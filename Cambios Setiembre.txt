@@ -1,0 +1,64 @@
+REQUERIMIENTOS SETIEMBRE
+
+Cambios
+LISTO-> Cambiar la palabra costo por precio, en factura, proforma y caja.
+LISTO-> Formatear los numeros por decenas y centenas.
+LISTO-> Cambiar monto minimo de venta por monto minimo intermedio en configuracion, 
+		esto establece quien queda como semiactivado
+LISTO-> Validar el estado del cliente cuando se le hace factura y/o proforma:
+                    -Activado: no pasa nada
+					-Semiactivado: Envia alerta de que no llego a la meta pero si ha comprado
+					-Desactivado: No puede comprar, administrador debe activarlo
+LISTO-> Editar por administrador.
+LISTO-> Si cliente tiene descuento pedir autorizacion.
+LISTO-> Pago por credito a 8, 30, 45, 60 dias. Se toma la columna cliente_maximo_monto_venta 
+		para determinar el maximo de credito de la persona.
+		RESUELTO!!! PROBLEMAAAAA: El monto de max credito permitido aplica para todas las sucursales.
+		PROBLEMAAAAA: Solo admite que se pague toda la factura por tipo credito (No pago mixto).
+		Verifica que el cliente tenga saldo disponible.
+LISTO-> En caja mostrar con cuanto se paga y el vuelto.
+LISTO-> Revisar página de inicio del vendedor
+LISTO-> EN LA PARTE FACTURA, AL ESCOGER FORMA PAGO TARJETA, CAMBIAR BANCO POR DATAFONO
+LISTO-> FORMA DE PAGO DEPOSITO, DEPOSITO CAMBIAR POR #DOCUMENTO Y AGREGAR A QUE BANCO SE 
+		REALIZO EL DEPOSITO, COMO ESTA ENTARJETAS
+-> Cambiar la forma en como se ingresan los productos y hacer traspaso de bodega a inventario.
+LISTO-> Cambiar como se escogen los descuentos FOTO
+
+
+Agregar
+-> Mostrar factura, proforma para impresion.
+-> Agregar en configuracion general un boton para actualizar estado de los 
+   clientes, pedir contraseña y validar que no se haga en menos de un mes.
+-> Notas credito.
+-> Notas debito.
+-> Recibos por dinero.
+-> Cierre Caja.
+-> Cierre Parcial.
+-> Hacer ventana de cambio de codigo.
+-> Ventana para usar facturas de garotas como compras de otras sucursales
+
+Otros
+LISTO-> Cambios en caja, para valorar que cuando se edite la factura y luego 
+		se cambia de factura o/y proforma tons elimine los eventos de salida y 
+		poner en false la bandera respectiva.
+LISTO-> Cuando se factura una proforma no se descuenta del inventario
+LISTO-> Cuando se da backspace no se quita el producto
+LISTO-> Cuando se cancela el log de administrador queda el cliente
+LISTO-> El nombre que se muestra de factura en la caja, que sea el nombre 
+		no del cliente sino de la columna nombre cliente
+LISTO-> Agregar numero cedula juridica, correo y fax a sucursal
+-> Habilitar impresion via HTML proforma, factura.
+LISTO-> Autorizaciones y descuentos/credito cliente
+LISTO-> Agregar permisos en usuarios
+LISTO-> Ver bitacora
+
+Esteban Correcciones
+
+LISTO-> En la factura cambiar costo en el precio que cancela el cleinte pie de factura por Monto, Precio total, por Monto Total
+LISTO-> Opcion tarjetas, Numero de Transaccion, cambiar por Numero de Autorizacion
+LISTO-> Opcion Credito: favor agregar 15 dias ya que solo 3 personas lo llevan asi
+LISTO-> Opcion Mixto: cambiar Numero de Transaccion por # de Autorizacion, cambiar cantidad de pago en tarjeta por monto en tarjeta, agregar espacio monto en efectivo.
+	    OJO en este paso, por que no hace correcto el calculo de suma y resta, no valida el monto de tarjeta, efectivo vs monto total
+	    Ejemplo: monto total de factura 120 000, pago con tarjeta 105 000, pago en efectivo 20 000, si coloco 20000 en cuanto va a cancelar me indica monto inferior, si pongo 120 0000, me indica vuelto 0, pero si coloco 125000 me dice vuelto 10000, realmente serian 5000.
+-> Favor en la impresión de pago mixto indicarlo en la factura, desglosado cuanto en efectivo y cuanto en tarjeta
+LISTO-> Cambiar “ con cuanto paga por” Entregado, agregar obsion para ver el monto total de la factura, y cambo o vuelto, tomar en cuanta lo de pago mixto para ver si se puede ver reflejado en esta misma Area,
