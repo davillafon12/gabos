@@ -1,8 +1,8 @@
 GABOS
 =====
 
-Version del sistema GABO con HTTPS habilitado en JS
-Sistema de Facturacion
+Version del sistema GABO con HTTPS habilitado en JS <br>
+Sistema de Facturacion <br>
 
-David Villalobos Fonseca
-Siviany Prendas Zamora
+-David Villalobos Fonseca<br>
+-Siviany Prendas Zamora
