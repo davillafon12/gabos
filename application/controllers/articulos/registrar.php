@@ -47,7 +47,7 @@ function es_Codigo_Utilizado()
 		echo "false"; //echo "<img src=".$ruta_base_imagenes_script."/tick.gif />";
 	}
  } 
-
+// Metodo encargado de registrar articulos 
  function registra_Articulo()
  {
 	//$id_empresa = $this->input->post('codigo');
