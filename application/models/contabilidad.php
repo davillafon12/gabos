@@ -41,6 +41,24 @@ Class contabilidad extends CI_Model
 		$this->db->update('tb_24_credito', $datos); 
 	}
 	
+	function agregarRecibo($factura, $cliente, $sucursal, $vendedor, $saldo, $montoPagado){
+		date_default_timezone_set("America/Costa_Rica");
+		$Current_datetime = date("y/m/d : H:i:s", now());
+		
+		$datos = array(
+						'Recibo_Cantidad' => $montoPagado,
+						'Recibo_Fecha' => $Current_datetime,
+						'Recibo_Saldo' => $saldo,
+						'Factura_Consecutivo' => $factura,
+						'Sucursal_Codigo' => $sucursal,
+						'Vendedor_Codigo' => $vendedor,
+						'Vendedor_Sucursal' => $sucursal,
+						'Cliente_Cedula' => $cliente
+						);
+		$this->db->insert('tb_26_recibos_dinero',$datos);
+		return $this->db->insert_id();
+	} 
+	
 }
 
 

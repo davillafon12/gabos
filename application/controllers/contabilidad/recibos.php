@@ -122,6 +122,11 @@ class recibos extends CI_Controller {
 				$codigoCredito = $facturaASaldar->Credito_Id;
 				$saldoActual = $facturaASaldar->Credito_Saldo_Actual;
 				
+				$cliente = $facturaASaldar->Credito_Cliente_Cedula;
+				$sucursal = $facturaASaldar->Credito_Sucursal_Codigo;
+				$vendedor = $facturaASaldar->Credito_Vendedor_Codigo;
+				$factura = $facturaASaldar->Credito_Factura_Consecutivo;
+				
 				//DEBE AGREGARSE A UNA TABLA DE RECIBOS
 				//Se agrega en cada caso en particular
 				
@@ -134,16 +139,24 @@ class recibos extends CI_Controller {
 					$this->contabilidad->saldarFactura($codigoCredito, 0);
 					
 					//Agregar recibo
+					$codigoRecibo = $this->contabilidad->agregarRecibo($factura, $cliente, $sucursal, $vendedor, 0, $saldoActual);
+					array_push($recibos, $codigoRecibo);
 					
 				}elseif($saldoALiquidar>0){ //Si el saldo de esta factura es mayor al ingresado pero mayor a cero
 					//Puedo saldar parte de la misma
 					$saldoActual -= $saldoALiquidar;
 					$this->contabilidad->saldarFactura($codigoCredito, $saldoActual);
+					
+					//Agregar recibo
+					$codigoRecibo = $this->contabilidad->agregarRecibo($factura, $cliente, $sucursal, $vendedor, $saldoActual, $saldoALiquidar);
+					
 					//Ya se uso todo el saldo, ponerlo en cero
 					$saldoALiquidar=0;
+					array_push($recibos, $codigoRecibo);
 				}
+				
 			}
-			return true;
+			return $recibos;
 		}else{
 			return false;
 		}
