@@ -31,7 +31,7 @@ Agregar
    clientes, pedir contraseña y validar que no se haga en menos de un mes.
 -> Notas credito.
 -> Notas debito.
--> Recibos por dinero.
+LISTO -> Recibos por dinero.
 -> Cierre Caja.
 -> Cierre Parcial.
 -> Hacer ventana de cambio de codigo.
