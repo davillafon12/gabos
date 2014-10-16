@@ -59,7 +59,7 @@
 				<li><a href='#' class='dir'>Notas</a>
 					<ul>
 						<li class='first'><a href='#'>Débito</a></li>
-						<li class='last'><a href='#'>Crédito</a></li>
+						<li class='last'><a href=".$Ruta_Base."contabilidad/notas/notasCredito>Crédito</a></li>
 					</ul>
 				</li>				
 				<li><a href='#'>Cambio de código</a></li>

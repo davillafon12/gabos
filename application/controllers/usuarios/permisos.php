@@ -19,6 +19,7 @@
 						'entrar_caja' => 'Entrar a Caja',
 						'entrar_configuracion' => 'Entrar a Configuración',
 						'entrar_empresa' => 'Entrar a Empresas',
+						'entrar_notas' => 'Entrar a Notas',
 						'entrar_recibos' => 'Entrar a recibos',
 						'otros_cliente' => 'Editar Descuentos y Credito',
 						'registrar_articulo' => 'Registrar Articulo',
@@ -32,7 +33,7 @@
 	);
 	
 	$permisosVendedor = array('crear_factura', 'crear_proforma', 'registrar_cliente', 'ver_autorizacion');
-	$permisosCajero = array('crear_factura', 'crear_proforma', 'registrar_cliente', 'entrar_caja', 'entrar_recibos', 'ver_autorizacion');
-	$permisosAdmin = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_articulo', 'registrar_articulos_masivo', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion');
-	$permisosAvanz = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'entrar_configuracion', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion');
+	$permisosCajero = array('crear_factura', 'crear_proforma', 'registrar_cliente', 'entrar_caja', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas');
+	$permisosAdmin = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_articulo', 'registrar_articulos_masivo', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas');
+	$permisosAvanz = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'entrar_configuracion', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas');
 ?>
