@@ -67,7 +67,10 @@ class editar extends CI_Controller {
                         </th>
 						<th class='Sorted_enabled'>
                             Cédula
-                        </th>                                                                                                            
+                        </th>
+						<th class='Sorted_enabled estado-centrado'>
+                            Estado
+                        </th>						
 						<th >
                             Opciones
                         </th>
@@ -94,6 +97,15 @@ class editar extends CI_Controller {
 						<td>
                             ".$row->Usuario_Cedula."
                         </td>
+						<td>";
+						if($this->user->isActivated($row->Usuario_Codigo)){
+							//Esta activado
+							echo "<div class='estado_Ac'>ACTIVADO</div><br>"; 
+						}else{
+							//Esta desactivado
+							echo "<div class='estado_De'>DESACTIVADO</div><br>"; 
+						}
+				echo	"</td>
 						<td >
 							<div class='tab_opciones'>
 								<a href='".base_url('')."usuarios/editar/edicion?id=".$row->Usuario_Codigo."' ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>

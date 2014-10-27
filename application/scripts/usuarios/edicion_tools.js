@@ -38,6 +38,7 @@ function getContentTable(url, div){
 								   null,
 								   null,
 								   null,
+								   null,
 								   { 'bSortable': false }, 
 								],
 					'sPaginationType': 'full_numbers',

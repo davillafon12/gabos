@@ -380,7 +380,7 @@
 	height: 15px;
 	margin-bottom: 0px;
 	border: 1px #92ce9c outset;
-
+	margin: 0 auto;
 	background-color: #20fd08;
 
 	color: #ffffff;
@@ -397,7 +397,7 @@
 	height: 15px;
 	margin-bottom: 0px;
 	border: 1px #ce9293 outset;
-
+	margin: 0 auto;
 	background-color: #fd080a;
 
 	color: #ffffff;
@@ -431,5 +431,9 @@
 	font-family:Verdana, Geneva, sans-serif; 
 	left:150px;
 	bottom:30px;
+}
+
+.estado-centrado{
+	width: 130px;
 }
 
