@@ -68,6 +68,7 @@ PARA:
                 $opcCedulaMetodo = 'id="tipo_Cedula", onblur="tipoCedula()", class="styleSelect", tabindex="1" , disabled';
                 $opc_estadoCliente= array ( 
                   'activo'   =>  'Activo' , 
+				  'semiactivo' => 'Semiactivo',
                   'inactivo'     =>  'Inactivo' , 
                 ); 
                 $opc_pagoCliente= array ( 

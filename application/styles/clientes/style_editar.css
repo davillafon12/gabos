@@ -409,6 +409,23 @@
 	letter-spacing: 0.075em;
 }
 
+.estado_Se{
+	width: 110px;
+	height: 15px;
+	margin-bottom: 0px;
+	border: 1px #ce9293 outset;
+
+	background-color: #FF9900;
+
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Verdana, Geneva, sans-serif;
+	font-style: inherit;
+	text-decoration: inherit;
+	letter-spacing: 0.075em;
+}
+
 .boton_volver{ 
 	background: #4b8df9; 
 	display: inline-block;

@@ -92,11 +92,12 @@ class editar extends CI_Controller {
                             ".$row->Cliente_Cedula."
                         </td>
 						<td>"; 
-						If($row->Cliente_Estado=="activo"||$row->Cliente_Estado=="semiactivo")
+						if($row->Cliente_Estado=="activo")
 						{
 							echo "<div class='estado_Ac'>ACTIVADO</div><br>"; 
-						}
-						else
+						}elseif($row->Cliente_Estado=="semiactivo"){
+							echo "<div class='estado_Se'>SEMIACTIVO</div><br>"; 
+						}else
 						{
 							echo "<div class='estado_De'>DESACTIVADO</div><br>"; 
 						}                        
