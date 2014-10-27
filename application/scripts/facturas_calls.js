@@ -101,7 +101,7 @@ function getNombreCliente(str){
 								$("#nombre").val(result[0].nombre);
 								enableArticulosInputs();
 								actualizaPreciosArticulos(str);
-								notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'warning');
+								notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'error');
 								clienteCanBuy = true;
 							}
 							break;
