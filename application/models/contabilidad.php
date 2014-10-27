@@ -18,10 +18,10 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
-	function getFacturasOrdenadasPorSaldoMenorAMayor($facturas){
+	function getCreditosOrdenadosPorConsecutivoMenorAMayor($facturas){
 		$this->db->where_in('Credito_Id', $facturas);
 		$this->db->from('tb_24_credito');
-		$this->db->order_by('Credito_Saldo_Actual','ASC');
+		$this->db->order_by('Credito_Factura_Consecutivo','ASC');
 		$query = $this->db->get();
 		if($query->num_rows()==0)
 		{

@@ -114,8 +114,8 @@ class recibos extends CI_Controller {
 		
 		$saldoALiquidar = $saldoAPagar;
 		
-		//Ya que tenemos las facturas existentes, las traemos en orden de menor saldo a mayor
-		if($facturasASaldar = $this->contabilidad->getFacturasOrdenadasPorSaldoMenorAMayor($facturasExistentes)){
+		//Ya que tenemos las facturas existentes, las traemos en orden de menor consecutivo a mayor
+		if($facturasASaldar = $this->contabilidad->getCreditosOrdenadosPorConsecutivoMenorAMayor($facturasExistentes)){
 			//Hacemos un array con los recibos para enviar a JS y que este los envie a impresion
 			$recibos = array();
 			foreach($facturasASaldar as $facturaASaldar){
