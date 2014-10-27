@@ -182,3 +182,34 @@
 	margin-top: 10px;
 	/* float: right; */
 }
+
+.bordes_tabla td{
+	*border-top: 2pt solid #999999;
+	border-bottom: 1pt solid #999999;
+}
+
+.bordes_tabla:hover{
+	cursor: pointer;
+	background: #808080;
+}
+
+.bordes_tabla{
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.celdas_tabla{
+	text-align: center;
+}
+
+.tirar-derecha{
+	text-align: right;
+}
+
+.tirar-derecha p{	
+	margin-right: 20px;
+}

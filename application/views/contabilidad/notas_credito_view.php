@@ -42,7 +42,10 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_notas_credito.css'); ?>">	
 		<!--CARGA DE HERRAMIENTAS DE ESTILO-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/estilo_notas.js'); ?>"></script>
-		
+		<!--CARGA DE FACTURAS-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_facturas.js'); ?>"></script>
+		<!--CARGA DE PRODUCTOS-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_productos.js'); ?>"></script>
 	</head>
 	<body onload="cambiarEstiloBotones()">
 		<!--Incluir imagen de cabezera-->

@@ -495,6 +495,20 @@ Class cliente extends CI_Model
 			return $query->result();
 		}
 	}
+	
+	function getFacturasDeClienteEnSucursal($cliente, $sucursal){
+		//Solo cargamos facturas cobradas
+		$this->db->where('Factura_Estado', 'cobrada');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('TB_03_Cliente_Cliente_Cedula', $cliente);
+		$query = $this->db->get('tb_07_factura');	
+		if($query->num_rows()==0)
+		{return false;} 
+		else
+		{
+			return $query->result();
+		}
+	}
 }
 
 
