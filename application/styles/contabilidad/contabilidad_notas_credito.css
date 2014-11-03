@@ -213,3 +213,10 @@
 .tirar-derecha p{	
 	margin-right: 20px;
 }
+
+.filtro_codigo{
+	position: relative;
+	top: -132px;
+	left: 500px;
+	margin-bottom: -35px;
+}

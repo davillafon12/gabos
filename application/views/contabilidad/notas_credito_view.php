@@ -111,6 +111,18 @@ PARA:
 						</div>
 					</div>
 				</div><!-- selectores_facturas -->
+				<div class="filtro_codigo">
+					<table>
+						<tr>
+							<td>
+								<p class="contact"><label for="codigo_busqueda">Código:</label></p>
+							</td>
+							<td>
+								<input id="codigo_busqueda" class="input_uno" placeholder="Inserte código para filtrar" name="codigo_busqueda" autocomplete="off" type="text" onkeyup="filtrarFacturasPorCodigo(this.value)" >					
+							</td>
+						</tr>
+					</table>
+				</div>
 				<hr class="division-contenido">
 				<div class="selectores_productos">
 					<div class="div_productos">

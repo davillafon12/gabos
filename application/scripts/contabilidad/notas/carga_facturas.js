@@ -110,6 +110,47 @@ function setFacturas(facturas){
 	$("#tbody_facturas").html(cuerpo);
 }
 
+function filtrarFacturasPorCodigo(codigo){
+	nombre = $("#nombre").val();
+	//Si el nombre es vacio, salir
+	if(nombre.trim()===''){buscarCedula(null);}
+	//Si el codigo no es numerico, salir
+	if(!isNumber(codigo)){buscarCedula(null);}
+	//Si la cedula no es numerica, salir
+	cedula = $("#cedula").val();
+	if(!isNumber(cedula)){buscarCedula(null);}
+	//Si no hay facturas, salir
+	cantFacturas = $('#tabla_facturas tr').length;
+	if(cantFacturas==1){buscarCedula(null);}
+	
+	//Ejecutar
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/contabilidad/notas/getFacturasFiltradasCodigo',
+		type: "POST",		
+		//async: false,
+		data: {'cedula':cedula, 'codigo':codigo},				
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				//alert(data.trim());
+				informacion = $.parseJSON('[' + data.trim() + ']');
+				//alert(JSON.stringify(informacion[0], null, 4));
+				if(informacion[0].status==="error"){
+					manejarErrores(informacion[0].error);
+				}else if(informacion[0].status==="success"){
+					//alert(JSON.stringify(informacion, null, 4));
+					setFacturas(informacion[0].facturas);
+				}
+			}catch(e){
+				//alert(e);
+				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{}
+	});
+}
+
 /**
  * Number.prototype.format(n, x, s, c)
  * 
