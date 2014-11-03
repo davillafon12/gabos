@@ -3,10 +3,10 @@ REQUERIMIENTOS OCTUBRE
 Cambios
 -> Cambiar la forma en como se ingresan los productos y hacer traspaso de bodega a inventario.
 LISTO-> Poner rojo la advertencia de semiactivo en crear factura, a la hora de cargar cliente semiactivo.
--> Agregar si cliente es exento de impuestos.
+LISTO-> Agregar si cliente es exento de impuestos.
 LISTO-> En recibos no cobrar por orden de saldo sino por consecutivo.
 LISTO-> Mostrar si usuario esta activo o inactivo en tabla de edicion.
--> En notas credito, agregar filtrado por codigo de articulo.
+LISTO-> En notas credito, agregar filtrado por codigo de articulo.
 -> Al hacer nota credito, seleccionar si el articulo devuelto es defectuoso o no.
 -> Agregar en a interfaz de notas credito, a cual factura se le aplica el descuento de dicha nota.
 LISTO-> Agregar semiactivo en cliente.
