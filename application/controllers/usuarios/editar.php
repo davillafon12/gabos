@@ -334,11 +334,11 @@ class editar extends CI_Controller {
  }
 
  function verMiPerfil(){
-	$id_request=$_GET['id'];
+	//$id_request=$_GET['id'];
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	$ruta_imagen_usuario = base_url('application/images/User_Photos/thumb');
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-	if($result = $this->user->getUsuario_Codigo($id_request))
+	if($result = $this->user->getUsuario_Codigo($data['Usuario_Codigo']))
 	{
 	    $this->load->helper(array('form'));
 	    foreach($result as $row)
@@ -360,7 +360,7 @@ class editar extends CI_Controller {
 			$data['Observaciones_Usuario'] = $row -> Usuario_Observaciones;
 			$data['Imagen_Usuario'] = $ruta_imagen_usuario."/".$row -> Usuario_Imagen_URL;
 			$data['Usuario_Correo_Electronico'] = $row -> Usuario_Correo_Electronico;
-			$data['Usuario_Rango'] = $row -> Usuario_Rango;		
+			$data['Usuario_Nivel'] = $row -> Usuario_Rango;		
 			$data['Sucursal_Nombre'] = $this->empresa->getNombreEmpresa( $row -> TB_02_Sucursal_Codigo); 
 				
 		}
