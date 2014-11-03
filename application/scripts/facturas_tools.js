@@ -771,6 +771,10 @@ function actualizaCostosTotales(decimales_int){
 	
 	IVA_Factura = costo_total_factura-costo_sin_IVA_factura;
 	
+	if(clienteEsExento){
+		costo_total_factura -= IVA_Factura;
+		IVA_Factura = 0;}//Si el cliente es exento de impuestos
+	
 	costo_cliente_final = costo_cliente_final.toFixed(decimales_int);
 	costo_sin_IVA_factura = costo_sin_IVA_factura.toFixed(decimales_int);
 	IVA_Factura = IVA_Factura.toFixed(decimales_int);

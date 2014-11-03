@@ -139,7 +139,9 @@ PARA:
 				</td>
 				<td>
 					<label for="essucursal" class="labelMedium" style="position: relative; top: -5px;">Sucursal:</label>  
-					<input id="essucursal" tabindex="11" type="checkbox" name="issucursal" value="1" style="position: relative; top: -5px;"> 	<br>
+					<input id="essucursal" tabindex="11" type="checkbox" name="issucursal" value="1" style="position: relative; top: -5px;"> 	
+					<label for="esexento" class="labelMedium" style="position: relative; top: -5px;">Exento:</label>  
+					<input id="esexento" tabindex="11" type="checkbox" name="esexento" value="1" style="position: relative; top: -5px;"> 	<br>
 				</td>
 
 			</tr>			

@@ -42,6 +42,7 @@ function getArticulo(str, id, num_row, cedula) {
 var clienteCanBuy = true;
 var infoClientePostAutorizacion = false;
 var cedulaPostAuto = false;
+var clienteEsExento = false;
 
 function getNombreCliente(str){
 	$.ajax({
@@ -73,13 +74,17 @@ function getNombreCliente(str){
 								numeroPopUp='5';
 								infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
 								cedulaPostAuto = str; //Se guarda la info para ser utilizada despues
+								clienteEsExento = parseInt(result[0].exento);
 							}else{
 								$("#nombre").val(result[0].nombre);
 								enableArticulosInputs();
 								actualizaPreciosArticulos(str);
 								clienteCanBuy = true;
+								clienteEsExento = parseInt(result[0].exento);
 							}
 							break;
+							
+							
 						case 'semiactivo':
 							//alert(result[0].descuento);
 							if(result[0].descuento){ //Si el cliente tiene descuento pide autorizacion
@@ -97,19 +102,24 @@ function getNombreCliente(str){
 								actualizaPreciosArticulos(str);
 								notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'warning');
 								clienteCanBuy = true;*/
+								clienteEsExento = parseInt(result[0].exento);
 							}else{
 								$("#nombre").val(result[0].nombre);
 								enableArticulosInputs();
 								actualizaPreciosArticulos(str);
 								notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'error');
 								clienteCanBuy = true;
+								clienteEsExento = parseInt(result[0].exento);
 							}
 							break;
+							
+							
 						case 'inactivo':
 							$("#nombre").val('');
 							disableArticulosInputs();
 							notyConTipo('¡Este cliente esta inactivo, contacte un administrador para poder activarlo!','error');
 							clienteCanBuy = false;
+							clienteEsExento = false;
 							break;
 					}									
 				}

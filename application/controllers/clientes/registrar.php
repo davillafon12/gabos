@@ -77,11 +77,15 @@ class registrar extends CI_Controller {
 	//Si es sucursal
 	$this->isSucursal = isset($_POST['issucursal']) && $_POST['issucursal']  ? "1" : "0";
 	
+	//Si es exento
+	$exento = 0;
+	$exento = isset($_POST['esexento']) && $_POST['esexento']  ? "1" : "0";
+	
 	$this->do_upload($cedula); // metodo encargado de cargar la imagen con la cedula del usuario
 			
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
-	if($this->cliente->registrar($nombre, $apellidos , $cedula, $tipo_Cedula, $carnet, $celular, $telefono, $pais, $direccion, $observaciones, $this->direccion_url_imagen, $email, $estado_Cliente, $this->calidad_Cliente, $tipo_pago_cliente, $this->isSucursal))
+	if($this->cliente->registrar($nombre, $apellidos , $cedula, $tipo_Cedula, $carnet, $celular, $telefono, $pais, $direccion, $observaciones, $this->direccion_url_imagen, $email, $estado_Cliente, $this->calidad_Cliente, $tipo_pago_cliente, $this->isSucursal, $exento))
 	{ //Si se ingreso bien a la BD
 		//Titulo de la pagina
 		$data['Titulo_Pagina'] = "Transacción Exitosa";

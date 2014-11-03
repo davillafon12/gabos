@@ -41,7 +41,7 @@ Class cliente extends CI_Model
 	}	
 
 
-	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $carnet_cliente, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal)
+	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $carnet_cliente, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento)
 	{
 		
 		if($this->existe_Cliente($cedula)){
@@ -67,7 +67,8 @@ Class cliente extends CI_Model
 							'Cliente_Estado'=>mysql_real_escape_string($estado_Cliente),	
 							'Cliente_Calidad'=>mysql_real_escape_string($calidad_Cliente),								
 							'Cliente_Numero_Pago'=>mysql_real_escape_string($tipo_pago_Cliente),
-							'Cliente_EsSucursal' => mysql_real_escape_string($isSucursal)
+							'Cliente_EsSucursal' => mysql_real_escape_string($isSucursal),
+							'Cliente_EsExento' => mysql_real_escape_string($exento)
 	                    );
 			try{
 	        $this->db->insert('TB_03_Cliente',$data); }
@@ -178,7 +179,9 @@ Class cliente extends CI_Model
 			{						
 				return array('nombre'=>$row->Cliente_Nombre." ".$row->Cliente_Apellidos,
 							 'estado'=>$row->Cliente_Estado,
-							 'descuento'=>$this->getClienteDescuento(mysql_real_escape_string($id), $data['Sucursal_Codigo']));
+							 'descuento'=>$this->getClienteDescuento(mysql_real_escape_string($id), $data['Sucursal_Codigo']),
+							 'exento' => $row->Cliente_EsExento
+							);
 			}
 		}	
 	}
@@ -502,6 +505,28 @@ Class cliente extends CI_Model
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('TB_03_Cliente_Cliente_Cedula', $cliente);
 		$query = $this->db->get('tb_07_factura');	
+		if($query->num_rows()==0)
+		{return false;} 
+		else
+		{
+			return $query->result();
+		}
+	}
+	
+	function getFacturasDeClienteEnSucursalFiltradasCodigo($cliente, $sucursal, $codigo){
+		//Solo cargamos facturas cobradas
+		$query = $this->db->query("  SELECT tb_07_factura.Factura_Consecutivo, 
+											tb_07_factura.Factura_Fecha_Hora, 
+											tb_07_factura.Factura_Monto_Total 
+									 FROM   tb_07_factura, 
+											tb_08_articulos_factura 
+									 WHERE  tb_07_factura.Factura_Consecutivo = tb_08_articulos_factura.TB_07_Factura_Factura_Consecutivo 
+									 AND 	tb_07_factura.TB_03_Cliente_Cliente_Cedula = $cliente 
+									 AND 	tb_07_factura.TB_02_Sucursal_Codigo = $sucursal
+									 AND 	tb_07_factura.Factura_Estado = 'cobrada' 
+									 AND 	tb_08_articulos_factura.Articulo_Factura_Codigo 
+									 LIKE   '%$codigo%' 
+									 GROUP BY tb_07_factura.Factura_Consecutivo");			
 		if($query->num_rows()==0)
 		{return false;} 
 		else

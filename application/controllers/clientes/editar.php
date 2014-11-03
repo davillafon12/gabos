@@ -356,7 +356,7 @@ class editar extends CI_Controller {
 			$data['Cliente_Pais'] = $row -> Cliente_Pais;
 			$data['Cliente_Direccion'] = $row -> Cliente_Direccion;
 			$data['isSucursal'] = $row -> Cliente_EsSucursal;
-			
+			$data['isExento'] = $row -> Cliente_EsExento;
 			$descuento = $this->cliente->getClienteDescuento($row -> Cliente_Cedula, $data['Sucursal_Codigo']);
 			$maxCredito = $this->cliente->getClienteMaximoCredito($row -> Cliente_Cedula, $data['Sucursal_Codigo']);
 			
@@ -404,7 +404,14 @@ class editar extends CI_Controller {
 		//$descuento = $this->input->post('descuento');
 		$observaciones = $this->input->post('observaciones');
 		$tipo_pago_cliente = $this->input->post('tipo_pago_cliente');
-
+		
+		//Si es sucursal
+		$isSucursal = isset($_POST['issucursal']) && $_POST['issucursal']  ? "1" : "0";
+		
+		//Si es exento
+		$exento = 0;
+		$exento = isset($_POST['esexento']) && $_POST['esexento']  ? "1" : "0";
+		
 
 		if($result = $this->cliente->obtener_Imagen_Cliente($cedula)){
 			foreach($result as $row)
@@ -441,7 +448,8 @@ class editar extends CI_Controller {
 		$data_update['Cliente_Estado'] = mysql_real_escape_string($estado_Cliente);
 		//$data_update['Cliente_Descuento'] = mysql_real_escape_string($descuento);
 		$data_update['Cliente_Numero_Pago'] = mysql_real_escape_string($tipo_pago_cliente);
-
+		$data_update['Cliente_EsSucursal'] = $isSucursal; 
+		$data_update['Cliente_EsExento'] = $exento;
 		
 		$this->cliente->actualizar(mysql_real_escape_string($cedula), $data_update);
 		
