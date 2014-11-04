@@ -10,7 +10,7 @@ LISTO-> En notas credito, agregar filtrado por codigo de articulo.
 -> Al hacer nota credito, seleccionar si el articulo devuelto es defectuoso o no.
 -> Agregar en a interfaz de notas credito, a cual factura se le aplica el descuento de dicha nota.
 LISTO-> Agregar semiactivo en cliente.
--> Cambiar interfaz de "ver mi perfil".
+LISTO-> Cambiar interfaz de "ver mi perfil".
 
 Agregar
 -> Pagina para ingresar la confirmacion de deposito de un recibo por dinero (Cuando empleado toma dinero del recibo y lo deposita en el banco)
