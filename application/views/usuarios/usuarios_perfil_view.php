@@ -30,11 +30,11 @@ PARA:
 
 		<script src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>" type="text/javascript"></script>
 		<script src="<?php echo base_url('application/scripts/jquery.maskedinput.js'); ?>" type="text/javascript"></script>
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.2.6.min.js'); ?>"></script>
+		
 		<?php include '/../../scripts/ajax_verify_usuarios_id.php';?>	
 		
 	</head>
-	<body onload="timeout()">
+	<body >
 		<!--Incluir imagen de cabezera-->
 		<?php include '/../Header/Header_Picture.php';?>
 		
@@ -80,15 +80,14 @@ PARA:
 					
 					<input type="hidden" name="codigo_usuario" value="<?php echo $Usuario_Codigo_Modificar;?>">
 					<input type="hidden" name="sucursal_usuario_original" value="<?php echo $Sucursal_Codigo;?>">
-					
+					<input type="hidden" name="cedula_usuario"  value="<?php echo $Usuario_Cedula;?>" >
 					<table>
 						<tr>
 							<td>
 								<label for="tipo_cedula_usuario" class="labelMedium">Cédula:</label>							
 							</td>
-							<td>
-								<?php echo form_dropdown ( 'tipo_cedula_usuario' , $opc_Cedula ,  $Usuario_Tipo_Cedula, $opcCedulaMetodo);  ?>
-								<input id="cedula_usuario" autocomplete="off" name="cedula_usuario"  placeholder="" required="" tabindex="2" style="position: absolute;" value="<?php echo $Usuario_Cedula;?>"> 
+							<td>								
+								<input value="<?php echo $Usuario_Cedula;?>" disabled>								 
 							</td>						
 						</tr>
 						<tr>
@@ -202,7 +201,7 @@ PARA:
 					<fieldset class="recuadro3">	
 					<legend>Observaciones</legend>
 					
-					<textarea id="observaciones" autocomplete="off" class="observaciones" placeholder="" tabindex="13"name="observaciones" cols="25" rows="7" maxlength="300" ><?php echo $Observaciones_Usuario;?></textarea> 
+					<textarea id="observaciones" autocomplete="off" class="observaciones" placeholder="" tabindex="13"name="observaciones" cols="25" rows="7" maxlength="300" disabled><?php echo $Observaciones_Usuario;?></textarea> 
 					<p class="advertencia_longitud">Máximo 300 caracteres</p> 
 					
 					</fieldset>

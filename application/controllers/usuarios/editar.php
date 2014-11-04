@@ -381,13 +381,64 @@ class editar extends CI_Controller {
  }
 
  function actualizarMiPerfil(){
-	$usuario_password = $this->input->post('usuario_password');
+	/*$usuario_password = $this->input->post('usuario_password');
 	$cedula_usuario = $this->input->post('cedula_usuario');
 
 	$data_update['Usuario_Password'] =MD5($usuario_password);  
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el usuario codigo: ".mysql_real_escape_string($cedula_usuario),$data['Sucursal_Codigo'],'edicion');
 	$this->user->actualizar(mysql_real_escape_string($cedula_usuario), $data_update);
+	
+	redirect('home', 'location');*/
+	
+	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		
+	$nombre_usuario = $this->input->post('nombre_usuario');
+	$apellidos_usuario = $this->input->post('apellidos_usuario');
+	$cedula_usuario = $this->input->post('cedula_usuario');
+	$tipo_cedula_usuario = $this->input->post('tipo_cedula');
+	$celular_usuario = $this->input->post('celular_usuario');
+	$telefono_usuario = $this->input->post('telefono_usuario');	
+	$email_usuario = $this->input->post('email_usuario');
+	$usuario_password = $this->input->post('usuario_password');
+	$usuario_password_actual = $this->input->post('usuario_password_actual');
+	$sucursal_usuario = $data['Sucursal_Codigo'];
+	$codigo_usuario = $data['Usuario_Codigo'];
+	
+	//echo $cedula_usuario;
+	//print_r($_POST);
+	
+	if($result = $this->user->obtener_Imagen_Usuario($cedula_usuario)){
+		foreach($result as $row)
+		{
+			$temp = $row -> Usuario_Imagen_URL;
+			if(!$temp == "Default.png"){
+				$this->flag = true; 
+				$this->nombreImagenTemp = $temp; 
+			}
+			else{
+				$this->flag = false; 
+				$this->nombreImagenTemp = $temp; 
+			}
+		}
+	}
+	
+	//if($_FILES['userfile']['name']!=''){ //El nombre del archivo no sea vacio
+		$this->do_upload($cedula_usuario."_".$sucursal_usuario); // metodo encargado de cargar la imagen con la cedula del usuario
+	//}
+	
+	$data_update['Usuario_Nombre'] = mysql_real_escape_string($nombre_usuario);
+	$data_update['Usuario_Apellidos'] = mysql_real_escape_string($apellidos_usuario);
+	$data_update['Usuario_Celular'] = mysql_real_escape_string($celular_usuario);
+	$data_update['Usuario_Telefono'] = mysql_real_escape_string($telefono_usuario);
+	$data_update['Usuario_Imagen_URL'] = mysql_real_escape_string($this->direccion_url_imagen);
+	$data_update['Usuario_Correo_Electronico'] = mysql_real_escape_string($email_usuario);
+	if($usuario_password && $this->user->login($data['Usuario_Nombre_Usuario'], $usuario_password_actual)){
+		$data_update['Usuario_Password'] = MD5($usuario_password);     
+	}
+	$this->user->actualizar($codigo_usuario, $data_update);
+	
+	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cambio su perfil: ".mysql_real_escape_string($codigo_usuario),$data['Sucursal_Codigo'],'edicion');
 	
 	redirect('home', 'location');
  }
@@ -396,7 +447,7 @@ class editar extends CI_Controller {
 
  function do_upload($cedula)
     {
-
+		//echo $cedula;
        //especificamos a donde se va almacenar nuestra imagen
         $config['upload_path'] = 'application/images/User_Photos';
         //indicamos que tipo de archivos están permitidos
