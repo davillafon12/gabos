@@ -8,7 +8,7 @@ LISTO-> En recibos no cobrar por orden de saldo sino por consecutivo.
 LISTO-> Mostrar si usuario esta activo o inactivo en tabla de edicion.
 LISTO-> En notas credito, agregar filtrado por codigo de articulo.
 -> Al hacer nota credito, seleccionar si el articulo devuelto es defectuoso o no.
--> Agregar en a interfaz de notas credito, a cual factura se le aplica el descuento de dicha nota.
+LISTO-> Agregar en a interfaz de notas credito, a cual factura se le aplica el descuento de dicha nota.
 LISTO-> Agregar semiactivo en cliente.
 LISTO-> Cambiar interfaz de "ver mi perfil".
 
