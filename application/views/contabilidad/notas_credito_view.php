@@ -46,6 +46,8 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_facturas.js'); ?>"></script>
 		<!--CARGA DE PRODUCTOS-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_productos.js'); ?>"></script>
+		<!--GESTOR DE FACTURA A APLICAR-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/gestor_factura_aplicar.js'); ?>"></script>
 	</head>
 	<body onload="cambiarEstiloBotones()">
 		<!--Incluir imagen de cabezera-->
@@ -119,6 +121,14 @@ PARA:
 							</td>
 							<td>
 								<input id="codigo_busqueda" class="input_uno" placeholder="Inserte código para filtrar" name="codigo_busqueda" autocomplete="off" type="text" onkeyup="filtrarFacturasPorCodigo(this.value)" >					
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<p class="contact"><label for="factura_aplicar">Factura a aplicar:</label></p>
+							</td>
+							<td>
+								<input id="factura_aplicar" class="input_uno" placeholder="Inserte consecutivo de factura" name="factura_aplicar" autocomplete="off" type="text" onkeyup="validarFacturaAplicar(this.value)" >					
 							</td>
 						</tr>
 					</table>

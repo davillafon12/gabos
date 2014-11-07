@@ -136,6 +136,32 @@ class notas extends CI_Controller {
 		}
 		echo json_encode($retorno);	
 	}
+	
+	function consecutivoFacturaExiste(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+		if(isset($_POST['cedula'])&&isset($_POST['consecutivo'])){
+			$cedula = $_POST['cedula']; 
+			$consecutivo = $_POST['consecutivo']; 
+			if(trim($cedula) == '1' || trim($cedula) == '0'){
+				$retorno['error'] = '4'; //Error cliente contado y afiliado
+			}else{
+				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
+					include '/../get_session_data.php';					
+					if($factura = $this->cliente->getFacturaDeClienteCobrada($consecutivo, $data['Sucursal_Codigo'], $cedula)){
+						$retorno['status'] = 'success';
+					}else{
+						$retorno['error'] = '10';
+					}					
+				}else{
+					$retorno['error'] = '3'; //Error no hay cliente
+				}
+			}
+		}else{
+			$retorno['error'] = '2'; //Error en la URL
+		}
+		echo json_encode($retorno);	
+	}
 }
 
 ?>

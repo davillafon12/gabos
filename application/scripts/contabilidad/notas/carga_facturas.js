@@ -73,7 +73,29 @@ function manejarErrores(error){
 			//No se obtuvo los productos
 			notyMsg('¡No se pudo obtener los productos de la factura!','error');
 			resetFieldsFromProductos();
-		break;		
+		break;
+		case '7':
+			//Consecutivo de factura no valida
+			notyMsg('¡El consecutivo no es válido!','error');
+			existeFacturaAplicar = false;
+		break;	
+        case '8':
+			//Cedula no valida
+			notyMsg('¡Cédula ingresada no es válida!','error');
+			$("#factura_aplicar").val('');
+			existeFacturaAplicar = false;
+		break;
+		case '9':
+			//No hay factura seleccionada
+			notyMsg('¡No ha seleccionado alguna factura!','error');
+			$("#factura_aplicar").val('');
+			existeFacturaAplicar = false;
+		break;
+		case '10':
+			//No existe factura o no ha sido cobrada
+			//notyMsg('¡No existe factura o no ha sido cobrada!','error');
+			existeFacturaAplicar = false;
+		break;
 	}
 }
 
@@ -88,6 +110,7 @@ function notyMsg(Mensaje, tipo){
 
 function resetFields(){
 	$("#nombre").val('');
+	$("#codigo_busqueda").val('');
 	$("#tbody_facturas").html('');
 	$("#tbody_productos").html('');
 	$("#tbody_productos_seleccionados").html('');
@@ -140,6 +163,9 @@ function filtrarFacturasPorCodigo(codigo){
 				}else if(informacion[0].status==="success"){
 					//alert(JSON.stringify(informacion, null, 4));
 					setFacturas(informacion[0].facturas);
+					$("#tbody_productos").html('');
+					$("#tbody_productos_seleccionados").html('');
+					facturaSeleccionada = 0;
 				}
 			}catch(e){
 				//alert(e);
