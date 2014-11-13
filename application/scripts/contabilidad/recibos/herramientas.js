@@ -30,7 +30,7 @@ function agregarFacturasSaldarSeleccion(){
 		row_a_copiar = $("#credito_row_"+facturasMarcadas[i]).html();		
 		$("#tbody_facturas_a_saldar").append("<tr class='bordes_tabla_saldar' onclick='marcarParaEliminar("+facturasMarcadas[i]+")' id='factura_saldar_"+facturasMarcadas[i]+"'>"+row_a_copiar+"</tr>");
 		//Agregamos la factura a facturas por saldar
-		if(!isNumber(facturasMarcadas[i])){alert("agregar"); return false;}
+		if(!isNumber(facturasMarcadas[i])){return false;}
 		facturasSaldar.push(parseInt(facturasMarcadas[i]));		
 	}
 	//Eliminamos las facturas del primer cuadro
