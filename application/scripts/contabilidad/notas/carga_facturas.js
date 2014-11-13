@@ -128,7 +128,7 @@ function setFacturas(facturas){
 		//alert(JSON.stringify(creditos[i], null, 4));
 		monto = parseFloat(facturas[i].monto);
 		monto = monto.format(2, 3, '.', ',');
-		cuerpo += "<tr class='bordes_tabla' onclick='seleccionarFactura("+facturas[i].consecutivo+")' id='factura_row_"+facturas[i].consecutivo+"'><td class='celdas_tabla'><p class='contact'>"+facturas[i].consecutivo+"</p></td><td class='celdas_tabla'><p class='contact'>"+facturas[i].fecha+"</p></td><td class='celdas_tabla tirar-derecha'><p class='contact'>"+monto+"</p></td></tr>"; 
+		cuerpo += "<tr class='bordes_tabla_factura' onclick='seleccionarFactura("+facturas[i].consecutivo+")' id='factura_row_"+facturas[i].consecutivo+"'><td class='celdas_tabla'><p class='contact'>"+facturas[i].consecutivo+"</p></td><td class='celdas_tabla'><p class='contact'>"+facturas[i].fecha+"</p></td><td class='celdas_tabla tirar-derecha'><p class='contact'>"+monto+"</p></td></tr>"; 
 	}
 	$("#tbody_facturas").html(cuerpo);
 }

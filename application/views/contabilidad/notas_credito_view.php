@@ -48,6 +48,8 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_productos.js'); ?>"></script>
 		<!--GESTOR DE FACTURA A APLICAR-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/gestor_factura_aplicar.js'); ?>"></script>
+		<!--SELECCION Y MARCA DE ARTICULOS-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/marca_seleccion_articulos.js'); ?>"></script>
 	</head>
 	<body onload="cambiarEstiloBotones()">
 		<!--Incluir imagen de cabezera-->
@@ -167,7 +169,9 @@ PARA:
 									<tr class="header">
 										<th class="titulo_header_tabla" style="width: 70px;">Código</th>
 										<th class="titulo_header_tabla" >Descripción</th>
-										<th class="titulo_header_tabla" style="width: 70px;">Cantidad</th>
+										<th id="titulo_cantidad_original" class="titulo_header_tabla titulo-cantidad" style="width: 30px;" title="Cantidad Original Facturada">C</th>
+										<th id="titulo_cantidad_defectuosa" class="titulo_header_tabla titulo-cantidad" style="width: 30px;" title="Cantidad Defectuosa">D</th>
+										<th id="titulo_cantidad_buena" class="titulo_header_tabla titulo-cantidad" style="width: 30px;" title="Cantidad en Buen Estado">B</th>
 									</tr>
 								</thead>
 								<tbody id="tbody_productos_seleccionados">
@@ -178,10 +182,9 @@ PARA:
 					</div>
 				</div><!-- selectores_productos -->
 				<div class="div_botones_acciones" id="div_botones_acciones">
-					<button class="boton_accion" onclick="agregarFacturasSaldarSeleccion()"><img title="Agregar Facturas Seleccionadas" src="<?php echo base_url('application/images/recibos/flecha_derecha.png');?>"></img></button>
-					<button class="boton_accion" onclick="eliminarFacturasSaldarSeleccion()"><img title="Quitar Facturas Seleccionadas" src="<?php echo base_url('application/images/recibos/flecha_izquierda.png');?>"></img></button>
-					<button class="boton_accion" onclick="pasarTodasPendientesASaldar()"><img title="Agregar Todas Las Facturas" src="<?php echo base_url('application/images/recibos/flecha_doble_derecha.png');?>"></img></button>
-					<button class="boton_accion" onclick="eliminarTodasASaldar()"><img title="Quitar Todas Las Facturas" src="<?php echo base_url('application/images/recibos/flecha_doble_izquierda.png');?>"></img></button>
+					<button class="boton_accion" onclick="agregarProductosACreditar()"><img title="Agregar Facturas Seleccionadas" src="<?php echo base_url('application/images/recibos/flecha_derecha.png');?>"></img></button>
+					<button class="boton_accion" onclick="eliminarProductosSeleccion()"><img title="Quitar Facturas Seleccionadas" src="<?php echo base_url('application/images/recibos/flecha_izquierda.png');?>"></img></button>
+					
 				</div><!-- div_botones_acciones -->
 				<hr class="divisor_footer">
 				<div class="footer_notas">					

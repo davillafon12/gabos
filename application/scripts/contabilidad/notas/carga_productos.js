@@ -11,7 +11,7 @@ function seleccionarFactura(factura){
 }
 
 function marcarSeleccion(){
-	$(".bordes_tabla").css("background", "none"); //Limpiamos todo
+	$(".bordes_tabla_factura").css("background", "none"); //Limpiamos todo
 	$("#factura_row_"+facturaSeleccionada).css("background", "#999999");
 }
 
@@ -46,7 +46,7 @@ function cargarProductos(){
 function setProductosOnTable(productos){	
 	cuerpo = '';
 	for(i=0; i<productos.length; i++){
-		cuerpo += "<tr class='bordes_tabla' onclick='' id='producto_row_"+productos[i].codigo+"'><td class='celdas_tabla'><p class='contact'>"+productos[i].codigo+"</p></td><td class='celdas_tabla'><p class='contact'>"+productos[i].descripcion+"</p></td><td class='celdas_tabla'><p class='contact'>"+productos[i].cantidad+"</p></td></tr>"; 
+		cuerpo += "<tr class='bordes_tabla' onclick='marcarArticulo("+i+")' id='producto_row_"+i+"'><td class='celdas_tabla'><p class='contact'>"+productos[i].codigo+"</p></td><td class='celdas_tabla'><p class='contact'>"+productos[i].descripcion+"</p></td><td class='celdas_tabla'><p class='contact'>"+productos[i].cantidad+"</p></td></tr>"; 
 	}
 	$("#tbody_productos").html(cuerpo);
 }

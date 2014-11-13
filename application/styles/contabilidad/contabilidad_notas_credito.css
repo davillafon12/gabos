@@ -144,7 +144,7 @@
 	width: 40px;
 	left: 493px;
 	top: -400px;
-	margin-bottom: -555px;
+	margin-bottom: -500px;
 	/* margin-top: 20px; */
 }
 
@@ -183,6 +183,24 @@
 	/* float: right; */
 }
 
+.bordes_tabla_factura td{
+	border-bottom: 1pt solid #999999;
+}
+
+.bordes_tabla_factura:hover{
+	cursor: pointer;
+	background: #808080;
+}
+
+.bordes_tabla_factura{
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .bordes_tabla td{
 	*border-top: 2pt solid #999999;
 	border-bottom: 1pt solid #999999;
@@ -202,7 +220,39 @@
     user-select: none;
 }
 
+.bordes_tabla_creditar td{
+	border-bottom: 1pt solid #999999;
+}
+
+.bordes_tabla_creditar:hover{
+	cursor: pointer;
+	background: #808080;
+}
+
+.bordes_tabla_creditar{
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.celdas_tabla_cantidades{
+	text-align: center;
+	border-left: 1pt solid #999999;
+}
+
+.celdas_tabla_cantidades:hover{
+	cursor: text;
+	background: white;
+}
+
 .celdas_tabla{
+	text-align: center;
+}
+
+.celdas_tabla_producto_acreditar{
 	text-align: center;
 }
 
@@ -219,4 +269,14 @@
 	top: -132px;
 	left: 500px;
 	margin-bottom: -60px;
+}
+
+.ui-tooltip{
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica;
+}
+
+.titulo-cantidad{
+	cursor:help;
 }

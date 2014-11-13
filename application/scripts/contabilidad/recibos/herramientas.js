@@ -81,9 +81,9 @@ function eliminarFacturasSaldarSeleccion(){
 			}
 		}		
 	}
-	//Eliminamos las facturas del primer cuadro
+	//Eliminamos las facturas del segundo cuadro
 	eliminarFacturasMarcadasEliminar();
-	//Reiniciamos el array de factiras marcadas
+	//Reiniciamos el array de facturas marcadas
 	facturasMarcadasEliminar = [];
 	//Actualizamos el saldo
 	setSaldo();
