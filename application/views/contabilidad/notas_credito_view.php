@@ -50,6 +50,8 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/gestor_factura_aplicar.js'); ?>"></script>
 		<!--SELECCION Y MARCA DE ARTICULOS-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/marca_seleccion_articulos.js'); ?>"></script>
+		<!--ENVIO DE NOTA-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/envio_nota_credito.js'); ?>"></script>
 	</head>
 	<body onload="cambiarEstiloBotones()">
 		<!--Incluir imagen de cabezera-->
@@ -188,7 +190,7 @@ PARA:
 				</div><!-- div_botones_acciones -->
 				<hr class="divisor_footer">
 				<div class="footer_notas">					
-					<button class="boton_generar" id="boton_generar" onclick="generarNota()">Generar Nota</button>
+					<button class="boton_generar" id="boton_generar" onclick="enviarNotaCredito()">Generar Nota</button>
 				</div>
 			</div><!-- contenedor -->			
 		</div><!-- main_wrapper -->
