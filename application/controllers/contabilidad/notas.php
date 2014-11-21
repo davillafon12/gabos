@@ -9,6 +9,7 @@ class notas extends CI_Controller {
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('contabilidad','',TRUE);	
 		$this->load->model('factura','',TRUE);
+		$this->load->model('articulo','',TRUE);
 	}
 
 	function index()
@@ -161,6 +162,91 @@ class notas extends CI_Controller {
 			$retorno['error'] = '2'; //Error en la URL
 		}
 		echo json_encode($retorno);	
+	}
+	
+	function generarNota(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+		//Revisamos que vengas las variables necesarias
+		if(	isset($_POST['cedula'])
+			&&isset($_POST['nombre'])
+			&&isset($_POST['facturaAplicar'])
+			&&isset($_POST['facturaSeleccion'])
+			&&isset($_POST['productos'])){
+			//Obtenemos los productos
+			$productosAAcreditar = json_decode($_POST['productos']);	
+			//Verificamos que no vengan vacios
+			if(trim($_POST['cedula'])!=''
+				&&trim($_POST['nombre'])!=''
+				&&trim($_POST['facturaAplicar'])!=''
+				&&trim($_POST['facturaSeleccion'])!=''
+				&&sizeOf($productosAAcreditar)>0){
+				//Cargamos las variables
+				$cedula = $_POST['cedula'];
+				$nombre = $_POST['nombre'];
+				$facturaAplicar = $_POST['facturaAplicar'];
+				$facturaAcreditar = $_POST['facturaSeleccion'];
+				//Verificamos que exista cliente
+				if(is_numeric($cedula)&&$this->cliente->existe_Cliente($cedula)){
+					include '/../get_session_data.php';	
+					//Verificamos que existan las facturas
+					if(is_numeric($facturaAplicar)&&$this->factura->existe_Factura($facturaAplicar, $data['Sucursal_Codigo'])
+						&&is_numeric($facturaAcreditar)&&$this->factura->existe_Factura($facturaAcreditar, $data['Sucursal_Codigo'])){
+						if($this->existeProductosAcreditar($productosAAcreditar, $data['Sucursal_Codigo'])){
+							//Preguntamos si la factura a aplicar ya fue aplicada en otra nota
+							if(!$this->contabilidad->facturaAplciarYaFueAplicada($facturaAplicar, $data['Sucursal_Codigo'])){
+								//Listo para realizar nota
+								//Obtenemos el consecutivo
+								if($consecutivo = $this->contabilidad->getConsecutivo($data['Sucursal_Codigo'])){
+									date_default_timezone_set("America/Costa_Rica");
+									$fecha = date("y/m/d : H:i:s", now());
+								
+									if($this->contabilidad->agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cedula, $data['Sucursal_Codigo'], $facturaAcreditar, $facturaAplicar)){
+										$this->contabilidad->agregarProductosNotaCredito($consecutivo, $data['Sucursal_Codigo'], $productosAAcreditar, $cedula);
+										
+										$retorno['status'] = 'success';
+										$retorno['consecutivo'] = $consecutivo;
+										unset($retorno['error']);
+									}else{
+										//No se pudo crear la nota
+										$retorno['error'] = '9';
+									}
+								}else{
+									//No se pudo obtener el nuevo consecutivo
+									$retorno['error'] = '8';
+								}
+							}else{
+								//La factura a aplicar ya fue aplicada
+								$retorno['error'] = '7';
+							}
+						}else{
+							//Algun producto ya no existe
+							$retorno['error'] = '6';
+						}
+					}else{
+						//Alguna factura no es valida o no existe
+						$retorno['error'] = '5';
+					}
+				}else{
+					//Cliente no valido
+					$retorno['error'] = '4'; 
+				}			
+			}else{
+				//Campos Vacios
+				$retorno['error'] = '3';
+			}			
+		}else{
+			//URL MALA
+			$retorno['error'] = '2';
+		}
+		echo json_encode($retorno);
+	}
+	
+	private function existeProductosAcreditar($productos, $sucursal){
+		foreach($productos as $producto){
+			if(!$this->articulo->existe_Articulo($producto->c,$sucursal)){return false;}
+		}
+		return true;
 	}
 }
 

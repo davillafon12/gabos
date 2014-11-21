@@ -428,6 +428,40 @@ Class articulo extends CI_Model
 		return '-3';*/
 	}
 	
+	function actualizarInventarioSUMADefectuoso($codigo_producto, $cantidad, $sucursal){		
+		if($codigo_producto!='00'){// Si no es generico sigue
+			//La cantidad que ingresa por parametro es la cantidad a restar al inventario
+			//Traemos la cantidad actual
+			//echo 'Paso 1';
+			$cantidadInventario = $this->inventarioDefectuosoActual($codigo_producto, $sucursal);
+			//echo $cantidadInventario."<br>";
+			if($cantidadInventario==false){// Si no se pudo obtener inventario			 
+				//return '1'; //numero de error para 'Error al obtener inventario' o 'No hay existencia de ese producto'
+				//SE CORRIGIO PUESTO NO AGREGABA CUANDO EL INVENTARIO ES CERO
+				$cantidadInventario=0;
+			}
+			/*else{ //Si se obtuvo el inventario				
+				$nuevoInventario = $cantidadInventario+$cantidad;
+				//echo 'Actual: '.$cantidadInventario.' Siguiente: '.$nuevoInventario
+				$data['Articulo_Cantidad_Inventario']=$nuevoInventario;
+				$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
+				$this->db->update('TB_06_Articulo' ,$data);
+				return '3'; //Numero que afirma un buen ingreso				
+			}*/
+			$nuevoInventario = $cantidadInventario+$cantidad;
+			//echo 'Actual: '.$cantidadInventario.' Siguiente: '.$nuevoInventario
+			$data['Articulo_Cantidad_Defectuoso']=$nuevoInventario;
+			$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
+			$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+			$this->db->update('TB_06_Articulo' ,$data);
+			return '3'; //Numero que afirma un buen ingreso
+		}
+		/*$data['Articulo_Cantidad_Inventario']=$cantidad;
+		$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
+		$this->db->update('TB_06_Articulo' ,$data);
+		return '-3';*/
+	}
+	
 	function inventarioActual($codigo, $sucursal){
 		$this -> db -> select('Articulo_Cantidad_Inventario');
 		$this -> db -> from('TB_06_Articulo');
@@ -443,6 +477,29 @@ Class articulo extends CI_Model
 			foreach($result as $row)
 			{
 				return $row->Articulo_Cantidad_Inventario;
+			}			
+		}
+		else
+		{
+		    return false;
+		}
+	}
+	
+	function inventarioDefectuosoActual($codigo, $sucursal){
+		$this -> db -> select('Articulo_Cantidad_Defectuoso');
+		$this -> db -> from('TB_06_Articulo');
+		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> limit(1);
+		
+		$query = $this -> db -> get();
+		
+		if($query -> num_rows() != 0)
+		{
+			$result = $query->result();
+			foreach($result as $row)
+			{
+				return $row->Articulo_Cantidad_Defectuoso;
 			}			
 		}
 		else

@@ -111,10 +111,15 @@ function notyMsg(Mensaje, tipo){
 function resetFields(){
 	$("#nombre").val('');
 	$("#codigo_busqueda").val('');
+	$("#factura_aplicar").val('');
 	$("#tbody_facturas").html('');
 	$("#tbody_productos").html('');
 	$("#tbody_productos_seleccionados").html('');
 	facturaSeleccionada = 0;
+	existeFacturaAplicar = false;
+	productosMarcados = [];
+	productosCreditar = [];
+	productosMarcadosEliminar = [];
 }
 
 function setInformacion(informacion){
