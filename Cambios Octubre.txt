@@ -7,7 +7,7 @@ LISTO-> Agregar si cliente es exento de impuestos.
 LISTO-> En recibos no cobrar por orden de saldo sino por consecutivo.
 LISTO-> Mostrar si usuario esta activo o inactivo en tabla de edicion.
 LISTO-> En notas credito, agregar filtrado por codigo de articulo.
--> Al hacer nota credito, seleccionar si el articulo devuelto es defectuoso o no.
+LISTO-> Al hacer nota credito, seleccionar si el articulo devuelto es defectuoso o no.
 LISTO-> Agregar en a interfaz de notas credito, a cual factura se le aplica el descuento de dicha nota.
 LISTO-> Agregar semiactivo en cliente.
 LISTO-> Cambiar interfaz de "ver mi perfil".
@@ -19,7 +19,7 @@ Agregar
 -> Mostrar factura, proforma para impresion.
 -> Agregar en configuracion general un boton para actualizar estado de los 
    clientes, pedir contraseña y validar que no se haga en menos de un mes.
--> Notas credito.
+LISTO-> Notas credito.
 -> Notas debito.
 -> Cierre Caja.
 -> Cierre Parcial.
