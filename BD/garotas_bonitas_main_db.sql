@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-10-2014 a las 05:35:58
+-- Tiempo de generación: 22-11-2014 a las 22:27:13
 -- Versión del servidor: 5.6.20
 -- Versión de PHP: 5.5.15
 
@@ -16,18 +16,19 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
-
 --
 -- Base de datos: `garotas_bonitas_main_db`
 --
--- --------------------------------------------------------
 CREATE DATABASE IF NOT EXISTS `garotas_bonitas_main_db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `garotas_bonitas_main_db`;
+
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tb_02_sucursal`
 --
 
+DROP TABLE IF EXISTS `tb_02_sucursal`;
 CREATE TABLE IF NOT EXISTS `tb_02_sucursal` (
   `Codigo` int(11) NOT NULL,
   `Sucursal_Cedula` varchar(100) NOT NULL,
@@ -60,6 +61,7 @@ INSERT INTO `tb_02_sucursal` (`Codigo`, `Sucursal_Cedula`, `Sucursal_Nombre`, `S
 -- Estructura de tabla para la tabla `tb_01_usuario`
 --
 
+DROP TABLE IF EXISTS `tb_01_usuario`;
 CREATE TABLE IF NOT EXISTS `tb_01_usuario` (
 `Usuario_Codigo` int(11) NOT NULL,
   `Usuario_Nombre` varchar(20) DEFAULT NULL,
@@ -85,12 +87,9 @@ CREATE TABLE IF NOT EXISTS `tb_01_usuario` (
 --
 
 INSERT INTO `tb_01_usuario` (`Usuario_Codigo`, `Usuario_Nombre`, `Usuario_Apellidos`, `Usuario_Cedula`, `Usuario_Tipo_Cedula`, `Usuario_Celular`, `Usuario_Telefono`, `Usuario_Fecha_Ingreso`, `Usuario_Fecha_Cesantia`, `Usuario_Fecha_Recontratacion`, `Usuario_Nombre_Usuario`, `Usuario_Observaciones`, `Usuario_Password`, `Usuario_Imagen_URL`, `Usuario_Correo_Electronico`, `Usuario_Rango`, `TB_02_Sucursal_Codigo`) VALUES
-(1, 'David', 'Villalobos Fonseca', 402040954, 'Nacional', '8327-5345', '2268-8368', '2014-02-02 00:00:00', NULL, NULL, 'David_test', 'Usuario testing', '49ff630e0642355953dece12a68da694', '1.png', 'djbrother12@gmail.com', 'avanzado', 0),
+(1, 'David', 'Villalobos Fonseca', 402040954, 'Nacional', '8327-5345', '2268-8368', '2014-02-02 00:00:00', NULL, NULL, 'David_test', 'Usuario testing', '49ff630e0642355953dece12a68da694', '402040954_0.png', 'davillafon12@gmail.com', 'avanzado', 0),
 (2, 'Siviany', 'Prendas Zamora', 401240584, 'Nacional', '85427454', '22374585', '2014-02-13 00:00:00', NULL, NULL, 'Siviany_Test', 'Usuario testing', '21232f297a57a5a743894a0e4a801fc3', '2.png', 'sprendas88@gmail.com', 'avanzado', 0),
-(3, 'David ', 'Villalobos', 402040952, 'nacional', '5555-5555', '6666-6666', '2014-07-17 00:00:00', NULL, '2014-10-08 21:55:33', 'villa', '', 'ed3f29fee9e28e36f7cdc8115e0642e9', '402040952_0.png', 'david@admin.cr', 'administra', 0),
-(4, 'Karla', 'Venegas', 201450125, 'nacional', '1111-1111', '2222-2222', '2014-10-08 23:14:16', NULL, NULL, 'kvenegas', '', '55557b0ddbfbd46f8d0aa994c8b2a961', '201450125_01.png', 'karla@correo.com', 'cajero', 0),
-(5, 'Brenda', 'Fonseca', 602010352, 'nacional', '1111-1111', '2222-2222', '2014-10-08 23:17:32', '2014-10-08 23:20:51', NULL, 'bfonseca', '', '9575fc2d9cd21cd80904ed15b9da6651', '602010352_0.png', 'brenda@correo.com', 'vendedor', 0);
-
+(3, 'David ', 'Villalobos', 402040952, 'nacional', '5555-5555', '6666-6666', '2014-07-17 00:00:00', NULL, '2014-10-16 23:30:34', 'villa', '', 'ed3f29fee9e28e36f7cdc8115e0642e9', '402040952_0.png', 'david@admin.cr', 'administra', 0);
 
 -- --------------------------------------------------------
 
@@ -98,6 +97,7 @@ INSERT INTO `tb_01_usuario` (`Usuario_Codigo`, `Usuario_Nombre`, `Usuario_Apelli
 -- Estructura de tabla para la tabla `tb_03_cliente`
 --
 
+DROP TABLE IF EXISTS `tb_03_cliente`;
 CREATE TABLE IF NOT EXISTS `tb_03_cliente` (
   `Cliente_Cedula` bigint(20) NOT NULL,
   `Cliente_Nombre` varchar(20) DEFAULT '',
@@ -115,38 +115,28 @@ CREATE TABLE IF NOT EXISTS `tb_03_cliente` (
   `Cliente_Estado` varchar(10) DEFAULT NULL,
   `Cliente_Calidad` int(11) DEFAULT NULL,
   `Cliente_Numero_Pago` int(11) DEFAULT NULL,
-  `Cliente_EsSucursal` tinyint(1) DEFAULT NULL
+  `Cliente_EsSucursal` tinyint(1) DEFAULT NULL,
+  `Cliente_EsExento` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_03_cliente`
 --
 
-INSERT INTO `tb_03_cliente` (`Cliente_Cedula`, `Cliente_Nombre`, `Cliente_Apellidos`, `Cliente_Tipo_Cedula`, `Cliente_Carnet_Numero`, `Cliente_Celular`, `Cliente_Telefono`, `Cliente_Fecha_Ingreso`, `Cliente_Pais`, `Cliente_Direccion`, `Cliente_Observaciones`, `Cliente_Imagen_URL`, `Cliente_Correo_Electronico`, `Cliente_Estado`, `Cliente_Calidad`, `Cliente_Numero_Pago`, `Cliente_EsSucursal`) VALUES
-(0, 'Cliente Contado', 'Afiliado', 'nacional', 0, '', '', '0000-00-00 00:00:00', 'Costa Rica', 'San Jose', '', '', '', 'activo', 5, 1, 0),
-(1, 'Cliente Contado', 'Corriente', 'nacional', 0, '', '', '0000-00-00 00:00:00', 'Costa Rica', 'San Jose', '', '', '', 'activo', 5, 2, 0),
-(111111111, 'Jairo', 'Arrieta Fonseca', 'nacional', 4444, '1111-1111', '2222-2222', '2014-09-28 21:10:24', 'CR', 'CR', '', 'Default.png', 'f@f.c', 'activo', 5, 1, 0),
-(111132456, 'Stefany', 'Zamora Beita', 'nacional', 2500, '85412244', '88554477', '2014-07-16 18:38:25', 'Costa Rica', 'San Rafael Centro', 'es una vaga', 'Default.png', 'estefa@hotmail.com', 'activo', 5, 2, 0),
-(123123123, 'Juan ', 'Ferrera', 'nacional', 1003, '9123-13-11', '1233-44-41', '2014-04-16 07:20:50', 'Costa Rica', 'San Jose', '', '123123123.jpg', 'juanFerrara@gmail.com', 'activo', 5, 1, 0),
-(212002360, 'Sofia', 'Araya Gonzales', 'nacional', 3333, '8888-8888', '2222-2222', '2014-09-28 05:00:37', '', 'Cartago', 'Se agrego por web', '212002360.png', 'sofi@correo.com', 'activo', 5, 2, 0),
-(321124553, 'Emma ', 'Watson ', 'nacional', 1002, '2225-54-36', '1124-41-12', '2014-04-16 06:00:00', 'Britania', 'nulo', '', '321124553.jpg', 'emawatson@hotmail.com', 'activo', 5, 1, 0),
-(321223444, 'Dulce Maria', 'Gonzalez Rodriguez', 'nacional', 1001, '2332-21-11', '5544-33-22', '2014-04-16 07:18:41', 'Estados Unidos', 'miami', '', '321223444.jpg', 'dulcemaria@hotmail.com', 'activo', 5, 1, 0),
-(333333333, 'Fabiola', 'Sanchez Vargas', 'nacional', 1111, '1111-1111', '1111-1111', '2014-09-28 05:08:16', 'Costa Rica', 'San Jose', 'Editado por web', '333333333.png', 'fabiola@correo.com', 'activo', 5, 2, 0),
-(401310918, 'Luisa', 'Fonseca Gonzales', 'nacional', 1111, '2222-2222', '2222-2222', '2014-10-01 05:05:41', 'CR', 'Heredia', '', 'Default.png', 'c@c.v', 'activo', 5, 2, 0),
-(401930976, 'Canino', 'Villalobos Fonseca', 'nacional', 1111, '1111-1111', '1111-1111', '2014-10-02 01:11:58', 'CR', 'Heredia', 'Caninooooooooooooooo', 'Default.png', 'c@v.v', 'activo', 5, 2, 0),
-(402040954, 'David', 'Villalobos Fonseca', 'nacional', 1003, '', '', '2014-04-16 07:20:50', 'Costa Rica', 'San Jose', '', '', '', 'activo', 5, 1, 0),
-(402090861, 'Kevin', 'Villalobos Fonseca', 'nacional', 1002, '8325-45-67', '2268-54-54', '2014-07-16 22:52:48', 'CR', 'San Chepe Centro', '', 'Default.png', 'elpelusa@familiar.com', 'activo', 5, 2, 0),
-(444444444, 'Valeria', 'Gomez Lizano', 'nacional', 1111, '1111-1111', '2222-2222', '2014-09-28 21:05:51', 'CR', 'San Jose', '', 'Default.png', 'v@v.c', 'activo', 5, 2, 0),
-(445566789, 'Cristina', 'Urcuyo Solorzano', 'nacional', 25001, '88547755', '22664422', '2014-07-16 18:38:25', 'Costa Rica', 'Entrada calle hernandez, san rafael ', 'muy buena compradora', 'Default.png', 'crisurcuyo@costarricense.cr', 'activo', 5, 1, 0),
-(654332211, 'Grettel', 'Valdez', 'nacional', 1002, '8655-43-25', '2262-05-43', '2014-04-16 07:21:54', 'Costa Rica', 'Cartago', '', '654332211.jpg', 'grettelvaldez@hotmail.com', 'activo', 5, 1, 0),
-(654435788, 'Alfonso', 'Herrera', 'nacional', 1005, '3343-22-32', '2347-65-43', '2014-04-16 07:22:42', 'Nicaragua', 'no tengo ', '', '654435788.jpg', 'alfonso@hotmail.com', 'semiactivo', 5, 1, 0),
-(701220145, 'Carlos', 'Smith', 'nacional', 2212, '8888-8888', '2222-2222', '2014-09-28 04:51:38', '', 'Limon', '', 'Default.png', 'csmith@correo.com', 'activo', 5, 1, 0),
-(888888888, 'Karen', 'Bolaños Soto', 'nacional', 1111, '2222-2222', '2222-2222', '2014-09-28 05:11:26', '', 'Chepe', 'Agregado por web', '888888888.png', 'c@c.c', 'activo', 5, 2, 0),
-(1111111111, 'GarotasByGarotas', ' ', 'juridica', 1111, '1111-1111', '2222-2222', '2014-09-28 05:23:08', 'CR', 'San Jose', 'Sucursal Prueba', '1111111111.png', 'g@g.g', 'activo', 5, 2, 0),
-(1111222345, 'Angie', 'Corrales Delgado', 'juridica', 2005, '88774455', '22665544', '2014-07-16 18:38:25', 'costa rica ', 'heredia centro ', 'robo la ultima compra ', 'Default.png', 'acorrales@hotmail.com', 'inactivo', 5, 2, 0),
-(6666666666, 'Garotas', 'Garage', 'juridica', 1111, '1111-1111', '2222-2222', '2014-09-28 05:28:20', 'CR', 'San Jose', 'Tipo sucursal', '6666666666.png', 'c@c.c', 'activo', 5, 2, 1),
-(111002002045, 'Ipanema', NULL, 'juridica', NULL, NULL, NULL, '2014-09-19 06:00:00', NULL, NULL, 'Sucursal', NULL, NULL, 'activo', 5, 1, 1),
-(155812825435, 'Lucia', 'Prado', 'residencia', 1111, '6666-66-66', '9999-99-99', '2014-08-22 23:38:30', 'De por alla', 'Heredia', '', 'Default.png', 'mulata@mukata.com', 'activo', 5, 1, 0);
+INSERT INTO `tb_03_cliente` (`Cliente_Cedula`, `Cliente_Nombre`, `Cliente_Apellidos`, `Cliente_Tipo_Cedula`, `Cliente_Carnet_Numero`, `Cliente_Celular`, `Cliente_Telefono`, `Cliente_Fecha_Ingreso`, `Cliente_Pais`, `Cliente_Direccion`, `Cliente_Observaciones`, `Cliente_Imagen_URL`, `Cliente_Correo_Electronico`, `Cliente_Estado`, `Cliente_Calidad`, `Cliente_Numero_Pago`, `Cliente_EsSucursal`, `Cliente_EsExento`) VALUES
+(0, 'Cliente Contado', 'Afiliado', 'nacional', 0, '', '', '0000-00-00 00:00:00', 'Costa Rica', 'San Jose', '', '', '', 'activo', 5, 1, 0, 0),
+(1, 'Cliente Contado', 'Corriente', 'nacional', 0, '', '', '0000-00-00 00:00:00', 'Costa Rica', 'San Jose', '', '', '', 'activo', 5, 2, 0, 0),
+(111132456, 'Stefany', 'Zamora Beita', 'nacional', 2500, '8541-2244', '8855-4477', '2014-07-16 18:38:25', 'Costa Rica', 'San Rafael Centro', 'es una vaga', 'Default.png', 'estefa@hotmail.com', 'semiactivo', 5, 2, 0, 0),
+(123123123, 'Juan ', 'Ferrera', 'nacional', 1003, '9123-13-11', '1233-44-41', '2014-04-16 07:20:50', 'Costa Rica', 'San Jose', '', '123123123.jpg', 'juanFerrara@gmail.com', 'inactivo', 5, 1, 0, 0),
+(212002360, 'Sofia', 'Araya Gonzales', 'nacional', 3333, '8888-8888', '2222-2222', '2014-09-28 05:00:37', '', 'Cartago', 'Se agrego por web', '212002360.png', 'sofi@correo.com', 'activo', 5, 2, 1, 1),
+(321124553, 'Emma ', 'Watson ', 'nacional', 1002, '2225-54-36', '1124-41-12', '2014-04-16 06:00:00', 'Britania', 'nulo', '', '321124553.jpg', 'emawatson@hotmail.com', 'activo', 5, 1, 0, 0),
+(321223444, 'Dulce Maria', 'Gonzalez Rodriguez', 'nacional', 1001, '2332-21-11', '5544-33-22', '2014-04-16 07:18:41', 'Estados Unidos', 'miami', '', '321223444.jpg', 'dulcemaria@hotmail.com', 'activo', 5, 1, 0, 0),
+(402040954, 'David', 'Villalobos Fonseca', 'nacional', 1003, '', '', '2014-04-16 07:20:50', 'Costa Rica', 'San Jose', '', '', '', 'activo', 5, 1, 0, 0),
+(654332211, 'Grettel', 'Valdez', 'nacional', 1002, '8655-43-25', '2262-05-43', '2014-04-16 07:21:54', 'Costa Rica', 'Cartago', '', '654332211.jpg', 'grettelvaldez@hotmail.com', 'activo', 5, 1, 0, 0),
+(654435788, 'Alfonso', 'Herrera', 'nacional', 1005, '3343-22-32', '2347-65-43', '2014-04-16 07:22:42', 'Nicaragua', 'no tengo ', '', '654435788.jpg', 'alfonso@hotmail.com', 'semiactivo', 5, 1, 0, 0),
+(701220145, 'Carlos', 'Smith', 'nacional', 2212, '8888-8888', '2222-2222', '2014-09-28 04:51:38', '', 'Limon', '', 'Default.png', 'csmith@correo.com', 'activo', 5, 1, 0, 0),
+(111002002045, 'Ipanema', NULL, 'juridica', NULL, NULL, NULL, '2014-09-19 06:00:00', NULL, NULL, 'Sucursal', NULL, NULL, 'activo', 5, 1, 1, 0),
+(155812825435, 'Lucia', 'Prado', 'residencia', 1111, '6666-66-66', '9999-99-99', '2014-08-22 23:38:30', 'De por alla', 'Heredia', '', 'Default.png', 'mulata@mukata.com', 'activo', 5, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -154,6 +144,7 @@ INSERT INTO `tb_03_cliente` (`Cliente_Cedula`, `Cliente_Nombre`, `Cliente_Apelli
 -- Estructura de tabla para la tabla `tb_05_familia`
 --
 
+DROP TABLE IF EXISTS `tb_05_familia`;
 CREATE TABLE IF NOT EXISTS `tb_05_familia` (
   `Familia_Codigo` int(11) NOT NULL,
   `Familia_Nombre` varchar(20) DEFAULT NULL,
@@ -181,6 +172,7 @@ INSERT INTO `tb_05_familia` (`Familia_Codigo`, `Familia_Nombre`, `Familia_Observ
 -- Estructura de tabla para la tabla `tb_06_articulo`
 --
 
+DROP TABLE IF EXISTS `tb_06_articulo`;
 CREATE TABLE IF NOT EXISTS `tb_06_articulo` (
   `Articulo_Codigo` varchar(20) NOT NULL,
   `Articulo_Descripcion` varchar(150) DEFAULT NULL,
@@ -199,9 +191,8 @@ CREATE TABLE IF NOT EXISTS `tb_06_articulo` (
 --
 
 INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articulo_Codigo_Barras`, `Articulo_Cantidad_Inventario`, `Articulo_Cantidad_Defectuoso`, `Articulo_Descuento`, `Articulo_Imagen_URL`, `Articulo_Exento`, `TB_05_Familia_Familia_Codigo`, `TB_02_Sucursal_Codigo`) VALUES
-('11', '<script>window.print()</script>', '11', 2, 0, 0, 'Default.png', 0, 0, 0),
 ('22750', 'JUEGO DRUSA DORADO (INCLUYE CAJA CARTON)', '22750', 100, 0, 0, '22750', 0, 0, 1),
-('22750', 'JUEGO DRUSA DORADO (INCLUYE CAJA CARTON)', '22750', 93, 0, 0, '22750', 0, 2, 0),
+('22750', 'JUEGO DRUSA DORADO (INCLUYE CAJA CARTON)', '22750', 97, 1, 0, '22750', 0, 2, 0),
 ('22751', 'ANILLO DRUSA DORADO', '22751', 100, 0, 0, '22750', 0, 0, 1),
 ('22751', 'ANILLO DRUSA DORADO', '22751', 98, 0, 0, '22750', 0, 2, 0),
 ('22752', 'ANILLO DRUSA PLATEADO', '22752', 100, 0, 0, '22750', 0, 0, 1),
@@ -243,11 +234,11 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('22782', 'ANILLO BOLA DE FUEGO', '22782', 100, 0, 0, '22750', 0, 2, 0),
 ('22783', 'JUEGO BOLA DE FUEGO NEGRO (INCLUYE CAJA CARTON)', '22783', 100, 0, 0, '22750', 0, 2, 0),
 ('22784', 'ANILLO BOLITAS DE FUEGO', '22784', 100, 0, 0, '22750', 0, 2, 0),
-('22785', 'JUEGO BOLA DE FUEGO BLANCO (INCLUYE CAJA CARTON)', '22785', 92, 0, 25, '22750', 0, 2, 0),
+('22785', 'JUEGO BOLA DE FUEGO BLANCO (INCLUYE CAJA CARTON)', '22785', 92, 2, 25, '22750', 0, 2, 0),
 ('22786', 'ANILLO BOLA DE FUEGO', '22786', 50, 0, 0, '22750', 0, 2, 0),
 ('22787', 'ARGOLLA BOLAS DE FUEGO', '22787', 100, 0, 0, '22750', 0, 2, 0),
 ('22788', 'ARETE BOLA DE FUEGO PEQ', '22788', 118, 0, 0, '22750', 0, 2, 0),
-('22789', 'ARETE BOLA DE FUEGO', '22789', 95, 0, 0, '22750', 0, 2, 0),
+('22789', 'ARETE BOLA DE FUEGO', '22789', 89, 0, 0, '22750', 0, 2, 0),
 ('22790', 'CADENA + DIJE CIRCULO', '22790', 7, 0, 0, '22750', 0, 2, 0),
 ('22791', 'CADENA TRES OROS ', '22791', 100, 0, 0, '22750', 0, 2, 0),
 ('22792', 'CADENA PLANA TRES OROS', '22792', 100, 0, 0, '22750', 0, 2, 0),
@@ -311,7 +302,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('22850', 'ANILLO CIRCONES ', '22850', 100, 0, 0, '22750', 0, 2, 0),
 ('22851', 'ANILLO COMPROMISO', '22851', 100, 0, 0, '22750', 0, 2, 0),
 ('22852', 'ANILLO FLOR ', '22852', 100, 0, 0, '22750', 0, 2, 0),
-('22853', 'ANILLO MATRIMONIO SOLO TALLAS 6 Y 7', '22853', 100, 0, 0, '22750', 0, 2, 0),
+('22853', 'ANILLO MATRIMONIO SOLO TALLAS 6 Y 7', '22853', 92, 0, 0, '22750', 0, 2, 0),
 ('22854', 'ANILLO CORAZON CIRCONES ', '22854', 98, 0, 0, '22750', 0, 2, 0),
 ('22855', 'ANILLO TRES OROS AJUSTABLE', '22855', 100, 0, 0, '22750', 0, 2, 0),
 ('22856', 'ARETE PERLA NEGRA ', '22856', 94, 0, 0, '22750', 0, 2, 0),
@@ -397,7 +388,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('22936', 'JUEGO PALITO BOLITA (INCLUYE CAJA CARTON)', '22936', 98, 0, 0, '22750', 0, 2, 0),
 ('22937', 'PULSERA BOLITAS ', '22937', 100, 0, 0, '22750', 0, 2, 0),
 ('22938', 'ARETE BOLITA LISA ', '22938', 100, 0, 0, '22750', 0, 2, 0),
-('22939', 'JUEGO PERLA NEGRA  (INCLUYE CAJA CARTON)', '22939', 96, 0, 0, '22750', 0, 2, 0),
+('22939', 'JUEGO PERLA NEGRA  (INCLUYE CAJA CARTON)', '22939', 97, 5, 0, '22750', 0, 2, 0),
 ('22940', 'CADENA + BOLITAS CRISTALES ', '22940', 100, 0, 0, '22750', 0, 2, 0),
 ('22941', 'ARETE GANCHO CRISTAL', '22941', 98, 0, 0, '22750', 0, 2, 0),
 ('22942', 'ANILLO GOTA DOBLE ', '22942', 100, 0, 0, '22750', 0, 2, 0),
@@ -423,7 +414,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('22962', 'CADENA + DIJE CORAZON', '22962', 100, 0, 0, '22750', 0, 2, 0),
 ('22963', 'CADENA + DIJE DELFIN', '22963', 100, 0, 0, '22750', 0, 2, 0),
 ('22964', 'CADENA + DIJE CUCHARA ', '22964', 100, 0, 0, '22750', 0, 2, 0),
-('22965', 'CADENA + DIJE TENEDORES ', '22965', 100, 0, 0, '22750', 0, 2, 0),
+('22965', 'CADENA + DIJE TENEDORES ', '22965', 93, 0, 0, '22750', 0, 2, 0),
 ('22966', 'CADENA + DIJE SOL Y LUNA ', '22966', 100, 0, 0, '22750', 0, 2, 0),
 ('22967', 'CADENA + DIJE FLOR', '22967', 99, 0, 0, '22750', 0, 2, 0),
 ('22968', 'CADENA + DIJE HOJA ', '22968', 99, 0, 0, '22750', 0, 2, 0),
@@ -559,7 +550,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('23098', 'CADENA + DIJE GOTA', '23098', 100, 0, 0, '22750', 0, 2, 0),
 ('23099', 'CADENA + DIJE BUHO', '23099', 100, 0, 0, '22750', 0, 2, 0),
 ('23100', 'CADENA + DIJE GATITOS ', '23100', 99, 0, 0, '22750', 0, 2, 0),
-('23101', 'CADENA + DIJE LUNA ', '23101', 100, 0, 0, '22750', 0, 2, 0),
+('23101', 'CADENA + DIJE LUNA ', '23101', 99, 0, 0, '22750', 0, 2, 0),
 ('23102', 'CADENA + DIJE ANGEL CIRCON', '23102', 100, 0, 0, '22750', 0, 2, 0),
 ('23103', 'ARETE PERLA PLACA LABRADA', '23103', 100, 0, 0, '22750', 0, 2, 0),
 ('23104', 'PULSERA PERLA ENTRELAZADA ', '23104', 100, 0, 0, '22750', 0, 2, 0),
@@ -598,12 +589,12 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('23137', 'HUGGIES LINEA DORADA', '23137', 100, 0, 0, '22750', 0, 2, 0),
 ('23138', 'HUGGIES MARIPOSA ', '23138', 100, 0, 0, '22750', 0, 2, 0),
 ('23139', 'ARETE GOTA DIAMANTADA ', '23139', 100, 0, 0, '22750', 0, 2, 0),
-('23140', 'ARETE ROMBO DIAMANTADO', '23140', 100, 0, 0, '22750', 0, 2, 0),
-('23141', 'ARETE LARGO MARIPOSA ', '23141', 99, 0, 0, '22750', 0, 2, 0),
+('23140', 'ARETE ROMBO DIAMANTADO', '23140', 70, 0, 0, '22750', 0, 2, 0),
+('23141', 'ARETE LARGO MARIPOSA ', '23141', 94, 0, 0, '22750', 0, 2, 0),
 ('23142', 'ARETE CIRCULO FLOR ', '23142', 100, 0, 0, '22750', 0, 2, 0),
 ('23143', 'ARETE CORAZON LIBELULA', '23143', 100, 0, 0, '22750', 0, 2, 0),
 ('23144', 'ARETE LARGO HOJA NACAR ', '23144', 100, 0, 0, '22750', 0, 2, 0),
-('23145', 'ARETE GATITOS ', '23145', 99, 0, 0, '22750', 0, 2, 0),
+('23145', 'ARETE GATITOS ', '23145', 94, 0, 0, '22750', 0, 2, 0),
 ('23146', 'ARETE LIBELULA NACAR ', '23146', 100, 0, 0, '22750', 0, 2, 0),
 ('23147', 'ARETE CORAZON', '23147', 100, 0, 0, '22750', 0, 2, 0),
 ('23148', 'ARETE CORAZON ROJO', '23148', 100, 0, 0, '22750', 0, 2, 0),
@@ -618,7 +609,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('23157', 'ARGOLLA LISA ', '23157', 100, 0, 0, '22750', 0, 2, 0),
 ('23158', 'ARGOLLA LISA ', '23158', 100, 0, 0, '22750', 0, 2, 0),
 ('23159', 'ARGOLLA LISA ', '23159', 100, 0, 0, '22750', 0, 2, 0),
-('23160', 'ARGOLLA MARIPOSA ', '23160', 100, 0, 0, '22750', 0, 2, 0),
+('23160', 'ARGOLLA MARIPOSA ', '23160', 95, 0, 0, '22750', 0, 2, 0),
 ('23161', 'ARGOLLA RESINA BLANCA c/u', '23161', 100, 0, 0, '22750', 0, 2, 0),
 ('23162', 'ARGOLLA LINEA CIRCONES', '23162', 100, 0, 0, '22750', 0, 2, 0),
 ('23163', 'ARGOLLA LINEA CIRCONES', '23163', 100, 0, 0, '22750', 0, 2, 0),
@@ -758,7 +749,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('23297', 'SEPARADOR DE LIBROS ', '23297', 100, 0, 0, '22750', 0, 2, 0),
 ('23298', 'ARGOLLA JESUS ', '23298', 100, 0, 0, '22750', 0, 2, 0),
 ('23299', 'DIJE CRUZ ', '23299', 100, 0, 0, '22750', 0, 2, 0),
-('23300', 'PIN VIRGEN', '23300', 100, 0, 0, '22750', 0, 2, 0),
+('23300', 'PIN VIRGEN', '23300', 99, 0, 0, '22750', 0, 2, 0),
 ('23301', 'ROSARIO ACERO', '23301', 100, 0, 0, '22750', 0, 2, 0),
 ('23302', 'ROSARIO ACERO', '23302', 100, 0, 0, '22750', 0, 2, 0),
 ('23303', 'DENARIO ACERO', '23303', 100, 0, 0, '22750', 0, 2, 0),
@@ -858,7 +849,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('23397', 'JUEGO PROMOCION', '23397', 100, 0, 0, '22750', 0, 1, 0),
 ('23398', 'JUEGO PROMOCION', '23398', 100, 0, 0, '22750', 0, 1, 0),
 ('23399', 'JUEGO PROMOCION', '23399', 100, 0, 0, '22750', 0, 1, 0),
-('23400', 'JUEGO PROMOCION', '23400', 100, 0, 0, '22750', 0, 1, 0),
+('23400', 'JUEGO PROMOCION', '23400', 90, 0, 0, '22750', 0, 1, 0),
 ('23401', 'JUEGO PROMOCION', '23401', 100, 0, 0, '22750', 0, 1, 0),
 ('23402', 'ARETES TRES POR ', '23402', 100, 0, 0, '22750', 0, 1, 0),
 ('23403', 'CADENA PROMOCION ', '23403', 100, 0, 0, '22750', 0, 1, 0),
@@ -882,6 +873,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 -- Estructura de tabla para la tabla `tb_07_factura`
 --
 
+DROP TABLE IF EXISTS `tb_07_factura`;
 CREATE TABLE IF NOT EXISTS `tb_07_factura` (
   `Factura_Consecutivo` int(11) NOT NULL,
   `Factura_Monto_Total` double DEFAULT NULL,
@@ -901,85 +893,13 @@ CREATE TABLE IF NOT EXISTS `tb_07_factura` (
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `tb_07_factura`
---
-
-INSERT INTO `tb_07_factura` (`Factura_Consecutivo`, `Factura_Monto_Total`, `Factura_Monto_Sin_IVA`, `Factura_Monto_IVA`, `Factura_Observaciones`, `Factura_Tipo_Pago`, `Factura_Fecha_Hora`, `Factura_Estado`, `Factura_Moneda`, `Factura_porcentaje_iva`, `Factura_tipo_cambio`, `Factura_Nombre_Cliente`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) VALUES
-(1, 121050, 107123.89380531, 13926.10619469, 'Se le aplica descuento por david', 'contado', '2014-08-18 05:39:31', 'cobrada', 'dolares', 13, 560, 'Emma  Watson ', 0, 1, 0, 321124553),
-(1, 19000, 16814.159292035, 2185.8407079646, '', NULL, NULL, 'pendiente', 'colones', 13, 560, 'Cliente Contado Afiliado', 1, 3, 1, 0),
-(2, 3300, 2920.3539823009, 379.64601769911, '', 'contado', '2014-08-18 05:32:05', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 402040954),
-(3, 6600, 5840.7079646018, 759.29203539823, 'Se le aplico un descuento por ser buen comprador', 'contado', '2014-08-22 04:09:29', 'cobrada', 'dolares', 13, 560, 'CALIDAD FONSECA', 0, 1, 0, 0),
-(4, 12000, 10619.469026549, 1380.5309734513, '', 'contado', '2014-08-18 05:34:09', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 1),
-(5, 291000, 257522.12389381, 33477.876106195, '', 'contado', '2014-09-14 19:57:15', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 123123123),
-(6, 20430, 18079.646017699, 2350.3539823009, '', 'contado', '2014-09-14 21:12:59', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 0),
-(7, 4977, 4404.4247787611, 572.57522123894, '', 'contado', '2014-09-14 21:32:52', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 321124553),
-(8, 2300, 2035.3982300885, 264.6017699115, '', 'contado', '2014-09-21 05:35:02', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 445566789),
-(9, 2300, 2035.3982300885, 264.6017699115, '', 'deposito', '2014-09-15 01:56:37', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 445566789),
-(10, 0, 0, 0, '', 'contado', '2014-08-18 05:30:43', 'cobrada', 'colones', 13, 560, 'Cliente Contado Corriente', 0, 1, 0, 1),
-(11, 3000, 2654.8672566372, 345.13274336283, '', 'contado', '2014-09-21 05:36:55', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 654435788),
-(12, 2000, 1769.9115044248, 230.08849557522, '', 'contado', '2014-09-21 05:37:45', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 402040954),
-(13, 207900, 183982.30088496, 23917.699115044, '', 'contado', '2014-09-21 05:46:05', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(14, 2100, 1858.407079646, 241.59292035398, '', 'contado', '2014-09-21 05:39:44', 'cobrada', 'colones', 13, 560, '', 0, 1, 0, 654332211),
-(15, 0, 0, 0, 'Observaciones', 'contado', '2014-08-18 05:19:40', 'pendiente', 'dolares', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(16, 0, 0, 0, '', 'contado', '2014-08-18 05:27:42', 'pendiente', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(17, 0, 0, 0, 'Test', 'contado', '2014-08-18 05:25:19', 'pendiente', 'colones', 13, 560, 'Juan  Ferrera', 0, 1, 0, 123123123),
-(18, 3000, 2654.8672566372, 345.13274336283, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-22 04:22:30', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(19, 6300, 5575.2212389381, 724.77876106195, '', 'contado', '2014-09-22 04:22:06', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(20, 6300, 5575.2212389381, 724.77876106195, '', 'contado', '2014-09-22 03:55:34', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(22, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(23, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(24, 30000, 26548.672566372, 3451.3274336283, '', NULL, NULL, 'anulada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(25, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(26, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(27, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(28, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(29, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(30, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(31, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'pendiente', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(32, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(33, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(34, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'anulada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(35, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-08-27 01:33:56', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(36, 14869, 13158.407079646, 1710.592920354, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-08-27 01:38:41', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(37, 14869, 13158.407079646, 1710.592920354, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-08-27 01:44:29', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(38, 3000, 2654.8672566372, 345.13274336283, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-08-27 06:03:15', 'cobrada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(39, 7000, 6194.6902654867, 805.30973451327, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-08-27 06:09:50', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(40, 923400, 817168.14159292, 106231.85840708, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-26 20:25:49', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(41, 3100, 2743.3628318584, 356.63716814159, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', NULL, NULL, 'pendiente', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(42, 297000, 262831.85840708, 34168.14159292, '', NULL, NULL, 'pendiente', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(43, 11400, 10088.495575221, 1311.5044247788, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-26 01:16:19', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(44, 120120, 106300.88495575, 13819.115044248, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-26 20:26:05', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(45, 3400, 3008.8495575221, 391.15044247788, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-21 05:52:43', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(46, 4300, 3805.3097345133, 494.69026548673, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-14 21:13:11', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(47, 4300, 3805.3097345133, 494.69026548673, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-14 21:19:31', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(48, 4300, 3805.3097345133, 494.69026548673, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-22 04:14:18', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(49, 4300, 3805.3097345133, 494.69026548673, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-14 21:25:35', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(50, 13440, 11893.805309735, 1546.1946902655, '', 'contado', '2014-09-21 05:47:17', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(51, 7100, 6283.185840708, 816.81415929203, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-15 02:34:42', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(52, 16200, 14336.283185841, 1863.7168141593, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', 'contado', '2014-09-15 02:51:00', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(53, 99330, 87902.654867257, 11427.345132743, '', 'credito', '2014-09-15 03:52:17', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(54, 91000, 80530.973451327, 10469.026548673, '', 'credito', '2014-09-15 04:08:24', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(55, 112370, 99442.477876106, 12927.522123894, 'Prueba con el Scanner de codigo de barras', 'deposito', '2014-09-21 04:36:40', 'cobrada', 'colones', 13, 560, 'Ipanema ', 0, 1, 0, 111002002045),
-(56, 1021500, 903982.30088496, 117517.69911504, '', 'contado', '2014-09-21 05:33:05', 'cobrada', 'colones', 13, 560, 'Cristina Urcuyo Solorzano', 0, 1, 0, 445566789),
-(57, 6200, 5486.7256637168, 713.27433628319, '', 'contado', '2014-09-21 05:31:28', 'cobrada', 'colones', 13, 560, 'Trocito', 0, 1, 0, 0),
-(58, 10500, 9292.0353982301, 1207.9646017699, '', 'credito', '2014-09-20 23:47:45', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(59, 22910, 20274.336283186, 2635.6637168142, '', 'contado', '2014-09-22 04:20:22', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(60, 42600, 37699.115044248, 4900.8849557522, '', 'credito', '2014-09-20 23:26:36', 'cobrada', 'colones', 13, 560, 'Cristina Urcuyo Solorzano', 0, 1, 0, 445566789),
-(61, 10042, 8886.7256637168, 1155.2743362832, '', 'credito', '2014-10-02 01:16:17', 'cobrada', 'colones', 13, 560, 'Canino Villalobos Fonseca', 0, 1, 0, 401930976),
-(62, 7490, 6628.3185840708, 861.6814159292, '', 'credito', '2014-10-02 01:25:42', 'cobrada', 'colones', 13, 560, 'Canino Villalobos Fonseca', 0, 1, 0, 401930976),
-(63, 3300, 2920.3539823009, 379.64601769911, '<script>alert(\\"HACKEADO\\")</script>', NULL, NULL, 'pendiente', 'colones', 13, 560, 'Emma  Watson ', 0, 1, 0, 321124553),
-(64, 5100, 4513.2743362832, 586.72566371681, '<script>window.location.href=www.google.com</script>', 'credito', '2014-10-04 00:39:36', 'cobrada', 'colones', 13, 560, 'Karen Bolaños Soto', 0, 1, 0, 888888888),
-(65, 66057, 58457.522123894, 7599.4778761062, '', 'credito', '2014-10-14 22:13:25', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(66, 27548, 24378.761061947, 3169.2389380531, '', 'credito', '2014-10-15 02:15:58', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(67, 39576, 35023.008849558, 4552.9911504425, '', 'credito', '2014-10-15 02:28:58', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tb_08_articulos_factura`
 --
 
+DROP TABLE IF EXISTS `tb_08_articulos_factura`;
 CREATE TABLE IF NOT EXISTS `tb_08_articulos_factura` (
 `Articulo_Factura_id` int(11) NOT NULL,
   `Articulo_Factura_Codigo` varchar(45) DEFAULT NULL,
@@ -994,156 +914,7 @@ CREATE TABLE IF NOT EXISTS `tb_08_articulos_factura` (
   `TB_07_Factura_Factura_Vendedor_Codigo` int(11) NOT NULL,
   `TB_07_Factura_Factura_Vendedor_Sucursal` int(11) NOT NULL,
   `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=170 ;
-
---
--- Volcado de datos para la tabla `tb_08_articulos_factura`
---
-
-INSERT INTO `tb_08_articulos_factura` (`Articulo_Factura_id`, `Articulo_Factura_Codigo`, `Articulo_Factura_Descripcion`, `Articulo_Factura_Cantidad`, `Articulo_Factura_Descuento`, `Articulo_Factura_Exento`, `Articulo_Factura_Precio_Unitario`, `Articulo_Factura_Imagen`, `TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) VALUES
-(17, '22775', 'ARETE BOLA DE FUEGO', 97, '0', '0', '3000', '22750', 5, 0, 1, 0, 123123123),
-(18, '22775', 'ARETE BOLA DE FUEGO', 3, '0', '0', '3000', '22750', 6, 0, 1, 0, 0),
-(19, '23141', 'ARETE LARGO MARIPOSA ', 1, '0', '0', '2800', '22750', 6, 0, 1, 0, 0),
-(20, '23100', 'CADENA + DIJE GATITOS ', 1, '10', '0', '3700', '22750', 6, 0, 1, 0, 0),
-(21, '23085', 'JUEGO BOLITAS (INCLUYE CAJA CARTON)', 1, '0', '0', '5300', '22750', 6, 0, 1, 0, 0),
-(22, '23155', 'ARETE LOVE ', 3, '21', '0', '2100', '22750', 7, 0, 1, 0, 321124553),
-(23, '22855', 'ANILLO TRES OROS AJUSTABLE', 1, '0', '0', '2300', '22750', 8, 0, 1, 0, 445566789),
-(24, '22855', 'ANILLO TRES OROS AJUSTABLE', 1, '0', '0', '2300', '22750', 9, 0, 1, 0, 445566789),
-(26, '22887', 'ARETE CHISPA 3 POR UNO', 1, '0', '0', '3000', '22750', 11, 0, 1, 0, 654435788),
-(27, '22777', 'ARETE MARIPOSA BOLA TORNASOL', 1, '0', '0', '2000', '22750', 12, 0, 1, 0, 402040954),
-(28, '22765', 'ARETE BOLA DE FUEGO', 99, '0', '0', '2100', '22750', 13, 0, 1, 0, 402040954),
-(29, '22765', 'ARETE BOLA DE FUEGO', 1, '0', '0', '2100', '22750', 14, 0, 1, 0, 654332211),
-(33, '22755', 'ANILLO DRUSA NEGRA PLATA', 5, '0', '0', '3800', '22750', 1, 1, 3, 1, 0),
-(34, '22788', 'ARETE BOLA DE FUEGO PEQ', 2, '0', '0', '3300', '22750', 3, 0, 1, 0, 0),
-(35, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 1, 0, 1, 0, 321124553),
-(36, '22777', 'ARETE MARIPOSA BOLA TORNASOL', 1, '0', '0', '2000', '22750', 1, 0, 1, 0, 321124553),
-(37, '22776', 'CADENA + DIJE BOLA DE FUEGO ', 1, '0', '0', '3100', '22750', 1, 0, 1, 0, 321124553),
-(38, '00', 'Producto genérico', 10, '5', '0', '6800', '', 1, 0, 1, 0, 321124553),
-(39, '00', 'Promocio del Mes', 10, '0', '0', '1250', '', 1, 0, 1, 0, 321124553),
-(40, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 1, 0, 1, 0, 321124553),
-(41, '22771', 'ARETE LARGO BOLA DE FUEGO', 1, '0', '0', '3700', '22750', 1, 0, 1, 0, 321124553),
-(42, '22774', 'PULSERA BOLA DE FUEGO NEGRA', 6, '15', '0', '3500', '22750', 1, 0, 1, 0, 321124553),
-(43, '00', 'Transporte', 1, '0', '0', '10000', '', 1, 0, 1, 0, 321124553),
-(44, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 18, 0, 1, 0, 0),
-(45, '22756', 'ANILLO DRUSA PLATEADO', 1, '0', '0', '3800', '22750', 19, 0, 1, 0, 0),
-(46, '00', 'Producto genérico', 1, '0', '0', '2500', '', 19, 0, 1, 0, 0),
-(47, '22756', 'ANILLO DRUSA PLATEADO', 1, '0', '0', '3800', '22750', 20, 0, 1, 0, 0),
-(48, '00', 'Producto genérico', 1, '0', '0', '2500', '', 20, 0, 1, 0, 0),
-(49, '22789', 'ARETE BOLA DE FUEGO', 7, '0', '0', '1800', '22750', 24, 0, 1, 0, 402040954),
-(50, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 24, 0, 1, 0, 402040954),
-(51, '22812', 'OMEGA RODIO', 8, '50', '0', '3600', '22750', 24, 0, 1, 0, 402040954),
-(54, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 30, 0, 1, 0, 0),
-(55, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 31, 0, 1, 0, 0),
-(56, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 32, 0, 1, 0, 0),
-(57, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 33, 0, 1, 0, 0),
-(58, '22789', 'ARETE BOLA DE FUEGO', 1, '0', '0', '1800', '22750', 34, 0, 1, 0, 402040954),
-(59, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 1, '7', '0', '3300', '22750', 34, 0, 1, 0, 402040954),
-(60, '00', 'Transporte', 1, '0', '0', '10000', '', 34, 0, 1, 0, 402040954),
-(61, '22789', 'ARETE BOLA DE FUEGO', 1, '0', '0', '1800', '22750', 35, 0, 1, 0, 402040954),
-(62, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 1, '7', '0', '3300', '22750', 35, 0, 1, 0, 402040954),
-(63, '00', 'Transporte', 1, '0', '0', '10000', '22750', 35, 0, 1, 0, 402040954),
-(64, '22789', 'ARETE BOLA DE FUEGO', 1, '0', '0', '1800', '22750', 36, 0, 1, 0, 402040954),
-(65, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 1, '7', '0', '3300', '22750', 36, 0, 1, 0, 402040954),
-(66, '00', 'Transporte', 1, '0', '0', '10000', '22750', 36, 0, 1, 0, 402040954),
-(67, '22789', 'ARETE BOLA DE FUEGO', 1, '0', '0', '1800', '22750', 37, 0, 1, 0, 402040954),
-(68, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 1, '7', '0', '3300', '22750', 37, 0, 1, 0, 402040954),
-(69, '00', 'Transporte', 1, '0', '0', '10000', '22750', 37, 0, 1, 0, 402040954),
-(70, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 38, 0, 1, 0, 0),
-(71, '22775', 'ARETE BOLA DE FUEGO', 1, '10', '0', '3000', '22750', 39, 0, 1, 0, 0),
-(72, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 39, 0, 1, 0, 0),
-(73, '22775', 'ARETE BOLA DE FUEGO', 450, '40', '0', '3000', '22750', 40, 0, 1, 0, 402040954),
-(74, '22789', 'ARETE BOLA DE FUEGO', 90, '30', '0', '1800', '22750', 40, 0, 1, 0, 402040954),
-(75, '22776', 'CADENA + DIJE BOLA DE FUEGO ', 1, '0', '0', '3100', '22750', 41, 0, 1, 0, 0),
-(76, '22790', 'CADENA + DIJE CIRCULO', 90, '0', '0', '3300', '22750', 42, 0, 1, 0, 0),
-(77, '22756', 'ANILLO DRUSA PLATEADO', 3, '0', '0', '3800', '22750', 43, 0, 1, 0, 0),
-(78, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 52, '30', '0', '3300', '22750', 44, 0, 1, 0, 402040954),
-(79, '22799', 'ARGOLLA BOLAS TRES OROS', 1, '0', '0', '3400', '22750', 45, 0, 1, 0, 0),
-(80, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 46, 0, 1, 0, 0),
-(81, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 47, 0, 1, 0, 0),
-(82, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 48, 0, 1, 0, 0),
-(83, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 49, 0, 1, 0, 0),
-(84, '22785', 'JUEGO BOLA DE FUEGO BLANCO (INCLUYE CAJA CART', 3, '30', '0', '6400', '22750', 50, 0, 1, 0, 402040954),
-(85, '22784', 'ANILLO BOLITAS DE FUEGO', 2, '0', '0', '3550', '22750', 51, 0, 1, 0, 0),
-(86, '22775', 'ARETE BOLA DE FUEGO', 6, '10', '0', '3000', '22750', 52, 0, 1, 0, 0),
-(87, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 33, '30', '0', '4300', '22750', 53, 0, 1, 0, 402040954),
-(88, '22786', 'ANILLO BOLA DE FUEGO', 50, '30', '0', '2600', '22750', 54, 0, 1, 0, 402040954),
-(89, '23154', 'ARETE BUHO', 1, '15', '0', '2100', '22750', 55, 0, 1, 0, 111002002045),
-(90, '23116', 'ARETE LARGO PERLA NEGRA ', 1, '15', '0', '2000', '22750', 55, 0, 1, 0, 111002002045),
-(91, '23151', 'ARETE OVALADO DIAMANTADO', 1, '15', '0', '3000', '22750', 55, 0, 1, 0, 111002002045),
-(92, '23115', 'JUEGO PERLA PULSERA+ARETES+CAD (INCLUYE CAJA ', 1, '15', '0', '5800', '22750', 55, 0, 1, 0, 111002002045),
-(93, '23114', 'CADENA + DIJE CORAZON ', 1, '15', '0', '3000', '22750', 55, 0, 1, 0, 111002002045),
-(94, '23149', 'ARETE NACAR TREBOL', 1, '15', '0', '2700', '22750', 55, 0, 1, 0, 111002002045),
-(95, '23145', 'ARETE GATITOS ', 1, '15', '0', '1300', '22750', 55, 0, 1, 0, 111002002045),
-(96, '23035', 'BLISTER FIGURAS ', 1, '15', '0', '900', '22750', 55, 0, 1, 0, 111002002045),
-(97, '23034', 'BLISTER FIGURAS ', 1, '15', '0', '1500', '22750', 55, 0, 1, 0, 111002002045),
-(98, '22833', 'JUEGO FLORES CIRCONES (INCLUYE CAJA CARTON)', 1, '15', '0', '5200', '22750', 55, 0, 1, 0, 111002002045),
-(99, '22815', 'ANILLO RODIO LINEAS DORADAS', 1, '15', '0', '3900', '22750', 55, 0, 1, 0, 111002002045),
-(100, '22785', 'JUEGO BOLA DE FUEGO BLANCO (INCLUYE CAJA CART', 1, '15', '0', '6400', '22750', 55, 0, 1, 0, 111002002045),
-(101, '22767', 'CADENA BOLITAS ', 1, '15', '0', '4700', '22750', 55, 0, 1, 0, 111002002045),
-(102, '22751', 'ANILLO DRUSA DORADO', 1, '15', '0', '3800', '22750', 55, 0, 1, 0, 111002002045),
-(103, '23032', 'ARETE HOJITAS ', 1, '15', '0', '2900', '22750', 55, 0, 1, 0, 111002002045),
-(104, '22990', 'ANILLO CUADRADO FLORES', 1, '15', '0', '3100', '22750', 55, 0, 1, 0, 111002002045),
-(105, '22989', 'ANILLO GOTA CRISTALES NEGROS ', 1, '15', '0', '3700', '22750', 55, 0, 1, 0, 111002002045),
-(106, '22969', 'CADENA + DIJE CORAZON', 1, '15', '0', '2200', '22750', 55, 0, 1, 0, 111002002045),
-(107, '22968', 'CADENA + DIJE HOJA ', 1, '15', '0', '2200', '22750', 55, 0, 1, 0, 111002002045),
-(108, '22967', 'CADENA + DIJE FLOR', 1, '15', '0', '2200', '22750', 55, 0, 1, 0, 111002002045),
-(109, '22941', 'ARETE GANCHO CRISTAL', 1, '15', '0', '3300', '22750', 55, 0, 1, 0, 111002002045),
-(110, '22939', 'JUEGO PERLA NEGRA  (INCLUYE CAJA CARTON)', 1, '15', '0', '3200', '22750', 55, 0, 1, 0, 111002002045),
-(111, '22936', 'JUEGO PALITO BOLITA (INCLUYE CAJA CARTON)', 1, '15', '0', '5100', '22750', 55, 0, 1, 0, 111002002045),
-(112, '22831', 'JUEGO CIRCULO COLORES CORAZON (INCLUYE CAJA C', 1, '15', '0', '5200', '22750', 55, 0, 1, 0, 111002002045),
-(113, '22790', 'CADENA + DIJE CIRCULO', 1, '15', '0', '3300', '22750', 55, 0, 1, 0, 111002002045),
-(114, '22775', 'ARETE BOLA DE FUEGO', 1, '15', '0', '3000', '22750', 55, 0, 1, 0, 111002002045),
-(115, '22764', 'ARETE BOLA DE FUEGO ROJO', 1, '15', '0', '3600', '22750', 55, 0, 1, 0, 111002002045),
-(116, '22750', 'JUEGO DRUSA DORADO (INCLUYE CAJA CARTON)', 1, '15', '0', '0', '22750', 55, 0, 1, 0, 111002002045),
-(117, '22866', 'ARETE LAZO ', 1, '15', '0', '2500', '22750', 55, 0, 1, 0, 111002002045),
-(118, '22864', 'ARETE DELFIN', 1, '15', '0', '1300', '22750', 55, 0, 1, 0, 111002002045),
-(119, '22861', 'ARETE FLOR ', 1, '15', '0', '2900', '22750', 55, 0, 1, 0, 111002002045),
-(120, '22854', 'ANILLO CORAZON CIRCONES ', 1, '15', '0', '2800', '22750', 55, 0, 1, 0, 111002002045),
-(121, '22849', 'ANILLO TRES CIRCONES ', 1, '15', '0', '1600', '22750', 55, 0, 1, 0, 111002002045),
-(122, '22846', 'ANILLO ENTRELAZADO CIRCONES ', 1, '15', '0', '3400', '22750', 55, 0, 1, 0, 111002002045),
-(123, '22844', 'ANILLO CIRCONES  CORAZON', 1, '15', '0', '1900', '22750', 55, 0, 1, 0, 111002002045),
-(124, '22841', 'ARGOLLA CIRCON NEGRO', 1, '15', '0', '1700', '22750', 55, 0, 1, 0, 111002002045),
-(125, '22839', 'ARO CIRCONES', 1, '15', '0', '6300', '22750', 55, 0, 1, 0, 111002002045),
-(126, '22820', 'ARETE RODIO CIRCONES ', 1, '15', '0', '3900', '22750', 55, 0, 1, 0, 111002002045),
-(127, '22789', 'ARETE BOLA DE FUEGO', 1, '15', '0', '1800', '22750', 55, 0, 1, 0, 111002002045),
-(128, '22773', 'PULSERA BOLA DE FUEGO AZUL', 1, '15', '0', '3500', '22750', 55, 0, 1, 0, 111002002045),
-(129, '22753', 'JUEGO DRUSA PLATEADO (INCLUYE CAJA CARTON)', 1, '15', '0', '7000', '22750', 55, 0, 1, 0, 111002002045),
-(130, '23156', 'ARGOLLA OVALADA TRES CIRCONES ', 1, '15', '0', '2300', '22750', 55, 0, 1, 0, 111002002045),
-(131, '23032', 'ARETE HOJITAS ', 99, '0', '0', '2900', '22750', 56, 0, 1, 0, 445566789),
-(132, '22989', 'ANILLO GOTA CRISTALES NEGROS ', 99, '0', '0', '3700', '22750', 56, 0, 1, 0, 445566789),
-(133, '22864', 'ARETE DELFIN', 7, '0', '0', '1300', '22750', 56, 0, 1, 0, 445566789),
-(134, '22854', 'ANILLO CORAZON CIRCONES ', 1, '0', '0', '2800', '22750', 56, 0, 1, 0, 445566789),
-(135, '22846', 'ANILLO ENTRELAZADO CIRCONES ', 1, '0', '0', '3400', '22750', 56, 0, 1, 0, 445566789),
-(136, '22839', 'ARO CIRCONES', 1, '0', '0', '6300', '22750', 56, 0, 1, 0, 445566789),
-(137, '22773', 'PULSERA BOLA DE FUEGO AZUL', 99, '0', '0', '3500', '22750', 56, 0, 1, 0, 445566789),
-(138, '22750', 'JUEGO DRUSA DORADO (INCLUYE CAJA CARTON)', 1, '0', '0', '0', '22750', 56, 0, 1, 0, 445566789),
-(139, '22941', 'ARETE GANCHO CRISTAL', 1, '0', '0', '3300', '22750', 57, 0, 1, 0, 0),
-(140, '22861', 'ARETE FLOR ', 1, '0', '0', '2900', '22750', 57, 0, 1, 0, 0),
-(141, '23156', 'ARGOLLA OVALADA TRES CIRCONES ', 3, '30', '0', '2300', '22750', 58, 0, 1, 0, 402040954),
-(142, '22790', 'CADENA + DIJE CIRCULO', 2, '30', '0', '3300', '22750', 58, 0, 1, 0, 402040954),
-(143, '23034', 'BLISTER FIGURAS ', 1, '30', '0', '1500', '22750', 58, 0, 1, 0, 402040954),
-(144, '22939', 'JUEGO PERLA NEGRA  (INCLUYE CAJA CARTON)', 3, '30', '0', '3200', '22750', 59, 0, 1, 0, 402040954),
-(145, '22936', 'JUEGO PALITO BOLITA (INCLUYE CAJA CARTON)', 1, '30', '0', '5100', '22750', 59, 0, 1, 0, 402040954),
-(146, '22751', 'ANILLO DRUSA DORADO', 1, '0', '0', '3800', '22750', 59, 0, 1, 0, 402040954),
-(147, '22785', 'JUEGO BOLA DE FUEGO BLANCO (INCLUYE CAJA CART', 1, '30', '0', '6400', '22750', 59, 0, 1, 0, 402040954),
-(148, '22750', 'JUEGO DRUSA DORADO (INCLUYE CAJA CARTON)', 5, '30', '0', '0', '22750', 59, 0, 1, 0, 402040954),
-(149, '23156', 'ARGOLLA OVALADA TRES CIRCONES ', 1, '30', '0', '2300', '22750', 59, 0, 1, 0, 402040954),
-(150, '23114', 'CADENA + DIJE CORAZON ', 1, '30', '0', '3000', '22750', 59, 0, 1, 0, 402040954),
-(151, '23035', 'BLISTER FIGURAS ', 1, '30', '0', '900', '22750', 59, 0, 1, 0, 402040954),
-(156, '23035', 'BLISTER FIGURAS ', 42, '0', '0', '900', '22750', 60, 0, 1, 0, 445566789),
-(157, '22785', 'JUEGO BOLA DE FUEGO BLANCO (INCLUYE CAJA CART', 1, '25', '0', '6400', '22750', 60, 0, 1, 0, 445566789),
-(158, '22789', 'ARETE BOLA DE FUEGO', 1, '30', '0', '3200', '22750', 61, 0, 1, 0, 401930976),
-(159, '23111', 'CADENA DOBLE CORAZON LEYENDA ', 1, '6', '0', '8300', '22750', 61, 0, 1, 0, 401930976),
-(160, '22785', 'JUEGO BOLA DE FUEGO BLANCO (INCLUYE CAJA CART', 1, '30', '0', '10700', '22750', 62, 0, 1, 0, 401930976),
-(161, '22788', 'ARETE BOLA DE FUEGO PEQ', 1, '0', '0', '3300', '22750', 63, 0, 1, 0, 321124553),
-(162, '23120', 'TOBILLERA CIRCONES ', 1, '0', '0', '5100', '22750', 64, 0, 1, 0, 888888888),
-(163, '22985', 'ANILLO V CIRCONES', 5, '3', '0', '3300', '22750', 65, 0, 1, 0, 402040954),
-(164, '22856', 'ARETE PERLA NEGRA ', 6, '3', '0', '3500', '22750', 65, 0, 1, 0, 402040954),
-(165, '22799', 'ARGOLLA BOLAS TRES OROS', 9, '3', '0', '3400', '22750', 65, 0, 1, 0, 402040954),
-(166, '22796', 'ANILLO MARIPOSA ', 6, '3', '0', '1000', '22750', 66, 0, 1, 0, 402040954),
-(167, '22899', 'ARGOLLA DIAMANTADA', 7, '3', '0', '3200', '22750', 66, 0, 1, 0, 402040954),
-(168, '22986', 'ANILLO V DIAMANTADO', 6, '3', '0', '2300', '22750', 67, 0, 1, 0, 402040954),
-(169, '22956', 'ARETE GOTA ', 9, '3', '0', '3000', '22750', 67, 0, 1, 0, 402040954);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1151,6 +922,7 @@ INSERT INTO `tb_08_articulos_factura` (`Articulo_Factura_id`, `Articulo_Factura_
 -- Estructura de tabla para la tabla `tb_09_articulos_transito`
 --
 
+DROP TABLE IF EXISTS `tb_09_articulos_transito`;
 CREATE TABLE IF NOT EXISTS `tb_09_articulos_transito` (
   `Articulo_Transito_Codigo` varchar(15) NOT NULL,
   `Articulo_Transito_Descripcion` varchar(45) DEFAULT NULL,
@@ -1166,6 +938,7 @@ CREATE TABLE IF NOT EXISTS `tb_09_articulos_transito` (
 -- Estructura de tabla para la tabla `tb_10_proforma`
 --
 
+DROP TABLE IF EXISTS `tb_10_proforma`;
 CREATE TABLE IF NOT EXISTS `tb_10_proforma` (
   `Proforma_Consecutivo` int(11) NOT NULL,
   `Proforma_Monto_Total` double DEFAULT NULL,
@@ -1184,34 +957,13 @@ CREATE TABLE IF NOT EXISTS `tb_10_proforma` (
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `tb_10_proforma`
---
-
-INSERT INTO `tb_10_proforma` (`Proforma_Consecutivo`, `Proforma_Monto_Total`, `Proforma_Monto_Sin_IVA`, `Proforma_Monto_IVA`, `Proforma_Observaciones`, `Proforma_Fecha_Hora`, `Proforma_Estado`, `Proforma_Moneda`, `Proforma_Porcentaje_IVA`, `Proforma_Tipo_Cambio`, `Proforma_Nombre_Cliente`, `TB_02_Sucursal_Codigo`, `Proforma_Vendedor_Codigo`, `Proforma_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) VALUES
-(1, NULL, NULL, NULL, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-03 06:00:00', 'pendiente', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(2, 3000, 2654.8672566372, 345.13274336283, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-20 06:00:00', 'cobrada', 'colones', 10, 500, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(3, 14869, 13158.407079646, 1710.592920354, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-01 06:00:00', 'pendiente', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(4, 14869, 13158.407079646, 1710.592920354, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-25 06:00:00', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(5, 14869, 13158.407079646, 1710.592920354, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-06 06:00:00', 'pendiente', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(6, 4300, 3805.3097345133, 494.69026548673, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-02 00:14:30', 'pendiente', 'colones', 13, 560, 'Dulce Maria Gonzalez Rodriguez', 0, 1, 0, 321223444),
-(7, 923400, 817168.14159292, 106231.85840708, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-27 05:58:20', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(8, 7000, 6194.6902654867, 805.30973451327, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-27 06:09:27', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(9, 629500, 557079.6460177, 72420.353982301, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-27 06:10:34', 'pendiente', 'colones', 13, 560, 'Grettel Valdez', 0, 1, 0, 654332211),
-(10, 3100, 2743.3628318584, 356.63716814159, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-29 22:11:42', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(11, 11400, 10088.495575221, 1311.5044247788, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-29 22:26:55', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(12, 120120, 106300.88495575, 13819.115044248, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-29 22:28:39', 'cobrada', 'colones', 13, 560, 'David Villalobos Fonseca', 0, 1, 0, 402040954),
-(13, 3400, 3008.8495575221, 391.15044247788, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-29 22:32:10', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(14, 4300, 3805.3097345133, 494.69026548673, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-08-29 22:35:51', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(15, 7100, 6283.185840708, 816.81415929203, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-09-15 02:31:34', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0),
-(16, 16200, 14336.283185841, 1863.7168141593, 'Esta proforma tiene una validez de solo 15 días, a partir del día de creación', '2014-09-15 02:50:44', 'cobrada', 'colones', 13, 560, 'Cliente Contado Afiliado', 0, 1, 0, 0);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tb_04_articulos_proforma`
 --
 
+DROP TABLE IF EXISTS `tb_04_articulos_proforma`;
 CREATE TABLE IF NOT EXISTS `tb_04_articulos_proforma` (
 `Articulo_Proforma_Id` int(11) NOT NULL,
   `Articulo_Proforma_Codigo` varchar(45) DEFAULT NULL,
@@ -1226,38 +978,7 @@ CREATE TABLE IF NOT EXISTS `tb_04_articulos_proforma` (
   `TB_10_Proforma_Proforma_Vendedor_Codigo` int(11) NOT NULL,
   `TB_10_Proforma_Proforma_Vendedor_Sucursal` int(11) NOT NULL,
   `TB_10_Proforma_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
-
---
--- Volcado de datos para la tabla `tb_04_articulos_proforma`
---
-
-INSERT INTO `tb_04_articulos_proforma` (`Articulo_Proforma_Id`, `Articulo_Proforma_Codigo`, `Articulo_Proforma_Descripcion`, `Articulo_Proforma_Cantidad`, `Articulo_Proforma_Descuento`, `Articulo_Proforma_Exento`, `Articulo_Proforma_Precio_Unitario`, `Articulo_Proforma_Imagen`, `TB_10_Proforma_Proforma_Consecutivo`, `TB_10_Proforma_TB_02_Sucursal_Codigo`, `TB_10_Proforma_Proforma_Vendedor_Codigo`, `TB_10_Proforma_Proforma_Vendedor_Sucursal`, `TB_10_Proforma_TB_03_Cliente_Cliente_Cedula`) VALUES
-(1, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 1, 0, 1, 0, 0),
-(2, '22775', 'ARETE BOLA DE FUEGO', 1, '0', '0', '3000', '22750', 2, 0, 1, 0, 0),
-(3, '22789', 'ARETE BOLA DE FUEGO', 1, '0', '0', '1800', '22750', 3, 0, 1, 0, 402040954),
-(4, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 1, '7', '0', '3300', '22750', 3, 0, 1, 0, 402040954),
-(5, '00', 'Transporte', 1, '0', '0', '10000', '', 3, 0, 1, 0, 402040954),
-(6, '22789', 'ARETE BOLA DE FUEGO', 1, '0', '0', '1800', '22750', 4, 0, 1, 0, 402040954),
-(7, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 1, '7', '0', '3300', '22750', 4, 0, 1, 0, 402040954),
-(8, '00', 'Transporte', 1, '0', '0', '10000', '', 4, 0, 1, 0, 402040954),
-(9, '22789', 'ARETE BOLA DE FUEGO', 1, '0', '0', '1800', '22750', 5, 0, 1, 0, 402040954),
-(10, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 1, '7', '0', '3300', '22750', 5, 0, 1, 0, 402040954),
-(11, '00', 'Transporte', 1, '0', '0', '10000', '', 5, 0, 1, 0, 402040954),
-(12, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 6, 0, 1, 0, 321223444),
-(13, '22775', 'ARETE BOLA DE FUEGO', 450, '40', '0', '3000', '22750', 7, 0, 1, 0, 402040954),
-(14, '22789', 'ARETE BOLA DE FUEGO', 90, '30', '0', '1800', '22750', 7, 0, 1, 0, 402040954),
-(15, '22775', 'ARETE BOLA DE FUEGO', 1, '10', '0', '3000', '22750', 8, 0, 1, 0, 0),
-(16, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 8, 0, 1, 0, 0),
-(17, '22790', 'CADENA + DIJE CIRCULO', 90, '0', '0', '3300', '22750', 9, 0, 1, 0, 654332211),
-(18, '22780', 'ARETE BOLA DE FUEGO NEGRO', 95, '0', '0', '3500', '22750', 9, 0, 1, 0, 654332211),
-(19, '22776', 'CADENA + DIJE BOLA DE FUEGO ', 1, '0', '0', '3100', '22750', 10, 0, 1, 0, 0),
-(20, '22756', 'ANILLO DRUSA PLATEADO', 3, '0', '0', '3800', '22750', 11, 0, 1, 0, 0),
-(21, '22763', 'ANILLO BOLA DE FUEGO ROJA AJUSTABLE ', 52, '30', '0', '3300', '22750', 12, 0, 1, 0, 402040954),
-(22, '22799', 'ARGOLLA BOLAS TRES OROS', 1, '0', '0', '3400', '22750', 13, 0, 1, 0, 0),
-(23, '22778', 'JUEGO GOTA TORNASOL (INCLUYE CAJA CARTON)', 1, '0', '0', '4300', '22750', 14, 0, 1, 0, 0),
-(24, '22784', 'ANILLO BOLITAS DE FUEGO', 2, '0', '0', '3550', '22750', 15, 0, 1, 0, 0),
-(25, '22775', 'ARETE BOLA DE FUEGO', 6, '10', '0', '3000', '22750', 16, 0, 1, 0, 0);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1265,6 +986,7 @@ INSERT INTO `tb_04_articulos_proforma` (`Articulo_Proforma_Id`, `Articulo_Profor
 -- Estructura de tabla para la tabla `tb_11_precios`
 --
 
+DROP TABLE IF EXISTS `tb_11_precios`;
 CREATE TABLE IF NOT EXISTS `tb_11_precios` (
 `Precio_Id` int(11) NOT NULL,
   `Precio_Numero` int(11) NOT NULL DEFAULT '0',
@@ -5318,13 +5040,7 @@ INSERT INTO `tb_11_precios` (`Precio_Id`, `Precio_Numero`, `Precio_Monto`, `TB_0
 (4006, 2, 2000, '227755', 0, 0),
 (4007, 3, 3000, '227755', 0, 0),
 (4008, 4, 1500, '227755', 0, 0),
-(4009, 5, 0, '227755', 0, 0),
-(4010, 0, 1000, '11', 0, 0),
-(4011, 1, 2000, '11', 0, 0),
-(4012, 2, 3000, '11', 0, 0),
-(4013, 3, 4000, '11', 0, 0),
-(4014, 4, 5000, '11', 0, 0),
-(4015, 5, 6000, '11', 0, 0);
+(4009, 5, 0, '227755', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -5332,6 +5048,7 @@ INSERT INTO `tb_11_precios` (`Precio_Id`, `Precio_Numero`, `Precio_Monto`, `TB_0
 -- Estructura de tabla para la tabla `tb_12_transacciones`
 --
 
+DROP TABLE IF EXISTS `tb_12_transacciones`;
 CREATE TABLE IF NOT EXISTS `tb_12_transacciones` (
 `Trans_Codigo` int(11) NOT NULL,
   `Trans_Descripcion` varchar(150) DEFAULT NULL,
@@ -5340,115 +5057,14 @@ CREATE TABLE IF NOT EXISTS `tb_12_transacciones` (
   `Trans_IP` varchar(40) DEFAULT NULL,
   `TB_01_Usuario_Usuario_Codigo` int(11) NOT NULL,
   `TB_01_Usuario_TB_02_Sucursal_Codigo` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=103 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Volcado de datos para la tabla `tb_12_transacciones`
 --
 
 INSERT INTO `tb_12_transacciones` (`Trans_Codigo`, `Trans_Descripcion`, `Trans_Fecha_Hora`, `Trans_Tipo`, `Trans_IP`, `TB_01_Usuario_Usuario_Codigo`, `TB_01_Usuario_TB_02_Sucursal_Codigo`) VALUES
-(1, 'El usuario se logueo al sistema', '2014-10-08 20:25:15', 'login', '127.0.0.1', 1, 0),
-(2, 'El usuario editó el usuario codigo: 3', '2014-10-08 20:39:53', 'edicion', '127.0.0.1', 1, 0),
-(3, 'El usuario editó el usuario codigo: 3', '2014-10-08 20:44:41', 'edicion', '127.0.0.1', 1, 0),
-(4, 'El usuario editó el usuario codigo: 3', '2014-10-08 20:51:31', 'edicion', '127.0.0.1', 1, 0),
-(5, 'El usuario editó el usuario codigo: 3', '2014-10-08 20:52:37', 'edicion', '127.0.0.1', 1, 0),
-(6, 'El usuario editó el usuario codigo: 3', '2014-10-08 20:53:14', 'edicion', '127.0.0.1', 1, 0),
-(7, 'El usuario editó el usuario codigo: 3', '2014-10-08 20:54:51', 'edicion', '127.0.0.1', 1, 0),
-(8, 'El usuario editó el usuario codigo: 3', '2014-10-08 20:56:59', 'edicion', '127.0.0.1', 1, 0),
-(9, 'El usuario editó el usuario codigo: 3', '2014-10-08 20:57:15', 'edicion', '127.0.0.1', 1, 0),
-(10, 'El usuario editó el usuario codigo: 3', '2014-10-08 21:06:48', 'edicion', '127.0.0.1', 1, 0),
-(11, 'El usuario editó el usuario codigo: 3', '2014-10-08 21:13:56', 'edicion', '127.0.0.1', 1, 0),
-(12, 'El usuario salio del sistema', '2014-10-08 21:14:07', 'login', '127.0.0.1', 1, 0),
-(13, 'El usuario se logueo al sistema', '2014-10-08 21:14:12', 'login', '127.0.0.1', 3, 0),
-(14, 'El usuario salio del sistema', '2014-10-08 21:14:50', 'login', '127.0.0.1', 3, 0),
-(15, 'El usuario se logueo al sistema', '2014-10-08 21:14:57', 'login', '127.0.0.1', 1, 0),
-(16, 'El usuario activo al usuario cédula: 402040952', '2014-10-08 21:20:04', 'edicion', '127.0.0.1', 1, 0),
-(17, 'El usuario activo al usuario cédula: 3', '2014-10-08 21:36:12', 'edicion', '127.0.0.1', 1, 0),
-(18, 'El usuario salio del sistema', '2014-10-08 21:38:38', 'login', '127.0.0.1', 1, 0),
-(19, 'El usuario se logueo al sistema', '2014-10-08 21:38:43', 'login', '127.0.0.1', 3, 0),
-(20, 'El usuario salio del sistema', '2014-10-08 21:39:15', 'login', '127.0.0.1', 3, 0),
-(21, 'El usuario se logueo al sistema', '2014-10-08 21:39:20', 'login', '127.0.0.1', 1, 0),
-(22, 'El usuario salio del sistema', '2014-10-08 21:40:34', 'login', '127.0.0.1', 1, 0),
-(23, 'El usuario se logueo al sistema', '2014-10-08 21:40:42', 'login', '127.0.0.1', 3, 0),
-(24, 'El usuario salio del sistema', '2014-10-08 21:48:51', 'login', '127.0.0.1', 3, 0),
-(25, 'El usuario se logueo al sistema', '2014-10-08 21:49:14', 'login', '127.0.0.1', 3, 0),
-(26, 'El usuario se logueo al sistema', '2014-10-08 21:50:48', 'login', '127.0.0.1', 1, 0),
-(27, 'El usuario se logueo al sistema', '2014-10-08 21:50:57', 'login', '127.0.0.1', 1, 0),
-(28, 'El usuario se logueo al sistema', '2014-10-08 21:51:15', 'login', '127.0.0.1', 1, 0),
-(29, 'El usuario se logueo al sistema', '2014-10-08 21:54:58', 'login', '127.0.0.1', 1, 0),
-(30, 'El usuario salio del sistema', '2014-10-08 21:55:10', 'login', '127.0.0.1', 1, 0),
-(31, 'El usuario se logueo al sistema', '2014-10-08 21:55:15', 'login', '127.0.0.1', 3, 0),
-(32, 'El usuario se logueo al sistema', '2014-10-08 21:55:26', 'login', '127.0.0.1', 1, 0),
-(33, 'El usuario activo al usuario código: 3', '2014-10-08 21:55:33', 'edicion', '127.0.0.1', 1, 0),
-(34, 'El usuario salio del sistema', '2014-10-08 21:55:39', 'login', '127.0.0.1', 1, 0),
-(35, 'El usuario se logueo al sistema', '2014-10-08 21:55:45', 'login', '127.0.0.1', 3, 0),
-(36, 'El usuario salio del sistema', '2014-10-08 21:55:50', 'login', '127.0.0.1', 3, 0),
-(37, 'El usuario se logueo al sistema', '2014-10-08 21:57:31', 'login', '127.0.0.1', 1, 0),
-(38, 'El usuario editó el usuario codigo: 1', '2014-10-08 22:08:01', 'edicion', '127.0.0.1', 1, 0),
-(39, 'El usuario editó el usuario codigo: 1', '2014-10-08 22:49:48', 'edicion', '127.0.0.1', 1, 0),
-(40, 'El usuario ingreso el usuario Karla codigo: 201450321', '2014-10-08 23:11:25', 'registro', '127.0.0.1', 1, 0),
-(41, 'El usuario ingreso el usuario Karla codigo: 201450125', '2014-10-08 23:14:16', 'registro', '127.0.0.1', 1, 0),
-(42, 'El usuario editó el usuario codigo: 4', '2014-10-08 23:14:41', 'edicion', '127.0.0.1', 1, 0),
-(43, 'El usuario ingreso el usuario Brenda codigo: 5', '2014-10-08 23:17:32', 'registro', '127.0.0.1', 1, 0),
-(44, 'El usuario activo al usuario código: 5', '2014-10-08 23:20:51', 'edicion', '127.0.0.1', 1, 0),
-(45, 'El usuario salio del sistema', '2014-10-08 23:21:19', 'login', '127.0.0.1', 1, 0),
-(46, 'El usuario se logueo al sistema', '2014-10-09 01:43:38', 'login', '127.0.0.1', 1, 0),
-(47, 'El usuario salio del sistema', '2014-10-09 03:25:06', 'login', '127.0.0.1', 1, 0),
-(48, 'El usuario se logueo al sistema', '2014-10-09 22:59:26', 'login', '192.168.1.4', 1, 0),
-(49, 'El usuario salio del sistema', '2014-10-09 23:10:59', 'login', '192.168.1.4', 1, 0),
-(50, 'El usuario se logueo al sistema', '2014-10-09 23:12:16', 'login', '192.168.1.4', 1, 0),
-(51, 'El usuario se logueo al sistema', '2014-10-09 23:12:32', 'login', '192.168.1.4', 1, 0),
-(52, 'El usuario salio del sistema', '2014-10-09 23:23:10', 'login', '192.168.1.4', 1, 0),
-(53, 'El usuario se logueo al sistema', '2014-10-09 23:24:43', 'login', '192.168.1.4', 1, 0),
-(54, 'El usuario salio del sistema', '2014-10-09 23:34:28', 'login', '192.168.1.4', 1, 0),
-(55, 'El usuario se logueo al sistema', '2014-10-09 23:36:42', 'login', '192.168.1.4', 1, 0),
-(56, 'El usuario se logueo al sistema', '2014-10-09 23:38:55', 'login', '127.0.0.1', 1, 0),
-(57, 'El usuario se logueo al sistema', '2014-10-09 23:46:42', 'login', '192.168.1.4', 1, 0),
-(58, 'El usuario se logueo al sistema', '2014-10-10 00:11:02', 'login', '192.168.1.4', 1, 0),
-(59, 'El usuario se logueo al sistema', '2014-10-10 01:48:41', 'login', '192.168.1.4', 1, 0),
-(60, 'El usuario salio del sistema', '2014-10-10 02:17:00', 'login', '192.168.1.4', 1, 0),
-(61, 'El usuario se logueo al sistema', '2014-10-10 02:18:31', 'login', '192.168.1.4', 1, 0),
-(62, 'El usuario se logueo al sistema', '2014-10-10 02:20:04', 'login', '192.168.1.4', 1, 0),
-(63, 'El usuario editó el usuario codigo: 1', '2014-10-10 02:26:26', 'edicion', '192.168.1.4', 1, 0),
-(64, 'El usuario editó el usuario codigo: 1', '2014-10-10 02:37:15', 'edicion', '192.168.1.4', 1, 0),
-(65, 'El usuario se logueo al sistema', '2014-10-10 04:12:50', 'login', '192.168.1.4', 1, 0),
-(66, 'El usuario salio del sistema', '2014-10-10 04:22:02', 'login', '192.168.1.4', 1, 0),
-(67, 'El usuario salio del sistema', '2014-10-10 04:24:07', 'login', '192.168.1.4', 1, 0),
-(68, 'El usuario se logueo al sistema', '2014-10-11 02:37:46', 'login', '127.0.0.1', 1, 0),
-(69, 'El usuario se logueo al sistema', '2014-10-11 02:41:42', 'login', '127.0.0.1', 1, 0),
-(70, 'El usuario salio del sistema', '2014-10-11 03:04:50', 'login', '127.0.0.1', 1, 0),
-(71, 'El usuario se logueo al sistema', '2014-10-11 03:26:20', 'login', '127.0.0.1', 1, 0),
-(72, 'El usuario se logueo al sistema', '2014-10-12 02:52:08', 'login', '127.0.0.1', 1, 0),
-(73, 'El usuario salio del sistema', '2014-10-12 03:17:51', 'login', '127.0.0.1', 1, 0),
-(74, 'El usuario se logueo al sistema', '2014-10-12 03:37:02', 'login', '127.0.0.1', 1, 0),
-(75, 'El usuario se logueo al sistema', '2014-10-12 04:02:20', 'login', '127.0.0.1', 1, 0),
-(76, 'El usuario salio del sistema', '2014-10-12 04:03:02', 'login', '127.0.0.1', 1, 0),
-(77, 'El usuario salio del sistema', '2014-10-12 04:13:52', 'login', '127.0.0.1', 1, 0),
-(78, 'El usuario se logueo al sistema', '2014-10-12 04:30:25', 'login', '127.0.0.1', 1, 0),
-(79, 'El usuario se logueo al sistema', '2014-10-12 04:38:44', 'login', '127.0.0.1', 1, 0),
-(80, 'El usuario salio del sistema', '2014-10-12 04:39:06', 'login', '127.0.0.1', 1, 0),
-(81, 'El usuario salio del sistema', '2014-10-12 05:56:21', 'login', '127.0.0.1', 1, 0),
-(82, 'El usuario se logueo al sistema', '2014-10-12 06:36:35', 'login', '127.0.0.1', 1, 0),
-(83, 'El usuario salio del sistema', '2014-10-12 06:47:32', 'login', '127.0.0.1', 1, 0),
-(84, 'El usuario se logueo al sistema', '2014-10-13 00:20:16', 'login', '127.0.0.1', 1, 0),
-(85, 'El usuario salio del sistema', '2014-10-13 00:45:48', 'login', '127.0.0.1', 1, 0),
-(86, 'El usuario se logueo al sistema', '2014-10-13 01:07:40', 'login', '127.0.0.1', 1, 0),
-(87, 'El usuario salio del sistema', '2014-10-13 01:24:00', 'login', '127.0.0.1', 1, 0),
-(88, 'El usuario se logueo al sistema', '2014-10-14 03:07:07', 'login', '192.168.1.4', 1, 0),
-(89, 'El usuario salio del sistema', '2014-10-14 04:42:25', 'login', '192.168.1.4', 1, 0),
-(90, 'El usuario se logueo al sistema', '2014-10-14 05:13:26', 'login', '192.168.1.4', 1, 0),
-(91, 'El usuario se logueo al sistema', '2014-10-14 21:18:04', 'login', '127.0.0.1', 1, 0),
-(92, 'El usuario salio del sistema', '2014-10-14 21:38:44', 'login', '127.0.0.1', 1, 0),
-(93, 'El usuario se logueo al sistema', '2014-10-14 22:12:18', 'login', '127.0.0.1', 1, 0),
-(94, 'El usuario 1 envio a caja la factura consecutivo:65', '2014-10-14 22:13:08', 'factura_envio', '127.0.0.1', 1, 0),
-(95, 'El usuario cobro la factura consecutivo: 65', '2014-10-14 22:13:25', 'cobro', '127.0.0.1', 1, 0),
-(96, 'El usuario salio del sistema', '2014-10-14 22:23:43', 'login', '127.0.0.1', 1, 0),
-(97, 'El usuario se logueo al sistema', '2014-10-15 02:14:28', 'login', '127.0.0.1', 1, 0),
-(98, 'El usuario 1 envio a caja la factura consecutivo:66', '2014-10-15 02:15:27', 'factura_envio', '127.0.0.1', 1, 0),
-(99, 'El usuario cobro la factura consecutivo: 66', '2014-10-15 02:15:58', 'cobro', '127.0.0.1', 1, 0),
-(100, 'El usuario 1 envio a caja la factura consecutivo:67', '2014-10-15 02:28:33', 'factura_envio', '127.0.0.1', 1, 0),
-(101, 'El usuario cobro la factura consecutivo: 67', '2014-10-15 02:28:58', 'cobro', '127.0.0.1', 1, 0),
-(102, 'El usuario salio del sistema', '2014-10-15 02:41:23', 'login', '127.0.0.1', 1, 0);
+(1, 'El usuario salio del sistema', '2014-11-22 21:22:27', 'login', '127.0.0.1', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -5456,6 +5072,7 @@ INSERT INTO `tb_12_transacciones` (`Trans_Codigo`, `Trans_Descripcion`, `Trans_F
 -- Estructura de tabla para la tabla `tb_13_cheque`
 --
 
+DROP TABLE IF EXISTS `tb_13_cheque`;
 CREATE TABLE IF NOT EXISTS `tb_13_cheque` (
 `Cheque_Id` int(11) NOT NULL,
   `Cheque_Numero` varchar(45) DEFAULT NULL,
@@ -5472,6 +5089,7 @@ CREATE TABLE IF NOT EXISTS `tb_13_cheque` (
 -- Estructura de tabla para la tabla `tb_14_sesiones`
 --
 
+DROP TABLE IF EXISTS `tb_14_sesiones`;
 CREATE TABLE IF NOT EXISTS `tb_14_sesiones` (
   `session_id` varchar(40) NOT NULL DEFAULT '0',
   `ip_address` varchar(45) NOT NULL DEFAULT '0',
@@ -5480,26 +5098,20 @@ CREATE TABLE IF NOT EXISTS `tb_14_sesiones` (
   `user_data` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `tb_14_sesiones`
---
-
-INSERT INTO `tb_14_sesiones` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
-('9ad285d968efa92790f1d83e1e15e7a8', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36', 1413340883, '');
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tb_15_permisos`
 --
 
+DROP TABLE IF EXISTS `tb_15_permisos`;
 CREATE TABLE IF NOT EXISTS `tb_15_permisos` (
 `Permisos_Id` int(11) NOT NULL,
   `Permisos_Area` varchar(30) DEFAULT NULL,
   `Permisos_Value` tinyint(1) DEFAULT NULL,
   `TB_01_Usuario_Usuario_Codigo` int(11) NOT NULL,
   `TB_01_Usuario_TB_02_Sucursal_Codigo` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=200 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=230 ;
 
 --
 -- Volcado de datos para la tabla `tb_15_permisos`
@@ -5521,42 +5133,36 @@ INSERT INTO `tb_15_permisos` (`Permisos_Id`, `Permisos_Area`, `Permisos_Value`, 
 (129, 'crear_proforma', 1, 3, 0),
 (130, 'entrar_caja', 1, 3, 0),
 (131, 'registrar_cliente', 1, 3, 0),
-(136, 'crear_factura', 1, 4, 0),
-(137, 'crear_proforma', 1, 4, 0),
-(138, 'entrar_caja', 1, 4, 0),
-(139, 'registrar_cliente', 1, 4, 0),
-(140, 'crear_factura', 1, 5, 0),
-(141, 'crear_proforma', 1, 5, 0),
-(142, 'registrar_cliente', 1, 5, 0),
-(171, 'activar_empresa', 1, 1, 0),
-(172, 'activar_familias', 1, 1, 0),
-(173, 'crear_factura', 1, 1, 0),
-(174, 'crear_proforma', 1, 1, 0),
-(175, 'desactivar_banco', 1, 1, 0),
-(176, 'desactivar_empresa', 1, 1, 0),
-(177, 'desactivar_familias', 1, 1, 0),
-(178, 'editar_autorizacion', 1, 1, 0),
-(179, 'editar_banco', 1, 1, 0),
-(180, 'editar_cliente', 1, 1, 0),
-(181, 'editar_codigo', 1, 1, 0),
-(182, 'editar_empresa', 1, 1, 0),
-(183, 'editar_familias', 1, 1, 0),
-(184, 'editar_usuarios', 1, 1, 0),
-(185, 'entrada_familias', 1, 1, 0),
-(186, 'entrar_banco', 1, 1, 0),
-(187, 'entrar_caja', 1, 1, 0),
-(188, 'entrar_configuracion', 1, 1, 0),
-(189, 'entrar_empresa', 1, 1, 0),
-(190, 'entrar_recibos', 1, 1, 0),
-(191, 'otros_cliente', 1, 1, 0),
-(192, 'registrar_articulo', 1, 1, 0),
-(193, 'registrar_articulos_masivo', 1, 1, 0),
-(194, 'registrar_banco', 1, 1, 0),
-(195, 'registrar_cliente', 1, 1, 0),
-(196, 'registrar_empresa', 1, 1, 0),
-(197, 'registrar_usuarios', 1, 1, 0),
-(198, 'ver_autorizacion', 1, 1, 0),
-(199, 'ver_bitacora', 1, 1, 0);
+(200, 'activar_empresa', 1, 1, 0),
+(201, 'activar_familias', 1, 1, 0),
+(202, 'crear_factura', 1, 1, 0),
+(203, 'crear_proforma', 1, 1, 0),
+(204, 'desactivar_banco', 1, 1, 0),
+(205, 'desactivar_empresa', 1, 1, 0),
+(206, 'desactivar_familias', 1, 1, 0),
+(207, 'editar_autorizacion', 1, 1, 0),
+(208, 'editar_banco', 1, 1, 0),
+(209, 'editar_cliente', 1, 1, 0),
+(210, 'editar_codigo', 1, 1, 0),
+(211, 'editar_empresa', 1, 1, 0),
+(212, 'editar_familias', 1, 1, 0),
+(213, 'editar_usuarios', 1, 1, 0),
+(214, 'entrada_familias', 1, 1, 0),
+(215, 'entrar_banco', 1, 1, 0),
+(216, 'entrar_caja', 1, 1, 0),
+(217, 'entrar_configuracion', 1, 1, 0),
+(218, 'entrar_empresa', 1, 1, 0),
+(219, 'entrar_notas', 1, 1, 0),
+(220, 'entrar_recibos', 1, 1, 0),
+(221, 'otros_cliente', 1, 1, 0),
+(222, 'registrar_articulo', 1, 1, 0),
+(223, 'registrar_articulos_masivo', 1, 1, 0),
+(224, 'registrar_banco', 1, 1, 0),
+(225, 'registrar_cliente', 1, 1, 0),
+(226, 'registrar_empresa', 1, 1, 0),
+(227, 'registrar_usuarios', 1, 1, 0),
+(228, 'ver_autorizacion', 1, 1, 0),
+(229, 'ver_bitacora', 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -5564,6 +5170,7 @@ INSERT INTO `tb_15_permisos` (`Permisos_Id`, `Permisos_Area`, `Permisos_Value`, 
 -- Estructura de tabla para la tabla `tb_16_authclientes`
 --
 
+DROP TABLE IF EXISTS `tb_16_authclientes`;
 CREATE TABLE IF NOT EXISTS `tb_16_authclientes` (
   `AuthClientes_Id` int(11) NOT NULL,
   `AuthClientes_Cedula` int(11) DEFAULT NULL,
@@ -5574,21 +5181,13 @@ CREATE TABLE IF NOT EXISTS `tb_16_authclientes` (
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `tb_16_authclientes`
---
-
-INSERT INTO `tb_16_authclientes` (`AuthClientes_Id`, `AuthClientes_Cedula`, `AuthClientes_Nombre`, `AuthClientes_Apellidos`, `AuthClientes_Carta_URL`, `AuthClientes_Seq`, `TB_03_Cliente_Cliente_Cedula`) VALUES
-(1, 601250854, 'Carlos', 'Alvarado Viquez', '402040954_auth_1.png', 1, 402040954),
-(2, 80210562, 'Luisa', 'Fonseca Gonzales', '402040954_auth_2.png', 2, 402040954),
-(3, 401220522, 'Trozito', 'Juan', 'default.png', 1, 402090861);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tb_17_descuento_producto`
 --
 
+DROP TABLE IF EXISTS `tb_17_descuento_producto`;
 CREATE TABLE IF NOT EXISTS `tb_17_descuento_producto` (
 `Descuento_producto_id` int(11) NOT NULL,
   `Descuento_producto_monto` double DEFAULT NULL,
@@ -5597,20 +5196,7 @@ CREATE TABLE IF NOT EXISTS `tb_17_descuento_producto` (
   `TB_06_Articulo_TB_05_Familia_Familia_Codigo` int(11) NOT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
   `TB_02_Sucursal_Codigo` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
-
---
--- Volcado de datos para la tabla `tb_17_descuento_producto`
---
-
-INSERT INTO `tb_17_descuento_producto` (`Descuento_producto_id`, `Descuento_producto_monto`, `Descuento_producto_porcentaje`, `TB_06_Articulo_Articulo_Codigo`, `TB_06_Articulo_TB_05_Familia_Familia_Codigo`, `TB_03_Cliente_Cliente_Cedula`, `TB_02_Sucursal_Codigo`) VALUES
-(3, NULL, 5, '22785', 2, 402040954, 0),
-(4, NULL, 3, '22755', 2, 402040954, 0),
-(6, NULL, 5, '22759', 2, 402040954, 0),
-(7, NULL, 4, '22789', 2, 402040954, 0),
-(8, NULL, 50, '23101', 2, 402040954, 0),
-(9, NULL, 35, '23140', 2, 401310918, 0),
-(10, NULL, 6, '23111', 2, 401930976, 0);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -5618,6 +5204,7 @@ INSERT INTO `tb_17_descuento_producto` (`Descuento_producto_id`, `Descuento_prod
 -- Estructura de tabla para la tabla `tb_22_banco`
 --
 
+DROP TABLE IF EXISTS `tb_22_banco`;
 CREATE TABLE IF NOT EXISTS `tb_22_banco` (
 `Banco_Codigo` int(11) NOT NULL,
   `Banco_Nombre` varchar(45) DEFAULT NULL,
@@ -5633,12 +5220,14 @@ INSERT INTO `tb_22_banco` (`Banco_Codigo`, `Banco_Nombre`, `Banco_Comision_Porce
 (1, 'Banco Nacional de Costa Rica', 4.2, 1),
 (6, 'Banco de Costa Rica', 4.6, 1),
 (7, 'Banco Popular De Costa Rica', 4.1, 1);
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tb_18_tarjeta`
 --
 
+DROP TABLE IF EXISTS `tb_18_tarjeta`;
 CREATE TABLE IF NOT EXISTS `tb_18_tarjeta` (
 `Tarjeta_Id` int(11) NOT NULL,
   `Tarjeta_Numero_Transaccion` varchar(45) DEFAULT NULL,
@@ -5651,19 +5240,13 @@ CREATE TABLE IF NOT EXISTS `tb_18_tarjeta` (
   `TB_22_Banco_Banco_Codigo` int(11) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
---
--- Volcado de datos para la tabla `tb_18_tarjeta`
---
-
-INSERT INTO `tb_18_tarjeta` (`Tarjeta_Id`, `Tarjeta_Numero_Transaccion`, `Tarjeta_Comision_Banco`, `TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`, `TB_22_Banco_Banco_Codigo`) VALUES
-(5, '452365', 4.2, 1, 0, 1, 0, 321124553, 1);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tb_19_deposito`
 --
 
+DROP TABLE IF EXISTS `tb_19_deposito`;
 CREATE TABLE IF NOT EXISTS `tb_19_deposito` (
   `Deposito_Id` int(11) NOT NULL,
   `Deposito_Numero_Transaccion` varchar(45) DEFAULT NULL,
@@ -5675,20 +5258,13 @@ CREATE TABLE IF NOT EXISTS `tb_19_deposito` (
   `TB_22_Banco_Banco_Codigo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `tb_19_deposito`
---
-
-INSERT INTO `tb_19_deposito` (`Deposito_Id`, `Deposito_Numero_Transaccion`, `TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`, `TB_22_Banco_Banco_Codigo`) VALUES
-(0, '2564512', 9, 0, 1, 0, 445566789, 6),
-(0, '11124556', 55, 0, 1, 0, 111002002045, 6);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tb_20_descuento_familia`
 --
 
+DROP TABLE IF EXISTS `tb_20_descuento_familia`;
 CREATE TABLE IF NOT EXISTS `tb_20_descuento_familia` (
 `Descuento_familia_id` int(11) NOT NULL,
   `Descuento_familia_monto` double DEFAULT NULL,
@@ -5697,16 +5273,7 @@ CREATE TABLE IF NOT EXISTS `tb_20_descuento_familia` (
   `TB_05_Familia_TB_02_Sucursal_Codigo` int(11) NOT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
   `TB_02_Sucursal_Codigo` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- Volcado de datos para la tabla `tb_20_descuento_familia`
---
-
-INSERT INTO `tb_20_descuento_familia` (`Descuento_familia_id`, `Descuento_familia_monto`, `Descuento_familia_porcentaje`, `TB_05_Familia_Familia_Codigo`, `TB_05_Familia_TB_02_Sucursal_Codigo`, `TB_03_Cliente_Cliente_Cedula`, `TB_02_Sucursal_Codigo`) VALUES
-(2, NULL, 5, 0, 0, 402040954, 0),
-(3, NULL, 5, 1, 0, 402040954, 0),
-(5, NULL, 3, 2, 0, 402040954, 0);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -5714,30 +5281,13 @@ INSERT INTO `tb_20_descuento_familia` (`Descuento_familia_id`, `Descuento_famili
 -- Estructura de tabla para la tabla `tb_21_descuento_cliente`
 --
 
+DROP TABLE IF EXISTS `tb_21_descuento_cliente`;
 CREATE TABLE IF NOT EXISTS `tb_21_descuento_cliente` (
 `Descuento_cliente_id` int(11) NOT NULL,
   `Descuento_cliente_porcentaje` double DEFAULT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
   `TB_02_Sucursal_Codigo` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
-
---
--- Volcado de datos para la tabla `tb_21_descuento_cliente`
---
-
-INSERT INTO `tb_21_descuento_cliente` (`Descuento_cliente_id`, `Descuento_cliente_porcentaje`, `TB_03_Cliente_Cliente_Cedula`, `TB_02_Sucursal_Codigo`) VALUES
-(1, 15, 402040954, 0),
-(2, 15, 111002002045, 0),
-(3, 20, 111132456, 0),
-(4, 5, 212002360, 0),
-(5, 0, 333333333, 0),
-(6, 0, 888888888, 0),
-(7, 20, 1111111111, 0),
-(8, 20, 6666666666, 0),
-(9, 5, 402090861, 0),
-(10, 5, 401310918, 0),
-(11, 30, 401930976, 0);
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -5745,6 +5295,7 @@ INSERT INTO `tb_21_descuento_cliente` (`Descuento_cliente_id`, `Descuento_client
 -- Estructura de tabla para la tabla `tb_23_mixto`
 --
 
+DROP TABLE IF EXISTS `tb_23_mixto`;
 CREATE TABLE IF NOT EXISTS `tb_23_mixto` (
 `Mixto_Id` int(11) NOT NULL,
   `Mixto_Cantidad_Paga` float DEFAULT NULL,
@@ -5763,6 +5314,7 @@ CREATE TABLE IF NOT EXISTS `tb_23_mixto` (
 -- Estructura de tabla para la tabla `tb_24_credito`
 --
 
+DROP TABLE IF EXISTS `tb_24_credito`;
 CREATE TABLE IF NOT EXISTS `tb_24_credito` (
 `Credito_Id` int(11) NOT NULL,
   `Credito_Numero_Dias` int(11) DEFAULT NULL,
@@ -5775,25 +5327,7 @@ CREATE TABLE IF NOT EXISTS `tb_24_credito` (
   `Credito_Vendedor_Codigo` int(11) NOT NULL,
   `Credito_Vendedor_Sucursal` int(11) NOT NULL,
   `Credito_Cliente_Cedula` bigint(20) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
-
---
--- Volcado de datos para la tabla `tb_24_credito`
---
-
-INSERT INTO `tb_24_credito` (`Credito_Id`, `Credito_Numero_Dias`, `Credito_Saldo_Actual`, `Credito_Saldo_Inicial`, `Credito_Generico`, `Credito_Fecha_Expedicion`, `Credito_Factura_Consecutivo`, `Credito_Sucursal_Codigo`, `Credito_Vendedor_Codigo`, `Credito_Vendedor_Sucursal`, `Credito_Cliente_Cedula`) VALUES
-(5, 8, 0, 22000, NULL, '2014-09-01 06:00:00', 13, 0, 1, 0, 402040954),
-(6, 45, 0, 91000, NULL, '2014-09-15 04:08:24', 54, 0, 1, 0, 402040954),
-(10, 15, 42600, 42600, NULL, '2014-09-20 23:25:30', 60, 0, 1, 0, 445566789),
-(11, 8, 42600, 42600, NULL, '2014-09-20 23:26:36', 60, 0, 1, 0, 445566789),
-(12, 8, 0, 10500, NULL, '2014-09-20 23:47:45', 58, 0, 1, 0, 402040954),
-(13, 45, 10042, 10042, NULL, '2014-10-02 01:15:44', 61, 0, 1, 0, 401930976),
-(14, 45, 10042, 10042, NULL, '2014-10-02 01:16:17', 61, 0, 1, 0, 401930976),
-(15, 8, 7490, 7490, NULL, '2014-10-02 01:25:42', 62, 0, 1, 0, 401930976),
-(16, 30, 5100, 5100, NULL, '2014-10-04 00:39:36', 64, 0, 1, 0, 888888888),
-(17, 60, 0, 66057, NULL, '2014-10-14 22:13:25', 65, 0, 1, 0, 402040954),
-(18, 30, 0, 27548, NULL, '2014-10-15 02:15:58', 66, 0, 1, 0, 402040954),
-(19, 60, 10000, 39576, NULL, '2014-10-15 02:28:58', 67, 0, 1, 0, 402040954);
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 -- --------------------------------------------------------
 
@@ -5801,31 +5335,13 @@ INSERT INTO `tb_24_credito` (`Credito_Id`, `Credito_Numero_Dias`, `Credito_Saldo
 -- Estructura de tabla para la tabla `tb_25_maximo_credito_cliente`
 --
 
+DROP TABLE IF EXISTS `tb_25_maximo_credito_cliente`;
 CREATE TABLE IF NOT EXISTS `tb_25_maximo_credito_cliente` (
 `Credito_Cliente_Id` int(11) NOT NULL,
   `Credito_Cliente_Cantidad_Maxima` double DEFAULT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
   `TB_02_Sucursal_Codigo` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
-
---
--- Volcado de datos para la tabla `tb_25_maximo_credito_cliente`
---
-
-INSERT INTO `tb_25_maximo_credito_cliente` (`Credito_Cliente_Id`, `Credito_Cliente_Cantidad_Maxima`, `TB_03_Cliente_Cliente_Cedula`, `TB_02_Sucursal_Codigo`) VALUES
-(1, 100000, 445566789, 0),
-(2, 10000000, 402040954, 0),
-(3, 0, 212002360, 0),
-(4, 0, 333333333, 0),
-(5, 100000, 888888888, 0),
-(6, 2000000, 1111111111, 0),
-(7, 5000000, 6666666666, 0),
-(8, 150000, 402090861, 0),
-(9, 10000000, 111002002045, 0),
-(10, 10000, 111111111, 0),
-(11, 10000, 654332211, 0),
-(12, 100000, 401310918, 0),
-(13, 100000, 401930976, 0);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -5833,30 +5349,49 @@ INSERT INTO `tb_25_maximo_credito_cliente` (`Credito_Cliente_Id`, `Credito_Clien
 -- Estructura de tabla para la tabla `tb_26_recibos_dinero`
 --
 
+DROP TABLE IF EXISTS `tb_26_recibos_dinero`;
 CREATE TABLE IF NOT EXISTS `tb_26_recibos_dinero` (
-`Recibo_Id` int(11) NOT NULL,
+`Consecutivo` int(11) NOT NULL,
   `Recibo_Cantidad` float DEFAULT NULL,
   `Recibo_Fecha` timestamp NULL DEFAULT NULL,
   `Recibo_Saldo` float DEFAULT NULL,
-  `Factura_Consecutivo` int(11) NOT NULL,
-  `Sucursal_Codigo` int(11) NOT NULL,
-  `Vendedor_Codigo` int(11) NOT NULL,
-  `Vendedor_Sucursal` int(11) NOT NULL,
-  `Cliente_Cedula` bigint(20) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+  `Credito` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Volcado de datos para la tabla `tb_26_recibos_dinero`
+-- Estructura de tabla para la tabla `tb_27_notas_credito`
 --
 
-INSERT INTO `tb_26_recibos_dinero` (`Recibo_Id`, `Recibo_Cantidad`, `Recibo_Fecha`, `Recibo_Saldo`, `Factura_Consecutivo`, `Sucursal_Codigo`, `Vendedor_Codigo`, `Vendedor_Sucursal`, `Cliente_Cedula`) VALUES
-(1, 50000, '2014-10-15 02:16:24', 16057, 65, 0, 1, 0, 402040954),
-(2, 16057, '2014-10-15 02:21:04', 0, 65, 0, 1, 0, 402040954),
-(3, 3943, '2014-10-15 02:21:04', 23605, 66, 0, 1, 0, 402040954),
-(4, 20000, '2014-10-15 02:30:03', 3605, 66, 0, 1, 0, 402040954),
-(5, 1000, '2014-10-15 02:30:43', 2605, 66, 0, 1, 0, 402040954),
-(6, 2605, '2014-10-15 02:31:22', 0, 66, 0, 1, 0, 402040954),
-(7, 29576, '2014-10-15 02:31:22', 10000, 67, 0, 1, 0, 402040954);
+DROP TABLE IF EXISTS `tb_27_notas_credito`;
+CREATE TABLE IF NOT EXISTS `tb_27_notas_credito` (
+  `Consecutivo` int(11) NOT NULL,
+  `Nombre_Cliente` varchar(60) DEFAULT NULL,
+  `Fecha_Creacion` timestamp NULL DEFAULT NULL,
+  `Factura_Acreditar` int(11) NOT NULL,
+  `Factura_Aplicar` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL,
+  `Cliente` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_28_productos_notas_credito`
+--
+
+DROP TABLE IF EXISTS `tb_28_productos_notas_credito`;
+CREATE TABLE IF NOT EXISTS `tb_28_productos_notas_credito` (
+`Id` int(11) NOT NULL,
+  `Codigo` varchar(20) DEFAULT NULL,
+  `Descripcion` varchar(150) DEFAULT NULL,
+  `Cantidad_Bueno` int(11) DEFAULT NULL,
+  `Cantidad_Defectuoso` int(11) DEFAULT NULL,
+  `Precio_Unitario` double DEFAULT NULL,
+  `Nota_Credito_Consecutivo` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Índices para tablas volcadas
@@ -6016,7 +5551,19 @@ ALTER TABLE `tb_25_maximo_credito_cliente`
 -- Indices de la tabla `tb_26_recibos_dinero`
 --
 ALTER TABLE `tb_26_recibos_dinero`
- ADD PRIMARY KEY (`Recibo_Id`,`Factura_Consecutivo`,`Sucursal_Codigo`,`Vendedor_Codigo`,`Vendedor_Sucursal`,`Cliente_Cedula`), ADD KEY `fk_TB_26_Recibos_Dinero_TB_07_Factura1_idx` (`Factura_Consecutivo`,`Sucursal_Codigo`,`Vendedor_Codigo`,`Vendedor_Sucursal`,`Cliente_Cedula`);
+ ADD PRIMARY KEY (`Consecutivo`,`Credito`), ADD KEY `fk_TB_26_Recibos_Dinero_TB_24_Credito1_idx` (`Credito`);
+
+--
+-- Indices de la tabla `tb_27_notas_credito`
+--
+ALTER TABLE `tb_27_notas_credito`
+ ADD PRIMARY KEY (`Consecutivo`,`Factura_Acreditar`,`Factura_Aplicar`,`Sucursal`,`Cliente`), ADD UNIQUE KEY `Consecutivo_UNIQUE` (`Consecutivo`), ADD KEY `fk_TB_27_Notas_Credito_TB_07_Factura1_idx` (`Factura_Acreditar`), ADD KEY `fk_TB_27_Notas_Credito_TB_07_Factura2_idx` (`Factura_Aplicar`), ADD KEY `fk_TB_27_Notas_Credito_TB_02_Sucursal1_idx` (`Sucursal`), ADD KEY `fk_TB_27_Notas_Credito_TB_03_Cliente1_idx` (`Cliente`);
+
+--
+-- Indices de la tabla `tb_28_productos_notas_credito`
+--
+ALTER TABLE `tb_28_productos_notas_credito`
+ ADD PRIMARY KEY (`Id`,`Nota_Credito_Consecutivo`,`Sucursal`), ADD KEY `fk_TB_28_Productos_Notas_Credito_TB_27_Notas_Credito1_idx` (`Nota_Credito_Consecutivo`), ADD KEY `fk_TB_28_Productos_Notas_Credito_TB_02_Sucursal1_idx` (`Sucursal`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -6031,12 +5578,12 @@ MODIFY `Usuario_Codigo` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 -- AUTO_INCREMENT de la tabla `tb_04_articulos_proforma`
 --
 ALTER TABLE `tb_04_articulos_proforma`
-MODIFY `Articulo_Proforma_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
+MODIFY `Articulo_Proforma_Id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tb_08_articulos_factura`
 --
 ALTER TABLE `tb_08_articulos_factura`
-MODIFY `Articulo_Factura_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=170;
+MODIFY `Articulo_Factura_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tb_11_precios`
 --
@@ -6046,7 +5593,7 @@ MODIFY `Precio_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4016;
 -- AUTO_INCREMENT de la tabla `tb_12_transacciones`
 --
 ALTER TABLE `tb_12_transacciones`
-MODIFY `Trans_Codigo` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=103;
+MODIFY `Trans_Codigo` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `tb_13_cheque`
 --
@@ -6056,12 +5603,12 @@ MODIFY `Cheque_Id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT de la tabla `tb_15_permisos`
 --
 ALTER TABLE `tb_15_permisos`
-MODIFY `Permisos_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=200;
+MODIFY `Permisos_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=230;
 --
 -- AUTO_INCREMENT de la tabla `tb_17_descuento_producto`
 --
 ALTER TABLE `tb_17_descuento_producto`
-MODIFY `Descuento_producto_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+MODIFY `Descuento_producto_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tb_18_tarjeta`
 --
@@ -6071,12 +5618,12 @@ MODIFY `Tarjeta_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 -- AUTO_INCREMENT de la tabla `tb_20_descuento_familia`
 --
 ALTER TABLE `tb_20_descuento_familia`
-MODIFY `Descuento_familia_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `Descuento_familia_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tb_21_descuento_cliente`
 --
 ALTER TABLE `tb_21_descuento_cliente`
-MODIFY `Descuento_cliente_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+MODIFY `Descuento_cliente_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tb_22_banco`
 --
@@ -6091,17 +5638,22 @@ MODIFY `Mixto_Id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT de la tabla `tb_24_credito`
 --
 ALTER TABLE `tb_24_credito`
-MODIFY `Credito_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+MODIFY `Credito_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT de la tabla `tb_25_maximo_credito_cliente`
 --
 ALTER TABLE `tb_25_maximo_credito_cliente`
-MODIFY `Credito_Cliente_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+MODIFY `Credito_Cliente_Id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tb_26_recibos_dinero`
 --
 ALTER TABLE `tb_26_recibos_dinero`
-MODIFY `Recibo_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+MODIFY `Consecutivo` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `tb_28_productos_notas_credito`
+--
+ALTER TABLE `tb_28_productos_notas_credito`
+MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Restricciones para tablas volcadas
 --
@@ -6247,13 +5799,30 @@ ADD CONSTRAINT `fk_TB_25_Maximo_Credito_Cliente_TB_03_Cliente1` FOREIGN KEY (`TB
 -- Filtros para la tabla `tb_26_recibos_dinero`
 --
 ALTER TABLE `tb_26_recibos_dinero`
-ADD CONSTRAINT `fk_TB_26_Recibos_Dinero_TB_07_Factura1` FOREIGN KEY (`Factura_Consecutivo`, `Sucursal_Codigo`, `Vendedor_Codigo`, `Vendedor_Sucursal`, `Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_TB_26_Recibos_Dinero_TB_24_Credito1` FOREIGN KEY (`Credito`) REFERENCES `tb_24_credito` (`Credito_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `tb_27_notas_credito`
+--
+ALTER TABLE `tb_27_notas_credito`
+ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_03_Cliente1` FOREIGN KEY (`Cliente`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_07_Factura1` FOREIGN KEY (`Factura_Acreditar`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_07_Factura2` FOREIGN KEY (`Factura_Aplicar`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `tb_28_productos_notas_credito`
+--
+ALTER TABLE `tb_28_productos_notas_credito`
+ADD CONSTRAINT `fk_TB_28_Productos_Notas_Credito_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_TB_28_Productos_Notas_Credito_TB_27_Notas_Credito1` FOREIGN KEY (`Nota_Credito_Consecutivo`) REFERENCES `tb_27_notas_credito` (`Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 DELIMITER $$
 --
 -- Procedimientos
 --
+DROP PROCEDURE IF EXISTS `productoConPrecios`$$
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `productoConPrecios`(IN codigoProducto varchar(20), IN codigoSucursal int(11), IN codigoFamilia int(11))
 BEGIN
 	SELECT  `tb_06_articulo`.`Articulo_Codigo`, 
@@ -6282,7 +5851,6 @@ BEGIN
 END$$
 
 DELIMITER ;
-
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
