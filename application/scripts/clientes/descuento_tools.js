@@ -177,7 +177,7 @@ function updateDescuento(){
 				$.ajax({
 						url : location.protocol+'//'+document.domain+'/clientes/otros/actualizarDescuento',
 						type: "POST",		
-						//async: false,
+						async: false,
 						data: {'cedula':cedula, 'descuento':descuento},				
 						success: function(data, textStatus, jqXHR)
 						{
@@ -237,7 +237,7 @@ function updateCredito(){
 				$.ajax({
 						url : location.protocol+'//'+document.domain+'/clientes/otros/actualizarCredito',
 						type: "POST",		
-						//async: false,
+						async: false,
 						data: {'cedula':cedula, 'credito':credito},				
 						success: function(data, textStatus, jqXHR)
 						{
@@ -294,7 +294,7 @@ function eliminarDesProducto(idDescuento){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/clientes/otros/eliminarDescuentoProducto',
 		type: "POST",		
-		//async: false,
+		async: false,
 		data: {'id':idDescuento},				
 		success: function(data, textStatus, jqXHR)
 		{
@@ -436,7 +436,7 @@ function eliminarDesFamilia(idDescuento){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/clientes/otros/eliminarDescuentoFamilia',
 		type: "POST",		
-		//async: false,
+		async: false,
 		data: {'id':idDescuento},				
 		success: function(data, textStatus, jqXHR)
 		{
