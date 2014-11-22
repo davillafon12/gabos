@@ -41,22 +41,42 @@ Class contabilidad extends CI_Model
 		$this->db->update('tb_24_credito', $datos); 
 	}
 	
-	function agregarRecibo($factura, $cliente, $sucursal, $vendedor, $saldo, $montoPagado){
+	function getConsecutivoUltimoRecibo($sucursal)
+	{
+		$this -> db -> select('Consecutivo');
+		$this -> db -> from('TB_26_Recibos_Dinero');
+		$this -> db -> join('TB_24_Credito', 'TB_26_Recibos_Dinero.Credito = TB_24_Credito.Credito_Id');
+		$this -> db -> where('TB_24_Credito.Credito_Vendedor_Sucursal', $sucursal);
+		$this -> db -> order_by('Consecutivo', 'desc');
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+		if($query->num_rows()==0)
+		{
+			return 1;
+		}
+		else
+		{			
+			$result = $query->result();
+			foreach($result as $row)
+			{$consecutivo=$row->Consecutivo;}
+			return $consecutivo;
+		}
+	}
+	
+	function agregarRecibo($sucursal, $codigoCredito, $saldo, $montoPagado){
 		date_default_timezone_set("America/Costa_Rica");
 		$Current_datetime = date("y/m/d : H:i:s", now());
-		
+		$consecutivo = $this->getConsecutivoUltimoRecibo($sucursal)+1;
 		$datos = array(
+						'Consecutivo' => $consecutivo,
 						'Recibo_Cantidad' => $montoPagado,
 						'Recibo_Fecha' => $Current_datetime,
 						'Recibo_Saldo' => $saldo,
-						'Factura_Consecutivo' => $factura,
-						'Sucursal_Codigo' => $sucursal,
-						'Vendedor_Codigo' => $vendedor,
-						'Vendedor_Sucursal' => $sucursal,
-						'Cliente_Cedula' => $cliente
+						'Credito' => $codigoCredito
 						);
 		$this->db->insert('tb_26_recibos_dinero',$datos);
-		return $this->db->insert_id();
+		//return $this->db->insert_id();
+		return $consecutivo;
 	} 
 	
 	function getConsecutivo($sucursal) //Traer el siguiente consecutivo de una empresa en particular

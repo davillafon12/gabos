@@ -139,7 +139,7 @@ class recibos extends CI_Controller {
 					$this->contabilidad->saldarFactura($codigoCredito, 0);
 					
 					//Agregar recibo
-					$codigoRecibo = $this->contabilidad->agregarRecibo($factura, $cliente, $sucursal, $vendedor, 0, $saldoActual);
+					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, 0, $saldoActual);
 					array_push($recibos, $codigoRecibo);
 					
 				}elseif($saldoALiquidar>0){ //Si el saldo de esta factura es mayor al ingresado pero mayor a cero
@@ -148,7 +148,7 @@ class recibos extends CI_Controller {
 					$this->contabilidad->saldarFactura($codigoCredito, $saldoActual);
 					
 					//Agregar recibo
-					$codigoRecibo = $this->contabilidad->agregarRecibo($factura, $cliente, $sucursal, $vendedor, $saldoActual, $saldoALiquidar);
+					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, $saldoActual, $saldoALiquidar);
 					
 					//Ya se uso todo el saldo, ponerlo en cero
 					$saldoALiquidar=0;
@@ -166,6 +166,16 @@ class recibos extends CI_Controller {
 	
 	private function existeFacturaConSaldo($idFactura){
 		return $this->contabilidad->existeFacturaPorId($idFactura);
+	}
+	
+	//Funcion para mostrar interfaz de anular recibos
+	function anular(){
+		
+	}
+	
+	//Funcion para mostrar interfaz de la confirmacion del deposito de los recibos
+	function deposito(){
+		
 	}
 }
 
