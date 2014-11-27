@@ -168,15 +168,6 @@ class recibos extends CI_Controller {
 		return $this->contabilidad->existeFacturaPorId($idFactura);
 	}
 	
-	//Funcion para mostrar interfaz de anular recibos
-	function anular(){
-		
-	}
-	
-	//Funcion para mostrar interfaz de la confirmacion del deposito de los recibos
-	function deposito(){
-		
-	}
 }
 
 ?>

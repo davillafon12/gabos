@@ -173,6 +173,87 @@ Class contabilidad extends CI_Model
 			return true;
 		}
 	}
+	
+	function getRecibos($cliente, $sucursal){
+		$this -> db -> select('Consecutivo, Credito, Recibo_Cantidad, Recibo_Fecha, Recibo_Saldo, Credito_Factura_Consecutivo');
+		$this -> db -> from('TB_26_recibos_dinero');
+		$this -> db -> join('TB_24_credito','Credito_Id = Credito');
+		$this -> db -> where('Credito_Sucursal_Codigo', $sucursal); 
+		$this -> db -> where('Credito_Cliente_Cedula', $cliente);
+		$this -> db -> where('Anulado', 0);
+		$this -> db -> order_by("Consecutivo", "asc");
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function existeRecibo($recibo, $credito){
+		$this->db->where('Credito', $credito);
+		$this->db->where('Consecutivo', $recibo);
+		$this->db->from('tb_26_recibos_dinero');
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return true;
+		}
+	}
+	
+	function getMontoRecibo($recibo, $credito){
+		$this->db->where('Credito', $credito);
+		$this->db->where('Consecutivo', $recibo);
+		$this->db->from('tb_26_recibos_dinero');
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return 0;
+		}
+		else
+		{			
+			$result = $query->result();
+			foreach($result as $rec){
+				return $rec->Recibo_Cantidad;
+			}
+		}
+	}
+	
+	function getMontoCredito($credito){
+		$this->db->where('Credito_Id', $credito);
+		$this->db->from('tb_24_credito');
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return 0;
+		}
+		else
+		{			
+			$result = $query->result();
+			foreach($result as $cre){
+				return $cre->Credito_Saldo_Actual;
+			}
+		}
+	}
+	
+	function actualizarCredito($datos, $credito){
+		$this->db->where('Credito_Id', $credito);
+		$this->db->update('tb_24_credito', $datos);
+	}
+	
+	function flagAnularRecibo($recibo, $credito){
+		$this->db->where('Credito', $credito);
+		$this->db->where('Consecutivo', $recibo);
+		$datos = array('Anulado'=>1);
+		$this->db->update('tb_26_recibos_dinero', $datos);
+	}
 }
 
 
