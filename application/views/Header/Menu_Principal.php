@@ -60,7 +60,7 @@
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."contabilidad/recibos>Crear</a></li>
 						<li><a href=".$Ruta_Base."contabilidad/anular>Anular</a></li>
-						<li class='last'><a href=".$Ruta_Base."contabilidad/recibos/deposito>Confirmar Deposito</a></li>
+						<li class='last'><a href=".$Ruta_Base."contabilidad/deposito>Confirmar Deposito</a></li>
 					</ul>
 				</li>
 				<li><a href='#' class='dir'>Notas</a>

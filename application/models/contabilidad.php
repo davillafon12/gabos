@@ -208,6 +208,22 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
+	function existeReciboBySucursal($recibo, $sucursal){
+		$this->db->where('Credito_Sucursal_Codigo', $sucursal);		
+		$this->db->where('Consecutivo', $recibo);
+		$this->db->join('tb_24_credito', 'tb_26_recibos_dinero.credito = tb_24_credito.Credito_Id');
+		$this->db->from('tb_26_recibos_dinero');
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
 	function getMontoRecibo($recibo, $credito){
 		$this->db->where('Credito', $credito);
 		$this->db->where('Consecutivo', $recibo);
@@ -253,6 +269,20 @@ Class contabilidad extends CI_Model
 		$this->db->where('Consecutivo', $recibo);
 		$datos = array('Anulado'=>1);
 		$this->db->update('tb_26_recibos_dinero', $datos);
+	}
+	
+	function guardarDepositoRecibo($recibo, $credito, $deposito, $id_banco, $banco_nombre){
+		date_default_timezone_set("America/Costa_Rica");
+		$fecha = date("y/m/d : H:i:s", now());
+		$datos = array(
+						'Banco_id' => $id_banco,
+						'Banco_Nombre' => $banco_nombre,
+						'Numero_Deposito' => $deposito,
+						'Fecha' => $fecha,
+						'Recibo' => $recibo,
+						'Credito' => $credito
+						);
+		$this->db->insert('tb_29_deposito_recibo', $datos);
 	}
 }
 
