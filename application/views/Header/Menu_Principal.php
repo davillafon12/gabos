@@ -65,7 +65,7 @@
 				</li>
 				<li><a href='#' class='dir'>Notas</a>
 					<ul>
-						<li class='first'><a href='#'>Débito</a></li>
+						<li class='first'><a href='".$Ruta_Base."contabilidad/notas/notasDebito'>Débito</a></li>
 						<li class='last'><a href=".$Ruta_Base."contabilidad/notas/notasCredito>Crédito</a></li>
 					</ul>
 				</li>				

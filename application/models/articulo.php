@@ -229,6 +229,48 @@ Class articulo extends CI_Model
 		}
 	}
 	
+	function getArticuloArray($codigo, $cedula, $sucursal)
+	{		
+		$this -> db -> from('TB_06_Articulo');
+		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+				
+		//Traemos el numero de precio utilizado por este cliente
+		$numero_precio = $this->getNumeroPrecio($cedula);
+			
+		if($query -> num_rows() != 0)
+		{
+			$result = $query->result();
+			foreach($result as $row)
+			{
+				$URL_IMAGEN = $row->Articulo_Imagen_URL;				
+				$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$URL_IMAGEN.'.jpg';
+				
+				if(!file_exists($ruta_a_preguntar)){$URL_IMAGEN = '00';}
+				
+				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento);
+				
+				$articulo['codigo'] = $codigo;
+				$articulo['descripcion'] = $row->Articulo_Descripcion;
+				$articulo['inventario'] = $row->Articulo_Cantidad_Inventario;
+				$articulo['descuento'] = $descuento;
+				$articulo['familia'] = $row->TB_05_Familia_Familia_Codigo;
+				$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
+				$articulo['precio_afiliado'] = $this->getPrecioProducto($codigo, 2, $sucursal);
+				$articulo['imagen'] = $URL_IMAGEN;
+				$articulo['exento'] = $row->Articulo_Exento;
+								
+				return $articulo;
+			}			
+		}
+		else
+		{
+		    return false;
+		}
+	}
+	
 	function getDescuento($codigo, $sucursal, $cedula, $familia, $descuento_producto){
 		$desCliente = $this->getDescuentoCliente($sucursal, $cedula);
 		$desClienteFamilia = $this->getDescuentoClienteFamilia($sucursal, $cedula, $familia);

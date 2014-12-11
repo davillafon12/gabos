@@ -60,6 +60,42 @@ class nueva extends CI_Controller {
 		echo $this->articulo->getArticuloXML($id_request_clean, $cedula, $data['Sucursal_Codigo']);
 	}
 	
+	function getArticuloJSON(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+		if(isset($_POST['codigo'])&&isset($_POST['cedula'])){
+			$codigo_articulo = $_POST['codigo'];
+			if(is_numeric($codigo_articulo)){
+				$cedula = $_POST['cedula'];
+				if(is_numeric($codigo_articulo)&&$this->cliente->existe_Cliente($cedula)){
+					include '/../get_session_data.php';				
+					if($this->articulo->existe_Articulo($codigo_articulo,$data['Sucursal_Codigo'])){
+						if($articulo = $this->articulo->getArticuloArray($codigo_articulo, $cedula, $data['Sucursal_Codigo'])){
+							if($articulo['inventario'] > 0){
+								$retorno['status'] = 'success';
+								$retorno['articulo'] = $articulo;
+								unset($retorno['error']);
+							}else{
+								$retorno['error'] = '6'; //No tiene inventario
+							}
+						}else{
+							$retorno['error'] = '5'; //No existe articulo
+						}
+					}else{
+						$retorno['error'] = '5'; //No existe articulo
+					}
+				}else{
+					$retorno['error'] = '4'; //Cedula no valida o no existe cliente
+				}
+			}else{
+				$retorno['error'] = '3'; //Codigo vacio o no valido
+			}
+		}else{
+			$retorno['error'] = '2'; //Error en la URL
+		}
+		echo json_encode($retorno);
+	}
+	
 	function crearFacturaTemporal()
 	{
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion

@@ -248,6 +248,20 @@ class notas extends CI_Controller {
 		}
 		return true;
 	}
+	
+	function notasDebito(){
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			
+		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+
+		if($permisos['entrar_notas_d'])
+		{
+			$this->load->view('contabilidad/notas_debito_view', $data);			
+		}
+		else{
+			redirect('accesoDenegado', 'location');
+		}
+	}
 }
 
 ?>
