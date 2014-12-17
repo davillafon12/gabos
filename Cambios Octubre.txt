@@ -11,23 +11,40 @@ LISTO-> Al hacer nota credito, seleccionar si el articulo devuelto es defectuoso
 LISTO-> Agregar en a interfaz de notas credito, a cual factura se le aplica el descuento de dicha nota.
 LISTO-> Agregar semiactivo en cliente.
 LISTO-> Cambiar interfaz de "ver mi perfil".
+-> Agregar tipo pago en recibos (Efectivo, tarjeta).
 
 Agregar
 LISTA-> Pagina para ingresar la confirmacion de deposito de un recibo por dinero (Cuando empleado toma dinero del recibo y lo deposita en el banco)
-		Lleva # de recibo, a cual banco y # de deposito
+  Lleva # de recibo, a cual banco y # de deposito
 LISTO-> Anulacion de recibos.
 -> Mostrar factura, proforma para impresion.
 -> Agregar en configuracion general un boton para actualizar estado de los 
    clientes, pedir contraseña y validar que no se haga en menos de un mes.
 LISTO-> Notas credito.
 -> Notas debito.
--> Cierre Caja.
--> Cierre Parcial.
+-> Consulta de venta (Muestra cantidad vendida del dia, por sucursal) Desde ultimo cierre de caja hasta ahora.
+-> Cierre Caja. 
+   Datos a mostrar: Total de venta.
+-> Retiro parcial (Suma a retirar no mas).
 -> Hacer ventana de cambio de codigo.
--> Ventana para usar facturas de garotas como compras de otras sucursales
+   Cambio de codigo de un producto: 27456 -> 23456(Este codigo ya debe de existir)
+                                    Cuando se cambia se decide cuantas unidades se desean pasar.
+   Traslado de bodega. ES CARGA MASIVA DE EXCEL Y MANUAL (SIEMPRE CODIGOS NUEVOS)
+           #CODIGOBRASIL      ->       #CODIGONORMAL (Puede ser nuevo o ya en inventario, valorar crear producto)
+            costo                         Se agrega la misma info de registro articulo
+            descripcion                  El costo de aqui es el costo + utilidad - impuestos
+            cantidad
+  
+
+-> Ventana para usar facturas de garotas como compras de otras sucursales. (TODA FACTURA).
+
+-> CARGA MASIVA PARA BODEGA
+-> CARGA MASIVA DE BODEGA A INVENTARIO
+-> CARGA MANUAL DE BODEGA A INVENTARIO (INDIVIDUAL) AGREGAR CODIGO ALFANUMERICO BRASILEÑO
 
 Otros
 -> Habilitar impresion via HTML proforma, factura.
 
 Esteban Correcciones
 -> Favor en la impresión de pago mixto indicarlo en la factura, desglosado cuanto en efectivo y cuanto en tarjeta
+-> En el caso de desampa, ellos llevan el consecutivo de garotas central, a la hora de facturar pasarlos como garotas.
