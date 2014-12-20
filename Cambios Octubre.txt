@@ -11,11 +11,11 @@ LISTO-> Al hacer nota credito, seleccionar si el articulo devuelto es defectuoso
 LISTO-> Agregar en a interfaz de notas credito, a cual factura se le aplica el descuento de dicha nota.
 LISTO-> Agregar semiactivo en cliente.
 LISTO-> Cambiar interfaz de "ver mi perfil".
--> Agregar tipo pago en recibos (Efectivo, tarjeta).
+LISTO-> Agregar tipo pago en recibos (Efectivo, tarjeta).
 
 Agregar
-LISTA-> Pagina para ingresar la confirmacion de deposito de un recibo por dinero (Cuando empleado toma dinero del recibo y lo deposita en el banco)
-  Lleva # de recibo, a cual banco y # de deposito
+LISTO-> Pagina para ingresar la confirmacion de deposito de un recibo por dinero (Cuando empleado toma dinero del recibo y lo deposita en el banco)
+		Lleva # de recibo, a cual banco y # de deposito
 LISTO-> Anulacion de recibos.
 -> Mostrar factura, proforma para impresion.
 -> Agregar en configuracion general un boton para actualizar estado de los 
