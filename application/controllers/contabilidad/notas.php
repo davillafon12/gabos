@@ -204,6 +204,8 @@ class notas extends CI_Controller {
 									if($this->contabilidad->agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cedula, $data['Sucursal_Codigo'], $facturaAcreditar, $facturaAplicar)){
 										$this->contabilidad->agregarProductosNotaCredito($consecutivo, $data['Sucursal_Codigo'], $productosAAcreditar, $cedula);
 										
+										$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo la nota credito: $consecutivo",$data['Sucursal_Codigo'],'nota');
+										
 										$retorno['status'] = 'success';
 										$retorno['consecutivo'] = $consecutivo;
 										unset($retorno['error']);
@@ -261,6 +263,12 @@ class notas extends CI_Controller {
 		else{
 			redirect('accesoDenegado', 'location');
 		}
+	}
+	
+	function generarNotaDebito(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+		echo json_encode($retorno);
 	}
 }
 

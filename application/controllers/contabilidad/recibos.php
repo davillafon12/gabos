@@ -145,6 +145,8 @@ class recibos extends CI_Controller {
 				//DEBE DEVOLVER EL SALDO A MAX CREDITO DEL CLIENTE				
 				//-> No aplica ya que cuando se cobra una factura con credito se calcula los saldos
 				
+				include '/../get_session_data.php';	
+				
 				if($saldoActual <= $saldoALiquidar){ //Si el saldo de esta factura es menor o igual al saldo enviado
 					//Puedo saldar toda la factura
 					$saldoALiquidar -= $saldoActual;
@@ -157,6 +159,9 @@ class recibos extends CI_Controller {
 					$this->guardarPago($tipoPago, $codigoRecibo, $codigoCredito);
 					
 					array_push($recibos, $codigoRecibo);
+					
+					//Guardamos transaccion
+					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo el recibo de dinero: $codigoRecibo del credito: $codigoCredito",$data['Sucursal_Codigo'],'recibo');
 					
 				}elseif($saldoALiquidar>0){ //Si el saldo de esta factura es mayor al ingresado pero mayor a cero
 					//Puedo saldar parte de la misma
@@ -172,6 +177,9 @@ class recibos extends CI_Controller {
 					//Ya se uso todo el saldo, ponerlo en cero
 					$saldoALiquidar=0;
 					array_push($recibos, $codigoRecibo);
+					
+					//Guardamos transaccion
+					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo el recibo de dinero: $codigoRecibo del credito: $codigoCredito",$data['Sucursal_Codigo'],'recibo');
 				}
 				
 			}

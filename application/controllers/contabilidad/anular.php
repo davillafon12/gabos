@@ -56,7 +56,7 @@ class anular extends CI_Controller {
 						unset($retorno['error']);
 						$retorno['status'] = 'success';
 						$retorno['recibos'] = $rec_arr;
-						$retorno['cliente'] = $cliente;
+						$retorno['cliente'] = $cliente;					
 					}else{
 						$retorno['error'] = '5'; //Error no hay recibos para este cliente
 					}					
