@@ -48,22 +48,28 @@ function validarEnvio(){
 		return false;
 	}
 	
+	if(!validarPago()){
+		return false;
+	}
+	
 	return true;
 }
 
 function enviarCobro(cedula, saldo){
+	
+
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/contabilidad/recibos/saldarFacturas',
 		type: "POST",		
 		//async: false,
-		data: {'cedula':cedula, 'saldoAPagar':saldo, 'facturas':JSON.stringify(facturasSaldar)},				
+		data: {'cedula':cedula, 'saldoAPagar':saldo, 'facturas':JSON.stringify(facturasSaldar), 'tipoPago':JSON.stringify(tipoPagoJSON())},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
 				informacion = $.parseJSON('[' + data.trim() + ']');
 				//alert(JSON.stringify(informacion[0], null, 4));
 				if(informacion[0].status==="error"){
-					manejarErroresAlPagar(informacion[0].error);
+					manejarErrores(informacion[0].error);
 				}else if(informacion[0].status==="success"){
 					resetFields();
 					buscarCedula(null); 
@@ -75,4 +81,29 @@ function enviarCobro(cedula, saldo){
 		error: function (jqXHR, textStatus, errorThrown)
 		{}
 	});
+}
+
+function validarPago(){
+	tipoPago = $('input[name=tipo]:checked').val();
+	if(tipoPago.trim()==='tarjeta'){
+		if(!validarTarjeta()){
+			notyMsg('¡Debe ingresar un número de autorización válido!','error');
+			return false;
+		}
+	}
+	return true;
+}
+
+function validarTarjeta(){
+	numeroTransaccion = $('#numero_transaccion').val();
+	return $.isNumeric(numeroTransaccion);
+}
+
+function tipoPagoJSON(){
+	tipoPago = $('input[name=tipo]:checked').val();
+	if(tipoPago.trim()==='tarjeta'){
+		return [{'tipo':'tarjeta','transaccion':$('#numero_transaccion').val(),'banco':$('#banco_sel').val()}];
+	}else if(tipoPago.trim()==='contado'){
+		return [{'tipo':'contado'}];
+	}
 }

@@ -126,3 +126,17 @@ function eliminarTodasASaldar(){
 	facturasMarcadasEliminar = getFacturasPorSaldar();
 	eliminarFacturasSaldarSeleccion();
 }
+
+function numTransaccion(tipo)
+{	
+	if(tipo.indexOf('contad') != -1)
+	{
+		$("#num_transaccion_field").css('display', 'none');
+		$("#datafono_field").css('display', 'none');
+	}
+	else if (tipo.indexOf('tarjet') != -1)
+	{
+		$("#num_transaccion_field").css('display', 'block');
+		$("#datafono_field").css('display', 'block');
+	}	
+}

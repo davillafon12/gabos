@@ -8,6 +8,7 @@ class recibos extends CI_Controller {
 		$this->load->model('user','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('contabilidad','',TRUE);	
+		$this->load->model('banco','',TRUE);
 	}
 
 	function index()
@@ -18,8 +19,10 @@ class recibos extends CI_Controller {
 
 		if($permisos['entrar_recibos'])
 		{
-		$this->load->helper(array('form'));
-		$this->load->view('contabilidad/contabilidad_recibos_view', $data);	
+			$this->load->helper(array('form'));
+			$bancos = $this->banco->getBancos();
+			$data['bancos'] = $bancos;
+			$this->load->view('contabilidad/contabilidad_recibos_view', $data);				
 		}
 		else{
 		   redirect('accesoDenegado', 'location');
@@ -77,24 +80,33 @@ class recibos extends CI_Controller {
 	function saldarFacturas(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
-		if(isset($_POST['cedula'])&&isset($_POST['saldoAPagar'])&&isset($_POST['facturas'])){
+		if(isset($_POST['cedula'])&&isset($_POST['saldoAPagar'])&&isset($_POST['facturas'])&&isset($_POST['tipoPago'])){
 			$cedula = $_POST['cedula'];
 			if($this->cliente->getClientes_Cedula($cedula)){
 				$saldoAPagar = $_POST['saldoAPagar'];
 				if(is_numeric($saldoAPagar)){
-					//Estas facturas son los creditos realizados					
-					$facturas = json_decode($_POST['facturas'], true);
-					if($recibos = $this->procesarFacturas($cedula, $saldoAPagar, $facturas)){
-						$retorno['status'] = 'success';
-						$retorno['recibos'] = $recibos;
+					$tipoPago = $_POST['tipoPago']; //Obtenemos el array
+					$tipoPago = json_decode($tipoPago, true);
+					$tipoPago = $tipoPago[0]; //Sacamos el array con los datos
+					//Verificamos que sea el tipo de pago autorizado
+					if($tipoPago['tipo']=='contado'||$tipoPago['tipo']=='tarjeta'){
+						//Estas facturas son los creditos realizados					
+						$facturas = json_decode($_POST['facturas'], true);
+						if($recibos = $this->procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago)){
+												
+							$retorno['status'] = 'success';
+							$retorno['recibos'] = $recibos;
+						}else{
+							$retorno['error'] = '9'; //Error pagando facturas
+						}
 					}else{
-						$retorno['error'] = '5'; //Error pagando facturas
+						$retorno['error'] = '8'; //Error tipo de pago no valido
 					}
 				}else{
-					$retorno['error'] = '4'; //Error saldo no es numerico
+					$retorno['error'] = '7'; //Error saldo no es numerico
 				}
 			}else{
-				$retorno['error'] = '3'; //Error no hay cliente
+				$retorno['error'] = '6'; //Error no hay cliente
 			}
 		}else{			
 			$retorno['error'] = '2'; //Error en la URL, no viene las variables
@@ -102,7 +114,7 @@ class recibos extends CI_Controller {
 		echo json_encode($retorno);
 	}
 	
-	private function procesarFacturas($cedula, $saldoAPagar, $facturas){
+	private function procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago){
 		//Creamos un array que contendra las facturas que realmente existen
 		$facturasExistentes = array();
 		foreach($facturas as $factura){
@@ -139,7 +151,11 @@ class recibos extends CI_Controller {
 					$this->contabilidad->saldarFactura($codigoCredito, 0);
 					
 					//Agregar recibo
-					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, 0, $saldoActual);
+					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, 0, $saldoActual, $tipoPago['tipo']);
+					
+					//Agregamos tipo de pago
+					$this->guardarPago($tipoPago, $codigoRecibo, $codigoCredito);
+					
 					array_push($recibos, $codigoRecibo);
 					
 				}elseif($saldoALiquidar>0){ //Si el saldo de esta factura es mayor al ingresado pero mayor a cero
@@ -148,7 +164,10 @@ class recibos extends CI_Controller {
 					$this->contabilidad->saldarFactura($codigoCredito, $saldoActual);
 					
 					//Agregar recibo
-					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, $saldoActual, $saldoALiquidar);
+					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, $saldoActual, $saldoALiquidar, $tipoPago['tipo']);
+					
+					//Agregamos tipo de pago
+					$this->guardarPago($tipoPago, $codigoRecibo, $codigoCredito);
 					
 					//Ya se uso todo el saldo, ponerlo en cero
 					$saldoALiquidar=0;
@@ -166,6 +185,17 @@ class recibos extends CI_Controller {
 	
 	private function existeFacturaConSaldo($idFactura){
 		return $this->contabilidad->existeFacturaPorId($idFactura);
+	}
+	
+	private function guardarPago($tipoPago, $recibo, $credito){
+		//EL TIPO DE PAGO DE CONTADO O CREDITO SE ENVIA PARA GUARDAR EN LA TABLA DE RECIBO Y NO AQUI
+		switch ($tipoPago['tipo']) {
+			case 'tarjeta':
+				$comision = $this->banco->getComision($tipoPago['banco']);
+				$this->contabilidad->guardarPagoTarjeta($tipoPago['transaccion'], $tipoPago['banco'], $comision, $recibo, $credito);
+				//$this->contabilidad->guardarPagoTarjeta($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco']);
+				break;
+		}
 	}
 	
 }

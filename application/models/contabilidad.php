@@ -63,7 +63,7 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
-	function agregarRecibo($sucursal, $codigoCredito, $saldo, $montoPagado){
+	function agregarRecibo($sucursal, $codigoCredito, $saldo, $montoPagado, $tipoPago){
 		date_default_timezone_set("America/Costa_Rica");
 		$Current_datetime = date("y/m/d : H:i:s", now());
 		$consecutivo = $this->getConsecutivoUltimoRecibo($sucursal)+1;
@@ -72,6 +72,7 @@ Class contabilidad extends CI_Model
 						'Recibo_Cantidad' => $montoPagado,
 						'Recibo_Fecha' => $Current_datetime,
 						'Recibo_Saldo' => $saldo,
+						'Tipo_Pago' => $tipoPago,
 						'Credito' => $codigoCredito
 						);
 		$this->db->insert('tb_26_recibos_dinero',$datos);
@@ -283,6 +284,17 @@ Class contabilidad extends CI_Model
 						'Credito' => $credito
 						);
 		$this->db->insert('tb_29_deposito_recibo', $datos);
+	}
+	
+	function guardarPagoTarjeta($autorizacion, $banco, $comision, $recibo, $credito){
+		$datos = array(
+						'Numero_Autorizacion' => $autorizacion,
+						'Comision_Por' => $comision,
+						'Banco' => $banco,
+						'Recibo' => $recibo,
+						'Credito' => $credito
+						);
+		$this->db->insert('tb_32_tarjeta_recibos', $datos);
 	}
 }
 

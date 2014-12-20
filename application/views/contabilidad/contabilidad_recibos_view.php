@@ -71,6 +71,11 @@ PARA:
 						<td>
 							<p class="contact"><label for="cliente">Cliente</label></p>
 						</td>
+						<td>
+						</td>
+						<td>
+							<p class="contact">Tipo de Pago:</p>
+						</td>
 					</tr>
 					<tr>
 						<td>
@@ -80,6 +85,10 @@ PARA:
 							<input id="cedula" class="input_uno" placeholder="Inserte el numero de cédula" name="cedula" autocomplete="off" type="text" onkeyup="buscarCedula(event);" required="" tabindex='1'>					
 							<script>document.getElementById('cedula').focus();</script>
 						</td>
+						<td>
+							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="contado" checked><div class="tipos_de_pago">Contado</div>
+							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="tarjeta"><div class="tipos_de_pago">Tarjeta</div>
+						</td>
 					</tr>
 					<tr>
 						<td>
@@ -88,7 +97,25 @@ PARA:
 						<td>
 							<input id="nombre" class="input_uno" placeholder="Inserte el nombre del cliente" autocomplete="off" name="nombre" type="text" >
 							<script>setUpLiveSearch();</script>
-						</td>						
+						</td>	
+						<td>
+							<div id="num_transaccion_field" style="display: none;">
+								<p class="contact" style="display: inline;">Número de Autorización:</p>
+								<input id='numero_transaccion' class='input_uno' style='width: 100px; margin-left: 5px;' autocomplete='off' name='numero_transaccion' required='' type='text'>
+							</div>
+						</td>
+						<td>
+							<div id="datafono_field" style="display: none;">
+								<p class="contact" style="display: inline;">Datáfono:</p>
+								<select id="banco_sel" name="banco_sel" class='input_uno' style='width: 250px; margin-left: 5px;'>
+									<?php
+										foreach($bancos as $banco){
+											echo "<option value='".$banco->Banco_Codigo."'>".$banco->Banco_Nombre."</option>";
+										}						
+									?>
+								</select>
+							</div>
+						</td>
 					</tr>
 				</table>
 				<hr class="division-contenido">

@@ -217,3 +217,10 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+
+.tipos_de_pago{
+	font-family: Keffeesatz, Arial; 
+	color: #4b4b4b; 
+	font-size: 14px;
+	display: inline-block;
+}

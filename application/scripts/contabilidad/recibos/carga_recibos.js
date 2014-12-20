@@ -72,6 +72,18 @@ function manejarErrores(error){
 			notyMsg('¡Este cliente no tiene recibos!','success');
 			resetFields();
 		break;
+		case '6':
+			notyMsg('¡Este cliente no existe!','error');
+		break;
+		case '7':
+			notyMsg('¡El saldo ingresado no es válido!','error');
+		break;
+		case '8':
+			notyMsg('¡El tipo de pago seleccionado no es válido!','error');
+		break;
+		case '9':
+			notyMsg('¡Error al saldar facturas!','error');
+		break;
 	}
 }
 
