@@ -98,7 +98,7 @@ class registrar extends CI_Controller {
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
 
-	    if($this->user->registrar($codigo, $nombre_usuario, $apellidos_usuario, $cedula_usuario, $tipo_cedula_usuario,  $celular_usuario, $telefono_usuario, $fecha_ingreso_usuario, $fecha_cesantia_usuario, $fecha_recontratacion_Usuario, $usuario_nombre_usuario, $observaciones, $usuario_nombre_usuario, $this->direccion_url_imagen, $email_usuario, $rango_usuario, $sucursal))
+	    if($this->user->registrar($codigo, $nombre_usuario, $apellidos_usuario, $cedula_usuario, $tipo_cedula_usuario,  $celular_usuario, $telefono_usuario, $fecha_ingreso_usuario, $fecha_cesantia_usuario, $fecha_recontratacion_Usuario, $usuario_nombre_usuario, $observaciones, $usuario_password, $this->direccion_url_imagen, $email_usuario, $rango_usuario, $sucursal))
 		{ //Si se ingreso bien a la BD
 			if(isset($_POST['permisos'])){
 				foreach($_POST['permisos'] as $permiso){
@@ -136,8 +136,8 @@ class registrar extends CI_Controller {
 		}
 		else
 		{ //Hubo un error  no se ingreso a la BD
-			echo "fallo esta mierda"; 
-			echo "la cedula es : ".$cedula_usuario; 
+			//echo "fallo esta mierda"; 
+			//echo "la cedula es : ".$cedula_usuario; 
 		}
 			/*$data['Titulo_Pagina'] = "Transacción Fallida";
 			$data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>Hubo un error al ingresar el usuario ".$nombre_usuario."! <img src=".$ruta_base_imagenes_script."/error.gif /></p></div><br>

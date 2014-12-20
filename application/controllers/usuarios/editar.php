@@ -306,8 +306,9 @@ class editar extends CI_Controller {
 				$data_update['Usuario_Imagen_URL'] = mysql_real_escape_string($this->direccion_url_imagen);
 				$data_update['Usuario_Correo_Electronico'] = mysql_real_escape_string($email_usuario);
 				$data_update['Usuario_Rango'] = mysql_real_escape_string($rango_usuario);
+				
 				if($usuario_password){
-					$data_update['Usuario_Password'] = MD5($usuario_nombre_usuario);     
+					$data_update['Usuario_Password'] = MD5($usuario_password);     
 				}
 				$this->user->actualizar($codigo_usuario, $data_update);
 				
