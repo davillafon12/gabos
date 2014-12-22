@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.7.1
+-- version 4.1.12
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-12-2014 a las 19:07:12
--- Versión del servidor: 5.6.20
--- Versión de PHP: 5.5.15
+-- Tiempo de generación: 22-12-2014 a las 23:05:53
+-- Versión del servidor: 5.6.16
+-- Versión de PHP: 5.5.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -21,7 +21,6 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `garotas_bonitas_main_db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `garotas_bonitas_main_db`;
-
 
 -- --------------------------------------------------------
 
@@ -43,7 +42,8 @@ CREATE TABLE IF NOT EXISTS `tb_02_sucursal` (
   `Sucursal_Creador` varchar(45) DEFAULT NULL,
   `Sucursal_Estado` tinyint(1) DEFAULT NULL,
   `Sucursal_Administrador` varchar(45) DEFAULT NULL,
-  `Sucursal_leyenda_tributacion` varchar(150) DEFAULT NULL
+  `Sucursal_leyenda_tributacion` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -55,7 +55,6 @@ INSERT INTO `tb_02_sucursal` (`Codigo`, `Sucursal_Cedula`, `Sucursal_Nombre`, `S
 (1, '4-525-451278', 'Ipanema', '8457-5124', '', '', 'Sin Definir', 'Testing', '2014-03-11 00:00:00', NULL, 'David_test', 1, 'Heredia, calle 34 avenida central', ''),
 (2, '3-101-350758', 'Garotas By Garotas', '2268-5478', '2356-4578', 'garotasBygarotas@ice.co.cr', 'Heredia Costa Rica', 'Testing', '2014-09-21 01:24:19', '2014-09-21 01:24:24', 'David_test', 0, 'Alberto', 'Tributacion');
 
-
 -- --------------------------------------------------------
 
 --
@@ -63,7 +62,7 @@ INSERT INTO `tb_02_sucursal` (`Codigo`, `Sucursal_Cedula`, `Sucursal_Nombre`, `S
 --
 
 CREATE TABLE IF NOT EXISTS `tb_01_usuario` (
-`Usuario_Codigo` int(11) NOT NULL,
+  `Usuario_Codigo` int(11) NOT NULL AUTO_INCREMENT,
   `Usuario_Nombre` varchar(20) DEFAULT NULL,
   `Usuario_Apellidos` varchar(40) DEFAULT NULL,
   `Usuario_Cedula` bigint(20) DEFAULT NULL,
@@ -79,7 +78,9 @@ CREATE TABLE IF NOT EXISTS `tb_01_usuario` (
   `Usuario_Imagen_URL` varchar(100) DEFAULT NULL,
   `Usuario_Correo_Electronico` varchar(30) DEFAULT NULL,
   `Usuario_Rango` varchar(10) DEFAULT NULL,
-  `TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Usuario_Codigo`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_01_Usuario_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
@@ -115,7 +116,8 @@ CREATE TABLE IF NOT EXISTS `tb_03_cliente` (
   `Cliente_Calidad` int(11) DEFAULT NULL,
   `Cliente_Numero_Pago` int(11) DEFAULT NULL,
   `Cliente_EsSucursal` tinyint(1) DEFAULT NULL,
-  `Cliente_EsExento` tinyint(1) NOT NULL
+  `Cliente_EsExento` tinyint(1) NOT NULL,
+  PRIMARY KEY (`Cliente_Cedula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -141,28 +143,6 @@ INSERT INTO `tb_03_cliente` (`Cliente_Cedula`, `Cliente_Nombre`, `Cliente_Apelli
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tb_04_articulos_proforma`
---
-
-CREATE TABLE IF NOT EXISTS `tb_04_articulos_proforma` (
-`Articulo_Proforma_Id` int(11) NOT NULL,
-  `Articulo_Proforma_Codigo` varchar(45) DEFAULT NULL,
-  `Articulo_Proforma_Descripcion` varchar(45) DEFAULT NULL,
-  `Articulo_Proforma_Cantidad` int(11) DEFAULT NULL,
-  `Articulo_Proforma_Descuento` varchar(45) DEFAULT NULL,
-  `Articulo_Proforma_Exento` varchar(45) DEFAULT NULL,
-  `Articulo_Proforma_Precio_Unitario` varchar(45) DEFAULT NULL,
-  `Articulo_Proforma_Imagen` varchar(45) DEFAULT NULL,
-  `TB_10_Proforma_Proforma_Consecutivo` int(11) NOT NULL,
-  `TB_10_Proforma_TB_02_Sucursal_Codigo` int(11) NOT NULL,
-  `TB_10_Proforma_Proforma_Vendedor_Codigo` int(11) NOT NULL,
-  `TB_10_Proforma_Proforma_Vendedor_Sucursal` int(11) NOT NULL,
-  `TB_10_Proforma_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `tb_05_familia`
 --
 
@@ -174,7 +154,9 @@ CREATE TABLE IF NOT EXISTS `tb_05_familia` (
   `Familia_Fecha_Desactivacion` timestamp NULL DEFAULT NULL,
   `Familia_Creador` varchar(45) DEFAULT NULL,
   `TB_02_Sucursal_Codigo` int(11) NOT NULL,
-  `Familia_Estado` tinyint(1) DEFAULT '1'
+  `Familia_Estado` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`Familia_Codigo`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_05_Familia_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -203,7 +185,10 @@ CREATE TABLE IF NOT EXISTS `tb_06_articulo` (
   `Articulo_Imagen_URL` varchar(45) DEFAULT NULL,
   `Articulo_Exento` tinyint(1) DEFAULT NULL,
   `TB_05_Familia_Familia_Codigo` int(11) NOT NULL,
-  `TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Articulo_Codigo`,`TB_05_Familia_Familia_Codigo`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_06_Articulo_TB_05_Familia1_idx` (`TB_05_Familia_Familia_Codigo`),
+  KEY `fk_TB_06_Articulo_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -258,7 +243,7 @@ INSERT INTO `tb_06_articulo` (`Articulo_Codigo`, `Articulo_Descripcion`, `Articu
 ('22786', 'ANILLO BOLA DE FUEGO', '22786', 100, 0, 0, '22750', 0, 2, 0),
 ('22787', 'ARGOLLA BOLAS DE FUEGO', '22787', 100, 0, 0, '22750', 0, 2, 0),
 ('22788', 'ARETE BOLA DE FUEGO PEQ', '22788', 100, 0, 0, '22750', 0, 2, 0),
-('22789', 'ARETE BOLA DE FUEGO', '22789', 100, 0, 0, '22750', 0, 2, 0),
+('22789', 'ARETE BOLA DE FUEGO', '22789', 100, 1, 0, '22750', 0, 2, 0),
 ('22790', 'CADENA + DIJE CIRCULO', '22790', 100, 0, 0, '22750', 0, 2, 0),
 ('22791', 'CADENA TRES OROS ', '22791', 100, 0, 0, '22750', 0, 2, 0),
 ('22792', 'CADENA PLANA TRES OROS', '22792', 100, 0, 0, '22750', 0, 2, 0),
@@ -909,7 +894,9 @@ CREATE TABLE IF NOT EXISTS `tb_07_factura` (
   `TB_02_Sucursal_Codigo` int(11) NOT NULL,
   `Factura_Vendedor_Codigo` int(11) NOT NULL,
   `Factura_Vendedor_Sucursal` int(11) NOT NULL,
-  `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
+  `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
+  PRIMARY KEY (`Factura_Consecutivo`,`TB_02_Sucursal_Codigo`,`Factura_Vendedor_Codigo`,`Factura_Vendedor_Sucursal`,`TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_07_Factura_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -930,7 +917,7 @@ INSERT INTO `tb_07_factura` (`Factura_Consecutivo`, `Factura_Monto_Total`, `Fact
 --
 
 CREATE TABLE IF NOT EXISTS `tb_08_articulos_factura` (
-`Articulo_Factura_id` int(11) NOT NULL,
+  `Articulo_Factura_id` int(11) NOT NULL AUTO_INCREMENT,
   `Articulo_Factura_Codigo` varchar(45) DEFAULT NULL,
   `Articulo_Factura_Descripcion` varchar(45) DEFAULT NULL,
   `Articulo_Factura_Cantidad` int(11) DEFAULT NULL,
@@ -942,7 +929,9 @@ CREATE TABLE IF NOT EXISTS `tb_08_articulos_factura` (
   `TB_07_Factura_TB_02_Sucursal_Codigo` int(11) NOT NULL,
   `TB_07_Factura_Factura_Vendedor_Codigo` int(11) NOT NULL,
   `TB_07_Factura_Factura_Vendedor_Sucursal` int(11) NOT NULL,
-  `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
+  `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
+  PRIMARY KEY (`Articulo_Factura_id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_08_Articulos_Factura_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
@@ -969,7 +958,9 @@ CREATE TABLE IF NOT EXISTS `tb_09_articulos_transito` (
   `Articulo_Transito_Codigo_Barras` varchar(45) DEFAULT NULL,
   `Articulo_Transito_Precio` double DEFAULT NULL,
   `Articulo_Transito_Cantidad` double DEFAULT NULL,
-  `TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Articulo_Transito_Codigo`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_13_Articulos_Transito_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -993,8 +984,36 @@ CREATE TABLE IF NOT EXISTS `tb_10_proforma` (
   `TB_02_Sucursal_Codigo` int(11) NOT NULL,
   `Proforma_Vendedor_Codigo` int(11) NOT NULL,
   `Proforma_Vendedor_Sucursal` int(11) NOT NULL,
-  `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
+  `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
+  PRIMARY KEY (`Proforma_Consecutivo`,`TB_02_Sucursal_Codigo`,`Proforma_Vendedor_Codigo`,`Proforma_Vendedor_Sucursal`,`TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_10_Proforma_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_10_Proforma_TB_01_Usuario1_idx` (`Proforma_Vendedor_Codigo`,`Proforma_Vendedor_Sucursal`),
+  KEY `fk_TB_10_Proforma_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_04_articulos_proforma`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_04_articulos_proforma` (
+  `Articulo_Proforma_Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Articulo_Proforma_Codigo` varchar(45) DEFAULT NULL,
+  `Articulo_Proforma_Descripcion` varchar(45) DEFAULT NULL,
+  `Articulo_Proforma_Cantidad` int(11) DEFAULT NULL,
+  `Articulo_Proforma_Descuento` varchar(45) DEFAULT NULL,
+  `Articulo_Proforma_Exento` varchar(45) DEFAULT NULL,
+  `Articulo_Proforma_Precio_Unitario` varchar(45) DEFAULT NULL,
+  `Articulo_Proforma_Imagen` varchar(45) DEFAULT NULL,
+  `TB_10_Proforma_Proforma_Consecutivo` int(11) NOT NULL,
+  `TB_10_Proforma_TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  `TB_10_Proforma_Proforma_Vendedor_Codigo` int(11) NOT NULL,
+  `TB_10_Proforma_Proforma_Vendedor_Sucursal` int(11) NOT NULL,
+  `TB_10_Proforma_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
+  PRIMARY KEY (`Articulo_Proforma_Id`,`TB_10_Proforma_Proforma_Consecutivo`,`TB_10_Proforma_TB_02_Sucursal_Codigo`,`TB_10_Proforma_Proforma_Vendedor_Codigo`,`TB_10_Proforma_Proforma_Vendedor_Sucursal`,`TB_10_Proforma_TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_10_Proforma_has_TB_06_Articulo_TB_10_Proforma1_idx` (`TB_10_Proforma_Proforma_Consecutivo`,`TB_10_Proforma_TB_02_Sucursal_Codigo`,`TB_10_Proforma_Proforma_Vendedor_Codigo`,`TB_10_Proforma_Proforma_Vendedor_Sucursal`,`TB_10_Proforma_TB_03_Cliente_Cliente_Cedula`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1003,12 +1022,14 @@ CREATE TABLE IF NOT EXISTS `tb_10_proforma` (
 --
 
 CREATE TABLE IF NOT EXISTS `tb_11_precios` (
-`Precio_Id` int(11) NOT NULL,
+  `Precio_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Precio_Numero` int(11) NOT NULL DEFAULT '0',
   `Precio_Monto` double NOT NULL DEFAULT '0',
   `TB_06_Articulo_Articulo_Codigo` varchar(20) NOT NULL,
   `TB_06_Articulo_TB_05_Familia_Familia_Codigo` int(11) NOT NULL,
-  `TB_06_Articulo_TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_06_Articulo_TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Precio_Id`,`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`,`TB_06_Articulo_TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_11_Precios_TB_06_Articulo1_idx` (`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`,`TB_06_Articulo_TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4010 ;
 
 --
@@ -5064,14 +5085,16 @@ INSERT INTO `tb_11_precios` (`Precio_Id`, `Precio_Numero`, `Precio_Monto`, `TB_0
 --
 
 CREATE TABLE IF NOT EXISTS `tb_12_transacciones` (
-`Trans_Codigo` int(11) NOT NULL,
+  `Trans_Codigo` int(11) NOT NULL AUTO_INCREMENT,
   `Trans_Descripcion` varchar(150) DEFAULT NULL,
   `Trans_Fecha_Hora` timestamp NULL DEFAULT NULL,
   `Trans_Tipo` varchar(15) DEFAULT NULL,
   `Trans_IP` varchar(40) DEFAULT NULL,
   `TB_01_Usuario_Usuario_Codigo` int(11) NOT NULL,
-  `TB_01_Usuario_TB_02_Sucursal_Codigo` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=71 ;
+  `TB_01_Usuario_TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Trans_Codigo`,`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_12_Transacciones_TB_01_Usuario1_idx` (`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=76 ;
 
 --
 -- Volcado de datos para la tabla `tb_12_transacciones`
@@ -5146,7 +5169,12 @@ INSERT INTO `tb_12_transacciones` (`Trans_Codigo`, `Trans_Descripcion`, `Trans_F
 (67, 'El usuario salio del sistema', '2014-12-11 03:53:49', 'login', '192.168.1.4', 1, 0),
 (68, 'El usuario se logueo al sistema', '2014-12-11 04:50:28', 'login', '192.168.1.4', 1, 0),
 (69, 'El usuario salio del sistema', '2014-12-11 05:03:45', 'login', '192.168.1.4', 1, 0),
-(70, 'El usuario se logueo al sistema', '2014-12-17 18:06:02', 'login', '127.0.0.1', 1, 0);
+(70, 'El usuario se logueo al sistema', '2014-12-17 18:06:02', 'login', '127.0.0.1', 1, 0),
+(71, 'El usuario se logueo al sistema', '2014-12-22 21:54:16', 'login', '127.0.0.1', 1, 0),
+(72, 'El usuario realizo la nota credito: 3', '2014-12-22 21:54:43', 'nota', '127.0.0.1', 1, 0),
+(73, 'El usuario realizo el recibo de dinero: 11 del credito: 1', '2014-12-22 22:00:47', 'recibo', '127.0.0.1', 1, 0),
+(74, 'El usuario realizo el recibo de dinero: 12 del credito: 2', '2014-12-22 22:00:47', 'recibo', '127.0.0.1', 1, 0),
+(75, 'El usuario realizo el recibo de dinero: 13 del credito: 3', '2014-12-22 22:00:47', 'recibo', '127.0.0.1', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -5155,13 +5183,15 @@ INSERT INTO `tb_12_transacciones` (`Trans_Codigo`, `Trans_Descripcion`, `Trans_F
 --
 
 CREATE TABLE IF NOT EXISTS `tb_13_cheque` (
-`Cheque_Id` int(11) NOT NULL,
+  `Cheque_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Cheque_Numero` varchar(45) DEFAULT NULL,
   `TB_07_Factura_Factura_Consecutivo` int(11) NOT NULL,
   `TB_07_Factura_TB_02_Sucursal_Codigo` int(11) NOT NULL,
   `TB_07_Factura_Factura_Vendedor_Codigo` int(11) NOT NULL,
   `TB_07_Factura_Factura_Vendedor_Sucursal` int(11) NOT NULL,
-  `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
+  `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
+  PRIMARY KEY (`Cheque_Id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_13_Cheque_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -5175,7 +5205,9 @@ CREATE TABLE IF NOT EXISTS `tb_14_sesiones` (
   `ip_address` varchar(45) NOT NULL DEFAULT '0',
   `user_agent` varchar(120) NOT NULL,
   `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
-  `user_data` text
+  `user_data` text,
+  PRIMARY KEY (`session_id`),
+  KEY `'last_activity_idx'` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -5184,6 +5216,7 @@ CREATE TABLE IF NOT EXISTS `tb_14_sesiones` (
 
 INSERT INTO `tb_14_sesiones` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 ('37d8d961386d068ea0445ae58b265c61', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36', 1418839553, 'a:2:{s:9:"user_data";s:0:"";s:9:"logged_in";a:8:{s:14:"Usuario_Codigo";s:1:"1";s:22:"Usuario_Nombre_Usuario";s:10:"David_test";s:15:"Sucursal_Codigo";s:1:"0";s:18:"Usuario_Imagen_URL";s:15:"402040954_0.png";s:14:"Usuario_Nombre";s:5:"David";s:17:"Usuario_Apellidos";s:18:"Villalobos Fonseca";s:21:"Usuario_Observaciones";s:15:"Usuario testing";s:13:"Usuario_Rango";s:8:"avanzado";}}'),
+('6c1407b41874b2ba83d4459a393a1e60', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36', 1419285647, 'a:2:{s:9:"user_data";s:0:"";s:9:"logged_in";a:8:{s:14:"Usuario_Codigo";s:1:"1";s:22:"Usuario_Nombre_Usuario";s:10:"David_test";s:15:"Sucursal_Codigo";s:1:"0";s:18:"Usuario_Imagen_URL";s:15:"402040954_0.png";s:14:"Usuario_Nombre";s:5:"David";s:17:"Usuario_Apellidos";s:18:"Villalobos Fonseca";s:21:"Usuario_Observaciones";s:15:"Usuario testing";s:13:"Usuario_Rango";s:8:"avanzado";}}'),
 ('6d741d2de7aecd8345dbee7334cd7c2d', '192.168.1.4', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36', 1418274225, '');
 
 -- --------------------------------------------------------
@@ -5193,11 +5226,13 @@ INSERT INTO `tb_14_sesiones` (`session_id`, `ip_address`, `user_agent`, `last_ac
 --
 
 CREATE TABLE IF NOT EXISTS `tb_15_permisos` (
-`Permisos_Id` int(11) NOT NULL,
+  `Permisos_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Permisos_Area` varchar(30) DEFAULT NULL,
   `Permisos_Value` tinyint(1) DEFAULT NULL,
   `TB_01_Usuario_Usuario_Codigo` int(11) NOT NULL,
-  `TB_01_Usuario_TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_01_Usuario_TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Permisos_Id`,`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_15_Permisos_TB_01_Usuario1_idx` (`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=326 ;
 
 --
@@ -5267,7 +5302,9 @@ CREATE TABLE IF NOT EXISTS `tb_16_authclientes` (
   `AuthClientes_Apellidos` varchar(45) DEFAULT NULL,
   `AuthClientes_Carta_URL` varchar(45) DEFAULT NULL,
   `AuthClientes_Seq` int(11) DEFAULT NULL,
-  `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL
+  `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
+  PRIMARY KEY (`TB_03_Cliente_Cliente_Cedula`,`AuthClientes_Id`),
+  KEY `fk_TB_16_AuthClientes_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -5277,13 +5314,17 @@ CREATE TABLE IF NOT EXISTS `tb_16_authclientes` (
 --
 
 CREATE TABLE IF NOT EXISTS `tb_17_descuento_producto` (
-`Descuento_producto_id` int(11) NOT NULL,
+  `Descuento_producto_id` int(11) NOT NULL AUTO_INCREMENT,
   `Descuento_producto_monto` double DEFAULT NULL,
   `Descuento_producto_porcentaje` double DEFAULT NULL,
   `TB_06_Articulo_Articulo_Codigo` varchar(20) NOT NULL,
   `TB_06_Articulo_TB_05_Familia_Familia_Codigo` int(11) NOT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
-  `TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Descuento_producto_id`,`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_21_Descuento_Producto_TB_06_Articulo1_idx` (`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`),
+  KEY `fk_TB_21_Descuento_Producto_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_21_Descuento_Producto_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
@@ -5300,10 +5341,11 @@ INSERT INTO `tb_17_descuento_producto` (`Descuento_producto_id`, `Descuento_prod
 --
 
 CREATE TABLE IF NOT EXISTS `tb_22_banco` (
-`Banco_Codigo` int(11) NOT NULL,
+  `Banco_Codigo` int(11) NOT NULL AUTO_INCREMENT,
   `Banco_Nombre` varchar(45) DEFAULT NULL,
   `Banco_Comision_Porcentaje` float DEFAULT NULL,
-  `Banco_Creado_Por` int(11) DEFAULT NULL
+  `Banco_Creado_Por` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Banco_Codigo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
@@ -5322,7 +5364,7 @@ INSERT INTO `tb_22_banco` (`Banco_Codigo`, `Banco_Nombre`, `Banco_Comision_Porce
 --
 
 CREATE TABLE IF NOT EXISTS `tb_18_tarjeta` (
-`Tarjeta_Id` int(11) NOT NULL,
+  `Tarjeta_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Tarjeta_Numero_Transaccion` varchar(45) DEFAULT NULL,
   `Tarjeta_Comision_Banco` float DEFAULT NULL,
   `TB_07_Factura_Factura_Consecutivo` int(11) NOT NULL,
@@ -5330,7 +5372,10 @@ CREATE TABLE IF NOT EXISTS `tb_18_tarjeta` (
   `TB_07_Factura_Factura_Vendedor_Codigo` int(11) NOT NULL,
   `TB_07_Factura_Factura_Vendedor_Sucursal` int(11) NOT NULL,
   `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
-  `TB_22_Banco_Banco_Codigo` int(11) NOT NULL
+  `TB_22_Banco_Banco_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Tarjeta_Id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`,`TB_22_Banco_Banco_Codigo`),
+  KEY `fk_TB_18_Tarjeta_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_18_Tarjeta_TB_22_Banco1_idx` (`TB_22_Banco_Banco_Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -5347,7 +5392,10 @@ CREATE TABLE IF NOT EXISTS `tb_19_deposito` (
   `TB_07_Factura_Factura_Vendedor_Codigo` int(11) NOT NULL,
   `TB_07_Factura_Factura_Vendedor_Sucursal` int(11) NOT NULL,
   `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
-  `TB_22_Banco_Banco_Codigo` int(11) NOT NULL
+  `TB_22_Banco_Banco_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Deposito_Id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`,`TB_22_Banco_Banco_Codigo`),
+  KEY `fk_TB_19_Deposito_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_19_Deposito_TB_22_Banco1_idx` (`TB_22_Banco_Banco_Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -5357,13 +5405,17 @@ CREATE TABLE IF NOT EXISTS `tb_19_deposito` (
 --
 
 CREATE TABLE IF NOT EXISTS `tb_20_descuento_familia` (
-`Descuento_familia_id` int(11) NOT NULL,
+  `Descuento_familia_id` int(11) NOT NULL AUTO_INCREMENT,
   `Descuento_familia_monto` double DEFAULT NULL,
   `Descuento_familia_porcentaje` double DEFAULT NULL,
   `TB_05_Familia_Familia_Codigo` int(11) NOT NULL,
   `TB_05_Familia_TB_02_Sucursal_Codigo` int(11) NOT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
-  `TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Descuento_familia_id`,`TB_05_Familia_Familia_Codigo`,`TB_05_Familia_TB_02_Sucursal_Codigo`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_20_Descuento_familia_TB_05_Familia1_idx` (`TB_05_Familia_Familia_Codigo`,`TB_05_Familia_TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_20_Descuento_Familia_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_20_Descuento_Familia_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
@@ -5380,10 +5432,13 @@ INSERT INTO `tb_20_descuento_familia` (`Descuento_familia_id`, `Descuento_famili
 --
 
 CREATE TABLE IF NOT EXISTS `tb_21_descuento_cliente` (
-`Descuento_cliente_id` int(11) NOT NULL,
+  `Descuento_cliente_id` int(11) NOT NULL AUTO_INCREMENT,
   `Descuento_cliente_porcentaje` double DEFAULT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
-  `TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Descuento_cliente_id`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_24_Descuento_Cliente_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_24_Descuento_Cliente_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
@@ -5402,7 +5457,7 @@ INSERT INTO `tb_21_descuento_cliente` (`Descuento_cliente_id`, `Descuento_client
 --
 
 CREATE TABLE IF NOT EXISTS `tb_23_mixto` (
-`Mixto_Id` int(11) NOT NULL,
+  `Mixto_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Mixto_Cantidad_Paga` float DEFAULT NULL,
   `TB_18_Tarjeta_Tarjeta_Id` int(11) NOT NULL,
   `TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo` int(11) NOT NULL,
@@ -5410,7 +5465,9 @@ CREATE TABLE IF NOT EXISTS `tb_23_mixto` (
   `TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Codigo` int(11) NOT NULL,
   `TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal` int(11) NOT NULL,
   `TB_18_Tarjeta_TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
-  `TB_18_Tarjeta_TB_22_Banco_Banco_Codigo` int(11) NOT NULL
+  `TB_18_Tarjeta_TB_22_Banco_Banco_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Mixto_Id`,`TB_18_Tarjeta_Tarjeta_Id`,`TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo`,`TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Codigo`,`TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_18_Tarjeta_TB_07_Factura_TB_03_Cliente_Cliente_Cedula`,`TB_18_Tarjeta_TB_22_Banco_Banco_Codigo`),
+  KEY `fk_TB_23_Mixto_TB_18_Tarjeta1_idx` (`TB_18_Tarjeta_Tarjeta_Id`,`TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo`,`TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Codigo`,`TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_18_Tarjeta_TB_07_Factura_TB_03_Cliente_Cliente_Cedula`,`TB_18_Tarjeta_TB_22_Banco_Banco_Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -5420,7 +5477,7 @@ CREATE TABLE IF NOT EXISTS `tb_23_mixto` (
 --
 
 CREATE TABLE IF NOT EXISTS `tb_24_credito` (
-`Credito_Id` int(11) NOT NULL,
+  `Credito_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Credito_Numero_Dias` int(11) DEFAULT NULL,
   `Credito_Saldo_Actual` double DEFAULT NULL,
   `Credito_Saldo_Inicial` double DEFAULT NULL,
@@ -5430,7 +5487,9 @@ CREATE TABLE IF NOT EXISTS `tb_24_credito` (
   `Credito_Sucursal_Codigo` int(11) NOT NULL,
   `Credito_Vendedor_Codigo` int(11) NOT NULL,
   `Credito_Vendedor_Sucursal` int(11) NOT NULL,
-  `Credito_Cliente_Cedula` bigint(20) NOT NULL
+  `Credito_Cliente_Cedula` bigint(20) NOT NULL,
+  PRIMARY KEY (`Credito_Id`,`Credito_Factura_Consecutivo`,`Credito_Sucursal_Codigo`,`Credito_Vendedor_Codigo`,`Credito_Vendedor_Sucursal`,`Credito_Cliente_Cedula`),
+  KEY `fk_TB_24_Credito_TB_07_Factura1_idx` (`Credito_Factura_Consecutivo`,`Credito_Sucursal_Codigo`,`Credito_Vendedor_Codigo`,`Credito_Vendedor_Sucursal`,`Credito_Cliente_Cedula`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
@@ -5438,9 +5497,9 @@ CREATE TABLE IF NOT EXISTS `tb_24_credito` (
 --
 
 INSERT INTO `tb_24_credito` (`Credito_Id`, `Credito_Numero_Dias`, `Credito_Saldo_Actual`, `Credito_Saldo_Inicial`, `Credito_Generico`, `Credito_Fecha_Expedicion`, `Credito_Factura_Consecutivo`, `Credito_Sucursal_Codigo`, `Credito_Vendedor_Codigo`, `Credito_Vendedor_Sucursal`, `Credito_Cliente_Cedula`) VALUES
-(1, 8, 19300, 19300, NULL, '2014-11-27 02:31:54', 1, 0, 1, 0, 402040954),
-(2, 15, 8000, 9000, NULL, '2014-11-27 02:32:03', 2, 0, 1, 0, 402040954),
-(3, 30, 33300, 74000, NULL, '2014-11-27 02:32:12', 3, 0, 1, 0, 402040954),
+(1, 8, 0, 19300, NULL, '2014-11-27 02:31:54', 1, 0, 1, 0, 402040954),
+(2, 15, 0, 9000, NULL, '2014-11-27 02:32:03', 2, 0, 1, 0, 402040954),
+(3, 30, 21300, 74000, NULL, '2014-11-27 02:32:12', 3, 0, 1, 0, 402040954),
 (4, 8, 4600, 9600, NULL, '2014-11-27 03:11:59', 4, 0, 1, 0, 701220145),
 (5, 8, 6100, 11100, NULL, '2014-11-27 03:12:06', 5, 0, 1, 0, 111002002045);
 
@@ -5451,10 +5510,13 @@ INSERT INTO `tb_24_credito` (`Credito_Id`, `Credito_Numero_Dias`, `Credito_Saldo
 --
 
 CREATE TABLE IF NOT EXISTS `tb_25_maximo_credito_cliente` (
-`Credito_Cliente_Id` int(11) NOT NULL,
+  `Credito_Cliente_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Credito_Cliente_Cantidad_Maxima` double DEFAULT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
-  `TB_02_Sucursal_Codigo` int(11) NOT NULL
+  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Credito_Cliente_Id`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_25_Maximo_Credito_Cliente_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`),
+  KEY `fk_TB_25_Maximo_Credito_Cliente_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
@@ -5475,28 +5537,34 @@ INSERT INTO `tb_25_maximo_credito_cliente` (`Credito_Cliente_Id`, `Credito_Clien
 --
 
 CREATE TABLE IF NOT EXISTS `tb_26_recibos_dinero` (
-`Consecutivo` int(11) NOT NULL,
+  `Consecutivo` int(11) NOT NULL AUTO_INCREMENT,
   `Recibo_Cantidad` float DEFAULT NULL,
   `Recibo_Fecha` timestamp NULL DEFAULT NULL,
   `Recibo_Saldo` float DEFAULT NULL,
   `Anulado` tinyint(1) NOT NULL DEFAULT '0',
-  `Credito` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+  `Tipo_Pago` varchar(20) NOT NULL,
+  `Credito` int(11) NOT NULL,
+  PRIMARY KEY (`Consecutivo`,`Credito`),
+  KEY `fk_TB_26_Recibos_Dinero_TB_24_Credito1_idx` (`Credito`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
 -- Volcado de datos para la tabla `tb_26_recibos_dinero`
 --
 
-INSERT INTO `tb_26_recibos_dinero` (`Consecutivo`, `Recibo_Cantidad`, `Recibo_Fecha`, `Recibo_Saldo`, `Anulado`, `Credito`) VALUES
-(2, 5000, '2014-11-27 02:32:58', 14300, 1, 1),
-(3, 4300, '2014-11-27 02:33:08', 10000, 1, 1),
-(4, 10000, '2014-11-27 02:33:19', 0, 1, 1),
-(5, 1000, '2014-11-27 02:33:19', 8000, 0, 2),
-(6, 5000, '2014-11-27 03:12:34', 4600, 0, 4),
-(7, 5000, '2014-11-27 03:12:50', 6100, 0, 5),
-(8, 9300, '2014-11-27 05:40:22', 0, 1, 1),
-(9, 40700, '2014-11-27 05:40:22', 33300, 0, 3),
-(10, 5000, '2014-11-27 05:44:40', 14300, 1, 1);
+INSERT INTO `tb_26_recibos_dinero` (`Consecutivo`, `Recibo_Cantidad`, `Recibo_Fecha`, `Recibo_Saldo`, `Anulado`, `Tipo_Pago`, `Credito`) VALUES
+(2, 5000, '2014-11-27 02:32:58', 14300, 1, 'contado', 1),
+(3, 4300, '2014-11-27 02:33:08', 10000, 1, 'contado', 1),
+(4, 10000, '2014-11-27 02:33:19', 0, 1, 'contado', 1),
+(5, 1000, '2014-11-27 02:33:19', 8000, 0, 'contado', 2),
+(6, 5000, '2014-11-27 03:12:34', 4600, 0, 'contado', 4),
+(7, 5000, '2014-11-27 03:12:50', 6100, 0, 'contado', 5),
+(8, 9300, '2014-11-27 05:40:22', 0, 1, 'contado', 1),
+(9, 40700, '2014-11-27 05:40:22', 33300, 0, 'contado', 3),
+(10, 5000, '2014-11-27 05:44:40', 14300, 1, 'contado', 1),
+(11, 0, '2014-12-22 22:00:47', 0, 0, 'tarjeta', 1),
+(12, 8000, '2014-12-22 22:00:47', 0, 0, 'tarjeta', 2),
+(13, 12000, '2014-12-22 22:00:47', 21300, 0, 'tarjeta', 3);
 
 -- --------------------------------------------------------
 
@@ -5511,7 +5579,13 @@ CREATE TABLE IF NOT EXISTS `tb_27_notas_credito` (
   `Factura_Acreditar` int(11) NOT NULL,
   `Factura_Aplicar` int(11) NOT NULL,
   `Sucursal` int(11) NOT NULL,
-  `Cliente` bigint(20) NOT NULL
+  `Cliente` bigint(20) NOT NULL,
+  PRIMARY KEY (`Consecutivo`,`Factura_Acreditar`,`Factura_Aplicar`,`Sucursal`,`Cliente`),
+  UNIQUE KEY `Consecutivo_UNIQUE` (`Consecutivo`),
+  KEY `fk_TB_27_Notas_Credito_TB_07_Factura1_idx` (`Factura_Acreditar`),
+  KEY `fk_TB_27_Notas_Credito_TB_07_Factura2_idx` (`Factura_Aplicar`),
+  KEY `fk_TB_27_Notas_Credito_TB_02_Sucursal1_idx` (`Sucursal`),
+  KEY `fk_TB_27_Notas_Credito_TB_03_Cliente1_idx` (`Cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -5520,7 +5594,8 @@ CREATE TABLE IF NOT EXISTS `tb_27_notas_credito` (
 
 INSERT INTO `tb_27_notas_credito` (`Consecutivo`, `Nombre_Cliente`, `Fecha_Creacion`, `Factura_Acreditar`, `Factura_Aplicar`, `Sucursal`, `Cliente`) VALUES
 (1, 'David Villalobos Fonseca', '2014-11-27 04:45:45', 1, 2, 0, 402040954),
-(2, 'David Villalobos Fonseca', '2014-12-17 18:06:34', 3, 1, 0, 402040954);
+(2, 'David Villalobos Fonseca', '2014-12-17 18:06:34', 3, 1, 0, 402040954),
+(3, 'David Villalobos Fonseca', '2014-12-22 21:54:43', 2, 3, 0, 402040954);
 
 -- --------------------------------------------------------
 
@@ -5529,15 +5604,18 @@ INSERT INTO `tb_27_notas_credito` (`Consecutivo`, `Nombre_Cliente`, `Fecha_Creac
 --
 
 CREATE TABLE IF NOT EXISTS `tb_28_productos_notas_credito` (
-`Id` int(11) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Codigo` varchar(20) DEFAULT NULL,
   `Descripcion` varchar(150) DEFAULT NULL,
   `Cantidad_Bueno` int(11) DEFAULT NULL,
   `Cantidad_Defectuoso` int(11) DEFAULT NULL,
   `Precio_Unitario` double DEFAULT NULL,
   `Nota_Credito_Consecutivo` int(11) NOT NULL,
-  `Sucursal` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `Sucursal` int(11) NOT NULL,
+  PRIMARY KEY (`Id`,`Nota_Credito_Consecutivo`,`Sucursal`),
+  KEY `fk_TB_28_Productos_Notas_Credito_TB_27_Notas_Credito1_idx` (`Nota_Credito_Consecutivo`),
+  KEY `fk_TB_28_Productos_Notas_Credito_TB_02_Sucursal1_idx` (`Sucursal`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `tb_28_productos_notas_credito`
@@ -5545,7 +5623,8 @@ CREATE TABLE IF NOT EXISTS `tb_28_productos_notas_credito` (
 
 INSERT INTO `tb_28_productos_notas_credito` (`Id`, `Codigo`, `Descripcion`, `Cantidad_Bueno`, `Cantidad_Defectuoso`, `Precio_Unitario`, `Nota_Credito_Consecutivo`, `Sucursal`) VALUES
 (1, '23245', 'PULSERA XX ', 0, 1, 1700, 1, 0),
-(2, '23100', 'CADENA + DIJE GATITOS ', 1, 0, 3700, 2, 0);
+(2, '23100', 'CADENA + DIJE GATITOS ', 1, 0, 3700, 2, 0),
+(3, '22789', 'ARETE BOLA DE FUEGO', 0, 1, 1800, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -5554,13 +5633,15 @@ INSERT INTO `tb_28_productos_notas_credito` (`Id`, `Codigo`, `Descripcion`, `Can
 --
 
 CREATE TABLE IF NOT EXISTS `tb_29_deposito_recibo` (
-`Id` int(11) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Banco_Id` int(11) DEFAULT NULL,
   `Banco_Nombre` varchar(45) DEFAULT NULL,
   `Numero_Deposito` varchar(45) DEFAULT NULL,
   `Fecha` timestamp NULL DEFAULT NULL,
   `Recibo` int(11) NOT NULL,
-  `Credito` int(11) NOT NULL
+  `Credito` int(11) NOT NULL,
+  PRIMARY KEY (`Id`,`Recibo`,`Credito`),
+  KEY `fk_TB_29_Deposito_Recibo_TB_26_Recibos_Dinero1_idx` (`Recibo`,`Credito`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
@@ -5580,7 +5661,10 @@ CREATE TABLE IF NOT EXISTS `tb_30_notas_debito` (
   `Consecutivo` int(11) NOT NULL,
   `Fecha` timestamp NULL DEFAULT NULL,
   `Usuario` int(11) NOT NULL,
-  `Sucursal` int(11) NOT NULL
+  `Sucursal` int(11) NOT NULL,
+  PRIMARY KEY (`Consecutivo`,`Sucursal`,`Usuario`),
+  KEY `fk_TB_30_Notas_Debito_TB_02_Sucursal1_idx` (`Sucursal`),
+  KEY `fk_TB_30_Notas_Debito_TB_01_Usuario1_idx` (`Usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -5590,305 +5674,45 @@ CREATE TABLE IF NOT EXISTS `tb_30_notas_debito` (
 --
 
 CREATE TABLE IF NOT EXISTS `tb_31_productos_notas_debito` (
-`Id` int(11) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Codigo` varchar(45) DEFAULT NULL,
   `Descripcion` varchar(45) DEFAULT NULL,
   `Cantidad_Debitar` varchar(45) DEFAULT NULL,
   `Precio_Unitario` varchar(45) DEFAULT NULL,
   `Nota_Debito_Consecutivo` int(11) NOT NULL,
   `Sucursal` int(11) NOT NULL,
-  `Usuario` int(11) NOT NULL
+  `Usuario` int(11) NOT NULL,
+  PRIMARY KEY (`Id`,`Nota_Debito_Consecutivo`,`Sucursal`,`Usuario`),
+  KEY `fk_TB_31_Productos_Notas_Debito_TB_30_Notas_Debito1_idx` (`Nota_Debito_Consecutivo`,`Sucursal`,`Usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Índices para tablas volcadas
---
+-- --------------------------------------------------------
 
 --
--- Indices de la tabla `tb_01_usuario`
---
-ALTER TABLE `tb_01_usuario`
- ADD PRIMARY KEY (`Usuario_Codigo`,`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_01_Usuario_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_02_sucursal`
---
-ALTER TABLE `tb_02_sucursal`
- ADD PRIMARY KEY (`Codigo`);
-
---
--- Indices de la tabla `tb_03_cliente`
---
-ALTER TABLE `tb_03_cliente`
- ADD PRIMARY KEY (`Cliente_Cedula`);
-
---
--- Indices de la tabla `tb_04_articulos_proforma`
---
-ALTER TABLE `tb_04_articulos_proforma`
- ADD PRIMARY KEY (`Articulo_Proforma_Id`,`TB_10_Proforma_Proforma_Consecutivo`,`TB_10_Proforma_TB_02_Sucursal_Codigo`,`TB_10_Proforma_Proforma_Vendedor_Codigo`,`TB_10_Proforma_Proforma_Vendedor_Sucursal`,`TB_10_Proforma_TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_10_Proforma_has_TB_06_Articulo_TB_10_Proforma1_idx` (`TB_10_Proforma_Proforma_Consecutivo`,`TB_10_Proforma_TB_02_Sucursal_Codigo`,`TB_10_Proforma_Proforma_Vendedor_Codigo`,`TB_10_Proforma_Proforma_Vendedor_Sucursal`,`TB_10_Proforma_TB_03_Cliente_Cliente_Cedula`);
-
---
--- Indices de la tabla `tb_05_familia`
---
-ALTER TABLE `tb_05_familia`
- ADD PRIMARY KEY (`Familia_Codigo`,`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_05_Familia_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_06_articulo`
---
-ALTER TABLE `tb_06_articulo`
- ADD PRIMARY KEY (`Articulo_Codigo`,`TB_05_Familia_Familia_Codigo`,`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_06_Articulo_TB_05_Familia1_idx` (`TB_05_Familia_Familia_Codigo`), ADD KEY `fk_TB_06_Articulo_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_07_factura`
---
-ALTER TABLE `tb_07_factura`
- ADD PRIMARY KEY (`Factura_Consecutivo`,`TB_02_Sucursal_Codigo`,`Factura_Vendedor_Codigo`,`Factura_Vendedor_Sucursal`,`TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_07_Factura_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`);
-
---
--- Indices de la tabla `tb_08_articulos_factura`
---
-ALTER TABLE `tb_08_articulos_factura`
- ADD PRIMARY KEY (`Articulo_Factura_id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_08_Articulos_Factura_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`);
-
---
--- Indices de la tabla `tb_09_articulos_transito`
---
-ALTER TABLE `tb_09_articulos_transito`
- ADD PRIMARY KEY (`Articulo_Transito_Codigo`,`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_13_Articulos_Transito_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_10_proforma`
---
-ALTER TABLE `tb_10_proforma`
- ADD PRIMARY KEY (`Proforma_Consecutivo`,`TB_02_Sucursal_Codigo`,`Proforma_Vendedor_Codigo`,`Proforma_Vendedor_Sucursal`,`TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_10_Proforma_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_10_Proforma_TB_01_Usuario1_idx` (`Proforma_Vendedor_Codigo`,`Proforma_Vendedor_Sucursal`), ADD KEY `fk_TB_10_Proforma_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`);
-
---
--- Indices de la tabla `tb_11_precios`
---
-ALTER TABLE `tb_11_precios`
- ADD PRIMARY KEY (`Precio_Id`,`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`,`TB_06_Articulo_TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_11_Precios_TB_06_Articulo1_idx` (`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`,`TB_06_Articulo_TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_12_transacciones`
---
-ALTER TABLE `tb_12_transacciones`
- ADD PRIMARY KEY (`Trans_Codigo`,`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_12_Transacciones_TB_01_Usuario1_idx` (`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_13_cheque`
---
-ALTER TABLE `tb_13_cheque`
- ADD PRIMARY KEY (`Cheque_Id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_13_Cheque_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`);
-
---
--- Indices de la tabla `tb_14_sesiones`
---
-ALTER TABLE `tb_14_sesiones`
- ADD PRIMARY KEY (`session_id`), ADD KEY `'last_activity_idx'` (`last_activity`);
-
---
--- Indices de la tabla `tb_15_permisos`
---
-ALTER TABLE `tb_15_permisos`
- ADD PRIMARY KEY (`Permisos_Id`,`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_15_Permisos_TB_01_Usuario1_idx` (`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_16_authclientes`
---
-ALTER TABLE `tb_16_authclientes`
- ADD PRIMARY KEY (`TB_03_Cliente_Cliente_Cedula`,`AuthClientes_Id`), ADD KEY `fk_TB_16_AuthClientes_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`);
-
---
--- Indices de la tabla `tb_17_descuento_producto`
---
-ALTER TABLE `tb_17_descuento_producto`
- ADD PRIMARY KEY (`Descuento_producto_id`,`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_21_Descuento_Producto_TB_06_Articulo1_idx` (`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`), ADD KEY `fk_TB_21_Descuento_Producto_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_21_Descuento_Producto_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_18_tarjeta`
---
-ALTER TABLE `tb_18_tarjeta`
- ADD PRIMARY KEY (`Tarjeta_Id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`,`TB_22_Banco_Banco_Codigo`), ADD KEY `fk_TB_18_Tarjeta_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_18_Tarjeta_TB_22_Banco1_idx` (`TB_22_Banco_Banco_Codigo`);
-
---
--- Indices de la tabla `tb_19_deposito`
---
-ALTER TABLE `tb_19_deposito`
- ADD PRIMARY KEY (`Deposito_Id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`,`TB_22_Banco_Banco_Codigo`), ADD KEY `fk_TB_19_Deposito_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_19_Deposito_TB_22_Banco1_idx` (`TB_22_Banco_Banco_Codigo`);
-
---
--- Indices de la tabla `tb_20_descuento_familia`
---
-ALTER TABLE `tb_20_descuento_familia`
- ADD PRIMARY KEY (`Descuento_familia_id`,`TB_05_Familia_Familia_Codigo`,`TB_05_Familia_TB_02_Sucursal_Codigo`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_20_Descuento_familia_TB_05_Familia1_idx` (`TB_05_Familia_Familia_Codigo`,`TB_05_Familia_TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_20_Descuento_Familia_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_20_Descuento_Familia_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_21_descuento_cliente`
---
-ALTER TABLE `tb_21_descuento_cliente`
- ADD PRIMARY KEY (`Descuento_cliente_id`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_24_Descuento_Cliente_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_24_Descuento_Cliente_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_22_banco`
---
-ALTER TABLE `tb_22_banco`
- ADD PRIMARY KEY (`Banco_Codigo`);
-
---
--- Indices de la tabla `tb_23_mixto`
---
-ALTER TABLE `tb_23_mixto`
- ADD PRIMARY KEY (`Mixto_Id`,`TB_18_Tarjeta_Tarjeta_Id`,`TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo`,`TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Codigo`,`TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_18_Tarjeta_TB_07_Factura_TB_03_Cliente_Cliente_Cedula`,`TB_18_Tarjeta_TB_22_Banco_Banco_Codigo`), ADD KEY `fk_TB_23_Mixto_TB_18_Tarjeta1_idx` (`TB_18_Tarjeta_Tarjeta_Id`,`TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo`,`TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Codigo`,`TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_18_Tarjeta_TB_07_Factura_TB_03_Cliente_Cliente_Cedula`,`TB_18_Tarjeta_TB_22_Banco_Banco_Codigo`);
-
---
--- Indices de la tabla `tb_24_credito`
---
-ALTER TABLE `tb_24_credito`
- ADD PRIMARY KEY (`Credito_Id`,`Credito_Factura_Consecutivo`,`Credito_Sucursal_Codigo`,`Credito_Vendedor_Codigo`,`Credito_Vendedor_Sucursal`,`Credito_Cliente_Cedula`), ADD KEY `fk_TB_24_Credito_TB_07_Factura1_idx` (`Credito_Factura_Consecutivo`,`Credito_Sucursal_Codigo`,`Credito_Vendedor_Codigo`,`Credito_Vendedor_Sucursal`,`Credito_Cliente_Cedula`);
-
---
--- Indices de la tabla `tb_25_maximo_credito_cliente`
---
-ALTER TABLE `tb_25_maximo_credito_cliente`
- ADD PRIMARY KEY (`Credito_Cliente_Id`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`), ADD KEY `fk_TB_25_Maximo_Credito_Cliente_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`), ADD KEY `fk_TB_25_Maximo_Credito_Cliente_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`);
-
---
--- Indices de la tabla `tb_26_recibos_dinero`
---
-ALTER TABLE `tb_26_recibos_dinero`
- ADD PRIMARY KEY (`Consecutivo`,`Credito`), ADD KEY `fk_TB_26_Recibos_Dinero_TB_24_Credito1_idx` (`Credito`);
-
---
--- Indices de la tabla `tb_27_notas_credito`
---
-ALTER TABLE `tb_27_notas_credito`
- ADD PRIMARY KEY (`Consecutivo`,`Factura_Acreditar`,`Factura_Aplicar`,`Sucursal`,`Cliente`), ADD UNIQUE KEY `Consecutivo_UNIQUE` (`Consecutivo`), ADD KEY `fk_TB_27_Notas_Credito_TB_07_Factura1_idx` (`Factura_Acreditar`), ADD KEY `fk_TB_27_Notas_Credito_TB_07_Factura2_idx` (`Factura_Aplicar`), ADD KEY `fk_TB_27_Notas_Credito_TB_02_Sucursal1_idx` (`Sucursal`), ADD KEY `fk_TB_27_Notas_Credito_TB_03_Cliente1_idx` (`Cliente`);
-
---
--- Indices de la tabla `tb_28_productos_notas_credito`
---
-ALTER TABLE `tb_28_productos_notas_credito`
- ADD PRIMARY KEY (`Id`,`Nota_Credito_Consecutivo`,`Sucursal`), ADD KEY `fk_TB_28_Productos_Notas_Credito_TB_27_Notas_Credito1_idx` (`Nota_Credito_Consecutivo`), ADD KEY `fk_TB_28_Productos_Notas_Credito_TB_02_Sucursal1_idx` (`Sucursal`);
-
---
--- Indices de la tabla `tb_29_deposito_recibo`
---
-ALTER TABLE `tb_29_deposito_recibo`
- ADD PRIMARY KEY (`Id`,`Recibo`,`Credito`), ADD KEY `fk_TB_29_Deposito_Recibo_TB_26_Recibos_Dinero1_idx` (`Recibo`,`Credito`);
-
---
--- Indices de la tabla `tb_30_notas_debito`
---
-ALTER TABLE `tb_30_notas_debito`
- ADD PRIMARY KEY (`Consecutivo`,`Sucursal`,`Usuario`), ADD KEY `fk_TB_30_Notas_Debito_TB_02_Sucursal1_idx` (`Sucursal`), ADD KEY `fk_TB_30_Notas_Debito_TB_01_Usuario1_idx` (`Usuario`);
-
---
--- Indices de la tabla `tb_31_productos_notas_debito`
---
-ALTER TABLE `tb_31_productos_notas_debito`
- ADD PRIMARY KEY (`Id`,`Nota_Debito_Consecutivo`,`Sucursal`,`Usuario`), ADD KEY `fk_TB_31_Productos_Notas_Debito_TB_30_Notas_Debito1_idx` (`Nota_Debito_Consecutivo`,`Sucursal`,`Usuario`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
+-- Estructura de tabla para la tabla `tb_32_tarjeta_recibos`
 --
 
+CREATE TABLE IF NOT EXISTS `tb_32_tarjeta_recibos` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Numero_Autorizacion` varchar(45) DEFAULT NULL,
+  `Comision_Por` float DEFAULT NULL,
+  `Banco` int(11) NOT NULL,
+  `Recibo` int(11) NOT NULL,
+  `Credito` int(11) NOT NULL,
+  PRIMARY KEY (`Id`,`Recibo`,`Credito`,`Banco`),
+  KEY `fk_TB_32_Tarjeta_Recibos_TB_26_Recibos_Dinero1_idx` (`Recibo`,`Credito`),
+  KEY `fk_TB_32_Tarjeta_Recibos_TB_22_Banco1_idx` (`Banco`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
 --
--- AUTO_INCREMENT de la tabla `tb_01_usuario`
+-- Volcado de datos para la tabla `tb_32_tarjeta_recibos`
 --
-ALTER TABLE `tb_01_usuario`
-MODIFY `Usuario_Codigo` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT de la tabla `tb_04_articulos_proforma`
---
-ALTER TABLE `tb_04_articulos_proforma`
-MODIFY `Articulo_Proforma_Id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `tb_08_articulos_factura`
---
-ALTER TABLE `tb_08_articulos_factura`
-MODIFY `Articulo_Factura_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT de la tabla `tb_11_precios`
---
-ALTER TABLE `tb_11_precios`
-MODIFY `Precio_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4010;
---
--- AUTO_INCREMENT de la tabla `tb_12_transacciones`
---
-ALTER TABLE `tb_12_transacciones`
-MODIFY `Trans_Codigo` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=71;
---
--- AUTO_INCREMENT de la tabla `tb_13_cheque`
---
-ALTER TABLE `tb_13_cheque`
-MODIFY `Cheque_Id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `tb_15_permisos`
---
-ALTER TABLE `tb_15_permisos`
-MODIFY `Permisos_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=326;
---
--- AUTO_INCREMENT de la tabla `tb_17_descuento_producto`
---
-ALTER TABLE `tb_17_descuento_producto`
-MODIFY `Descuento_producto_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT de la tabla `tb_18_tarjeta`
---
-ALTER TABLE `tb_18_tarjeta`
-MODIFY `Tarjeta_Id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `tb_20_descuento_familia`
---
-ALTER TABLE `tb_20_descuento_familia`
-MODIFY `Descuento_familia_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT de la tabla `tb_21_descuento_cliente`
---
-ALTER TABLE `tb_21_descuento_cliente`
-MODIFY `Descuento_cliente_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT de la tabla `tb_22_banco`
---
-ALTER TABLE `tb_22_banco`
-MODIFY `Banco_Codigo` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT de la tabla `tb_23_mixto`
---
-ALTER TABLE `tb_23_mixto`
-MODIFY `Mixto_Id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `tb_24_credito`
---
-ALTER TABLE `tb_24_credito`
-MODIFY `Credito_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT de la tabla `tb_25_maximo_credito_cliente`
---
-ALTER TABLE `tb_25_maximo_credito_cliente`
-MODIFY `Credito_Cliente_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT de la tabla `tb_26_recibos_dinero`
---
-ALTER TABLE `tb_26_recibos_dinero`
-MODIFY `Consecutivo` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
---
--- AUTO_INCREMENT de la tabla `tb_28_productos_notas_credito`
---
-ALTER TABLE `tb_28_productos_notas_credito`
-MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT de la tabla `tb_29_deposito_recibo`
---
-ALTER TABLE `tb_29_deposito_recibo`
-MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT de la tabla `tb_31_productos_notas_debito`
---
-ALTER TABLE `tb_31_productos_notas_debito`
-MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `tb_32_tarjeta_recibos` (`Id`, `Numero_Autorizacion`, `Comision_Por`, `Banco`, `Recibo`, `Credito`) VALUES
+(1, '523126', 4.2, 1, 11, 1),
+(2, '523126', 4.2, 1, 12, 2),
+(3, '523126', 4.2, 1, 13, 3);
+
 --
 -- Restricciones para tablas volcadas
 --
@@ -5897,180 +5721,188 @@ MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 -- Filtros para la tabla `tb_01_usuario`
 --
 ALTER TABLE `tb_01_usuario`
-ADD CONSTRAINT `fk_TB_01_Usuario_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_01_Usuario_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_04_articulos_proforma`
 --
 ALTER TABLE `tb_04_articulos_proforma`
-ADD CONSTRAINT `fk_TB_10_Proforma_has_TB_06_Articulo_TB_10_Proforma1` FOREIGN KEY (`TB_10_Proforma_Proforma_Consecutivo`, `TB_10_Proforma_TB_02_Sucursal_Codigo`, `TB_10_Proforma_Proforma_Vendedor_Codigo`, `TB_10_Proforma_Proforma_Vendedor_Sucursal`, `TB_10_Proforma_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_10_proforma` (`Proforma_Consecutivo`, `TB_02_Sucursal_Codigo`, `Proforma_Vendedor_Codigo`, `Proforma_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_10_Proforma_has_TB_06_Articulo_TB_10_Proforma1` FOREIGN KEY (`TB_10_Proforma_Proforma_Consecutivo`, `TB_10_Proforma_TB_02_Sucursal_Codigo`, `TB_10_Proforma_Proforma_Vendedor_Codigo`, `TB_10_Proforma_Proforma_Vendedor_Sucursal`, `TB_10_Proforma_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_10_proforma` (`Proforma_Consecutivo`, `TB_02_Sucursal_Codigo`, `Proforma_Vendedor_Codigo`, `Proforma_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_05_familia`
 --
 ALTER TABLE `tb_05_familia`
-ADD CONSTRAINT `fk_TB_05_Familia_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_05_Familia_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_06_articulo`
 --
 ALTER TABLE `tb_06_articulo`
-ADD CONSTRAINT `fk_TB_06_Articulo_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_06_Articulo_TB_05_Familia1` FOREIGN KEY (`TB_05_Familia_Familia_Codigo`) REFERENCES `tb_05_familia` (`Familia_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_06_Articulo_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_06_Articulo_TB_05_Familia1` FOREIGN KEY (`TB_05_Familia_Familia_Codigo`) REFERENCES `tb_05_familia` (`Familia_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_07_factura`
 --
 ALTER TABLE `tb_07_factura`
-ADD CONSTRAINT `fk_TB_07_Factura_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_07_Factura_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_08_articulos_factura`
 --
 ALTER TABLE `tb_08_articulos_factura`
-ADD CONSTRAINT `fk_TB_08_Articulos_Factura_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_08_Articulos_Factura_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_09_articulos_transito`
 --
 ALTER TABLE `tb_09_articulos_transito`
-ADD CONSTRAINT `fk_TB_13_Articulos_Transito_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_13_Articulos_Transito_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_10_proforma`
 --
 ALTER TABLE `tb_10_proforma`
-ADD CONSTRAINT `fk_TB_10_Proforma_TB_01_Usuario1` FOREIGN KEY (`Proforma_Vendedor_Codigo`, `Proforma_Vendedor_Sucursal`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_10_Proforma_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_10_Proforma_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_10_Proforma_TB_01_Usuario1` FOREIGN KEY (`Proforma_Vendedor_Codigo`, `Proforma_Vendedor_Sucursal`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_10_Proforma_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_10_Proforma_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_11_precios`
 --
 ALTER TABLE `tb_11_precios`
-ADD CONSTRAINT `fk_TB_11_Precios_TB_06_Articulo1` FOREIGN KEY (`TB_06_Articulo_Articulo_Codigo`, `TB_06_Articulo_TB_05_Familia_Familia_Codigo`, `TB_06_Articulo_TB_02_Sucursal_Codigo`) REFERENCES `tb_06_articulo` (`Articulo_Codigo`, `TB_05_Familia_Familia_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_11_Precios_TB_06_Articulo1` FOREIGN KEY (`TB_06_Articulo_Articulo_Codigo`, `TB_06_Articulo_TB_05_Familia_Familia_Codigo`, `TB_06_Articulo_TB_02_Sucursal_Codigo`) REFERENCES `tb_06_articulo` (`Articulo_Codigo`, `TB_05_Familia_Familia_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_12_transacciones`
 --
 ALTER TABLE `tb_12_transacciones`
-ADD CONSTRAINT `fk_TB_12_Transacciones_TB_01_Usuario1` FOREIGN KEY (`TB_01_Usuario_Usuario_Codigo`, `TB_01_Usuario_TB_02_Sucursal_Codigo`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_12_Transacciones_TB_01_Usuario1` FOREIGN KEY (`TB_01_Usuario_Usuario_Codigo`, `TB_01_Usuario_TB_02_Sucursal_Codigo`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_13_cheque`
 --
 ALTER TABLE `tb_13_cheque`
-ADD CONSTRAINT `fk_TB_13_Cheque_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_13_Cheque_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_15_permisos`
 --
 ALTER TABLE `tb_15_permisos`
-ADD CONSTRAINT `fk_TB_15_Permisos_TB_01_Usuario1` FOREIGN KEY (`TB_01_Usuario_Usuario_Codigo`, `TB_01_Usuario_TB_02_Sucursal_Codigo`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_15_Permisos_TB_01_Usuario1` FOREIGN KEY (`TB_01_Usuario_Usuario_Codigo`, `TB_01_Usuario_TB_02_Sucursal_Codigo`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_16_authclientes`
 --
 ALTER TABLE `tb_16_authclientes`
-ADD CONSTRAINT `fk_TB_16_AuthClientes_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_16_AuthClientes_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_17_descuento_producto`
 --
 ALTER TABLE `tb_17_descuento_producto`
-ADD CONSTRAINT `fk_TB_21_Descuento_Producto_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_21_Descuento_Producto_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_21_Descuento_Producto_TB_06_Articulo1` FOREIGN KEY (`TB_06_Articulo_Articulo_Codigo`, `TB_06_Articulo_TB_05_Familia_Familia_Codigo`) REFERENCES `tb_06_articulo` (`Articulo_Codigo`, `TB_05_Familia_Familia_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_21_Descuento_Producto_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_21_Descuento_Producto_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_21_Descuento_Producto_TB_06_Articulo1` FOREIGN KEY (`TB_06_Articulo_Articulo_Codigo`, `TB_06_Articulo_TB_05_Familia_Familia_Codigo`) REFERENCES `tb_06_articulo` (`Articulo_Codigo`, `TB_05_Familia_Familia_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_18_tarjeta`
 --
 ALTER TABLE `tb_18_tarjeta`
-ADD CONSTRAINT `fk_TB_18_Tarjeta_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_18_Tarjeta_TB_22_Banco1` FOREIGN KEY (`TB_22_Banco_Banco_Codigo`) REFERENCES `tb_22_banco` (`Banco_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_18_Tarjeta_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_18_Tarjeta_TB_22_Banco1` FOREIGN KEY (`TB_22_Banco_Banco_Codigo`) REFERENCES `tb_22_banco` (`Banco_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_19_deposito`
 --
 ALTER TABLE `tb_19_deposito`
-ADD CONSTRAINT `fk_TB_19_Deposito_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_19_Deposito_TB_22_Banco1` FOREIGN KEY (`TB_22_Banco_Banco_Codigo`) REFERENCES `tb_22_banco` (`Banco_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_19_Deposito_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_19_Deposito_TB_22_Banco1` FOREIGN KEY (`TB_22_Banco_Banco_Codigo`) REFERENCES `tb_22_banco` (`Banco_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_20_descuento_familia`
 --
 ALTER TABLE `tb_20_descuento_familia`
-ADD CONSTRAINT `fk_TB_20_Descuento_Familia_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_20_Descuento_Familia_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_20_Descuento_familia_TB_05_Familia1` FOREIGN KEY (`TB_05_Familia_Familia_Codigo`, `TB_05_Familia_TB_02_Sucursal_Codigo`) REFERENCES `tb_05_familia` (`Familia_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_20_Descuento_Familia_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_20_Descuento_Familia_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_20_Descuento_familia_TB_05_Familia1` FOREIGN KEY (`TB_05_Familia_Familia_Codigo`, `TB_05_Familia_TB_02_Sucursal_Codigo`) REFERENCES `tb_05_familia` (`Familia_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_21_descuento_cliente`
 --
 ALTER TABLE `tb_21_descuento_cliente`
-ADD CONSTRAINT `fk_TB_24_Descuento_Cliente_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_24_Descuento_Cliente_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_24_Descuento_Cliente_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_24_Descuento_Cliente_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_23_mixto`
 --
 ALTER TABLE `tb_23_mixto`
-ADD CONSTRAINT `fk_TB_23_Mixto_TB_18_Tarjeta1` FOREIGN KEY (`TB_18_Tarjeta_Tarjeta_Id`, `TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo`, `TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Codigo`, `TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_18_Tarjeta_TB_07_Factura_TB_03_Cliente_Cliente_Cedula`, `TB_18_Tarjeta_TB_22_Banco_Banco_Codigo`) REFERENCES `tb_18_tarjeta` (`Tarjeta_Id`, `TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`, `TB_22_Banco_Banco_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_23_Mixto_TB_18_Tarjeta1` FOREIGN KEY (`TB_18_Tarjeta_Tarjeta_Id`, `TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo`, `TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Codigo`, `TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_18_Tarjeta_TB_07_Factura_TB_03_Cliente_Cliente_Cedula`, `TB_18_Tarjeta_TB_22_Banco_Banco_Codigo`) REFERENCES `tb_18_tarjeta` (`Tarjeta_Id`, `TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`, `TB_22_Banco_Banco_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_24_credito`
 --
 ALTER TABLE `tb_24_credito`
-ADD CONSTRAINT `fk_TB_24_Credito_TB_07_Factura1` FOREIGN KEY (`Credito_Factura_Consecutivo`, `Credito_Sucursal_Codigo`, `Credito_Vendedor_Codigo`, `Credito_Vendedor_Sucursal`, `Credito_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_24_Credito_TB_07_Factura1` FOREIGN KEY (`Credito_Factura_Consecutivo`, `Credito_Sucursal_Codigo`, `Credito_Vendedor_Codigo`, `Credito_Vendedor_Sucursal`, `Credito_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_25_maximo_credito_cliente`
 --
 ALTER TABLE `tb_25_maximo_credito_cliente`
-ADD CONSTRAINT `fk_TB_25_Maximo_Credito_Cliente_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_25_Maximo_Credito_Cliente_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_25_Maximo_Credito_Cliente_TB_02_Sucursal1` FOREIGN KEY (`TB_02_Sucursal_Codigo`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_25_Maximo_Credito_Cliente_TB_03_Cliente1` FOREIGN KEY (`TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_26_recibos_dinero`
 --
 ALTER TABLE `tb_26_recibos_dinero`
-ADD CONSTRAINT `fk_TB_26_Recibos_Dinero_TB_24_Credito1` FOREIGN KEY (`Credito`) REFERENCES `tb_24_credito` (`Credito_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_26_Recibos_Dinero_TB_24_Credito1` FOREIGN KEY (`Credito`) REFERENCES `tb_24_credito` (`Credito_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_27_notas_credito`
 --
 ALTER TABLE `tb_27_notas_credito`
-ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_03_Cliente1` FOREIGN KEY (`Cliente`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_07_Factura1` FOREIGN KEY (`Factura_Acreditar`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_07_Factura2` FOREIGN KEY (`Factura_Aplicar`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_03_Cliente1` FOREIGN KEY (`Cliente`) REFERENCES `tb_03_cliente` (`Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_07_Factura1` FOREIGN KEY (`Factura_Acreditar`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_27_Notas_Credito_TB_07_Factura2` FOREIGN KEY (`Factura_Aplicar`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_28_productos_notas_credito`
 --
 ALTER TABLE `tb_28_productos_notas_credito`
-ADD CONSTRAINT `fk_TB_28_Productos_Notas_Credito_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_28_Productos_Notas_Credito_TB_27_Notas_Credito1` FOREIGN KEY (`Nota_Credito_Consecutivo`) REFERENCES `tb_27_notas_credito` (`Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_28_Productos_Notas_Credito_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_28_Productos_Notas_Credito_TB_27_Notas_Credito1` FOREIGN KEY (`Nota_Credito_Consecutivo`) REFERENCES `tb_27_notas_credito` (`Consecutivo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_29_deposito_recibo`
 --
 ALTER TABLE `tb_29_deposito_recibo`
-ADD CONSTRAINT `fk_TB_29_Deposito_Recibo_TB_26_Recibos_Dinero1` FOREIGN KEY (`Recibo`, `Credito`) REFERENCES `tb_26_recibos_dinero` (`Consecutivo`, `Credito`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_29_Deposito_Recibo_TB_26_Recibos_Dinero1` FOREIGN KEY (`Recibo`, `Credito`) REFERENCES `tb_26_recibos_dinero` (`Consecutivo`, `Credito`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_30_notas_debito`
 --
 ALTER TABLE `tb_30_notas_debito`
-ADD CONSTRAINT `fk_TB_30_Notas_Debito_TB_01_Usuario1` FOREIGN KEY (`Usuario`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TB_30_Notas_Debito_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_30_Notas_Debito_TB_01_Usuario1` FOREIGN KEY (`Usuario`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_30_Notas_Debito_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_31_productos_notas_debito`
 --
 ALTER TABLE `tb_31_productos_notas_debito`
-ADD CONSTRAINT `fk_TB_31_Productos_Notas_Debito_TB_30_Notas_Debito1` FOREIGN KEY (`Nota_Debito_Consecutivo`, `Sucursal`, `Usuario`) REFERENCES `tb_30_notas_debito` (`Consecutivo`, `Sucursal`, `Usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_TB_31_Productos_Notas_Debito_TB_30_Notas_Debito1` FOREIGN KEY (`Nota_Debito_Consecutivo`, `Sucursal`, `Usuario`) REFERENCES `tb_30_notas_debito` (`Consecutivo`, `Sucursal`, `Usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+--
+-- Filtros para la tabla `tb_32_tarjeta_recibos`
+--
+ALTER TABLE `tb_32_tarjeta_recibos`
+  ADD CONSTRAINT `fk_TB_32_Tarjeta_Recibos_TB_26_Recibos_Dinero1` FOREIGN KEY (`Recibo`, `Credito`) REFERENCES `tb_26_recibos_dinero` (`Consecutivo`, `Credito`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_32_Tarjeta_Recibos_TB_22_Banco1` FOREIGN KEY (`Banco`) REFERENCES `tb_22_banco` (`Banco_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ 
 DELIMITER $$
 --
 -- Procedimientos
@@ -6104,7 +5936,7 @@ END$$
 
 DELIMITER ;
 
-
+  
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
