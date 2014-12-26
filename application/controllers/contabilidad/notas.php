@@ -10,6 +10,7 @@ class notas extends CI_Controller {
 		$this->load->model('contabilidad','',TRUE);	
 		$this->load->model('factura','',TRUE);
 		$this->load->model('articulo','',TRUE);
+		$this->load->model('XMLParser','',TRUE);
 	}
 
 	function index()
@@ -268,7 +269,49 @@ class notas extends CI_Controller {
 	function generarNotaDebito(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
+		if(isset($_POST['productos'])){
+			if(sizeOf($_POST['productos'])!=0)
+			{
+				$productos = json_decode($_POST['productos']);
+				//var_dump($productos);
+				include '/../get_session_data.php';
+				
+				$consecutivo = $this->getNextConsecutivoNotaDebito($data['Sucursal_Codigo']);
+				date_default_timezone_set("America/Costa_Rica");
+				$fecha = date("y/m/d : H:i:s", now());
+				$c_array = $this->XMLParser->getConfigArray();				
+				
+				$this->contabilidad->crearNotaDebito($consecutivo, $fecha, $c_array['iva'], $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+				
+				foreach($productos as $producto){
+					if($this->articulo->existe_Articulo($producto->co,$data['Sucursal_Codigo'])){
+						if(is_numeric($producto->ca)&&$producto->ca>0){
+							//Sacamos el producto de inventario, la funcion esta valida que la cantidad no sea mayor al inventario actual
+							if($this->articulo->actualizarInventarioRESTA($producto->co, $producto->ca, $data['Sucursal_Codigo'])=='3'){
+								$descripcion = $this->articulo->getArticuloDescripcion($producto->co, $data['Sucursal_Codigo']);
+								$costo = $this->articulo->getPrecioProducto($producto->co, 0, $data['Sucursal_Codigo']);
+							
+								$this->contabilidad->agregarArticuloNotaDebito($producto->co, $descripcion, $producto->ca, $costo, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo']);
+							}
+						}
+						//Si la cantidad no es numerica o mayor a 0
+					}
+					//Si no existe el articulo no lo procesa
+				}
+				$retorno['status'] = 'success';
+				$retorno['consecutivo'] = $consecutivo;
+				unset($retorno['error']);
+			}else{
+				$retorno['error'] = '3'; //No vienen productos
+			}
+		}else{
+			$retorno['error'] = '2'; //URL mala
+		}
 		echo json_encode($retorno);
+	}
+	
+	function getNextConsecutivoNotaDebito($sucursal){
+		return $this->contabilidad->getConsecutivoUltimaNotaDebito($sucursal)+1;
 	}
 }
 

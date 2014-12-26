@@ -52,7 +52,7 @@ Class contabilidad extends CI_Model
 		$query = $this -> db -> get();
 		if($query->num_rows()==0)
 		{
-			return 1;
+			return 0;
 		}
 		else
 		{			
@@ -295,6 +295,51 @@ Class contabilidad extends CI_Model
 						'Credito' => $credito
 						);
 		$this->db->insert('tb_32_tarjeta_recibos', $datos);
+	}
+	
+	function getConsecutivoUltimaNotaDebito($sucursal)
+	{
+		$this -> db -> select('Consecutivo');
+		$this -> db -> from('tb_30_notas_debito');
+		$this -> db -> where('Sucursal', $sucursal);
+		$this -> db -> order_by('Consecutivo', 'desc');
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+		if($query->num_rows()==0)
+		{
+			return 0;
+		}
+		else
+		{			
+			$result = $query->result();
+			foreach($result as $row)
+			{$consecutivo=$row->Consecutivo;}
+			return $consecutivo;
+		}
+	}
+	
+	function crearNotaDebito($consecutivo, $fecha, $porcentaje_iva, $usuario, $sucursal){
+		$datos = array(
+						'Consecutivo' => $consecutivo,
+						'Fecha' => $fecha,
+						'Impuesto_Porcentaje' => $porcentaje_iva,
+						'Usuario' => $usuario,
+						'Sucursal' => $sucursal
+						);
+		$this->db->insert('tb_30_notas_debito', $datos);
+	}
+	
+	function agregarArticuloNotaDebito($codigo, $descripcion, $cantidad, $costo, $notaConsecutivo, $sucursal, $usuario){
+		$datos = array(
+						'Codigo' => $codigo,
+						'Descripcion' => $descripcion,
+						'Cantidad_Debitar' => $cantidad,
+						'Precio_Unitario' => $costo,
+						'Nota_Debito_Consecutivo' => $notaConsecutivo,
+						'Sucursal' => $sucursal,
+						'Usuario' => $usuario
+						);
+		$this->db->insert('tb_31_productos_notas_debito', $datos);
 	}
 }
 
