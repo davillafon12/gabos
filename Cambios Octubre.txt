@@ -1,4 +1,4 @@
-REQUERIMIENTOS OCTUBRE
+﻿REQUERIMIENTOS OCTUBRE
 
 Cambios
 -> Cambiar la forma en como se ingresan los productos y hacer traspaso de bodega a inventario.
@@ -21,7 +21,7 @@ LISTO-> Anulacion de recibos.
 -> Agregar en configuracion general un boton para actualizar estado de los 
    clientes, pedir contraseña y validar que no se haga en menos de un mes.
 LISTO-> Notas credito.
--> Notas debito.
+LISTO-> Notas debito.
 -> Consulta de venta (Muestra cantidad vendida del dia, por sucursal) Desde ultimo cierre de caja hasta ahora.
 -> Cierre Caja. 
    Datos a mostrar: Total de venta.
