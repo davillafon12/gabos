@@ -341,6 +341,16 @@ Class contabilidad extends CI_Model
 						);
 		$this->db->insert('tb_31_productos_notas_debito', $datos);
 	}
+	
+	function crearRetiroParcial($monto, $fecha, $usuario, $sucursal){
+		$datos = array(
+						'Monto' => $monto,
+						'Fecha_Hora' => $fecha,
+						'Sucursal' => $sucursal,
+						'Usuario' => $usuario
+						);
+		$this->db->insert('TB_33_Retiros_Parciales', $datos);
+	}
 }
 
 
