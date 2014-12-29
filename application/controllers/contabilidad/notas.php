@@ -283,6 +283,8 @@ class notas extends CI_Controller {
 				
 				$this->contabilidad->crearNotaDebito($consecutivo, $fecha, $c_array['iva'], $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 				
+				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo la nota debito: $consecutivo",$data['Sucursal_Codigo'],'nota');
+				
 				foreach($productos as $producto){
 					if($this->articulo->existe_Articulo($producto->co,$data['Sucursal_Codigo'])){
 						if(is_numeric($producto->ca)&&$producto->ca>0){
