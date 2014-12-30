@@ -34,12 +34,15 @@
 			<img class='icono' src=".$Ruta_Icono_Articulos." alt='Articulos' width='22' height='22'>
 			<a href='#' class='dir'>Articulos</a>
 			<ul>
-				<li class='first_Level_2'><a href=".$Ruta_Base."articulos/registrar>Ingresar</a></li>
-				<li><a href=".$Ruta_Base."articulos/editar>Edición</a></li>
-				<li><a href=".$Ruta_Base."articulos/registrar/registro_masivo>Registro Masivo</a></li>
-				<li><a href='#'>Importación</a></li>
-				<li><a href='#'>Exportación</a></li>
-				<li class='last'><a href='#'>Consulta</a></li>
+				<li class='first_Level_2'><a href=".$Ruta_Base."articulos/bodega>Ingreso a Bodega</a></li>
+				<li><a href='#' class='dir'>Traspasos</a>
+					<ul>
+						<li class='first'><a href=".$Ruta_Base."articulos/registrar>Individual</a></li>
+						<li class='last'><a href=".$Ruta_Base."articulos/registrar/registro_masivo>Masivo</a></li>
+					</ul>
+				</li>
+				<li><a href=".$Ruta_Base."articulos/editar>Edición</a></li>				
+				<li class='last'><a href='#'>Cambio de Código</a></li>
 			</ul>
 		</li>
 		<li >
