@@ -1,7 +1,7 @@
 ﻿REQUERIMIENTOS OCTUBRE
 
 Cambios
-LISTO-> Cambiar la forma en como se ingresan los productos y hacer traspaso de bodega a inventario.
+LISTO INGRESO A BODEGA-> Cambiar la forma en como se ingresan los productos y hacer traspaso de bodega a inventario.
 LISTO-> Poner rojo la advertencia de semiactivo en crear factura, a la hora de cargar cliente semiactivo.
 LISTO-> Agregar si cliente es exento de impuestos.
 LISTO-> En recibos no cobrar por orden de saldo sino por consecutivo.
