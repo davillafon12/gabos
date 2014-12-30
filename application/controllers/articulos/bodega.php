@@ -126,7 +126,9 @@ class bodega extends CI_Controller {
 							array_push($erroresCantidad, $codigoBra);
 						}
 						
-						array_push($articulos, array("cod"=>$codigoBra,"des"=>$descripcion,"cos"=>$costo,"can"=>$cantidad));
+						if(trim($codigoBra)!=''){ //Si la fila no es vacia
+							array_push($articulos, array("cod"=>$codigoBra,"des"=>$descripcion,"cos"=>$costo,"can"=>$cantidad));
+						}
 					}
 					$resultado["status"] = "success";
 					unset($resultado["error"]);

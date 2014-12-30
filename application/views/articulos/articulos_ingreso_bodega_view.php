@@ -34,6 +34,7 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_ingreso_bodega.css'); ?>">	
 		<!--SCRIPT DE NOTY-->		
 		<script src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>" type="text/javascript"></script>
+		
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
@@ -108,7 +109,7 @@ PARA:
 					if(isset($error)){
 						echo "<div class='alert alert-danger'>
 								ERROR $error - $msj ";
-						if($error = '5'){ //Si es error con articulos, mostrar cuales articulos
+						if($error == '5'){ //Si es error con articulos, mostrar cuales articulos
 							echo "<br><br><small class='bold'>Problemas con el costo:</small>";
 							if(sizeOf($errorCosto)<1){
 								echo "<br><small>No hay artículos.</small>";

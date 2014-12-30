@@ -19,6 +19,25 @@ Class familia extends CI_Model
 		}
 	}	
 	
+	function existeFamilia($familia, $sucursal){
+		$this -> db -> select('Familia_Codigo');
+		$this -> db -> from('TB_05_Familia');
+		$this -> db -> where('Familia_Codigo', $familia);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> limit(1);
+
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		  return $query->result();
+		}
+		else
+		{
+		  return false;
+		}
+	}	
+	
 	function getCantidadFamilias()
 	{
 		return $this->db->count_all('TB_05_Familia');

@@ -11,7 +11,7 @@ PARA:
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Registro De Clientes</title>
+		<title>Traspaso Masivo de Artículos</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="shortcut icon" href="<?php echo base_url('application/images/header_icon.png'); ?>">
 		<!--CSS ESTILO BASICO E IMAGEN HEADER DE LA PAGINA-->
@@ -23,19 +23,19 @@ PARA:
 		<!--CSS ESTILO DEL FOOTER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Footer/Default_Style.css'); ?>">
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
-		<!--CSS ESTILO REGISTRO MASIVO CLIENTES-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/clientes/style_registro_masivo.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">		
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
 		<?php include '/../Header/log_out_from_browser_Script.php';?>
-		<!--SCRIPT DE AJAX JQUERY-->
-		
+		<!--SCRIPT DE JQUERY-->		
 		<script src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('application/scripts/jquery.maskedinput.js'); ?>" type="text/javascript"></script>
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.2.6.min.js'); ?>"></script>
-		<?php include '/../../scripts/ajax_verify_cliente_id.php';?>	
+		<!--CSS ESTILO TRASPASO MASIVO ARTICULOS-->
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_traspaso_masivo.css'); ?>">
+		<!--SCRIPT DE HERRAMIENTAS-->		
+		<script src="<?php echo base_url('application/scripts/articulos/traspaso_masivo_tools.js'); ?>" type="text/javascript"></script>		
+		<!--SCRIPT DE NOTY-->		
+		<script src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>" type="text/javascript"></script>		
 	</head>
-	<body onload="timeout()">
+	<body>
 		<!--Incluir imagen de cabezera-->
 		<?php include '/../Header/Header_Picture.php';?>
 		
@@ -48,62 +48,185 @@ PARA:
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
-			<p class="titulo_wrapper">Registro Masivo Artículos</p>
+			<p class="titulo_wrapper">Traspaso Masivo de Artículos</p>
 			<hr class="division_wrapper">
-			<p class="contenido_wrapper">
-			<div  class="form">
-			<?php 
-				$attributes = array('name' => 'registrar_articulos_form', 'class' => 'registrar_articulos_form-form');
-				
-				echo form_open_multipart('articulos/registrar/carga_excel', $attributes); 
-			?>
-			<fieldset class="recuadro">	
-			<legend>Información</legend>
-				<p class="formato"> Formato Celdas : </p>
-				<br><p class="formato"> Código Barras - Código - Descripción - Costo - Precio1 - Precio2 - Precio3 - Precio4 - Precio5 - Familia - Cantidad Inicial - Empresa - Exento IVI - URL_Imagen</p>
-				<br><p class="formato"> Formato Excel 2007</p>
-					<label class="formato" for="file">Filename:</label>
-					<input type="file" name="file" id="file"><br>	
-					<input class="buttom" name="submit"  o tabindex="18" value="Procesar" type="submit" >
-					<a href='<?php echo base_url('home')?>' class='boton_volver'>Volver</a>
-					<div class="tabla">
-					<?php 		
-		
+			<div class="contenedor">
+				<table>
+					<tr>
+						<td>
+							<p class="contact">Por favor tome en cuenta lo siguiente:</p>
+						</td>
+					</tr>
+					<tr>
+						<td>
 						
-						if(is_array($contenedor)){
-							echo '<br><table id="datos"><tr>';	
-							foreach($contenedor as $conte)
-							{
-								echo '<tr>';
-								echo '<td>' . $conte[0] . '</td>';
-								echo '<td>' . $conte[1] . '</td>';
-								echo '<td>' . $conte[2] . '</td>';
-								echo '<td>' . $conte[3] . '</td>';
-								echo '<td>' . $conte[4] . '</td>';
-								echo '<td>' . $conte[5] . '</td>';							
-								echo '</tr>';
-							}
-							echo '</table>';
-						}
-						/*
-						echo "<PRE>";
-						print_r($contenedor);
-						echo "</PRE>";*/
-					?>
-				</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p class="contact">1- Celdas requeridas <small>Nota: El orden es importante</small></p>
+						</td>
+					</tr>
+					<tr>
+						<td class="pad-l">
+							<div class="imagen_celdas">
+								<img src="<?php echo base_url('application/images/articulos/celdas_ingreso_inventario.png'); ?>"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p class="contact">2- Formato de Excel <small>Requerido</small></p>
+						</td>
+					</tr>
+					<tr>
+						<td  class="pad-l">
+							<p class="contact">Excel 97-2003 - xls</p>
+						</td>
+					</tr>			
+				</table>
+				<hr class="division-contenido">
+				<?php 
+					$attributes = array('name' => 'traspaso_inventario_masivo', 'class' => 'traspaso_inventario_masivo', 'id' => 'traspaso_inventario_masivo');
+					
+					echo form_open_multipart('articulos/registrar/carga_excel', $attributes); 
+				?>					
+					<p class="contact">Seleccione el archivo a cargar:</p>
+					<div class="pad-l mar-top">
+						<input type="file" name="archivo_excel" id="archivo_excel" accept="application/vnd.ms-excel"/>
+					</div>
+					<input class="boton_procesar " value="Procesar" type="submit" />
 				</form>
-			<table>
-			<tr>
+				<?php 
+					if(isset($_GET['s'])&&$_GET['s']=='1'){
+						echo "
+							<div class='alert alert-success'>
+								¡Se traspasaron los artículos con éxito a inventario!
+							</div>
+						";
+					}
+					if(isset($error)){
+						echo "<div class='alert alert-danger'>
+								ERROR $error - $msj ";
+						if($error == '5'){ //Si es error con articulos, mostrar cuales articulos
+							
+							echo "<br><br><small class='bold'>Problemas con el código:</small>";
+							if(sizeOf($erroresCodigo)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresCodigo as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Problemas con el Precio 1:</small>";
+							if(sizeOf($erroresPrecio1)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresPrecio1 as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Problemas con el Precio 2:</small>";
+							if(sizeOf($erroresPrecio2)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresPrecio2 as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Problemas con el Precio 3:</small>";
+							if(sizeOf($erroresPrecio3)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresPrecio3 as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Problemas con el Precio 4:</small>";
+							if(sizeOf($erroresPrecio4)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresPrecio4 as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Problemas con el Precio 5:</small>";
+							if(sizeOf($erroresPrecio5)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresPrecio5 as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Problemas con la cantidad:</small>";
+							if(sizeOf($erroresCantidad)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresCantidad as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Familia No Existe:</small>";
+							if(sizeOf($erroresFamilia)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresFamilia as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Sucursal No Existe:</small>";
+							if(sizeOf($erroresSucursal)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresSucursal as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Formato de Exento No Válido:</small>";
+							if(sizeOf($erroresExento)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresExento as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>Con Descuento no Válido:</small>";
+							if(sizeOf($erroresDescuento)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresDescuento as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							echo "<br><br><small class='bold'>No existen en bodega:</small>";
+							if(sizeOf($erroresCodBrasil)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresCodBrasil as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
+							
+						}
+						echo "</div>";
+					}
+				?>
 				
-			
-			</tr>
-
-			</table>
-			</fieldset>
-		</form>
-
-		</div>			
-<!---->
+				
+				
+			</div><!-- Contenedor div -->
         </div>		
 
 		<!--Incluir footer-->
