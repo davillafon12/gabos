@@ -1,7 +1,7 @@
 ﻿REQUERIMIENTOS OCTUBRE
 
 Cambios
--> Cambiar la forma en como se ingresan los productos y hacer traspaso de bodega a inventario.
+LISTO-> Cambiar la forma en como se ingresan los productos y hacer traspaso de bodega a inventario.
 LISTO-> Poner rojo la advertencia de semiactivo en crear factura, a la hora de cargar cliente semiactivo.
 LISTO-> Agregar si cliente es exento de impuestos.
 LISTO-> En recibos no cobrar por orden de saldo sino por consecutivo.
@@ -24,8 +24,8 @@ LISTO-> Notas credito.
 LISTO-> Notas debito.
 -> Consulta de venta (Muestra cantidad vendida del dia, por sucursal) Desde ultimo cierre de caja hasta ahora.
 -> Cierre Caja. 
-   Datos a mostrar: Total de venta.
--> Retiro parcial (Suma a retirar no mas).
+   Datos a mostrar: Ver Correo de Esteban.
+LISTO-> Retiro parcial (Suma a retirar no mas).
 -> Hacer ventana de cambio de codigo.
    Cambio de codigo de un producto: 27456 -> 23456(Este codigo ya debe de existir)
                                     Cuando se cambia se decide cuantas unidades se desean pasar.
@@ -38,7 +38,7 @@ LISTO-> Notas debito.
 
 -> Ventana para usar facturas de garotas como compras de otras sucursales. (TODA FACTURA).
 
--> CARGA MASIVA PARA BODEGA
+LISTO -> CARGA MASIVA PARA BODEGA
 -> CARGA MASIVA DE BODEGA A INVENTARIO
 -> CARGA MANUAL DE BODEGA A INVENTARIO (INDIVIDUAL) AGREGAR CODIGO ALFANUMERICO BRASILEÑO
 
