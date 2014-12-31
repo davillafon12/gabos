@@ -218,6 +218,15 @@ PARA:
 								}
 							}
 							
+							echo "<br><br><small class='bold'>La cantidad es mayor a la disponible en bodega:</small>";
+							if(sizeOf($erroresCantidadMayor)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresCantidadMayor as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
 							
 						}
 						echo "</div>";

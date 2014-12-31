@@ -44,8 +44,20 @@ class bodega extends CI_Controller {
 								
 								date_default_timezone_set("America/Costa_Rica");
 								$fecha = date("y/m/d : H:i:s", now());
-								$this->bodega_m->agregarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $fecha, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingresó a bodega el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'nota');
+								
+								//Se agrega a bodega para validar a la hora del traspaso
+								if($this->bodega_m->existeArticuloEnBodega($articulo['cod'], $data['Sucursal_Codigo'])){
+									//Si existe actualizamos
+									$this->bodega_m->actualizarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $data['Sucursal_Codigo']);
+								}else{
+									//Si no existe lo agregamos
+									$this->bodega_m->agregarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+								}								
+								
+								//Se agrega como compra para generar reportes y llevar el record de compras
+								$this->bodega_m->agregarCompra($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $fecha, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+								
+								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingresó a bodega/compra el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'nota');
 							}
 						}
 						//Todo salio bien

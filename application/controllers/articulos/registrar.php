@@ -221,7 +221,8 @@ function do_upload($cedula)
 						sizeOf($resultado["erroresSucursal"])==0 &&
 						sizeOf($resultado["erroresExento"])==0 &&
 						sizeOf($resultado["erroresDescuento"])==0 &&
-						sizeOf($resultado["erroresCodBrasil"])==0 ){
+						sizeOf($resultado["erroresCodBrasil"])==0 &&
+						sizeOf($resultado["erroresCantidadMayor"])==0 ){
 						$articulos = $resultado['articulos'];
 						foreach($articulos as $articulo){
 							/*//Filtramos que el articulo no este dentro de los articulos con errores
@@ -251,6 +252,8 @@ function do_upload($cedula)
 								"cbra"=>$cod_brasil
 							*/
 							$this->articulo->registrar($articulo['cod'], $articulo['des'], $articulo['cod'], $articulo['can'], 0, $articulo['desc'], $articulo['ima'], $articulo['exe'],  $articulo['fam'], $articulo['suc'], $articulo['cos'], $articulo['p1'], $articulo['p2'], $articulo['p3'],  $articulo['p4'], $articulo['p5']);
+							$this->bodega_m->restarCantidadBodega($articulo['can'], $articulo['cbra'], $articulo['suc']);
+							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario traspaso a inventario el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'traspaso');
 						}
 						//Todo salio bien
 						redirect('articulos/registrar/registro_masivo?s=1', 'location');
@@ -275,6 +278,7 @@ function do_upload($cedula)
 						$data['erroresExento'] = $resultado["erroresExento"];
 						$data['erroresDescuento'] = $resultado["erroresDescuento"];
 						$data['erroresCodBrasil'] = $resultado["erroresCodBrasil"];
+						$data['erroresCantidadMayor'] = $resultado["erroresCantidadMayor"];
 						$this->load->view('articulos/registro_masivo_articulos', $data);
 					}
 				}else{
@@ -392,6 +396,7 @@ function do_upload($cedula)
 					$erroresExento = array();
 					$erroresDescuento = array();
 					$erroresCodBrasil = array();
+					$erroresCantidadMayor = array();
 					
 					$articulos = array();
 					
@@ -442,8 +447,16 @@ function do_upload($cedula)
 						}
 						//Revisamos que la cantidad sea numerica y mayor a 0
 						if(!is_numeric($cantidad)||$cantidad<0){
-							array_push($erroresCantidad, $codigo);
+							array_push($erroresCantidad, $codigo);												
+						}else{
+							//Verificamos que la cantidad a traspasar no sea mayor a la de la bodega
+							$cantidadBodega = $this->bodega_m->getCantidadArticulo($cod_brasil, $sucursal);
+							if($cantidadBodega<$cantidad){
+								array_push($erroresCantidadMayor, $codigo);
+							}	
 						}
+						
+						
 						//Revisamos que la sucursal exista
 						if(!$this->empresa->getEmpresa($sucursal)){
 							array_push($erroresSucursal, $codigo);
@@ -501,6 +514,7 @@ function do_upload($cedula)
 					$resultado["erroresExento"] = $erroresExento;
 					$resultado["erroresDescuento"] = $erroresDescuento;
 					$resultado["erroresCodBrasil"] = $erroresCodBrasil;
+					$resultado["erroresCantidadMayor"] = $erroresCantidadMayor;
 				}else{
 					//No tiene las columnas requeridas
 					$resultado['error'] = '2';
