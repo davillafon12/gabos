@@ -27,9 +27,10 @@ class familias extends CI_Controller {
 	
 	function getMainTable()
 	 {	
+		include '/../get_session_data.php';
 		$ruta_imagen = base_url('application/images/Icons');
 		
-		if($result = $this->familia->getFamilias())
+		if($result = $this->familia->getFamiliasTodas())
 		{
 			/*
 							<th class='Sorted_enabled'>
@@ -174,7 +175,7 @@ class familias extends CI_Controller {
 		{	
 		   redirect('accesoDenegado', 'location');
 		}
-		echo "PASO AQUI";
+		//echo "PASO AQUI";
 		
 		date_default_timezone_set("America/Costa_Rica");
 		$Current_datetime = date("y/m/d : H:i:s", now());
@@ -184,9 +185,9 @@ class familias extends CI_Controller {
 		$data_update['Familia_Estado'] = 0;
 		foreach($familias as $familia_id)
 		{
-			if($this->familia->isActivated($familia_id))
+			if($this->familia->isActivated($familia_id, $data['Sucursal_Codigo']))
 			{ 
-				$this->familia->actualizar($familia_id, $data_update);
+				$this->familia->actualizar($familia_id, $data['Sucursal_Codigo'], $data_update);
 				
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario desactivo a la familia codigo: ".$familia_id,$data['Sucursal_Codigo'],'edicion');
 			}
@@ -202,7 +203,7 @@ class familias extends CI_Controller {
 		{	
 		   redirect('accesoDenegado', 'location');
 		}
-		echo "PASO AQUI";
+		//echo "PASO AQUI";
 		date_default_timezone_set("America/Costa_Rica");
 		$Current_datetime = date("y/m/d : H:i:s", now());
 		$familias=$_GET['array'];
@@ -212,9 +213,9 @@ class familias extends CI_Controller {
 		$data_update['Familia_Estado'] = 1;
 		foreach($familias as $familia_id)
 		{
-			if(!$this->familia->isActivated($familia_id))
+			if(!$this->familia->isActivated($familia_id, $data['Sucursal_Codigo']))
 			{
-				$this->familia->actualizar($familia_id, $data_update);
+				$this->familia->actualizar($familia_id, $data['Sucursal_Codigo'], $data_update);
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario activo a la empresa codigo: ".$familia_id,$data['Sucursal_Codigo'],'edicion');
 			}
 		}
@@ -222,10 +223,11 @@ class familias extends CI_Controller {
 	
 	function edicion()
 	{
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$id_request=$_GET['id'];
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
-		$nombre_familia = $this->familia->getNombreFamilia($id_request);
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		$nombre_familia = $this->familia->getNombreFamiliaSucursal($id_request, $data['Sucursal_Codigo']);
+		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['editar_familias'])
@@ -234,7 +236,7 @@ class familias extends CI_Controller {
 		}
 		
 		//echo $nombre_empresa;
-		if($result = $this->familia->getFamilia($id_request))
+		if($result = $this->familia->getFamilia($id_request, $data['Sucursal_Codigo']))
 		{
 			$this->load->helper(array('form'));
 			foreach($result as $row)
@@ -276,11 +278,11 @@ class familias extends CI_Controller {
 		//$data_update['Familia_Descuento'] = mysql_real_escape_string($descuento_familia);
 		//$data_update['Familia_Direccion'] = mysql_real_escape_string($direccion_empresa);
 		$data_update['Familia_Observaciones'] = mysql_real_escape_string($observaciones_familia);
-        $data_update['TB_02_Sucursal_Codigo'] = mysql_real_escape_string($sucursal_familia);
+        //$data_update['TB_02_Sucursal_Codigo'] = mysql_real_escape_string($sucursal_familia);
 		//echo $id_empresa;
 		//echo $nombre_empresa;
 
-		$this->familia->actualizar(mysql_real_escape_string($id_familia), $data_update);
+		$this->familia->actualizar(mysql_real_escape_string($id_familia), $sucursal_familia, $data_update);
 
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la familia codigo: ".mysql_real_escape_string($id_familia),$data['Sucursal_Codigo'],'edicion');

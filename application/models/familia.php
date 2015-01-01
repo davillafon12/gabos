@@ -1,10 +1,10 @@
 <?php
 Class familia extends CI_Model
 {
-	function es_codigo_usado($Codigo_evaluar){
-		$this -> db -> select('Familia_Codigo');
+	function es_codigo_usado($codigo, $sucursal){
 		$this -> db -> from('TB_05_Familia');
-		$this -> db -> where('Familia_Codigo', mysql_real_escape_string($Codigo_evaluar));
+		$this -> db -> where('Familia_Codigo', $codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 
 		$query = $this -> db -> get();
@@ -38,9 +38,11 @@ Class familia extends CI_Model
 		}
 	}	
 	
-	function getCantidadFamilias()
+	function getCantidadFamilias($sucursal)
 	{
-		return $this->db->count_all('TB_05_Familia');
+		//Este metodo lo que hace realemente es devolver el siguiente codigo para la nueva familia
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		return $this->db->count_all_results('TB_05_Familia');
 	}
 	
 	function registrar($id_familia, $nombre_familia, $observaciones_familia, $sucursal_familia, $nombre)
@@ -65,23 +67,32 @@ Class familia extends CI_Model
 		{return false;}
 		
 		//Verificamos y retornamos si se guardo en base de datos
-		return $this->es_codigo_usado($id_familia);
+		return $this->es_codigo_usado($id_familia, $sucursal_familia);
 	}
 	
-	function getFamilias()
+	function getFamilias($sucursal)
 	{
-		$this -> db -> select('Familia_Codigo, Familia_Nombre, Familia_Observaciones, Familia_Fecha_Creacion, Familia_Fecha_Desactivacion, Familia_Creador, TB_02_Sucursal_Codigo, Familia_Estado');
-		$this -> db -> from('TB_05_familia');
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> from('TB_05_familia');		
 		$query = $this -> db -> get();
        
 		return $query->result();
 	}
 	
-	function getFamilia($id)
+	function getFamiliasTodas()
 	{
-		$this -> db -> select('Familia_Codigo, Familia_Nombre, Familia_Observaciones, Familia_Fecha_Creacion, Familia_Fecha_Desactivacion, Familia_Creador, TB_02_Sucursal_Codigo');
+		//$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> from('TB_05_familia');		
+		$query = $this -> db -> get();
+       
+		return $query->result();
+	}
+	
+	function getFamilia($id, $sucursal)
+	{
 		$this -> db -> from('TB_05_familia');		
 		$this -> db -> where('Familia_Codigo', mysql_real_escape_string($id));
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -132,11 +143,12 @@ Class familia extends CI_Model
 		}else{return false;}
 	}
 	
-	function isActivated($id)
+	function isActivated($codigo, $sucursal)
 	{
 		$this -> db -> select('Familia_Fecha_Desactivacion');
 		$this -> db -> from('TB_05_Familia');
-		$this -> db -> where('Familia_Codigo', mysql_real_escape_string($id));
+		$this -> db -> where('Familia_Codigo', $codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		$result = $query->result();
@@ -154,21 +166,18 @@ Class familia extends CI_Model
 		}
 	}
 	
-	function actualizar($id, $data)
-	{
-		    
-			$this->db->where('Familia_Codigo', mysql_real_escape_string($id));
-			$this->db->update('TB_05_Familia' ,$data);
-		
+	function actualizar($codigo, $sucursal, $data)
+	{		    
+		$this->db->where('Familia_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this->db->update('TB_05_Familia' ,$data);		
 	}
 	
-	function get_familias_ids_array()
+	function get_familias_ids_array($sucursal)
 	{
-		$this -> db -> select('Familia_Codigo, Familia_Nombre');
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> from('TB_05_Familia');
-		$data = array(); // create a variable to hold the information
-		
-			
+		$data = array(); // create a variable to hold the information	
 		
 		$query = $this -> db -> get();
 		

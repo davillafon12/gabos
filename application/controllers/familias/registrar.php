@@ -45,7 +45,7 @@ class registrar extends CI_Controller {
 	//include '/../../models/empresa.php';
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 
-	if($this->familia->es_codigo_usado($id_request))
+	if($this->familia->es_codigo_usado($id_request, $data['Sucursal_Codigo']))
 	{
 		echo "true"; //echo "<img src=".$ruta_base_imagenes_script."/error.gif />";
 	}
@@ -64,9 +64,11 @@ class registrar extends CI_Controller {
 	$observaciones_familia = $this->input->post('observaciones');
 	$sucursal_familia = $this->input->post('sucursal');
 	
-	$id_familia = $this->familia->getCantidadFamilias();
-	
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	
+	$id_familia = $this->familia->getCantidadFamilias($sucursal_familia);
+	
+	
 	//echo $id_familia." DDD";
 	$nombre = $this->user->get_name($data['Usuario_Codigo']);
 	//echo $nombre;

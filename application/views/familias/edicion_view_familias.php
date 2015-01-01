@@ -78,23 +78,24 @@ PARA:
 				<!--<tr>
 				<td>
     			<p class="contact"><label for="descuento">Descuento:</label></p> 
-    			<input value="<?php echo $Familia_Descuento;?>" id="descuento" autocomplete="off" name="descuento" placeholder="Descuento de la familia" tabindex="3" type="number" min="0" max="100">% 
+    			<input value="<?php// echo $Familia_Descuento;?>" id="descuento" autocomplete="off" name="descuento" placeholder="Descuento de la familia" tabindex="3" type="number" min="0" max="100">% 
                 </td>
 				</tr>-->
 				<tr>
 				<td>
     			<p class="contact"><label for="sucursal">Empresa:</label></p> 
-    			<select name="sucursal">
+				<input type="text" value="<?php echo $Familia_Sucursal;?>" name="sucursal" readonly>
+    			<!--<select name="sucursal" readonly>
 				<?php 					
-					foreach($Familia_Empresas as $Nombre_Empresa => $codigo_empresa)
+					/*foreach($Familia_Empresas as $Nombre_Empresa => $codigo_empresa)
 					{
 						echo "<option value='".$codigo_empresa."'";
 						if($codigo_empresa==$Familia_Sucursal)
 						{echo "selected";}
 						echo">".$codigo_empresa." - ".$Nombre_Empresa."</option>";
-					}
+					}*/
 				?>
-				</select> 
+				</select> -->
                 </td>
 				</tr>
 				<tr>

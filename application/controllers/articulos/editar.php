@@ -164,8 +164,8 @@ class editar extends CI_Controller {
 			$data['precio3_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 3, $data['Sucursal_Codigo']);
 			$data['precio4_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 4, $data['Sucursal_Codigo']);
 			$data['precio5_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 5, $data['Sucursal_Codigo']);
-			$empresas_actuales = $this->empresa->get_empresas_ids_array();
-			$familias_actuales = $this->familia->get_familias_ids_array(); 
+			$empresas_actuales = $this->empresa->get_empresas_ids_array($data['Sucursal_Codigo']);
+			$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
 			$data['Familia_Empresas'] = $empresas_actuales;
 			$data['Familias'] = $familias_actuales;
 		}

@@ -32,6 +32,7 @@
 						'registrar_banco' => 'Registrar Banco',
 						'registrar_cliente' => 'Registrar Cliente',
 						'registrar_empresa' => 'Registrar Empresa',
+						'registrar_familia' => 'Registrar Familia',
 						'registrar_usuarios' => 'Registrar Usuario',
 						'ver_autorizacion' => 'Ver Autorizaciones',
 						'ver_bitacora' => 'Ver Bitacora'						
@@ -39,6 +40,6 @@
 	
 	$permisosVendedor = array('crear_factura', 'crear_proforma', 'registrar_cliente', 'ver_autorizacion');
 	$permisosCajero = array('crear_factura', 'crear_proforma', 'registrar_cliente', 'entrar_caja', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas');
-	$permisosAdmin = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_articulo', 'registrar_articulos_masivo', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas', 'anular_recibos', 'deposito_recibos', 'entrar_notas_d', 'crear_retiros', 'ingreso_bodega');
+	$permisosAdmin = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_articulo', 'registrar_articulos_masivo', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas', 'anular_recibos', 'deposito_recibos', 'entrar_notas_d', 'crear_retiros', 'ingreso_bodega', 'registrar_familia');
 	$permisosAvanz = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'entrar_configuracion', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas', 'anular_recibos', 'deposito_recibos', 'entrar_notas_d', 'crear_retiros');
 ?>

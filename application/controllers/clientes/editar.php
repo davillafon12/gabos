@@ -366,7 +366,7 @@ class editar extends CI_Controller {
 			$data['Cliente_Observaciones'] = $row -> Cliente_Observaciones;
 			$data['Cliente_Numero_Pago'] = $row -> Cliente_Numero_Pago;
 		}
-		$familias_actuales = $this->familia->get_familias_ids_array(); 
+		$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
 		$data['Familias'] = $familias_actuales;
 		$this->load->view('clientes/clientes_edision_view', $data);
 	}

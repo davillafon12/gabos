@@ -28,7 +28,7 @@ class registrar extends CI_Controller {
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	$this->load->helper(array('form'));
 	$empresas_actuales = $this->empresa->get_empresas_ids_array();
-	$familias_actuales = $this->familia->get_familias_ids_array(); 
+	$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
 	$data['Familia_Empresas'] = $empresas_actuales;
 	$data['Familias'] = $familias_actuales;
 	$this->load->view('articulos/articulos_registrar_view', $data);
