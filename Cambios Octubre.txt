@@ -12,6 +12,7 @@ LISTO-> Agregar en a interfaz de notas credito, a cual factura se le aplica el d
 LISTO-> Agregar semiactivo en cliente.
 LISTO-> Cambiar interfaz de "ver mi perfil".
 LISTO-> Agregar tipo pago en recibos (Efectivo, tarjeta).
+LISTO-> Modificar metodos de familia
 
 Agregar
 LISTO-> Pagina para ingresar la confirmacion de deposito de un recibo por dinero (Cuando empleado toma dinero del recibo y lo deposita en el banco)
@@ -39,7 +40,7 @@ LISTO-> Retiro parcial (Suma a retirar no mas).
 -> Ventana para usar facturas de garotas como compras de otras sucursales. (TODA FACTURA).
 
 LISTO -> CARGA MASIVA PARA BODEGA
--> CARGA MASIVA DE BODEGA A INVENTARIO
+LISTO -> CARGA MASIVA DE BODEGA A INVENTARIO
 -> CARGA MANUAL DE BODEGA A INVENTARIO (INDIVIDUAL) AGREGAR CODIGO ALFANUMERICO BRASILEÑO
 
 Otros
