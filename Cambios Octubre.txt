@@ -13,6 +13,7 @@ LISTO-> Agregar semiactivo en cliente.
 LISTO-> Cambiar interfaz de "ver mi perfil".
 LISTO-> Agregar tipo pago en recibos (Efectivo, tarjeta).
 LISTO-> Modificar metodos de familia
+-> Cambiar UI y demas en edicion
 
 Agregar
 LISTO-> Pagina para ingresar la confirmacion de deposito de un recibo por dinero (Cuando empleado toma dinero del recibo y lo deposita en el banco)
@@ -42,6 +43,11 @@ LISTO-> Retiro parcial (Suma a retirar no mas).
 LISTO -> CARGA MASIVA PARA BODEGA
 LISTO -> CARGA MASIVA DE BODEGA A INVENTARIO
 -> CARGA MANUAL DE BODEGA A INVENTARIO (INDIVIDUAL) AGREGAR CODIGO ALFANUMERICO BRASILEÑO
+	-> Cambiar familias cuando se cambia sucursal
+	-> Validar campos antes de submit
+	-> Validar si es sucursal diferente y agregarlo como compra de la misma
+	-> Rebajar la cantidad en bodega
+	
 
 Otros
 -> Habilitar impresion via HTML proforma, factura.
