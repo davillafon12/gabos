@@ -34,20 +34,28 @@ class registrar extends CI_Controller {
 	$this->load->view('articulos/articulos_registrar_view', $data);
  }
  
-function es_Codigo_Utilizado()
- {
-	$id_request=$_GET['id'];
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-	$ruta_base_imagenes_script = base_url('application/images/scripts');
-	if($this->articulo->existe_Articulo($id_request, $data['Sucursal_Codigo']))
+	function es_Codigo_Utilizado()
 	{
-		echo "true"; //echo "<img src=".$ruta_base_imagenes_script."/error.gif />";
-	}
-	else
-	{
-		echo "false"; //echo "<img src=".$ruta_base_imagenes_script."/tick.gif />";
-	}
- } 
+		$retorno['status'] = 'error';
+		if(isset($_POST['codigo'])&&isset($_POST['sucursal'])){
+			include '/../get_session_data.php';
+			if(!$this->articulo->existe_Articulo($_POST['codigo'], $_POST['sucursal'])){
+				$retorno['status'] = 'success';
+			}
+		}
+		echo json_encode($retorno);
+		/*$id_request=$_GET['id'];
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		$ruta_base_imagenes_script = base_url('application/images/scripts');
+		if($this->articulo->existe_Articulo($id_request, $data['Sucursal_Codigo']))
+		{
+			echo "true"; //echo "<img src=".$ruta_base_imagenes_script."/error.gif />";
+		}
+		else
+		{
+			echo "false"; //echo "<img src=".$ruta_base_imagenes_script."/tick.gif />";
+		}*/
+	} 
 // Metodo encargado de registrar articulos 
  function registra_Articulo()
  {

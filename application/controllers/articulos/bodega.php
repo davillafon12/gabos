@@ -155,6 +155,20 @@ class bodega extends CI_Controller {
 		}
 		return $resultado;
 	}
+	
+	function existeEnBodega(){
+		$retorno['status'] = 'error';
+		if(isset($_POST['codigo'])){
+			include '/../get_session_data.php';
+			if($articulos = $this->bodega_m->existeArticuloEnBodega($_POST['codigo'], $data['Sucursal_Codigo'])){
+				$retorno['status'] = 'success';
+				foreach($articulos as $articulo){
+					$retorno['cantidad'] = $articulo->Cantidad;
+				}
+			}
+		}
+		echo json_encode($retorno);
+	}
 
 }
 

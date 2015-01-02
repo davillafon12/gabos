@@ -53,13 +53,13 @@ echo
 						//div.innerHTML=ajax.responseText;
 					    if(ajax.responseText.indexOf('tr') != -1)
 						{						
-							div.innerHTML = \"<div class='status_2'><img src=".$ruta_base_imagenes_script."/error.gif /><p class='text_status'>¡No esta disponible!</p></div>\";							
+							div.innerHTML = '<img src=".$ruta_base_imagenes_script."/error.gif />';							
 							boton.disabled=true;
 
 						}
 						else
 						{
-							div.innerHTML = \"<div class='status_2'><img src=".$ruta_base_imagenes_script."/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>\";
+							div.innerHTML = '<img src=".$ruta_base_imagenes_script."/tick.gif />';
 							boton.disabled=false;
 						}
 					}
@@ -72,7 +72,7 @@ echo
 			var input = document.getElementById('articulo_codigo');
 			var codigo_barras = document.getElementById('cod_Barras');
 			var codigo =  input.value;
-			codigo_barras.innerHTML='<center><img alt=\"12345\" src=\"../application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/></center>';
+			codigo_barras.innerHTML='<img alt=\"12345\" src=\"../application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/>';
 		}
 
 		
