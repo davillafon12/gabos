@@ -119,9 +119,13 @@ function verificarCodigoArticulo(){
 				if(informacion[0].status==="error"){					
 					codigoDisponible = false;
 					$("#status").html("<img src="+location.protocol+'//'+document.domain+"/application/images/scripts/error.gif />");
+					$("#cod_Barras").html('');
 				}else if(informacion[0].status==="success"){					
 					codigoDisponible = true;
 					$("#status").html("<img src="+location.protocol+'//'+document.domain+"/application/images/scripts/tick.gif />");
+					
+					//Crear codigo barras
+					$("#cod_Barras").html('<img alt=\"12345\" src=\"../application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/>');					
 				}
 			}catch(e){				
 				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
@@ -144,3 +148,8 @@ $(function() {
 	$("#precio4").numeric(",");
 	$("#precio5").numeric(",");
 });
+
+function llamarCodigoBarras(codigo){
+	codigo_barras = document.getElementById('');
+	codigo_barras.innerHTML='<img alt=\"12345\" src=\"../application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/>';
+}

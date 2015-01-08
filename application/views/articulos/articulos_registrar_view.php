@@ -129,11 +129,12 @@ PARA:
 							</td>
 							<td>
 								<select name="sucursal" class="input_dos" id="sucursal" onchange="verificarCodigoArticulo()" disabled>
-									<?php 					
+									<?php 
 										foreach($Familia_Empresas as $Nombre_Empresa => $codigo_empresa)
 										{
 											echo "<option value='".$codigo_empresa."'";
 											echo">".$codigo_empresa." - ".$Nombre_Empresa."</option>";
+											break;
 										}
 									?>
 								</select> 

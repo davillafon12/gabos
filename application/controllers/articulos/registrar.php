@@ -364,12 +364,12 @@ function do_upload($cedula)
 				$c7 = $worksheet->getCellByColumnAndRow(6, 1)->getValue();
 				$c8 = $worksheet->getCellByColumnAndRow(7, 1)->getValue();
 				$c9 = $worksheet->getCellByColumnAndRow(8, 1)->getValue();
-				$c10 = $worksheet->getCellByColumnAndRow(9, 1)->getValue();
-				$c11 = $worksheet->getCellByColumnAndRow(10, 1)->getValue();
-				$c12 = $worksheet->getCellByColumnAndRow(11, 1)->getValue();
-				$c13 = $worksheet->getCellByColumnAndRow(12, 1)->getValue();
-				$c14 = $worksheet->getCellByColumnAndRow(13, 1)->getValue();
-				$c15 = $worksheet->getCellByColumnAndRow(14, 1)->getValue();
+				//$c10 = $worksheet->getCellByColumnAndRow(9, 1)->getValue(); 
+				$c11 = $worksheet->getCellByColumnAndRow(9, 1)->getValue();
+				$c12 = $worksheet->getCellByColumnAndRow(10, 1)->getValue();
+				$c13 = $worksheet->getCellByColumnAndRow(11, 1)->getValue();
+				$c14 = $worksheet->getCellByColumnAndRow(12, 1)->getValue();
+				$c15 = $worksheet->getCellByColumnAndRow(13, 1)->getValue();
 				
 				if(	trim($c1) == 'CODIGO' && 
 					trim($c2) == 'DESCRIPCION' && 
@@ -379,8 +379,7 @@ function do_upload($cedula)
 					trim($c6) == 'PRECIO_3' &&
 					trim($c7) == 'PRECIO_4' &&
 					trim($c8) == 'PRECIO_5' &&
-					trim($c9) == 'FAMILIA' &&
-					trim($c10) == 'SUCURSAL' &&
+					trim($c9) == 'FAMILIA' &&					
 					trim($c11) == 'CANTIDAD' &&
 					trim($c12) == 'EXENTO_IVA' &&
 					trim($c13) == 'DESCUENTO' &&
@@ -418,12 +417,13 @@ function do_upload($cedula)
 						$p4 = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
 						$p5 = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
 						$familia = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
-						$sucursal = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
-						$cantidad = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
-						$exento = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
-						$descuento = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
-						$imagen = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
-						$cod_brasil = $worksheet->getCellByColumnAndRow(14, $row)->getValue();
+						//$sucursal = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
+						$sucursal = 0; //Siempre se pasara a Garotas Bonitas Central
+						$cantidad = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
+						$exento = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
+						$descuento = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
+						$imagen = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
+						$cod_brasil = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
 						
 						//Revisamos si el codigo es numerico
 						if(!is_numeric($codigo)||$this->articulo->existe_Articulo($codigo,$sucursal)){
