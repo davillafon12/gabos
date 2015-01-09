@@ -36,10 +36,8 @@ PARA:
 		<script src="<?php echo base_url('application/scripts/articulos/verificar_codigos_tools.js'); ?>" type="text/javascript"></script>
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_traspaso_individual.css'); ?>">
-		
-		
-		<?php include '/../../scripts/ajax_verify_articulos_id.php';?>	
-		
+		<!--SCRIPT DE HERRAMIENTAS-->
+		<script src="<?php echo base_url('application/scripts/articulos/traspaso_individual_tools.js'); ?>" type="text/javascript"></script>	
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
@@ -57,7 +55,7 @@ PARA:
 			<p class="titulo_wrapper">Traspaso Individual De Artículos</p>
 			<hr class="division_wrapper">
 			<?php 
-				$attributes = array('name' => 'registrar_articulos_form', 'class' => 'registrar_articulos_form-form');
+				$attributes = array('name' => 'registrar_articulos_form', 'id' => 'registrar_articulos_form', 'class' => 'registrar_articulos_form-form');
 				
 				echo form_open_multipart('articulos/registrar/registra_Articulo', $attributes);              
 			?>	

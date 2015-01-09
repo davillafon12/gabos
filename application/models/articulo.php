@@ -2,7 +2,6 @@
 Class articulo extends CI_Model
 {
 	function existe_Articulo($Codigo,$sucursal){
-		$this -> db -> select('Articulo_Codigo');
 		$this -> db -> from('TB_06_Articulo');
 		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($Codigo));
 		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
@@ -64,10 +63,22 @@ Class articulo extends CI_Model
 
 	function actualizar($codigo, $sucursal, $data)
 	{
-			$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo));
-			$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
-			$this->db->update('TB_06_Articulo' ,$data);
+		$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this->db->update('TB_06_Articulo' ,$data);
 	}	
+	
+	function actualizarPrecios($codigo, $sucursal, $precios){
+		for($i = 0; $i<6; $i++){ //6 puesto que solo se manejan 5 precios por el momento
+			$datos = array(
+							'Precio_Monto' => $precios["p$i"]
+						);
+			$this->db->where('Precio_Numero', $i);	
+			$this->db->where('TB_06_Articulo_Articulo_Codigo',$codigo);
+			$this->db->where('TB_06_Articulo_TB_02_Sucursal_Codigo',$sucursal);			
+			$this->db->update('tb_11_precios', $datos);
+		}
+	}
 
 	function get_Articulos($sucursal)
 	{
