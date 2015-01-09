@@ -61,6 +61,7 @@ class registrar extends CI_Controller {
  {
 	//$id_empresa = $this->input->post('codigo');
 	$codigo_Articulo = $this->input->post('articulo_codigo');
+	$codigoBrasil = $this->input->post('codigo_bodega');
 	$descripcion_Articulo = $this->input->post('articulo_descripcion');
 	$codigoBarras_articulo = $this->input->post('articulo_codigo');
 	$cantidad_Articulos = $this->input->post('articulos_cantidad');
@@ -82,6 +83,8 @@ class registrar extends CI_Controller {
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo,  $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo))
 	{ //Si se ingreso bien a la BD
+		$this->bodega_m->restarCantidadBodega($cantidad_Articulos, $codigoBrasil, $empresa_Articulo);
+		
 		//Titulo de la pagina
 		$mensajeExento = "";
 		if($codigoBarras_articulo){
@@ -182,8 +185,8 @@ function do_upload($cedula)
 		//$config['create_thumb'] = TRUE;
 		$config['maintain_ratio'] = TRUE;
 		$config['quality'] = '100%';    // calidad de la imagen
-		$config['width']	 = $this->ancho_Imagen;
-		$config['height']	= $this->alto_Imagen;
+		$config['width']	 = 200;
+		$config['height']	= 200;
 		$this->load->library('image_lib', $config);	
 		if (!$this->image_lib->resize())
 		{
