@@ -13,13 +13,12 @@ LISTO-> Agregar semiactivo en cliente.
 LISTO-> Cambiar interfaz de "ver mi perfil".
 LISTO-> Agregar tipo pago en recibos (Efectivo, tarjeta).
 LISTO-> Modificar metodos de familia
--> Cambiar UI y demas en edicion
+LISTO-> Cambiar UI y demas en articulos edicion
 
 Agregar
 LISTO-> Pagina para ingresar la confirmacion de deposito de un recibo por dinero (Cuando empleado toma dinero del recibo y lo deposita en el banco)
 		Lleva # de recibo, a cual banco y # de deposito
 LISTO-> Anulacion de recibos.
--> Mostrar factura, proforma para impresion.
 -> Agregar en configuracion general un boton para actualizar estado de los 
    clientes, pedir contraseña y validar que no se haga en menos de un mes.
 LISTO-> Notas credito.
@@ -31,10 +30,10 @@ LISTO-> Retiro parcial (Suma a retirar no mas).
 -> Hacer ventana de cambio de codigo.
    Cambio de codigo de un producto: 27456 -> 23456(Este codigo ya debe de existir)
                                     Cuando se cambia se decide cuantas unidades se desean pasar.
-   Traslado de bodega. ES CARGA MASIVA DE EXCEL Y MANUAL (SIEMPRE CODIGOS NUEVOS)
-           #CODIGOBRASIL      ->       #CODIGONORMAL (Puede ser nuevo o ya en inventario, valorar crear producto)
-            costo                         Se agrega la misma info de registro articulo
-            descripcion                  El costo de aqui es el costo + utilidad - impuestos
+   LISTO Traslado de bodega. ES CARGA MASIVA DE EXCEL Y MANUAL (SIEMPRE CODIGOS NUEVOS)
+           LISTO #CODIGOBRASIL      ->      LISTO #CODIGONORMAL (Puede ser nuevo o ya en inventario, valorar crear producto)
+            costo                         			Se agrega la misma info de registro articulo
+            descripcion                  			El costo de aqui es el costo + utilidad - impuestos
             cantidad
   
 
@@ -42,15 +41,16 @@ LISTO-> Retiro parcial (Suma a retirar no mas).
 
 LISTO -> CARGA MASIVA PARA BODEGA
 LISTO -> CARGA MASIVA DE BODEGA A INVENTARIO
--> CARGA MANUAL DE BODEGA A INVENTARIO (INDIVIDUAL) AGREGAR CODIGO ALFANUMERICO BRASILEÑO
-	-> Cambiar familias cuando se cambia sucursal
-	-> Validar campos antes de submit
-	-> Validar si es sucursal diferente y agregarlo como compra de la misma
-	-> Rebajar la cantidad en bodega
+LISTO -> CARGA MANUAL DE BODEGA A INVENTARIO (INDIVIDUAL) AGREGAR CODIGO ALFANUMERICO BRASILEÑO
+		NO SE HIZO PUES SOLO SE CARGA DE GAROTAS-> Cambiar familias cuando se cambia sucursal
+		LISTO-> Validar campos antes de submit
+		NO SE HIZO PUES SOLO SE CARGA DE GAROTAS-> Validar si es sucursal diferente y agregarlo como compra de la misma
+		LISTO-> Rebajar la cantidad en bodega
 	
 
 Otros
 -> Habilitar impresion via HTML proforma, factura.
+-> Mostrar factura, proforma para impresion.
 
 Esteban Correcciones
 -> Favor en la impresión de pago mixto indicarlo en la factura, desglosado cuanto en efectivo y cuanto en tarjeta
