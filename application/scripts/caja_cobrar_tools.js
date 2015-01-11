@@ -278,7 +278,9 @@ function enviarCobro(URL){
 				$('#envio_factura').bPopup().close();
 			}else if(facturaHEAD[0].status==="success"){
 				$('#envio_factura').bPopup().close();																																																							
-				window.open(location.protocol+'//'+document.domain+'/facturas/caja/imprimirFactura?consecutivo='+consecutivoActual+'&sucursal='+sucursal+'&tipo='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+				//window.open(location.protocol+'//'+document.domain+'/facturas/caja/imprimirFactura?consecutivo='+consecutivoActual+'&sucursal='+sucursal+'&tipo='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+				window.open(location.protocol+'//127.0.0.1:8080/index.html?consecutivo='+consecutivoActual+'&sucursal='+sucursal+'&tipo='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+			
 				window.location = location.protocol+'//'+document.domain+'/facturas/caja';
 			}
 			}

@@ -87,12 +87,7 @@ PARA:
 		
 	</head>
 	<body onload="setMainValues()" oncopy="return false" oncut="return false" onpaste="return false" style="min-width:1280px;">
-		<applet id="qz" archive="./qz-print.jar" name="QZ Print Plugin" code="qz.PrintApplet.class" width="55" height="55">
-			<param name="jnlp_href" value="qz-print_jnlp.jnlp">
-			<param name="cache_option" value="plugin">
-			<param name="disable_logging" value="false">
-			<param name="initial_focus" value="false">
-		</applet>
+		
 	
 		<script>
 			//Anulamos los eventos de salida
