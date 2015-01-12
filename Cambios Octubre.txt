@@ -27,10 +27,10 @@ LISTO-> Notas debito.
 -> Cierre Caja. 
    Datos a mostrar: Ver Correo de Esteban.
 LISTO-> Retiro parcial (Suma a retirar no mas).
--> Hacer ventana de cambio de codigo.
-   Cambio de codigo de un producto: 27456 -> 23456(Este codigo ya debe de existir)
+LISTO-> Hacer ventana de cambio de codigo.
+	LISTO Cambio de codigo de un producto: 27456 -> 23456(Este codigo ya debe de existir)
                                     Cuando se cambia se decide cuantas unidades se desean pasar.
-   LISTO Traslado de bodega. ES CARGA MASIVA DE EXCEL Y MANUAL (SIEMPRE CODIGOS NUEVOS)
+	LISTO Traslado de bodega. ES CARGA MASIVA DE EXCEL Y MANUAL (SIEMPRE CODIGOS NUEVOS)
            LISTO #CODIGOBRASIL      ->      LISTO #CODIGONORMAL (Puede ser nuevo o ya en inventario, valorar crear producto)
             costo                         			Se agrega la misma info de registro articulo
             descripcion                  			El costo de aqui es el costo + utilidad - impuestos
