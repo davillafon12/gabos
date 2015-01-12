@@ -27,13 +27,15 @@
 						'entrar_recibos' => 'Entrar a recibos',
 						'ingreso_bodega' => 'Ingreso a Bodega',
 						'otros_cliente' => 'Editar Descuentos y Credito',
-						'registrar_articulo' => 'Registrar Articulo',
-						'registrar_articulos_masivo' => 'Registrar Articulo Masivo',
+						'registrar_articulo_individual' => 'Registro Individual Articulo',
+						'registrar_articulos_masivo' => 'Registro Masivo Articulo',
 						'registrar_banco' => 'Registrar Banco',
 						'registrar_cliente' => 'Registrar Cliente',
 						'registrar_empresa' => 'Registrar Empresa',
 						'registrar_familia' => 'Registrar Familia',
 						'registrar_usuarios' => 'Registrar Usuario',
+						'traspaso_individual_articulo' => 'Traspaso Individual Articulo',
+						'traspaso_articulos_masivo' => 'Traspaso Masivo Articulos',
 						'ver_autorizacion' => 'Ver Autorizaciones',
 						'ver_bitacora' => 'Ver Bitacora'						
 	);

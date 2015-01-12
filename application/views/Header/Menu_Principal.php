@@ -35,10 +35,16 @@
 			<a href='#' class='dir'>Articulos</a>
 			<ul>
 				<li class='first_Level_2'><a href=".$Ruta_Base."articulos/bodega>Ingreso a Bodega</a></li>
-				<li><a href='#' class='dir'>Traspasos</a>
+				<li><a href='#' class='dir'>Traspaso</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."articulos/registrar>Individual</a></li>
 						<li class='last'><a href=".$Ruta_Base."articulos/registrar/registro_masivo>Masivo</a></li>
+					</ul>
+				</li>
+				<li><a href='#' class='dir'>Registro</a>
+					<ul>
+						<li class='first'><a href=".$Ruta_Base."articulos/ingresar/individual>Individual</a></li>
+						<li class='last'><a href=".$Ruta_Base."articulos/ingresar/masivo>Masivo</a></li>
 					</ul>
 				</li>
 				<li><a href=".$Ruta_Base."articulos/editar>Edición</a></li>				

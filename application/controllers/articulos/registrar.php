@@ -13,25 +13,27 @@ class registrar extends CI_Controller {
 	$this->load->model('familia','',TRUE);
 	$this->load->model('user','',TRUE);
 	$this->load->model('bodega_m','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-		
-	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
-	if(!$permisos['registrar_articulo'])
-	{	
-	   redirect('accesoDenegado', 'location');
-	}
  }
 
  function index()
  {
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		
+	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+	
+	if(!$permisos['traspaso_individual_articulo'])
+	{	
+	   redirect('accesoDenegado', 'location');
+	}
+	
 	$this->load->helper(array('form'));
 	$empresas_actuales = $this->empresa->get_empresas_ids_array();
 	$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
 	$data['Familia_Empresas'] = $empresas_actuales;
 	$data['Familias'] = $familias_actuales;
 	$this->load->view('articulos/articulos_registrar_view', $data);
+	
  }
  
 	function es_Codigo_Utilizado()
@@ -199,7 +201,7 @@ function do_upload($cedula)
     function registro_masivo(){
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-		if($permisos['registrar_articulos_masivo'])
+		if($permisos['traspaso_articulos_masivo'])
 		{
 			$this->load->helper(array('form'));
 			$this->load->view('articulos/registro_masivo_articulos', $data);	

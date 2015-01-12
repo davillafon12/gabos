@@ -76,7 +76,15 @@ Class familia extends CI_Model
 		$this -> db -> from('TB_05_familia');		
 		$query = $this -> db -> get();
        
-		return $query->result();
+	   
+		if($query -> num_rows() != 0)
+		{
+		  return $query->result();
+		}
+		else
+		{
+		  return false;
+		}
 	}
 	
 	function getFamiliasTodas()
