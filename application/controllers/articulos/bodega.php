@@ -57,7 +57,7 @@ class bodega extends CI_Controller {
 								//Se agrega como compra para generar reportes y llevar el record de compras
 								$this->bodega_m->agregarCompra($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $fecha, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 								
-								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingresó a bodega/compra el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'nota');
+								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingresó a bodega/compra el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'bodega');
 							}
 						}
 						//Todo salio bien
