@@ -64,7 +64,7 @@
 			<img class='icono' src=".$Ruta_Icono_Contabilidad." alt='Contabilidad' width='22' height='22'>
 			<a href='#' class='dir'>Contabilidad</a>	
 			<ul>
-				<li class='first_Level_2'><a href='#'>Cambio de código</a></li>
+				<li class='first_Level_2'><a href='#'>Inventario</a></li>
 				<li><a href='#' class='dir'>Recibos de Dinero</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."contabilidad/recibos>Crear</a></li>
@@ -78,13 +78,12 @@
 						<li class='last'><a href=".$Ruta_Base."contabilidad/notas/notasCredito>Crédito</a></li>
 					</ul>
 				</li>				
-				<li><a href='#' class='dir'>Cierres</a>
+				<li class='last'><a href='#' class='dir'>Cierres</a>
 					<ul>
 						<li class='first'><a href='".$Ruta_Base."contabilidad/retiro/parcial'>Retiro Parcial</a></li>
 						<li class='last'><a href=".$Ruta_Base."contabilidad/cierre/caja>Cierre de Caja</a></li>
 					</ul>
 				</li>	
-				<li class='last'><a href='#'>Inventario</a></li>
 			</ul>
 		</li>
 		<li>
