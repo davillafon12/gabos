@@ -46,7 +46,7 @@ LISTO -> CARGA MANUAL DE BODEGA A INVENTARIO (INDIVIDUAL) AGREGAR CODIGO ALFANUM
 		LISTO-> Validar campos antes de submit
 		NO SE HIZO PUES SOLO SE CARGA DE GAROTAS-> Validar si es sucursal diferente y agregarlo como compra de la misma
 		LISTO-> Rebajar la cantidad en bodega
-	
+LISTO -> Ingreso individual y masivo de articulos sin consultar bodega	
 
 Otros
 -> Habilitar impresion via HTML proforma, factura.
