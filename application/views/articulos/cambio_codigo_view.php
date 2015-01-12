@@ -32,6 +32,10 @@ PARA:
 		<script src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>" type="text/javascript"></script>
 		<!--SCRIPT DE NUMERIC-->		
 		<script src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
+		<!--SCRIPT DE Impromptu-->		
+		<script src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>" type="text/javascript"></script>
+		<!--CSS ESTILO DEL Impromptu-->
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_cambio_codigo.css'); ?>">
 		<!--SCRIPT DE HERRAMIENTAS-->		
@@ -73,7 +77,7 @@ PARA:
 					<tr>
 						<td><label for="sucursal" class="contact">Sucursal:</label></td>
 						<td class="pad-right border-right" >
-							<select id="sucursal" class="input_dos" name="sucursal" onchange="getArticuloCambiar()">
+							<select id="sucursal" class="input_dos" name="sucursal" onchange="cambioDeSucursal()">
 								<?php 
 									foreach($Familia_Empresas as $Nombre_Empresa => $codigo_empresa)
 									{
@@ -94,7 +98,10 @@ PARA:
 					</tr>
 					<tr>
 						<td><p class="contact">Inventario:</p></td>
-						<td class="pad-right border-right" ><p class="contact" id="inventario"></p></td>
+						<td class="pad-right border-right" >
+							<p class="contact" id="inventario"></p>
+							<input type="hidden" id="inventarioh"/>
+						</td>
 						<td><p class="contact">Descripción:</p></td>
 						<td class="pad-right2"><p class="contact" id="descripcion_abonar"></p></td>
 					</tr>
@@ -104,7 +111,7 @@ PARA:
 						<td class="border-bottom" colspan="2"></td>
 					</tr>
 				</table>	
-				<input type="button" class="boton" value="Realizar Cambio"/>				
+				<input type="button" class="boton" value="Realizar Cambio" onclick="realizarCambioCodigo()"/>				
 			</div><!-- Contenedor div -->
         </div>		
 
