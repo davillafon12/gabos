@@ -351,6 +351,43 @@ Class contabilidad extends CI_Model
 						);
 		$this->db->insert('TB_33_Retiros_Parciales', $datos);
 	}
+	
+	function getFechaUltimoCierreCaja($sucursal){
+		$this->db->where('Sucursal', $sucursal);
+		$this->db->from('tb_37_cierre_caja');
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			//Si no hay cierres de caja devolvemos una fecha vieja para que agarre todas facturas
+			return strtotime('01-01-2000 00:00:00');
+		}
+		else
+		{			
+			$result = $query->result();
+			foreach($result as $row)
+			{ $fecha = $row->Fecha; }
+			return strtotime($fecha);
+		}
+	}
+	
+	function getFacturasEntreRangoFechas($sucursal, $inicio, $final){
+		$this->db->where('Factura_Fecha_Hora >', $inicio);
+		$this->db->where('Factura_Fecha_Hora <', $final);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('Factura_Estado', 'cobrada');
+		$this->db->order_by('Factura_Consecutivo', 'asc'); 
+		$this->db->from('tb_07_factura');		
+		$query = $this->db->get();
+		//echo $this->db->last_query();
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
 }
 
 

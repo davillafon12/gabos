@@ -4,6 +4,7 @@
 						'activar_familias' => 'Activar Familia',
 						'anular_recibos' => 'Anular Recibos',
 						'cambio_codigo_articulo' => 'Cambiar Código de Artículo',
+						'consultar_ventas' => 'Consultar Ventas',
 						'crear_factura' => 'Crear Factura',
 						'crear_proforma' => 'Crear Proforma',
 						'crear_retiros' => 'Retiros Parciales',

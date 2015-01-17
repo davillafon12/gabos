@@ -78,12 +78,13 @@
 						<li class='last'><a href=".$Ruta_Base."contabilidad/notas/notasCredito>Crédito</a></li>
 					</ul>
 				</li>				
-				<li class='last'><a href='#' class='dir'>Cierres</a>
+				<li><a href='#' class='dir'>Cierres</a>
 					<ul>
 						<li class='first'><a href='".$Ruta_Base."contabilidad/retiro/parcial'>Retiro Parcial</a></li>
 						<li class='last'><a href=".$Ruta_Base."contabilidad/cierre/caja>Cierre de Caja</a></li>
 					</ul>
 				</li>	
+				<li class='last'><a href='".$Ruta_Base."contabilidad/consultaVenta'>Consulta de Ventas</a></li>
 			</ul>
 		</li>
 		<li>
