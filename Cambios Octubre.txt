@@ -23,7 +23,7 @@ LISTO-> Anulacion de recibos.
    clientes, pedir contraseña y validar que no se haga en menos de un mes.
 LISTO-> Notas credito.
 LISTO-> Notas debito.
--> Consulta de venta (Muestra cantidad vendida del dia, por sucursal) Desde ultimo cierre de caja hasta ahora.
+LISTO-> Consulta de venta (Muestra cantidad vendida del dia, por sucursal) Desde ultimo cierre de caja hasta ahora.
 -> Cierre Caja. 
    Datos a mostrar: Ver Correo de Esteban.
 LISTO-> Retiro parcial (Suma a retirar no mas).
