@@ -111,6 +111,25 @@ PARA:
 						<td class="border-bottom" colspan="2"></td>
 					</tr>
 				</table>	
+				<input type="button" class="boton_agregar" value="+ Agregar" onclick="agregarFila()"/>
+				<hr class="divisor"/>
+				<p class="contact">Articulos a realizar cambio:</p>
+				<table class="tabla_articulos" id="tabla_articulos">
+					<thead>
+						<tr class="header">
+							<th class="titulo_header_tabla" style="width: 80px;">Código</th>
+							<th class="titulo_header_tabla" style="width: 250px;">Descripción</th>
+							<th class="titulo_header_tabla" style="width: 25px;"></th>
+							<th class="titulo_header_tabla" style="width: 80px;">Código</th>
+							<th class="titulo_header_tabla" style="width: 250px;">Descripción</th>
+							<th class="titulo_header_tabla" style="width: 70px;">Cantidad</th>
+							<th class="titulo_header_tabla" style="width: 25px;"></th>
+						</tr>
+					</thead>
+					<tbody id="tbody_articulos">
+						
+					</tbody>
+				</table>
 				<input type="button" class="boton" value="Realizar Cambio" onclick="realizarCambioCodigo()"/>				
 			</div><!-- Contenedor div -->
         </div>		

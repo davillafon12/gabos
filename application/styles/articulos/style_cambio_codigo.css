@@ -20,6 +20,17 @@
 	margin-left: 5px;
 }
 
+.contactSmall {
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+	font-family: Arial, Helvetica;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 5px;
+	text-align: center;
+}
+
 .input_uno{
 	width: 100px;
 	background-color: rgba(255, 255, 255, 0.4); 
@@ -50,6 +61,37 @@
 
 .boton{
 	background: #4b8df9;
+	/* display: inline-block; */
+	padding: 5px 10px 6px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
+	-webkit-box-shadow: 0 1px 3px #999;
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	/* position: relative; */
+	cursor: pointer;
+	font-size: 14px;
+	font-family: Verdana, Geneva, sans-serif;
+	/* left: 150px; */
+	/* bottom: 30px; */
+	*margin-top: 10px;
+	float: right;
+	margin-top: 10px;
+}
+
+.divisor{
+	margin-top: 45px;
+}
+
+.boton_agregar{
+	background: #59B659;
 	/* display: inline-block; */
 	padding: 5px 10px 6px;
 	color: #fbf7f7;
@@ -128,4 +170,38 @@ td {
 
 .pre-advertencia{
 	display: inline;
+}
+
+.tabla_articulos{
+	border-collapse: collapse;
+	border: 1pt solid black;
+}
+
+.header th {
+	border-left: 1px solid black;
+}
+
+.header {
+	background: #eeeeee;
+	background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc));
+	background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background: -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background: -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
+	border-bottom: 1px solid black;
+}
+
+.titulo_header_tabla {
+	text-align: center;
+	font-size: 14px;
+}
+
+.fila_articulo{
+	border-bottom: 1px solid black;
+}
+
+.eliminar_cruz{
+	width: 20px;
 }

@@ -1,5 +1,6 @@
 var codigoCambiarValido = false; //Variable que controla si se cargo un producto bueno
 var codigoAbonarValido = false; //Variable que controla si se cargo un producto valido a abonar
+var sucursalYaIngresada = false; //Variable que controla si ya se cargo una sucursal
 
 $(function() {
     $("#codigo_abonar").numeric();
@@ -162,20 +163,46 @@ function validarCodigos(){
 	return true;
 }
 
-function realizarCambioCodigo(){
+function ingresarSucursal(){ //Bloquea la seleccion de sucursal una vez se haya ingresado el primer articulo, para no enviar diferentes articulos en diferentes sucursales
+	sucursalYaIngresada = true;
+	$("#sucursal").prop('disabled', true);
+}
+
+function desIngresarSucursal(){ //Bloquea la seleccion de sucursal una vez se haya ingresado el primer articulo, para no enviar diferentes articulos en diferentes sucursales
+	sucursalYaIngresada = false;
+	$("#sucursal").prop('disabled', false);
+}
+
+function getFilasTabla(){
+	return $("#tbody_articulos tr");
+}
+
+function verificarCodigoNoRepetido(){
+	filas = getFilasTabla();
+	codigo = $("#codigo_cambiar").val();
+	if(filas.length>0){
+		for(i = 0; i<filas.length; i++){
+			codigoFila = filas[i].children[0].innerHTML;
+			if(codigo.trim() === codigoFila.trim()){
+				notyMsg('El artículo ya fue ingresado para cambio', 'error');
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+function agregarFila(){
 	if(codigoCambiarValido){
 		if(codigoAbonarValido){
 			if(validarCantidad()){
 				if(validarCodigos()){
-					$.prompt("¡Esto cambiará el inventario!", {
-					title: "¿Esta seguro que desea cambiar este código?",
-					buttons: { "Si, estoy seguro": true, "Cancelar": false },
-					submit:function(e,v,m,f){
-												if(v){													
-													sendCambio($("#codigo_cambiar").val(), $("#codigo_abonar").val(), $("#sucursal").val(), $("#cantidad").val());
-												}
-											}
-					});	
+					if(verificarCodigoNoRepetido()){
+						ingresarSucursal(); //Bloquemos la sucursal
+						
+						ingresarFila($("#codigo_cambiar").val(), $("#codigo_abonar").val(), $("#cantidad").val(), $("#descripcion_cambiar").html(), $("#descripcion_abonar").html());
+						//Verificar que sea de la misma sucursal, para esto bloquear el combo cuando ya se agrego la primera fila, y verificar que cuando se eliminen todas volver a habilitarlo
+					}
 				}
 			}
 		}else{
@@ -183,7 +210,40 @@ function realizarCambioCodigo(){
 		}
 	}else{
 		notyMsg('Articulo a Cambiar no es válido', 'error');
-	}	
+	}
+}
+
+function ingresarFila(cod_cambiar, cod_abonar, cantidad, des_cambiar, des_abonar){
+
+	fila = "<tr class='fila_articulo'>"
+	+	"<td class='contactSmall'>"+cod_cambiar+"</td>"
+	+	"<td class='contactSmall'>"+des_cambiar+"</td>"
+	+	"<td class='contactSmall'><img src="+location.protocol+"//"+document.domain+"/application/images/recibos/flecha_derecha.png></td>"
+	+	"<td class='contactSmall'>"+cod_abonar+"</td>"
+	+	"<td class='contactSmall'>"+des_abonar+"</td>"
+	+	"<td class='contactSmall'>"+cantidad+"</td>"
+	+	"<td class='contactSmall'><a href='javascript:;' onclick='eliminarFila(this)'><img class='eliminar_cruz' title='Eliminar Artículo' src="+location.protocol+"//"+document.domain+"/application/images/Icons/eliminar.png></a></td>"
+	+ "</tr>";
+	$("#tbody_articulos").append(fila);
+}
+
+
+function realizarCambioCodigo(){
+	filas = getFilasTabla();
+	
+	if(filas.length>0){
+		$.prompt("¡Esto cambiará el inventario!", {
+					title: "¿Esta seguro que desea cambiar este código?",
+					buttons: { "Si, estoy seguro": true, "Cancelar": false },
+					submit:function(e,v,m,f){
+							if(v){													
+								sendCambio($("#sucursal").val(), articulosToJSON());
+							}
+						}
+					});	
+	}else{
+		notyMsg('Debe agregar al menos un artículo para realizar el cambio', 'error');
+	}
 }
 
 function limpiarTodo(){
@@ -197,14 +257,17 @@ function limpiarTodo(){
 	$("#sucursal")[0].selectedIndex = 0;
 	codigoCambiarValido = false; 
     codigoAbonarValido = false;
+	$("#tbody_articulos").html('');
+	sucursalYaIngresada = false;
+	desIngresarSucursal();
 }
 
-function sendCambio(cod_cambiar, cod_abonar, sucursal, cantidad){
+function sendCambio(sucursal, articulos){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/articulos/cambio/realizarCambio',
 		type: "POST",		
 		async: false,
-		data: {'cod_cambiar':cod_cambiar, 'cod_abonar':cod_abonar, 'sucursal':sucursal, 'cantidad':cantidad},				
+		data: {'sucursal':sucursal, 'articulos':articulos},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{				
@@ -248,4 +311,33 @@ function manejoErrores(error){
 			notyMsg('¡La cantidad ingresada no es válida!', 'error');
 		break;
 	}
+}
+
+function eliminarFila(fila){
+	padre = fila.parentNode.parentNode.parentNode;
+	hijo = fila.parentNode.parentNode;
+	padre.removeChild(hijo);
+	verificarTablaVacia();
+}
+
+function verificarTablaVacia(){
+	filas = getFilasTabla();
+	if(filas.length<1){
+		desIngresarSucursal();
+	}
+}
+
+function articulosToJSON(){
+	filas = getFilasTabla();
+	articulos = [];
+	
+	for(i=0; i<filas.length; i++){
+				
+		codigo_cambiar = filas[i].children[0].innerHTML;
+		codigo_abonar = filas[i].children[3].innerHTML;
+		cantidad = filas[i].children[5].innerHTML;
+		
+		articulos.push({'cambiar':codigo_cambiar, 'abonar':codigo_abonar, 'cantidad':cantidad});
+	}
+	return JSON.stringify(articulos);
 }

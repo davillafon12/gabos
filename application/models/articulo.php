@@ -605,36 +605,27 @@ Class articulo extends CI_Model
 		}
 	}
 	
-	
-	/*function getCantidadArticuloFromFacturaTemporal($factura_codigo, $Codigo_articulo){
-		$this -> db -> select('Factura_Temporal_Cantidad_Articulo');
-		$this -> db -> from('TB_23_Articulos_Factura_Temporal');
-		$this -> db -> where('TB_22_Factura_Temporal_Factura_Temporal_id', mysql_real_escape_string($factura_codigo));
-		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', mysql_real_escape_string($Codigo_articulo));
-		$this -> db -> limit(1);
-		$query = $this -> db -> get();
-		
-		if($query -> num_rows() != 0)
-		{
-			$result = $query->result();
-			foreach($result as $row)
-			{
-				return $row->Factura_Temporal_Cantidad_Articulo;
-			}			
-		}
-		else
-		{
-		    return false;
-		}
+	function crearCambioCodigo($sucursal, $fecha, $usuario){
+		$datos = array(
+						'Sucursal' => $sucursal,
+						'Fecha' => $fecha,
+						'Usuario' => $usuario
+						);
+		$this->db->insert('tb_35_cambio_codigo', $datos);
+		return $this->db->insert_id();
 	}
 	
-	function actualizarCantidadProductoTemporal($codigo_producto, $cantidad, $facturaTemp_codigo){
-		$data['Factura_Temporal_Cantidad_Articulo']=$cantidad;
-		$this->db->where('TB_06_Articulo_Articulo_Codigo', mysql_real_escape_string($codigo_producto));
-		$this->db->where('TB_22_Factura_Temporal_Factura_Temporal_id', mysql_real_escape_string($facturaTemp_codigo));
-		$this->db->update('TB_23_Articulos_Factura_Temporal' ,$data);
-	}*/
-	
+	function agregarArticuloCambioCodigo($cambio, $cambiado, $descripcionCambiado, $abonado, $descripcionAbonado, $cantidad){
+		$datos = array(
+						'Articulo_Cambio' => $cambiado,
+						'Descripcion_Cambio' => $descripcionCambiado,
+						'Articulo_Abonado' => $abonado,
+						'Descripcion_Abonado' => $descripcionAbonado,
+						'Cantidad' => $cantidad,
+						'Cambio_Codigo' => $cambio
+						);
+		$this->db->insert('tb_36_articulos_cambio_codigo', $datos);
+	}
 	
 	
 } //FIN DE LA CLASE
