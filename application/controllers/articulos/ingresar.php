@@ -43,10 +43,10 @@ class ingresar extends CI_Controller {
 		$cantidad_Articulos = $this->input->post('articulos_cantidad');
 		$cantidad_Defectuosa = $this->input->post('articulos_cantidad_defectuoso');
 		$descuento_Articulo = $this->input->post('descuento');
-		$this->do_upload($codigo_Articulo); // aqui jala la imagen 
-		$exento_articulo = $this->input->post('exento');
-		$familia_articulo = $this->input->post('familia');	
 		$empresa_Articulo = $this->input->post('sucursal');
+		$this->do_upload($codigo_Articulo.$empresa_Articulo); // aqui jala la imagen 
+		$exento_articulo = $this->input->post('exento');
+		$familia_articulo = $this->input->post('familia');			
 		$costo_Articulo = $this->input->post('costo');
 		$precio1_Articulo = $this->input->post('precio1');
 		$precio2_Articulo = $this->input->post('precio2');
@@ -402,8 +402,8 @@ class ingresar extends CI_Controller {
 						$imagen = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
 						$cod_brasil = $worksheet->getCellByColumnAndRow(14, $row)->getValue();
 						
-						//Revisamos si el codigo es numerico
-						if(!is_numeric($codigo)||$this->articulo->existe_Articulo($codigo,$sucursal)){
+						//Revisamos si el codigo existe
+						if($this->articulo->existe_Articulo($codigo,$sucursal)){
 							array_push($erroresCodigo, $codigo);
 						}
 						//Revisamos que el costo sea numerico

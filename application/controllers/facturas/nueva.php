@@ -65,30 +65,26 @@ class nueva extends CI_Controller {
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['codigo'])&&isset($_POST['cedula'])){
 			$codigo_articulo = $_POST['codigo'];
-			if(is_numeric($codigo_articulo)){
-				$cedula = $_POST['cedula'];
-				if(is_numeric($codigo_articulo)&&$this->cliente->existe_Cliente($cedula)){
-					include '/../get_session_data.php';				
-					if($this->articulo->existe_Articulo($codigo_articulo,$data['Sucursal_Codigo'])){
-						if($articulo = $this->articulo->getArticuloArray($codigo_articulo, $cedula, $data['Sucursal_Codigo'])){
-							if($articulo['inventario'] > 0){
-								$retorno['status'] = 'success';
-								$retorno['articulo'] = $articulo;
-								unset($retorno['error']);
-							}else{
-								$retorno['error'] = '6'; //No tiene inventario
-							}
+			$cedula = $_POST['cedula'];
+			if($this->cliente->existe_Cliente($cedula)){
+				include '/../get_session_data.php';				
+				if($this->articulo->existe_Articulo($codigo_articulo,$data['Sucursal_Codigo'])){
+					if($articulo = $this->articulo->getArticuloArray($codigo_articulo, $cedula, $data['Sucursal_Codigo'])){
+						if($articulo['inventario'] > 0){
+							$retorno['status'] = 'success';
+							$retorno['articulo'] = $articulo;
+							unset($retorno['error']);
 						}else{
-							$retorno['error'] = '5'; //No existe articulo
+							$retorno['error'] = '6'; //No tiene inventario
 						}
 					}else{
 						$retorno['error'] = '5'; //No existe articulo
 					}
 				}else{
-					$retorno['error'] = '4'; //Cedula no valida o no existe cliente
+					$retorno['error'] = '5'; //No existe articulo
 				}
 			}else{
-				$retorno['error'] = '3'; //Codigo vacio o no valido
+				$retorno['error'] = '4'; //Cedula no valida o no existe cliente
 			}
 		}else{
 			$retorno['error'] = '2'; //Error en la URL
@@ -113,7 +109,7 @@ class nueva extends CI_Controller {
 	{
 		//Solo vamos a guardar articulos que esten en el sistema
 		//Los articulos genericos seran ingresados solo en la factura final
-		$articulo=$_GET['datosArticulo'];
+		$articulo = $_GET['datosArticulo'];
 		$articuloARRAY=explode(',',$articulo);
 		if($articuloARRAY[1]!='00') //Mientras no sea un producto generico
 		{$flag = $this->factura->agregarArticuloFactura($articuloARRAY);}

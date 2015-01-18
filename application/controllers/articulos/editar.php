@@ -235,7 +235,7 @@ class editar extends CI_Controller {
  
  function actualizarArticulos()
  {
-	print_r($_POST);
+	//print_r($_POST);
 	//print_r($_FILES);
 	if(isset($_POST['articulo_codigo'])&&
 		isset($_POST['sucursal'])){

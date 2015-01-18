@@ -58,13 +58,13 @@ function verificarCodigoArticulo(){
 		return false;
 	}
 	
-	if(!isNumber(codigo)){
+	/*if(!isNumber(codigo)){
 		codigoDisponible = false;
 		$("#status").html('');	
 		notyMsg('Código de Artículo no Válido', 'error');
 		deshabilitarCampos();
 		return false;
-	}
+	}*/
 	
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/articulos/registrar/es_Codigo_Utilizado',
@@ -98,7 +98,7 @@ function verificarCodigoArticulo(){
 }
 
 $(function() {
-    $("#articulo_codigo").numeric();
+    //$("#articulo_codigo").numeric();
 	$("#articulos_cantidad").numeric();
 	$("#articulos_cantidad_defectuoso").numeric();
 	$("#descuento").numeric();

@@ -3,8 +3,8 @@ var codigoAbonarValido = false; //Variable que controla si se cargo un producto 
 var sucursalYaIngresada = false; //Variable que controla si ya se cargo una sucursal
 
 $(function() {
-    $("#codigo_abonar").numeric();
-	$("#codigo_cambiar").numeric();
+    //$("#codigo_abonar").numeric();
+	//$("#codigo_cambiar").numeric();
 	$("#cantidad").numeric();
 });
 

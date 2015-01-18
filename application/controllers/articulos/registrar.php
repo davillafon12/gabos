@@ -430,8 +430,8 @@ function do_upload($cedula)
 						$imagen = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
 						$cod_brasil = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
 						
-						//Revisamos si el codigo es numerico
-						if(!is_numeric($codigo)||$this->articulo->existe_Articulo($codigo,$sucursal)){
+						//Revisamos si el codigo esta repetido
+						if($this->articulo->existe_Articulo($codigo,$sucursal)){
 							array_push($erroresCodigo, $codigo);
 						}
 						//Revisamos que el costo sea numerico

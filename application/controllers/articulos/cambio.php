@@ -35,7 +35,7 @@ class cambio extends CI_Controller {
 			$codigo = $_POST['codigo'];
 			$sucursal = $_POST['sucursal'];
 			if(trim($codigo)!='' && trim($sucursal)!=''){
-				if(is_numeric($codigo) && is_numeric($sucursal)){
+				if(is_numeric($sucursal)){
 					if($articulos = $this->articulo->existe_Articulo($codigo,$sucursal)){
 						foreach($articulos as $articulo){
 							$art['descripcion'] = $articulo->Articulo_Descripcion;
@@ -107,7 +107,7 @@ class cambio extends CI_Controller {
 	
 	function articulosSonNumericos($articulos){
 		foreach($articulos as $articulo){
-			if(is_numeric($articulo->cambiar) && is_numeric($articulo->abonar) && is_numeric($articulo->cantidad)){
+			if(is_numeric($articulo->cantidad)){
 				//No pasa nada
 			}else{
 				return false;

@@ -385,7 +385,7 @@ class caja extends CI_Controller {
 		fclose($myfile);
 		
 		
-		file_put_contents('application/logs/devolverInventario.txt', "--Entro\n", FILE_APPEND);
+		//file_put_contents('application/logs/devolverInventario.txt', "--Entro\n", FILE_APPEND);
 		if(isset($_POST['consecutivo'])&&isset($_POST['items'])){
 			$consecutivo = $_POST['consecutivo'];
 			include '/../get_session_data.php';	
@@ -404,38 +404,40 @@ class caja extends CI_Controller {
 									$cantidadDevolver = $cantidadClient-$cantidadBD;
 									//SUMA AL INVENTARIO
 									$this->articulo->actualizarInventarioSUMA($articulo['co'], $cantidadDevolver, $data['Sucursal_Codigo']);
-									file_put_contents('application/logs/devolverInventario.txt', "--SE SUMO AL INVENTARIO D:$cantidadDevolver BD:$cantidadBD CL:$cantidadClient\n", FILE_APPEND);
+									//file_put_contents('application/logs/devolverInventario.txt', "--SE SUMO AL INVENTARIO D:$cantidadDevolver BD:$cantidadBD CL:$cantidadClient\n", FILE_APPEND);
 								}elseif($cantidadBD>$cantidadClient){
 									$cantidadDevolver = $cantidadBD-$cantidadClient;
 									//RESTAR AL INVENTARIO
 									$this->articulo->actualizarInventarioRESTA($articulo['co'], $cantidadDevolver, $data['Sucursal_Codigo']);
-									file_put_contents('application/logs/devolverInventario.txt', "--SE RESTO AL INVENTARIO D:$cantidadDevolver BD:$cantidadBD CL:$cantidadClient\n", FILE_APPEND);
+									//file_put_contents('application/logs/devolverInventario.txt', "--SE RESTO AL INVENTARIO D:$cantidadDevolver BD:$cantidadBD CL:$cantidadClient\n", FILE_APPEND);
 								}
 							}else{
 								//No hay que hacer nada
-								file_put_contents('application/logs/devolverInventario.txt', "--NO CAMBIO\n", FILE_APPEND);
+								//file_put_contents('application/logs/devolverInventario.txt', "--NO CAMBIO\n", FILE_APPEND);
 							}
 						}else{//Se agrego Articulo en edicion
 							$this->articulo->actualizarInventarioSUMA($articulo['co'], $articulo['ca'], $data['Sucursal_Codigo']);
-							file_put_contents('application/logs/devolverInventario.txt', "--SE SUMO NUEVO\n", FILE_APPEND);
+							//file_put_contents('application/logs/devolverInventario.txt', "--SE SUMO NUEVO\n", FILE_APPEND);
 						}
 					}else{
 						//Si el articulo no existe no hacer nada
-						file_put_contents('application/logs/devolverInventario.txt', "--INEXISTENTE\n", FILE_APPEND);
+						//file_put_contents('application/logs/devolverInventario.txt', "--INEXISTENTE\n", FILE_APPEND);
 					}
 				}else{
 					//Si el articulo no existe no hacer nada
-						file_put_contents('application/logs/devolverInventario.txt', "--GENERICO\n", FILE_APPEND);
+						//file_put_contents('application/logs/devolverInventario.txt', "--GENERICO\n", FILE_APPEND);
 				}				
 			}
 			//Revisar si algun producto fue eliminado en edicion
 			$this->checkIfItemsWasDeletedAndRestore($items, $consecutivo, $data['Sucursal_Codigo']);
 			
-		}else{file_put_contents('application/logs/devolverInventario.txt', "--URL MALA\n", FILE_APPEND);}		
+		}else{
+			//file_put_contents('application/logs/devolverInventario.txt', "--URL MALA\n", FILE_APPEND);
+		}		
 	}
 	
 	function checkIfItemsWasDeletedAndRestore($ItemsCliente, $consecutivo, $sucursal){
-		file_put_contents('application/logs/devolverInventario.txt', "--SE VERIFICA CAMBIOS\n", FILE_APPEND);
+		//file_put_contents('application/logs/devolverInventario.txt', "--SE VERIFICA CAMBIOS\n", FILE_APPEND);
 		/*$articulosBD = $this->factura->getArticulosFactura($consecutivo, $sucursal); //obtenemos los productos de la factura
 		$articulosBD = makeArrayItemsOnlyByKey($articulosBD, 'Articulo_Factura_Codigo');
 		$ItemsClienteOnly = makeArrayItemsOnlyByKey($itemsArray, 'co');
@@ -459,11 +461,11 @@ class caja extends CI_Controller {
 				if($cantidadBD = $this->articulo->getCantidadArticuloFactura($item, $sucursal, $consecutivo)){
 					//Restamos eso de inventario
 					if($this->articulo->actualizarInventarioRESTA($item, $cantidadBD, $sucursal)=='3'){
-						file_put_contents('application/logs/devolverInventario.txt', "Articulo $item esta en la factura\n", FILE_APPEND);
-						file_put_contents('application/logs/devolverInventario.txt', "Salio bien\n", FILE_APPEND);
+						//file_put_contents('application/logs/devolverInventario.txt', "Articulo $item esta en la factura\n", FILE_APPEND);
+						//file_put_contents('application/logs/devolverInventario.txt', "Salio bien\n", FILE_APPEND);
 					}					
 				}else{
-					file_put_contents('application/logs/devolverInventario.txt', "Articulo $item no esta en la factura\n", FILE_APPEND);
+					//file_put_contents('application/logs/devolverInventario.txt', "Articulo $item no esta en la factura\n", FILE_APPEND);
 				}
 			}
 		}
@@ -497,7 +499,7 @@ class caja extends CI_Controller {
 		fwrite($myfile, '');
 		fclose($myfile);
 		
-		file_put_contents('application/logs/cambiarFactura.txt', "Entro\n", FILE_APPEND);
+		//file_put_contents('application/logs/cambiarFactura.txt', "Entro\n", FILE_APPEND);
 		if(isset($_POST['head'])&&isset($_POST['items'])&&isset($_POST['consecutivo'])){
 		    //Obtener las dos partes del post
 			$info_factura = $_POST['head'];
@@ -522,9 +524,9 @@ class caja extends CI_Controller {
 							
 			//ELIMINAMOS LOS PRODUCTOS
 			$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
-			file_put_contents('application/logs/cambiarFactura.txt', "Elimino los articulos\n", FILE_APPEND);
+			//file_put_contents('application/logs/cambiarFactura.txt', "Elimino los articulos\n", FILE_APPEND);
 			$this->factura->actualizarFacturaHead($datosHead, $consecutivo, $data['Sucursal_Codigo']);
-			file_put_contents('application/logs/cambiarFactura.txt', "Actualiza la factura $consecutivo\n", FILE_APPEND);
+			//file_put_contents('application/logs/cambiarFactura.txt', "Actualiza la factura $consecutivo\n", FILE_APPEND);
 			/*if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'])){
 				$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
 				$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
@@ -538,32 +540,32 @@ class caja extends CI_Controller {
 			//$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
 			//LOS VOLVEMOS A AGREGAR LOS NUEVOS
 			$cliente = $this->factura->getCliente($consecutivo, $data['Sucursal_Codigo']);
-			file_put_contents('application/logs/cambiarFactura.txt', "Cliente $cliente\n", FILE_APPEND);
+			//file_put_contents('application/logs/cambiarFactura.txt', "Cliente $cliente\n", FILE_APPEND);
 			$vendedor = $this->factura->getVendedor($consecutivo, $data['Sucursal_Codigo']);
-			file_put_contents('application/logs/cambiarFactura.txt', "Vendedor $vendedor\n", FILE_APPEND);
-			print_r($items_factura);
+			//file_put_contents('application/logs/cambiarFactura.txt', "Vendedor $vendedor\n", FILE_APPEND);
+			//print_r($items_factura);
 			$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
-			file_put_contents('application/logs/cambiarFactura.txt', "Agrego los items\n", FILE_APPEND);
+			//file_put_contents('application/logs/cambiarFactura.txt', "Agrego los items\n", FILE_APPEND);
 			$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-			file_put_contents('application/logs/cambiarFactura.txt', "Actualizo costos\n", FILE_APPEND);
+			//file_put_contents('application/logs/cambiarFactura.txt', "Actualizo costos\n", FILE_APPEND);
 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_edicion');
 		
 		}
 		else{
-			file_put_contents('application/logs/cambiarFactura.txt', "--MAL URL\n", FILE_APPEND);
+			//file_put_contents('application/logs/cambiarFactura.txt', "--MAL URL\n", FILE_APPEND);
 		} //Numero de error mal post	
 	}
 	
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
 		foreach($items_factura as $item){
-		file_put_contents('application/logs/cambiarFactura.txt', "--Se valora ".$item['co']."\n", FILE_APPEND);
+		//file_put_contents('application/logs/cambiarFactura.txt', "--Se valora ".$item['co']."\n", FILE_APPEND);
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico					
 					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
 			}else{ //Si es normal					
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
-					file_put_contents('application/logs/cambiarFactura.txt', "--Se agrega ".$item['co']."\n", FILE_APPEND);
+					//file_put_contents('application/logs/cambiarFactura.txt', "--Se agrega ".$item['co']."\n", FILE_APPEND);
 					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
@@ -631,8 +633,8 @@ class caja extends CI_Controller {
 								$facturaHEAD['error']='22';
 								//Factura vencida
 							}							
-							file_put_contents('application/logs/dias.txt', "Proforma: $fecha_proforma\n", FILE_APPEND);
-							file_put_contents('application/logs/dias.txt', "Actual: $Current_datetime\n", FILE_APPEND);
+							//file_put_contents('application/logs/dias.txt', "Proforma: $fecha_proforma\n", FILE_APPEND);
+							//file_put_contents('application/logs/dias.txt', "Actual: $Current_datetime\n", FILE_APPEND);
 						}else if($row->Proforma_Estado=='cobrada'){
 							$facturaHEAD['status']='error';
 							$facturaHEAD['error']='21';

@@ -27,11 +27,13 @@ function buscarArticulo(e, value, id){
 	}	
 	
 	//Validar si codigo es numerico
-	if(isNumber(value)){
+	/*if(isNumber(value)){
 		getArticulo(fila, value);
 	}else{
 		resetRow(fila, true);
-	}
+	}*/
+	
+	getArticulo(fila, value);
 }
 
 function getArticulo(fila, articulo){
