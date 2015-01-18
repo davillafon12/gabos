@@ -1,0 +1,49 @@
+<?php
+	$permisos = array(
+						'activar_empresa' => 'Activar Empresa',
+						'activar_familias' => 'Activar Familia',
+						'anular_recibos' => 'Anular Recibos',
+						'cambio_codigo_articulo' => 'Cambiar Código de Artículo',
+						'consultar_ventas' => 'Consultar Ventas',
+						'crear_factura' => 'Crear Factura',
+						'crear_proforma' => 'Crear Proforma',
+						'crear_retiros' => 'Retiros Parciales',
+						'entrar_notas' => 'Crear Notas Crédito',
+						'entrar_notas_d' => 'Crear Notas Débito',
+						'deposito_recibos' => 'Crear Deposito Recibos',
+						'desactivar_banco' => 'Desactivar Banco',
+						'desactivar_empresa' => 'Desactivar Empresa',
+						'desactivar_familias' => 'Desactivar Familias',
+						'editar_autorizacion' => 'Editar Autorizaciónes',
+						'editar_banco' => 'Editar Banco',
+						'editar_cliente' => 'Editar Cliente',
+						'editar_codigo' => 'Editar Codigo',
+						'editar_empresa' => 'Editar Empresa',
+						'editar_familias' => 'Editar Familias',
+						'editar_usuarios' => 'Editar Usuarios',
+						'entrada_familias' => 'Entrar a Familias',
+						'entrar_banco' => 'Entrar a Bancos',
+						'entrar_caja' => 'Entrar a Caja',
+						'entrar_configuracion' => 'Entrar a Configuración',
+						'entrar_empresa' => 'Entrar a Empresas',						
+						'entrar_recibos' => 'Entrar a recibos',
+						'ingreso_bodega' => 'Ingreso a Bodega',
+						'otros_cliente' => 'Editar Descuentos y Credito',
+						'registrar_articulo_individual' => 'Registro Individual Articulo',
+						'registrar_articulos_masivo' => 'Registro Masivo Articulo',
+						'registrar_banco' => 'Registrar Banco',
+						'registrar_cliente' => 'Registrar Cliente',
+						'registrar_empresa' => 'Registrar Empresa',
+						'registrar_familia' => 'Registrar Familia',
+						'registrar_usuarios' => 'Registrar Usuario',
+						'traspaso_individual_articulo' => 'Traspaso Individual Articulo',
+						'traspaso_articulos_masivo' => 'Traspaso Masivo Articulos',
+						'ver_autorizacion' => 'Ver Autorizaciones',
+						'ver_bitacora' => 'Ver Bitacora'						
+	);
+	
+	$permisosVendedor = array('crear_factura', 'crear_proforma', 'registrar_cliente', 'ver_autorizacion');
+	$permisosCajero = array('crear_factura', 'crear_proforma', 'registrar_cliente', 'entrar_caja', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas');
+	$permisosAdmin = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_articulo', 'registrar_articulos_masivo', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas', 'anular_recibos', 'deposito_recibos', 'entrar_notas_d', 'crear_retiros', 'ingreso_bodega', 'registrar_familia', 'cambio_codigo_articulo');
+	$permisosAvanz = array('activar_empresa', 'activar_familias', 'crear_factura', 'crear_proforma', 'desactivar_banco', 'desactivar_empresa', 'desactivar_familias', 'editar_autorizacion', 'editar_banco', 'editar_cliente', 'editar_codigo', 'editar_empresa', 'editar_familias', 'editar_usuarios', 'entrada_familias', 'entrar_banco', 'entrar_caja', 'entrar_empresa', 'otros_cliente', 'registrar_banco', 'registrar_cliente', 'registrar_empresa', 'entrar_configuracion', 'ver_bitacora', 'entrar_recibos', 'ver_autorizacion', 'entrar_notas', 'anular_recibos', 'deposito_recibos', 'entrar_notas_d', 'crear_retiros', 'cambio_codigo_articulo');
+?>

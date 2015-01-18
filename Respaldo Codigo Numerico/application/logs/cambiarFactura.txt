@@ -1,0 +1,11 @@
+Entro
+Elimino los articulos
+Actualiza la factura 60
+Cliente 445566789
+Vendedor 1
+--Se valora 23035
+--Se agrega 23035
+--Se valora 22785
+--Se agrega 22785
+Agrego los items
+Actualizo costos

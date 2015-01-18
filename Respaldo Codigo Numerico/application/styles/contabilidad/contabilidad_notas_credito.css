@@ -1,0 +1,282 @@
+.contenedor{
+	width: 1024px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	border: 1px #f2f2f2 solid;
+	-moz-box-shadow: 0px 0px 2px 0px #888888;
+	-webkit-box-shadow: 0px 0px 2px 0px #888888;
+	box-shadow: 0px 0px 2px 0px #888888;
+	padding: 10px;
+	overflow: hidden;
+}
+
+.contact { 
+	color: #000; 
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica;  
+    *padding: 7px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left:5px;
+}
+
+.input_uno{
+	width: 250px;
+	background-color: rgba(255, 255, 255, 0.4); 
+	border: 1px solid rgba(51, 51, 51, 0.15); 
+	*padding: 7px; 
+	font-family: Keffeesatz, Arial; 
+	color: #4b4b4b; 
+	font-size: 14px; 
+	-webkit-border-radius: 5px;	
+	*margin-top: 0px;
+	padding-left: 2px;
+}
+
+.selectores_facturas{
+	margin-bottom: 155px;
+}
+
+.div_facturas{
+	width: 450px;
+	height: 125px;
+	margin-bottom: 20px;
+	
+	float: left;
+	margin-left: 30px;
+}
+
+.cuerpo_cuadro{
+	width: 100%;
+	height: 100px;
+	border: 1px #f2f2f2 solid;
+	-moz-box-shadow: 0px 0px 2px 0px #888888;
+	-webkit-box-shadow: 0px 0px 2px 0px #888888;
+	box-shadow: 0px 0px 2px 0px #888888;
+	border: 1pt solid black;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.titulo_cuadro{ 
+	margin-left: 5px;
+	margin-bottom: 5px;
+}
+
+.tabla_facturas{
+	position: relative;
+	left: -3px;
+	width: 456px;
+	border-collapse:collapse;
+}
+
+.header{
+	background: #eeeeee; /* Old browsers */
+	background: -moz-linear-gradient(top,  #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #eeeeee 0%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #eeeeee 0%,#cccccc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #eeeeee 0%,#cccccc 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #eeeeee 0%,#cccccc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+	border-bottom: 1px solid black;
+	
+}
+
+.header th{
+	border-left: 1px solid black;
+}
+
+.titulo_header_tabla{
+	text-align: center;
+	font-size: 14px;
+}
+
+.div_productos{
+	width: 450px;
+	height: 400px;
+	margin-bottom: 20px;
+	
+	float: left;
+	margin-left: 30px;
+}
+
+.div_productos_seleccionados{
+	width: 450px;
+	height: 400px;
+	margin-bottom: 20px;
+	
+	float: right;
+	margin-right: 30px;
+}
+
+
+
+.tabla_productos{
+	position: relative;
+	left: -3px;
+	width: 456px;
+	border-collapse:collapse;
+}
+
+.tabla_productos_seleccionados{
+	position: relative;
+	left: -3px;
+	width: 456px;
+	border-collapse:collapse;
+}
+
+.cuerpo_cuadro_grande{
+	width: 100%;
+	height: 378px;
+	border: 1px #f2f2f2 solid;
+	-moz-box-shadow: 0px 0px 2px 0px #888888;
+	-webkit-box-shadow: 0px 0px 2px 0px #888888;
+	box-shadow: 0px 0px 2px 0px #888888;
+	border: 1pt solid black;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.div_botones_acciones{
+	position: relative;
+	width: 40px;
+	left: 493px;
+	top: -400px;
+	margin-bottom: -500px;
+	/* margin-top: 20px; */
+}
+
+.divisor_footer{
+	margin-top: 440px;
+}
+
+.footer_notas{
+	text-align: right;
+	margin-right: 20px;
+}
+
+.boton_generar{
+	background: #4b8df9;
+	/* display: inline-block; */
+	padding: 5px 10px 6px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
+	-webkit-box-shadow: 0 1px 3px #999;
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	/* position: relative; */
+	cursor: pointer;
+	font-size: 18px;
+	font-family: Verdana, Geneva, sans-serif;
+	/* left: 150px; */
+	/* bottom: 30px; */
+	margin-top: 10px;
+	/* float: right; */
+}
+
+.bordes_tabla_factura td{
+	border-bottom: 1pt solid #999999;
+}
+
+.bordes_tabla_factura:hover{
+	cursor: pointer;
+	background: #808080;
+}
+
+.bordes_tabla_factura{
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.bordes_tabla td{
+	*border-top: 2pt solid #999999;
+	border-bottom: 1pt solid #999999;
+}
+
+.bordes_tabla:hover{
+	cursor: pointer;
+	background: #808080;
+}
+
+.bordes_tabla{
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.bordes_tabla_creditar td{
+	border-bottom: 1pt solid #999999;
+}
+
+.bordes_tabla_creditar:hover{
+	cursor: pointer;
+	background: #808080;
+}
+
+.bordes_tabla_creditar{
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.celdas_tabla_cantidades{
+	text-align: center;
+	border-left: 1pt solid #999999;
+}
+
+.celdas_tabla_cantidades:hover{
+	cursor: text;
+	background: white;
+}
+
+.celdas_tabla{
+	text-align: center;
+}
+
+.celdas_tabla_producto_acreditar{
+	text-align: center;
+}
+
+.tirar-derecha{
+	text-align: right;
+}
+
+.tirar-derecha p{	
+	margin-right: 20px;
+}
+
+.filtro_codigo{
+	position: relative;
+	top: -132px;
+	left: 500px;
+	margin-bottom: -60px;
+}
+
+.ui-tooltip{
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica;
+}
+
+.titulo-cantidad{
+	cursor:help;
+}

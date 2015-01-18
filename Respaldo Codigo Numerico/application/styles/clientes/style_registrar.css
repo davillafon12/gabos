@@ -1,0 +1,418 @@
+/*
+http://www.freshdesignweb.com/beautiful-registration-form-with-html5-and-css3.html
+*/
+
+
+.form p.contact { 
+	font-size: 12px; 
+	margin:0px 0px 10px 0;
+	line-height: 14px; 
+	font-family:Arial, Helvetica; 
+}
+
+.form {
+	max-width: 1120px;
+	min-width: 1120px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	border: 1px #f2f2f2 solid;
+	-moz-box-shadow: 0px 0px 2px 0px #888888;
+	-webkit-box-shadow: 0px 0px 2px 0px #888888;
+	box-shadow: 0px 0px 2px 0px #888888;
+}
+
+/*.form input[type="text"] {
+ 	/*width: 200px; 
+}*/
+
+.form input[type="number"] {
+ width: 200; 
+}
+
+.form label { color: #000; font-weight:bold;font-size: 14px;font-family:Arial, Helvetica; }
+
+.form input, textarea { background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(51, 51, 51, 0.15); padding: 7px; font-family: Keffeesatz, Arial; color: #4b4b4b; font-size: 14px; -webkit-border-radius: 5px; margin-bottom: 15px; margin-top: -10px; }
+.form input:focus, textarea:focus { border: 1px solid #ff5400; background-color: rgba(255, 255, 255, 1); }
+
+.form input.buttom{ 
+	background: #4b8df9; 
+	display: inline-block; 
+	padding: 5px 10px 6px; 
+	*margin-top: 60px;  
+	color: #fbf7f7; 
+	text-decoration: none; 
+	font-weight: bold; 
+	line-height: 1; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	border-radius: 5px; 
+	-moz-box-shadow: 0 1px 3px #999; 
+	-webkit-box-shadow: 0 1px 3px #999; 
+	box-shadow: 0 1px 3px #999; 
+	text-shadow: 0 -1px 1px #222; 
+	border: none; 
+	*position: relative; 
+	cursor: pointer; 
+	font-size: 14px; 
+	font-family:Verdana, Geneva, sans-serif; 
+	*left:125px; 
+	*bottom:30px;
+}
+
+.form input.butto{ background: #4b8df9; display: inline-block; padding: 5px 10px 6px; margin-top: 20px;  color: #fbf7f7; text-decoration: none; font-weight: bold; line-height: 1; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 1px 3px #999; -webkit-box-shadow: 0 1px 3px #999; box-shadow: 0 1px 3px #999; text-shadow: 0 -1px 1px #222; border: none; position: relative; cursor: pointer; font-size: 14px; font-family:Verdana, Geneva, sans-serif; width:70px; height:17px}
+.form input.buttom:hover	{ background-color: #2a78f6; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.observaciones{
+	width: 430px; resize: none;
+	height: 150px; 
+	margin-top: 20px; 
+}
+
+.advertencia_longitud{
+	width: 400px;
+	height: 10px;
+	line-height: 10px;
+	font-family:Arial, Helvetica;
+	font-size: 12px;
+	position: relative;
+	top: -25px;
+}
+
+.status_2{
+position: relative;
+	
+    width: 170px;
+height: 25px;
+
+border: 1px #efbc6b solid;
+
+background-color: #fee7af;
+
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+
+-moz-box-shadow: 3px 3px 5px 0px #888888;
+-webkit-box-shadow: 3px 3px 5px 0px #888888;
+box-shadow: 3px 3px 5px 0px #888888;
+
+	color: #000; font-weight:bold;font-size: 14px;font-family:Arial, Helvetica;
+}
+
+.status_2 img{
+	position: relative;
+	top: 5px;
+	left: 5px;
+}
+
+.status_2 p{
+	position: relative;
+	top: -25px;
+	left: 27px;
+}
+
+.titulo{
+    color: #000; font-weight:bold;font-size: 16px;font-family:Arial, Helvetica;
+	margin-bottom:0px;
+}
+
+
+/*Diseñados Siviany Prendas Zamrora - David Villalobos Foncesa*/
+.labelMedium{
+    padding-left: 5px; 
+    padding-right: 10px; 
+    margin: 100px 0;
+}
+
+
+.labelMedium2{
+    padding-left: 5px; 
+    padding-right: 10px; 
+    margin: 100px 0;
+}
+.labelSmall{
+	padding-left: 5px; 
+    padding-right: 10px; 
+    margin: 100px 0;
+}
+
+.labelBig{
+	padding-left: 5px; 
+    padding-right: 10px; 
+    margin: 100px 0;
+}
+
+.input_Small{
+	width: 125px;
+}
+.input_Medium{
+	width: 200px;
+	padding-right: 50px; 
+}
+.input_Big{
+	width: 350px;
+}
+.input_Direccion{
+	width: 600px;
+}
+
+.recuadro{
+	margin: 10px;
+ 	border: 1px solid gray;
+ 	position: relative;
+
+}
+
+.recuadro2{
+	position: relative;
+	margin-bottom: -90px;
+	top: -176px;
+	margin-left: 10px;
+	width: 200px;
+	height: 210px;
+	border: 2px solid gray;
+	display: inline-block;
+}
+
+.recuadro3{
+	*position: absolute;
+	margin-top: 0px;
+	*margin-left:50px; 
+	*margin-bottom: 50px; 
+	width: 450px; 
+	height: 210px; 
+ 	border:2px solid gray;
+ 	display: inline-block;
+}
+
+.autorizacion1{
+	margin-top: 20px;
+	margin-left:50px; 
+	width: 450px; 
+	height: 250px; 
+ 	border:2px solid gray;
+ 	display: inline-block;
+}
+
+.autorizacion2{
+	margin-top: 20px;
+	margin-left:50px; 
+	width: 450px; 
+	height: 250px; 
+ 	border:2px solid gray;
+ 	display: inline-block;
+}
+
+
+.styleSelect{
+	color: #000; 
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica; 
+	padding: 5px 5px;
+}
+
+.picture{
+/*	position: absolute;
+	width: 80px; 
+	top: 20px;
+	right: 20px;
+	bottom: 50px; */
+
+}
+
+.descuento{
+	width: 10px; 
+}
+
+.montos-label{
+	display: block;
+	margin-top: 0px; 
+	margin-left: 10px; 
+	margin-bottom: 10px; 
+}
+
+.montos-input{
+	width: 30px;
+	margin-left: 10px;
+}
+
+.input-credito{
+	width: 150px;
+	margin-left: 10px;
+	text-align:right; 
+}
+
+
+.styleSelectPago{
+	color: #000; 
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica; 
+	padding: 5px 22px;
+	display: block;
+	margin-top: 0px; 
+	margin-left: 10px; 
+	margin-bottom: 10px;
+}
+
+.divButton{
+	width: 200px;
+	position: relative;
+	top: -115px;
+	margin-bottom: -120px;
+	left: 940px;
+}
+
+.close {
+	background: #606061;
+	color: #FFFFFF;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+	-moz-box-shadow: 1px 1px 3px #000;
+	-webkit-box-shadow: 1px 1px 3px #000;
+	box-shadow: 1px 1px 3px #000;
+}
+
+
+
+
+.div_bot_des {
+    *text-align: left;
+}
+
+.permisosPersona {
+    background: none repeat scroll 0 0 #59B659;
+    border: medium none;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #999999;
+    color: #FBF7F7;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Verdana,Geneva,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    margin-left: 5px;
+    padding: 5px 10px 6px;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #222222;
+}
+
+.boton_act_all2 {
+    background: none repeat scroll 0 0 #59B659;
+    border: medium none;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #999999;
+    color: #FBF7F7;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Verdana,Geneva,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    *margin-left: 5px;
+    padding: 5px 10px 6px;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #222222;
+}
+/*
+*::-moz-selection {
+    background: none repeat scroll 0 0 #837EC9;
+
+    */
+.boton_volver{ 
+	background: #4b8df9; 
+	/*display: inline-block;*/
+	padding: 5px 10px 6px; 
+	color: #fbf7f7; 
+	text-decoration: none; 
+	font-weight: bold; 
+	line-height: 1; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	border-radius: 5px; 
+	-moz-box-shadow: 0 1px 3px #999; 
+	-webkit-box-shadow: 0 1px 3px #999; 
+	box-shadow: 0 1px 3px #999; 
+	text-shadow: 0 -1px 1px #222; 
+	border: none; 
+	*position: relative; 
+	cursor: pointer; 
+	font-size: 14px; 
+	font-family:Verdana, Geneva, sans-serif; 
+	*left:150px;
+	*bottom:30px;
+}
+.demoHeaders {
+		margin-top: 2em;
+	}
+#dialog-link {
+	padding: .4em 1em .4em 20px;
+	text-decoration: none;
+	position: relative;
+}
+#dialog-link span.ui-icon {
+	margin: 5px 5px 5px 5px;
+	position: absolute;
+	left: .2em;
+	top: 50%;
+	margin-top: -8px;
+}
+#icons {
+	margin: 0;
+	padding: 0;
+}
+#icons li {
+	margin: 2px;
+	position: relative;
+	padding: 4px 0;
+	cursor: pointer;
+	float: left;
+	list-style: none;
+}
+#icons span.ui-icon {
+	float: left;
+	margin: 0 4px;
+}
+.fakewindowcontain .ui-widget-overlay {
+	position: absolute;
+}
+
+#dialog-link {
+	font: 62.5% "Trebuchet MS", sans-serif;
+	padding: .4em 1em .4em 20px;
+	text-decoration: none;
+	position: relative;
+}
+#dialog-link span.ui-icon {
+	margin: 0 5px 0 0;
+	position: absolute;
+	left: .2em;
+	top: 50%;
+	margin-top: -8px;
+}
+
+.estado-div{
+	margin-left: 5px;
+	margin-top: -15px;
+}
+
+.estado-div select{
+	margin-left: 22px;
+}
