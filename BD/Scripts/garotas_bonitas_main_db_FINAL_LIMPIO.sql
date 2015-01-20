@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-01-2015 a las 06:24:03
+-- Tiempo de generación: 20-01-2015 a las 04:34:48
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -23,50 +23,6 @@ CREATE DATABASE IF NOT EXISTS `garotas_bonitas_main_db` DEFAULT CHARACTER SET ut
 USE `garotas_bonitas_main_db`;
 
 
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tb_01_usuario`
---
-
-CREATE TABLE IF NOT EXISTS `tb_01_usuario` (
-  `Usuario_Codigo` int(11) NOT NULL AUTO_INCREMENT,
-  `Usuario_Nombre` varchar(20) DEFAULT NULL,
-  `Usuario_Apellidos` varchar(40) DEFAULT NULL,
-  `Usuario_Cedula` bigint(20) DEFAULT NULL,
-  `Usuario_Tipo_Cedula` varchar(10) DEFAULT NULL,
-  `Usuario_Celular` varchar(15) DEFAULT NULL,
-  `Usuario_Telefono` varchar(15) DEFAULT NULL,
-  `Usuario_Fecha_Ingreso` timestamp NULL DEFAULT NULL,
-  `Usuario_Fecha_Cesantia` timestamp NULL DEFAULT NULL,
-  `Usuario_Fecha_Recontratacion` timestamp NULL DEFAULT NULL,
-  `Usuario_Nombre_Usuario` varchar(20) DEFAULT NULL,
-  `Usuario_Observaciones` varchar(150) DEFAULT NULL,
-  `Usuario_Password` varchar(100) DEFAULT NULL,
-  `Usuario_Imagen_URL` varchar(100) DEFAULT NULL,
-  `Usuario_Correo_Electronico` varchar(30) DEFAULT NULL,
-  `Usuario_Rango` varchar(10) DEFAULT NULL,
-  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
-  PRIMARY KEY (`Usuario_Codigo`,`TB_02_Sucursal_Codigo`),
-  KEY `fk_TB_01_Usuario_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
-
-
---
--- Volcado de datos para la tabla `tb_01_usuario`
---
-
-INSERT INTO `tb_01_usuario` (`Usuario_Codigo`, `Usuario_Nombre`, `Usuario_Apellidos`, `Usuario_Cedula`, `Usuario_Tipo_Cedula`, `Usuario_Celular`, `Usuario_Telefono`, `Usuario_Fecha_Ingreso`, `Usuario_Fecha_Cesantia`, `Usuario_Fecha_Recontratacion`, `Usuario_Nombre_Usuario`, `Usuario_Observaciones`, `Usuario_Password`, `Usuario_Imagen_URL`, `Usuario_Correo_Electronico`, `Usuario_Rango`, `TB_02_Sucursal_Codigo`) VALUES
-(1, 'David', 'Villalobos Fonseca', 402040954, 'Nacional', '8327-5345', '2268-8368', '2014-02-02 00:00:00', NULL, NULL, 'David_test', 'Usuario testing', '49ff630e0642355953dece12a68da694', '402040954_0.png', 'davillafon12@gmail.com', 'avanzado', 0),
-(2, 'Siviany', 'Prendas Zamora', 401240584, 'Nacional', '85427454', '22374585', '2014-02-13 00:00:00', NULL, NULL, 'Siviany_Test', 'Usuario testing', '21232f297a57a5a743894a0e4a801fc3', '2.png', 'sprendas88@gmail.com', 'avanzado', 0),
-(3, 'David ', 'Villalobos', 402040952, 'nacional', '5555-5555', '6666-6666', '2014-07-17 00:00:00', NULL, '2014-10-16 23:30:34', 'villa', '', 'ed3f29fee9e28e36f7cdc8115e0642e9', '402040952_0.png', 'david@admin.cr', 'administra', 0),
-(4, 'Esteban', 'Prendas Zamora', 112010752, 'nacional', '8411-6368', '2278-5429', '2014-12-16 17:56:27', NULL, NULL, 'eprendas', '', 'c610d7eb88ac759067eac5a61b4957cc', 'Default.png', 'esteban@garotasbonitascr.com', 'avanzado', 0),
-(5, 'JUAN', 'VARGAS BARQUERO', 304860001, 'nacional', '8661-4624', '', '2014-12-16 22:46:23', NULL, NULL, 'jvargas', '', '6ea6df9407ae14873ffbfca3fd06ee03', 'Default.png', '', 'cajero', 0),
-(6, 'jose pablo', 'bonilla castillo', 113500583, 'nacional', '8775-1440', '8775-1440', '2015-01-03 18:38:41', NULL, NULL, 'jbonilla', '', 'ce871ab21a6c7ba65b04461eab26f166', 'Default.png', '', 'vendedor', 0),
-(7, 'ISMAEL OMAR', 'GUTIERREZ PEREZ', 114130256, 'nacional', '6173-3716', '2230-8812', '2015-01-03 18:51:38', NULL, NULL, 'igutierrez', '', 'c49931740ae86dd7e14ebd236a1b371b', 'Default.png', 'isma_35@live.com', 'vendedor', 0),
-(8, 'DIGNA', 'QUIROS CARVAJAL', 301900516, 'nacional', '8336-8704', '2254-7793', '2015-01-03 18:55:57', NULL, NULL, 'dquiros', '', 'dd5812769bed285f793b53c94aa436e5', 'Default.png', 'digna.quiros@gmail.com', 'vendedor', 0),
-(9, 'KEVIN', 'SANDOVAL ROJAS', 114510504, 'nacional', '7007-5997', '7007-5997', '2015-01-03 19:22:19', NULL, NULL, 'ksandoval', '', '1755fee3c0c83123560e782ec56d5205', 'Default.png', '', 'vendedor', 0);
 
 -- --------------------------------------------------------
 
@@ -98,6 +54,49 @@ CREATE TABLE IF NOT EXISTS `tb_02_sucursal` (
 
 INSERT INTO `tb_02_sucursal` (`Codigo`, `Sucursal_Cedula`, `Sucursal_Nombre`, `Sucursal_Telefono`, `Sucursal_Fax`, `Sucursal_Email`, `Sucursal_Direccion`, `Sucursal_Observaciones`, `Sucursal_Fecha_Ingreso`, `Sucursal_Fecha_Desactivacion`, `Sucursal_Creador`, `Sucursal_Estado`, `Sucursal_Administrador`, `Sucursal_leyenda_tributacion`) VALUES
 (0, '3-101-350785', 'Inversiones Garotas ', '2221-8127', '2223-4870', 'garotasbonitas@ice.co.cr', 'Avenida Segunda, Edificio Las Arcadas 4to piso, Frente al Ministerio de Hacienda', 'Testing', '2014-04-03 14:30:13', NULL, 'David_test', 1, 'Sin Definir', 'Autorizado mediante resolución No.11-97 de la D.G.T.D de fecha: 05/09/1997. La Gaceta No. 171');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_01_usuario`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_01_usuario` (
+  `Usuario_Codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `Usuario_Nombre` varchar(20) DEFAULT NULL,
+  `Usuario_Apellidos` varchar(40) DEFAULT NULL,
+  `Usuario_Cedula` bigint(20) DEFAULT NULL,
+  `Usuario_Tipo_Cedula` varchar(10) DEFAULT NULL,
+  `Usuario_Celular` varchar(15) DEFAULT NULL,
+  `Usuario_Telefono` varchar(15) DEFAULT NULL,
+  `Usuario_Fecha_Ingreso` timestamp NULL DEFAULT NULL,
+  `Usuario_Fecha_Cesantia` timestamp NULL DEFAULT NULL,
+  `Usuario_Fecha_Recontratacion` timestamp NULL DEFAULT NULL,
+  `Usuario_Nombre_Usuario` varchar(20) DEFAULT NULL,
+  `Usuario_Observaciones` varchar(150) DEFAULT NULL,
+  `Usuario_Password` varchar(100) DEFAULT NULL,
+  `Usuario_Imagen_URL` varchar(100) DEFAULT NULL,
+  `Usuario_Correo_Electronico` varchar(30) DEFAULT NULL,
+  `Usuario_Rango` varchar(10) DEFAULT NULL,
+  `TB_02_Sucursal_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Usuario_Codigo`,`TB_02_Sucursal_Codigo`),
+  KEY `fk_TB_01_Usuario_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+
+--
+-- Volcado de datos para la tabla `tb_01_usuario`
+--
+
+INSERT INTO `tb_01_usuario` (`Usuario_Codigo`, `Usuario_Nombre`, `Usuario_Apellidos`, `Usuario_Cedula`, `Usuario_Tipo_Cedula`, `Usuario_Celular`, `Usuario_Telefono`, `Usuario_Fecha_Ingreso`, `Usuario_Fecha_Cesantia`, `Usuario_Fecha_Recontratacion`, `Usuario_Nombre_Usuario`, `Usuario_Observaciones`, `Usuario_Password`, `Usuario_Imagen_URL`, `Usuario_Correo_Electronico`, `Usuario_Rango`, `TB_02_Sucursal_Codigo`) VALUES
+(1, 'David', 'Villalobos Fonseca', 402040954, 'Nacional', '8327-5345', '2268-8368', '2014-02-02 00:00:00', NULL, NULL, 'David_test', 'Usuario testing', '49ff630e0642355953dece12a68da694', '402040954_0.png', 'davillafon12@gmail.com', 'avanzado', 0),
+(2, 'Siviany', 'Prendas Zamora', 401240584, 'Nacional', '85427454', '22374585', '2014-02-13 00:00:00', NULL, NULL, 'Siviany_Test', 'Usuario testing', '21232f297a57a5a743894a0e4a801fc3', '2.png', 'sprendas88@gmail.com', 'avanzado', 0),
+(3, 'David ', 'Villalobos', 402040952, 'nacional', '5555-5555', '6666-6666', '2014-07-17 00:00:00', NULL, '2014-10-16 06:00:00', 'villa', '', 'ed3f29fee9e28e36f7cdc8115e0642e9', '402040952_0.png', 'david@admin.cr', 'administra', 0),
+(4, 'Esteban', 'Prendas Zamora', 112010752, 'nacional', '8411-6368', '2278-5429', '2014-12-16 17:56:27', NULL, NULL, 'eprendas', '', 'c610d7eb88ac759067eac5a61b4957cc', 'Default.png', 'esteban@garotasbonitascr.com', 'avanzado', 0),
+(5, 'JUAN', 'VARGAS BARQUERO', 304860001, 'nacional', '8661-4624', '', '2014-12-16 22:46:23', NULL, NULL, 'jvargas', '', '6ea6df9407ae14873ffbfca3fd06ee03', 'Default.png', '', 'cajero', 0),
+(6, 'jose pablo', 'bonilla castillo', 113500583, 'nacional', '8775-1440', '8775-1440', '2015-01-03 18:38:41', NULL, NULL, 'jbonilla', '', 'ce871ab21a6c7ba65b04461eab26f166', 'Default.png', '', 'vendedor', 0),
+(7, 'ISMAEL OMAR', 'GUTIERREZ PEREZ', 114130256, 'nacional', '6173-3716', '2230-8812', '2015-01-03 18:51:38', NULL, NULL, 'igutierrez', '', 'c49931740ae86dd7e14ebd236a1b371b', 'Default.png', 'isma_35@live.com', 'vendedor', 0),
+(8, 'DIGNA', 'QUIROS CARVAJAL', 301900516, 'nacional', '8336-8704', '2254-7793', '2015-01-03 18:55:57', NULL, NULL, 'dquiros', '', 'dd5812769bed285f793b53c94aa436e5', 'Default.png', 'digna.quiros@gmail.com', 'vendedor', 0),
+(9, 'KEVIN', 'SANDOVAL ROJAS', 114510504, 'nacional', '7007-5997', '7007-5997', '2015-01-03 19:22:19', NULL, NULL, 'ksandoval', '', '1755fee3c0c83123560e782ec56d5205', 'Default.png', '', 'vendedor', 0);
 
 -- --------------------------------------------------------
 
@@ -157,7 +156,7 @@ INSERT INTO `tb_03_cliente` (`Cliente_Cedula`, `Cliente_Nombre`, `Cliente_Apelli
 
 CREATE TABLE IF NOT EXISTS `tb_04_articulos_proforma` (
   `Articulo_Proforma_Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Articulo_Proforma_Codigo` varchar(45) DEFAULT NULL,
+  `Articulo_Proforma_Codigo` varchar(30) DEFAULT NULL,
   `Articulo_Proforma_Descripcion` varchar(45) DEFAULT NULL,
   `Articulo_Proforma_Cantidad` int(11) DEFAULT NULL,
   `Articulo_Proforma_Descuento` varchar(45) DEFAULT NULL,
@@ -192,7 +191,6 @@ CREATE TABLE IF NOT EXISTS `tb_05_familia` (
   KEY `fk_TB_05_Familia_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 -- --------------------------------------------------------
 
 --
@@ -200,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `tb_05_familia` (
 --
 
 CREATE TABLE IF NOT EXISTS `tb_06_articulo` (
-  `Articulo_Codigo` varchar(20) NOT NULL,
+  `Articulo_Codigo` varchar(30) NOT NULL,
   `Articulo_Descripcion` varchar(150) DEFAULT NULL,
   `Articulo_Codigo_Barras` varchar(45) DEFAULT NULL,
   `Articulo_Cantidad_Inventario` int(11) DEFAULT NULL,
@@ -250,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `tb_07_factura` (
 
 CREATE TABLE IF NOT EXISTS `tb_08_articulos_factura` (
   `Articulo_Factura_id` int(11) NOT NULL AUTO_INCREMENT,
-  `Articulo_Factura_Codigo` varchar(45) DEFAULT NULL,
+  `Articulo_Factura_Codigo` varchar(30) DEFAULT NULL,
   `Articulo_Factura_Descripcion` varchar(45) DEFAULT NULL,
   `Articulo_Factura_Cantidad` int(11) DEFAULT NULL,
   `Articulo_Factura_Descuento` varchar(45) DEFAULT NULL,
@@ -264,8 +262,7 @@ CREATE TABLE IF NOT EXISTS `tb_08_articulos_factura` (
   `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
   PRIMARY KEY (`Articulo_Factura_id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`),
   KEY `fk_TB_08_Articulos_Factura_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -285,8 +282,7 @@ CREATE TABLE IF NOT EXISTS `tb_09_compras` (
   PRIMARY KEY (`Id`),
   KEY `fk_TB_09_Bodega_TB_02_Sucursal1_idx` (`Sucursal`),
   KEY `fk_TB_09_Bodega_TB_01_Usuario1_idx` (`Usuario`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -326,12 +322,12 @@ CREATE TABLE IF NOT EXISTS `tb_11_precios` (
   `Precio_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Precio_Numero` int(11) NOT NULL DEFAULT '0',
   `Precio_Monto` double NOT NULL DEFAULT '0',
-  `TB_06_Articulo_Articulo_Codigo` varchar(20) NOT NULL,
+  `TB_06_Articulo_Articulo_Codigo` varchar(30) NOT NULL,
   `TB_06_Articulo_TB_05_Familia_Familia_Codigo` int(11) NOT NULL,
   `TB_06_Articulo_TB_02_Sucursal_Codigo` int(11) NOT NULL,
   PRIMARY KEY (`Precio_Id`,`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`,`TB_06_Articulo_TB_02_Sucursal_Codigo`),
   KEY `fk_TB_11_Precios_TB_06_Articulo1_idx` (`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`,`TB_06_Articulo_TB_02_Sucursal_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4250 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -349,11 +345,7 @@ CREATE TABLE IF NOT EXISTS `tb_12_transacciones` (
   `TB_01_Usuario_TB_02_Sucursal_Codigo` int(11) NOT NULL,
   PRIMARY KEY (`Trans_Codigo`,`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`),
   KEY `fk_TB_12_Transacciones_TB_01_Usuario1_idx` (`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=307 ;
-
---
--- Volcado de datos para la tabla `tb_12_transacciones`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -403,90 +395,89 @@ CREATE TABLE IF NOT EXISTS `tb_15_permisos` (
   `TB_01_Usuario_TB_02_Sucursal_Codigo` int(11) NOT NULL,
   PRIMARY KEY (`Permisos_Id`,`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`),
   KEY `fk_TB_15_Permisos_TB_01_Usuario1_idx` (`TB_01_Usuario_Usuario_Codigo`,`TB_01_Usuario_TB_02_Sucursal_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=622 ;
---
--- Volcado de datos para la tabla `tb_15_permisos`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 INSERT INTO `tb_15_permisos` (`Permisos_Id`, `Permisos_Area`, `Permisos_Value`, `TB_01_Usuario_Usuario_Codigo`, `TB_01_Usuario_TB_02_Sucursal_Codigo`) VALUES
-(623, 'activar_empresa', 1, 1, 0),
-(624, 'activar_familias', 1, 1, 0),
-(625, 'anular_recibos', 1, 1, 0),
-(626, 'cambio_codigo_articulo', 1, 1, 0),
-(627, 'crear_factura', 1, 1, 0),
-(628, 'crear_proforma', 1, 1, 0),
-(629, 'crear_retiros', 1, 1, 0),
-(630, 'entrar_notas', 1, 1, 0),
-(631, 'entrar_notas_d', 1, 1, 0),
-(632, 'deposito_recibos', 1, 1, 0),
-(633, 'desactivar_banco', 1, 1, 0),
-(634, 'desactivar_empresa', 1, 1, 0),
-(635, 'desactivar_familias', 1, 1, 0),
-(636, 'editar_autorizacion', 1, 1, 0),
-(637, 'editar_banco', 1, 1, 0),
-(638, 'editar_cliente', 1, 1, 0),
-(639, 'editar_codigo', 1, 1, 0),
-(640, 'editar_empresa', 1, 1, 0),
-(641, 'editar_familias', 1, 1, 0),
-(642, 'editar_usuarios', 1, 1, 0),
-(643, 'entrada_familias', 1, 1, 0),
-(644, 'entrar_banco', 1, 1, 0),
-(645, 'entrar_caja', 1, 1, 0),
-(646, 'entrar_configuracion', 1, 1, 0),
-(647, 'entrar_empresa', 1, 1, 0),
-(648, 'entrar_recibos', 1, 1, 0),
-(649, 'ingreso_bodega', 1, 1, 0),
-(650, 'otros_cliente', 1, 1, 0),
-(651, 'registrar_articulo_individual', 1, 1, 0),
-(652, 'registrar_articulos_masivo', 1, 1, 0),
-(653, 'registrar_banco', 1, 1, 0),
-(654, 'registrar_cliente', 1, 1, 0),
-(655, 'registrar_empresa', 1, 1, 0),
-(656, 'registrar_familia', 1, 1, 0),
-(657, 'registrar_usuarios', 1, 1, 0),
-(658, 'traspaso_individual_articulo', 1, 1, 0),
-(659, 'traspaso_articulos_masivo', 1, 1, 0),
-(660, 'ver_autorizacion', 1, 1, 0),
-(661, 'ver_bitacora', 1, 1, 0),
-(662, 'activar_empresa', 1, 4, 0),
-(663, 'activar_familias', 1, 4, 0),
-(664, 'anular_recibos', 1, 4, 0),
-(665, 'cambio_codigo_articulo', 1, 4, 0),
-(666, 'crear_factura', 1, 4, 0),
-(667, 'crear_proforma', 1, 4, 0),
-(668, 'crear_retiros', 1, 4, 0),
-(669, 'entrar_notas', 1, 4, 0),
-(670, 'entrar_notas_d', 1, 4, 0),
-(671, 'deposito_recibos', 1, 4, 0),
-(672, 'desactivar_banco', 1, 4, 0),
-(673, 'desactivar_empresa', 1, 4, 0),
-(674, 'desactivar_familias', 1, 4, 0),
-(675, 'editar_autorizacion', 1, 4, 0),
-(676, 'editar_banco', 1, 4, 0),
-(677, 'editar_cliente', 1, 4, 0),
-(678, 'editar_codigo', 1, 4, 0),
-(679, 'editar_empresa', 1, 4, 0),
-(680, 'editar_familias', 1, 4, 0),
-(681, 'editar_usuarios', 1, 4, 0),
-(682, 'entrada_familias', 1, 4, 0),
-(683, 'entrar_banco', 1, 4, 0),
-(684, 'entrar_caja', 1, 4, 0),
-(685, 'entrar_configuracion', 1, 4, 0),
-(686, 'entrar_empresa', 1, 4, 0),
-(687, 'entrar_recibos', 1, 4, 0),
-(688, 'ingreso_bodega', 1, 4, 0),
-(689, 'otros_cliente', 1, 4, 0),
-(690, 'registrar_articulo_individual', 1, 4, 0),
-(691, 'registrar_articulos_masivo', 1, 4, 0),
-(692, 'registrar_banco', 1, 4, 0),
-(693, 'registrar_cliente', 1, 4, 0),
-(694, 'registrar_empresa', 1, 4, 0),
-(695, 'registrar_familia', 1, 4, 0),
-(696, 'registrar_usuarios', 1, 4, 0),
-(697, 'traspaso_individual_articulo', 1, 4, 0),
-(698, 'traspaso_articulos_masivo', 1, 4, 0),
-(699, 'ver_autorizacion', 1, 4, 0),
-(700, 'ver_bitacora', 1, 4, 0);
+(2, 'activar_empresa', 1, 1, 0),
+(3, 'activar_familias', 1, 1, 0),
+(4, 'anular_recibos', 1, 1, 0),
+(5, 'cambio_codigo_articulo', 1, 1, 0),
+(6, 'consultar_ventas', 1, 1, 0),
+(7, 'crear_factura', 1, 1, 0),
+(8, 'crear_proforma', 1, 1, 0),
+(9, 'crear_retiros', 1, 1, 0),
+(10, 'entrar_notas', 1, 1, 0),
+(11, 'entrar_notas_d', 1, 1, 0),
+(12, 'deposito_recibos', 1, 1, 0),
+(13, 'desactivar_banco', 1, 1, 0),
+(14, 'desactivar_empresa', 1, 1, 0),
+(15, 'desactivar_familias', 1, 1, 0),
+(16, 'editar_autorizacion', 1, 1, 0),
+(17, 'editar_banco', 1, 1, 0),
+(18, 'editar_cliente', 1, 1, 0),
+(19, 'editar_codigo', 1, 1, 0),
+(20, 'editar_empresa', 1, 1, 0),
+(21, 'editar_familias', 1, 1, 0),
+(22, 'editar_usuarios', 1, 1, 0),
+(23, 'entrada_familias', 1, 1, 0),
+(24, 'entrar_banco', 1, 1, 0),
+(25, 'entrar_caja', 1, 1, 0),
+(26, 'entrar_configuracion', 1, 1, 0),
+(27, 'entrar_empresa', 1, 1, 0),
+(28, 'entrar_recibos', 1, 1, 0),
+(29, 'ingreso_bodega', 1, 1, 0),
+(30, 'otros_cliente', 1, 1, 0),
+(31, 'registrar_articulo_individual', 1, 1, 0),
+(32, 'registrar_articulos_masivo', 1, 1, 0),
+(33, 'registrar_banco', 1, 1, 0),
+(34, 'registrar_cliente', 1, 1, 0),
+(35, 'registrar_empresa', 1, 1, 0),
+(36, 'registrar_familia', 1, 1, 0),
+(37, 'registrar_usuarios', 1, 1, 0),
+(38, 'traspaso_individual_articulo', 1, 1, 0),
+(39, 'traspaso_articulos_masivo', 1, 1, 0),
+(40, 'ver_autorizacion', 1, 1, 0),
+(41, 'ver_bitacora', 1, 1, 0),
+(42, 'activar_empresa', 1, 4, 0),
+(43, 'activar_familias', 1, 4, 0),
+(44, 'anular_recibos', 1, 4, 0),
+(45, 'cambio_codigo_articulo', 1, 4, 0),
+(46, 'consultar_ventas', 1, 4, 0),
+(47, 'crear_factura', 1, 4, 0),
+(48, 'crear_proforma', 1, 4, 0),
+(49, 'crear_retiros', 1, 4, 0),
+(50, 'entrar_notas', 1, 4, 0),
+(51, 'entrar_notas_d', 1, 4, 0),
+(52, 'deposito_recibos', 1, 4, 0),
+(53, 'desactivar_banco', 1, 4, 0),
+(54, 'desactivar_empresa', 1, 4, 0),
+(55, 'desactivar_familias', 1, 4, 0),
+(56, 'editar_autorizacion', 1, 4, 0),
+(57, 'editar_banco', 1, 4, 0),
+(58, 'editar_cliente', 1, 4, 0),
+(59, 'editar_codigo', 1, 4, 0),
+(60, 'editar_empresa', 1, 4, 0),
+(61, 'editar_familias', 1, 4, 0),
+(62, 'editar_usuarios', 1, 4, 0),
+(63, 'entrada_familias', 1, 4, 0),
+(64, 'entrar_banco', 1, 4, 0),
+(65, 'entrar_caja', 1, 4, 0),
+(66, 'entrar_configuracion', 1, 4, 0),
+(67, 'entrar_empresa', 1, 4, 0),
+(68, 'entrar_recibos', 1, 4, 0),
+(69, 'ingreso_bodega', 1, 4, 0),
+(70, 'otros_cliente', 1, 4, 0),
+(71, 'registrar_articulo_individual', 1, 4, 0),
+(72, 'registrar_articulos_masivo', 1, 4, 0),
+(73, 'registrar_banco', 1, 4, 0),
+(74, 'registrar_cliente', 1, 4, 0),
+(75, 'registrar_empresa', 1, 4, 0),
+(76, 'registrar_familia', 1, 4, 0),
+(77, 'registrar_usuarios', 1, 4, 0),
+(78, 'traspaso_individual_articulo', 1, 4, 0),
+(79, 'traspaso_articulos_masivo', 1, 4, 0),
+(80, 'ver_autorizacion', 1, 4, 0),
+(81, 'ver_bitacora', 1, 4, 0);
 -- --------------------------------------------------------
 
 --
@@ -515,7 +506,7 @@ CREATE TABLE IF NOT EXISTS `tb_17_descuento_producto` (
   `Descuento_producto_id` int(11) NOT NULL AUTO_INCREMENT,
   `Descuento_producto_monto` double DEFAULT NULL,
   `Descuento_producto_porcentaje` double DEFAULT NULL,
-  `TB_06_Articulo_Articulo_Codigo` varchar(20) NOT NULL,
+  `TB_06_Articulo_Articulo_Codigo` varchar(30) NOT NULL,
   `TB_06_Articulo_TB_05_Familia_Familia_Codigo` int(11) NOT NULL,
   `TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
   `TB_02_Sucursal_Codigo` int(11) NOT NULL,
@@ -523,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `tb_17_descuento_producto` (
   KEY `fk_TB_21_Descuento_Producto_TB_06_Articulo1_idx` (`TB_06_Articulo_Articulo_Codigo`,`TB_06_Articulo_TB_05_Familia_Familia_Codigo`),
   KEY `fk_TB_21_Descuento_Producto_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`),
   KEY `fk_TB_21_Descuento_Producto_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -584,7 +575,7 @@ CREATE TABLE IF NOT EXISTS `tb_20_descuento_familia` (
   KEY `fk_TB_20_Descuento_familia_TB_05_Familia1_idx` (`TB_05_Familia_Familia_Codigo`,`TB_05_Familia_TB_02_Sucursal_Codigo`),
   KEY `fk_TB_20_Descuento_Familia_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`),
   KEY `fk_TB_20_Descuento_Familia_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -600,7 +591,7 @@ CREATE TABLE IF NOT EXISTS `tb_21_descuento_cliente` (
   PRIMARY KEY (`Descuento_cliente_id`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`),
   KEY `fk_TB_24_Descuento_Cliente_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`),
   KEY `fk_TB_24_Descuento_Cliente_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -614,7 +605,7 @@ CREATE TABLE IF NOT EXISTS `tb_22_banco` (
   `Banco_Comision_Porcentaje` float DEFAULT NULL,
   `Banco_Creado_Por` int(11) DEFAULT NULL,
   PRIMARY KEY (`Banco_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -656,7 +647,7 @@ CREATE TABLE IF NOT EXISTS `tb_24_credito` (
   `Credito_Cliente_Cedula` bigint(20) NOT NULL,
   PRIMARY KEY (`Credito_Id`,`Credito_Factura_Consecutivo`,`Credito_Sucursal_Codigo`,`Credito_Vendedor_Codigo`,`Credito_Vendedor_Sucursal`,`Credito_Cliente_Cedula`),
   KEY `fk_TB_24_Credito_TB_07_Factura1_idx` (`Credito_Factura_Consecutivo`,`Credito_Sucursal_Codigo`,`Credito_Vendedor_Codigo`,`Credito_Vendedor_Sucursal`,`Credito_Cliente_Cedula`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -672,7 +663,7 @@ CREATE TABLE IF NOT EXISTS `tb_25_maximo_credito_cliente` (
   PRIMARY KEY (`Credito_Cliente_Id`,`TB_03_Cliente_Cliente_Cedula`,`TB_02_Sucursal_Codigo`),
   KEY `fk_TB_25_Maximo_Credito_Cliente_TB_03_Cliente1_idx` (`TB_03_Cliente_Cliente_Cedula`),
   KEY `fk_TB_25_Maximo_Credito_Cliente_TB_02_Sucursal1_idx` (`TB_02_Sucursal_Codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -690,7 +681,7 @@ CREATE TABLE IF NOT EXISTS `tb_26_recibos_dinero` (
   `Credito` int(11) NOT NULL,
   PRIMARY KEY (`Consecutivo`,`Credito`),
   KEY `fk_TB_26_Recibos_Dinero_TB_24_Credito1_idx` (`Credito`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -722,7 +713,7 @@ CREATE TABLE IF NOT EXISTS `tb_27_notas_credito` (
 
 CREATE TABLE IF NOT EXISTS `tb_28_productos_notas_credito` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Codigo` varchar(20) DEFAULT NULL,
+  `Codigo` varchar(30) DEFAULT NULL,
   `Descripcion` varchar(150) DEFAULT NULL,
   `Cantidad_Bueno` int(11) DEFAULT NULL,
   `Cantidad_Defectuoso` int(11) DEFAULT NULL,
@@ -732,7 +723,7 @@ CREATE TABLE IF NOT EXISTS `tb_28_productos_notas_credito` (
   PRIMARY KEY (`Id`,`Nota_Credito_Consecutivo`,`Sucursal`),
   KEY `fk_TB_28_Productos_Notas_Credito_TB_27_Notas_Credito1_idx` (`Nota_Credito_Consecutivo`),
   KEY `fk_TB_28_Productos_Notas_Credito_TB_02_Sucursal1_idx` (`Sucursal`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -750,7 +741,7 @@ CREATE TABLE IF NOT EXISTS `tb_29_deposito_recibo` (
   `Credito` int(11) NOT NULL,
   PRIMARY KEY (`Id`,`Recibo`,`Credito`),
   KEY `fk_TB_29_Deposito_Recibo_TB_26_Recibos_Dinero1_idx` (`Recibo`,`Credito`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -778,16 +769,16 @@ CREATE TABLE IF NOT EXISTS `tb_30_notas_debito` (
 
 CREATE TABLE IF NOT EXISTS `tb_31_productos_notas_debito` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Codigo` varchar(45) DEFAULT NULL,
-  `Descripcion` varchar(45) DEFAULT NULL,
-  `Cantidad_Debitar` varchar(45) DEFAULT NULL,
-  `Precio_Unitario` varchar(45) DEFAULT NULL,
+  `Codigo` varchar(30) DEFAULT NULL,
+  `Descripcion` varchar(150) DEFAULT NULL,
+  `Cantidad_Debitar` int(11) DEFAULT NULL,
+  `Precio_Unitario` double DEFAULT NULL,
   `Nota_Debito_Consecutivo` int(11) NOT NULL,
   `Sucursal` int(11) NOT NULL,
   `Usuario` int(11) NOT NULL,
   PRIMARY KEY (`Id`,`Nota_Debito_Consecutivo`,`Sucursal`,`Usuario`),
   KEY `fk_TB_31_Productos_Notas_Debito_TB_30_Notas_Debito1_idx` (`Nota_Debito_Consecutivo`,`Sucursal`,`Usuario`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -805,7 +796,7 @@ CREATE TABLE IF NOT EXISTS `tb_32_tarjeta_recibos` (
   PRIMARY KEY (`Id`,`Recibo`,`Credito`,`Banco`),
   KEY `fk_TB_32_Tarjeta_Recibos_TB_26_Recibos_Dinero1_idx` (`Recibo`,`Credito`),
   KEY `fk_TB_32_Tarjeta_Recibos_TB_22_Banco1_idx` (`Banco`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -822,7 +813,7 @@ CREATE TABLE IF NOT EXISTS `tb_33_retiros_parciales` (
   PRIMARY KEY (`Id`),
   KEY `fk_TB_33_Retiros_Parciales_TB_01_Usuario1_idx` (`Usuario`),
   KEY `fk_TB_33_Retiros_Parciales_TB_02_Sucursal1_idx` (`Sucursal`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -840,6 +831,73 @@ CREATE TABLE IF NOT EXISTS `tb_34_bodega` (
   PRIMARY KEY (`Codigo`),
   KEY `fk_TB_34_Bodega_TB_01_Usuario1_idx` (`Usuario`),
   KEY `fk_TB_34_Bodega_TB_02_Sucursal1_idx` (`Sucursal`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_35_cambio_codigo`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_35_cambio_codigo` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Fecha` timestamp NULL DEFAULT NULL,
+  `Usuario` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `fk_TB_35_Cambio_Codigo_TB_01_Usuario1_idx` (`Usuario`),
+  KEY `fk_TB_35_Cambio_Codigo_TB_02_Sucursal1_idx` (`Sucursal`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_36_articulos_cambio_codigo`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_36_articulos_cambio_codigo` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Articulo_Cambio` varchar(30) DEFAULT NULL,
+  `Descripcion_Cambio` varchar(150) DEFAULT NULL,
+  `Articulo_Abonado` varchar(30) DEFAULT NULL,
+  `Descripcion_Abonado` varchar(150) DEFAULT NULL,
+  `Cantidad` int(11) DEFAULT NULL,
+  `Cambio_Codigo` int(11) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `fk_TB_36_Articulos_Cambio_Codigo_TB_35_Cambio_Codigo1_idx` (`Cambio_Codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_37_cierre_caja`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_37_cierre_caja` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Fecha` timestamp NULL DEFAULT NULL,
+  `Sucursal` int(11) NOT NULL,
+  `Usuario` int(11) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `fk_TB_37_Cierre_Caja_TB_02_Sucursal1_idx` (`Sucursal`),
+  KEY `fk_TB_37_Cierre_Caja_TB_01_Usuario1_idx` (`Usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_38_moneda_cierre_caja`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_38_moneda_cierre_caja` (
+  `Id` int(11) NOT NULL,
+  `Denominacion` int(11) DEFAULT NULL,
+  `Cantidad` int(11) DEFAULT NULL,
+  `Tipo` varchar(15) DEFAULT NULL,
+  `Moneda` varchar(15) DEFAULT NULL,
+  `Cierre_Caja` int(11) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `fk_TB_38_Moneda_Cierre_Caja_TB_37_Cierre_Caja1_idx` (`Cierre_Caja`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1046,7 +1104,33 @@ ALTER TABLE `tb_34_bodega`
   ADD CONSTRAINT `fk_TB_34_Bodega_TB_01_Usuario1` FOREIGN KEY (`Usuario`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_TB_34_Bodega_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-DELIMITER $$
+--
+-- Filtros para la tabla `tb_35_cambio_codigo`
+--
+ALTER TABLE `tb_35_cambio_codigo`
+  ADD CONSTRAINT `fk_TB_35_Cambio_Codigo_TB_01_Usuario1` FOREIGN KEY (`Usuario`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_35_Cambio_Codigo_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `tb_36_articulos_cambio_codigo`
+--
+ALTER TABLE `tb_36_articulos_cambio_codigo`
+  ADD CONSTRAINT `fk_TB_36_Articulos_Cambio_Codigo_TB_35_Cambio_Codigo1` FOREIGN KEY (`Cambio_Codigo`) REFERENCES `tb_35_cambio_codigo` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `tb_37_cierre_caja`
+--
+ALTER TABLE `tb_37_cierre_caja`
+  ADD CONSTRAINT `fk_TB_37_Cierre_Caja_TB_01_Usuario1` FOREIGN KEY (`Usuario`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_TB_37_Cierre_Caja_TB_02_Sucursal1` FOREIGN KEY (`Sucursal`) REFERENCES `tb_02_sucursal` (`Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `tb_38_moneda_cierre_caja`
+--
+ALTER TABLE `tb_38_moneda_cierre_caja`
+  ADD CONSTRAINT `fk_TB_38_Moneda_Cierre_Caja_TB_37_Cierre_Caja1` FOREIGN KEY (`Cierre_Caja`) REFERENCES `tb_37_cierre_caja` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ DELIMITER $$
 --
 -- Procedimientos
 --
