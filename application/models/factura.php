@@ -405,6 +405,42 @@ Class factura extends CI_Model
 		$this->db->delete('TB_08_Articulos_Factura'); 
 	}
 	
+	function getMontoTotalPago($sucursal, $consecutivo){
+		$this->db->where('Factura_Consecutivo', $consecutivo);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->from('tb_07_factura');
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    $query = $query->result();
+			foreach($query as $row){
+				return $row -> Factura_Monto_Total;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	function getMontoPagoTarjetaMixto($sucursal, $consecutivo){
+		$this->db->where('TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo', $consecutivo);
+		$this->db->where('TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->from('tb_23_mixto');
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    $query = $query->result();
+			foreach($query as $row){
+				return $row -> Mixto_Cantidad_Paga;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
 }
 
 

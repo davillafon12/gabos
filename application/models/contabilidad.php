@@ -388,6 +388,62 @@ Class contabilidad extends CI_Model
 			return $query->result();
 		}
 	}
+	
+	function getRetirosParcialesRangoFechas($sucursal, $inicio, $final){
+		$this->db->where('Fecha_Hora >', $inicio);
+		$this->db->where('Fecha_Hora <', $final);
+		$this->db->where('Sucursal', $sucursal);
+		$this->db->order_by('Fecha_Hora', 'asc'); 
+		$this->db->from('tb_33_retiros_parciales');		
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function getFacturasPagasTarjetaRangoFechasYBanco($sucursal, $banco, $inicio, $final){
+		/*
+			SELECT * FROM TB_07_Factura
+			JOIN TB_18_Tarjeta ON TB_07_Factura.Factura_Consecutivo = TB_18_Tarjeta.TB_07_Factura_Factura_Consecutivo
+			WHERE TB_07_Factura.Factura_Tipo_Pago = 'tarjeta'
+			OR TB_07_Factura.Factura_Tipo_Pago = 'mixto'
+			AND TB_07_Factura.TB_02_Sucursal_Codigo = 0
+			AND TB_18_Tarjeta.TB_22_Banco_Banco_Codigo
+		*/
+		/*$this->db->from('tb_07_factura');
+		$this->db->join('TB_18_Tarjeta', 'TB_07_Factura.Factura_Consecutivo = TB_18_Tarjeta.TB_07_Factura_Factura_Consecutivo');
+		$this->db->where('TB_07_Factura.Factura_Tipo_Pago', 'tarjeta');
+		$this->db->or_where('TB_07_Factura.Factura_Tipo_Pago', 'mixto');
+		$this->db->where('TB_07_Factura.TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('TB_18_Tarjeta.TB_22_Banco_Banco_Codigo', $banco);
+		$this->db->where('TB_07_Factura.Factura_Fecha_Hora >', $inicio);
+		$this->db->where('TB_07_Factura.Factura_Fecha_Hora <', $final);
+		$query = $this->db->get();*/
+		
+		$query = $this->db->query("
+			SELECT * FROM TB_07_Factura
+			JOIN TB_18_Tarjeta ON TB_07_Factura.Factura_Consecutivo = TB_18_Tarjeta.TB_07_Factura_Factura_Consecutivo
+			WHERE (TB_07_Factura.Factura_Tipo_Pago = 'tarjeta'
+			OR TB_07_Factura.Factura_Tipo_Pago = 'mixto')
+			AND TB_07_Factura.TB_02_Sucursal_Codigo = $sucursal
+			AND TB_18_Tarjeta.TB_22_Banco_Banco_Codigo = $banco
+			AND TB_07_Factura.Factura_Fecha_Hora > '$inicio'
+			AND TB_07_Factura.Factura_Fecha_Hora < '$final'
+		");
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
 }
 
 
