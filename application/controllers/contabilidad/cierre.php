@@ -9,6 +9,7 @@ class cierre extends CI_Controller {
 		$this->load->model('contabilidad','',TRUE);
 		$this->load->model('banco','',TRUE);
 		$this->load->model('factura','',TRUE);
+		$this->load->model('configuracion','',TRUE);
 	}
 
 	function index()
@@ -39,11 +40,8 @@ class cierre extends CI_Controller {
 		
 		$data['retirosParciales'] = $retirosParciales['retiros'];
 		$data['totalRecibosParciales'] = $retirosParciales['total'];
-		
-		$pagosDatafonos = $this->getPagosDatafonos($data['Sucursal_Codigo']);
-		
-		$data['datafonos'] = $pagosDatafonos['datafonos']; 
-		$data['totalDatafonos'] = $pagosDatafonos['totalDatafonos'];
+			
+		$data['pagoDatafonos'] = $this->getPagosDatafonos($data['Sucursal_Codigo']);
 		
 		$this->load->view('contabilidad/cierre_caja_view', $data);
 	}	
@@ -92,7 +90,7 @@ class cierre extends CI_Controller {
 	
 	function getPagosDatafonos($sucursal){
 		if(!$bancos = $this->banco->getBancos()){
-			return array('datafonos' => array(), 'totalDatafonos' => 0);
+			return array('datafonos' => array(), 'totalDatafonos' => 0, 'totalComision' => 0, 'totalRetencion' => 0);
 		}
 		
 		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($sucursal);
@@ -101,12 +99,17 @@ class cierre extends CI_Controller {
 		$fechaHoraActual = date("Y-m-d : H:i:s", now());
 		
 		$totalPagosTarjeta = 0;
+		$totalComisionFinal = 0;
+		$totalRetencionFinal = 0;
+		$procentajeRetencion = $this->configuracion->getPorRetencionHaciendaTarjeta();
 		
 		for($count = 0; $count < sizeOf($bancos); $count++){
+			$totalComision = 0;
+			$totalRetencion = 0;
+			$total = 0;
+						
+			//Pagos con tarjeta en facturas
 			if($facturasTarjeta = $this->contabilidad->getFacturasPagasTarjetaRangoFechasYBanco($sucursal, $bancos[$count]->Banco_Codigo, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
-				$totalComision = 0;
-				$total = 0;
-				
 				foreach($facturasTarjeta as $fac){
 					if($fac->Factura_Tipo_Pago == 'tarjeta'){
 						$totalPagado = $this->factura->getMontoTotalPago($sucursal, $fac->Factura_Consecutivo);
@@ -115,18 +118,32 @@ class cierre extends CI_Controller {
 						$totalPagado = $this->factura->getMontoPagoTarjetaMixto($sucursal, $fac->Factura_Consecutivo);
 						$porcentajeComision = $fac->Tarjeta_Comision_Banco;
 					}					
-					$totalComision = $totalComision + ($totalPagado * ($porcentajeComision/100));						
+					$totalComision = $totalComision + ($totalPagado * ($porcentajeComision/100));
+					$totalRetencion = $totalRetencion + ($totalPagado * ($procentajeRetencion/100));
+					$total = $total + $totalPagado;
+				}				
+			}
+			
+			//Pagos con tarjeta en recibos
+			if($recibos = $this->contabilidad->getRecibosPagadosConTarjetaRangoFecha($sucursal, $bancos[$count]->Banco_Codigo, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+				foreach($recibos as $recibo){
+					$totalPagado = $recibo->Recibo_Cantidad;
+					$porcentajeComision = $recibo->Comision_Por;
+					$totalComision = $totalComision + ($totalPagado * ($porcentajeComision/100));	
+					$totalRetencion = $totalRetencion + ($totalPagado * ($procentajeRetencion/100));
 					$total = $total + $totalPagado;
 				}
-				$bancos[$count]->Total_Comision = $totalComision;
-				$bancos[$count]->Total = $total;
-				$totalPagosTarjeta = $totalPagosTarjeta + $total;
-			}else{
-				$bancos[$count]->Total_Comision = 0;
-				$bancos[$count]->Total = 0;
-			}		
+			}
+			
+			
+			$totalPagosTarjeta = $totalPagosTarjeta + $total;
+			$totalComisionFinal = $totalComisionFinal + $totalComision;
+			$totalRetencionFinal = $totalRetencionFinal + $totalRetencion;
+			$bancos[$count]->Total_Comision = $totalComision;
+			$bancos[$count]->Total_Retencion = $totalRetencion;
+			$bancos[$count]->Total = $total;					
 		}
-		return array('datafonos' => $bancos, 'totalDatafonos' => $totalPagosTarjeta);
+		return array('datafonos' => $bancos, 'totalDatafonos' => $totalPagosTarjeta, 'totalComision' => $totalComisionFinal, 'totalRetencion' => $totalRetencionFinal);
 	}
 	
 }

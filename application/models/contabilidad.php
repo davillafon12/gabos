@@ -444,6 +444,36 @@ Class contabilidad extends CI_Model
 			return $query->result();
 		}
 	}
+	
+	function getRecibosPagadosConTarjetaRangoFecha($sucursal, $banco, $inicio, $final){
+		/*
+			SELECT tb_32_tarjeta_recibos.Comision_Por,
+					tb_26_recibos_dinero.Recibo_Cantidad,
+					tb_26_recibos_dinero.Recibo_Fecha
+			FROM tb_32_tarjeta_recibos
+			JOIN tb_26_recibos_dinero ON tb_26_recibos_dinero.Consecutivo = tb_32_tarjeta_recibos.Recibo
+			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_32_tarjeta_recibos.Credito
+			WHERE tb_24_credito.Credito_Sucursal_Codigo = 0
+			AND  tb_32_tarjeta_recibos.Banco = 2
+		*/
+		$this->db->select('tb_32_tarjeta_recibos.Comision_Por, tb_26_recibos_dinero.Recibo_Cantidad, tb_26_recibos_dinero.Recibo_Fecha');
+		$this->db->from('tb_32_tarjeta_recibos');
+		$this->db->join('tb_26_recibos_dinero', 'tb_26_recibos_dinero.Consecutivo = tb_32_tarjeta_recibos.Recibo');
+		$this->db->join('tb_24_credito', 'tb_24_credito.Credito_Id = tb_32_tarjeta_recibos.Credito');
+		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
+		$this->db->where('tb_32_tarjeta_recibos.Banco', $banco);
+		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha >', $inicio);
+		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha <', $final);
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
 }
 
 

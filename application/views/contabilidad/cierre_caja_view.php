@@ -199,21 +199,23 @@ PARA:
 						</td>
 						<td>
 							<table class="tabla-datafonos">
-								<tr><td colspan="3"><p class="titulo-2">Datáfonos</p></td></tr>
+								<tr><td colspan="4"><p class="titulo-2">Datáfonos</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Banco</p></td>
-									<td class="borde-abajo"><p class="parrafo">Monto Comisión</p></td>
+									<td class="borde-abajo"><p class="parrafo">Comisión</p></td>
+									<td class="borde-abajo"><p class="parrafo">Retención</p></td>
 									<td class="borde-abajo"><p class="parrafo">Total</p></td>
 								</tr>
 								<?php
-									if(sizeOf($datafonos)==0){
+									if(sizeOf($pagoDatafonos['datafonos'])==0){
 										echo "<tr><td colspan='3'><p class='parrafo'>No hay datáfonos registrados. . .</p></td></tr>";
 									}else{
-										foreach($datafonos as $datafono){
+										foreach($pagoDatafonos['datafonos'] as $datafono){
 											echo "
 												<tr>
 													<td><p class='parrafo' style='font-size: 11px;'>".$datafono->Banco_Codigo." - ".$datafono->Banco_Nombre."</p></td>
 													<td class='alg-right'><p class='parrafo'>₡".number_format($datafono->Total_Comision,2,",",".")."</p></td>
+													<td class='alg-right'><p class='parrafo'>₡".number_format($datafono->Total_Retencion,2,",",".")."</p></td>
 													<td class='alg-right'><p class='parrafo'>₡".number_format($datafono->Total,2,",",".")."</p></td>
 												</tr>
 											";
@@ -221,8 +223,10 @@ PARA:
 									}									
 								?>
 								<tr>
-									<td colspan="2" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
-									<td class="alg-right borde-arriba"><p class="parrafo">₡<?php echo number_format($totalDatafonos,2,",",".");?></p></td>
+									<td class="alg-right borde-arriba"><p class="parrafo">Totales:</p></td>	
+									<td class="alg-right borde-arriba"><p class="parrafo">₡<?php echo number_format($pagoDatafonos['totalComision'],2,",",".");?></p></td>
+									<td class="alg-right borde-arriba"><p class="parrafo">₡<?php echo number_format($pagoDatafonos['totalRetencion'],2,",",".");?></p></td>
+									<td class="alg-right borde-arriba"><p class="parrafo">₡<?php echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
 								</tr>
 							</table>
 						</td>
