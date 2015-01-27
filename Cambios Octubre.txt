@@ -37,7 +37,7 @@ LISTO-> Hacer ventana de cambio de codigo.
             cantidad
   
 
--> Ventana para usar facturas de garotas como compras de otras sucursales. (TODA FACTURA).
+LISTO -> Ventana para usar facturas de garotas como compras de otras sucursales. (TODA FACTURA).
 
 LISTO -> CARGA MASIVA PARA BODEGA
 LISTO -> CARGA MASIVA DE BODEGA A INVENTARIO
@@ -51,6 +51,7 @@ LISTO -> Ingreso individual y masivo de articulos sin consultar bodega
 Otros
 -> Habilitar impresion via HTML proforma, factura.
 -> Mostrar factura, proforma para impresion.
+LISTO -> Pasar la configuracion de XML a BD
 
 Esteban Correcciones
 -> Favor en la impresión de pago mixto indicarlo en la factura, desglosado cuanto en efectivo y cuanto en tarjeta

@@ -16,7 +16,7 @@ class registrar extends CI_Controller {
 	    parent::__construct(); 
 		$this->load->model('user','',TRUE);
 		$this->load->model('cliente','',TRUE);
-		$this->load->model('XMLParser','',TRUE);	
+		$this->load->model('configuracion','',TRUE);	
 		/*$conf_array = $this->XMLParser->getConfigArray();
 		$this->monto_minimo_defecto = $conf_array['monto_minimo_compra'];
 		$this->monto_maximo_defecto = $conf_array['monto_minimo_venta'];*/
@@ -233,7 +233,7 @@ class registrar extends CI_Controller {
 		$flag = true;
 		$contenedor = array();
 		$cont = 0;
-		$conf_array = $this->XMLParser->getConfigArray();
+		$conf_array = $this->configuracion->getConfiguracionArray();
 		$monto_minimo_defecto = $conf_array['monto_minimo_compra'];
 		$monto_maximo_defecto = $conf_array['monto_minimo_venta'];
 		foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {

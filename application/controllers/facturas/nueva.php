@@ -9,7 +9,7 @@ class nueva extends CI_Controller {
 		$this->load->model('factura','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
-		$this->load->model('XMLParser','',TRUE);
+		$this->load->model('configuracion','',TRUE);
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -27,7 +27,7 @@ class nueva extends CI_Controller {
 		//echo $this->factura->getConsecutivo($data['Sucursal_Codigo']);
 		//date_default_timezone_set("America/Costa_Rica");
 		//echo date("y/m/d : H:i:s", now());
-		$conf_array = $this->XMLParser->getConfigArray();
+		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
 		$this->load->view('facturas/view_nueva_factura', $data);	
 	}

@@ -1,9 +1,9 @@
-.form{
+/*.form{
 	margin: 0 auto; 
 	margin-bottom: 10px;
 	padding-left:10px;
 	width: 440px;
-	height: 460px;
+	*height: 460px;
 	border: 1px #f2f2f2 solid;
 	-moz-box-shadow: 0px 0px 2px 0px #888888;
 	-webkit-box-shadow: 0px 0px 2px 0px #888888;
@@ -123,7 +123,104 @@
 	position: relative;
 	top: -25px;
 	left: 27px;
+}*/
+
+.contenedor {
+	width: 720px;
+	margin: auto;
+	margin-bottom: 20px;
+	border: 1px #f2f2f2 solid;
+	-moz-box-shadow: 0px 0px 2px 0px #888888;
+	-webkit-box-shadow: 0px 0px 2px 0px #888888;
+	box-shadow: 0px 0px 2px 0px #888888;
+	padding: 10px;
+	overflow: hidden;
 }
 
+.contact {
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+	font-family: Arial, Helvetica;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 5px;
+}
 
+.input_uno {
+	width: 200px;
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid rgba(51, 51, 51, 0.15);
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
+	padding-left: 2px;
+}
 
+.input_dos {
+	width: 70px;
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid rgba(51, 51, 51, 0.15);
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
+	padding-left: 2px;
+	text-align: right;
+}
+
+.input_tres {
+	width: 40px;
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid rgba(51, 51, 51, 0.15);
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
+	padding-left: 2px;
+	text-align: right;
+}
+
+.recuadro-general{
+	width: 400px;
+	display: inline;
+}
+
+.recuadro-clientes{
+	width: 250px;
+	display: inline;
+	position: relative;
+	top: 39px;
+	margin-top: -40px;
+}
+
+.txt-right{
+	text-align: right;
+}
+
+.boton {
+	float: right;
+	background: #4b8df9;
+	display: inline-block;
+	padding: 5px 10px 6px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
+	-webkit-box-shadow: 0 1px 3px #999;
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
+	font-family: Verdana, Geneva, sans-serif;
+}
+
+td {
+	padding-top: 5px;
+}

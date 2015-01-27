@@ -1,0 +1,10 @@
+$(function(){
+	$("#cant_dec").numeric();
+	$("#compra_dolar").numeric();
+	$("#venta_dolar").numeric();
+	$("#compra_min").numeric();
+	$("#compra_inter").numeric();
+	$("#cant_ses").numeric();
+	$("#iva_cant").numeric();
+	$("#iva_ret").numeric();
+});

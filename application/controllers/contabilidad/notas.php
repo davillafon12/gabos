@@ -10,7 +10,7 @@ class notas extends CI_Controller {
 		$this->load->model('contabilidad','',TRUE);	
 		$this->load->model('factura','',TRUE);
 		$this->load->model('articulo','',TRUE);
-		$this->load->model('XMLParser','',TRUE);
+		$this->load->model('configuracion','',TRUE);
 	}
 
 	function index()
@@ -279,7 +279,7 @@ class notas extends CI_Controller {
 				$consecutivo = $this->getNextConsecutivoNotaDebito($data['Sucursal_Codigo']);
 				date_default_timezone_set("America/Costa_Rica");
 				$fecha = date("y/m/d : H:i:s", now());
-				$c_array = $this->XMLParser->getConfigArray();				
+				$c_array = $this->configuracion->getConfiguracionArray();				
 				
 				$this->contabilidad->crearNotaDebito($consecutivo, $fecha, $c_array['iva'], $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 				

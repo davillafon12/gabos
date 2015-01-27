@@ -111,7 +111,7 @@
 			<img class='icono' src=".$Ruta_Icono_Configuracion." alt='Configuracion' width='22' height='22'>
 			<a href='#' class='dir'>Configuraci&oacute;n</a>
 			<ul>
-				<li class='first_Level_2'><a href='".$Ruta_Base."configuracion'>General del sistema</a></li>
+				<li class='first_Level_2'><a href='".$Ruta_Base."config'>General del sistema</a></li>
 				<li><a href='#' class='dir'>Usuarios</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."usuarios/registrar>Registro</a></li>

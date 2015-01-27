@@ -6,8 +6,7 @@ class otros extends CI_Controller {
 		$this->load->model('user','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
-		$this->load->model('familia','',TRUE);
-		$this->load->model('XMLParser','',TRUE);	
+		$this->load->model('familia','',TRUE);	
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);

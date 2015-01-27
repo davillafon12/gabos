@@ -12,6 +12,8 @@ function cargarFactura(){
 		return false;
 	}
 	
+	resetFields();
+	
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/contabilidad/agregarComprasSucursal/cargarFactura',
 		type: "POST",		

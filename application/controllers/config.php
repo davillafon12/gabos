@@ -1,0 +1,122 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class config extends CI_Controller {
+
+	function __construct()
+	{
+		parent::__construct(); 
+		include 'get_session_data.php'; //Esto es para traer la informacion de la sesion
+		$this->load->model('user','',TRUE);	
+		$this->load->model('empresa','',TRUE);	
+		//$this->load->model('XMLParser','',TRUE);
+		$this->load->model('configuracion','',TRUE);
+		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+
+		if(!$permisos['entrar_configuracion'])
+		{	
+			redirect('accesoDenegado', 'location');	
+		}
+	}
+
+	function index()
+	{
+		include 'get_session_data.php';
+		//Traemos el array con toda la info
+		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+		$data['c_array'] = $this->configuracion->getConfiguracionArray();
+		$this->load->helper(array('form'));
+		$this->load->view('view_configuracion', $data);	
+	}
+	
+	function guardar()
+	{	
+		if(isset($_POST['email'])&&
+			isset($_POST['cant_dec'])&&
+			isset($_POST['compra_dolar'])&&
+			isset($_POST['venta_dolar'])&&
+			isset($_POST['compra_min'])&&
+			isset($_POST['compra_inter'])&&
+			isset($_POST['cant_ses'])&&
+			isset($_POST['iva_cant'])&&
+			isset($_POST['ret_cant'])&&
+			isset($_POST['sucursal'])){
+				$email = $_POST['email'];
+				$decimales = $_POST['cant_dec'];
+				$compra_dolar = $_POST['compra_dolar'];
+				$venta_dolar = $_POST['venta_dolar'];
+				$compra_minima = $_POST['compra_min'];
+				$compra_intermedia = $_POST['compra_inter'];
+				$tiempo_sesion = $_POST['cant_ses'];
+				$por_iva = $_POST['iva_cant'];
+				$por_retencion = $_POST['ret_cant'];
+				$sucursal_compras = $_POST['sucursal'];			
+				if(is_numeric($decimales)&&
+					is_numeric($compra_dolar)&&
+					is_numeric($venta_dolar)&&
+					is_numeric($compra_minima)&&
+					is_numeric($compra_intermedia)&&
+					is_numeric($tiempo_sesion)&&
+					is_numeric($por_iva)&&
+					is_numeric($por_retencion)&&
+					is_numeric($sucursal_compras)){
+					if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+						if($this->empresa->getEmpresa($sucursal_compras)){
+						
+							$this->configuracion->actualizarCorreoAdmin($email);
+							$this->configuracion->actualizarDecimales($decimales);
+							$this->configuracion->actualizarCompraDolar($compra_dolar);
+							$this->configuracion->actualizarVentaDolar($venta_dolar);
+							$this->configuracion->actualizarCompraMinima($compra_minima);
+							$this->configuracion->actualizarCompraIntermedia($compra_intermedia);
+							$this->configuracion->actualizarTiempoSesion($tiempo_sesion);
+							$this->configuracion->actualizarPorcentajeIVA($por_iva);
+							$this->configuracion->actualizarPorcentajeRetencion($por_retencion);
+							$this->configuracion->actualizarSucursalDefectoTraspasoCompras($sucursal_compras);
+							
+							redirect('config', 'refresh');	
+						}else{
+							//Sucursal no existe
+							echo "sucursal no existe";
+						}
+					}else{
+						//Correo electronico no valido
+						echo "correo electronico no valido";
+					}
+				}else{
+					//Datos numericos no validos
+					echo "Datos numericos invalidos";
+				}		
+		}else{
+			//URL MALA
+			echo "URL MALA";
+		}
+		/*$venta_min = $this->input->post('venta_min');
+		$compra_min = $this->input->post('compra_min');
+		$venta_dolar = $this->input->post('venta_dolar');
+		$compra_dolar = $this->input->post('compra_dolar');
+		$cant_dec = $this->input->post('cant_dec');
+		$email = $this->input->post('email');
+		$cant_ses = $this->input->post('cant_ses');
+		$iva_cant = $this->input->post('iva_cant');
+		//echo $email; 
+		$result = $this->XMLParser->saveXML($venta_min, $compra_min, $venta_dolar, $compra_dolar, $cant_dec, $email, $cant_ses, $iva_cant);		
+		include 'get_session_data.php'; //Esto es para traer la informacion de la sesion
+		$ruta_base_imagenes_script = base_url('application/images/scripts');
+		if($result)
+		{
+			$data['post_message']="<div class='status_2'><img src=".$ruta_base_imagenes_script."/tick.gif /><p class='text_status'>¡Se guardo correctamente!</div></p>";
+		}
+		else
+		{
+			$data['post_message']="<div class='status_2'><img src=".$ruta_base_imagenes_script."/error.gif /><p class='text_status'>¡No se guardo correctamente!</p></div>";
+		}
+		$conf_array = $this->XMLParser->getConfigArray();
+		$data['c_array'] = $conf_array;
+		$this->load->helper(array('form'));
+		$this->load->view('view_configuracion', $data);*/
+	}
+ 
+}// FIN DE LA CLASE
+
+
+?>

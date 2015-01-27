@@ -9,7 +9,7 @@ class caja extends CI_Controller {
 		$this->load->model('factura','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
-		$this->load->model('XMLParser','',TRUE);
+		$this->load->model('configuracion','',TRUE);
 		$this->load->model('banco','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
@@ -27,7 +27,7 @@ class caja extends CI_Controller {
 	{
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$this->load->helper(array('form'));
-		$conf_array = $this->XMLParser->getConfigArray();
+		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
 		$bancos = $this->banco->getBancos();
 		$data['bancos'] = $bancos;
