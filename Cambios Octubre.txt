@@ -55,3 +55,6 @@ Otros
 Esteban Correcciones
 -> Favor en la impresión de pago mixto indicarlo en la factura, desglosado cuanto en efectivo y cuanto en tarjeta
 -> En el caso de desampa, ellos llevan el consecutivo de garotas central, a la hora de facturar pasarlos como garotas.
+
+SENTENCIA SQL:
+ALTER TABLE `tb_02_sucursal` CHANGE `Sucursal_Nombre` `Sucursal_Nombre` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;

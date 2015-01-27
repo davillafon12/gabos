@@ -167,7 +167,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .permisos-label{
-	font-weight: 600 !important; 
+	font-weight: normal !important; 
 }
 
 .permisos-div{

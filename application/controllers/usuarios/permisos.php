@@ -2,6 +2,7 @@
 	$permisos = array(
 						'activar_empresa' => 'Activar Empresa',
 						'activar_familias' => 'Activar Familia',
+						'compras_sucursales' => 'Agregar Compras a Sucursales',
 						'anular_recibos' => 'Anular Recibos',
 						'cambio_codigo_articulo' => 'Cambiar Código de Artículo',
 						'consultar_ventas' => 'Consultar Ventas',

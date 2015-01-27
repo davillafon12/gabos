@@ -64,7 +64,7 @@
 			<img class='icono' src=".$Ruta_Icono_Contabilidad." alt='Contabilidad' width='22' height='22'>
 			<a href='#' class='dir'>Contabilidad</a>	
 			<ul>
-				<li class='first_Level_2'><a href='#'>Inventario</a></li>
+				<li class='first_Level_2'><a href=".$Ruta_Base."contabilidad/agregarComprasSucursal>Agregar Compras a Sucursales</a></li>
 				<li><a href='#' class='dir'>Recibos de Dinero</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."contabilidad/recibos>Crear</a></li>

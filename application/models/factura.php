@@ -153,7 +153,7 @@ Class factura extends CI_Model
 	}
 	
 	function getItemsFactura($consecutivo, $sucursal){
-		$this -> db -> select('Articulo_Factura_Cantidad, Articulo_Factura_Descuento, Articulo_Factura_Precio_Unitario, Articulo_Factura_Exento');
+		//$this -> db -> select('Articulo_Factura_Cantidad, Articulo_Factura_Descuento, Articulo_Factura_Precio_Unitario, Articulo_Factura_Exento');
 		$this -> db -> from('TB_08_Articulos_Factura');
 		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
 		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
