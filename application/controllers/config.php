@@ -10,6 +10,7 @@ class config extends CI_Controller {
 		$this->load->model('empresa','',TRUE);	
 		//$this->load->model('XMLParser','',TRUE);
 		$this->load->model('configuracion','',TRUE);
+		$this->load->model('cliente','',TRUE);
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['entrar_configuracion'])
@@ -116,6 +117,62 @@ class config extends CI_Controller {
 		$this->load->view('view_configuracion', $data);*/
 	}
  
+	function actualizarEstadoClientes(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		include 'get_session_data.php';
+		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+		if($permisos['actualizar_estado'])
+		{	
+			$fechaUltimaActualizacion = $this->configuracion->getFechaUltimaActualizacion();
+			date_default_timezone_set("America/Costa_Rica");
+			$fechaActual = now();
+			if(trim($fechaUltimaActualizacion)==''){
+				$fechaUltimaActualizacion = strtotime('01-01-1970');
+			}else{
+				$fechaUltimaActualizacion = strtotime($fechaUltimaActualizacion);
+			}			
+			$mesesPasados = (int)abs(($fechaActual - $fechaUltimaActualizacion)/(60*60*24*30));
+			
+			if($mesesPasados>=1){
+				if($clientes = $this->cliente->getClientes()){
+					$montoMinimo = $this->configuracion->getMontoMinimoCompra();
+					$montoIntermedio = $this->configuracion->getMontoIntermedioCompra();
+					foreach($clientes as $cliente){
+						//No valorar cliente contado y afiliado
+						if($cliente->Cliente_Cedula!='1'&&$cliente->Cliente_Cedula!='0'){
+							$totalCliente = $this->cliente->getMontoCompradoClienteRangoTiempo($cliente->Cliente_Cedula, $fechaUltimaActualizacion, $fechaActual);
+							if($montoMinimo > $totalCliente){
+								//Desactivar cliente
+								$this->cliente->actualizar($cliente->Cliente_Cedula, array('Cliente_Estado' => 'inactivo'));
+								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario desactivo al cliente $cliente->Cliente_Cedula",$data['Sucursal_Codigo'],'edicion');
+							}elseif($montoIntermedio > $totalCliente){
+								//Semiactivar cliente
+								$this->cliente->actualizar($cliente->Cliente_Cedula, array('Cliente_Estado' => 'semiactivo'));
+								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario semiactivo al cliente $cliente->Cliente_Cedula",$data['Sucursal_Codigo'],'edicion');
+							}else{
+								//Activar cliente
+								$this->cliente->actualizar($cliente->Cliente_Cedula, array('Cliente_Estado' => 'activo'));
+								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario activo al cliente $cliente->Cliente_Cedula",$data['Sucursal_Codigo'],'edicion');
+							}	
+						}					
+					}
+					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario actualizo el estado de los clientes",$data['Sucursal_Codigo'],'edicion');
+					$this->configuracion->actualizarUltimaActualizacionEstadoClientes(date('d-m-Y H:i:s', $fechaActual));
+					unset($retorno['error']);
+					$retorno['status'] = 'success';
+					$retorno['fecha'] = date('d-m-Y H:i:s', $fechaActual);
+				}else{
+					$retorno['error'] = '4'; //No se pudo cargar los clientes
+				}
+			}else{
+				$retorno['error'] = '3'; //No ha transcurrido un mes
+			}			
+		}else{
+			$retorno['error'] = '2'; //No tiene permiso para actualizar estado
+		}		
+		echo json_encode($retorno);
+	}
 }// FIN DE LA CLASE
 
 

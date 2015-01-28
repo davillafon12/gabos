@@ -180,7 +180,7 @@ PARA:
 				<fieldset class="recuadro-clientes">
 					<legend>Estado de clientes</legend>
 					<p class="contact">Última actualización:</p>
-					<p class="contact">
+					<p class="contact" id="fecha_actualizacion_estado">
 						<?php
 							if(trim($c_array['ultima_actualizacion_estado_clientes'])==''){
 								echo "Nunca";
@@ -192,6 +192,8 @@ PARA:
 					<input type="button" value="Actualizar Estado" class="boton" onclick="actualizarEstadoClientes()"/>
 				</fieldset>
 			</div>
+			
+			
 			
 				<!--<div id="timeout_show"></div>-->
         </div>		

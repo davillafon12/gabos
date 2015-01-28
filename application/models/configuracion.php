@@ -50,6 +50,54 @@
 			}
 		}
 		
+		function getMontoMinimoCompra(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'monto_minimo_compra_cliente');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return 99999999999999; //Si no hay envia un numero alto
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
+		function getMontoIntermedioCompra(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'monto_intermedio_compra_cliente');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return 99999999999999; //Si no hay envia un numero alto
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
+		function getFechaUltimaActualizacion(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'ultima_actualizacion_estado_clientes');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return null; 
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
 		function getConfiguracionArray(){
 			$this->db->from('tb_39_configuracion');
 			$query = $this->db->get();		
@@ -66,7 +114,7 @@
 				return $config;
 			}
 		}
-		
+				
 				
 		function actualizarCorreoAdmin($email){
 			$this->db->where('Parametro', 'correo_administracion');
@@ -116,6 +164,11 @@
 		function actualizarSucursalDefectoTraspasoCompras($sucursal_compras){
 			$this->db->where('Parametro', 'codigo_empresa_traspaso_compras');
 			$this->db->update('tb_39_configuracion', array('Valor'=>$sucursal_compras));
+		}
+		
+		function actualizarUltimaActualizacionEstadoClientes($fecha){
+			$this->db->where('Parametro', 'ultima_actualizacion_estado_clientes');
+			$this->db->update('tb_39_configuracion', array('Valor'=>$fecha));
 		}
 		
 	}
