@@ -19,7 +19,7 @@ Agregar
 LISTO-> Pagina para ingresar la confirmacion de deposito de un recibo por dinero (Cuando empleado toma dinero del recibo y lo deposita en el banco)
 		Lleva # de recibo, a cual banco y # de deposito
 LISTO-> Anulacion de recibos.
--> Agregar en configuracion general un boton para actualizar estado de los 
+LISTO-> Agregar en configuracion general un boton para actualizar estado de los 
    clientes, pedir contraseña y validar que no se haga en menos de un mes.
 LISTO-> Notas credito.
 LISTO-> Notas debito.
