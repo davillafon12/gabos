@@ -219,6 +219,43 @@ Class factura extends CI_Model
 		}
 	}
 	
+	function getFacturasHeadersImpresion($consecutivo, $sucursal){
+		/*//JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = TB_07_Factura.Factura_Vendedor_Codigo
+		$this -> db -> select("Factura_Consecutivo AS consecutivo, TB_03_Cliente_Cliente_Cedula AS cliente_ced, Factura_Nombre_Cliente AS cliente_nom, Factura_Monto_Total AS total, Factura_Tipo_Pago AS tipo, Factura_Moneda AS moneda, Factura_tipo_cambio AS cambio");
+		$this -> db -> from('TB_07_Factura');
+		$this -> db -> join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = TB_07_Factura.Factura_Vendedor_Codigo');
+		$this -> db -> where('TB_07_Factura.TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('TB_07_Factura.Factura_Consecutivo', $consecutivo);
+		$this-> db ->set("date_format(Factura_Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') AS fecha", FALSE);
+		//$this -> db -> limit(1);
+		$query = $this -> db -> get();*/
+		
+		$query = $this->db->query("
+			SELECT Factura_Consecutivo AS consecutivo, 
+				date_format(Factura_Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') AS fecha, 
+				TB_03_Cliente_Cliente_Cedula AS cliente_ced, 
+				Factura_Nombre_Cliente AS cliente_nom, 
+				Factura_Monto_Total AS total, 
+				Factura_Tipo_Pago AS tipo, 
+				Factura_Moneda AS moneda, 
+				Factura_tipo_cambio AS cambio, 
+				CONCAT_WS(' ', Usuario_Nombre, Usuario_Apellidos) AS vendedor   
+			FROM TB_07_Factura
+			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = TB_07_Factura.Factura_Vendedor_Codigo
+			WHERE TB_07_Factura.TB_02_Sucursal_Codigo = $sucursal
+			AND TB_07_Factura.Factura_Consecutivo = $consecutivo
+		");
+
+		if($query -> num_rows() != 0)
+		{
+		   return $query->result();
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
 	function getCliente($consecutivo, $sucursal){
 		$this -> db -> select('TB_03_Cliente_Cliente_Cedula');
 		$this -> db -> from('TB_07_Factura');
@@ -266,6 +303,24 @@ Class factura extends CI_Model
 	function getArticulosFactura($consecutivo, $sucursal){
 		//echo "entro";
 		$this -> db -> select('*');
+		$this -> db -> from('TB_08_Articulos_Factura');
+		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		   return $query->result();
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
+	function getArticulosFacturaImpresion($consecutivo, $sucursal){
+		//echo "entro";
+		$this -> db -> select('Articulo_Factura_Codigo AS codigo, Articulo_Factura_Descripcion AS descripcion, Articulo_Factura_Cantidad AS cantidad, Articulo_Factura_Descuento AS descuento, Articulo_Factura_Exento AS exento, Articulo_Factura_Precio_Unitario AS precio');
 		$this -> db -> from('TB_08_Articulos_Factura');
 		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);

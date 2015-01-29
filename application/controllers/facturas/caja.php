@@ -198,28 +198,28 @@ class caja extends CI_Controller {
 				//echo $this->creditoDisponible($consecutivo, $data['Sucursal_Codigo']);
 					if($this->creditoDisponible($consecutivo, $data['Sucursal_Codigo'])){
 						if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){							
-						$facturaBODY['status']='success';
-						
-						//Para efecto de impresion
-						//$facturaBODY['sucursal']=$data['Sucursal_Codigo'];
-						//$facturaBODY['tipoImpresion']='t';
-						
-						date_default_timezone_set("America/Costa_Rica");
-						$Current_datetime = date("y/m/d : H:i:s", now());
-						$datos = array(         
-							'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
-							'Factura_Fecha_Hora'=>$Current_datetime, 
-							'Factura_Estado'=>'cobrada'
-						);
-						
-						$this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
-						
-						//Agregamos tipo de pago
-						//Tarjeta, Deposito, Cheque y Mixto
-						$this->guardarTipoPago($tipoPago, $consecutivo, $data['Sucursal_Codigo']);
-						
-						
-						$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
+							$facturaBODY['status']='success';
+							
+							//Para efecto de impresion
+							$facturaBODY['sucursal']= $data['Sucursal_Codigo'];
+							$facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+							
+							date_default_timezone_set("America/Costa_Rica");
+							$Current_datetime = date("y/m/d : H:i:s", now());
+							$datos = array(         
+								'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
+								'Factura_Fecha_Hora'=>$Current_datetime, 
+								'Factura_Estado'=>'cobrada'
+							);
+							
+							$this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
+							
+							//Agregamos tipo de pago
+							//Tarjeta, Deposito, Cheque y Mixto
+							$this->guardarTipoPago($tipoPago, $consecutivo, $data['Sucursal_Codigo']);
+							
+							
+							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
 						}else{
 							$facturaBODY['status']='error';
 							$facturaBODY['error']='19'; //Error no existe esa factura
@@ -231,6 +231,10 @@ class caja extends CI_Controller {
 				}else{
 					if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){							
 						$facturaBODY['status']='success';
+						
+						//Para efecto de impresion
+						$facturaBODY['sucursal']= $data['Sucursal_Codigo'];
+						$facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 						
 						date_default_timezone_set("America/Costa_Rica");
 						$Current_datetime = date("y/m/d : H:i:s", now());

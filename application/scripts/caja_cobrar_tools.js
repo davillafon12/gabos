@@ -277,10 +277,11 @@ function enviarCobro(URL){
 				displayErrors(facturaHEAD[0].error);
 				$('#envio_factura').bPopup().close();
 			}else if(facturaHEAD[0].status==="success"){
-				$('#envio_factura').bPopup().close();																																																							
-				//window.open(location.protocol+'//'+document.domain+'/facturas/caja/imprimirFactura?consecutivo='+consecutivoActual+'&sucursal='+sucursal+'&tipo='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-				window.open(location.protocol+'//127.0.0.1:8080/index.html?consecutivo='+consecutivoActual+'&sucursal='+sucursal+'&tipo='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-			
+				$('#envio_factura').bPopup().close();
+				//imprimirFactura(facturaHEAD[0].token, 'f', consecutivoActual, facturaHEAD[0].sucursal, tipoImpresion);						
+				window.open(location.protocol+'//127.0.0.1:8080/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+				//alert("t="+facturaHEAD[0].token+"&d=f&n="+consecutivoActual+"&s="+facturaHEAD[0].sucursal+"&i="+tipoImpresion);
+				//console.log( "t="+facturaHEAD[0].token+"&d=f&n="+consecutivoActual+"&s="+facturaHEAD[0].sucursal+"&i="+tipoImpresion );
 				window.location = location.protocol+'//'+document.domain+'/facturas/caja';
 			}
 			}
@@ -294,6 +295,35 @@ function enviarCobro(URL){
 		}
 	});
 }
+
+/*function imprimirFactura(t, d, n, s, i){
+	$.ajax({
+		url : location.protocol+'//'+document.domain+"/impresion",
+		type: "GET",
+		data: {'t':t,'d':d,'n':n,'s':s,'i':i},		
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
+				if(facturaHEAD[0].status==="error"){
+					alert("Error");
+				}else if(facturaHEAD[0].status==="success"){
+					
+					ventana = window.open('http://127.0.0.1:8080');
+					ventana.factura = facturaHEAD[0];
+					//window.location = location.protocol+'//'+document.domain+'/facturas/caja';
+				}
+			}catch(e){
+				alert("Error e");
+				//notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+	 
+		}
+	});
+}*/
 
 function cambiarFactura(URL){
 	createJSON();
