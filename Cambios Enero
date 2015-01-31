@@ -8,6 +8,41 @@ Impresion A4
 -> Notas Credito
 -> Notas Debito
 -> Agregado de inventario a otras sucursales desde Garotas
--> Inventario
+-> Inventario *Reporte
 -> Proforma
+-> Clientes *Reporte
+
+Otros Cambios:
+-> Agregar apartado como tipo de pago, cliente deja bono (En factura decir cuanto abono y cuanto saldo).
+-> En retiro parcial agregar la parte de monedas y billetes, a partir de eso generar el total a retirar.
+-> Agregar en cierre de caja y parcial dolares (1,5,10) y convertir en colones.
+-> En cierre de caja y parcial agregar a cuanto se recibio el dolar, cargar por defecto compra dolar.
+-> En cierre de caja la base debe ser ingresada por el usuario.
+-> En caso de usuario administrador seleccionar sucursal a la que va a loguearse.
+-> Las autorizaciones las da administrador y usuario avanzado.
+-> Agregar deposito como tipo de pago de recibos por dinero.
+-> La cedula de residencia en usuario le faltan 3 espacios.
+-> La cedula de residencia en cliente quitar un espacio.
+-> En cliente agregar fecha nacimiento *NO PRECISA
+-> Finalizar cierre caja
+
+Menu de vendedor
+-> Crear factura
+-> Crear proforma
+-> Registrar Clientes
+-> Puede editar solo numeros de telefono de clientes *REVISAR
+-> Consultar autorizaciones de clientes
+
+Menu de cajero
+-> Crear factura
+-> Crear proforma
+-> Registrar Clientes
+-> Puede editar solo numeros de telefono y direccion y carnet de clientes *REVISAR
+-> Consultar autorizaciones de clientes
+-> Entrar a caja
+-> Notas Credito
+-> Recibos por dinero
+-> Cierre Parcial
+-> Cierre de caja
+
 
