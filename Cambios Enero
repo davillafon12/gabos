@@ -45,4 +45,9 @@ Menu de cajero
 -> Cierre Parcial
 -> Cierre de caja
 
+Cambio Tributacion
+  Se cobrara el impuesto del cliente final y no afiliado, se le recargara al afiliado.
+  Formula:
+    (precioAfiliado-IVAprecioAfiliado)+(IVAprecioClienteFinal)
+  Agregar en configuracion si se utiliza o no este metodo
 
