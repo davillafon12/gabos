@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Modulo Impresión - Garotas Bonitas</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="shortcut icon" href="img/header_icon.png">
+		<script src="js/jquery-1.11.0.js"></script>
+		<script src="js/qztools.js"></script>
+		<script src="js/tools.js"></script>
+			
+		<link rel="stylesheet" type="text/css" href="css/estilo.css">
+	</head>
+	<body>
+		<applet id="qz" archive="./qz-print.jar" name="QZ Print Plugin" code="qz.PrintApplet.class" width="1" height="1">
+			<param name="jnlp_href" value="qz-print_jnlp.jnlp">
+			<param name="cache_option" value="plugin">
+			<param name="disable_logging" value="false">
+			<param name="initial_focus" value="false">
+			<param name="printer" value="TM">
+		</applet><br />			
+		<div class="contenedor">
+			<img class="logo" src="img/header_pic.png"></img>
+			<hr>
+			<h2 id="estado">Módulo de Impresión -<span class="status-fail"> NO LISTO  <img class="check" src="img/error.png" width="40"></span></h2>
+			<hr>
+		</div>
+		<!--<span class="status-ready"> LISTO  <img class="check" src="img/check.png" width="40"></span>-->
+	</body>
+</html>
