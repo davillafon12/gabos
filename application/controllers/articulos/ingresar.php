@@ -329,7 +329,7 @@ class ingresar extends CI_Controller {
 		require_once './application/libraries/PHPExcel/IOFactory.php';
     	$objPHPExcel = PHPExcel_IOFactory::load($_FILES['archivo_excel']['tmp_name']);
 		$cantidadHojas = 1; //Para que solo procese la primera hoja del excel
-		foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+		foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {			
 			if($cantidadHojas == 1){
 				$cantidadHojas++;
 				//Probamos que el orden de las columnas sea el requerido
