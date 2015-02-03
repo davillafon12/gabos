@@ -187,7 +187,7 @@ PARA:
 						<td>	
 							<img class='imagen_arrow' title='Agregar Fila' src='/../application/scripts/Images/agregar_row.gif' width='14' height='7' onClick='agregarByCM(".$numero_id.")'/>
 							<input tabindex='".$numero_tab."' id='codigo_articulo_".$numero_id."' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);' disabled>
-							<input id='codigo_articulo_anterior_".$numero_id."' type='hidden' >
+							<input id='codigo_articulo_anterior_".$numero_id."' type='hidden' value=''>
 						</td>
 						<td>
 							<div class='articulo_specs' id='descripcion_articulo_".$numero_id."'></div>

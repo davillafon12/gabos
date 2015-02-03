@@ -10,7 +10,8 @@ class Home extends CI_Controller {
 
  function index()
  {
-    include 'get_session_data.php'; //Esto es para traer la informacion de la sesion
+    include 'get_session_data.php'; //Esto es para traer la informacion de la sesion	
+	//$id_con = mysqli_connect('76.162.254.146', 'usuario_comercio', 'Comercio_666');
     $this->load->view('home_view', $data);
  }
 

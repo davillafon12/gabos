@@ -1,43 +1,56 @@
 var isCallByDescuento = false; // Variable usada para restear campos de nombre y factura si el usuario de la cancelar al administrador
 
-function getArticulo(str, id, num_row, cedula) {
-	url = '/facturas/nueva/getArticuloXML?codigo='+str+'&cedula='+cedula;
-    datosArticulo = getandmakeCall(url);
-	//alert(datosArticulo);
-	datosArticuloARRAY = datosArticulo.split(',');
-	//alert(datosArticuloARRAY[0]);
-	
-	setDatosArticulo(datosArticuloARRAY, id, num_row, 1);
-	/*if(datosArticuloARRAY[0].trim()==='1'){
-		setDatosArticulo(datosArticuloARRAY, id, num_row, 1);	
-	}
-	else{return false;}*/
+function getArticulo(codigo, id_fila, num_fila, cedula) {
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/facturas/nueva/getArticuloJSON',
+		type: "POST",
+		async: true,
+		data: {'cedula':cedula, 'codigo':codigo},		
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				result = $.parseJSON('[' + data.trim() + ']');
+				if(result[0].status==="error"){
+					mostrarErroresCargarArticulo(result[0].error, num_fila);
+				}else if(result[0].status==="success"){	
+					resetRowFields(num_fila, false);
+					setArticulo(result[0].articulo, num_fila);									
+				}
+			}catch(e){
+				notyConTipo('¡La respuesta tiene un formato indebido, contacte al administrador!','error');
+			}		
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+	 
+		}
+	});
 }
 
-/*function getNombreCliente(str) {
-	url = '/facturas/nueva/getNombreCliente?cedula='+str;
-    nombre_cliente = getandmakeCall(url);
-	if(nombre_cliente.indexOf('Cliente Contad')!=-1)
-	{
-	//document.getElementById('nombre').disabled=false;
+function mostrarErroresCargarArticulo(error, num_fila){
+	switch(error){
+		case '1':
+			resetRowFields(num_fila, true);
+			notyConTipo('¡No se pudo cargar el artículo, contacte al administrador!','error');
+		break;
+		case '2':
+			resetRowFields(num_fila, true);
+			notyConTipo('¡URL indebida, contacte al administrador!','error');
+		break;
+		case '4':
+			resetRowFields(num_fila, false);
+			notyConTipo('¡No existe cliente o cédula inválida!','error');
+		break;
+		case '5':
+			//No existe articulo
+			resetRowFields(num_fila, false);			
+		break;
+		case '6':
+			resetRowFields(num_fila, false);
+			notyConTipo('¡No hay más unidades en inventario!','warning');
+		break;
 	}
-	else
-	{
-	//document.getElementById('nombre').disabled=true;
-	}
-	document.getElementById('nombre').value=nombre_cliente;
-	if(document.getElementById('nombre').value!='No existe cliente!!!')
-	{
-		enableArticulosInputs();
-		//isActualizarCliente=true;
-		actualizaPreciosArticulos(str);
-	}
-	else
-	{
-		disableArticulosInputs();
-	}
-	
-}*/
+}
 
 var clienteCanBuy = true;
 var infoClientePostAutorizacion = false;
@@ -48,7 +61,7 @@ function getNombreCliente(str){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/facturas/nueva/getNombreCliente?cedula='+str,
 		type: "POST",
-		async: false,
+		//async: false,
 		data: {'cedula':str},		
 		success: function(data, textStatus, jqXHR)
 		{
@@ -166,7 +179,6 @@ var tokenFacturaTemporal = -1;
 function setFacturaTemporal(){
 	url = '/facturas/nueva/crearFacturaTemporal';
 	datosFacturaTemporal = getandmakeCall(url);
-	//alert(datosFacturaTemporal);
 	if(datosFacturaTemporal.indexOf('fals') != -1){
 		$('#error_crear_factura_popup').bPopup({
 			modalClose: false
@@ -184,12 +196,10 @@ function setFacturaTemporal(){
 			tokenFacturaTemporal = arrayFacturaTemporal[1];
 		}
 	}
-	//alert("Codigo: "+codigoFacturaTemporal+"\nToken: "+tokenFacturaTemporal);
 }
 
 function agregarArticuloFactura(datosArticulo)
-{
-	//alert(datosArticulo[1]);
+{	
 	codigo = datosArticulo[1];
 	codigo = codigo.trim();
 	if(codigo.indexOf('00')!=-1){
@@ -200,7 +210,6 @@ function agregarArticuloFactura(datosArticulo)
 		datosArticulo = datosArticulo+","+codigoFacturaTemporal; //Agregamos el codigo de la factura
 		url = '/facturas/nueva/agregarArticuloFactura?datosArticulo='+datosArticulo;
 		datosArticulo = getandmakeCall(url);
-		//alert(codigo);
 	}
 }
 

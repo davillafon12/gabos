@@ -259,7 +259,7 @@ Class articulo extends CI_Model
 				$URL_IMAGEN = $row->Articulo_Imagen_URL;				
 				$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$URL_IMAGEN.'.jpg';
 				
-				if(!file_exists($ruta_a_preguntar)){$URL_IMAGEN = '00';}
+				if(!file_exists($ruta_a_preguntar)){$URL_IMAGEN = '00.jpg';}
 				
 				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento);
 				
@@ -269,7 +269,7 @@ Class articulo extends CI_Model
 				$articulo['descuento'] = $descuento;
 				$articulo['familia'] = $row->TB_05_Familia_Familia_Codigo;
 				$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
-				$articulo['precio_afiliado'] = $this->getPrecioProducto($codigo, 2, $sucursal);
+				$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 2, $sucursal);
 				$articulo['imagen'] = $URL_IMAGEN;
 				$articulo['exento'] = $row->Articulo_Exento;
 								
