@@ -1,3 +1,6 @@
+var totalEspacios = 40; //Cantidad de espacios soportados por la impresora mas pequeña TDMU200 en una sola fila
+var servidor = '';
+var protocolo = 'http:';
 
 function parse(val) {
 	result = "_nulo_",
@@ -19,43 +22,41 @@ function imprimir(){
 	i = parse('i');
 	n = parse('n');
 	s = parse('s');
-	t = parse('t');
-	//traerDocumento("t=db426c6074f7eba4770e32c8e1928fe7&d=f&n=3&s=0&i=t");	
+	t = parse('t');	
+	servidor = parse('server'); 
+	protocolo = parse('protocol');
 	traerDocumento(t,d,n,s,i);	
 }
 
 function traerDocumento(t,d,n,s,i){
 	$.ajax({
-		url : 'http://www.gabo.com/impresion',
+		url : protocolo+'//'+servidor+'/impresion',
 		dataType : 'jsonp',
 		data : "t="+t+"&d="+d+"&n="+n+"&s="+s+"&i="+i,
 		success: function(data, textStatus, jqXHR)
 		{
-			//alert(data);
-			//console.log(data);
 			try{				
 				if(data.status==="error"){
-					alert("Error");
+					alert("Error: "+data.error);
 				}else if(data.status==="success"){
 					seleccionarTipoDocumento(d, data);				
 				}
 			}catch(e){
-				alert("Error e");				
+				alert("No se pudo imprimir");
 			}
 		},
 		error: function (jqXHR, textStatus, errorThrown)
-		{
-	 
-		}
+		{}
 	});
 }
 
 function seleccionarTipoDocumento(d, data){
 	switch(d.trim()){
 		case 'f':
-			imprimirFactura(data);
+			imprimirFactura(data);			
 		break;
 	}
+	comenzarCierre();
 }
 
 function imprimirFactura(data){
@@ -84,7 +85,7 @@ function imprimirFactura(data){
 	qz.append(" Fecha: "+factura.fecha+"\r\n"); 
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Cliente: "+factura.cliente_ced+"\r\n");
-	qz.append(" Nombre: "+factura.cliente_nom+"\r\n");
+	qz.append(" Nombre: "+factura.cliente_nom.substring(0, 31)+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Tipo de Pago: "+factura.tipo+"\r\n"); 
 	if(factura.tipo==='credito'){
@@ -95,9 +96,9 @@ function imprimirFactura(data){
 		qz.append(" Pagado con Contado: "+formatearNumero(factura.cantidadContado)+"\r\n");
 	}
 	qz.append(" Moneda: "+factura.moneda+"\r\n"); 
-	qz.append(" Vendedor: "+factura.vendedor+"\r\n");
+	qz.append(" Vendedor: "+factura.vendedor.substring(0, 29)+"\r\n");
 	qz.append("----------------------------------------\r\n");
-	qz.append(" Cant. Desc.     Articulo        Precio \r\n");
+	qz.append(" Articulo      Cant. Desc.      Precio  \r\n");
 	qz.append("----------------------------------------\r\n");
 	
 	//PROCESADO DE PRODUCTOS
@@ -110,14 +111,14 @@ function imprimirFactura(data){
 		precio = parseFloat(productos[i].precio);
 		precio = cantidad * ( precio - ( precio * ( descuento / 100 ) ) );
 		
-		qz.append(formatearCantidad(cantidad)+formatearDescuento(descuento)+formatearCodigo(productos[i].codigo)+acomodarPrecio(formatearNumero(precio))+"\r\n");
-		qz.append(" ->"+productos[i].descripcion+"\r\n");
+		qz.append(formatearCodigo(productos[i].codigo)+formatearCantidad(cantidad)+formatearDescuento(descuento)+acomodarPrecio(formatearNumero(precio))+"\r\n");
+		qz.append(" ->"+productos[i].descripcion.substring(0, 36)+"\r\n");
 	}
 	
 	qz.append("----------------------------------------\r\n");
-	//Tiramos a la izquierda
-	qz.append("\x1B\x61\x02");
-	qz.append("Total: "+formatearNumero(factura.total)+"\r\n");
+	qz.append(enviarDerecha("Subtotal:"+formatearMontoTotal(formatearNumero(factura.subtotal)))+"\r\n");
+	qz.append(enviarDerecha("IVA:"+formatearMontoTotal(formatearNumero(factura.total_iva)))+"\r\n");
+	qz.append(enviarDerecha("Total:"+formatearMontoTotal(formatearNumero(factura.total)))+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	//Centramos 
 	qz.append("\x1B\x61\x01");
@@ -127,9 +128,8 @@ function imprimirFactura(data){
 	qz.append("Gracias por su visita\r\n");
 	qz.append(" \r\n");
 	qz.append(empresa.leyenda+"\r\n");
+	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
-	//Cortar
-	qz.append("\x1D\x56\x48");
 	qz.print();
 }
 
@@ -178,25 +178,46 @@ function formatearDescuento(cantidad){
 	}
 }
 
+//Acomoda el precio del articulo apra que quede en 14 espacios
 function acomodarPrecio(precio){
-	//Largo 11
+	//Largo 14
 	n = precio.length;
-	while(n<11){
+	while(n<14){
 		precio = " "+precio;
 		n++;
 	}
 	return precio;
 }
 
+//Formatea el precio del monto total para que tenga siempre 16 espacios
+function formatearMontoTotal(monto){
+	//Largo 16
+	n = monto.length;
+	while(n<16){
+		monto = " "+monto;
+		n++;
+	}
+	return monto;
+}
+
+//Formatea el codigo del articulo para que tenga 14 espacios
 function formatearCodigo(codigo){	
-	//Largo 17
-	codigo = "     "+codigo;
+	//Largo 14
+	codigo = " "+codigo; //Lo corremos un espacio a la derecha
 	n = codigo.length;
-	while(n<17){
+	while(n<14){
 		codigo = codigo+" ";
 		n++;
 	}
 	return codigo;
+}
+function enviarDerecha(cadena){	
+	n = cadena.length;
+	while(n<totalEspacios){
+		cadena = " "+cadena;
+		n++;
+	}
+	return cadena;
 }
 
 /**
@@ -218,68 +239,17 @@ Number.prototype.format = function(n, x, s, c) {
     return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
 };
 
-function prueba(){
-	var qz = document.getElementById("qz");
-	qz.append("\x1B\x40"); //Reset todo
-	qz.append(" Prueba Normal \r\n");
-	qz.append("________________\r\n");
-	qz.append("\x1B\x21\x02");
-	qz.append(" Prueba 02 \r\n");
-	qz.append("\x1B\x21\x08");
-	qz.append(" Prueba 08 \r\n");
-	qz.append("\x1B\x21\x01");
-	qz.append(" Prueba 01 \r\n");
-	qz.append("\x1B\x21\x10");
-	qz.append(" Prueba 10 \r\n");
-	qz.append("\x1B\x21\x20");
-	qz.append(" Prueba 20 \r\n");
-	qz.append("\x1B\x21\x80");
-	qz.append(" Prueba 80 \r\n");
-	qz.append("________________\r\n");
-	qz.append("\x1B\x21\x01");
-	qz.append("\x1B\x2D\x01");
-	qz.append(" Prueba Underline 1d \r\n");
-	qz.append("\x1B\x2D\x02");
-	qz.append(" Prueba Underline 2d \r\n");
-	qz.append("\x1B\x21\x01");
-	qz.append("\x1B\x2D\x00");
-	qz.append("________________\r\n");
-	qz.append("\x1B\x4D\x00");
-	qz.append(" Prueba Fuente A \r\n");
-	qz.append("\x1B\x4D\x01");
-	qz.append(" Prueba Fuente B \r\n");
-	qz.append("\x1B\x4D\x02");
-	qz.append(" Prueba Fuente C \r\n");
-	qz.append("________________\r\n");
-	qz.append("\x1B\x4D\x00");
-	qz.append("\x1B\x21\x01");
-	qz.append("\x1B\x61\x00");
-	qz.append(" Prueba Jus L \r\n");
-	qz.append("\x1B\x61\x01");
-	qz.append(" Prueba Jus C \r\n");
-	qz.append("\x1B\x61\x02");
-	qz.append(" Prueba Jus R \r\n");
-	qz.print();
-}
+var segundos = 20;
 
-function prueba2(){
-	var qz = document.getElementById("qz");
-	qz.append("\x1B\x40"); //Reset todo
-	qz.append("\x1B\x21\x10");
-	qz.append("\x1B\x61\x02");
-	qz.append(" Inversiones Garotas Bonitas S.A. \r\n");
-	qz.print();
-}
-
-function prueba3(){
-	var qz = document.getElementById("qz");
-	qz.append("\x1B\x40"); //Reset todo
-	qz.append("\x1B\x21\x01");
-	qz.append("\x1B\x2D\x01");
-	qz.append("Estoesunapruebadelinepordebajoparaverhastadondeescapazdeimprimrlarayaabajo\r\n");
-	qz.append("\x1B\x2D\x00");
-	qz.append("--------------------------------------------------------------------------\r\n");
-	qz.print();
+function comenzarCierre(){
+	//Despues de realizado el trabajo cierra la venta tras 20 segundos
+	setInterval(function () {
+		segundos--;
+		$("#boton_reimprimir").val("Reimprimir ("+segundos+")");
+		if(segundos===0){
+			window.close();
+		}		
+	}, 1000);
 }
 
 
