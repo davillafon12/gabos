@@ -202,6 +202,7 @@ class caja extends CI_Controller {
 							
 							//Para efecto de impresion
 							$facturaBODY['sucursal']= $data['Sucursal_Codigo'];
+							$facturaBODY['servidor_impresion']= $this->configuracion->getServidorImpresion();
 							$facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 							
 							date_default_timezone_set("America/Costa_Rica");
@@ -234,6 +235,7 @@ class caja extends CI_Controller {
 						
 						//Para efecto de impresion
 						$facturaBODY['sucursal']= $data['Sucursal_Codigo'];
+						$facturaBODY['servidor_impresion']= $this->configuracion->getServidorImpresion();
 						$facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 						
 						date_default_timezone_set("America/Costa_Rica");

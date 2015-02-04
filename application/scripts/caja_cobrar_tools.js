@@ -277,11 +277,8 @@ function enviarCobro(URL){
 				displayErrors(facturaHEAD[0].error);
 				$('#envio_factura').bPopup().close();
 			}else if(facturaHEAD[0].status==="success"){
-				$('#envio_factura').bPopup().close();
-				//imprimirFactura(facturaHEAD[0].token, 'f', consecutivoActual, facturaHEAD[0].sucursal, tipoImpresion);						
-				window.open(location.protocol+'//127.0.0.1:8080/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-				//alert("t="+facturaHEAD[0].token+"&d=f&n="+consecutivoActual+"&s="+facturaHEAD[0].sucursal+"&i="+tipoImpresion);
-				//console.log( "t="+facturaHEAD[0].token+"&d=f&n="+consecutivoActual+"&s="+facturaHEAD[0].sucursal+"&i="+tipoImpresion );
+				$('#envio_factura').bPopup().close();						
+				window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 				window.location = location.protocol+'//'+document.domain+'/facturas/caja';
 			}
 			}
