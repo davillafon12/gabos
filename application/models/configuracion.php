@@ -114,6 +114,59 @@
 				return $config;
 			}
 		}
+		
+		//Devuelve toda la direccion del servidor de impresion
+		function getServidorImpresion(){
+			return $this->getProtocoloServidorImpresion()."://".$this->getDireccionIpServidorImpresion().":".$this->getPuertoServidorImpresion();
+		}
+		
+		function getDireccionIpServidorImpresion(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'direccion_ip_servidor_impresion');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return null; 
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
+		function getPuertoServidorImpresion(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'puerto_servidor_impresion');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return null; 
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
+		function getProtocoloServidorImpresion(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'protocolo_servidor_impresion');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return null; 
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
 				
 				
 		function actualizarCorreoAdmin($email){
@@ -169,6 +222,21 @@
 		function actualizarUltimaActualizacionEstadoClientes($fecha){
 			$this->db->where('Parametro', 'ultima_actualizacion_estado_clientes');
 			$this->db->update('tb_39_configuracion', array('Valor'=>$fecha));
+		}
+		
+		function actualizarDireccionIPServidorImpresion($ip){
+			$this->db->where('Parametro', 'direccion_ip_servidor_impresion');
+			$this->db->update('tb_39_configuracion', array('Valor'=>$ip));
+		}
+		
+		function actualizarPuertoServidorImpresion($puerto){
+			$this->db->where('Parametro', 'puerto_servidor_impresion');
+			$this->db->update('tb_39_configuracion', array('Valor'=>$puerto));
+		}
+		
+		function actualizarProtocoloServidorImpresion($protocolo){
+			$this->db->where('Parametro', 'protocolo_servidor_impresion');
+			$this->db->update('tb_39_configuracion', array('Valor'=>$protocolo));
 		}
 		
 	}

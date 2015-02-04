@@ -191,6 +191,36 @@ PARA:
 					</p>
 					<input type="button" value="Actualizar Estado" class="boton" onclick="actualizarEstadoClientes()"/>
 				</fieldset>
+				<fieldset class="recuadro-impresion">
+					<legend>Servidor de Impresion</legend>
+					<table>
+						<tr>
+							<td>
+							<p class="contact"><label>IP:</label></p> 
+							</td>
+							<td>
+							<input class="input_cuatro" id="ip_servidor_impresion" value="<?php echo $c_array['direccion_ip_servidor_impresion'];?>" autocomplete="off" type="text"> 
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<p class="contact"><label>Puerto:</label></p> 
+							</td>
+							<td>
+							<input class="input_cuatro" id="puerto_servidor_impresion" value="<?php echo $c_array['puerto_servidor_impresion'];?>" autocomplete="off" type="text"> 
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<p class="contact"><label>Protocolo:</label></p> 
+							</td>
+							<td>
+							<input class="input_cuatro" id="protocolo_servidor_impresion" value="<?php echo $c_array['protocolo_servidor_impresion'];?>" autocomplete="off" type="text"> 
+							</td>
+						</tr>
+					</table>
+					<input type="button" value="Actualizar" class="boton" onclick="actualizarServidorImpresion()"/>
+				</fieldset>
 			</div>
 			
 			

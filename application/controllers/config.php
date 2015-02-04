@@ -173,6 +173,36 @@ class config extends CI_Controller {
 		}		
 		echo json_encode($retorno);
 	}
+	
+	
+	function actualizarServidorImpresion(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		if(isset($_POST['ip'])&&isset($_POST['puerto'])&&isset($_POST['protocolo'])){
+			$ip = trim($_POST['ip']);
+			$puerto = trim($_POST['puerto']);
+			$protocolo = trim($_POST['protocolo']);
+			if($this->esIPValida($ip)&&is_numeric($puerto)&&($protocolo == 'http' || $protocolo == 'https')){
+				include 'get_session_data.php';
+				$this->configuracion->actualizarDireccionIPServidorImpresion($ip);
+				$this->configuracion->actualizarPuertoServidorImpresion($puerto);
+				$this->configuracion->actualizarProtocoloServidorImpresion($protocolo);
+				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario actualizo la info. del servidor de impresión",$data['Sucursal_Codigo'],'edicion');
+				unset($retorno['error']);
+				$retorno['status'] = 'success';
+			}else{
+				$retorno['error'] = '6';
+			}
+		}else{
+			$retorno['error'] = '5';
+		}
+		echo json_encode($retorno);
+	}
+	
+	function esIPValida($valor){
+		return preg_match( '/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/', $valor );
+	}
+	
 }// FIN DE LA CLASE
 
 

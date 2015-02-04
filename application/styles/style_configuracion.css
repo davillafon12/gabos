@@ -182,6 +182,17 @@
 	text-align: right;
 }
 
+.input_cuatro {
+	width: 100px;
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid rgba(51, 51, 51, 0.15);
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
+	padding-left: 2px;
+}
+
 .recuadro-general{
 	width: 400px;
 	display: inline;
@@ -223,4 +234,13 @@
 
 td {
 	padding-top: 5px;
+}
+
+.recuadro-impresion{
+	width: 250px;
+	display: inline;
+	position: relative;
+	top: -180px;
+	margin-top: -150px;
+	left: 436px;
 }
