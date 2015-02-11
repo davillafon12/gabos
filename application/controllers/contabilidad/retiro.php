@@ -21,6 +21,7 @@ class retiro extends CI_Controller {
 
 		if($permisos['crear_retiros'])
 		{
+			$data['tipo_cambio'] = $this->configuracion->getTipoCambioCompraDolar();
 			$this->load->view('contabilidad/retiros_parciales_view', $data);			
 		}
 		else{
@@ -31,16 +32,33 @@ class retiro extends CI_Controller {
 	function crearRetiro(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
-		if(isset($_POST['cantidad'])){
+		if(isset($_POST['cantidad'])&&isset($_POST['tipo_cambio'])&&isset($_POST['colones'])&&isset($_POST['dolares'])){
 			$cantidad = $_POST['cantidad'];
 			$cantidad = str_replace(".","",$cantidad);
 			$cantidad = str_replace(",",".",$cantidad);
-			if(is_numeric($cantidad)){
+			$tipo_cambio = $_POST['tipo_cambio'];
+			if(is_numeric($cantidad)&&is_numeric($tipo_cambio)){
+				$colones = json_decode($_POST['colones']);
+				$dolares = json_decode($_POST['dolares']);
 				include '/../get_session_data.php';
 				date_default_timezone_set("America/Costa_Rica");
-				$fecha = date("y/m/d : H:i:s", now());
+				$fecha = date("y/m/d : H:i:s", now());				
 				//echo $cantidad;
-				$this->contabilidad->crearRetiroParcial($cantidad, $fecha, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+				$retiro = $this->contabilidad->crearRetiroParcial($cantidad, $fecha, $tipo_cambio, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+				
+				foreach($colones as $colon){
+					$tipo = 'moneda';
+					if($colon->denominacion>500){
+						$tipo = 'billete';						
+					}
+					$this->contabilidad->agregarDenominacionRetiroParcial($colon->denominacion, $colon->cantidad, $tipo, 'colones', $retiro);					
+				}
+				
+				foreach($dolares as $dolar){
+					$this->contabilidad->agregarDenominacionRetiroParcial($dolar->denominacion, $dolar->cantidad, 'billete', 'dolares', $retiro);					
+				}
+				
+				
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo un retiro parcial de: $cantidad",$data['Sucursal_Codigo'],'retiro_parcial');
 				$retorno['status'] = 'success';
 				unset($retorno['error']);

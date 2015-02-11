@@ -76,6 +76,13 @@ PARA:
 						<td>
 							<p class="contact">Tipo de Pago:</p>
 						</td>
+						<td>
+							<p class="contact" style="display:inline;"><label for="impresion">Impresión:</label></p> 					
+							<select id="tipo_impresion" onChange="cambiarTipoImpresion(this.value)" class="impresion" name="impresion" >
+								<option value="t">PV</option>
+								<option value="c">A4</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td>
@@ -98,7 +105,7 @@ PARA:
 							<input id="nombre" class="input_uno" placeholder="Inserte el nombre del cliente" autocomplete="off" name="nombre" type="text" >
 							<script>setUpLiveSearch();</script>
 						</td>	
-						<td>
+						<td colspan="2">
 							<div id="num_transaccion_field" style="display: none;">
 								<p class="contact" style="display: inline;">Número de Autorización:</p>
 								<input id='numero_transaccion' class='input_uno' style='width: 100px; margin-left: 5px;' autocomplete='off' name='numero_transaccion' required='' type='text'>

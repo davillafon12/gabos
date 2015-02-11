@@ -72,7 +72,13 @@ function enviarCobro(cedula, saldo){
 					manejarErrores(informacion[0].error);
 				}else if(informacion[0].status==="success"){
 					resetFields();
-					buscarCedula(null); 
+					buscarCedula(null);
+					if(tipoImpresion==='t'){
+						//Impresion termica
+						window.open(informacion[0].servidor_impresion+'/index.html?t='+informacion[0].token+'&d=r&n='+informacion[0].recibos.join()+'&s='+informacion[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Recibos','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+					}else if(tipoImpresion==='c'){
+						//Impresion carta
+					}
 				}
 			}catch(e){
 				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
@@ -81,6 +87,25 @@ function enviarCobro(cedula, saldo){
 		error: function (jqXHR, textStatus, errorThrown)
 		{}
 	});
+}
+
+// Para el tamaño del windows open
+var anchoImpresion = 290;
+var alturaImpresion = 400;
+var tipoImpresion = 't';
+
+function cambiarTipoImpresion(tipo){
+	tipoImpresion = tipo;
+	switch(tipo){
+		case 't':
+			anchoImpresion = 290;
+			alturaImpresion = 400;
+		break;
+		case 'c':
+			anchoImpresion = 1024;
+			alturaImpresion = 768;
+		break;
+	}
 }
 
 function validarPago(){
@@ -107,3 +132,5 @@ function tipoPagoJSON(){
 		return [{'tipo':'contado'}];
 	}
 }
+
+

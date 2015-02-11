@@ -29,7 +29,8 @@ class cierre extends CI_Controller {
 		
 		date_default_timezone_set("America/Costa_Rica");
 		$data['fechaActual'] = date('d-m-Y', now());
-		$data['baseCaja'] = "₡ 30.000";
+		$data['baseCaja'] = "30.000";
+		$data['tipo_cambio'] = $this->configuracion->getTipoCambioCompraDolar();
 		
 		$facturas = $this->getPrimeraUltimaFactura($data['Sucursal_Codigo']);
 		

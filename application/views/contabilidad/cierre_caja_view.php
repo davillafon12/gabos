@@ -64,7 +64,8 @@ PARA:
 							<p class="titulo-2">Fecha: <?php echo $fechaActual;?></p>
 						</td>
 						<td>
-							<p class="titulo-2">Base: <?php echo $baseCaja;?></p>
+							<label class="titulo-2" for="base_caja">Base: ₡</label>
+							<input type="text" class="input-base-caja alg-right" id="base_caja" value="<?php echo $baseCaja;?>"/>
 						</td>
 					</tr>
 					<tr>
@@ -165,6 +166,42 @@ PARA:
 								</tr>
 							</table>
 						</td>						
+					</tr>
+					<tr>
+						<td>
+							<table class="tabla-denominaciones">
+								<tr><td colspan="3"><p class="titulo-2">Dólares</p></td></tr>
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Denominación</p></td>
+									<td class="borde-abajo"><p class="parrafo">Cantidad</p></td>
+									<td class="borde-abajo" style="min-width: 100px;"><p class="parrafo">Total</p></td>
+								</tr>
+								<tr>
+									<td><p class="parrafo">$ 50</p><input type="hidden" id="deno_do_50"></td>
+									<td><p class="parrafo"><input type="text" id="cant_do_50" class="input-deno alg-right" value="0" onkeyup="actualizarCantidadDolar(this.value, 50)" onclick="this.select()"></p></td>
+									<td class="alg-right"><p class="parrafo" id="total_do_50">$0,00</p></td>
+								</tr>
+								<tr>
+									<td><p class="parrafo">$ 10</p><input type="hidden" id="deno_do_10"></td>
+									<td><p class="parrafo"><input type="text" id="cant_do_10" class="input-deno alg-right" value="0" onkeyup="actualizarCantidadDolar(this.value, 10)" onclick="this.select()"></p></td>
+									<td class="alg-right"><p class="parrafo" id="total_do_10">$0,00</p></td>
+								</tr>
+								<tr>
+									<td><p class="parrafo">$ 1</p><input type="hidden" id="deno_do_1"></td>
+									<td><p class="parrafo"><input type="text" id="cant_do_1" class="input-deno alg-right" value="0" onkeyup="actualizarCantidadDolar(this.value, 1)" onclick="this.select()"></p></td>
+									<td class="alg-right"><p class="parrafo" id="total_do_1">$0,00</p></td>
+								</tr>
+								<tr>
+									<td colspan="2" class="alg-right"><p class="parrafo">Total:</p></td>
+									<td class="alg-right"><p class="parrafo" id="total_dolares">$0,00</p></td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<div class="contenedor-tipo-cambio">
+								<label class="parrafo">Tipo de Cambio ₡</label><input id="tipo_cambio_dolar" class="input-deno alg-right" value="<?php echo $tipo_cambio;?>" onblur="validarYFormatearCantidadEscritaTipoCambio(this.value)" onclick="this.select()" type="text"/><br>
+							</div>
+						</td>
 					</tr>
 					<tr><td colspan="2"><hr></td></tr>
 					<tr>

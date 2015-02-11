@@ -106,13 +106,73 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
-	function agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cliente, $sucursal, $facturaAcreditar, $facturaAplicar){
+	function getReciboParaImpresion($recibo, $sucursal){
+		$query = $this->db->query("
+			SELECT  tb_26_recibos_dinero.Consecutivo AS recibo,
+					tb_26_recibos_dinero.Recibo_Cantidad AS monto,
+					date_format(tb_26_recibos_dinero.Recibo_Fecha, '%d-%m-%Y %h:%i:%s %p') AS fecha_recibo, 
+					tb_26_recibos_dinero.Recibo_Saldo AS saldo,
+					tb_26_recibos_dinero.Tipo_Pago AS tipo_pago,
+					tb_07_factura.Factura_Monto_Total AS Saldo_inicial,
+					date_format(tb_24_credito.Credito_Fecha_Expedicion, '%d-%m-%Y %h:%i:%s %p') AS fecha_expedicion,
+					tb_24_credito.Credito_Factura_Consecutivo AS factura,
+					tb_07_factura.Factura_Moneda AS moneda,
+					tb_07_factura.Factura_Nombre_Cliente AS cliente_nombre,
+					tb_07_factura.TB_03_Cliente_Cliente_Cedula AS cliente_cedula,
+					tb_26_recibos_dinero.Credito AS c
+			FROM tb_26_recibos_dinero
+			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito
+			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
+			WHERE  tb_24_credito.Credito_Sucursal_Codigo = $sucursal
+			AND    tb_26_recibos_dinero.Consecutivo = $recibo
+		");
+		if($query -> num_rows() != 0)
+		{
+		   return $query->result();
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
+	function getSaldoAnteriorRecibo($recibo, $credito){
+		/*
+			SELECT Recibo_Saldo FROM tb_26_recibos_dinero
+			WHERE  Credito = 1
+			AND Consecutivo != 3
+			ORDER BY Consecutivo DESC
+			LIMIT 1
+		*/
+		$this->db->select("Recibo_Saldo");
+		$this->db->where("Credito", $credito);
+		$this->db->where("Consecutivo !=", $recibo);
+		$this->db->from('tb_26_recibos_dinero');
+		$this->db->order_by('Consecutivo', 'desc');
+		$this->db->limit(1);
+		$query = $this->db->get();
+		if($query -> num_rows() != 0)
+		{
+		   $result = $query->result();
+		   return $result[0]->Recibo_Saldo;
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
+	function agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cliente, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $por_iva, $tipo_cambio){
 		$datos = array(
 						'Consecutivo' => $consecutivo,
 						'Nombre_Cliente' => $nombre,
 						'Fecha_Creacion' => $fecha,
 						'Factura_Acreditar' => $facturaAcreditar,
 						'Factura_Aplicar' => $facturaAplicar,
+						'Tipo_Pago' => $tipoPago,
+						'Moneda' => $moneda,
+						'Por_IVA' => $por_iva,
+						'Tipo_Cambio' => $tipo_cambio,
 						'Sucursal' => $sucursal,
 						'Cliente' => $cliente
 						);
@@ -158,6 +218,47 @@ Class contabilidad extends CI_Model
 			$this->articulo->actualizarInventarioSUMADefectuoso($producto->c, $producto->d, $sucursal);
 		}
 		$this->db->insert_batch('TB_28_Productos_Notas_Credito', $datos);
+	}
+	
+	function getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal){
+		$query = $this->db->query("
+			SELECT 	Consecutivo AS nota, 
+					Nombre_Cliente AS cliente_nombre, 
+					Cliente AS cliente_cedula,
+					date_format(Fecha_Creacion, '%d-%m-%Y %h:%i:%s %p') AS fecha,
+					Factura_Aplicar AS factura_aplicar,
+					Tipo_Pago AS tipo_pago,
+					Moneda AS moneda,
+					Por_IVA AS iva,
+					Tipo_Cambio AS tipo_cambio
+			FROM TB_27_Notas_Credito
+			WHERE Consecutivo = $consecutivo
+			AND Sucursal = $sucursal
+		");
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal){
+		$this->db->select("Codigo AS codigo, Descripcion AS descripcion, Cantidad_Bueno AS bueno, Cantidad_Defectuoso AS defectuoso, Precio_Unitario AS precio");
+		$this->db->from("tb_28_productos_notas_credito");
+		$this->db->where("Nota_Credito_Consecutivo",$consecutivo);
+		$this->db->where("Sucursal",$sucursal);
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
 	}
 	
 	function facturaAplciarYaFueAplicada($factura, $sucursal){
@@ -342,14 +443,63 @@ Class contabilidad extends CI_Model
 		$this->db->insert('tb_31_productos_notas_debito', $datos);
 	}
 	
-	function crearRetiroParcial($monto, $fecha, $usuario, $sucursal){
+	function getHeadNotaDebito($consecutivo, $sucursal){
+		$query = $this->db->query("
+			SELECT 	Consecutivo AS nota, 
+					date_format(Fecha, '%d-%m-%Y %h:%i:%s %p') AS fecha,
+					Impuesto_Porcentaje AS iva,
+					Observaciones AS observaciones        
+				   FROM tb_30_notas_debito
+			WHERE Consecutivo = $consecutivo
+			AND Sucursal = $sucursal
+		");
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function getProductosNotaDebito($consecutivo, $sucursal){
+		$this->db->select("Codigo AS codigo, Descripcion AS descripcion, Cantidad_Debitar AS cantidad, Precio_Unitario AS precio");
+		$this->db->from("tb_31_productos_notas_debito");
+		$this->db->where("Sucursal", $sucursal);
+		$this->db->where("Nota_Debito_Consecutivo", $consecutivo);
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function crearRetiroParcial($monto, $fecha, $tipo_cambio, $usuario, $sucursal){
 		$datos = array(
 						'Monto' => $monto,
 						'Fecha_Hora' => $fecha,
+						'Tipo_Cambio' => $tipo_cambio,
 						'Sucursal' => $sucursal,
 						'Usuario' => $usuario
 						);
 		$this->db->insert('TB_33_Retiros_Parciales', $datos);
+		return $this->db->insert_id();
+	}
+	
+	function agregarDenominacionRetiroParcial($denominacion, $cantidad, $tipo, $moneda, $retiro){
+		$datos = array(
+						'Denominacion' => $denominacion,
+						'Cantidad' => $cantidad,
+						'Tipo' => $tipo,
+						'Moneda' => $moneda,
+						'Retiro' => $retiro
+						);
+		$this->db->insert('tb_42_moneda_retiro_parcial', $datos);
 	}
 	
 	function getFechaUltimoCierreCaja($sucursal){

@@ -1,6 +1,7 @@
 var signo = '₡'; //Guarda el signo de la moneda para uso general
 var denMonedas = [500, 100, 50, 25, 10, 5]; //Guarda las denominacions de monedas
 var denBilletes = [50000, 20000, 10000, 5000, 2000, 1000]; //Guarda las denominacions de monedas
+var denDolares = [50, 10, 1]; //Guarda las denominacions de dolares
 
 $(function(){
 	//Cuando se cargue la pag ejecuta este codigo
@@ -16,6 +17,17 @@ $(function(){
 	$("#cant_25").numeric();
 	$("#cant_10").numeric();
 	$("#cant_5").numeric();
+	
+	//Dolares
+	$("#cant_do_50").numeric();
+	$("#cant_do_10").numeric();
+	$("#cant_do_1").numeric();
+	
+	//Tipo cambio
+	$("#tipo_cambio_dolar").numeric();
+	
+	//Base caja 
+	$("#base_caja").numeric();
 });
 
 function replaceAll(find, replace, str) {
@@ -55,6 +67,7 @@ String.prototype.aFlotante = function(){
 };
 
 function actualizarCantidad(cantidad, denominacion){
+	signo = '₡';
 	//Filtramos negativos
 	cantidad = replaceAll('-', '', cantidad);
 	$("#cant_"+denominacion).val(cantidad);
@@ -73,7 +86,28 @@ function actualizarCantidad(cantidad, denominacion){
 	actualizarTotalesDenominaciones(cantidad, denominacion);
 }
 
+function actualizarCantidadDolar(cantidad, denominacion){
+	signo = '$'
+	//Filtramos negativos
+	cantidad = replaceAll('-', '', cantidad);
+	$("#cant_do_"+denominacion).val(cantidad);
+	
+	if(cantidad.trim()===''){
+		$("#total_do_"+denominacion).html(signo+"0,00");
+		return false;
+	}
+	
+	denominacion = parseInt(denominacion);
+	cantidad = parseInt(cantidad);
+	cantidad = cantidad * denominacion;
+	cantidad = parseFloat(cantidad);
+	cantidad = cantidad.format(2, 3, '.', ',');
+	$("#total_do_"+denominacion).html(signo+cantidad);
+	actualizarTotalesDenominacionesDolares(cantidad, denominacion)
+}
+
 function actualizarTotalesDenominaciones(cantidad, denominacion){
+	signo = '₡';
 	cantidad = cantidad.aFlotante();
 	denominacion = parseInt(denominacion);
 	if(denominacion <=500){
@@ -97,4 +131,47 @@ function actualizarTotalesDenominaciones(cantidad, denominacion){
 		total = total.format(2, 3, '.', ',');
 		$("#total_billetes").html(signo+total);
 	}
+}
+
+function actualizarTotalesDenominacionesDolares(cantidad, denominacion){
+	signo = '$';
+	cantidad = cantidad.aFlotante();
+	denominacion = parseInt(denominacion);	
+	total = 0;
+	for(i = 0; i<denDolares.length; i++){
+		x = $("#total_do_"+denDolares[i]).html();
+		x = x.aFlotante();
+		total += x;
+	}
+	total = total.format(2, 3, '.', ',');
+	$("#total_dolares").html(signo+total);
+}
+
+function validarYFormatearCantidadEscritaTipoCambio(cantidad){
+	if(isCantidadValida(cantidad)){
+		cantidadValida = true;	
+
+		//Cambiamos los puntos por nada
+		//cantidad = cantidad.replace('.','');
+		//Cambiamos las comas por un punto, cambiar a notacion del numeric
+		cantidad = cantidad.replace(',','.');
+		cantidad = parseFloat(cantidad);
+		cantidad = cantidad.format(2, 3, '.', ',');
+		$("#tipo_cambio_dolar").val(cantidad);
+	}else{
+		cantidadValida = false;
+		notyMsg('¡La cantidad ingresada no es válida!', 'error');
+	}
+}
+
+function isNumber(n) {
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function isCantidadValida(valor){
+	//Cambiamos los puntos por nada
+	valor = valor.replace('.','');
+	//Cambiamos las comas por un punto, cambiar a notacion del numeric
+	valor = valor.replace(',','.');	
+	return isNumber(valor);
 }
