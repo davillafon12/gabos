@@ -139,7 +139,7 @@ function sendInvoice(URL){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+URL,
 		type: "POST",
-		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON)},		
+		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON), 'token':token_factura_temporal},		
 		success: function(data, textStatus, jqXHR)
 		{
 			if(data.trim()==='7'){//Todo salio bien

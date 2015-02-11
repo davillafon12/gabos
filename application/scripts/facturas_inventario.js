@@ -57,7 +57,7 @@ function actualizarCantidadProductoInventario(cantidad, codigo, num_row)
 		operacion = calcularCantidadInventario(antes,cantidad);
 		if(operacion===undefined){return false;} //Si hay problemas no pase de aqui
 		$.ajax({
-			url : location.protocol+'//'+document.domain+'/facturas/nueva/actualizarInventario?codigo='+codigo+'&operacion='+operacion,
+			url : location.protocol+'//'+document.domain+'/facturas/nueva/actualizarInventario?codigo='+codigo+'&operacion='+operacion+'&token='+token_factura_temporal,
 			type: "GET",
 			async: false,		
 			success: function(data, textStatus, jqXHR)
@@ -95,4 +95,17 @@ function actualizarInventarioPorError(codigo, num_row, antes){
 	cedula = document.getElementById("cedula").value;
 	getArticulo(codigo, '', num_row, cedula);
 	document.getElementById("cantidad_articulo_"+num_row).value = antes;
+}
+
+function devolverProductos(){
+	$.ajax({
+			url : location.protocol+'//'+document.domain+'/facturas/nueva/devolverProductos',
+			type: "POST",
+			async: false,
+			data: {'token': token_factura_temporal},
+			success: function(data, textStatus, jqXHR)
+			{},
+			error: function (jqXHR, textStatus, errorThrown)
+			{}
+		});
 }

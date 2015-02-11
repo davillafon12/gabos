@@ -621,7 +621,8 @@ function advertenciaSalida(){
 }
 
 function deshacerFactura(){
-	resetAll();
+	//resetAll();
+	devolverProductos();
 }
 
 function salidaSesion(){

@@ -25,10 +25,11 @@ class nueva extends CI_Controller {
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$this->load->helper(array('form'));
 		//echo $this->factura->getConsecutivo($data['Sucursal_Codigo']);
-		//date_default_timezone_set("America/Costa_Rica");
-		//echo date("y/m/d : H:i:s", now());
+		date_default_timezone_set("America/Costa_Rica");
+		$fecha = date("y/m/d : H:i:s", now());
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
+		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$this->load->view('facturas/view_nueva_factura', $data);	
 	}
 	
@@ -124,6 +125,7 @@ class nueva extends CI_Controller {
 	function actualizarInventario(){
 		$codigo_articulo=$_GET['codigo'];
 		$operacion=$_GET['operacion'];
+		$tokenFactura=$_GET['token'];
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$operacionARRAY = explode(',',$operacion);
 		
@@ -138,10 +140,12 @@ class nueva extends CI_Controller {
 				if($cantidadActual<$operacionARRAY[1]) //Si la cantidad es mayor a la actual hay ERROR
 				{echo '-2';} //Numero de error para 'Cantidad mayor a inventario actual'
 				else{
+					$this->articulo->actualizarInventarioFacturaTemporal($codigo_articulo, $data['Sucursal_Codigo'], $operacionARRAY[1], $tokenFactura, false);
 					echo $this->articulo->actualizarInventarioRESTA($codigo_articulo, $operacionARRAY[1], $data['Sucursal_Codigo']);
 				}
 			}
 			else if($operacionARRAY[0]=='2'){ //Se suma al inventario
+				$this->articulo->actualizarInventarioFacturaTemporal($codigo_articulo, $data['Sucursal_Codigo'], $operacionARRAY[1], $tokenFactura, true);
 				echo $this->articulo->actualizarInventarioSUMA($codigo_articulo, $operacionARRAY[1], $data['Sucursal_Codigo']);
 			}
 		}
@@ -241,7 +245,7 @@ class nueva extends CI_Controller {
 	}
 	
 	function crearPendiente(){
-		if(isset($_POST['head'])&&isset($_POST['items'])){
+		if(isset($_POST['head'])&&isset($_POST['items'])&&isset($_POST['token'])){
 		    //Obtener las dos partes del post
 			$info_factura = $_POST['head'];
 			$items_factura = $_POST['items'];
@@ -253,10 +257,14 @@ class nueva extends CI_Controller {
 						
 			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 			
+			//Borramos la factura temporal
+			$this->articulo->eliminarFacturaTemporal($_POST['token']);
+			
 			if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
 				$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
 				$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
+				//$this->
 				echo '7'; //El ingreso fue correcto											
 			}else{
 				echo '11'; //Error al crear la factura
@@ -288,6 +296,20 @@ class nueva extends CI_Controller {
 	function actualizarCostosFactura($consecutivo, $sucursal){
 		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
 		$this->factura->updateCostosTotales($costosArray, $consecutivo, $sucursal);
+	}
+	
+	function devolverProductos(){
+		if(isset($_POST['token'])){
+			if($articulos = $this->articulo->getProductosFacturaTemporal($_POST['token'])){
+				include '/../get_session_data.php';
+				//Devolvemos a inventario las cantidades de la factura temporal
+				foreach($articulos as $articulo){
+					$this->articulo->actualizarInventarioSUMA($articulo->Codigo_Articulo, $articulo->Cantidad, $data['Sucursal_Codigo']);
+				}
+				//Eliminamos la factura temporal
+				$this->articulo->eliminarFacturaTemporal($_POST['token']);
+			}
+		}
 	}
  
 }// FIN DE LA CLASE

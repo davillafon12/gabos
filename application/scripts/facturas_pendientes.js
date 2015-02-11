@@ -402,6 +402,17 @@ function numTransaccion(tipo)
 		mxtLabelContado.html('');
 		mxtContado.html('');
 	}
+	else if (tipo.indexOf('apartad') != -1)
+	{
+		vend.html("Abono:");
+		inyectado.html("<input id='cantidad_abono' class='input_uno' style='width: 100px; margin-left: 5px;' autocomplete='off' required='' type='text'>");
+		mxt.html('');
+		mxtLabel.html('');
+		banco_title.html('');
+		banco_sel.css('display', 'none');
+		mxtLabelContado.html('');
+		mxtContado.html('');
+	}
 }
 
 function disableInputs(){

@@ -338,6 +338,8 @@ Class factura extends CI_Model
 		}
 	}
 	
+	
+	
 	function actualizarFacturaHead($datos, $consecutivo, $sucursal){
 		$this->db->where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
 		$this->db->where('Factura_Consecutivo', mysql_real_escape_string($consecutivo));
@@ -414,6 +416,40 @@ Class factura extends CI_Model
 							'Credito_Cliente_Cedula' => $cliente
 							);
 		$this->db->insert('TB_24_Credito',$dataGuardar);
+		return $this->db->insert_id();
+	}
+	
+	function guardarPagoAbono($credito, $abono){
+		$dataGuardar = array(
+							'Abono' => $abono,
+							'Credito' => $credito
+							);
+		$this->db->insert('tb_40_apartado',$dataGuardar);
+	}
+	
+	function getAbonoApartado($sucursal, $consecutivo){
+		/*
+			SELECT 	tb_40_apartado.Abono		
+			FROM tb_40_apartado
+			JOIN tb_24_credito ON tb_40_apartado.Credito = tb_24_credito.Credito_Id
+			WHERE tb_24_credito.Credito_Factura_Consecutivo = 1
+			AND tb_24_credito.Credito_Sucursal_Codigo = 0
+		*/
+		$this->db->select('tb_40_apartado.Abono');
+		$this->db->from('tb_40_apartado');
+		$this->db->join('tb_24_credito','tb_40_apartado.Credito = tb_24_credito.Credito_Id');
+		$this->db->where('tb_24_credito.Credito_Factura_Consecutivo', $consecutivo);
+		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
+		$query = $this->db->get();
+		if($query -> num_rows() != 0)
+		{
+		   $result = $query->result();
+		   return $result[0]->Abono;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	
 	function getCreditosClientePorSucursal($cedula, $sucursal){
