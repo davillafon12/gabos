@@ -55,9 +55,28 @@ function seleccionarTipoDocumento(d, data){
 		case 'f':
 			imprimirFactura(data);			
 		break;
+		case 'r':
+			//Sacamos cuantos recibos se hicieron
+			cant_recibos = data.recibos.length;
+			for(i=0; i<cant_recibos; i++){
+				recibo = data.recibos[i];
+				recibo.push(data.empresa);
+				imprimirRecibo(recibo);
+			}
+		break;
+		case 'nc':
+			imprimirNotaCredito(data);			
+		break;
+		case 'nd':
+			imprimirNotaDebito(data);			
+		break;
 	}
 	comenzarCierre();
 }
+
+/**********************************************************************************************************************************
+											FUNCIONES DE IMPRESION DE CADA DOCUMENTO
+**********************************************************************************************************************************/
 
 function imprimirFactura(data){
 	empresa = data.empresa[0];
@@ -66,7 +85,7 @@ function imprimirFactura(data){
 	
 	qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
-	qz.append("\x1B\x74\x02"); //Code page PC850
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	//Seleccionamos el tipo de letra
 	qz.append("\x1B\x21\x10");
 	//Centramos
@@ -80,12 +99,15 @@ function imprimirFactura(data){
 	qz.append(" Email: "+empresa.email+" \r\n");
 	qz.append(" \r\n");
 	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	qz.append("----------------------------------------\r\n");			
 	qz.append(" Factura: "+factura.consecutivo+"\r\n"); 
 	qz.append(" Fecha: "+factura.fecha+"\r\n"); 
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Cliente: "+factura.cliente_ced+"\r\n");
-	qz.append(" Nombre: "+factura.cliente_nom.substring(0, 31)+"\r\n");
+	qz.append(" Nombre: \r\n");
+	//Se tira en otro reglo para que queda todo el nombre, si es mayor a 40 lo corta
+	qz.append(factura.cliente_nom.substring(0, 40)+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Tipo de Pago: "+factura.tipo+"\r\n"); 
 	if(factura.tipo==='credito'){
@@ -94,6 +116,8 @@ function imprimirFactura(data){
 	}else if(factura.tipo==='mixto'){
 		qz.append(" Pagado con Tarjeta: "+formatearNumero(factura.cantidadTarjeta)+"\r\n");
 		qz.append(" Pagado con Contado: "+formatearNumero(factura.cantidadContado)+"\r\n");
+	}else if(factura.tipo==='apartado'){
+		qz.append(" Abono: "+formatearNumero(factura.abono)+"\r\n");
 	}
 	qz.append(" Moneda: "+factura.moneda+"\r\n"); 
 	qz.append(" Vendedor: "+factura.vendedor.substring(0, 29)+"\r\n");
@@ -132,6 +156,207 @@ function imprimirFactura(data){
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
 	qz.print();
 }
+
+
+function imprimirRecibo(data){
+	recibo = data[0];
+	empresa = data[1][0];
+	
+	qz = document.getElementById("qz");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x10");
+	//Centramos
+	qz.append("\x1B\x61\x01");
+	qz.append(" "+empresa.nombre+" \r\n");
+	//Seleccionamos tipo de letra
+	qz.append("\x1B\x21\x01");
+	qz.append(" Ced. Jur.: "+empresa.cedula+" \r\n");
+	qz.append(" Tel.: "+empresa.telefono+" \r\n");
+	//qz.append(" Direccion: "+empresa.Sucursal_Direccion+" \r\n");
+	qz.append(" Email: "+empresa.email+" \r\n");
+	qz.append(" \r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("----------------------------------------\r\n");
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x08");	
+	qz.append("Recibo de Dinero\r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("Numero: "+recibo.recibo+"\r\n");
+	qz.append("Fecha: "+recibo.fecha_recibo+"\r\n");
+	qz.append("Moneda: "+recibo.moneda+"\r\n");
+	qz.append("Tipo de Pago: "+recibo.tipo_pago+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append("Recibimos de: "+recibo.cliente_cedula+"\r\n");
+	qz.append(recibo.cliente_nombre.substring(0, 40)+"\r\n");
+	qz.append("La suma de: "+formatearNumero(recibo.monto)+"\r\n");
+	qz.append("Por concepto de abono a la factura: \r\n");
+	qz.append("Consecutivo: "+recibo.factura+"\r\n");
+	qz.append("Emitida: "+recibo.fecha_expedicion+"\r\n");
+	qz.append("Monto: "+formatearNumero(recibo.Saldo_inicial)+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append("Saldo Anterior:"+formatearMontoTotal(formatearNumero(recibo.saldo_anterior))+"\r\n");
+	//Underline
+	qz.append("\x1B\x2D\x01");		
+	qz.append("Este Abono:    "+formatearMontoTotal(formatearNumero(recibo.monto))+"\r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("Saldo Actual:  "+formatearMontoTotal(formatearNumero(recibo.saldo))+"\r\n");
+	qz.append("\r\n\r\n\r\n");
+	//Centramos 
+	qz.append("\x1B\x61\x01");
+	//Underline
+	qz.append("\x1B\x2D\x01");
+	qz.append("                              \r\n");	
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	//Centramos 
+	qz.append("\x1B\x61\x01");
+	qz.append("Firma Autoriza\r\n");
+	qz.append("\r\n");
+	qz.append("Gracias por su visita\r\n");
+	//Damos espacio al final
+	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.print();
+}
+
+function imprimirNotaCredito(data){
+	empresa = data.empresa[0];
+	nota = data.notaHead[0];
+	productos = data.notaBody;
+
+	qz = document.getElementById("qz");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x10");
+	//Centramos
+	qz.append("\x1B\x61\x01");
+	qz.append(" "+empresa.nombre+" \r\n");
+	//Seleccionamos tipo de letra
+	qz.append("\x1B\x21\x01");
+	qz.append(" Ced. Jur.: "+empresa.cedula+" \r\n");
+	qz.append(" Tel.: "+empresa.telefono+" \r\n");
+	//qz.append(" Direccion: "+empresa.Sucursal_Direccion+" \r\n");
+	qz.append(" Email: "+empresa.email+" \r\n");
+	qz.append(" \r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("----------------------------------------\r\n");
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x08");	
+	qz.append("Nota de Credito\r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("Numero: "+nota.nota+"\r\n");
+	qz.append("Fecha: "+nota.fecha+"\r\n");
+	qz.append("Moneda: "+nota.moneda+"\r\n");
+	qz.append("Tipo de Pago: "+nota.tipo_pago+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append(" Cliente: "+nota.cliente_cedula+"\r\n");
+	qz.append(" Nombre: \r\n");
+	//Se tira en otro reglo para que queda todo el nombre, si es mayor a 40 lo corta
+	qz.append(nota.cliente_nombre.substring(0, 40)+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append(" Articulo      C.B.  C.D.       Precio  \r\n");
+	qz.append("----------------------------------------\r\n");
+	//PROCESADO DE PRODUCTOS
+	for(i = 0; productos.length>i; i++){
+		bueno = parseInt(productos[i].bueno);
+		defectuoso = parseInt(productos[i].defectuoso);		
+		precio = parseFloat(productos[i].precio);
+				
+		precio = precio * (bueno+defectuoso);
+		precio = precio+"".trim();
+		
+		bueno = bueno+"";
+		defectuoso = defectuoso+"";	
+		
+		qz.append(formatearCodigo(productos[i].codigo)+formatearCantidad(bueno)+formatearDescuento(defectuoso)+acomodarPrecio(formatearNumero(precio))+"\r\n");
+		qz.append(" ->"+productos[i].descripcion.substring(0, 36)+"\r\n");
+	}
+	qz.append("----------------------------------------\r\n");
+	qz.append(enviarDerecha("Subtotal:"+formatearMontoTotal(formatearNumero(nota.subtotal)))+"\r\n");
+	qz.append(enviarDerecha("IVA:"+formatearMontoTotal(formatearNumero(nota.total_iva)))+"\r\n");
+	qz.append(enviarDerecha("Total:"+formatearMontoTotal(formatearNumero(nota.total)))+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append("\r\n");
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x10");
+	//Centramos 
+	qz.append("\x1B\x61\x01");
+	qz.append("Se aplica esta nota credito a\r\n");
+	qz.append("la factura #"+nota.factura_aplicar+"\r\n");
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x01");
+	qz.append("Gracias por su visita\r\n");
+	//Damos espacio al final
+	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.print();
+}
+
+function imprimirNotaDebito(data){
+	empresa = data.empresa[0];
+	nota = data.notaHead[0];
+	productos = data.notaBody;
+
+	qz = document.getElementById("qz");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x10");
+	//Centramos
+	qz.append("\x1B\x61\x01");
+	qz.append(" "+empresa.nombre+" \r\n");
+	//Seleccionamos tipo de letra
+	qz.append("\x1B\x21\x01");
+	qz.append(" Ced. Jur.: "+empresa.cedula+" \r\n");
+	qz.append(" Tel.: "+empresa.telefono+" \r\n");
+	//qz.append(" Direccion: "+empresa.Sucursal_Direccion+" \r\n");
+	qz.append(" Email: "+empresa.email+" \r\n");
+	qz.append(" \r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("----------------------------------------\r\n");
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x08");	
+	qz.append("Nota de Debito\r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("Numero: "+nota.nota+"\r\n");
+	qz.append("Fecha: "+nota.fecha+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append(" Articulo      Cantidad         Precio  \r\n");
+	qz.append("----------------------------------------\r\n");
+	//PROCESADO DE PRODUCTOS
+	for(i = 0; productos.length>i; i++){
+		cantidad = parseInt(productos[i].cantidad);		
+		precio = parseFloat(productos[i].precio);
+		precio = precio * cantidad;
+		cantidad = cantidad+""; //Para pasarlo a string
+		
+		qz.append(formatearCodigo(productos[i].codigo)+"    "+formatearCantidad(cantidad)+"  "+acomodarPrecio(formatearNumero(precio))+"\r\n");
+		qz.append(" ->"+productos[i].descripcion.substring(0, 36)+"\r\n");
+	}
+	qz.append("----------------------------------------\r\n");
+	qz.append(enviarDerecha("Subtotal:"+formatearMontoTotal(formatearNumero(nota.subtotal)))+"\r\n");
+	qz.append(enviarDerecha("IVA:"+formatearMontoTotal(formatearNumero(nota.total_iva)))+"\r\n");
+	qz.append(enviarDerecha("Total:"+formatearMontoTotal(formatearNumero(nota.total)))+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	//Damos espacio al final
+	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.print();
+}
+
+/**********************************************************************************************************************************
+											         FUNCIONES DE FORMATEO
+**********************************************************************************************************************************/
+
+
+
 
 function formatearNumero(numero){
 	numero = parseFloat(numero);
