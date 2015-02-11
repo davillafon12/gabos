@@ -98,6 +98,38 @@
 			}
 		}
 		
+		function getPorcentajeIVA(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'iva');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return null; 
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
+		function getTipoCambioCompraDolar(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'dolar_compra');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return null; 
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
 		function getConfiguracionArray(){
 			$this->db->from('tb_39_configuracion');
 			$query = $this->db->get();		
