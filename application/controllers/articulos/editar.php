@@ -130,52 +130,6 @@ class editar extends CI_Controller {
 	}
  }//FIN DE GETTABLE
  
-	function obtenerArticulosTabla(){
-		include '/../get_session_data.php';
-		//Un array que contiene el nombre de las columnas que se pueden ordenar
-		$columnas = array(
-								'0' => 'Articulo_Codigo',
-								'1' => 'Articulo_Codigo',
-								'2' => 'Articulo_Descripcion',
-								'3' => 'Articulo_Cantidad_Inventario',
-								'4' => 'Articulo_Descuento'
-								);
-		$query = $this->articulo->obtenerArticulosParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $data['Sucursal_Codigo']);
-		
-		$ruta_imagen = base_url('application/images/Icons');
-		$articulosAMostrar = array();
-		foreach($query->result() as $art){
-			$auxArray = array(
-				"<input class='checkbox'  type='checkbox' name='articulos_seleccionados' value='".$art->codigo."'>",
-				$art->codigo,
-				$art->descripcion,
-				$art->inventario,
-				$art->descuento,
-				number_format($this->articulo->getPrecioProducto($art->codigo, 0, $data['Sucursal_Codigo']),2),
-				number_format($this->articulo->getPrecioProducto($art->codigo, 1, $data['Sucursal_Codigo']),2),
-				number_format($this->articulo->getPrecioProducto($art->codigo, 2, $data['Sucursal_Codigo']),2),
-				"
-				<div class='tab_opciones'>
-					<a href='".base_url('')."articulos/editar/edicion?id=".$art->codigo."' ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>
-				</div>
-				"
-			);
-			array_push($articulosAMostrar, $auxArray);
-		}
-		
-		$filtrados = $this->articulo->obtenerArticulosParaTablaFiltrados($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $data['Sucursal_Codigo']);
-		
-		$retorno = array(
-					'draw' => $_POST['draw'],
-					'recordsTotal' => $this->articulo->getTotalArticulosEnSucursal($data['Sucursal_Codigo']),
-					'recordsFiltered' => $filtrados -> num_rows(),
-					'data' => $articulosAMostrar
-				);
-		echo json_encode($retorno);
-	}
-	
-	
- 
  function edicion()
  {
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion	
