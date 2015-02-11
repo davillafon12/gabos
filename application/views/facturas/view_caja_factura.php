@@ -233,10 +233,12 @@ PARA:
 						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="cheque"><div class="tipos_de_pago">Cheque</div>
 						
 						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="deposito"><div class="tipos_de_pago">Deposito</div>
-						
+						<br>
 						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="mixto"><div class="tipos_de_pago">Mixto</div>
 						
 						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="credito"><div class="tipos_de_pago">Crédito</div>
+						
+						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="apartado"><div class="tipos_de_pago">Apartado</div>
 					</td>
 					<td id="numero_transaccion_container">
 					</td>

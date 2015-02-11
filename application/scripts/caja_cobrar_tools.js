@@ -186,6 +186,11 @@ function validarPago(){
 			alertaPago('¡Debe ingresar un número de autorización, monto de tarjeta y/o monto en efectivo válido!','#numero_transaccion');
 			return false;
 		}
+	}else if(tipoPago.trim()==='apartado'){
+		if(!validarApartado()){
+			alertaPago('¡Debe ingresar monto de abono válido!','#cantidad_abono');
+			return false;
+		}
 	}
 	return true;
 }
@@ -236,6 +241,24 @@ function validarMixto(){
 	return false;
 }
 
+function validarApartado(){
+	abono = $("#cantidad_abono").val();
+	if($.isNumeric(abono)){
+		cantidadTotalFactura = $("#costo_total").val();
+		cantidadTotalFactura = cantidadTotalFactura.replace(',','');
+		cantidadTotalFactura = parseFloat(cantidadTotalFactura);
+		abono = parseFloat(abono);
+		cantidadTotalFactura -= abono;
+		if(cantidadTotalFactura>=0){
+			return true;
+		}else{
+			return false;
+		}
+	}else{
+		return false;
+	}
+}
+
 function tipoPagoJSON(){
 	tipoPago = $('input[name=tipo]:checked').val();
 	if(tipoPago.trim()==='tarjeta'){
@@ -248,6 +271,8 @@ function tipoPagoJSON(){
 		return [{'tipo':'mixto','transaccion':$('#numero_transaccion').val(),'cantidad':$('#cantidad_mixto').val(),'banco':$('#banco_sel').val()}];
 	}else if(tipoPago.trim()==='credito'){
 		return [{'tipo':'credito','canDias':$('#cant_dias_credito').val()}];
+	}else if(tipoPago.trim()==='apartado'){
+		return [{'tipo':'apartado','abono':$('#cantidad_abono').val()}];
 	}else if(tipoPago.trim()==='contado'){
 		return [{'tipo':'contado'}];
 	}
@@ -277,8 +302,13 @@ function enviarCobro(URL){
 				displayErrors(facturaHEAD[0].error);
 				$('#envio_factura').bPopup().close();
 			}else if(facturaHEAD[0].status==="success"){
-				$('#envio_factura').bPopup().close();						
-				window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+				$('#envio_factura').bPopup().close();	
+				if(tipoImpresion==='t'){
+					//Impresion termica
+					window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+				}else if(tipoImpresion==='c'){
+					//Impresion carta
+				}
 				window.location = location.protocol+'//'+document.domain+'/facturas/caja';
 			}
 			}

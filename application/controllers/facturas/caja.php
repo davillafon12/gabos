@@ -216,7 +216,7 @@ class caja extends CI_Controller {
 							$this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
 							
 							//Agregamos tipo de pago
-							//Tarjeta, Deposito, Cheque y Mixto
+							//Tarjeta, Deposito, Cheque, Mixto, Apartado
 							$this->guardarTipoPago($tipoPago, $consecutivo, $data['Sucursal_Codigo']);
 							
 							
@@ -332,6 +332,22 @@ class caja extends CI_Controller {
 				}
 			
 				$this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, $tipoPago['canDias'], $Current_datetime, $totalFactura);
+				break;
+			case 'apartado':
+				//Guardamos como si fuera un credito y luego como apartado
+				$abono = $tipoPago['abono'];
+				if(!is_numeric($abono)){$abono=0;}
+				date_default_timezone_set("America/Costa_Rica");
+				$Current_datetime = date("y/m/d : H:i:s", now());
+				$facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
+				foreach($facturaHead as $row){					
+					$totalFactura = $row->Factura_Monto_Total;
+				}	
+				
+				$totalFactura = $totalFactura - $abono;				
+				$credito = $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, 10000, $Current_datetime, $totalFactura);				
+				$this->factura->guardarPagoAbono($credito, $abono);
+				
 				break;
 		}
 	}
