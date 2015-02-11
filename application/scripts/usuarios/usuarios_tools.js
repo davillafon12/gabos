@@ -113,16 +113,16 @@ function tipoCedula(){
 	var opcion = valor; 
 	switch (opcion) {
 		case 1:
-			("#cedula_usuario").mask("999999999"); 
+			$("#cedula_usuario").mask("999999999"); 
 			break;
 		case 2:
-			("#cedula_usuario").mask("9999999999999"); 
+			$("#cedula_usuario").mask("999999999999"); 
 			break;
 		case 3:
-			("#cedula_usuario").mask("9999999999"); 
+			$("#cedula_usuario").mask("9999999999"); 
 			break;	
 		default:
-			("#cedula_usuario").mask("999999999"); 
+			$("#cedula_usuario").mask("999999999"); 
 			break;
 	}
 	

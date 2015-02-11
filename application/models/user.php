@@ -315,6 +315,7 @@ function existe_Nombre_Usuario($nombre){
 		$this -> db -> where('Usuario_Nombre_Usuario', mysql_real_escape_string($username));
 		$this -> db -> where('Usuario_Password', mysql_real_escape_string($password));
 		$this -> db -> where('Usuario_Rango', 'administra');
+		$this -> db -> or_where('Usuario_Rango', 'avanzado');
 		$this -> db -> where('TB_02_Sucursal_Codigo', $data['Sucursal_Codigo']); //Que pertenezca a la surcusal de factura
 		$this -> db -> limit(1);
 

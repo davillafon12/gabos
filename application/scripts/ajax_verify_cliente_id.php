@@ -121,7 +121,7 @@ echo
 					$(\"#cedula\").mask(\"999999999\"); 
 					break;
 				case 2:
-					$(\"#cedula\").mask(\"9999999999999\"); 
+					$(\"#cedula\").mask(\"999999999999\"); 
 					break;
 				case 3:
 					$(\"#cedula\").mask(\"9999999999\"); 
