@@ -20,6 +20,71 @@ Class articulo extends CI_Model
 		}
 	}
 	
+	function getTotalArticulosEnSucursal($sucursal){
+		$this->db->from('TB_06_Articulo');
+		$query = $this -> db -> get();
+		return $query -> num_rows();
+	}
+	
+	function obtenerArticulosParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal){
+		/*
+			SELECT 	Articulo_Codigo AS codigo,
+					Articulo_Descripcion AS descripcion,
+					Articulo_Cantidad_Inventario AS inventario,
+					Articulo_Descuento AS descuento
+			FROM tb_06_articulo
+			WHERE (Articulo_Codigo LIKE '%%' OR
+				   Articulo_Descripcion LIKE '%%' OR
+				   Articulo_Cantidad_Inventario LIKE '%%' OR
+				   Articulo_Descuento LIKE '%%')
+			AND    TB_02_Sucursal_Codigo = $sucursal
+			ORDER BY Articulo_Codigo DESC
+			LIMIT 40,60
+		*/
+		return $this->db->query("
+			SELECT 	Articulo_Codigo AS codigo,
+					Articulo_Descripcion AS descripcion,
+					Articulo_Cantidad_Inventario AS inventario,
+					Articulo_Descuento AS descuento
+			FROM tb_06_articulo
+			WHERE (Articulo_Codigo LIKE '%$busqueda%' OR
+				   Articulo_Descripcion LIKE '%$busqueda%' OR
+				   Articulo_Cantidad_Inventario LIKE '%$busqueda%' OR
+				   Articulo_Descuento LIKE '%$busqueda%')
+			AND    TB_02_Sucursal_Codigo = $sucursal
+			ORDER BY $columnaOrden $tipoOrden
+			LIMIT $inicio,$cantidad		
+		");		
+	}
+	
+	function obtenerArticulosParaTablaFiltrados($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal){
+		/*
+			SELECT 	Articulo_Codigo AS codigo,
+					Articulo_Descripcion AS descripcion,
+					Articulo_Cantidad_Inventario AS inventario,
+					Articulo_Descuento AS descuento
+			FROM tb_06_articulo
+			WHERE (Articulo_Codigo LIKE '%%' OR
+				   Articulo_Descripcion LIKE '%%' OR
+				   Articulo_Cantidad_Inventario LIKE '%%' OR
+				   Articulo_Descuento LIKE '%%')
+			ORDER BY Articulo_Codigo DESC
+			LIMIT 40,60
+		*/
+		return $this->db->query("
+			SELECT 	Articulo_Codigo AS codigo,
+					Articulo_Descripcion AS descripcion,
+					Articulo_Cantidad_Inventario AS inventario,
+					Articulo_Descuento AS descuento
+			FROM tb_06_articulo
+			WHERE (Articulo_Codigo LIKE '%$busqueda%' OR
+				   Articulo_Descripcion LIKE '%$busqueda%' OR
+				   Articulo_Cantidad_Inventario LIKE '%$busqueda%' OR
+				   Articulo_Descuento LIKE '%$busqueda%')	
+			AND    TB_02_Sucursal_Codigo = $sucursal
+		");		
+	}
+	
 	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5)
 	{
 		if($this->existe_Articulo($articulo_Codigo, $TB_02_Sucursal_Codigo)){
@@ -225,7 +290,7 @@ Class articulo extends CI_Model
 				//HAY QUE VALIDAR EL DESCUENTO POR FAMILIA, ARTICULO Y CLIENTE
 				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento);
 				//SE ENVIA EL DESCUENTO DEL ARTICULO 
-				$articuloXML = "1,$codigo,".$row->Articulo_Descripcion.",".$row->Articulo_Cantidad_Inventario.",$descuento,".$row->TB_05_Familia_Familia_Codigo.",".$this->getPrecioProducto($codigo, $numero_precio, $sucursal).",".$this->getPrecioProducto($codigo, 2, $sucursal).",".$URL_IMAGEN.",".$row->Articulo_Exento;
+				$articuloXML = "1,$codigo,".$row->Articulo_Descripcion.",".$row->Articulo_Cantidad_Inventario.",$descuento,".$row->TB_05_Familia_Familia_Codigo.",".$this->getPrecioProducto($codigo, $numero_precio, $sucursal).",".$this->getPrecioProducto($codigo, 1, $sucursal).",".$URL_IMAGEN.",".$row->Articulo_Exento;
 				
 				//return $ruta_a_preguntar ;
 				
@@ -257,7 +322,7 @@ Class articulo extends CI_Model
 			foreach($result as $row)
 			{
 				$URL_IMAGEN = $row->Articulo_Imagen_URL;				
-				$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$URL_IMAGEN.'.jpg';
+				$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$URL_IMAGEN;
 				
 				if(!file_exists($ruta_a_preguntar)){$URL_IMAGEN = '00.jpg';}
 				
@@ -269,7 +334,7 @@ Class articulo extends CI_Model
 				$articulo['descuento'] = $descuento;
 				$articulo['familia'] = $row->TB_05_Familia_Familia_Codigo;
 				$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
-				$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 2, $sucursal);
+				$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 1, $sucursal);
 				$articulo['imagen'] = $URL_IMAGEN;
 				$articulo['exento'] = $row->Articulo_Exento;
 								
@@ -479,6 +544,69 @@ Class articulo extends CI_Model
 		$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
 		$this->db->update('TB_06_Articulo' ,$data);
 		return '-3';*/
+	}
+	
+	function actualizarInventarioFacturaTemporal($codigo, $sucursal, $cantidadAgregar, $tokenFactura, $estaRestando){
+		if($articulo = $this->getArticuloFacturaTemporal($codigo, $sucursal, $tokenFactura)){
+			//Si existe actualizamos
+			$cantidadActual = $articulo->Cantidad;
+			if($estaRestando){
+				$cantidadActual -= $cantidadAgregar;
+			}else{
+				$cantidadActual += $cantidadAgregar;
+			}			
+			//echo "A:".$cantidadAgregar."Ac:".$cantidadActual;
+			$datos = array('Cantidad' => $cantidadActual);
+			$this->db->where('Codigo_Articulo',$codigo);
+			$this->db->where('Factura_Temporal',$tokenFactura);
+			$this->db->where('Sucursal',$sucursal);
+			$this->db->update('tb_41_productos_factura_temporal', $datos);
+		}else{
+			//Si no existe creamos
+			$datos = array(
+						'Codigo_Articulo' => $codigo,
+						'Factura_Temporal' => $tokenFactura,
+						'Sucursal' => $sucursal,
+						'Cantidad' => $cantidadAgregar
+						);
+			$this->db->insert('tb_41_productos_factura_temporal', $datos);
+		}
+		$this->eliminarArticulosEnCeroFacturaTemporal($tokenFactura);
+	}
+	
+	function getArticuloFacturaTemporal($codigo, $sucursal, $tokenFactura){
+		$this->db->from('tb_41_productos_factura_temporal');
+		$this->db->where('Codigo_Articulo',$codigo);
+		$this->db->where('Factura_Temporal',$tokenFactura);
+		$this->db->where('Sucursal',$sucursal);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+	
+	function eliminarArticulosEnCeroFacturaTemporal($factura){
+		$this->db->where('Factura_Temporal',$factura);
+		$this->db->where('Cantidad',0);
+		$this->db->delete('tb_41_productos_factura_temporal');
+	}
+	
+	function eliminarFacturaTemporal($factura){
+		$this->db->where('Factura_Temporal',$factura);
+		$this->db->delete('tb_41_productos_factura_temporal');
+	}
+	
+	function getProductosFacturaTemporal($factura){
+		$this->db->from('tb_41_productos_factura_temporal');
+		$this->db->where('Factura_Temporal',$factura);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
 	}
 	
 	function actualizarInventarioSUMADefectuoso($codigo_producto, $cantidad, $sucursal){		
