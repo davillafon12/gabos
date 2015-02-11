@@ -201,15 +201,21 @@ class notas extends CI_Controller {
 								if($consecutivo = $this->contabilidad->getConsecutivo($data['Sucursal_Codigo'])){
 									date_default_timezone_set("America/Costa_Rica");
 									$fecha = date("y/m/d : H:i:s", now());
-								
-									if($this->contabilidad->agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cedula, $data['Sucursal_Codigo'], $facturaAcreditar, $facturaAplicar)){
+									
+									$tipoPago = 'contado'; //Por defetco guarda este
+									$moneda = 'colones'; //Por defecto guarda este
+									
+									
+									if($this->contabilidad->agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cedula, $data['Sucursal_Codigo'], $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $this->configuracion->getPorcentajeIVA(), $this->configuracion->getTipoCambioCompraDolar())){
 										$this->contabilidad->agregarProductosNotaCredito($consecutivo, $data['Sucursal_Codigo'], $productosAAcreditar, $cedula);
 										
 										$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo la nota credito: $consecutivo",$data['Sucursal_Codigo'],'nota');
-										
 										$retorno['status'] = 'success';
-										$retorno['consecutivo'] = $consecutivo;
+										$retorno['nota'] = $consecutivo;
 										unset($retorno['error']);
+										$retorno['sucursal']= $data['Sucursal_Codigo'];
+										$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+										$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 									}else{
 										//No se pudo crear la nota
 										$retorno['error'] = '9';
@@ -300,6 +306,10 @@ class notas extends CI_Controller {
 					}
 					//Si no existe el articulo no lo procesa
 				}
+				
+				$retorno['sucursal']= $data['Sucursal_Codigo'];
+				$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+				$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");				
 				$retorno['status'] = 'success';
 				$retorno['consecutivo'] = $consecutivo;
 				unset($retorno['error']);

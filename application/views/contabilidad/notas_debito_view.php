@@ -7,7 +7,7 @@ PARA:
 -GAROTAS BONITAS S.A.
 2014
 -->
-
+<?php $this->contabilidad->getHeadNotaDebito(1, 0)?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -63,6 +63,11 @@ PARA:
 			
 			<div class="contenedor" >
 				<span class="contact">Productos a Debitar</span>
+				<p class="contact" style="display:inline;"><label for="impresion">Impresión:</label></p> 					
+				<select id="tipo_impresion" onChange="cambiarTipoImpresion(this.value)" class="impresion" name="impresion" >
+					<option value="t">PV</option>
+					<option value="c">A4</option>
+				</select>
 				<table id="tabla_productos" class="tabla_productos" >
 					<thead>
 						<th class="th_codigo">Código</th>

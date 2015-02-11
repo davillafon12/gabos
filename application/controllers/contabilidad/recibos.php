@@ -34,9 +34,9 @@ class recibos extends CI_Controller {
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['cedula'])){
 			$cedula = $_POST['cedula']; 
-			if(trim($cedula) == '1' || trim($cedula) == '0'){
+			/*if(trim($cedula) == '1' || trim($cedula) == '0'){
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
-			}else{
+			}else{*/
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
 					include '/../get_session_data.php';					
 					if($creditos = $this->cliente->getFacturasConSaldo($cedula, $data['Sucursal_Codigo'])){
@@ -69,7 +69,7 @@ class recibos extends CI_Controller {
 				}else{
 					$retorno['error'] = '3'; //Error no hay cliente
 				}
-			}
+			//}
 		}else{
 			$retorno['error'] = '2'; //Error en la URL
 		}
@@ -93,9 +93,13 @@ class recibos extends CI_Controller {
 						//Estas facturas son los creditos realizados					
 						$facturas = json_decode($_POST['facturas'], true);
 						if($recibos = $this->procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago)){
-												
+							include '/../get_session_data.php';					
 							$retorno['status'] = 'success';
 							$retorno['recibos'] = $recibos;
+							$retorno['sucursal']= $data['Sucursal_Codigo'];
+							$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+							$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+							//La transaccion se guarda en $this->procesarFacturas
 						}else{
 							$retorno['error'] = '9'; //Error pagando facturas
 						}

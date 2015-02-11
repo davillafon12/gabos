@@ -139,6 +139,15 @@ function enviarServer(json){
 					//Cargamos una cedula vacia y la buscamos para resetear todo
 					$("#cedula").val('');
 					buscarCedula(null);
+					
+					if(tipoImpresion==='t'){
+						//Impresion termica
+						window.open(informacion[0].servidor_impresion+'/index.html?t='+informacion[0].token+'&d=nc&n='+informacion[0].nota+'&s='+informacion[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Notas Credito','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+					}else if(tipoImpresion==='c'){
+						//Impresion carta
+					}
+					
+					
 				}
 			}catch(e){
 				//alert(e);
@@ -182,5 +191,23 @@ function manejarErroresEnvioNotas(error){
 	}
 }
 
+// Para el tamaño del windows open
+var anchoImpresion = 290;
+var alturaImpresion = 400;
+var tipoImpresion = 't';
+
+function cambiarTipoImpresion(tipo){
+	tipoImpresion = tipo;
+	switch(tipo){
+		case 't':
+			anchoImpresion = 290;
+			alturaImpresion = 400;
+		break;
+		case 'c':
+			anchoImpresion = 1024;
+			alturaImpresion = 768;
+		break;
+	}
+}
 
 

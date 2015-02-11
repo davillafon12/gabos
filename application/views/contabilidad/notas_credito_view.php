@@ -84,6 +84,13 @@ PARA:
 							<input id="cedula" class="input_uno" placeholder="Inserte el numero de cédula" name="cedula" autocomplete="off" type="text" onkeyup="buscarCedula(event);" required="" tabindex='1'>					
 							<script>document.getElementById('cedula').focus();</script>
 						</td>
+						<td>
+							<p class="contact" style="display:inline;"><label for="impresion">Impresión:</label></p> 					
+							<select id="tipo_impresion" onChange="cambiarTipoImpresion(this.value)" class="impresion" name="impresion" >
+								<option value="t">PV</option>
+								<option value="c">A4</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td>
