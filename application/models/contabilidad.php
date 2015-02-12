@@ -624,6 +624,14 @@ Class contabilidad extends CI_Model
 			return $query->result();
 		}
 	}
+	
+	function guardarTipoDeposito($documento, $recibo){
+		$datos = array(
+						'Numero_Documento' => $documento,
+						'Recibo' => $recibo
+						);
+		$this->db->insert('tb_43_deposito_recibo', $datos);
+	}
 }
 
 

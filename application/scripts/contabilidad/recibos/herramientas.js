@@ -133,10 +133,18 @@ function numTransaccion(tipo)
 	{
 		$("#num_transaccion_field").css('display', 'none');
 		$("#datafono_field").css('display', 'none');
+		$("#num_documento_field").css('display', 'none');
 	}
 	else if (tipo.indexOf('tarjet') != -1)
 	{
 		$("#num_transaccion_field").css('display', 'block');
 		$("#datafono_field").css('display', 'block');
+		$("#num_documento_field").css('display', 'none');
+	}
+	else if (tipo.indexOf('deposit') != -1)
+	{
+		$("#num_transaccion_field").css('display', 'none');
+		$("#datafono_field").css('display', 'none');
+		$("#num_documento_field").css('display', 'block');
 	}	
 }

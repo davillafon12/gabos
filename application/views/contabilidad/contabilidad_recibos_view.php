@@ -95,6 +95,7 @@ PARA:
 						<td>
 							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="contado" checked><div class="tipos_de_pago">Contado</div>
 							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="tarjeta"><div class="tipos_de_pago">Tarjeta</div>
+							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="deposito"><div class="tipos_de_pago">Deposito</div>
 						</td>
 					</tr>
 					<tr>
@@ -105,10 +106,14 @@ PARA:
 							<input id="nombre" class="input_uno" placeholder="Inserte el nombre del cliente" autocomplete="off" name="nombre" type="text" >
 							<script>setUpLiveSearch();</script>
 						</td>	
-						<td colspan="2">
+						<td>
 							<div id="num_transaccion_field" style="display: none;">
 								<p class="contact" style="display: inline;">Número de Autorización:</p>
 								<input id='numero_transaccion' class='input_uno' style='width: 100px; margin-left: 5px;' autocomplete='off' name='numero_transaccion' required='' type='text'>
+							</div>
+							<div id="num_documento_field" style="display: none;">
+								<p class="contact" style="display: inline;">Número de Documento:</p>
+								<input id='numero_documento' class='input_uno' style='width: 100px; margin-left: 5px;' autocomplete='off' name='numero_documento' required='' type='text'>
 							</div>
 						</td>
 						<td>

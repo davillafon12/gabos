@@ -71,6 +71,7 @@ function enviarCobro(cedula, saldo){
 				if(informacion[0].status==="error"){
 					manejarErrores(informacion[0].error);
 				}else if(informacion[0].status==="success"){
+					notyMsg('¡Se ha creado el recibo con éxito!', 'success');
 					resetFields();
 					buscarCedula(null);
 					if(tipoImpresion==='t'){
@@ -115,6 +116,12 @@ function validarPago(){
 			notyMsg('¡Debe ingresar un número de autorización válido!','error');
 			return false;
 		}
+	}else if(tipoPago.trim()==='deposito'){
+		deposito = $('#numero_documento').val();
+		if(deposito.trim()===''){
+			notyMsg('¡Debe ingresar un número de documento válido!','error');
+			return false;
+		}
 	}
 	return true;
 }
@@ -128,6 +135,8 @@ function tipoPagoJSON(){
 	tipoPago = $('input[name=tipo]:checked').val();
 	if(tipoPago.trim()==='tarjeta'){
 		return [{'tipo':'tarjeta','transaccion':$('#numero_transaccion').val(),'banco':$('#banco_sel').val()}];
+	}else if(tipoPago.trim()==='deposito'){
+		return [{'tipo':'deposito', 'documento':$('#numero_documento').val()}];
 	}else if(tipoPago.trim()==='contado'){
 		return [{'tipo':'contado'}];
 	}

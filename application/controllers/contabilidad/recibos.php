@@ -89,12 +89,13 @@ class recibos extends CI_Controller {
 					$tipoPago = json_decode($tipoPago, true);
 					$tipoPago = $tipoPago[0]; //Sacamos el array con los datos
 					//Verificamos que sea el tipo de pago autorizado
-					if($tipoPago['tipo']=='contado'||$tipoPago['tipo']=='tarjeta'){
+					if($tipoPago['tipo']=='contado'||$tipoPago['tipo']=='tarjeta'||$tipoPago['tipo']=='deposito'){
 						//Estas facturas son los creditos realizados					
 						$facturas = json_decode($_POST['facturas'], true);
 						if($recibos = $this->procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago)){
 							include '/../get_session_data.php';					
 							$retorno['status'] = 'success';
+							unset($retorno['error']);
 							$retorno['recibos'] = $recibos;
 							$retorno['sucursal']= $data['Sucursal_Codigo'];
 							$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
@@ -206,6 +207,9 @@ class recibos extends CI_Controller {
 				$comision = $this->banco->getComision($tipoPago['banco']);
 				$this->contabilidad->guardarPagoTarjeta($tipoPago['transaccion'], $tipoPago['banco'], $comision, $recibo, $credito);
 				//$this->contabilidad->guardarPagoTarjeta($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco']);
+				break;
+			case 'deposito':
+				$this->contabilidad->guardarTipoDeposito($tipoPago['documento'], $recibo);				
 				break;
 		}
 	}
