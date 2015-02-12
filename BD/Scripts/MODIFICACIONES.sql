@@ -53,3 +53,18 @@ CREATE TABLE IF NOT EXISTS `GAROTAS_BONITAS_MAIN_DB`.`TB_42_Moneda_Retiro_Parcia
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+
+CREATE TABLE IF NOT EXISTS `GAROTAS_BONITAS_MAIN_DB`.`TB_43_Deposito_Recibo` (
+  `Id` INT NOT NULL,
+  `Numero_Documento` VARCHAR(45) NULL,
+  `Recibo` INT NOT NULL,
+  PRIMARY KEY (`Id`),
+  INDEX `fk_TB_43_Deposito_Recibo_TB_26_Recibos_Dinero1_idx` (`Recibo` ASC),
+  CONSTRAINT `fk_TB_43_Deposito_Recibo_TB_26_Recibos_Dinero1`
+    FOREIGN KEY (`Recibo`)
+    REFERENCES `GAROTAS_BONITAS_MAIN_DB`.`TB_26_Recibos_Dinero` (`Consecutivo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+ALTER TABLE `tb_43_deposito_recibo` CHANGE `Id` `Id` INT(11) NOT NULL AUTO_INCREMENT;
