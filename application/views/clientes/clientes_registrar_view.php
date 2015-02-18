@@ -60,7 +60,8 @@ PARA:
 				$opc_Cedula= array ( 
                   'nacional'   =>  'Nacional' , 
                   'residencia'     =>  'Residencia' , 
-                  'juridica'     =>  'Juridica' , 
+                  'juridica'     =>  'Jurídica' , 
+				  'pasaporte' => 'Pasaporte'
                 ); 
                 $opcCedulaMetodo = 'id="tipo_Cedula", onblur="tipoCedula()", class="styleSelect", tabindex="1" ';
                 $opc_estadoCliente= array ( 

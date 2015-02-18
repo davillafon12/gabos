@@ -61,7 +61,8 @@ PARA:
 					$opc_Cedula= array ( 
 					  'nacional'   =>  'Nacional' , 
 					  'residencia'     =>  'Residencia' , 
-					  'juridica'     =>  'Juridica' , 
+					  'juridica'     =>  'Jurídica' , 
+					  'pasaporte' => 'Pasaporte'
 					);     
 					$opc_rango= array ( 
 					  'vendedor'   =>  'Vendedor' , 

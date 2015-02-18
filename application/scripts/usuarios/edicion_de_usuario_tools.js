@@ -89,24 +89,19 @@ jQuery(function($){
 function convertirResultado(){
 	var selectCedula = document.getElementById("tipo_Cedula"); 
 	var tipo = selectCedula.options[selectCedula.selectedIndex].text; 
-	if(tipo =='Nacional'){
+	if(tipo =="Nacional"){
 		valor = 1; 
-	}
-	else{
-		if(tipo=="Residencia"){
-			valor = 2; 
-		}
-		else{
-			if(tipo=="Juridica"){
-				valor = 3; 
-			}
-			else{
-				valor = 1; 
-			}
-		}
-	}
-	
+	}else if(tipo=="Residencia"){
+		valor = 2; 
+	}else if(tipo=="Jurídica"){
+		valor = 3; 
+	}else if(tipo=='Pasaporte'){
+		valor = 4; 
+	}else{
+		valor = 1;
+	}	
 }
+
 function tipoCedula(){	
 	convertirResultado();
 	var opcion = valor; 
@@ -119,7 +114,10 @@ function tipoCedula(){
 			break;
 		case 3:
 			$("#cedula_usuario").mask("9999999999"); 
-			break;	
+			break;
+		case 4:
+			$("#cedula_usuario").unmask(); 
+			break;
 		default:
 			$("#cedula_usuario").mask("999999999"); 
 			break;

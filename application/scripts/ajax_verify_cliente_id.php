@@ -97,22 +97,17 @@ echo
 			var tipo = selectCedula.options[selectCedula.selectedIndex].text; 
 			if(tipo =='Nacional'){
 				valor = 1; 
-			}
-			else{
-				if(tipo==\"Residencia\"){
-					valor = 2; 
-				}
-				else{
-					if(tipo==\"Juridica\"){
-						valor = 3; 
-					}
-					else{
-						valor = 1; 
-					}
-				}
-			}
-			
+			}else if(tipo=='Residencia'){
+				valor = 2; 
+			}else if(tipo=='Jurídica'){
+				valor = 3; 
+			}else if(tipo=='Pasaporte'){
+				valor = 4; 
+			}else{
+				valor = 1;
+			}			
 		}
+		
 		function tipoCedula(){	
 			convertirResultado();
 			var opcion = valor; 
@@ -125,7 +120,10 @@ echo
 					break;
 				case 3:
 					$(\"#cedula\").mask(\"9999999999\"); 
-					break;	
+					break;
+				case 4:
+					$(\"#cedula\").unmask(); 
+					break;
 				default:
 					$(\"#cedula\").mask(\"999999999\"); 
 					break;
