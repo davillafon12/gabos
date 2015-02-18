@@ -467,6 +467,38 @@ class editar extends CI_Controller {
         $this->image_lib->resize();
 		return $name;
     }
+	
+	function agregarDescuentoMasivo(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		if(isset($_POST['articulos'])&&isset($_POST['descuento'])){
+			$articulos = json_decode($_POST['articulos']);
+			$descuento = $_POST['descuento'];
+			if(sizeof($articulos)>0){
+				if(is_numeric($descuento)){
+					if($descuento<=100&&$descuento>=0){
+						include '/../get_session_data.php';
+						foreach($articulos as $art){
+							if($this->articulo->existe_Articulo($art,$data['Sucursal_Codigo'])){
+								$this->articulo->cambiarDescuento($art, $data['Sucursal_Codigo'], $descuento);
+							}
+						}
+						$retorno['status'] = 'success';
+						unset($retorno['error']);
+					}else{
+						$retorno['error'] = '4'; //Descuento invalido
+					}
+				}else{
+					$retorno['error'] = '4'; //Descuento invalido
+				}
+			}else{
+				$retorno['error'] = '3'; //Sin articulos
+			}
+		}else{
+			$retorno['error'] = '2'; //Mala URL			
+		}
+		echo json_encode($retorno);
+	}
  
  
  

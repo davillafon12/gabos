@@ -755,6 +755,13 @@ Class articulo extends CI_Model
 		$this->db->insert('tb_36_articulos_cambio_codigo', $datos);
 	}
 	
+	function cambiarDescuento($codigo, $sucursal, $descuento){
+		$datos = array('Articulo_Descuento'=>$descuento);
+		$this->db->where('Articulo_Codigo',$codigo);
+		$this->db->where('TB_02_Sucursal_Codigo',$sucursal);
+		$this->db->update('tb_06_articulo', $datos);
+	}
+	
 	
 } //FIN DE LA CLASE
 

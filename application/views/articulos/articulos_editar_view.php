@@ -26,14 +26,16 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
 		<?php include '/../Header/log_out_from_browser_Script.php';?>			
-		<!--CSS ESTILO DEL MODAL-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
-		<!--AJAX DE LA TABLA-->
-		<?php include '/../../scripts/ajax_desactivar_articulos.php';?>
 		<!--CARGA DEL JQUERY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script> 		
 		<!--CARGA DE MODAL-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
+		<!--CSS ESTILO DEL MODAL-->
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
+		<!--SCRIPT DE NOTY-->		
+		<script src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>" type="text/javascript"></script>
+		<!--SCRIPT DE NUMERIC-->		
+		<script src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
 		<!-- DATA TABES SCRIPT -->
         <script src="<?php echo base_url('/application/scripts/datatables/dataTablesNew.js');?>" type="text/javascript"></script>
 		<!--CARGA DE HERRAMIENTAS VARIAS-->
@@ -91,8 +93,13 @@ PARA:
 					</tbody>
 				</table>
 				<div class='div_bot_des'>
-					<a href='javascript:;' onClick='resetCheckBox()' class='boton_desall'>Deseleccionar Todo</a>
+					<a href='javascript:;' onClick='selectAllCheckBox()' class='boton_desall'>Seleccionar Todo</a>
+					<a href='javascript:;' onClick='resetCheckBox()' class='boton_desall'>Deseleccionar Todo</a>					
 					<a href='<?php echo base_url('').'articulos/registrar';?>' class='boton_agregar'>Agregar Articulo</a>
+				</div>
+				<div class='div_descuento_ingreso'>
+					<label class="contact">Descuento: </label><input type="text" class="descuento-input" id="descuento" autocomplete="off" /><label class="contact">%</label>
+					<a href='javascript:;' onClick='agregarDescuentoMasivo()' class='boton_descuento'>Agregar</a>
 				</div>
 			</div>
 

@@ -1,88 +1,114 @@
-	//Reset todo los checkboxes
-	function resetCheckBox(){
-		$('tbody tr td input[type="checkbox"]').each(function(){
-            $(this).prop('checked', false);
+
+$(function(){
+	$("#descuento").numeric();
+});
+
+function isNumber(n) {
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function notyMsg(Mensaje, tipo){
+	n = noty({
+			   layout: 'topRight',
+			   text: Mensaje,
+			   type: tipo,
+			   timeout: 4000
 			});
-	}
-	
-	//Retorna un array con los checkboxes chequeados
-	function getCheckedCB()
-	{
-		var selected = new Array();
-        $('tbody tr td input[type="checkbox"]:checked').each(function() {
-			   selected.push($(this).val());
-		  });
-		 return selected;
-	}
-	
-	//Funcion que desactiva todos los cilentes  seleccionados
-	function desAllChecked()
-	{
-		var selected = getCheckedCB();
-		var amount_checks = selected.length;
-		
-		if(amount_checks==0)
-        {
-			$.prompt("No ha seleccionado ningun usuario");
-		}	
-        else
-        {
-			$.prompt("¡Esto deshabilitara todos los usuarios seleccionados!", {
-				title: "¿Esta seguro que desea desactivar este usuario?",
-				buttons: { "Si, estoy seguro": true, "Cancelar": false },
-				submit:function(e,v,m,f){
-											if(v){deactiveUsuarios(selected);}
-										}
-			});
+}
+
+//Reset todo los checkboxes
+function resetCheckBox(){
+	$('tbody tr td input[type="checkbox"]').each(function(){
+		$(this).prop('checked', false);
+		});
+}
+
+function selectAllCheckBox(){
+	$('tbody tr td input[type="checkbox"]').each(function(){
+		$(this).prop('checked', true);
+		});
+}
+
+function agregarDescuentoMasivo(){
+	descuento = $("#descuento").val();
+	if(isNumber(descuento)){
+		if(descuento>=0&&descuento<=100){
+			seleccionados = getSelectedCheckboxes();
+			if(seleccionados.length>0){
+				$.prompt("¡Esto agregará el descuento ingresado a todos los artículos seleccionados!", {
+						title: "¿Esta seguro que desea realizar esta operación?",
+						buttons: { "Si, estoy seguro": true, "Cancelar": false },
+						submit:function(e,v,m,f){
+													if(v){													
+														ingresarDescuento(convertirArray(seleccionados), descuento);
+													}
+												}
+					});	
+			}else{
+				notyMsg('Debe seleccionar al menos un artículo', 'error');					
+			}
+		}else{
+			notyMsg('Debe ingresar un descuento válido', 'error');	
 		}		
+	}else{
+		notyMsg('Debe ingresar un descuento válido', 'error');		
 	}
+}
+
+function getSelectedCheckboxes(){
+	return $('tbody tr td input[type="checkbox"]:checked');	
+}
+
+function convertirArray(array){
+	newArray = [];
+	for(i=0; i<array.length; i++){
+		newArray.push(array[i].value);		
+	}
+	return newArray;
+}
 	
-	function actAllChecked()
-	{
-		var selected = getCheckedCB();
-		var amount_checks = selected.length;
-		
-		if(amount_checks==0)
-        {
-			$.prompt("No ha seleccionado ningun Usuario");
-		}	
-        else
-        {
-			$.prompt("¡Esto habilitara a todos los usuarios seleccionados!", {
-				title: "¿Esta seguro que desea activar el usuario?",
-				buttons: { "Si, estoy seguro": true, "Cancelar": false },
-				submit:function(e,v,m,f){
-											if(v){activeUsuarios(selected);}
-										}
-			});
-		}		
-	}
+function ingresarDescuento(articulos, descuento){
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/articulos/editar/agregarDescuentoMasivo',
+		type: "POST",		
+		async: false,
+		data: {'descuento':descuento, 'articulos':JSON.stringify(articulos)},				
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				informacion = $.parseJSON('[' + data.trim() + ']');				
+				if(informacion[0].status==="error"){					
+					manejarErrores(informacion[0].error);
+				}else if(informacion[0].status==="success"){
+					$("#tabla_editar").dataTable().fnDraw();
+					notyMsg('¡Se agrego el descuento con éxito a los artículos seleccionados!', 'success');
+					$("#descuento").val('');
+				}
+			}catch(e){
+				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{}
+	});	
+}
 	
-	function goDesactivar(id)
-	{
-		var selected = new Array();
-		selected.push(id);
-		$.prompt("¡Esto deshabilitara al Usuario!", {
-				title: "¿Esta seguro que desea desactivar este usuario?",
-				buttons: { "Si, estoy seguro": true, "Cancelar": false },
-				submit:function(e,v,m,f){
-											if(v){deactiveUsuarios(selected);}
-										}
-			});
-	}
-	
-	function goActivar(id)
-	{
-		var selected = new Array();
-		selected.push(id);
-		$.prompt("¡Esto habilitara al Usuario!", {
-				title: "¿Esta seguro que desea activar el Usuario?",
-				buttons: { "Si, estoy seguro": true, "Cancelar": false },
-				submit:function(e,v,m,f){
-											if(v){activeUsuarios(selected);}
-										}
-			});
-	}
+function manejarErrores(error){
+	switch(error){
+		case '1':
+				notyMsg('¡No se pudo realizar la operación, contacte al administrador!', 'error');
+				break;
+		case '2':
+				notyMsg('¡URL inválida, contacte al administrador!', 'error');
+				break;
+		case '3':
+				notyMsg('¡No se seleccionaron actículos!', 'error');
+				break;
+		case '3':
+				notyMsg('¡Descuento inválido!', 'error');
+				break;
+	}	
+}
 
 
 	
