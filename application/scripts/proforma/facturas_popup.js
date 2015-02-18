@@ -24,6 +24,8 @@ function validateNpass(currentID, nextID, e){
 				if(numeroPopUp=='1'){nextID='pop_descripcion';}
 				else if(numeroPopUp=='2'){nextID='pop_descuento_cambio';}
 				else if(numeroPopUp=='3'){anularPost(); return false;}//Pop proveniente de caja
+				else if(numeroPopUp=='4'){makeFacturaEditable(); return false;}//Pop proveniente de caja
+				else if(numeroPopUp=='5'){autorizadoClienteDescuento(); return false;}
 			}
 			//if(currentID.trim=='pop_descripcion'){return false;}
 			if(nextID=='boton_aceptar_popup'||nextID=='boton_aceptar_popup_admin'||nextID=='boton_aceptar_popup_desc'||nextID=='boton_aceptar_popup_cantidad'){document.getElementById(nextID).focus();}
@@ -147,8 +149,12 @@ function setArticuloFromPopup(){
 	setDatosArticulo(datosArticulo.split(','), rowIDpopup, num_row,pop_cantidad);
 }
 
+
+var isCajaLoaded = false; //Variable utilizada para ver si estamos en caja y limpiar 
+//campos de nombre y cedula cuando no hay autorizacion de descuento al traer un cliente
+
 function closePopUp(){
-	$('#pop_up_articulo').bPopup().close(); 
+	$('#pop_up_articulo').bPopup().close();
 }
 
 function clickAceptar(){
@@ -163,12 +169,25 @@ function clickAceptar(){
 }
 
 function closePopUp_Admin(){
-	$('#pop_up_administrador').bPopup().close(); 
+	$('#pop_up_administrador').bPopup().close();
+	if(isCallByDescuento){
+		$("#cedula").val('');
+		$("#nombre").val('');
+		isCallByDescuento = false; //Proviene de facturasCall.js
+	}
+	if(isCajaLoaded&&seCambioFactura){
+		$("#cedula").val('');
+		$("#nombre").val('');
+	}
+	
 }
 
 function clickAceptar_Admin(event){
 	if(checkAdminLog()){
+		isCallByDescuento = false; // Eliminados el flag para que no borre los campos
+		isCajaLoaded = false; //Para que no nos quite los campos de nombre y cedula
 		closePopUp_Admin();
+		isCajaLoaded = true; //Lo volvemos a poner
 		if(numeroPopUp=='1'){ //Si es articulo
 			$('#pop_up_articulo').bPopup({
 				modalClose: false
@@ -204,7 +223,7 @@ function checkAdminLog(){
 	document.getElementById("pop_password").value=''; //Lo limpiamos para que no quede evidencia del pass
 	document.getElementById("pop_usuario").value=''; //Limpiamos 
 	
-	url = '/facturas/nueva/checkUSR?user='+usuario_check+'&pass='+contra_usuario;
+	url = '/facturas/nueva/checkUSR?user='+usuario_check+'&pass='+contra_usuario+'&tipo='+numeroPopUp;
     
 	contra_usuario=''; //Limpiamos
 	

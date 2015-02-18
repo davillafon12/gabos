@@ -216,7 +216,7 @@ function buscarCedula (e)
 }
 
 function isNumber(n) {
-			return !isNaN(parseFloat(n)) && isFinite(n);
+	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function enableArticulosInputs()
@@ -247,16 +247,19 @@ function disableArticulosInputs()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// BUSQUEDA Y SETEO DEL ARTICULO EN TABLA //////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//var codigoArticuloKeyDown = '';
+//var idCodigoArticuloKeyDown = '';
 function filtrarKeys(e, id){
-	if(e.which == 107){
+	//idCodigoArticuloKeyDown = id;
+	//codigoArticuloKeyDown = $("#"+id).val();
+	/*if(e.which == 107){ //Tecla "+" 
 		//alert('Entro');
 		//codigo = document.getElementById(id).value;
         id_row = id.replace('codigo_articulo_','');
 		//document.getElementById(id).value;
 		resetRowFields(id_row, false);
 		//return false;
-    }
+    }*/
 }
 
 //element.on(?:copy|cut|paste)
@@ -267,100 +270,66 @@ function filtrarKeys(e, id){
 var isFromAgregarCantidad = true;
 
 function buscarArticulo(e, value, id){
-	//entradas++;
-	//Limpiamos el valor, el codigo del articulo
-	value_clean = value.replace("&","");
-	value_clean = value_clean.replace(";","");
-	
-	//Obtenemos el numero de fila
 	id_row = id.replace("codigo_articulo_","");
+	descripcion = $("#descripcion_articulo_"+id_row).html();
+	codigo = value.trim();
 	
-	//Obtenemos la descripcion de la fila
-	descripcion = document.getElementById("descripcion_articulo_"+id_row).innerHTML;	
-	//alert(value_clean);
-	//MANEJADOR DE EVENTOS
-	//Para pasar a siguiente o agregar fila
+	// 1) Revisar eventos
+	
 	if(e!=null)
 	{
 		//Cuando sea Up down left right, no haga nada
 		if(e.keyCode == 37||e.keyCode == 38||e.keyCode == 39||e.keyCode == 40||e.keyCode == 107){return false;}
 		
-		//Cuando si es producto generico, si es producto generico pasa 
-		if (e.keyCode == 13) //Enter
-		{			
-			if(value_clean==='00'&&descripcion===''){openGenericProductDialog(id);}
-			//alert(descripcion);
+		//Cuando presiona enter
+		if (e.keyCode == 13) 
+		{				
+			//Si es generico			
+			if(codigo==='00'&&descripcion==='')
+			{
+				openGenericProductDialog(id);
+			}	
+			//Si ya cargo producto pasarse a cantidad
 			if(descripcion!="")
 			{
-				//alert("Entro");
 				tabRowORAdd(id, false);
 				return false;
-			}
-		}
-		
-		//Si presiona backspace o delete resetea el row, y quedo en blanco
-		if(e.keyCode == 8 || e.keyCode == 46) 
-		{		
-			if(value_clean.trim()=="")
-			{
-				resetRowFields(id_row, true);
-			}
-		}
-		
-		//Si presiona ctrl+x resetea el row
-		if(e.ctrlKey && e.which === 88){ //Ctrl+x
-			//var id_row = id.replace("codigo_articulo_","");
-			resetRowFields(id_row, true);
-		}
-		
-		//Si presiona ctrl+v no haga nada
-		if(e.ctrlKey && e.which === 86){ //Ctrl+v
-			return false;
-		}
-		
-		//Si presiona ctrl+z
-		if(e.ctrlKey && e.which === 90)
-		{		
-			resetRowFields(id_row, true);
-			/*if(value_clean.trim()=="")
-			{
-				//alert(id_row);
-				var id_row = id.replace("codigo_articulo_","");
-				resetRowFields(id_row, true);
-			}*/
-		}
-		
-		//Pasar a fila o cantidad
-		if (e.keyCode == 13) {
-			tabRowORAdd(id, false);
-		}
+			}else{
+				if (articuloYaIngresado(codigo, id)&&codigo!='00'&&isFromAgregarCantidad) { //Si viene por primera vez
+					isFromAgregarCantidad=false;
+					agregarCantidadArticulosPopUp(id.replace("codigo_articulo_",""));
+				}
+				else if(isFromAgregarCantidad==false){
+					isFromAgregarCantidad=true;
+					return false;
+				}	
+			}					
+		}					
 	}	
+	// 2 Si codigo es vacio no hace nada
 	
-	//Limpiamos si se quita producto generico &&descripcion.trim()!=''
-	if(value_clean.trim()=='0'&&descripcion!=""){
-		//alert(descripcion);
-		cod_anterior_generico = document.getElementById("codigo_articulo_anterior_"+id_row).value;
-		//alert(cod_anterior_generico);
-		if(cod_anterior_generico.trim()=='00'){resetRowFields(id_row, true);}		
+	if(codigo===''){
+		resetRowFields(id_row, true);
+		return false;
 	}
 	
-	if(articuloYaIngresado(value_clean.trim(), id)&&value_clean.trim()!='00')
-	{//Si el articulo ya fue ingresado no lo vuelve a colocar
-		if (e.keyCode == 13&&isFromAgregarCantidad) { //Si viene por primera vez
-			isFromAgregarCantidad=false;
-			agregarCantidadArticulosPopUp(id.replace("codigo_articulo_",""));
-		}
-		else if(isFromAgregarCantidad==false){isFromAgregarCantidad=true;}		
+	//Esto es para que no cargue el producto si ya esta ingresado
+	codigo_anterior = $("#codigo_articulo_anterior_"+id_row).val();	
+	if(codigo_anterior===codigo){return false;}
+	
+	// 3 Verificamos si el articulo esta repetido, si no lo buscamos normal
+	
+	if(articuloYaIngresado(codigo, id)&&codigo!='00')
+	{
+		resetRowFields(id_row, false);
+		//Esto para que nos permita realizar cambios de articulo a la primera
+		$("#codigo_articulo_anterior_"+num_row).val('');
 	}
 	else
 	{
-		var num_row = id.replace("codigo_articulo_","");
-		//alert(num_row);
-		var cedula = document.getElementById('cedula').value;
-		//showResult(cedula);
-	
-		//alert("entro");
-		getArticulo(value_clean, id, num_row, cedula);		
+		num_row = id.replace("codigo_articulo_","");
+		cedula = $("#cedula").val();
+		getArticulo(codigo, id, num_row, cedula);		
 	}	
 }
 
@@ -394,6 +363,62 @@ var valor_real_inventario = '';
 
 
 var isActualizarCliente = false;
+
+function setArticulo(articulo, num_fila){
+	//Seteamos la parte del codigo
+	$("#codigo_articulo_anterior_"+num_fila).val(articulo.codigo);
+	//Seteamos la descripcion
+	$("#descripcion_articulo_"+num_fila).html(articulo.descripcion);
+	//Seteamos el tootltip de la imagen del articulo
+	$("#tooltip_imagen_articulo_"+num_fila).html("<img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+articulo.imagen+"' height='200' width='200'>");
+	agregarTooltip("#descripcion_articulo_"+num_fila);
+	//Seteamos la bodega
+	$("#bodega_articulo_"+num_fila).html(articulo.inventario);
+	//Seteamos la cantidad inicial
+	$("#cantidad_articulo_"+num_fila).val(1);
+	$("#cantidad_articulo_"+num_fila).prop( "disabled", false );
+	$("#cantidad_articulo_"+num_fila).attr( "max", articulo.inventario );
+	//Seteamos el descuento
+	$("#descuento_articulo_"+num_fila).html(articulo.descuento);
+		
+	//Tipo de moneda y factor
+	tipo_moneda = $("#tipo_moneda").val();
+	factor_tipo_moneda = 1.00; //Cualquier cosa entre 1 es igual
+	if(tipo_moneda.indexOf('dolare') != -1)
+	{
+		tipo_cambio_venta = $("#tipo_cambio_venta").val();
+		factor_tipo_moneda = parseFloat(tipo_cambio_venta);
+	}
+	
+	//Capturar decimales
+	decimales = $("#cantidad_decimales").val();
+	decimales = parseInt(decimales);
+	
+	//Precio del articulo	
+	precio_articulo_unitario = parseFloat(articulo.precio_cliente);
+	precio_articulo_unitario = precio_articulo_unitario/factor_tipo_moneda;
+	
+	//Seteamos precio sin formato en input oculto	
+	$("#costo_unidad_articulo_ORIGINAL_"+num_fila).val(precio_articulo_unitario);
+	
+	//Seteamos precio con formato en UI
+	precio_articulo_unitario = precio_articulo_unitario.toFixed(decimales);
+	precio_articulo_unitario = parseFloat(precio_articulo_unitario);
+	precio_articulo_unitario = precio_articulo_unitario.format(decimales, 3, '.', ',');
+	$("#costo_unidad_articulo_"+num_fila).html(precio_articulo_unitario);
+		
+	//Seteamos el precio de cliente final para calcular ganancia
+	$("#costo_unidad_articulo_FINAL_"+num_fila).val(parseFloat(articulo.precio_no_afiliado).toFixed(decimales));
+	
+	//Seteamos si es exento
+	$("#producto_exento_"+num_fila).val(articulo.exento);
+	
+	//Funciones Finales
+	actualizaCostoTotalArticulo("cantidad_articulo_"+num_fila);
+	updateProductsTotal();
+	//actualizarCantidadProductoInventario('', articulo.codigo, num_fila);
+	$("#cantidad_articulo_anterior_"+num_fila).val(1);
+}
 
 function setDatosArticulo(articuloARRAY, id_input, num_row, cantidadArticulos){
 	descripcion = document.getElementById('descripcion_articulo_'+num_row).innerHTML;
@@ -471,7 +496,7 @@ function setDatosArticulo(articuloARRAY, id_input, num_row, cantidadArticulos){
 		
 		document.getElementById("descripcion_articulo_"+num_row).innerHTML=articuloARRAY[2];
 		
-		document.getElementById("tooltip_imagen_articulo_"+num_row).innerHTML = "<img src='http://"+document.domain+"/application/images/articulos/"+articuloARRAY[8]+".jpg' height='200' width='200'>";
+		document.getElementById("tooltip_imagen_articulo_"+num_row).innerHTML = "<img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+articuloARRAY[8]+".jpg' height='200' width='200'>";
 		agregarTooltip("#descripcion_articulo_"+num_row);
 		
 		document.getElementById("bodega_articulo_"+num_row).innerHTML=articuloARRAY[3];
@@ -516,7 +541,6 @@ function setDatosArticulo(articuloARRAY, id_input, num_row, cantidadArticulos){
 		precio_unidad_FACTOR_float = precio_unidad_FACTOR_float.format(2, 3, '.', ',');
 		
 		document.getElementById("costo_unidad_articulo_"+num_row).innerHTML=precio_unidad_FACTOR_float;
-		//document.getElementById("costo_unidad_articulo_"+num_row).innerHTML=precio_unidad_FACTOR_float.toFixed(decimales_int);
 		
 		
 		
@@ -558,7 +582,10 @@ function resetRowFields(id_row, flag_cod){
 		}
 	}
 
-	if(flag_cod){document.getElementById("codigo_articulo_"+id_row).value="";}
+	if(flag_cod){
+		document.getElementById("codigo_articulo_"+id_row).value="";
+		$("#codigo_articulo_anterior_"+id_row).val('');
+	}
 	document.getElementById("descripcion_articulo_"+id_row).innerHTML="";
 	document.getElementById("bodega_articulo_"+id_row).innerHTML="";
 	document.getElementById("cantidad_articulo_"+id_row).value="";
@@ -594,18 +621,19 @@ function advertenciaSalida(){
 }
 
 function deshacerFactura(){
-	resetAll();
+	//resetAll();
+	devolverProductos();
 }
 
 function salidaSesion(){
-	/*resetAll();
+	resetAll();
 	window.onbeforeunload=null;
-	window.location = 'http://'+document.domain+'/home/logout';*/
+	window.location = location.protocol+'//'+document.domain+'/home/logout';
 	
 }
 
-/*window.onbeforeunload=advertenciaSalida;
-window.onunload=deshacerFactura;*/
+window.onbeforeunload=advertenciaSalida;
+window.onunload=deshacerFactura;
 
 function resetCostosTotales(){
 	document.getElementById("ganancia").value = "";
@@ -686,17 +714,16 @@ function actualizaCostoTotalArticulo(id){
 	precio_final_por_unidad = precio_unidad_float - descuento_float;
 	precio_total = precio_final_por_unidad * cantidad_float;
 	//Cargamos la cantidad de decimales permitidos
-	var decimales = document.getElementById("cantidad_decimales").value;
-	var decimales_int = parseInt(decimales);
+	decimales = document.getElementById("cantidad_decimales").value;
+	decimales_int = parseInt(decimales);
 	//Cargamos el valor al div
-	var costo_total = document.getElementById("costo_total_articulo_"+num_row);
+	costo_total = document.getElementById("costo_total_articulo_"+num_row);
 	
 	//Formateamos el valor
 	precio_total = precio_total.toFixed(decimales_int);
 	precio_total = parseFloat(precio_total);		
 	precio_total = precio_total.format(2, 3, '.', ',');	
 	costo_total.innerHTML = precio_total;
-	//costo_total.innerHTML = precio_total.toFixed(decimales_int);
 	//alert(num_row);
 	//Actualizamos el costo total
 	actualizaCostosTotales(decimales_int);
@@ -752,10 +779,16 @@ function actualizaCostosTotales(decimales_int){
 		factor_tipo_moneda_float = parseFloat(tipo_cambio_venta);
 		costo_cliente_final = (costo_cliente_final/factor_tipo_moneda_float) - costo_total_factura;
 	}
+	
+	
 	//Formateo e impresion a UI
 	//precio_unidad_FACTOR_float = precio_unidad_FACTOR_float.format(2, 3, '.', ',');
 	
 	IVA_Factura = costo_total_factura-costo_sin_IVA_factura;
+	
+	if(clienteEsExento){
+		costo_total_factura -= IVA_Factura;
+		IVA_Factura = 0;}//Si el cliente es exento de impuestos
 	
 	costo_cliente_final = costo_cliente_final.toFixed(decimales_int);
 	costo_sin_IVA_factura = costo_sin_IVA_factura.toFixed(decimales_int);
@@ -783,15 +816,13 @@ function actualizaCostosTotales(decimales_int){
 	$("#iva").val(IVA_Factura);
 	$("#costo_total").val(costo_total_factura);
 	
-	/*document.getElementById("ganancia").value = costo_cliente_final.toFixed(decimales_int);
-	//alert(costo_total_sin_iva_float);
-	document.getElementById("costo").value = costo_sin_IVA_factura.toFixed(decimales_int);
-	//var iva_total = costo_total_sin_iva_float*(impuesto_venta_float/100);
-	IVA_Factura = costo_total_factura-costo_sin_IVA_factura;
-	document.getElementById("iva").value = IVA_Factura.toFixed(decimales_int);
-	//var costo_total = iva_total+costo_total_sin_iva_float;
-	document.getElementById("costo_total").value = costo_total_factura.toFixed(decimales_int);
-	*/
+	/*alert(typeof costo_cliente_final);
+	document.getElementById("ganancia").value = costo_cliente_final;
+	
+	document.getElementById("costo").value = costo_sin_IVA_factura;
+	document.getElementById("iva").value = IVA_Factura;
+	
+	document.getElementById("costo_total").value = costo_total_factura;*/
 }
 
 function getPrecioTotalRow(num_row){
@@ -819,12 +850,13 @@ function getPrecioTotalRow(num_row){
 	}*/
 	
 	precio_total = document.getElementById("costo_total_articulo_"+num_row).innerHTML;
+	
 	//Quitamos el formato de moneda para que se lea bien
 	precio_total = precio_total.replace(',','');
 	
 	//alert("entro");
 	if(precio_total.trim()!='')
-	{		
+	{
 		precio_total_float = parseFloat(precio_total);
 		//Preguntamos si esta en dolares
 		/*moneda = document.getElementById("tipo_moneda").value;
@@ -862,57 +894,92 @@ function getPrecioTotalRowFINAL(num_row){
 	return 0.0;
 }
 
-function actualizaPreciosArticulos(cedula){
-	//alert("entro");
-	
+function actualizaPreciosArticulos(cedula){	
 	//Tomar codigo que tambien tenga descripcion, esto indicara que si es efectivo el producto.
 	//Hacer ajax con el nuevo numero de cedula, con ese producto. getArticulo(codigo del producto, id, num_row, cedula)
 	
-	var table = document.getElementById("tabla_productos");
-	var rows = cantidadFilas(table);
-	for (var i = 0; i < rows; i++) 
+	table = document.getElementById("tabla_productos");
+	rows = cantidadFilas(table);
+	//Capturar decimales
+	decimales = $("#cantidad_decimales").val();
+	decimales = parseInt(decimales);
+	for (i = 0; i < rows; i++) 
 	{
 		incremental = i+1;
-		id_codigo = "codigo_articulo_"+incremental;
-		id_descripcion = "descripcion_articulo_"+incremental;
-		codigo = document.getElementById(id_codigo).value;
-		descripcion = document.getElementById(id_descripcion).innerHTML;
+		codigo = $("#codigo_articulo_"+incremental).val();
+		descripcion = $("#descripcion_articulo_"+incremental).html();
 		if(codigo!=""&&descripcion!=""&&codigo!='00'){
-			cantidad_articulo = document.getElementById("cantidad_articulo_"+incremental).value;
-			inventario_guardado = document.getElementById("bodega_articulo_"+incremental).innerHTML;
-			//alert('Inventario: '+inventario);
-			//Devolvemos el inventario			
-			//actualizarCantidadProductoInventario('0', codigo, incremental);
-			//document.getElementById("cantidad_articulo_anterior_"+incremental).value=-1;
-			//alert('codigo: '+codigo+" num_row: "+incremental+" Valor anterior: "+document.getElementById("cantidad_articulo_anterior_"+incremental).value);
-			//////////////////////////////////////
-			
-			isActualizarCliente=true;
-			//alert(isActualizarCliente);
-			getArticulo(codigo, "codigo_articulo_"+incremental, incremental, cedula);
-			//alert(cantidad_articulo);
-			document.getElementById("cantidad_articulo_"+incremental).value=cantidad_articulo;
-			//alert(inventario);
-			document.getElementById("bodega_articulo_"+incremental).innerHTML=inventario_guardado;
-			document.getElementById("cantidad_articulo_"+incremental).setAttribute("max",inventario_guardado);
-			//alert(incremental);
-			actualizaCostoTotalArticulo("cantidad_articulo_"+incremental);
-			//actualizarCantidadProductoInventario('', codigo, incremental);
-			cantidadNuevaHide = document.getElementById("cantidad_articulo_"+incremental).value;
-			//alert(cantidadNuevaHide);
-			document.getElementById("cantidad_articulo_anterior_"+incremental).value=cantidadNuevaHide;
+			num_fila = incremental;
+			$.ajax({
+				url : location.protocol+'//'+document.domain+'/facturas/nueva/getArticuloJSON',
+				type: "POST",
+				async: false,
+				data: {'cedula':cedula, 'codigo':codigo},		
+				success: function(data, textStatus, jqXHR)
+				{
+					try{
+						result = $.parseJSON('[' + data.trim() + ']');
+						if(result[0].status==="error"){
+							//mostrarErroresCargarArticulo(result[0].error, num_fila);
+						}else if(result[0].status==="success"){	
+							articulo = result[0].articulo;
+							
+							//Seteamos el descuento
+							$("#descuento_articulo_"+num_fila).html(articulo.descuento);
+								
+							//Tipo de moneda y factor
+							tipo_moneda = $("#tipo_moneda").val();
+							factor_tipo_moneda = 1.00; //Cualquier cosa entre 1 es igual
+							if(tipo_moneda.indexOf('dolare') != -1)
+							{
+								tipo_cambio_venta = $("#tipo_cambio_venta").val();
+								factor_tipo_moneda = parseFloat(tipo_cambio_venta);
+							}
+														
+							//Precio del articulo	
+							precio_articulo_unitario = parseFloat(articulo.precio_cliente);
+							precio_articulo_unitario = precio_articulo_unitario/factor_tipo_moneda;
+							
+							//Seteamos precio sin formato en input oculto	
+							$("#costo_unidad_articulo_ORIGINAL_"+num_fila).val(precio_articulo_unitario);
+							
+							//Seteamos precio con formato en UI
+							precio_articulo_unitario = precio_articulo_unitario.toFixed(decimales);
+							precio_articulo_unitario = parseFloat(precio_articulo_unitario);
+							
+							descuento = parseFloat(articulo.descuento);
+							cantidad = parseInt($("#cantidad_articulo_"+num_fila).val());
+							
+							precio_articulo_total = cantidad * (precio_articulo_unitario-(precio_articulo_unitario*(descuento/100)));
+							precio_articulo_total = parseFloat(precio_articulo_total);
+							precio_articulo_total = precio_articulo_total.format(decimales, 3, '.', ',');
+							
+							precio_articulo_unitario = precio_articulo_unitario.format(decimales, 3, '.', ',');
+							$("#costo_unidad_articulo_"+num_fila).html(precio_articulo_unitario);
+							$("#costo_total_articulo_"+num_fila).html(precio_articulo_total);
+								
+							//Seteamos el precio de cliente final para calcular ganancia
+							$("#costo_unidad_articulo_FINAL_"+num_fila).val(parseFloat(articulo.precio_no_afiliado).toFixed(decimales));
+							//actualizaCostoTotalArticulo("cantidad_articulo_"+num_fila);
+
+							
+							
+
+							
+						}
+					}catch(e){
+						//notyConTipo('¡La respuesta tiene un formato indebido, contacte al administrador!','error');
+					}		
+				},
+				error: function (jqXHR, textStatus, errorThrown)
+				{
+			 
+				}
+			});
 		}
-	}
-	
-	/*var table = document.getElementById("tabla_productos");
-	var rows = cantidadFilas(table);
-	for (var i = 0; i < rows; i++) 
-	{
-		var incremental = i+1;
-		var id = "codigo_articulo_"+incremental;
-		var value = document.getElementById(id).value;
-		buscarArticulo(null, value, id);
-	}*/
+	}	
+	actualizaCostosTotales(decimales);
+	updateProductsTotal();
 }
 
 var isCajaLoad = true;
@@ -963,6 +1030,29 @@ function getCantidadProducto(num_row){
 	return 0;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// FORMATEO DE NUMEROS /////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Number.prototype.format(n, x, s, c)
+ * 
+ * param integer n: length of decimal
+ * param integer x: length of whole part
+ * param mixed   s: sections delimiter
+ * param mixed   c: decimal delimiter
+	12345678.9.format(2, 3, '.', ',');  // "12.345.678,90"
+	123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
+	12345678.9.format(0, 3, '-');       // "12-345-679"
+ */
+ 
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
 
 
 

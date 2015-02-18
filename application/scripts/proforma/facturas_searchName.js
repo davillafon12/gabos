@@ -4,6 +4,7 @@ function setUpLiveSearch(){
 		  minLength: 1,
 		  select: function( event, ui ) {
 			document.getElementById("cedula").value=ui.item.id;
+			//$("#nombre").val('');
 			var evt = document.createEvent("KeyboardEvent");
 			buscarCedula(evt); 
 		   // alert("Selected: " + ui.item.id + " aka " + ui.item.value);

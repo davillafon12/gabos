@@ -6,7 +6,7 @@ var invoiceItemsJSON = [];
 var datosFactura = [];
 
 function toCajaSubmit(){
-	r = confirm("¿Esta seguro que desea guardar e imprimir esta proforma?");
+	r = confirm("¿Esta seguro que desea envia esta factura a caja?");
 	if (r == true) {
 		doSubmit();
 	} else {}	
@@ -18,7 +18,7 @@ function doSubmit(){
 		//alert(JSON.stringify(invoiceItemsJSON, null, 4));
 		//data = [];
 		//data.push(getFullData());
-		url = "/facturas/proforma/crear";
+		url = "/facturas/nueva/crearPendiente";
 		//data.push(invoiceItemsJSON);
 		//alert(JSON.stringify(data));
 		//alert(url);
@@ -58,7 +58,16 @@ function validarCampos(){
 	if(tamJSONArray<1){
 		n = noty({
 					   layout: 'topRight',
-					   text: '¡No hay articulos en la proforma!',
+					   text: '¡No hay articulos en la factura!',
+					   type: 'error',
+					   timeout: 4000
+					});
+		return false;
+	}
+	if(clienteCanBuy==false){
+		n = noty({
+					   layout: 'topRight',
+					   text: '¡Este cliente no puede comprar!',
 					   type: 'error',
 					   timeout: 4000
 					});
@@ -130,7 +139,7 @@ function sendInvoice(URL){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+URL,
 		type: "POST",
-		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON)},		
+		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON), 'token':token_factura_temporal},		
 		success: function(data, textStatus, jqXHR)
 		{
 			if(data.trim()==='7'){//Todo salio bien
@@ -140,7 +149,7 @@ function sendInvoice(URL){
 			}else{
 				n = noty({
 					   layout: 'topRight',
-					   text: '¡Hubo un error en el envio de la proforma. #'+data.trim(),
+					   text: '¡Hubo un error en el envio de la factura. #'+data.trim(),
 					   type: 'error',
 					   timeout: 4000
 					});
