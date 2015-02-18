@@ -71,7 +71,7 @@ class otros extends CI_Controller {
 						$desProductos = array();
 						foreach($descuentoProductos as $producto){
 							$pro['id'] = $producto -> Descuento_producto_id;
-							$pro['porcentaje'] = $producto -> Descuento_producto_porcentaje;
+							$pro['porcentaje'] = $producto -> Descuento_producto_monto;
 							$pro['codigo'] = $producto -> TB_06_Articulo_Articulo_Codigo;
 							$pro['descripcion'] = $this -> articulo -> getArticuloDescripcion($producto -> TB_06_Articulo_Articulo_Codigo, $data['Sucursal_Codigo']);
 							array_push($desProductos, $pro);
@@ -215,8 +215,20 @@ class otros extends CI_Controller {
 						foreach($pro as $row){
 							$familia = $row -> TB_05_Familia_Familia_Codigo;
 						}
-						$this->cliente->agregarDescuentoDeProducto($codigo, $cedula, $data['Sucursal_Codigo'], $descuento, $familia);
-						$retorno['status'] = 'success';	
+						
+						$numeroPrecio = $this->cliente->getNumeroPrecio($cedula);
+						$precioArticulo = $this->articulo->getPrecioProducto($codigo, $numeroPrecio, $data['Sucursal_Codigo']);
+						
+						$diferencia = $precioArticulo - $descuento;
+						
+						$descuentoPorcentaje = ($diferencia*100)/$precioArticulo;
+						
+						if($diferencia>=0){
+							$this->cliente->agregarDescuentoDeProducto($codigo, $cedula, $data['Sucursal_Codigo'], $descuentoPorcentaje, $familia);
+							$retorno['status'] = 'success';							
+						}else{
+							$retorno['error'] = '10'; //Descuento mayor al precio del cliente							
+						}						
 					}			
 				}else{
 					$retorno['error'] = '5'; //Cliente no existe

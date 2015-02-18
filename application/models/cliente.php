@@ -394,11 +394,15 @@ Class cliente extends CI_Model
 		}
 	}
 	
-	function agregarDescuentoDeProducto($codigo, $cedula, $sucursal, $descuento, $familia){
+	function agregarDescuentoDeProducto($codigo, $cedula, $sucursal, $descuentoPorcentaje, $familia){
+		$numeroPrecio = $this->getNumeroPrecio($cedula);
+		$precioArticulo = $this->articulo->getPrecioProducto($codigo, $numeroPrecio, $sucursal);
+		$descuentoMonto = $precioArticulo - ($precioArticulo * ($descuentoPorcentaje)/100);
 		$arrayDescuento = array(
 							'TB_06_Articulo_Articulo_Codigo' =>mysql_real_escape_string($codigo),
 							'TB_03_Cliente_Cliente_Cedula'=> mysql_real_escape_string($cedula),
-							'Descuento_producto_porcentaje' => mysql_real_escape_string($descuento),
+							'Descuento_producto_monto' => $descuentoMonto,
+							'Descuento_producto_porcentaje' => $descuentoPorcentaje,
 							'TB_06_Articulo_TB_05_Familia_Familia_Codigo' => mysql_real_escape_string($familia),
 							'TB_02_Sucursal_Codigo'=>$sucursal
 						);

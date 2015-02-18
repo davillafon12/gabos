@@ -127,7 +127,7 @@ PARA:
 								</td>
 								<td class="borde-arriba" ><p class="tiny-font" id="descripcion_producto"></p></td>
 								<td class="borde-arriba">
-									<input class="input-descuento" type="text" id="descuento_producto"/>%
+									<input class="input-descuento" type="text" id="descuento_producto"/>
 								</td>
 								<td class="borde-arriba">
 									<a href="javascript:;" onclick="agregarDescuentoProducto()" class="boton-cambiar">Agregar</a>
@@ -164,7 +164,7 @@ PARA:
 								</td>
 								<td class="borde-arriba"><p class="tiny-font" id="descripcion_familia"></p></td>
 								<td class="borde-arriba">
-									<input class="input-descuento" type="text" id="descuento_familia"/>%
+									<input class="input-descuento" type="text" id="descuento_familia"/>
 								</td>
 								<td class="borde-arriba">
 									<a href="javascript:;" onclick="" class="boton-cambiar">Agregar</a>

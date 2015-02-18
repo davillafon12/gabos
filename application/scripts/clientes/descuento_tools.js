@@ -24,8 +24,8 @@ function resetFields(){
 	$("#descuento").val('00');
 	$("#credito").val('0.0');
 	
-	cuerpoProductos  = "<tr><td colspan='4'><p class='tiny-font'>No tiene descuentos</p></td></tr><tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_producto' onkeyup='buscarArticulo();'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_producto'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_producto'/>%</td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoProducto()' class='boton-cambiar'>Agregar</a></td></tr>";
-	cuerpoFamilias = "<tr><td colspan='4'><p class='tiny-font'>No tiene descuentos</p></td></tr><tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_familia' onkeyup='buscarFamilia()'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_familia'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_familia'/>%</td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoFamilia()' class='boton-cambiar'>Agregar</a></td></tr>";
+	cuerpoProductos  = "<tr><td colspan='4'><p class='tiny-font'>No tiene descuentos</p></td></tr><tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_producto' onkeyup='buscarArticulo();'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_producto'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_producto'/></td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoProducto()' class='boton-cambiar'>Agregar</a></td></tr>";
+	cuerpoFamilias = "<tr><td colspan='4'><p class='tiny-font'>No tiene descuentos</p></td></tr><tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_familia' onkeyup='buscarFamilia()'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_familia'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_familia'/></td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoFamilia()' class='boton-cambiar'>Agregar</a></td></tr>";
 	
 	$("#cuerpo_productos").html(cuerpoProductos);
 	$("#cuerpo_familia").html(cuerpoFamilias);
@@ -92,6 +92,9 @@ function manejarErrores(error){
 		case '9':
 			notyError('¡Este cliente ya tiene un descuento con esta familia!');
 		break;
+		case '10':
+			notyError('¡El precio de descuento es mayor al precio actual del cliente!');
+		break;
 	}
 }
 
@@ -115,7 +118,7 @@ function setInformacion(informacionArray){
 }
 
 function setDescuentosProductos(productos){
-	footerDescuentos = "<tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_producto' onkeyup='buscarArticulo();'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_producto'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_producto'/>%</td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoProducto()' class='boton-cambiar'>Agregar</a></td></tr>";
+	footerDescuentos = "<tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_producto' onkeyup='buscarArticulo();'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_producto'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_producto'/></td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoProducto()' class='boton-cambiar'>Agregar</a></td></tr>";
 	$("#cuerpo_productos").html('');
 	for (i = 0; i < productos.length; i++) { 
 		descripcion = productos[i].descripcion;
@@ -127,7 +130,7 @@ function setDescuentosProductos(productos){
 }
 
 function setDescuentosFamilias(familias){
-	footerFamilias = "<tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_familia' onkeyup='buscarFamilia()'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_familia'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_familia'/>%</td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoFamilia()' class='boton-cambiar'>Agregar</a></td></tr>";
+	footerFamilias = "<tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_familia' onkeyup='buscarFamilia()'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_familia'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_familia'/></td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoFamilia()' class='boton-cambiar'>Agregar</a></td></tr>";
 	$("#cuerpo_familia").html('');
 	for (i = 0; i < familias.length; i++) { 
 		$('#tabla_des_familias').append("<tr><td><p class='tiny-font'>"+familias[i].codigo+"</p></td><td><p class='tiny-font'>"+familias[i].descripcion+"</p></td><td><p class='tiny-font'>"+familias[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesFamilia("+familias[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
@@ -367,8 +370,8 @@ function agregarDescuentoProducto(){
 	}else{
 		descuento = $("#descuento_producto").val();
 		if(isNumber(descuento)){
-			descuento = parseInt(descuento);
-			if(descuento>=0&&descuento<=100){
+			descuento = parseFloat(descuento);
+			if(descuento>=0){
 				cedula = $("#cedula").val();
 				if(isNumber(cedula)){
 					envioDescuentoProducto(codigo, descuento);
