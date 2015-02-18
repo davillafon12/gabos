@@ -20,14 +20,14 @@ LISTO-> En cierre de caja y parcial agregar a cuanto se recibio el dolar, cargar
 LISTO-> En cierre de caja la base debe ser ingresada por el usuario.
 NO SE PUEDE - CONSTRAINT-> En caso de usuario administrador seleccionar sucursal a la que va a loguearse.
 LISTO-> Las autorizaciones las da administrador y usuario avanzado.
--> Agregar deposito como tipo de pago de recibos por dinero.
+LISTO-> Agregar deposito como tipo de pago de recibos por dinero.
 LISTO-> La cedula de residencia en usuario le faltan 3 espacios.
 LISTO-> La cedula de residencia en cliente quitar un espacio.
 -> En cliente agregar fecha nacimiento *NO PRECISA
 -> Finalizar cierre caja
--> En la parte de descuentos, no poner porcentaje, poner precio y en js calcula el procentaje
--> Corregir en el registro de clientes y usurios agregar la opción de pasaporte
--> En los artículos aplicar descuento de forma masiva, por ejemplo elegir un rango de códigos 24576 hasta el 26589 y aplicarle un descuento de 10%, que eso se pueda hacer en todas las tiendas para no tener que hacerlo 1x1
+LISTO-> En la parte de descuentos, no poner porcentaje, poner precio y en js calcula el porcentaje
+LISTO-> Corregir en el registro de clientes y usurios agregar la opción de pasaporte
+LISTO-> En los artículos aplicar descuento de forma masiva, por ejemplo elegir un rango de códigos 24576 hasta el 26589 y aplicarle un descuento de 10%, que eso se pueda hacer en todas las tiendas para no tener que hacerlo 1x1
 LISTO-> Pasar la tabla de articulos a puro ajax con datatable
 LISTO-> Agregar tabla para guardar productos en una factura temporal, por si se va la luz poder recatar los productos de ahi.
 		LISTO REVISAR : No devuelve onbeforeunload y falta eliminar factura cuando se crea pendiente, ver el caso de modificar factura en caja 
