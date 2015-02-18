@@ -476,3 +476,48 @@
 .contenido{
 	display: none;
 }
+
+.div_descuento_ingreso{
+	margin-bottom: 10px;
+	margin-left: 2%;
+}
+
+.contact{
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+	font-family: Arial, Helvetica;
+}
+
+.descuento-input{
+	width: 30px;
+	text-align: right;
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid rgba(51, 51, 51, 0.15);
+	padding: 3px;
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
+}
+
+.boton_descuento{
+	background: #15B81D;
+	display: inline-block;
+	padding: 2px 4px 3px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
+	-webkit-box-shadow: 0 1px 3px #999;
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
+	font-family: Verdana, Geneva, sans-serif;
+}
