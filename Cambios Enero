@@ -34,7 +34,7 @@ LISTO-> Agregar tabla para guardar productos en una factura temporal, por si se 
 -> Agregar vista para devolver productos en facturas temporales.
 LISTO-> Precio No Afiliado = 1, Precio Afiliado = 2 -- Se deben cambiar el cliente 0 y 1
 LISTO-> Revisar fallo de imagenes en factura
--> Cambiar la forma en como carga articulos en proforma (Poner lo de factura) 
+LISTO-> Cambiar la forma en como carga articulos en proforma (Poner lo de factura) 
 
 Menu de vendedor
 -> Crear factura
