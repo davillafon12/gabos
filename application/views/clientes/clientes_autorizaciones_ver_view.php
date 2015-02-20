@@ -11,7 +11,7 @@ PARA:
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Registrar o Editar Autorizaciones</title>
+		<title>Ver Autorizaciones</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="shortcut icon" href="<?php echo base_url('application/images/header_icon.png'); ?>">
 		<!--CSS ESTILO BASICO E IMAGEN HEADER DE LA PAGINA-->
@@ -66,7 +66,7 @@ PARA:
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
-			<p class="titulo_wrapper">Registrar o Editar Autorizaciones</p>
+			<p class="titulo_wrapper">Ver Autorizaciones</p>
 			<hr class="division_wrapper">
 			<div  class="contenido">
 			

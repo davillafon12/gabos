@@ -45,7 +45,7 @@ PARA:
 		<?php include '/../Header/Log_In_Information.php';?>
 		<!--CSS ESTILO DEL FORMULARIO-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/usuarios/style_perfil.css'); ?>">
-	
+		
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">

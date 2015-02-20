@@ -15,7 +15,8 @@
 			<a href='#' class='dir'>Clientes</a>
 			<ul>
 				<li class='first_Level_2'><a href=".$Ruta_Base."clientes/registrar>Registrar</a></li> 
-				<li class='last'><a href='#'>Consulta</a></li>
+				<li><a href=".$Ruta_Base."clientes/editar>Edición</a></li>
+				<li class='last'><a href=".$Ruta_Base."clientes/autorizaciones/verAutorizaciones>Ver Autorizaciones</a></li>
 			</ul>
 		</li>
 		<li class='last_last'>

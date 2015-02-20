@@ -5,6 +5,10 @@
 							ul.dropdown li.last_last {
 								padding-right: 59px;								
 							}
+							
+							.titulo_wrapper{
+								margin-top: 31px;								
+							}
 						</style>";
 			}elseif($Usuario_Rango=='cajero'){
 				include '/../Header/Menu_Principal_Cajero.php';
