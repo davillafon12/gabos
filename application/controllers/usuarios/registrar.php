@@ -72,7 +72,7 @@ class registrar extends CI_Controller {
 	 }	 
 
 	function registrar_Usuarios(){
-
+		
 
 		$codigo = $this->user->getCantidadUsuarios()+1; 
 		$nombre_usuario = $this->input->post('nombre_usuario');

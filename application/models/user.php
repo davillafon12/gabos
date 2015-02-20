@@ -147,12 +147,13 @@ function existe_Nombre_Usuario($nombre){
 						//'Usuario_Fecha_Recontratacion'=>mysql_real_escape_string(NULL),                        
 						'Usuario_Nombre_Usuario'=>mysql_real_escape_string($Usuario_Nombre_Usuario),                        
 						'Usuario_Observaciones'=>mysql_real_escape_string($Usuario_Observaciones),                        
-						'Usuario_Password'=>MD5($Usuario_Password),                        
+						'Usuario_Password'=>md5($Usuario_Password),                        
 						'Usuario_Imagen_URL'=>mysql_real_escape_string($Usuario_Imagen_URL),                        
 						'Usuario_Correo_Electronico'=>mysql_real_escape_string($Usuario_Correo_Electronico),                        
 						'Usuario_Rango'=>mysql_real_escape_string($Usuario_Rango),                        
 						'TB_02_Sucursal_Codigo'=>mysql_real_escape_string($Sucursal_Correspondiente)                      
                     );
+		//print_r($data);
 		try{
         	$this->db->insert('TB_01_Usuario',$data); 
     	}
@@ -161,6 +162,7 @@ function existe_Nombre_Usuario($nombre){
 		
 		//Verificamos y retornamos si se guardo en ba
 		return $this->existe_Usuario_Cedula($cedula);
+		//return true;
 	}
 
 	function getCantidadUsuarios()
