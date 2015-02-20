@@ -35,25 +35,26 @@ LISTO-> Agregar tabla para guardar productos en una factura temporal, por si se 
 LISTO-> Precio No Afiliado = 1, Precio Afiliado = 2 -- Se deben cambiar el cliente 0 y 1
 LISTO-> Revisar fallo de imagenes en factura
 LISTO-> Cambiar la forma en como carga articulos en proforma (Poner lo de factura) 
+LISTO-> A la hora de crear el usuario no guarda bien la contraseña
 
 Menu de vendedor
--> Crear factura
--> Crear proforma
--> Registrar Clientes
+LISTO-> Crear factura
+LISTO-> Crear proforma
+LISTO-> Registrar Clientes
 -> Puede editar solo numeros de telefono de clientes *REVISAR
--> Consultar autorizaciones de clientes
+LISTO-> Consultar autorizaciones de clientes
 
 Menu de cajero
--> Crear factura
--> Crear proforma
--> Registrar Clientes
+LISTO-> Crear factura
+LISTO-> Crear proforma
+LISTO-> Registrar Clientes
 -> Puede editar solo numeros de telefono y direccion y carnet de clientes *REVISAR
--> Consultar autorizaciones de clientes
--> Entrar a caja
--> Notas Credito
--> Recibos por dinero
--> Cierre Parcial
--> Cierre de caja
+LISTO-> Consultar autorizaciones de clientes
+LISTO-> Entrar a caja
+LISTO-> Notas Credito
+LISTO-> Recibos por dinero
+LISTO-> Cierre Parcial
+LISTO-> Cierre de caja
 
 Cambio Tributacion
   Se cobrara el impuesto del cliente final y no afiliado, se le recargara al afiliado.
