@@ -32,6 +32,8 @@ LISTO-> Pasar la tabla de articulos a puro ajax con datatable
 LISTO-> Agregar tabla para guardar productos en una factura temporal, por si se va la luz poder recatar los productos de ahi.
 		LISTO REVISAR : No devuelve onbeforeunload y falta eliminar factura cuando se crea pendiente, ver el caso de modificar factura en caja 
 -> Agregar vista para devolver productos en facturas temporales.
+LISTO-> Agregar Vista para manejar articulos de otras sucursales.
+-> Agregar Vista de consulta y reimpresion de documentos.
 LISTO-> Precio No Afiliado = 1, Precio Afiliado = 2 -- Se deben cambiar el cliente 0 y 1
 LISTO-> Revisar fallo de imagenes en factura
 LISTO-> Cambiar la forma en como carga articulos en proforma (Poner lo de factura) 
