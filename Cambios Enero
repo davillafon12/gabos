@@ -38,6 +38,7 @@ LISTO-> Precio No Afiliado = 1, Precio Afiliado = 2 -- Se deben cambiar el clien
 LISTO-> Revisar fallo de imagenes en factura
 LISTO-> Cambiar la forma en como carga articulos en proforma (Poner lo de factura) 
 LISTO-> A la hora de crear el usuario no guarda bien la contraseña
+LISTO-> Pasar tabla de transacciones a puro ajax
 
 Menu de vendedor
 LISTO-> Crear factura
