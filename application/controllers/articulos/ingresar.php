@@ -36,6 +36,8 @@ class ingresar extends CI_Controller {
 	}
 	
 	function registrar(){
+		//print_r($_POST);
+		//exit;
 		$codigo_Articulo = $this->input->post('articulo_codigo');
 		//$codigoBrasil = $this->input->post('codigo_bodega');
 		$descripcion_Articulo = $this->input->post('articulo_descripcion');

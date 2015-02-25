@@ -122,7 +122,7 @@
 				<li ><a class='dir' href='#'>Empresas</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."empresas/editar>Registro y Edición</a></li>						
-						<li class='last'><a href='#'>Manejo de articulos</a></li>
+						<li class='last'><a href=".$Ruta_Base."articulos/editar/manejoArticulos>Manejo de articulos</a></li>
 					</ul>
 				</li>
 				<li >

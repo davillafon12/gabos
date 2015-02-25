@@ -22,6 +22,7 @@ Class articulo extends CI_Model
 	
 	function getTotalArticulosEnSucursal($sucursal){
 		$this->db->from('TB_06_Articulo');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
 		$query = $this -> db -> get();
 		return $query -> num_rows();
 	}

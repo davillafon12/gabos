@@ -174,6 +174,50 @@ class editar extends CI_Controller {
 		echo json_encode($retorno);
 	}
 	
+	function obtenerArticulosTablaManejo(){
+		include '/../get_session_data.php';
+		//Un array que contiene el nombre de las columnas que se pueden ordenar
+		$columnas = array(
+								'0' => 'Articulo_Codigo',
+								'1' => 'Articulo_Codigo',
+								'2' => 'Articulo_Descripcion',
+								'3' => 'Articulo_Cantidad_Inventario',
+								'4' => 'Articulo_Descuento'
+								);
+		$query = $this->articulo->obtenerArticulosParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $_POST['sucursal']);
+		
+		$ruta_imagen = base_url('application/images/Icons');
+		$articulosAMostrar = array();
+		foreach($query->result() as $art){
+			$auxArray = array(
+				"<input class='checkbox'  type='checkbox' name='articulos_seleccionados' value='".$art->codigo."'>",
+				$art->codigo,
+				$art->descripcion,
+				$art->inventario,
+				$art->descuento,
+				number_format($this->articulo->getPrecioProducto($art->codigo, 0, $_POST['sucursal']),2),
+				number_format($this->articulo->getPrecioProducto($art->codigo, 1, $_POST['sucursal']),2),
+				number_format($this->articulo->getPrecioProducto($art->codigo, 2, $_POST['sucursal']),2),
+				"
+				<div class='tab_opciones'>
+					<a href=".base_url('')."articulos/editar/edicion?id=".$art->codigo."&suc=".$_POST['sucursal']." ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>
+				</div>
+				"
+			);
+			array_push($articulosAMostrar, $auxArray);
+		}
+		
+		$filtrados = $this->articulo->obtenerArticulosParaTablaFiltrados($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $_POST['sucursal']);
+		
+		$retorno = array(
+					'draw' => $_POST['draw'],
+					'recordsTotal' => $this->articulo->getTotalArticulosEnSucursal($_POST['sucursal']),
+					'recordsFiltered' => $filtrados -> num_rows(),
+					'data' => $articulosAMostrar
+				);
+		echo json_encode($retorno);
+	}
+	
 	
  
  function edicion()
@@ -186,7 +230,14 @@ class editar extends CI_Controller {
 	}
 	
 	if(isset($_GET['id'])){ //Verifica que traiga esa variable
-		if($result = $this->articulo->existe_Articulo($_GET['id'], $data['Sucursal_Codigo'])){ //Verifica que exista el articulo
+		$sucursal = $data['Sucursal_Codigo'];
+		//Si viene sucursal usamos la que viene, sino deja la del log del usuario
+		if(isset($_GET['suc'])){
+			if($this->empresa->getEmpresa($_GET['suc'])){
+				$sucursal = $_GET['suc'];
+			}							
+		}
+		if($result = $this->articulo->existe_Articulo($_GET['id'], $sucursal)){ //Verifica que exista el articulo
 			foreach($result as $row)
 			{	
 				$data['Articulo_Codigo'] = $row -> Articulo_Codigo;
@@ -208,12 +259,12 @@ class editar extends CI_Controller {
 				//$data['TB_05_Familia_Familia_Codigo'] = $row -> TB_05_Familia_Familia_Codigo;
 				//$data['TB_02_Sucursal_Codigo'] = $row -> TB_02_Sucursal_Codigo;
 				
-				$data['costo_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 0, $data['Sucursal_Codigo']);
-				$data['precio1_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 1, $data['Sucursal_Codigo']);
-				$data['precio2_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 2, $data['Sucursal_Codigo']);
-				$data['precio3_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 3, $data['Sucursal_Codigo']);
-				$data['precio4_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 4, $data['Sucursal_Codigo']);
-				$data['precio5_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 5, $data['Sucursal_Codigo']);
+				$data['costo_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 0, $sucursal);
+				$data['precio1_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 1, $sucursal);
+				$data['precio2_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 2, $sucursal);
+				$data['precio3_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 3, $sucursal);
+				$data['precio4_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 4, $sucursal);
+				$data['precio5_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 5, $sucursal);
 				
 				$data['empresaId'] = $row -> TB_02_Sucursal_Codigo;
 				$data['empresaNombre'] = $this->empresa->getNombreEmpresa($row -> TB_02_Sucursal_Codigo);
@@ -356,7 +407,7 @@ class editar extends CI_Controller {
 									include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 									$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el artículo código: ".$_POST['articulo_codigo'],$data['Sucursal_Codigo'],'edicion');
 							
-									redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=s', 'location');
+									redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=s&suc='.$_POST['sucursal'], 'location');
 							}else{
 								//echo "Algun precio no es valido";
 								redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=e&e=7', 'location');
@@ -477,10 +528,20 @@ class editar extends CI_Controller {
 			if(sizeof($articulos)>0){
 				if(is_numeric($descuento)){
 					if($descuento<=100&&$descuento>=0){
+						
 						include '/../get_session_data.php';
+						$sucursal = $data['Sucursal_Codigo'];
+						
+						//Si viene sucursal usamos la que viene, sino deja la del log del usuario
+						if(isset($_POST['sucursal'])){
+							if($this->empresa->getEmpresa($_POST['sucursal'])){
+								$sucursal = $_POST['sucursal'];
+							}							
+						}					
+						
 						foreach($articulos as $art){
-							if($this->articulo->existe_Articulo($art,$data['Sucursal_Codigo'])){
-								$this->articulo->cambiarDescuento($art, $data['Sucursal_Codigo'], $descuento);
+							if($this->articulo->existe_Articulo($art,$sucursal)){
+								$this->articulo->cambiarDescuento($art, $sucursal, $descuento);
 							}
 						}
 						$retorno['status'] = 'success';
@@ -500,7 +561,19 @@ class editar extends CI_Controller {
 		echo json_encode($retorno);
 	}
  
- 
+	function manejoArticulos()
+	{	
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);	
+		if(!$permisos['manejo_articulos'])
+		{	
+			redirect('accesoDenegado', 'location');	
+		}
+		$empresas_actuales = $this->empresa->get_empresas_ids_array();
+		
+		$data['Familia_Empresas'] = $empresas_actuales;
+		$this->load->view('articulos/manejo_articulos_view', $data);
+	}
  
 	
  }// FIN DE LA CLASE

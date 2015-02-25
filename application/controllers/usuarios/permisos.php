@@ -31,6 +31,7 @@
 						'entrar_empresa' => 'Entrar a Empresas',						
 						'entrar_recibos' => 'Entrar a recibos',
 						'ingreso_bodega' => 'Ingreso a Bodega',
+						'manejo_articulos' => 'Manejo de Artículos',
 						'otros_cliente' => 'Editar Descuentos y Credito',
 						'registrar_articulo_individual' => 'Registro Individual Articulo',
 						'registrar_articulos_masivo' => 'Registro Masivo Articulo',
