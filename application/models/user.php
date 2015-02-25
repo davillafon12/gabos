@@ -357,6 +357,98 @@ function existe_Nombre_Usuario($nombre){
 		return $this->db->get('TB_12_Transacciones')->result();
 	}
 	
+	function obtenerTransaccionesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal){
+		/*
+			SELECT 	Trans_Codigo as codigo,
+					Trans_Descripcion as descripcion,
+					Trans_Fecha_Hora as fecha,
+					Trans_Tipo as tipo,
+					TB_01_Usuario_Usuario_Codigo as usuario_codigo,
+					CONCAT(Usuario_Nombre,' ',Usuario_Apellidos) as usuario_nombre,
+					Usuario_Nombre_Usuario as usuario_user
+			FROM tb_12_transacciones
+			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = tb_12_transacciones.TB_01_Usuario_Usuario_Codigo
+			WHERE (Trans_Codigo LIKE '%%' OR
+				   Trans_Descripcion LIKE '%%' OR
+				   Trans_Tipo LIKE '%%' OR
+				   Usuario_Nombre LIKE '%%' OR
+				   Usuario_Apellidos LIKE '%%' OR
+				   Usuario_Nombre_Usuario LIKE '%%')
+			AND TB_01_Usuario_TB_02_Sucursal_Codigo = 0
+			ORDER BY Trans_Codigo DESC
+			LIMIT 20,10	
+		*/
+		return $this->db->query("
+			SELECT 	Trans_Codigo as codigo,
+					Trans_Descripcion as descripcion,
+					Trans_Fecha_Hora as fecha,
+					Trans_Tipo as tipo,
+					Trans_IP as ip,
+					TB_01_Usuario_Usuario_Codigo as usuario_codigo,
+					CONCAT(Usuario_Nombre,' ',Usuario_Apellidos) as usuario_nombre,
+					Usuario_Nombre_Usuario as usuario_user
+			FROM tb_12_transacciones
+			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = tb_12_transacciones.TB_01_Usuario_Usuario_Codigo
+			WHERE (Trans_Codigo LIKE '%$busqueda%' OR
+				   Trans_Descripcion LIKE '%$busqueda%' OR
+				   Trans_Tipo LIKE '%$busqueda%' OR
+				   Trans_IP  LIKE '%$busqueda%' OR
+				   Usuario_Nombre LIKE '%$busqueda%' OR
+				   Usuario_Apellidos LIKE '%$busqueda%' OR
+				   Usuario_Nombre_Usuario LIKE '%$busqueda%')
+			AND TB_01_Usuario_TB_02_Sucursal_Codigo = $sucursal
+			ORDER BY $columnaOrden $tipoOrden
+			LIMIT $inicio,$cantidad
+		");		
+	}
+	
+	function obtenerTransaccionesParaTablaFiltrados($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal){
+		/*
+			SELECT 	Trans_Codigo as codigo,
+					Trans_Descripcion as descripcion,
+					Trans_Fecha_Hora as fecha,
+					Trans_Tipo as tipo,
+					TB_01_Usuario_Usuario_Codigo as usuario_codigo,
+					CONCAT(Usuario_Nombre,' ',Usuario_Apellidos) as usuario_nombre,
+					Usuario_Nombre_Usuario as usuario_user
+			FROM tb_12_transacciones
+			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = tb_12_transacciones.TB_01_Usuario_Usuario_Codigo
+			WHERE (Trans_Codigo LIKE '%%' OR
+				   Trans_Descripcion LIKE '%%' OR
+				   Trans_Tipo LIKE '%%' OR
+				   Usuario_Nombre LIKE '%%' OR
+				   Usuario_Apellidos LIKE '%%' OR
+				   Usuario_Nombre_Usuario LIKE '%%')
+			AND TB_01_Usuario_TB_02_Sucursal_Codigo = 0
+		*/
+		return $this->db->query("
+			SELECT 	Trans_Codigo as codigo,
+					Trans_Descripcion as descripcion,
+					Trans_Fecha_Hora as fecha,
+					Trans_Tipo as tipo,
+					Trans_IP as ip,
+					TB_01_Usuario_Usuario_Codigo as usuario_codigo,
+					CONCAT(Usuario_Nombre,' ',Usuario_Apellidos) as usuario_nombre,
+					Usuario_Nombre_Usuario as usuario_user
+			FROM tb_12_transacciones
+			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = tb_12_transacciones.TB_01_Usuario_Usuario_Codigo
+			WHERE (Trans_Codigo LIKE '%$busqueda%' OR
+				   Trans_Descripcion LIKE '%$busqueda%' OR
+				   Trans_Tipo LIKE '%$busqueda%' OR
+				   Trans_IP  LIKE '%$busqueda%' OR
+				   Usuario_Nombre LIKE '%$busqueda%' OR
+				   Usuario_Apellidos LIKE '%$busqueda%' OR
+				   Usuario_Nombre_Usuario LIKE '%$busqueda%')
+			AND TB_01_Usuario_TB_02_Sucursal_Codigo = $sucursal
+		");		
+	}
+	
+	function getTotalTransaccionesEnSucursal($sucursal){
+		$this->db->where('TB_01_Usuario_TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->from('tb_12_transacciones');
+		return $this->db->get()->num_rows();
+	}
+	
 }//FIN DE LA CLASE
 ?>
 
