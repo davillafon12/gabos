@@ -763,6 +763,22 @@ Class articulo extends CI_Model
 		$this->db->update('tb_06_articulo', $datos);
 	}
 	
+	function getArticulosFacturasTemporales($sucursal){
+		$this->db->where('Sucursal', $sucursal);
+		$this->db->from('tb_41_productos_factura_temporal');
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
+	
+	function borrarArticulosTemporalesDeSucursal($sucursal){
+		$this->db->where('Sucursal', $sucursal);
+		$this->db->delete('tb_41_productos_factura_temporal');		
+	}
+	
 	
 } //FIN DE LA CLASE
 

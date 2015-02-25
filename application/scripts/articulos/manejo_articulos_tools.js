@@ -1,6 +1,9 @@
+var hayArticulosTemporales = false; //Se utilzia para valorar que realmente se hayan cargado productos
+
 
 $(function(){
 	$("#descuento").numeric();
+	actualizarProductosTemporales();
 });
 
 function isNumber(n) {
@@ -107,6 +110,12 @@ function manejarErrores(error){
 		case '3':
 				notyMsg('¡Descuento inválido!', 'error');
 				break;
+		case '4':
+				notyMsg('¡Sucursal no existe!', 'error');
+				break;
+		case '5':
+				notyMsg('¡No habían artículos que devolver!', 'error');
+				break;		
 	}	
 }
 
@@ -114,7 +123,82 @@ function cargarArticulosSucursal(){
 	$("#tabla_editar").dataTable().fnDraw();	
 }
 
+function actualizarProductosTemporales(){
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/articulos/editar/obtenerArticulosTemporales',
+		type: "POST",		
+		async: false,
+		data: {'sucursal':$("#sucursalTemporalesArticulos").val()},				
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				informacion = $.parseJSON('[' + data.trim() + ']');				
+				if(informacion[0].status==="error"){					
+					manejarErrores(informacion[0].error);
+				}else if(informacion[0].status==="success"){
+					cargarArticulosTemporales(informacion[0].articulos);
+				}
+			}catch(e){
+				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{}
+	});	
+}
+
+function cargarArticulosTemporales(articulos){
+	$("#cuerpo_articulos_temporales").html('');
+	for(i=0; i<articulos.length; i++){
+		$("#cuerpo_articulos_temporales").append("<tr><td>"+articulos[0].Codigo_Articulo+"</td><td>"+articulos[0].Cantidad+"</td></tr>");
+	}
+	//Si cargo productos
+	if(articulos.length>0){
+		hayArticulosTemporales = true;
+	}else{
+		hayArticulosTemporales = false;
+	}
+}
+
+function devolverProductosTemporales(){
+	if(hayArticulosTemporales){
+		$.prompt("¡Esto devolverá todos los productos temporales a inventario, esto afectará el inventario! \n Solo ejecutarse cuando sea estrictamente necesario.", {
+						title: "¿Esta seguro que desea realizar esta operación?",
+						buttons: { "Si, estoy seguro": true, "Cancelar": false },
+						submit:function(e,v,m,f){
+													if(v){													
+														retornarArticulos();
+													}
+												}
+					});
+	}else{
+		notyMsg('¡No hay artículos que devolver al inventario!', 'error');
+	}	
+}
 	
-	
+function retornarArticulos(){
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/articulos/editar/retornarArticulosTemporales',
+		type: "POST",		
+		async: false,
+		data: {'sucursal':$("#sucursalTemporalesArticulos").val()},				
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				informacion = $.parseJSON('[' + data.trim() + ']');				
+				if(informacion[0].status==="error"){					
+					manejarErrores(informacion[0].error);
+				}else if(informacion[0].status==="success"){
+					notyMsg('¡Se retornaron los artículos con éxito!', 'success');
+					actualizarProductosTemporales();
+				}
+			}catch(e){
+				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{}
+	});	
+}
 	
 	

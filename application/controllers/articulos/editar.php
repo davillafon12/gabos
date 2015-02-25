@@ -570,9 +570,59 @@ class editar extends CI_Controller {
 			redirect('accesoDenegado', 'location');	
 		}
 		$empresas_actuales = $this->empresa->get_empresas_ids_array();
-		
-		$data['Familia_Empresas'] = $empresas_actuales;
+		$data['Familia_Empresas'] = $empresas_actuales;		
 		$this->load->view('articulos/manejo_articulos_view', $data);
+	}
+	
+	function obtenerArticulosTemporales(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = 1;
+		if(isset($_POST['sucursal'])){
+			$sucursal = $_POST['sucursal'];
+			if($this->empresa->getEmpresa($sucursal)){
+				$articulos = array();
+				if($arts = $this->articulo->getArticulosFacturasTemporales($sucursal)){
+					$articulos = $arts;
+				}
+				unset($retorno['error']);
+				$retorno['status'] = 'success';
+				$retorno['articulos'] = $articulos;
+			}else{
+				$retorno['error'] = 4;
+			}
+		}else{
+			$retorno['error'] = 2;
+		}
+		echo json_encode($retorno);
+	}
+	
+	function retornarArticulosTemporales(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = 1;
+		if(isset($_POST['sucursal'])){
+			$sucursal = $_POST['sucursal'];
+			if($this->empresa->getEmpresa($sucursal)){				
+				if($articulos = $this->articulo->getArticulosFacturasTemporales($sucursal)){
+					//Los devolvemos
+					foreach($articulos as $art){
+						$this->articulo->actualizarInventarioSUMA($art->Codigo_Articulo, $art->Cantidad, $sucursal);
+					}
+					//Los borramos de temporal
+					$this->articulo->borrarArticulosTemporalesDeSucursal($sucursal);
+					include '/../get_session_data.php';
+					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario retornó los artículos temporales de la sucursal $sucursal",$data['Sucursal_Codigo'],'devolucion');
+					unset($retorno['error']);
+					$retorno['status'] = 'success';
+				}else{
+					$retorno['error'] = 5;
+				}				
+			}else{
+				$retorno['error'] = 4;
+			}
+		}else{
+			$retorno['error'] = 2;
+		}
+		echo json_encode($retorno);		
 	}
  
 	

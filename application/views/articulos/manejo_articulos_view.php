@@ -115,37 +115,31 @@ PARA:
 				</fieldset>
 				<fieldset class="lista-articulos-temporales-fieldset">
 					<legend>Artículos Temporales</legend>
-					<table id='tabla_editar' class='tablaPrincipal'>
+					<div class="contenedor-sucursal">
+						<p class="contact label-sucursal">Sucursal:</p>
+						<select class="input_dos" onchange="actualizarProductosTemporales()" id="sucursalTemporalesArticulos">
+							<?php
+								foreach($Familia_Empresas as $en => $ek){
+									echo "<option value='$ek'>$en</option>";								
+								}
+							?>			
+						</select>
+					</div>
+					<table id='tabla_temporal' class='tablaPrincipal'>
 						<thead> 
-							<th ></th>
 							<th class='Sorted_enabled'>
 								Código
 							</th>
 							<th class='Sorted_enabled'>
-								Descripción
-							</th>
-							<th class='Sorted_enabled'>
-								Inventario
-							</th>
-							<th class='Sorted_enabled'>
-								Descuento
-							</th>
-							<th>
-								Costo
-							</th>
-							<th>
-								Precio Afiliado 
-							</th>
-							<th>
-								Precio No Afiliado
-							</th>
-							<th >
-								Opciones
+								Cantidad
 							</th>
 						</thead> 
-						<tbody>
+						<tbody id="cuerpo_articulos_temporales">
 						</tbody>
 					</table>
+					<div class='div_bot_des'>
+						<a href='javascript:;' onClick='devolverProductosTemporales()' class='boton_desall'>Devolver a Inventario</a>
+					</div>
 				</fieldset>
 			</div>
 

@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	setTable();
+	setTableTemporal();
 });
 
 function setTable(){
@@ -30,6 +31,18 @@ function setTable(){
 		 "drawCallback": function( settings ) {
 							$("#contenido").css( "display", 'block' );
 						}
+	});
+}
+
+function setTableTemporal(){
+	$('#tabla_temporal').dataTable({
+		'oLanguage': {
+				'sUrl': location.protocol+'//'+document.domain+'/application/scripts/datatables/Spanish.txt'
+			},
+		"columns": [ 
+					   null,    
+					   null,					  
+					]
 	});
 }
 
