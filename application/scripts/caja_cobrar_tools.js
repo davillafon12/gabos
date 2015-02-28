@@ -229,6 +229,9 @@ function validarMixto(){
 	cantidadIsNumberEfectivo = $.isNumeric(cantidadTransaccionEfectivo);
 	if(transacIsNumber&&cantidadIsNumber&&cantidadIsNumberEfectivo){
 		cantidadTotalFactura = $("#costo_total").val();
+		//Se hace varias veces por si es millones o mas
+		cantidadTotalFactura = cantidadTotalFactura.replace(',','');
+		cantidadTotalFactura = cantidadTotalFactura.replace(',','');
 		cantidadTotalFactura = cantidadTotalFactura.replace(',','');
 		cantidadTotalFactura = parseFloat(cantidadTotalFactura);
 		//alert(parseFloat(cantidadTransaccion)+parseFloat(cantidadTransaccionEfectivo));
@@ -308,6 +311,7 @@ function enviarCobro(URL){
 					window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 				}else if(tipoImpresion==='c'){
 					//Impresion carta
+					window.open(location.protocol+'//'+document.domain+'/impresion?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 				}
 				window.location = location.protocol+'//'+document.domain+'/facturas/caja';
 			}

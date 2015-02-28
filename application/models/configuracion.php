@@ -130,6 +130,22 @@
 			}
 		}
 		
+		function getDecimales(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'cantidad_decimales');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return 2; 
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
 		function getConfiguracionArray(){
 			$this->db->from('tb_39_configuracion');
 			$query = $this->db->get();		

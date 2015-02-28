@@ -241,7 +241,8 @@ Class factura extends CI_Model
 				Factura_Tipo_Pago AS tipo, 
 				Factura_Moneda AS moneda, 
 				Factura_tipo_cambio AS cambio, 
-				CONCAT_WS(' ', Usuario_Nombre, Usuario_Apellidos) AS vendedor   
+				CONCAT_WS(' ', Usuario_Nombre, Usuario_Apellidos) AS vendedor,
+				Factura_Observaciones AS observaciones				
 			FROM TB_07_Factura
 			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = TB_07_Factura.Factura_Vendedor_Codigo
 			WHERE TB_07_Factura.TB_02_Sucursal_Codigo = $sucursal
