@@ -38,9 +38,9 @@ class notas extends CI_Controller {
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['cedula'])){
 			$cedula = $_POST['cedula']; 
-			if(trim($cedula) == '1' || trim($cedula) == '0'){
+			/*if(trim($cedula) == '1' || trim($cedula) == '0'){
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
-			}else{
+			}else{*/
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
 					include '/../get_session_data.php';					
 					if($facturas = $this->cliente->getFacturasDeClienteEnSucursal($cedula, $data['Sucursal_Codigo'])){
@@ -67,7 +67,7 @@ class notas extends CI_Controller {
 				}else{
 					$retorno['error'] = '3'; //Error no hay cliente
 				}
-			}
+			//}
 		}else{
 			$retorno['error'] = '2'; //Error en la URL
 		}
@@ -108,9 +108,9 @@ class notas extends CI_Controller {
 		if(isset($_POST['cedula'])&&isset($_POST['codigo'])){
 			$cedula = $_POST['cedula']; 
 			$codigo = $_POST['codigo']; 
-			if(trim($cedula) == '1' || trim($cedula) == '0'){
+			/*if(trim($cedula) == '1' || trim($cedula) == '0'){
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
-			}else{
+			}else{*/
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
 					include '/../get_session_data.php';					
 					if($facturas = $this->cliente->getFacturasDeClienteEnSucursalFiltradasCodigo($cedula, $data['Sucursal_Codigo'], $codigo)){
@@ -132,7 +132,7 @@ class notas extends CI_Controller {
 				}else{
 					$retorno['error'] = '3'; //Error no hay cliente
 				}
-			}
+			//}
 		}else{
 			$retorno['error'] = '2'; //Error en la URL
 		}
@@ -145,9 +145,9 @@ class notas extends CI_Controller {
 		if(isset($_POST['cedula'])&&isset($_POST['consecutivo'])){
 			$cedula = $_POST['cedula']; 
 			$consecutivo = $_POST['consecutivo']; 
-			if(trim($cedula) == '1' || trim($cedula) == '0'){
+			/*if(trim($cedula) == '1' || trim($cedula) == '0'){
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
-			}else{
+			}else{*/
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
 					include '/../get_session_data.php';					
 					if($factura = $this->cliente->getFacturaDeClienteCobrada($consecutivo, $data['Sucursal_Codigo'], $cedula)){
@@ -158,7 +158,7 @@ class notas extends CI_Controller {
 				}else{
 					$retorno['error'] = '3'; //Error no hay cliente
 				}
-			}
+			//}
 		}else{
 			$retorno['error'] = '2'; //Error en la URL
 		}

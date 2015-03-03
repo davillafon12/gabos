@@ -617,12 +617,12 @@ function resetAllRowsFields(){
 }
 
 function advertenciaSalida(){
-	return "Está saliendo de esta página. Los productos seran devueltos a inventario!!! "
+	//return "Está saliendo de esta página. Los productos seran devueltos a inventario!!! "
 }
 
 function deshacerFactura(){
 	//resetAll();
-	devolverProductos();
+	//devolverProductos();
 }
 
 function salidaSesion(){

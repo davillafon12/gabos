@@ -17,6 +17,7 @@ class impresion extends CI_Controller {
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('factura','',TRUE);
 		$this->load->model('contabilidad','',TRUE);
+		$this->load->model('proforma_m','',TRUE);
 		include 'get_session_data.php'; //Esto es para traer la informacion de la sesion
 		//Generamos el token de seguridad, el cual debe coincidir con el token de llegada
 		$this->tokenSeguridad = md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
@@ -360,12 +361,7 @@ class impresion extends CI_Controller {
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
 							if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal)){
-								unset($this->retorno['error']);
-								$this->retorno['status'] = 'success';
-								$this->retorno['empresa'] = $empresa;
-								$this->retorno['notaHead'] = $notaCreditoHead;
-								$this->retorno['notaBody'] = $notaCreditoBody;
-								
+															
 								$total = 0;
 								$subtotal = 0;
 								$total_iva = 0;
@@ -378,7 +374,9 @@ class impresion extends CI_Controller {
 								
 								$notaCreditoHead[0]->total = $total;
 								$notaCreditoHead[0]->subtotal = $subtotal;
-								$notaCreditoHead[0]->total_iva = $total_iva;							
+								$notaCreditoHead[0]->total_iva = $total_iva;
+
+								$this->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $notaCreditoBody);
 							}else{
 								$this->retorno['error'] = '12';
 							}
@@ -399,12 +397,7 @@ class impresion extends CI_Controller {
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($notaDebitoHead = $this->contabilidad->getHeadNotaDebito($consecutivo, $sucursal)){
 							if($notaDebitoBody = $this->contabilidad->getProductosNotaDebito($consecutivo, $sucursal)){
-								unset($this->retorno['error']);
-								$this->retorno['status'] = 'success';
-								$this->retorno['empresa'] = $empresa;
-								$this->retorno['notaHead'] = $notaDebitoHead;
-								$this->retorno['notaBody'] = $notaDebitoBody;
-								
+															
 								$total = 0;
 								$subtotal = 0;
 								$total_iva = 0;
@@ -418,6 +411,9 @@ class impresion extends CI_Controller {
 								$notaDebitoHead[0]->total = $total;
 								$notaDebitoHead[0]->subtotal = $subtotal;
 								$notaDebitoHead[0]->total_iva = $total_iva;
+								
+								
+								$this->notaDebitoPDF($empresa[0], $notaDebitoHead[0], $notaDebitoBody);
 							}else{
 								$this->retorno['error'] = '14';
 							}
@@ -429,6 +425,19 @@ class impresion extends CI_Controller {
 					}
 				}else{
 					$this->retorno['error'] = '6';
+				}
+			break;
+			case 'p':
+				if(isset($_GET['n'])&&isset($_GET['s'])){
+					$sucursal = $_GET['s'];
+					$consecutivo = $_GET['n'];
+					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+						if($proformaHead = $this->proforma_m->getProformasHeadersImpresion($consecutivo, $sucursal)){
+							if($proformaBody = $facturaPRODUCTS = $this->proforma_m->getArticulosProformaImpresion($consecutivo, $sucursal)){
+								$this->proformaPDF($empresa, $proformaHead, $proformaBody);							
+							}
+						}				
+					}
 				}
 			break;
 			default:
@@ -467,6 +476,93 @@ class impresion extends CI_Controller {
 		$pdf->Output();
 	}
 	
+	private function proformaPDF($empresa, $fhead, $fbody){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		
+		$cantidadProductos = sizeOf($fbody);
+		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		
+		while($paginasADibujar>=$this->numPagina){
+			//Agregamos pag		
+			$pdf->AddPage();			
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('p', $empresa[0], $fhead[0], $pdf);
+			//Agregamos Productos
+			$inicio = $this->numPagina*33;
+			if((($this->numPagina+1)*33)<$cantidadProductos){
+				$final = ($this->numPagina+1)*33;
+			}else{
+				$final = $cantidadProductos;
+			}
+			
+			$this->printProducts($fbody, $inicio, $final-1, $pdf);
+			//Definimos el pie de pagina
+			$this->pieDocumentoPDF('p', $fhead[0], $empresa[0], $pdf);
+			$this->numPagina++;
+		}
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
+	private function notaCreditoPDF($empresa, $head, $productos){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		
+		$cantidadProductos = sizeOf($productos);
+		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		
+		while($paginasADibujar>=$this->numPagina){
+			//Agregamos pag		
+			$pdf->AddPage();			
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('nc', $empresa, $head, $pdf);
+			//Agregamos Productos
+			$inicio = $this->numPagina*33;
+			if((($this->numPagina+1)*33)<$cantidadProductos){
+				$final = ($this->numPagina+1)*33;
+			}else{
+				$final = $cantidadProductos;
+			}
+			
+			$this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf);
+			//Definimos el pie de pagina
+			$this->pieDocumentoPDF('nc', $head, $empresa, $pdf);
+			$this->numPagina++;
+		}
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
+	private function notaDebitoPDF($empresa, $head, $productos){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		
+		$cantidadProductos = sizeOf($productos);
+		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		
+		while($paginasADibujar>=$this->numPagina){
+			//Agregamos pag		
+			$pdf->AddPage();			
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('nd', $empresa, $head, $pdf);
+			//Agregamos Productos
+			$inicio = $this->numPagina*33;
+			if((($this->numPagina+1)*33)<$cantidadProductos){
+				$final = ($this->numPagina+1)*33;
+			}else{
+				$final = $cantidadProductos;
+			}
+			
+			$this->printProductsNotaDebito($productos, $inicio, $final-1, $pdf);
+			//Definimos el pie de pagina
+			$this->pieDocumentoPDF('nd', $head, $empresa, $pdf);
+			$this->numPagina++;
+		}
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
 	private function encabezadoDocumentoPDF($tipo, $empresa, $encabezado, &$pdf){
 		//var_dump($empresa);
 		$pdf->SetFont('Arial','B',14);
@@ -494,22 +590,24 @@ class impresion extends CI_Controller {
 				//Info del cliente
 				$pdf->SetFont('Arial','B',12);
 				$pdf->Text(12, 42, 'Cliente');
-				$pdf->SetFont('Arial','',12);
+				$pdf->SetFont('Arial','',11);
 				$pdf->Text(12, 49, 'Identificación: '.$encabezado->cliente_ced);
 				$pdf->SetXY(11, 50);
 				$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
+				//Caja redondeada 1
+				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
 				//Divisores				
-				$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
+				//$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
 				$pdf->Line(100, 37, 100, 60); //Centro caja
-				$pdf->Line(10, 60, 200, 60); //Borde de abajo
-				$pdf->Line(200, 37, 200, 60); //Lado derecho caja
-				$pdf->Line(10, 37, 200, 37); //Borde de arriba
+				//$pdf->Line(10, 60, 200, 60); //Borde de abajo
+				//$pdf->Line(200, 37, 200, 60); //Lado derecho caja
+				//$pdf->Line(10, 37, 200, 37); //Borde de arriba
 				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
 				$pdf->Line(100, 55, 200, 55); //Borde arriba vendedor
 				//Info de la factura
 				$pdf->SetFont('Arial','B',12);
 				$pdf->Text(102, 42, 'Descripción');
-				$pdf->SetFont('Arial','',12);
+				$pdf->SetFont('Arial','',11);
 				$pdf->Text(102, 49, 'Tipo: '.$encabezado->tipo);
 				$pdf->Text(102, 54, 'Moneda: '.$encabezado->moneda);
 				$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);
@@ -527,6 +625,81 @@ class impresion extends CI_Controller {
 					break;
 				}
 			break;
+			case 'nc':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Nota Crédito #'.$encabezado->nota);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha);
+				
+				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+				
+				//Info del cliente
+				$pdf->SetFont('Arial','B',12);
+				$pdf->Text(12, 42, 'Cliente');
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(12, 49, 'Identificación: '.$encabezado->cliente_cedula);
+				$pdf->SetXY(11, 50);
+				$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nombre);
+				//Caja redondeada 1
+				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
+				//Divisores					
+				$pdf->Line(100, 37, 100, 60); //Centro caja				
+				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
+				$pdf->Line(100, 51, 200, 51); //Borde arriba vendedor
+				//Info de la factura
+				$pdf->SetFont('Arial','B',12);
+				$pdf->Text(102, 42, 'Descripción');
+				$pdf->Text(102, 57, 'Esta nota crédito se aplica a la factura #'.$encabezado->factura_aplicar);
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(102, 49, 'Moneda: '.$encabezado->moneda);
+				//$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);
+			break;
+			case 'nd':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Nota Débito #'.$encabezado->nota);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha);
+				
+				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+								
+			break;
+			case 'p':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Proforma #'.$encabezado->consecutivo);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha);
+				
+				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+				
+				//Info del cliente
+				$pdf->SetFont('Arial','B',12);
+				$pdf->Text(12, 42, 'Cliente');
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(12, 49, 'Identificación: '.$encabezado->cliente_ced);
+				$pdf->SetXY(11, 50);
+				$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
+				//Caja redondeada 1
+				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
+				//Divisores				
+				$pdf->Line(100, 37, 100, 60); //Centro caja
+				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
+				$pdf->Line(100, 55, 200, 55); //Borde arriba vendedor
+				//Info de la factura
+				$pdf->SetFont('Arial','B',12);
+				$pdf->Text(102, 42, 'Descripción');
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(102, 49, 'Moneda: '.$encabezado->moneda);
+				$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);				
+			break;
 		}
 	}
 	
@@ -540,7 +713,7 @@ class impresion extends CI_Controller {
 				$pdf->SetXY(10, 270);	
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 				//Costos totales
-				$pdf->SetFont('Arial','B',12);
+				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 240);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
@@ -551,12 +724,56 @@ class impresion extends CI_Controller {
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
 			break;			
-		}
-		
-		
-		
-		
-		
+			case 'nc':
+				//Parte de observaciones
+				$this->observaciones('', $pdf);
+				//Costos totales
+				$pdf->SetFont('Arial','',11);
+				$pdf->SetXY(131, 240);	
+				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
+				$pdf->SetXY(131, 247);	
+				$pdf->Cell(41,7,'IVA:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
+				$pdf->SetXY(131, 254);	
+				$pdf->Cell(41,7,'Total:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
+			break;
+			case 'nd':
+				//Parte de observaciones
+				$this->observaciones('', $pdf);
+				//Costos totales
+				$pdf->SetFont('Arial','',11);
+				$pdf->SetXY(131, 240);	
+				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
+				$pdf->SetXY(131, 247);	
+				$pdf->Cell(41,7,'IVA:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
+				$pdf->SetXY(131, 254);	
+				$pdf->Cell(41,7,'Total:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
+			break;
+			case 'p':
+				//Parte de observaciones
+				$this->observaciones($encabezado->observaciones, $pdf);
+				//Leyenda de tributacion
+				$pdf->SetFont('Arial','',8);
+				$pdf->SetXY(10, 270);	
+				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
+				//Costos totales
+				$pdf->SetFont('Arial','',11);
+				$pdf->SetXY(131, 240);	
+				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
+				$pdf->SetXY(131, 247);	
+				$pdf->Cell(41,7,'IVA:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
+				$pdf->SetXY(131, 254);	
+				$pdf->Cell(41,7,'Total:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
+			break;
+		}		
 	}
 	
 	private function fn($numero){		
@@ -586,7 +803,7 @@ class impresion extends CI_Controller {
 		//Agregamos el cuadro de observaciones
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Text(11, 245, 'Observaciones:');
-		$pdf->SetFont('Arial','',11);
+		$pdf->SetFont('Arial','',8);
 		$pdf->SetXY(10, 246);	
 		$pdf->MultiCell(100,5,$obs);
 	}
@@ -595,20 +812,22 @@ class impresion extends CI_Controller {
 		//Agregamos el apartado de productos
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Text(90, 65, 'Productos');
+		//Caja redondeada 1
+		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
 		//Divisores verticales de productos
 		$pdf->Line(10, 74, 200, 74);		
-		$pdf->Line(10, 67, 200, 67); //Borde abajo productos
-		$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
+		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
+		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
 		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
 		$pdf->Line(110, 67, 110, 240); //Divisor de descripcion y cantidad
 		$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
 		$pdf->Line(131, 67, 131, 240); //Divisor de exento y descuento
 		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
 		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total		
-		$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
-		$pdf->Line(10, 240, 200, 240); //Borde abajo productos
+		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
+		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
 		//Encabezado de productos
-		$pdf->SetFont('Arial','',12);
+		$pdf->SetFont('Arial','',10);
 		$pdf->Text(13, 72, 'Código');
 		$pdf->Text(58, 72, 'Descripción');
 		$pdf->Text(112, 72, 'Cant.');
@@ -617,7 +836,7 @@ class impresion extends CI_Controller {
 		$pdf->Text(149, 72, 'P/Unitario');
 		$pdf->Text(179, 72, 'P/Total');
 		//Agregamos Productos
-		$pdf->SetFont('Arial','',11);
+		$pdf->SetFont('Arial','',8);
 		
 		$pdf->SetXY(110, 75.3);		
 		$sl = 5; //Salto de linea
@@ -637,6 +856,121 @@ class impresion extends CI_Controller {
 			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
 			$pdf->ln($sl);
 			$pdf->SetX(110);
+			$pl += $sl;
+		}
+		
+		// MAXIMO 33 PRODUCTOS POR PAGINA
+		
+		/*for($cc = 0; $cc<33; $cc++){
+			$pdf->Text(11, $pl, $cc);
+			$pl += $sl;
+		}*/
+	}
+	
+	private function printProductsNotaCredito($productos, $inicio, $fin, &$pdf){
+		//Agregamos el apartado de productos
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Text(90, 65, 'Productos');
+		//Caja redondeada 1
+		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
+		//Divisores verticales de productos
+		$pdf->Line(10, 74, 200, 74);		
+		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
+		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
+		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
+		$pdf->Line(110, 67, 110, 240); //Divisor de descripcion y cantidad
+		$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
+		//$pdf->Line(131, 67, 131, 240); //Divisor de exento y descuento
+		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
+		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total		
+		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
+		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
+		//Encabezado de productos
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(13, 72, 'Código');
+		$pdf->Text(58, 72, 'Descripción');
+		$pdf->Text(112, 72, 'Bueno');
+		$pdf->Text(126.5, 72, 'Defectuoso');
+		$pdf->Text(151, 72, 'P/Unitario');
+		$pdf->Text(179, 72, 'P/Total');
+		//Agregamos Productos
+		$pdf->SetFont('Arial','',8);
+		
+		$pdf->SetXY(110, 75.3);		
+		$sl = 5; //Salto de linea
+		$pl = 79; //Primera linea
+		
+		
+		for($cc = $inicio; $cc<=$fin; $cc++){
+			//Calculamos la cantidad
+			$cantidad = $productos[$cc]->bueno + $productos[$cc]->defectuoso;
+			
+			//Calculamos precio total con descuento
+			$total = $cantidad * $productos[$cc]->precio; 
+			
+			$pdf->Text(11, $pl, $productos[$cc]->codigo);
+			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
+			$pdf->cell(15,5,$productos[$cc]->bueno,0,0,'C');
+			$pdf->cell(20,5,$productos[$cc]->defectuoso,0,0,'C');
+			$pdf->cell(27.5,5,$this->fn($productos[$cc]->precio),0,0,'R');
+			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
+			$pdf->ln($sl);
+			$pdf->SetX(110);
+			$pl += $sl;
+		}
+		
+		// MAXIMO 33 PRODUCTOS POR PAGINA
+		
+		/*for($cc = 0; $cc<33; $cc++){
+			$pdf->Text(11, $pl, $cc);
+			$pl += $sl;
+		}*/
+	}
+	
+	private function printProductsNotaDebito($productos, $inicio, $fin, &$pdf){
+		//Agregamos el apartado de productos
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Text(90, 65, 'Productos');
+		//Caja redondeada 1
+		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
+		//Divisores verticales de productos
+		$pdf->Line(10, 74, 200, 74);		
+		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
+		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
+		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
+		$pdf->Line(125, 67, 125, 240); //Divisor de descripcion y cantidad
+		//$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
+		//$pdf->Line(131, 67, 131, 240); //Divisor de exento y descuento
+		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
+		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total		
+		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
+		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
+		//Encabezado de productos
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(13, 72, 'Código');
+		$pdf->Text(58, 72, 'Descripción');
+		$pdf->Text(128, 72, 'Cantidad');
+		$pdf->Text(151, 72, 'P/Unitario');
+		$pdf->Text(179, 72, 'P/Total');
+		//Agregamos Productos
+		$pdf->SetFont('Arial','',8);
+		
+		$pdf->SetXY(125, 75.3);		
+		$sl = 5; //Salto de linea
+		$pl = 79; //Primera linea
+		
+		
+		for($cc = $inicio; $cc<=$fin; $cc++){
+			//Calculamos precio total con descuento
+			$total = $productos[$cc]->cantidad * $productos[$cc]->precio; 
+			
+			$pdf->Text(11, $pl, $productos[$cc]->codigo);
+			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
+			$pdf->cell(20,5,$productos[$cc]->cantidad,0,0,'C');
+			$pdf->cell(27.5,5,$this->fn($productos[$cc]->precio),0,0,'R');
+			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
+			$pdf->ln($sl);
+			$pdf->SetX(125);
 			$pl += $sl;
 		}
 		

@@ -55,6 +55,7 @@ function enviarNota(){
 						window.open(informacion[0].servidor_impresion+'/index.html?t='+informacion[0].token+'&d=nd&n='+informacion[0].consecutivo+'&s='+informacion[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Notas Credito','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}else if(tipoImpresion==='c'){
 						//Impresion carta
+						window.open(location.protocol+'//'+document.domain+'/impresion?t='+informacion[0].token+'&d=nd&n='+informacion[0].consecutivo+'&s='+informacion[0].sucursal+'&i='+tipoImpresion,'Impresion de Nota Débito','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}
 				}
 			}catch(e){

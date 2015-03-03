@@ -84,6 +84,8 @@ class proforma extends CI_Controller {
 	}
 	
 	function crear(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
 		if(isset($_POST['head'])&&isset($_POST['items'])){
 		    //Obtener las dos partes del post
 			$info_factura = $_POST['head'];
@@ -100,12 +102,24 @@ class proforma extends CI_Controller {
 				$this->agregarItemsProforma($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
 				$this->actualizarCostosProforma($consecutivo, $data['Sucursal_Codigo']);
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." creo la proforma consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
-				echo '7'; //El ingreso fue correcto											
+				
+				//Para efecto de impresion
+				$retorno['consecutivo']= $consecutivo;
+				$retorno['sucursal']= $data['Sucursal_Codigo'];
+				$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+	
+				$retorno['status'] = 'success';
+				unset($retorno['error']);
+				
+				//echo '7'; //El ingreso fue correcto											
 			}else{
-				echo '11'; //Error al crear la factura
+				$retorno['error'] = '11'; //Error al crear la factura
 			}			
 		}
-		else{echo '10';} //Numero de error mal post		
+		else{
+			$retorno['error'] = '10';
+		} //Numero de error mal post
+		echo json_encode($retorno);
 	}
 	
 	function agregarItemsProforma($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
@@ -131,7 +145,9 @@ class proforma extends CI_Controller {
 	function actualizarCostosProforma($consecutivo, $sucursal){
 		$costosArray = $this->proforma_m->getCostosTotalesProforma($consecutivo, $sucursal);
 		$this->proforma_m->updateCostosTotales($costosArray, $consecutivo, $sucursal);
-	}	
+	}
+
+	
  
 }// FIN DE LA CLASE
 

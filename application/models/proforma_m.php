@@ -103,6 +103,7 @@ Class proforma_m extends CI_Model
 		$iva = 0;
 		$costo_sin_iva = 0;
 		
+		$head = $this->getProformasHeaders($consecutivo, $sucursal);
 		if($articulos = $this->getArticulosProforma($consecutivo, $sucursal)){
 			foreach($articulos as $articulo)
 			{
@@ -114,7 +115,7 @@ Class proforma_m extends CI_Model
 				$c_array = $this->getConfgArray();
 				$isExento = $articulo->Articulo_Proforma_Exento;
 				if($isExento=='0'){
-					$costo_sin_iva += $precio_total_articulo/(1+(floatval($c_array['iva'])/100));
+					$costo_sin_iva += $precio_total_articulo/(1+(floatval($head->Proforma_Porcentaje_IVA)/100));
 				}
 				else if($isExento=='1'){
 					$costo_sin_iva += $precio_total_articulo;
@@ -177,6 +178,51 @@ Class proforma_m extends CI_Model
 		}
 	}
 	
+	function getProformasHeadersImpresion($consecutivo, $sucursal){
+		/*$this -> db -> select('Proforma_Consecutivo as consecutivo, 
+								Proforma_Monto_Total as total,
+								Proforma_Monto_Sin_IVA as subtotal,
+								Proforma_Monto_IVA as iva,
+								Proforma_Observaciones as observaciones,
+								Proforma_Fecha_Hora as fecha,
+								Proforma_Moneda as moneda,
+								Proforma_Nombre_Cliente as cliente_nombre,
+								TB_03_Cliente_Cliente_Cedula as cliente_cedula,
+								Proforma_Vendedor_Sucursal as vendedor');
+		$this -> db -> from('TB_10_Proforma');
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Proforma_Consecutivo', $consecutivo);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();*/
+		
+		$query = $this->db->query("
+			SELECT 
+				Proforma_Consecutivo as consecutivo, 
+				Proforma_Monto_Total as total,
+				Proforma_Monto_Sin_IVA as subtotal,
+				Proforma_Monto_IVA as total_iva,
+				Proforma_Observaciones as observaciones,
+				date_format(Proforma_Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha,
+				Proforma_Moneda as moneda,
+				Proforma_Nombre_Cliente as cliente_nom,
+				TB_03_Cliente_Cliente_Cedula as cliente_ced,
+				CONCAT_WS(' ', Usuario_Nombre, Usuario_Apellidos) AS vendedor 
+			FROM TB_10_Proforma
+			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = TB_10_Proforma.Proforma_Vendedor_Codigo
+			WHERE TB_10_Proforma.TB_02_Sucursal_Codigo = $sucursal
+			AND TB_10_Proforma.Proforma_Consecutivo = $consecutivo
+		");
+
+		if($query -> num_rows() != 0)
+		{
+		   return $query->result();
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
 	function getCliente($consecutivo, $sucursal){
 		$this -> db -> select('TB_03_Cliente_Cliente_Cedula');
 		$this -> db -> from('TB_10_Proforma');
@@ -224,6 +270,29 @@ Class proforma_m extends CI_Model
 	function getArticulosProforma($consecutivo, $sucursal){
 		//echo "entro";
 		$this -> db -> select('*');
+		$this -> db -> from('TB_04_Articulos_Proforma');
+		$this -> db -> where('TB_10_Proforma_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('TB_10_Proforma_Proforma_Consecutivo', $consecutivo);
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		   return $query->result();
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
+	function getArticulosProformaImpresion($consecutivo, $sucursal){
+		$this -> db -> select('
+				Articulo_Proforma_Codigo AS codigo, 
+				Articulo_Proforma_Descripcion AS descripcion, 
+				Articulo_Proforma_Cantidad AS cantidad, 
+				Articulo_Proforma_Descuento AS descuento, 
+				Articulo_Proforma_Exento AS exento, 
+				Articulo_Proforma_Precio_Unitario AS precio');
 		$this -> db -> from('TB_04_Articulos_Proforma');
 		$this -> db -> where('TB_10_Proforma_TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> where('TB_10_Proforma_Proforma_Consecutivo', $consecutivo);
