@@ -4,12 +4,12 @@ LISTO-> Notas credito
 LISTO-> Notas debito FALTA AGREGAR OBSERVACIONES
 
 Impresion A4
--> Facturas
--> Notas Credito
--> Notas Debito
+LISTO-> Facturas
+LISTO-> Notas Credito
+LISTO-> Notas Debito
 -> Agregado de inventario a otras sucursales desde Garotas
 -> Inventario *Reporte
--> Proforma
+LISTO-> Proforma
 -> Clientes *Reporte
 
 Otros Cambios:
@@ -23,7 +23,7 @@ LISTO-> Las autorizaciones las da administrador y usuario avanzado.
 LISTO-> Agregar deposito como tipo de pago de recibos por dinero.
 LISTO-> La cedula de residencia en usuario le faltan 3 espacios.
 LISTO-> La cedula de residencia en cliente quitar un espacio.
--> En cliente agregar fecha nacimiento *NO PRECISA
+NO SE PUEDE -> En cliente agregar fecha nacimiento *NO PRECISA
 -> Finalizar cierre caja
 LISTO-> En la parte de descuentos, no poner porcentaje, poner precio y en js calcula el porcentaje
 LISTO-> Corregir en el registro de clientes y usurios agregar la opción de pasaporte
@@ -39,6 +39,13 @@ LISTO-> Revisar fallo de imagenes en factura
 LISTO-> Cambiar la forma en como carga articulos en proforma (Poner lo de factura) 
 LISTO-> A la hora de crear el usuario no guarda bien la contraseña
 LISTO-> Pasar tabla de transacciones a puro ajax
+LISTO-> Al crear nota credito debe guardar el precio con el descuento aplicado en la factura, y no jalar el precio directo de la BD
+LISTO-> Revisar que todo documento tenga su consecutivo en su sucursal 
+		SI -Factura 
+		SI -Proforma 
+		SI -Nota Credito
+		SI -Nota Debito
+		SI -Recibo de Dinero
 
 Menu de vendedor
 LISTO-> Crear factura
