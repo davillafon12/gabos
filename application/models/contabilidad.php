@@ -195,8 +195,12 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
-	function agregarProductosNotaCredito($consecutivo, $sucursal, $productos, $cliente){
+	function agregarProductosNotaCredito($consecutivo, $sucursal, $productos, $cliente, $facturaAcreditar){
 		$datos = array();
+		
+		// Para valorar el precio real unitario debemos obtener el 
+		// precio con el que se hizo la factura y no con el que este en la bd
+		// esto porque puede que al cliente se le vendio con descuento 
 		
 		foreach($productos as $producto){
 			//Agregamos los datos a un arrya para ser agregado a la bd
@@ -205,7 +209,7 @@ Class contabilidad extends CI_Model
 						'Descripcion' => $this->articulo->getArticuloDescripcion($producto->c, $sucursal),
 						'Cantidad_Bueno' => $producto->b,
 						'Cantidad_Defectuoso' => $producto->d,
-						'Precio_Unitario' => $this->articulo->getPrecioProducto($producto->c, $this->articulo->getNumeroPrecio($cliente), $sucursal),
+						'Precio_Unitario' => $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c),
 						'Nota_Credito_Consecutivo' => $consecutivo,
 						'Sucursal' => $sucursal
 						);
@@ -218,6 +222,18 @@ Class contabilidad extends CI_Model
 			$this->articulo->actualizarInventarioSUMADefectuoso($producto->c, $producto->d, $sucursal);
 		}
 		$this->db->insert_batch('TB_28_Productos_Notas_Credito', $datos);
+	}
+	
+	function precioArticuloEnFacturaDeterminada($factura, $sucursal, $articulo){
+		$this->db->select('Articulo_Factura_Descuento as descuento, Articulo_Factura_Precio_Unitario as precio');
+		$this->db->from('tb_08_articulos_factura');
+		$this->db->where('TB_07_Factura_Factura_Consecutivo',$factura);
+		$this->db->where('TB_07_Factura_TB_02_Sucursal_Codigo',$sucursal);
+		$this->db->where('Articulo_Factura_Codigo',$articulo);
+		$query = $this->db->get();
+		$art = $query->result()[0];
+		//Calculamos el precio con el descuento
+		return ($art->precio - ($art->precio * ($art->descuento/100)));
 	}
 	
 	function getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal){
