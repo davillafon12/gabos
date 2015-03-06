@@ -338,10 +338,7 @@ class impresion extends CI_Controller {
 								}
 							}
 							if($this->retorno['error']!='11'){ //Si no se cargo algun recibo salirse
-								unset($this->retorno['error']);
-								$this->retorno['status'] = 'success';
-								$this->retorno['recibos'] = $recibosDevolver;
-								$this->retorno['empresa'] = $empresa;
+								$this->recibosPDF($recibosDevolver, $empresa[0]);
 							}
 						}else{
 							//No vienen recibos
@@ -563,6 +560,58 @@ class impresion extends CI_Controller {
 		$pdf->Output();
 	}
 	
+	private function recibosPDF($recibos, $empresa){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		foreach($recibos as $recibo){
+			//Agregamos una pagina
+			$pdf->AddPage();
+			//Obtenemos el recibo
+			$recibo = $recibo[0];
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('r', $empresa, $recibo, $pdf);
+			//Agregamos el cuerpo del recibo
+			//Caja redondeada 1
+			$pdf->RoundedRect(10, 67, 190, 28, 5, '124', 'D');
+			$pdf->SetFont('Arial','',11);
+			$pdf->Text(12, 72, 'Recibimos de: ');
+			$pdf->Text(42, 72, $recibo->cliente_cedula." - ".$recibo->cliente_nombre);
+			
+			$V = new EnLetras(); 
+			$con_letra = $V->ValorEnLetras($recibo->monto,$recibo->moneda); 			
+			
+			$pdf->Text(12, 79, 'La suma de: ');
+			$pdf->Text(42, 79, $this->fn($recibo->monto)." - $con_letra");
+			$pdf->Text(12, 86, 'Por concepto de abono a la factura: ');
+			$pdf->Text(12, 93, 'Consecutivo # ');
+			$pdf->Text(42, 93, $recibo->factura);
+			$pdf->Text(62, 93, 'Emitida el ');
+			$pdf->Text(84, 93, $recibo->fecha_expedicion);
+			$pdf->Text(132, 93, 'Por el monto de ');
+			$pdf->Text(164, 93, $this->fn($recibo->Saldo_inicial));
+			
+			//Divisores
+			$pdf->Line(10, 74, 200, 74); //Primer divisor			
+			$pdf->Line(10, 81, 200, 81); //Segundo divisor
+			$pdf->Line(10, 88, 200, 88); //Tercer divisor
+			//$pdf->Line(10, 95, 200, 95); //Cuarto divisor
+			$pdf->Line(40, 67, 40, 81); //Primer divisor vertical
+			//$pdf->Line(40, 88, 40, 95); //Segundo divisor vertical
+			$pdf->Line(60, 88, 60, 95); //Tercer divisor vertical
+			//$pdf->Line(82, 88, 82, 95); //Cuarto divisor vertical
+			$pdf->Line(130, 88, 130, 95); //Quinto divisor vertical
+			//$pdf->Line(162, 88, 162, 95); //Sexto divisor vertical
+			
+			//Definimos el pie de pagina
+			$this->pieDocumentoPDF('r', $recibo, $empresa, $pdf);
+			
+			//Aumentamos la cantidad de paginas
+			$this->numPagina++;
+		}
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
 	private function encabezadoDocumentoPDF($tipo, $empresa, $encabezado, &$pdf){
 		//var_dump($empresa);
 		$pdf->SetFont('Arial','B',14);
@@ -700,6 +749,37 @@ class impresion extends CI_Controller {
 				$pdf->Text(102, 49, 'Moneda: '.$encabezado->moneda);
 				$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);				
 			break;
+			case 'r':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Recibo de Dinero #'.$encabezado->recibo);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha_recibo);
+				
+				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+				
+				//Info del cliente
+				$pdf->SetFont('Arial','B',12);
+				$pdf->Text(12, 42, 'Cliente');
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(12, 49, 'Identificación: '.$encabezado->cliente_cedula);
+				$pdf->SetXY(11, 50);
+				$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nombre);
+				//Caja redondeada 1
+				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
+				//Divisores				
+				$pdf->Line(100, 37, 100, 60); //Centro caja
+				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
+				$pdf->Line(100, 55, 200, 55); //Borde arriba vendedor
+				//Info de la factura
+				$pdf->SetFont('Arial','B',12);
+				$pdf->Text(102, 42, 'Descripción');
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(102, 49, 'Moneda: '.$encabezado->moneda);
+				$pdf->Text(102, 54, 'Tipo de Pago: '.$encabezado->tipo_pago);
+			break;
 		}
 	}
 	
@@ -772,6 +852,19 @@ class impresion extends CI_Controller {
 				$pdf->SetXY(131, 254);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
+			break;
+			case 'r':
+				//Costos totales
+				$pdf->SetFont('Arial','',11);
+				$pdf->SetXY(130, 95);	
+				$pdf->Cell(42,7,'Saldo Anterior:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->saldo_anterior),1,0,'R');
+				$pdf->SetXY(130, 102);	
+				$pdf->Cell(42,7,'Este Abono:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->monto),1,0,'R');
+				$pdf->SetXY(130, 109);	
+				$pdf->Cell(42,7,'Saldo Actual:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->saldo),1,0,'R');
 			break;
 		}		
 	}
@@ -985,5 +1078,231 @@ class impresion extends CI_Controller {
 	
 }// FIN DE LA CLASE
 
+
+
+
+class EnLetras 
+{ 
+  var $Void = ""; 
+  var $SP = " "; 
+  var $Dot = "."; 
+  var $Zero = "0"; 
+  var $Neg = "Menos"; 
+   
+function ValorEnLetras($x, $Moneda )  
+{ 
+    $s=""; 
+    $Ent=""; 
+    $Frc=""; 
+    $Signo=""; 
+         
+    if(floatVal($x) < 0) 
+     $Signo = $this->Neg . " "; 
+    else 
+     $Signo = ""; 
+     
+    if(intval(number_format($x,2,'.','') )!=$x) //<- averiguar si tiene decimales 
+      $s = number_format($x,2,'.',''); 
+    else 
+      $s = number_format($x,2,'.',''); 
+        
+    $Pto = strpos($s, $this->Dot); 
+         
+    if ($Pto === false) 
+    { 
+      $Ent = $s; 
+      $Frc = $this->Void; 
+    } 
+    else 
+    { 
+      $Ent = substr($s, 0, $Pto ); 
+      $Frc =  substr($s, $Pto+1); 
+    } 
+
+    if($Ent == $this->Zero || $Ent == $this->Void) 
+       $s = "Cero "; 
+    elseif( strlen($Ent) > 7) 
+    { 
+       $s = $this->SubValLetra(intval( substr($Ent, 0,  strlen($Ent) - 6))) .  
+             "Millones " . $this->SubValLetra(intval(substr($Ent,-6, 6))); 
+    } 
+    else 
+    { 
+      $s = $this->SubValLetra(intval($Ent)); 
+    } 
+
+    if (substr($s,-9, 9) == "Millones " || substr($s,-7, 7) == "Millón ") 
+       $s = $s . "de "; 
+
+    $s = $s . $Moneda; 
+
+    /*if($Frc != $this->Void) 
+    { 
+       $s = $s . " " . $Frc. "/100"; 
+       //$s = $s . " " . $Frc . "/100"; 
+    } 
+    $letrass=$Signo . $s . " M.N."; */
+    return ($Signo . $s ); 
+    
+} 
+
+
+function SubValLetra($numero)  
+{ 
+    $Ptr=""; 
+    $n=0; 
+    $i=0; 
+    $x =""; 
+    $Rtn =""; 
+    $Tem =""; 
+
+    $x = trim("$numero"); 
+    $n = strlen($x); 
+
+    $Tem = $this->Void; 
+    $i = $n; 
+     
+    while( $i > 0) 
+    { 
+       $Tem = $this->Parte(intval(substr($x, $n - $i, 1).  
+                           str_repeat($this->Zero, $i - 1 ))); 
+       If( $Tem != "Cero" ) 
+          $Rtn .= $Tem . $this->SP; 
+       $i = $i - 1; 
+    } 
+
+     
+    //--------------------- GoSub FiltroMil ------------------------------ 
+    $Rtn=str_replace(" Mil Mil", " Un Mil", $Rtn ); 
+    while(1) 
+    { 
+       $Ptr = strpos($Rtn, "Mil ");        
+       If(!($Ptr===false)) 
+       { 
+          If(! (strpos($Rtn, "Mil ",$Ptr + 1) === false )) 
+            $this->ReplaceStringFrom($Rtn, "Mil ", "", $Ptr); 
+          Else 
+           break; 
+       } 
+       else break; 
+    } 
+
+    //--------------------- GoSub FiltroCiento ------------------------------ 
+    $Ptr = -1; 
+    do{ 
+       $Ptr = strpos($Rtn, "Cien ", $Ptr+1); 
+       if(!($Ptr===false)) 
+       { 
+          $Tem = substr($Rtn, $Ptr + 5 ,1); 
+          if( $Tem == "M" || $Tem == $this->Void) 
+             ; 
+          else           
+             $this->ReplaceStringFrom($Rtn, "Cien", "Ciento", $Ptr); 
+       } 
+    }while(!($Ptr === false)); 
+
+    //--------------------- FiltroEspeciales ------------------------------ 
+    $Rtn=str_replace("Diez Un", "Once", $Rtn ); 
+    $Rtn=str_replace("Diez Dos", "Doce", $Rtn ); 
+    $Rtn=str_replace("Diez Tres", "Trece", $Rtn ); 
+    $Rtn=str_replace("Diez Cuatro", "Catorce", $Rtn ); 
+    $Rtn=str_replace("Diez Cinco", "Quince", $Rtn ); 
+    $Rtn=str_replace("Diez Seis", "Dieciseis", $Rtn ); 
+    $Rtn=str_replace("Diez Siete", "Diecisiete", $Rtn ); 
+    $Rtn=str_replace("Diez Ocho", "Dieciocho", $Rtn ); 
+    $Rtn=str_replace("Diez Nueve", "Diecinueve", $Rtn ); 
+    $Rtn=str_replace("Veinte Un", "Veintiun", $Rtn ); 
+    $Rtn=str_replace("Veinte Dos", "Veintidos", $Rtn ); 
+    $Rtn=str_replace("Veinte Tres", "Veintitres", $Rtn ); 
+    $Rtn=str_replace("Veinte Cuatro", "Veinticuatro", $Rtn ); 
+    $Rtn=str_replace("Veinte Cinco", "Veinticinco", $Rtn ); 
+    $Rtn=str_replace("Veinte Seis", "Veintiseís", $Rtn ); 
+    $Rtn=str_replace("Veinte Siete", "Veintisiete", $Rtn ); 
+    $Rtn=str_replace("Veinte Ocho", "Veintiocho", $Rtn ); 
+    $Rtn=str_replace("Veinte Nueve", "Veintinueve", $Rtn ); 
+
+    //--------------------- FiltroUn ------------------------------ 
+    If(substr($Rtn,0,1) == "M") $Rtn = "Un " . $Rtn; 
+    //--------------------- Adicionar Y ------------------------------ 
+    for($i=65; $i<=88; $i++) 
+    { 
+      If($i != 77) 
+         $Rtn=str_replace("a " . Chr($i), "* y " . Chr($i), $Rtn); 
+    } 
+    $Rtn=str_replace("*", "a" , $Rtn); 
+    return($Rtn); 
+} 
+
+
+function ReplaceStringFrom(&$x, $OldWrd, $NewWrd, $Ptr) 
+{ 
+  $x = substr($x, 0, $Ptr)  . $NewWrd . substr($x, strlen($OldWrd) + $Ptr); 
+} 
+
+
+function Parte($x) 
+{ 
+    $Rtn=''; 
+    $t=''; 
+    $i=''; 
+    Do 
+    { 
+      switch($x) 
+      { 
+         Case 0:  $t = "Cero";break; 
+         Case 1:  $t = "Un";break; 
+         Case 2:  $t = "Dos";break; 
+         Case 3:  $t = "Tres";break; 
+         Case 4:  $t = "Cuatro";break; 
+         Case 5:  $t = "Cinco";break; 
+         Case 6:  $t = "Seis";break; 
+         Case 7:  $t = "Siete";break; 
+         Case 8:  $t = "Ocho";break; 
+         Case 9:  $t = "Nueve";break; 
+         Case 10: $t = "Diez";break; 
+         Case 20: $t = "Veinte";break; 
+         Case 30: $t = "Treinta";break; 
+         Case 40: $t = "Cuarenta";break; 
+         Case 50: $t = "Cincuenta";break; 
+         Case 60: $t = "Sesenta";break; 
+         Case 70: $t = "Setenta";break; 
+         Case 80: $t = "Ochenta";break; 
+         Case 90: $t = "Noventa";break; 
+         Case 100: $t = "Cien";break; 
+         Case 200: $t = "Doscientos";break; 
+         Case 300: $t = "Trescientos";break; 
+         Case 400: $t = "Cuatrocientos";break; 
+         Case 500: $t = "Quinientos";break; 
+         Case 600: $t = "Seiscientos";break; 
+         Case 700: $t = "Setecientos";break; 
+         Case 800: $t = "Ochocientos";break; 
+         Case 900: $t = "Novecientos";break; 
+         Case 1000: $t = "Mil";break; 
+         Case 1000000: $t = "Millón";break; 
+      } 
+
+      If($t == $this->Void) 
+      { 
+        $i = $i + 1; 
+        $x = $x / 1000; 
+        If($x== 0) $i = 0; 
+      } 
+      else 
+         break; 
+            
+    }while($i != 0); 
+    
+    $Rtn = $t; 
+    Switch($i) 
+    { 
+       Case 0: $t = $this->Void;break; 
+       Case 1: $t = " Mil";break; 
+       Case 2: $t = " Millones";break; 
+       Case 3: $t = " Billones";break; 
+    } 
+    return($Rtn . $t); 
+} 
+
+} 
 
 ?>
