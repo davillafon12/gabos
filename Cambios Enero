@@ -11,6 +11,7 @@ LISTO-> Notas Debito
 -> Inventario *Reporte
 LISTO-> Proforma
 -> Clientes *Reporte
+LISTO-> Recibos de dinero
 
 Otros Cambios:
 LISTO-> Agregar apartado como tipo de pago, cliente deja bono (En factura decir cuanto abono y cuanto saldo). Impresion en recibo de dinero.
@@ -24,7 +25,7 @@ LISTO-> Agregar deposito como tipo de pago de recibos por dinero.
 LISTO-> La cedula de residencia en usuario le faltan 3 espacios.
 LISTO-> La cedula de residencia en cliente quitar un espacio.
 NO SE PUEDE -> En cliente agregar fecha nacimiento *NO PRECISA
--> Finalizar cierre caja
+REVISAR!!!!!-> Finalizar cierre caja
 LISTO-> En la parte de descuentos, no poner porcentaje, poner precio y en js calcula el porcentaje
 LISTO-> Corregir en el registro de clientes y usurios agregar la opción de pasaporte
 LISTO-> En los artículos aplicar descuento de forma masiva, por ejemplo elegir un rango de códigos 24576 hasta el 26589 y aplicarle un descuento de 10%, que eso se pueda hacer en todas las tiendas para no tener que hacerlo 1x1
