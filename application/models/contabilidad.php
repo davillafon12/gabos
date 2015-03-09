@@ -648,6 +648,175 @@ Class contabilidad extends CI_Model
 						);
 		$this->db->insert('tb_43_deposito_recibo', $datos);
 	}
+	
+	function getPagosMixtosPorRangoFecha($sucursal, $inicio, $final){
+		/*
+			SELECT tb_07_factura.Factura_Monto_Total AS monto, tb_07_factura.Factura_Fecha_Hora AS fecha, tb_23_mixto.Mixto_Cantidad_Paga AS pago_tarjeta 
+			FROM tb_07_factura
+			JOIN tb_23_mixto ON tb_23_mixto.TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo = tb_07_factura.Factura_Consecutivo
+			WHERE tb_07_factura.Factura_Tipo_Pago = 'mixto'
+			AND tb_07_factura.TB_02_Sucursal_Codigo = 0
+		*/
+		$this->db->select('tb_07_factura.Factura_Monto_Total AS monto, tb_07_factura.Factura_Fecha_Hora AS fecha, tb_23_mixto.Mixto_Cantidad_Paga AS pago_tarjeta');
+		$this->db->from('tb_07_factura');
+		$this->db->join('tb_23_mixto', 'tb_23_mixto.TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo = tb_07_factura.Factura_Consecutivo');
+		$this->db->where('tb_07_factura.Factura_Tipo_Pago', 'mixto');
+		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
+		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);
+		return $this->db->get();
+	}
+	
+	function getRecibosPorRangoFecha($sucursal, $inicio, $final){
+		/*
+			SELECT * 
+			FROM tb_26_recibos_dinero
+			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito
+			WHERE Credito_Sucursal_Codigo = 0;
+		*/
+		$this->db->from('tb_26_recibos_dinero');
+		$this->db->where('Credito_Sucursal_Codigo', $sucursal);
+		$this->db->join('tb_24_credito', 'tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito');
+		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha >', $inicio);
+		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha <', $final);
+		//QUE NO SEAN RECIBOS ANULADOS
+		$this->db->where('tb_26_recibos_dinero.Anulado', 0);
+		$query = $this->db->get();
+		
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function getNotaCreditoPorRangoFecha($sucursal, $inicio, $final){
+		$this->db->from('TB_27_Notas_Credito');
+		$this->db->where('Sucursal', $sucursal);
+		$this->db->where('Fecha_Creacion >', $inicio);
+		$this->db->where('Fecha_Creacion <', $final);
+		$query = $this->db->get();		
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function getFacturasContadoPorRangoFecha($sucursal, $inicio, $final){
+		$this->db->from('tb_07_factura');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('Factura_Fecha_Hora >', $inicio);
+		$this->db->where('Factura_Fecha_Hora <', $final);
+		$this->db->where('Factura_Estado','cobrada');
+		$this->db->where('Factura_Tipo_Pago','contado');
+		$query = $this->db->get();		
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function getFacturasCreditoYApartadoPorRangoFecha($sucursal, $inicio, $final){
+		$this->db->from('tb_07_factura');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('Factura_Fecha_Hora >', $inicio);
+		$this->db->where('Factura_Fecha_Hora <', $final);
+		$this->db->where('Factura_Estado','cobrada');
+		$this->db->where("(Factura_Tipo_Pago = 'credito' OR Factura_Tipo_Pago = 'apartado')",'',false);
+		$query = $this->db->get();		
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function getAbonoFacturasApartadoPorRangoFecha($sucursal, $inicio, $final){
+		/*
+			SELECT SUM(Abono) 
+			FROM tb_40_apartado
+			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_40_apartado.Id
+			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
+			WHERE tb_24_credito.Credito_Sucursal_Codigo = 0
+			AND tb_07_factura.TB_02_Sucursal_Codigo = 0
+			;
+		*/	
+		$this->db->select('SUM(Abono) AS abono');
+		$this->db->from('tb_40_apartado');
+		$this->db->join('tb_24_credito','tb_24_credito.Credito_Id = tb_40_apartado.Id');
+		$this->db->join('tb_07_factura','tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo');
+		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
+		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('tb_07_factura.Factura_Estado','cobrada');
+		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
+		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);		
+		$query = $this->db->get();		
+		if($query->num_rows()==0)
+		{
+			return 0;
+		}
+		else
+		{			
+			return $query->result()[0]->abono;
+		}
+	}
+	
+	function getNotaDebitoPorRangoFecha($sucursal, $inicio, $final){
+		$this->db->from('tb_30_notas_debito');
+		$this->db->where('Sucursal', $sucursal);
+		$this->db->where('Fecha >', $inicio);
+		$this->db->where('Fecha <', $final);
+		$query = $this->db->get();		
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function getVendidoPorVendedor($vendedor, $sucursal, $inicio, $final){
+		/*
+			SELECT 	SUM(tb_07_factura.Factura_Monto_Total) AS total_vendido, 
+					CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario
+			FROM tb_07_factura
+			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = tb_07_factura.Factura_Vendedor_Codigo
+			WHERE tb_07_factura.TB_02_Sucursal_Codigo = 0
+			AND Factura_Estado = 'cobrada'
+			AND Factura_Vendedor_Codigo = 1;
+		*/
+		$this->db->select("SUM(tb_07_factura.Factura_Monto_Total) AS total_vendido, 
+					CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario", false);
+		$this->db->from('tb_07_factura');
+		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = tb_07_factura.Factura_Vendedor_Codigo');
+		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('tb_07_factura.Factura_Estado', 'cobrada');
+		$this->db->where('tb_07_factura.Factura_Vendedor_Codigo', $vendedor);
+		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
+		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);	
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
 }
 
 

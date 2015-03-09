@@ -99,3 +99,31 @@
 .contenedor-tipo-cambio{
 	margin-top: -45px;
 }
+
+.tabla-pagos-mixtos{
+	width: 350px;
+	text-align:center;
+	border-collapse: collapse;
+	margin-left: 10px;
+}
+
+.tabla-recibos-dinero{
+	width: 350px;
+	text-align:center;
+	border-collapse: collapse;
+	margin-left: 10px;
+}
+
+.tabla-costos-totales{
+	width: 744px;
+	text-align:center;
+	border-collapse: collapse;
+	*margin-left: 10px;
+}
+
+.tabla-vendedores{
+	width: 744px;
+	text-align:center;
+	border-collapse: collapse;
+	*margin-left: 10px;
+}

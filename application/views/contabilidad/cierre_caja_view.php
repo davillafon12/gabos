@@ -266,7 +266,115 @@ PARA:
 									<td class="alg-right borde-arriba"><p class="parrafo">₡<?php echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
 								</tr>
 							</table>
+						</td>						
+					</tr>
+					<tr><td colspan="2"><hr></td></tr>
+					<tr>
+						<td>
+							<table class="tabla-pagos-mixtos">
+								<tr><td colspan="3"><p class="titulo-2">Pago Mixtos</p></td></tr>
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Cant. Facturas</p></td>
+									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
+									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
+								</tr>
+								<tr>
+									<td class=''><p class='parrafo'><?php echo $pagoMixto['cantidadFacturas'];?></p></td>
+									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($pagoMixto['efectivo'],2,",",".");?></p></td>
+									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($pagoMixto['tarjeta'],2,",",".");?></p></td>
+								</tr>								
+								<tr>
+									<td colspan="2" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
+									<td class="alg-right borde-arriba"><p class="parrafo">₡<?php echo number_format($pagoMixto['total'],2,",",".");?></p></td>
+								</tr>
+							</table>
 						</td>
+						<td>
+							<table class="tabla-recibos-dinero">
+								<tr><td colspan="3"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Contado</p></td>
+									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
+									<td class="borde-abajo"><p class="parrafo">Deposito</p></td>
+								</tr>
+								<tr>
+									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['efectivo'],2,",",".");?></p></td>
+									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['tarjeta'],2,",",".");?></p></td>
+									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['deposito'],2,",",".");?></p></td>
+								</tr>								
+								<tr>
+									<td colspan="2" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
+									<td class="alg-right borde-arriba"><p class="parrafo">₡<?php echo number_format($recibos['total'],2,",",".");?></p></td>
+								</tr>
+							</table>
+						</td>						
+					</tr>
+					<tr><td colspan="2"><hr></td></tr>
+					<tr>
+						<td colspan="2">
+							<table class="tabla-costos-totales">
+								<tr><td colspan="7"><p class="titulo-2">Otros Totales</p></td></tr>
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Facturas de Contado</p></td>
+									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
+									<td class="borde-abajo"><p class="parrafo">Tarjetas</p></td>
+									<td class="borde-abajo"><p class="parrafo">Créditos</p></td>
+									<td class="borde-abajo"><p class="parrafo">Notas Crédito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Notas Débito</p></td>
+								</tr>
+								<tr>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalFacturasContado,2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalRecibosParciales,2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalCreditos,2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalNotasCredito['total'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalNotasDebito['total'],2,",",".");?></p></td>
+								</tr>								
+								<tr>
+									<td colspan="7" class="alg-right borde-arriba"></td>
+								</tr>
+							</table>
+						</td>						
+					</tr>
+					<tr><td colspan="2"><hr></td></tr>
+					<tr>
+						<td colspan="2">
+							<table class="tabla-vendedores">
+								<tr><td colspan="7"><p class="titulo-2">Vendedores</p></td></tr>
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Vendedor</p></td>
+									<td class="borde-abajo"><p class="parrafo">Vendido</p></td>
+									<td class="borde-abajo"><p class="parrafo">Vendedor</p></td>
+									<td class="borde-abajo"><p class="parrafo">Vendido</p></td>
+								</tr>
+								<tr>
+									<?php
+										$contador = 1;
+										foreach($vendedores as $vendedor){
+											$vendedor = $vendedor[0];											
+											echo "<td style='text-align: left; width: 250px;'><p class='parrafo'>{$vendedor->usuario}</p></td>";
+											echo "<td class='' style='width: 120px;'><p class='parrafo'>₡".number_format($vendedor->total_vendido,2,",",".")."</p></td>";
+											if($contador == 2){
+												$contador = 1;
+												echo "</tr><tr>";
+											}else{
+												$contador++;
+											}											
+										}
+									?>
+								</tr>
+									<!--<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalFacturasContado,2,",",".");?></p></td>
+									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalRecibosParciales,2,",",".");?></p></td>
+									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
+									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalCreditos,2,",",".");?></p></td>
+									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalNotasCredito['total'],2,",",".");?></p></td>
+									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalNotasDebito['total'],2,",",".");?></p></td>
+								</tr>		-->						
+								<tr>
+									<td colspan="7" class="alg-right borde-arriba"></td>
+								</tr>
+							</table>
+						</td>						
 					</tr>
 				</table>
 			</div><!-- contenedor -->			

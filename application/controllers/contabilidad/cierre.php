@@ -27,32 +27,48 @@ class cierre extends CI_Controller {
 			redirect('accesoDenegado', 'location');						
 		}
 		
+		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($data['Sucursal_Codigo']);
+		
 		date_default_timezone_set("America/Costa_Rica");
-		$data['fechaActual'] = date('d-m-Y', now());
+		
+		$fechaHoraActual = date("Y-m-d : H:i:s", now()); //PARA USAR CON LA BASE DE DATOS
+		
+		$data['fechaActual'] = date('d-m-Y', now()); // PARA IMPRIMIR
 		$data['baseCaja'] = "30.000";
 		$data['tipo_cambio'] = $this->configuracion->getTipoCambioCompraDolar();
 		
-		$facturas = $this->getPrimeraUltimaFactura($data['Sucursal_Codigo']);
+		$facturas = $this->getPrimeraUltimaFactura($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
 		$data['primeraFactura'] = $facturas['primera'];
 		$data['ultimaFactura'] = $facturas['ultima'];
 		
-		$retirosParciales = $this->getRetirosParcialesYTotal($data['Sucursal_Codigo']);
+		$retirosParciales = $this->getRetirosParcialesYTotal($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
 		$data['retirosParciales'] = $retirosParciales['retiros'];
 		$data['totalRecibosParciales'] = $retirosParciales['total'];
 			
-		$data['pagoDatafonos'] = $this->getPagosDatafonos($data['Sucursal_Codigo']);
+		$data['pagoDatafonos'] = $this->getPagosDatafonos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
+		$data['pagoMixto'] = $this->obtenerPagosMixtos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
+		$data['recibos'] = $this->obtenerRecibosDeDinero($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
+		$data['totalFacturasContado'] = $this->obtenerTotalFacturasContado($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
+		$data['totalCreditos'] = $this->obtenerTotalCreditos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
+		$data['totalNotasCredito'] = $this->obtenerTotalesNotasCredito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
+		$data['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
+		$data['vendedores'] = $this->obtenerVendidoPorCadaVendedor($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
+		print_r($data['vendedores']);
 		
 		$this->load->view('contabilidad/cierre_caja_view', $data);
 	}	
 	
-	function getPrimeraUltimaFactura($sucursal){
-		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($sucursal);
-				
-		date_default_timezone_set("America/Costa_Rica");
-		$fechaHoraActual = date("Y-m-d : H:i:s", now());
-		
+	function getPrimeraUltimaFactura($sucursal, $fechaHoraActual, $fechaUltimoCierra){				
 		$primeraFactura = 0;
 		$ultimaFactura = 0;
 		
@@ -71,13 +87,7 @@ class cierre extends CI_Controller {
 		return array("primera"=>$primeraFactura, "ultima"=>$ultimaFactura);
 	}
 	
-	function getRetirosParcialesYTotal($sucursal){
-		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($sucursal);
-				
-		date_default_timezone_set("America/Costa_Rica");
-		$fechaHoraActual = date("Y-m-d : H:i:s", now());
-		
-		
+	function getRetirosParcialesYTotal($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		$total = 0;
 		
 		if($retiros = $this->contabilidad->getRetirosParcialesRangoFechas($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
@@ -89,16 +99,11 @@ class cierre extends CI_Controller {
 		return array("retiros" => $retiros, "total" => $total);
 	}
 	
-	function getPagosDatafonos($sucursal){
+	function getPagosDatafonos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		if(!$bancos = $this->banco->getBancos()){
 			return array('datafonos' => array(), 'totalDatafonos' => 0, 'totalComision' => 0, 'totalRetencion' => 0);
 		}
-		
-		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($sucursal);
-				
-		date_default_timezone_set("America/Costa_Rica");
-		$fechaHoraActual = date("Y-m-d : H:i:s", now());
-		
+			
 		$totalPagosTarjeta = 0;
 		$totalComisionFinal = 0;
 		$totalRetencionFinal = 0;
@@ -145,6 +150,122 @@ class cierre extends CI_Controller {
 			$bancos[$count]->Total = $total;					
 		}
 		return array('datafonos' => $bancos, 'totalDatafonos' => $totalPagosTarjeta, 'totalComision' => $totalComisionFinal, 'totalRetencion' => $totalRetencionFinal);
+	}
+	
+	function obtenerPagosMixtos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$pagos = $this->contabilidad->getPagosMixtosPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual);
+		$cantidadFacturas = 0;
+		$total = 0;
+		$tarjeta = 0;
+		$efectivo = 0;			
+		if($pagos->num_rows()!=0){
+			$cantidadFacturas = $pagos->num_rows();
+			$pagos = $pagos->result();			
+			foreach($pagos as $pago){
+				$total += $pago->monto;
+				$tarjeta += $pago->pago_tarjeta;
+			}			
+			$efectivo = $total - $tarjeta;
+		}		
+		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo);
+	}
+	
+	function obtenerRecibosDeDinero($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		$efectivo = 0;
+		$tarjeta = 0;
+		$deposito = 0;
+		if($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($recibos as $recibo){
+				$total += $recibo->Recibo_Cantidad;
+				switch($recibo->Tipo_Pago){
+					case 'contado':
+						$efectivo += $recibo->Recibo_Cantidad;
+					break;
+					case 'deposito':
+						$deposito += $recibo->Recibo_Cantidad;
+					break;
+					case 'tarjeta':
+						$tarjeta += $recibo->Recibo_Cantidad;
+					break;
+				}
+			}
+		}
+		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito);
+	}
+	
+	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasContadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
+	}
+	
+	function obtenerTotalCreditos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		//INCLUYE LOS APARTADOS!!!!!!!
+		$totalCredito = 0;
+		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
+		if($facturas = $this->contabilidad->getFacturasCreditoYApartadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($facturas as $factura){
+				$totalCredito += $factura->Factura_Monto_Total;
+			}
+		}
+		$totalCredito -= $totalAbonoApartado;
+		return $totalCredito;
+	}
+	
+	function obtenerTotalesNotasCredito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		$subtotal = 0;
+		$total_iva = 0;
+		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($notas as $nota){
+				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $sucursal)){
+					foreach($notaCreditoBody as $art){
+						$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
+						$total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($notaCreditoHead[0]->iva/100));
+						$subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($notaCreditoHead[0]->iva/100)));
+					}
+				}
+			}
+		}
+		return array('total'=>$total, 'subtotal'=>$subtotal, 'iva'=>$total_iva);		
+	}
+	
+	function obtenerTotalesNotasDebito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		$subtotal = 0;
+		$total_iva = 0;
+		if($notas = $this->contabilidad->getNotaDebitoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($notas as $nota){
+				if($notaDebitoBody = $this->contabilidad->getProductosNotaDebito($nota->Consecutivo, $sucursal)){
+					foreach($notaDebitoBody as $art){
+						$total += ($art->precio * $art->cantidad);
+						$total_iva += (($art->precio * $art->cantidad) * ($nota->Impuesto_Porcentaje/100));
+						$subtotal += (($art->precio * $art->cantidad) - (($art->precio * $art->cantidad) * ($nota->Impuesto_Porcentaje/100)));
+					}
+				}
+			}
+		}
+		return array('total'=>$total, 'subtotal'=>$subtotal, 'iva'=>$total_iva);		
+	}
+	
+	function obtenerVendidoPorCadaVendedor($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+				
+		$vendidoVendedores = array();
+		
+		if($vendedores = $this->user->getVendedores($sucursal)){
+			foreach($vendedores as $vendedor){
+				if($vendido = $this->contabilidad->getVendidoPorVendedor($vendedor->Factura_Vendedor_Codigo, $sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+					array_push($vendidoVendedores, $vendido);
+				}
+			}
+		}
+		
+		return $vendidoVendedores;
 	}
 	
 }

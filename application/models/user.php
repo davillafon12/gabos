@@ -449,6 +449,27 @@ function existe_Nombre_Usuario($nombre){
 		return $this->db->get()->num_rows();
 	}
 	
+	function getVendedores($sucursal){
+		/*
+			SELECT Factura_Vendedor_Codigo 
+			FROM tb_07_factura
+			WHERE TB_02_Sucursal_Codigo = 0
+			AND Factura_Estado = 'cobrada'
+			GROUP BY Factura_Vendedor_Codigo;
+		*/
+		$this->db->select('Factura_Vendedor_Codigo');
+		$this->db->from('tb_07_factura');
+		$this->db->where('TB_02_Sucursal_Codigo',$sucursal);
+		$this->db->where('Factura_Estado','cobrada');
+		$this->db->group_by('Factura_Vendedor_Codigo');
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
+	
 }//FIN DE LA CLASE
 ?>
 
