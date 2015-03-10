@@ -63,7 +63,7 @@ class cierre extends CI_Controller {
 		
 		$data['vendedores'] = $this->obtenerVendidoPorCadaVendedor($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
-		print_r($data['vendedores']);
+		
 		
 		$this->load->view('contabilidad/cierre_caja_view', $data);
 	}	

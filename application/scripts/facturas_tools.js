@@ -32,7 +32,7 @@ function agregarFila(index){
 
 	// Add some text to the new cells:
 	var cedula = document.getElementById('cedula').value;
-	if(!isNumber(cedula))
+	if(!clienteCanBuy)
 	{
 		cell1.innerHTML = "<img class='imagen_arrow' title='Agregar Fila' src='/../application/scripts/Images/agregar_row.gif' width='14' height='7' onClick='agregarByCM("+siguienteFila+")'/>"
 		                  +"<input tabindex='"+tabindex+"' id='codigo_articulo_"+siguienteFila+"' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);' disabled>"
