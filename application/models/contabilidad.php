@@ -852,6 +852,36 @@ Class contabilidad extends CI_Model
 						);
 		$this->db->insert('TB_45_Articulos_Traspaso_Inventario', $datos);				
 	}
+	
+	function getTraspasoArticulos($id){
+		$this->db->select("	TB_44_Traspaso_Inventario.Id as consecutivo, 
+							date_format(TB_44_Traspaso_Inventario.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,
+							TB_44_Traspaso_Inventario.Sucursal_Salida as salida,
+							TB_44_Traspaso_Inventario.Sucursal_Entrada as entrada,
+							TB_44_Traspaso_Inventario.Factura_Traspasada as factura,
+							TB_44_Traspaso_Inventario.Usuario as usuario,
+							CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario_nombre", false);		
+		$this->db->from('TB_44_Traspaso_Inventario');
+		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = TB_44_Traspaso_Inventario.Usuario');
+		$this->db->where('TB_44_Traspaso_Inventario.Id', $id);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+	
+	function getArticulosTraspaso($id){
+		$this->db->from('TB_45_Articulos_Traspaso_Inventario');
+		$this->db->where('Traspaso', $id);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
 }
 
 

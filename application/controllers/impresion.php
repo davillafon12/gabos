@@ -264,6 +264,7 @@ class impresion extends CI_Controller {
 			r = recibo
 			nc = nota credito
 			nb = nota debito
+			t = traspaso
 		*/
 		switch($_GET['d']){
 			case 'f':				
@@ -437,6 +438,21 @@ class impresion extends CI_Controller {
 					}
 				}
 			break;
+			case 't':
+				if(isset($_GET['n'])&&isset($_GET['s'])){
+					$sucursal = $_GET['s'];
+					$consecutivo = $_GET['n'];
+					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+						if($traspaso = $this->contabilidad->getTraspasoArticulos($consecutivo)){
+							if($productos = $this->contabilidad->getArticulosTraspaso($consecutivo)){
+								$traspaso->nombre_salida = $this->empresa->getNombreEmpresa($traspaso->salida);
+								$traspaso->nombre_entrada = $this->empresa->getNombreEmpresa($traspaso->entrada);
+								$this->traspasoPDF($empresa, $traspaso, $productos);
+							}
+						}			
+					}
+				}
+			break;
 			default:
 				$this->retorno['error'] = '5';
 			break;
@@ -496,6 +512,36 @@ class impresion extends CI_Controller {
 			$this->printProducts($fbody, $inicio, $final-1, $pdf);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('p', $fhead[0], $empresa[0], $pdf);
+			$this->numPagina++;
+		}
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
+	private function traspasoPDF($empresa, $fhead, $fbody){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		
+		$cantidadProductos = sizeOf($fbody);
+		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		
+		while($paginasADibujar>=$this->numPagina){
+			//Agregamos pag		
+			$pdf->AddPage();			
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('t', $empresa[0], $fhead, $pdf);
+			//Agregamos Productos
+			$inicio = $this->numPagina*33;
+			if((($this->numPagina+1)*33)<$cantidadProductos){
+				$final = ($this->numPagina+1)*33;
+			}else{
+				$final = $cantidadProductos;
+			}
+			
+			//$this->printProducts($fbody, $inicio, $final-1, $pdf);
+			$this->printArticulosTraspaso($fbody, $inicio, $final-1, $pdf);
+			//Definimos el pie de pagina
+	//		$this->pieDocumentoPDF('p', $fhead[0], $empresa[0], $pdf);
 			$this->numPagina++;
 		}
 		//Imprimimos documento
@@ -780,6 +826,37 @@ class impresion extends CI_Controller {
 				$pdf->Text(102, 49, 'Moneda: '.$encabezado->moneda);
 				$pdf->Text(102, 54, 'Tipo de Pago: '.$encabezado->tipo_pago);
 			break;
+			case 't':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Traspaso de Artículos #'.$encabezado->consecutivo);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha);
+				
+				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+				
+				//Info del traspaso
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(12, 42, 'Suc. Salida:');		
+				$pdf->Text(42, 42, $encabezado->salida." - ".$encabezado->nombre_salida);	
+				$pdf->Text(12, 49, 'Suc. Entrada:');	
+				$pdf->Text(42, 49, $encabezado->entrada." - ".$encabezado->nombre_entrada);
+				//Caja redondeada 1
+				$pdf->RoundedRect(10, 37, 190, 14, 2, '1234', 'D');
+				//Divisores				
+				$pdf->Line(110, 37, 110, 51); //Centro caja
+				$pdf->Line(150, 37, 150, 44); //Despues de factura aplicada
+				$pdf->Line(135, 44, 135, 51); //Despues de realizador
+				$pdf->Line(40, 37, 40, 51); //Izquierda caja
+				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
+			
+				$pdf->Text(112, 42, 'Factura Traspasada:');
+				$pdf->Text(152, 42, $encabezado->factura);
+				$pdf->Text(112, 49, 'Realizador:');
+				$pdf->Text(137, 49, $encabezado->usuario." - ".$encabezado->usuario_nombre);				
+			break;
 		}
 	}
 	
@@ -1062,6 +1139,59 @@ class impresion extends CI_Controller {
 			$pdf->cell(20,5,$productos[$cc]->cantidad,0,0,'C');
 			$pdf->cell(27.5,5,$this->fn($productos[$cc]->precio),0,0,'R');
 			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
+			$pdf->ln($sl);
+			$pdf->SetX(125);
+			$pl += $sl;
+		}
+		
+		// MAXIMO 33 PRODUCTOS POR PAGINA
+		
+		/*for($cc = 0; $cc<33; $cc++){
+			$pdf->Text(11, $pl, $cc);
+			$pl += $sl;
+		}*/
+	}
+	
+	private function printArticulosTraspaso($productos, $inicio, $fin, &$pdf){
+		//Agregamos el apartado de productos
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Text(90, 65, 'Productos');
+		//Caja redondeada 1
+		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
+		//Divisores verticales de productos
+		$pdf->Line(10, 74, 200, 74);		
+		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
+		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
+		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
+		//$pdf->Line(125, 67, 125, 240); //Divisor de descripcion y cantidad
+		//$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
+		//$pdf->Line(131, 67, 131, 240); //Divisor de exento y descuento
+		//$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
+		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total		
+		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
+		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
+		//Encabezado de productos
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(13, 72, 'Código');
+		$pdf->Text(58, 72, 'Descripción');
+		$pdf->Text(179, 72, 'Cantidad');
+		//Agregamos Productos
+		$pdf->SetFont('Arial','',8);
+		
+		$pdf->SetXY(125, 75.3);		
+		$sl = 5; //Salto de linea
+		$pl = 79; //Primera linea
+		
+		
+		for($cc = $inicio; $cc<=$fin; $cc++){
+			//Calculamos precio total con descuento
+		//	$total = $productos[$cc]->cantidad * $productos[$cc]->precio; 
+			
+			$pdf->Text(11, $pl, $productos[$cc]->Codigo);
+			$pdf->Text(31, $pl, substr($productos[$cc]->Descripcion,0,33));
+			$pdf->cell(20,5,' ',0,0,'C');
+			$pdf->cell(27.5,5,' ',0,0,'R');
+			$pdf->cell(28,5,$productos[$cc]->Cantidad,0,0,'C');			
 			$pdf->ln($sl);
 			$pdf->SetX(125);
 			$pl += $sl;
