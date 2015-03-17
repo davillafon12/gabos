@@ -817,6 +817,41 @@ Class contabilidad extends CI_Model
 			return $query->result();
 		}
 	}
+	
+	function facturaTraspasoHaSidoAplicada($factura, $sucursalSalida, $sucursalEntrada){
+		$this->db->from('TB_44_Traspaso_Inventario');
+		$this->db->where('Sucursal_Salida', $sucursalSalida);
+		$this->db->where('Sucursal_Entrada', $sucursalEntrada);
+		$this->db->where('Factura_Traspasada', $factura);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+	function crearTraspasoArticulos($sucursalSalida, $sucursalEntrada, $usuario, $fecha, $factura){
+		$datos = array(
+					'Sucursal_Salida' => $sucursalSalida,
+					'Sucursal_Entrada' => $sucursalEntrada,
+					'Fecha' => $fecha,
+					'Usuario' => $usuario,
+					'Factura_Traspasada' => $factura
+					);
+		$this->db->insert('TB_44_Traspaso_Inventario', $datos);
+		return $this->db->insert_id();
+	}
+	
+	function agregarArticuloTraspaso($codigo, $descripcion, $cantidad, $traspaso){
+		$datos = array(
+						'Codigo' => $codigo,
+						'Descripcion' => $descripcion,
+						'Cantidad' => $cantidad,
+						'Traspaso' => $traspaso
+						);
+		$this->db->insert('TB_45_Articulos_Traspaso_Inventario', $datos);				
+	}
 }
 
 

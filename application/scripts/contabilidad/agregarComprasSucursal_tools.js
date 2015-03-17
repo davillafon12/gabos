@@ -79,6 +79,9 @@ function manejarErrores(error){
 		case '6':
 			notyMsg('La sucursal de destino no puede ser a la misma sucursal que envía', 'error');
 		break;
+		case '7':
+			notyMsg('Esta factura ya fue aplicada en un traspaso anterior', 'error');
+		break;
 	}
 }
 
@@ -158,7 +161,8 @@ function agregarFacturaASucursal(){
 				}else if(informacion[0].status==="success"){
 					resetFields();
 					$("#numero_factura").val('');
-					notyMsg('¡Se han agregado los artículos como compras con éxito!', 'success');
+					window.open(location.protocol+'//'+document.domain+'/impresion?t='+informacion[0].token+'&d=t&n='+informacion[0].traspaso+'&s='+informacion[0].sucursal+'&i=c','Impresion de Traspaso','width=768,height=1024,resizable=no,toolbar=no,location=no,menubar=no');
+					notyMsg('¡Se han agregado los artículos como compras con éxito!', 'success');					
 				}
 			}catch(e){
 				

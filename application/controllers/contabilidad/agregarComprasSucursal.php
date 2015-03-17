@@ -7,9 +7,11 @@ class agregarComprasSucursal extends CI_Controller {
 		parent::__construct(); 
 		$this->load->model('user','',TRUE);
 		$this->load->model('empresa','',TRUE);
-		$this->load->model('configuracion','',TRUE);
 		$this->load->model('factura','',TRUE);
 		$this->load->model('bodega_m','',TRUE);
+		$this->load->model('articulo','',TRUE);
+		$this->load->model('familia','',TRUE);
+		$this->load->model('contabilidad','',TRUE);
 	}
 
 	function index()
@@ -59,22 +61,39 @@ class agregarComprasSucursal extends CI_Controller {
 			if(is_numeric($factura)){
 				if($productos = $this->factura->getItemsFactura($factura, $this->configuracion->getEmpresaDefectoTraspasoCompras())){ 
 					if($this->empresa->getEmpresa($sucursal)){
+						//Verifica que ambas sucursales sean diferentes
 						if(trim($sucursal) != trim($this->configuracion->getEmpresaDefectoTraspasoCompras()))
 						{
-							include '/../get_session_data.php';
-							date_default_timezone_set("America/Costa_Rica");
-							$fecha = date("y/m/d : H:i:s", now());
-							foreach($productos as $pro){
-								$costo = $pro->Articulo_Factura_Precio_Unitario;
-								$descuento = $pro->Articulo_Factura_Descuento;
-								$costo -= $costo * ( $descuento / 100 ); 
-								$this->bodega_m->agregarCompra($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Descripcion, $costo, $pro->Articulo_Factura_Cantidad, $fecha, $data['Usuario_Codigo'], $sucursal);
+							//Verifica que la factura a traspasar no haya sido traspasado antes a esa sucursal
+							if(!$this->contabilidad->facturaTraspasoHaSidoAplicada($factura, $this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal))
+							{
+								include '/../get_session_data.php';
+								date_default_timezone_set("America/Costa_Rica");
+								$fecha = date("y/m/d : H:i:s", now());
+								
+								$traspaso = $this->contabilidad->crearTraspasoArticulos($this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $data['Usuario_Codigo'], $fecha, $factura);
+								
+								foreach($productos as $pro){
+									$costo = $pro->Articulo_Factura_Precio_Unitario;
+									$descuento = $pro->Articulo_Factura_Descuento;
+									$costo -= $costo * ( $descuento / 100 ); 
+									$this->bodega_m->agregarCompra($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Descripcion, $costo, $pro->Articulo_Factura_Cantidad, $fecha, $data['Usuario_Codigo'], $sucursal);
+									$this->agregarAInventario($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Cantidad, $pro->Articulo_Factura_Descripcion, $costo, $this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $traspaso);
+								}
+								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario agrego la factura #$factura como compras de la sucursal $sucursal",$data['Sucursal_Codigo'],'compras');
+								
+								$retorno['status'] = 'success';
+								unset($retorno['error']);
+								$retorno['traspaso'] = $traspaso;
+								$retorno['sucursal']= $data['Sucursal_Codigo'];
+								$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+								$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 							}
-							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario agrego la factura #$factura como compras de la sucursal $sucursal",$data['Sucursal_Codigo'],'compras');
-							$retorno['status'] = 'success';
-							unset($retorno['error']);
+							else{
+								$retorno['error'] = '7'; //La factura ya fue aplicada antes
+							}
 						}else{
-							$retorno['error'] = '6'; //La sucursal a enviar no puede ser igual ala sucursal que envia
+							$retorno['error'] = '6'; //La sucursal a enviar no puede ser igual a la sucursal que envia
 						}
 					}else{
 						$retorno['error'] = '5'; //Sucursal no existe
@@ -90,6 +109,47 @@ class agregarComprasSucursal extends CI_Controller {
 		}
 		echo json_encode($retorno);
 	}
+	
+	private function agregarAInventario($codigo, $cantidad, $descripcion, $costo, $sucursalSalida, $sucursalEntrada, $traspaso){
+		if($this->articulo->get_Articulo($codigo, $sucursalEntrada)){
+			//El articulo si esta creado en la sucursal de entrada
+			$this->articulo->actualizarInventarioSUMA($codigo, $cantidad, $sucursalEntrada);
+		}else{
+			//No existe debemos registrarlo
+			$articulo = $this->articulo->get_Articulo($codigo, $sucursalSalida)[0];
+			
+			$familia = $articulo->TB_05_Familia_Familia_Codigo;
+			//Revisamos que exista esa familia
+			if(!$this->familia->es_codigo_usado($familia, $sucursalEntrada)){
+				//Si no existe la creamos
+				include '/../get_session_data.php';
+				$fa = $this->familia->es_codigo_usado($familia, $sucursalSalida)[0];
+				$this->familia->registrar($fa->Familia_Codigo, $fa->Familia_Nombre, $fa->Familia_Observaciones, $sucursalEntrada, $data['Usuario_Nombre']);
+			}
+			
+			
+			$this->articulo->registrar(	$codigo, 
+										$descripcion, 
+										$articulo->Articulo_Codigo_Barras, 
+										$cantidad, 
+										0, 
+										0, 
+										$articulo->Articulo_Imagen_URL, 
+										$articulo->Articulo_Exento, 
+										$familia, 
+										$sucursalEntrada, 
+										$costo, 
+										$costo, 
+										$costo, 
+										$costo, 
+										$costo, 
+										$costo);
+		}
+		//Agregamos el producto al traspaso
+		$this->contabilidad->agregarArticuloTraspaso($codigo, $descripcion, $cantidad, $traspaso);
+	}
+	
+	
 	
 	
 }
