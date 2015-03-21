@@ -7,7 +7,7 @@ Impresion A4
 LISTO-> Facturas
 LISTO-> Notas Credito
 LISTO-> Notas Debito
--> Agregado de inventario a otras sucursales desde Garotas
+LISTO-> Agregado de inventario a otras sucursales desde Garotas
 LISTO-> Proforma
 LISTO-> Recibos de dinero
 
@@ -70,4 +70,16 @@ Cambio Tributacion
   Formula:
     (precioAfiliado-IVAprecioAfiliado)+(IVAprecioClienteFinal)
   Agregar en configuracion si se utiliza o no este metodo
-
+  
+  
+FALTA:
+- Caso de tributacion.
+- Revisar e impresion cierre de caja.
+- Controlar bien el tipo de moneda en la impresion de facturas (Dolares/colones).
+- Cuando se hace apratdo en dolares, convertir bono de dolares a colones.
+- Restringir tamaño del descuento en las facturas termicas, no mas de 5 digitos (Punto + 4 numeros).
+- Opciones del footer.
+- Solicitudes de restricciones de usuario en ediciones de clientes.
+- Consulta e Impresion de Recibos, Notas y cierres.
+- Ver tema de Desampa.
+- Ver si se pone consulta en menu de vendedores y cajeros.
