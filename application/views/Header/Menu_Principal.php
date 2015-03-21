@@ -92,19 +92,10 @@
 			<a href='#' class='dir'>Consultas</a>	
 			<ul>
 				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>
-				<li><a href='#' class='dir'>Inventarios</a>
-					<ul>
-						<li class='first'><a href='#'>Transito</a></li>
-						<li><a href='#'>Actual</a></li>
-						<li><a href='#'>Defectuoso</a></li>
-						<li class='last'><a href='#'>Otras empresas</a></li>
-					</ul>
-				</li>
-				<li><a href='#'>Usuarios</a></li>
-				<li><a href='#'>Bitacora de transacciones</a></li>
-				<li><a href='#'>Estados de cuenta</a></li>
-				<li><a href='#'>Articulos</a></li>
-				<li class='last'><a href='#'>Ventas y compras</a></li>
+				<li><a href='#'>Recibos</a></li>
+				<li><a href='#'>Notas Crédito</a></li>
+				<li><a href='#'>Notas Débito</a></li>
+				<li class='last'><a href='#'>Cierres de Caja</a></li>
 			</ul>
 		</li>
 		<li class='last_last'>
