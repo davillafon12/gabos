@@ -91,7 +91,7 @@
 			<img class='icono' src=".$Ruta_Icono_Consultas." alt='Consultas' width='22' height='22'>
 			<a href='#' class='dir'>Consultas</a>	
 			<ul>
-				<li class='first_Level_2'><a href='#'>Clientes</a></li>
+				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>
 				<li><a href='#' class='dir'>Inventarios</a>
 					<ul>
 						<li class='first'><a href='#'>Transito</a></li>

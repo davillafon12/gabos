@@ -126,6 +126,48 @@ class caja extends CI_Controller {
 		echo json_encode($facturaHEAD);
 	}
 	
+	function getFacturaHeadersConsulta(){
+		$facturaHEAD['status']='error';
+		$facturaHEAD['error']='14'; //No se logro procesar la factura
+		if(isset($_POST['consecutivo'])){
+			$consecutivo=$_POST['consecutivo'];
+			include '/../get_session_data.php'; 		
+			if($facturaHEADS = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){
+				foreach($facturaHEADS as $row){			
+					$facturaHEAD['status']='success';				
+					$facturaHEAD['cedula']=$row->TB_03_Cliente_Cliente_Cedula;
+					
+					$ClienteArray = $this->cliente->getNombreCliente($facturaHEAD['cedula']);
+					$NombreCliente = $ClienteArray['nombre'];
+					
+					if($row->Factura_Nombre_Cliente!=''){ //Si el nombre del cliente de la factura es diferente de vacio 
+						$NombreCliente  = $row->Factura_Nombre_Cliente;
+					}
+					
+					$facturaHEAD['nombre']= $NombreCliente;
+					$facturaHEAD['moneda']=$row->Factura_Moneda;
+					$facturaHEAD['total']=$row->Factura_Monto_Total;
+					$facturaHEAD['iva']=$row->Factura_Monto_IVA;
+					$facturaHEAD['costo']=$row->Factura_Monto_Sin_IVA;
+					$facturaHEAD['observaciones']=$row->Factura_Observaciones;
+					$facturaHEAD['ivapor']=$row->Factura_porcentaje_iva;
+					$facturaHEAD['cambio']=$row->Factura_tipo_cambio;	
+					$facturaHEAD['tipo']=$row->Factura_Estado;	
+					$facturaHEAD['sucursal']= $data['Sucursal_Codigo'];
+					$facturaHEAD['servidor_impresion']= $this->configuracion->getServidorImpresion();
+					$facturaHEAD['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+				}
+			}else{
+				$facturaHEAD['status']='error';
+				$facturaHEAD['error']='10';
+			}
+		}else{
+			$facturaHEAD['status']='error';
+			$facturaHEAD['error']='13'; //Error de no leer encabezado del URL
+		}
+		echo json_encode($facturaHEAD);
+	}
+	
 	function getNombreCliente($cedula){
 		return $this->cliente->getNombreCliente($cedula);
 	}

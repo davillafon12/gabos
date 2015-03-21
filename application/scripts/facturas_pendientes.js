@@ -246,7 +246,7 @@ function setProductosFactura(productos){
 				+"<input tabindex='"+(i+1)+"' id='codigo_articulo_"+(i+1)+"' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);' value='"+productos[i].codigo+"' disabled>"
 				+"<input id='codigo_articulo_anterior_"+(i+1)+"' type='hidden' value='"+productos[i].codigo+"'>";
 		cell2.innerHTML = "<div class='articulo_specs' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].descripcion+"</div>"
-				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+productos[i].imagen+".jpg' height='200' width='200'></div>";
+				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+productos[i].imagen+"' height='200' width='200'></div>";
 		cell3.innerHTML = "<input id='cantidad_articulo_"+(i+1)+"' class='cantidad_articulo' autocomplete='off' name='cantidad_articulo' type='number' min='1' max='"+bodegaINT+"' onchange='cambiarCantidad(this.id, event, this.value);' onkeyup='cambiarCantidad(this.id, event, this.value);' value='"+productos[i].cantidad+"' disabled>"
 				+"<input id='cantidad_articulo_anterior_"+(i+1)+"' type='hidden' value='"+productos[i].cantidad+"'>";
 		cell4.innerHTML = "<div class='articulo_specs' id='bodega_articulo_"+(i+1)+"'>"+bodegaINT+"</div>";

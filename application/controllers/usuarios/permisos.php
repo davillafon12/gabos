@@ -33,6 +33,7 @@
 						'ingreso_bodega' => 'Ingreso a Bodega',
 						'manejo_articulos' => 'Manejo de Artículos',
 						'otros_cliente' => 'Editar Descuentos y Credito',
+						'realizar_consulta' => 'Realizar Consultas',
 						'registrar_articulo_individual' => 'Registro Individual Articulo',
 						'registrar_articulos_masivo' => 'Registro Masivo Articulo',
 						'registrar_banco' => 'Registrar Banco',
