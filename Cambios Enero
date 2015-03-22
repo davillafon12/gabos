@@ -73,14 +73,14 @@ Cambio Tributacion
   
   
 FALTA:
-- Caso de tributacion.
-- Revisar e impresion cierre de caja.
-- Controlar bien el tipo de moneda en la impresion de facturas (Dolares/colones).
-- Cuando se hace apratdo en dolares, convertir bono de dolares a colones.
-- Restringir tamaño del descuento en las facturas termicas, no mas de 5 digitos (Punto + 4 numeros).
-- Opciones del footer.
-- Solicitudes de restricciones de usuario en ediciones de clientes.
+CONTADOR - Caso de tributacion.
+CONTADOR - Revisar e impresion cierre de caja.
+LISTO- Controlar bien el tipo de moneda en la impresion de facturas (Dolares/colones).
+LISTO- Cuando se hace apratdo en dolares, convertir bono de dolares a colones.
+LISTO - Restringir tamaño del descuento en las facturas termicas, no mas de 5 digitos (Punto + 4 numeros).
+LISTO- Opciones del footer.
+QEUDA IGUAL - Solicitudes de restricciones de usuario en ediciones de clientes.
 - Consulta e Impresion de Recibos, Notas y cierres.
-- Ver tema de Desampa.
-- Ver si se pone consulta en menu de vendedores y cajeros.
-- Aplicar corte de factura y abrir gabeta en impresion termica.
+NO SE VIO - Ver tema de Desampa.
+LISTO FALTA ACTUALIZARLO DE NUEVO- Ver si se pone consulta en menu de vendedores y cajeros.
+LISTO - Aplicar corte de factura y abrir gabeta en impresion termica.
