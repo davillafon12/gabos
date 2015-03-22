@@ -85,6 +85,7 @@ function imprimirFactura(data){
 	
 	qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
+	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	//Seleccionamos el tipo de letra
 	qz.append("\x1B\x21\x10");
@@ -154,6 +155,7 @@ function imprimirFactura(data){
 	qz.append(empresa.leyenda+"\r\n");
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.append("\x1B\x69"); //Cortar
 	qz.print();
 }
 
@@ -164,6 +166,7 @@ function imprimirRecibo(data){
 	
 	qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
+	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	//Seleccionamos el tipo de letra
 	qz.append("\x1B\x21\x10");
@@ -220,6 +223,7 @@ function imprimirRecibo(data){
 	qz.append("Gracias por su visita\r\n");
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.append("\x1B\x69"); //Cortar
 	qz.print();
 }
 
@@ -230,6 +234,7 @@ function imprimirNotaCredito(data){
 
 	qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
+	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	//Seleccionamos el tipo de letra
 	qz.append("\x1B\x21\x10");
@@ -295,6 +300,7 @@ function imprimirNotaCredito(data){
 	qz.append("Gracias por su visita\r\n");
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.append("\x1B\x69"); //Cortar
 	qz.print();
 }
 
@@ -305,6 +311,7 @@ function imprimirNotaDebito(data){
 
 	qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
+	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	//Seleccionamos el tipo de letra
 	qz.append("\x1B\x21\x10");
@@ -348,6 +355,7 @@ function imprimirNotaDebito(data){
 	qz.append("----------------------------------------\r\n");
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.append("\x1B\x69"); //Cortar
 	qz.print();
 }
 
@@ -386,6 +394,7 @@ function formatearCantidad(cantidad){
 }
 
 function formatearDescuento(cantidad){
+	cantidad = cantidad.substring(0, 4)
 	//3 espacios
 	switch(cantidad.length){
 		case 1:
