@@ -28,7 +28,18 @@
 				<li><a href=".$Ruta_Base."facturas/caja>Caja</a></li>
 				<li class='last' ><a href=".$Ruta_Base."facturas/proforma>Crear proforma</a></li>
 			</ul>
-		</li>	
+		</li>
+		<li>
+			<img class='icono' src=".$Ruta_Icono_Consultas." alt='Consultas' width='22' height='22'>
+			<a href='#' class='dir'>Consultas</a>	
+			<ul>
+				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>
+				<li><a href='#'>Recibos</a></li>
+				<li><a href='#'>Notas Crédito</a></li>
+				<li><a href='#'>Notas Débito</a></li>
+				<li class='last'><a href='#'>Cierres de Caja</a></li>
+			</ul>
+		</li>
 		<li class='last_last'>
 			<img class='icono' src=".$Ruta_Icono_Contabilidad." alt='Contabilidad' width='22' height='22'>
 			<a href='#' class='dir'>Contabilidad</a>	
