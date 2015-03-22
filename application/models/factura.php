@@ -303,6 +303,50 @@ Class factura extends CI_Model
 		}
 	}
 	
+	function getTipoCambio($consecutivo, $sucursal){
+		$this -> db -> select('Factura_tipo_cambio');
+		$this -> db -> from('TB_07_Factura');
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Factura_Consecutivo', $consecutivo);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		   $result = $query->result();
+			foreach($result as $row)
+			{	
+				return $row->Factura_tipo_cambio;
+			}
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
+	function getMoneda($consecutivo, $sucursal){
+		$this -> db -> select('Factura_Moneda');
+		$this -> db -> from('TB_07_Factura');
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Factura_Consecutivo', $consecutivo);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		   $result = $query->result();
+			foreach($result as $row)
+			{	
+				return $row->Factura_Moneda;
+			}
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
 	function getArticulosFactura($consecutivo, $sucursal){
 		//echo "entro";
 		$this -> db -> select('*');

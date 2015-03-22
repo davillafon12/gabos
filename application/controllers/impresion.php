@@ -92,15 +92,41 @@ class impresion extends CI_Controller {
 							}elseif($facturaHead[0] -> tipo == 'mixto'){								
 								$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
 								$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
+								//Valorar si fue en colones o dolares								
+								if($facturaHead[0] -> moneda == 'dolares'){
+									$cantidadPagaTarjeta = $cantidadPagaTarjeta/$facturaHead[0] -> cambio;
+									$cantidadPagaContado = $cantidadPagaContado/$facturaHead[0] -> cambio;
+								}	
 								$facturaHead[0] -> cantidadTarjeta = $cantidadPagaTarjeta;
 								$facturaHead[0] -> cantidadContado = $cantidadPagaContado;
 							}elseif($facturaHead[0] -> tipo == 'apartado'){								
 								$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
+								//Valorar si fue en colones o dolares								
+								if($facturaHead[0] -> moneda == 'dolares'){
+									$abono = $abono/$facturaHead[0] -> cambio;
+								}
 								$facturaHead[0] -> abono = $abono;
 							}
+							
+							//Costos totales
+							$subtotal = $facturaHead[0]->subtotal;
+							$totalIVA = $facturaHead[0]->total_iva;
+							$total = $facturaHead[0]->total;
+							//Valoramos si es en dolares
+							if($facturaHead[0]->moneda=='dolares'){
+								$facturaHead[0]->subtotal = $subtotal/$facturaHead[0]->cambio;
+								$facturaHead[0]->total_iva = $totalIVA/$facturaHead[0]->cambio;
+								$facturaHead[0]->total = $total/$facturaHead[0]->cambio;
+							}		
 						
 							if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
-								//var_dump($empresa);
+							
+								//Valoramos si es en dolares
+								if($facturaHead[0]->moneda=='dolares'){
+									for($i = 0; $i<sizeOf($facturaBody); $i++){
+										$facturaBody[$i]->precio = ($facturaBody[$i]->precio)/$facturaHead[0]->cambio;
+									}
+								}
 								
 								$this->retorno['status'] = 'success';
 								unset($this->retorno['error']);
@@ -279,16 +305,27 @@ class impresion extends CI_Controller {
 								$facturaHead[0] -> diasCredito = $diasCredito;
 								$date = strtotime("+$diasCredito days", strtotime($facturaHead[0] -> fecha) );
 								$facturaHead[0] -> fechaVencimiento = date('d-m-Y',$date);
-							}elseif($facturaHead[0] -> tipo == 'mixto'){								
+							}elseif($facturaHead[0] -> tipo == 'mixto'){
 								$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
 								$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
+								
+								//Valorar si fue en colones o dolares								
+								if($facturaHead[0] -> moneda == 'dolares'){
+									$cantidadPagaTarjeta = $cantidadPagaTarjeta/$facturaHead[0] -> cambio;
+									$cantidadPagaContado = $cantidadPagaContado/$facturaHead[0] -> cambio;
+								}						
+								
 								$facturaHead[0] -> cantidadTarjeta = $cantidadPagaTarjeta;
 								$facturaHead[0] -> cantidadContado = $cantidadPagaContado;
 							}elseif($facturaHead[0] -> tipo == 'apartado'){								
 								$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
+								//Valorar si fue en colones o dolares								
+								if($facturaHead[0] -> moneda == 'dolares'){
+									$abono = $abono/$facturaHead[0] -> cambio;
+								}
 								$facturaHead[0] -> abono = $abono;
 							}
-						
+							
 							if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
 								$this->facturaPDF($empresa, $facturaHead, $facturaBody);								
 							}else{
@@ -480,7 +517,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$this->printProducts($fbody, $inicio, $final-1, $pdf);
+			$this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('f', $fhead[0], $empresa[0], $pdf);
 			$this->numPagina++;
@@ -509,7 +546,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$this->printProducts($fbody, $inicio, $final-1, $pdf);
+			$this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('p', $fhead[0], $empresa[0], $pdf);
 			$this->numPagina++;
@@ -870,16 +907,25 @@ class impresion extends CI_Controller {
 				$pdf->SetXY(10, 270);	
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 				//Costos totales
+				$subtotal = $encabezado->subtotal;
+				$totalIVA = $encabezado->total_iva;
+				$total = $encabezado->total;
+				//Valoramos si es en dolares
+				if($encabezado->moneda=='dolares'){
+					$subtotal = $subtotal/$encabezado->cambio;
+					$totalIVA = $totalIVA/$encabezado->cambio;
+					$total = $total/$encabezado->cambio;
+				}
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 240);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
+				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
 				$pdf->SetXY(131, 247);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
+				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
 				$pdf->SetXY(131, 254);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
+				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
 			break;			
 			case 'nc':
 				//Parte de observaciones
@@ -919,16 +965,25 @@ class impresion extends CI_Controller {
 				$pdf->SetXY(10, 270);	
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 				//Costos totales
+				$subtotal = $encabezado->subtotal;
+				$totalIVA = $encabezado->total_iva;
+				$total = $encabezado->total;
+				//Valoramos si es en dolares
+				if($encabezado->moneda=='dolares'){
+					$subtotal = $subtotal/$encabezado->cambio;
+					$totalIVA = $totalIVA/$encabezado->cambio;
+					$total = $total/$encabezado->cambio;
+				}
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 240);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
+				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
 				$pdf->SetXY(131, 247);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
+				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
 				$pdf->SetXY(131, 254);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
+				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
 			break;
 			case 'r':
 				//Costos totales
@@ -978,7 +1033,7 @@ class impresion extends CI_Controller {
 		$pdf->MultiCell(100,5,$obs);
 	}
 	
-	private function printProducts($productos, $inicio, $fin, &$pdf){
+	private function printProducts($productos, $inicio, $fin, &$pdf, $fhead){
 		//Agregamos el apartado de productos
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Text(90, 65, 'Productos');
@@ -1016,13 +1071,19 @@ class impresion extends CI_Controller {
 		for($cc = $inicio; $cc<=$fin; $cc++){
 			//Calculamos precio total con descuento
 			$total = $productos[$cc]->cantidad * ($productos[$cc]->precio - ($productos[$cc]->precio * ($productos[$cc]->descuento/100))); 
+			$precio = $productos[$cc]->precio;
+			//Valoramos si es en dolares
+			if($fhead->moneda=='dolares'){
+				$total = $total/$fhead->cambio;
+				$precio = $precio/$fhead->cambio;
+			}
 			
 			$pdf->Text(11, $pl, $productos[$cc]->codigo);
 			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
 			$pdf->cell(15,5,$productos[$cc]->cantidad,0,0,'C');
 			$pdf->cell(6,5,$this->fe($productos[$cc]->exento),0,0,'C');
 			$pdf->cell(14,5,$this->fn($productos[$cc]->descuento),0,0,'C');
-			$pdf->cell(27.5,5,$this->fn($productos[$cc]->precio),0,0,'R');
+			$pdf->cell(27.5,5,$this->fn($precio),0,0,'R');
 			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
 			$pdf->ln($sl);
 			$pdf->SetX(110);

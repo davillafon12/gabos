@@ -237,7 +237,7 @@ class caja extends CI_Controller {
 			if(isset($tipoPago['tipo'])){
 				if($tipoPago['tipo']=='credito'){ //Si es pago a credito
 				
-				//echo $this->creditoDisponible($consecutivo, $data['Sucursal_Codigo']);
+					//echo $this->creditoDisponible($consecutivo, $data['Sucursal_Codigo']);
 					if($this->creditoDisponible($consecutivo, $data['Sucursal_Codigo'])){
 						if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){							
 							$facturaBODY['status']='success';
@@ -363,7 +363,14 @@ class caja extends CI_Controller {
 				break;
 			case 'mixto':
 				$comision = $this->banco->getComision($tipoPago['banco']);
-				$this->factura->guardarPagoMixto($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco'], $tipoPago['cantidad']);
+				$moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
+				$cantidad = $tipoPago['cantidad'];
+				$tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
+				if($moneda=='dolares'){
+					$cantidad = $cantidad * $tipoCambio;
+				}
+				
+				$this->factura->guardarPagoMixto($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco'], $cantidad );
 				break;
 			case 'credito':
 				date_default_timezone_set("America/Costa_Rica");
@@ -387,7 +394,13 @@ class caja extends CI_Controller {
 				}	
 				
 				$totalFactura = $totalFactura - $abono;				
-				$credito = $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, 10000, $Current_datetime, $totalFactura);				
+				$credito = $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, 10000, $Current_datetime, $totalFactura);
+				
+				$moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
+				$tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
+				if($moneda=='dolares'){
+					$abono = $abono * $tipoCambio;
+				}
 				$this->factura->guardarPagoAbono($credito, $abono);
 				
 				break;

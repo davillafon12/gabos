@@ -103,7 +103,7 @@ Class proforma_m extends CI_Model
 		$iva = 0;
 		$costo_sin_iva = 0;
 		
-		$head = $this->getProformasHeaders($consecutivo, $sucursal);
+		$head = $this->getProformasHeaders($consecutivo, $sucursal)[0];
 		if($articulos = $this->getArticulosProforma($consecutivo, $sucursal)){
 			foreach($articulos as $articulo)
 			{
@@ -205,6 +205,7 @@ Class proforma_m extends CI_Model
 				date_format(Proforma_Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha,
 				Proforma_Moneda as moneda,
 				Proforma_Nombre_Cliente as cliente_nom,
+				Proforma_Tipo_Cambio as cambio,
 				TB_03_Cliente_Cliente_Cedula as cliente_ced,
 				CONCAT_WS(' ', Usuario_Nombre, Usuario_Apellidos) AS vendedor 
 			FROM TB_10_Proforma
