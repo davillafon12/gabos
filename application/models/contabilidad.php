@@ -507,6 +507,24 @@ Class contabilidad extends CI_Model
 		return $this->db->insert_id();
 	}
 	
+	function getRetiroParcialHeadImpresion($retiro){
+		$this->db->select("	TB_33_Retiros_Parciales.Id as consecutivo,
+							TB_33_Retiros_Parciales.Monto as monto, 
+							date_format(TB_33_Retiros_Parciales.Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha,
+							TB_33_Retiros_Parciales.Tipo_Cambio as tipo,
+							TB_33_Retiros_Parciales.Sucursal as sucursal,
+							CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario", false);
+		$this->db->from('TB_33_Retiros_Parciales');
+		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = TB_33_Retiros_Parciales.Usuario');
+		$this->db->where('Id', $retiro);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+	
 	function agregarDenominacionRetiroParcial($denominacion, $cantidad, $tipo, $moneda, $retiro){
 		$datos = array(
 						'Denominacion' => $denominacion,
@@ -516,6 +534,20 @@ Class contabilidad extends CI_Model
 						'Retiro' => $retiro
 						);
 		$this->db->insert('tb_42_moneda_retiro_parcial', $datos);
+	}
+	
+	function getDenominacionesRetiroParcialPorTipoYMoneda($retiro, $tipo, $moneda){
+		$this->db->select('Denominacion as denominacion, Cantidad as cantidad');
+		$this->db->from('tb_42_moneda_retiro_parcial');
+		$this->db->where('Tipo',$tipo);
+		$this->db->where('Moneda',$moneda);
+		$this->db->where('Retiro',$retiro);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
 	}
 	
 	function getFechaUltimoCierreCaja($sucursal){

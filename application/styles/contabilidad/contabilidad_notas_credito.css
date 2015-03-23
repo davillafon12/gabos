@@ -280,3 +280,8 @@
 .titulo-cantidad{
 	cursor:help;
 }
+
+.cantidades-devolver{
+	  width: 26px;
+	  text-align: center;
+}

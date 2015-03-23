@@ -117,6 +117,12 @@ function enviarRetiro(cantidad){
 					notyMsg('¡Se realizó el retiro parcial con éxito!', 'success');
 					$("#input_retiro_parcial").val("");
 					reiniciarCampos();
+					if(tipoImpresion==='t'){
+						//Impresion termica
+						window.open(informacion[0].servidor_impresion+'/index.html?t='+informacion[0].token+'&d=rp&n='+informacion[0].retiro+'&s='+informacion[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Retiros Parciales','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+					}else if(tipoImpresion==='c'){
+						//Impresion carta
+					}
 				}
 			}catch(e){				
 				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
@@ -317,4 +323,32 @@ function actualizarMontoTotalRetiro(){
 	total = (dolares*tipo_cambio)+billetes+monedas;
 	$("#input_retiro_parcial").val(total.format(2, 3, '.', ','));
 	validarYFormatearCantidadEscrita($("#input_retiro_parcial").val());
+}
+
+function colonesToJSON(){
+	//El JSON no se hace con un ciclo ocupo reflejar el valor de la llave del json, cosa que no se carga dinamicamente
+	return {'50000':$("#cant_50000").val(), '20000':$("#cant_20000").val(), '10000':$("#cant_10000").val(), '5000':$("#cant_5000").val(), '2000':$("#cant_2000").val(), '1000':$("#cant_1000").val(), '500':$("#cant_500").val(), '100':$("#cant_100").val(), '50':$("#cant_50").val(),	'25':$("#cant_25").val(), '10':$("#cant_10").val(), '5':$("#cant_5").val()};
+}
+
+function dolaresToJSON(){
+	return {'50':$("#cant_do_50").val(), '10':$("#cant_do_10").val(), '1':$("#cant_do_1").val()};
+}
+
+// Para el tamaño del windows open
+var anchoImpresion = 290;
+var alturaImpresion = 400;
+var tipoImpresion = 't';
+
+function cambiarTipoImpresion(tipo){
+	tipoImpresion = tipo;
+	switch(tipo){
+		case 't':
+			anchoImpresion = 290;
+			alturaImpresion = 400;
+		break;
+		case 'c':
+			anchoImpresion = 1024;
+			alturaImpresion = 768;
+		break;
+	}
 }

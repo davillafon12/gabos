@@ -68,8 +68,8 @@ function validarCedulaNombre(){
 
 function validarCantidadDevolver(cantidad){
 	for(i=0; i<cantidad; i++){
-		defectuoso = $("#celda_cantidad_defectuoso_"+productosCreditar[i]).html();
-		bueno = $("#celda_cantidad_buena_"+productosCreditar[i]).html();
+		defectuoso = $("#celda_cantidad_defectuoso_"+productosCreditar[i]).val();
+		bueno = $("#celda_cantidad_buena_"+productosCreditar[i]).val();
 		//Verificamos que sean numeros
 		if(!isNumber(defectuoso)||!isNumber(bueno)){return false;}
 		//Si lo son revisamos que no sean menores a cero
@@ -80,8 +80,8 @@ function validarCantidadDevolver(cantidad){
 
 function validarCantidadDevolverConCantidadReal(cantidad){
 	for(i=0; i<cantidad; i++){
-		defectuoso = parseFloat($("#celda_cantidad_defectuoso_"+productosCreditar[i]).html());
-		bueno = parseFloat($("#celda_cantidad_buena_"+productosCreditar[i]).html());
+		defectuoso = parseFloat($("#celda_cantidad_defectuoso_"+productosCreditar[i]).val());
+		bueno = parseFloat($("#celda_cantidad_buena_"+productosCreditar[i]).val());
 		original = parseFloat($("#p_cantidad_original_"+productosCreditar[i]).html());
 		//Si la cantidad original es menor a la suma de defectuoso y bueno
 		if(original<(defectuoso+bueno)){
@@ -93,8 +93,8 @@ function validarCantidadDevolverConCantidadReal(cantidad){
 
 function validarCantidadesMayoresCero(cantidad){	
 	for(i=0; i<cantidad; i++){
-		defectuoso = parseFloat($("#celda_cantidad_defectuoso_"+productosCreditar[i]).html());
-		bueno = parseFloat($("#celda_cantidad_buena_"+productosCreditar[i]).html());
+		defectuoso = parseFloat($("#celda_cantidad_defectuoso_"+productosCreditar[i]).val());
+		bueno = parseFloat($("#celda_cantidad_buena_"+productosCreditar[i]).val());
 		if(defectuoso<1 && bueno<1){
 			return false;
 		}
@@ -111,8 +111,8 @@ function obtenerJSON(){
 	cantidad = $('#tabla_productos_seleccionados tr').length-1;
 	for(i=0; i<cantidad; i++){
 		codigo = $("#codigo_producto_"+productosCreditar[i]).html();
-		defectuoso = parseFloat($("#celda_cantidad_defectuoso_"+productosCreditar[i]).html());
-		bueno = parseFloat($("#celda_cantidad_buena_"+productosCreditar[i]).html());
+		defectuoso = parseFloat($("#celda_cantidad_defectuoso_"+productosCreditar[i]).val());
+		bueno = parseFloat($("#celda_cantidad_buena_"+productosCreditar[i]).val());
 		productos.push({c:codigo, d:defectuoso, b:bueno});
 	}
 	

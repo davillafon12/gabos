@@ -195,9 +195,9 @@ class caja extends CI_Controller {
 					
 					//Procesamos la imagen
 					$articulo['imagen'] = $row->Articulo_Factura_Imagen;				
-					$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$articulo['imagen'].'.jpg';
+					$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$articulo['imagen'];
 					//return $ruta_a_preguntar;
-					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00';}					
+					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00.jpg';}					
 					if($inventario = $this->articulo->inventarioActual($articulo['codigo'], $data['Sucursal_Codigo'])){
 						$articulo['bodega']=$inventario;
 					}else{

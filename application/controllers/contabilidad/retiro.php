@@ -62,6 +62,10 @@ class retiro extends CI_Controller {
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo un retiro parcial de: $cantidad",$data['Sucursal_Codigo'],'retiro_parcial');
 				$retorno['status'] = 'success';
 				unset($retorno['error']);
+				$retorno['retiro'] = $retiro;
+				$retorno['sucursal']= $data['Sucursal_Codigo'];
+				$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+				$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 			}else{
 				$retorno['error'] = '3'; //Cantidad no valida
 			}

@@ -9,6 +9,7 @@ class impresion extends CI_Controller {
 	private $tokenSeguridad = '';
 	private $retorno = array();
 	private $numPagina = 0;
+	private $cantidadPaginas = 1;
 	
 	function __construct()
 	{
@@ -276,6 +277,41 @@ class impresion extends CI_Controller {
 					$this->retorno['error'] = '6';
 				}
 			break;
+			case 'rp':
+				if(isset($_GET['n'])&&isset($_GET['s'])){
+					$sucursal = $_GET['s'];
+					$consecutivo = $_GET['n'];
+					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+						if($retiro = $this->contabilidad->getRetiroParcialHeadImpresion($consecutivo)){
+							if($billetes = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'colones')){
+								if($monedas = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'moneda', 'colones')){
+									if($dolares = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'dolares')){
+										unset($this->retorno['error']);
+										$this->retorno['status'] = 'success';
+										$this->retorno['empresa'] = $empresa;
+										$this->retorno['retiro'] = $retiro;
+										$this->retorno['billetes'] = $billetes;
+										$this->retorno['monedas'] = $monedas;
+										$this->retorno['dolares'] = $dolares;
+									}else{
+										$this->retorno['error'] = '18';
+									}
+								}else{
+									$this->retorno['error'] = '17';
+								}
+							}else{
+								$this->retorno['error'] = '16';
+							}
+						}else{
+							$this->retorno['error'] = '15';
+						}
+					}else{
+						$this->retorno['error'] = '7';
+					}
+				}else{
+					$this->retorno['error'] = '6';
+				}
+			break;
 			default:
 				$this->retorno['error'] = '5';
 			break;
@@ -503,6 +539,7 @@ class impresion extends CI_Controller {
 		
 		$cantidadProductos = sizeOf($fbody);
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		$this->cantidadPaginas = $paginasADibujar + 1;
 		
 		while($paginasADibujar>=$this->numPagina){
 			//Agregamos pag		
@@ -716,8 +753,8 @@ class impresion extends CI_Controller {
 				$pdf->SetFont('Arial','',12);
 				$pdf->Text(122, 22, 'Fecha y Hora: ');				
 				$pdf->Text(122, 27, $encabezado->fecha);
-				
-				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(172, 16, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
 				
 				//Info del cliente
 				$pdf->SetFont('Arial','B',12);
@@ -1021,6 +1058,7 @@ class impresion extends CI_Controller {
 		}elseif($auxInteger==$aux){
 			return $auxInteger;
 		}
+		$this->cantidadPaginas = $auxInteger+1;
 		return $auxInteger;
 	}
 	

@@ -97,11 +97,12 @@ function validarVariablesServidor(){
 	puerto = $("#puerto_servidor_impresion").val();
 	protocolo = $("#protocolo_servidor_impresion").val();
 	
-	pattern = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/g;
+	//Se quito pues puede ser ip o dominio
+	/*pattern = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/g;
     if(!pattern.test(ip)){
 		notyMsg('¡Número de IP no válido!', 'error');
 		return false;
-	}
+	}*/
 	
 	if(!isNumber(puerto)){
 		notyMsg('¡Número de puerto no válido!', 'error');

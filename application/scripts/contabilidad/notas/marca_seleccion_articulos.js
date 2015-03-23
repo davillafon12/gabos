@@ -36,7 +36,7 @@ function agregarProductosACreditar(){
 			fila_nueva = fila_nueva+"<td class='celdas_tabla_producto_acreditar' onclick='marcarProductoParaEliminar("+productosMarcados[i]+")'>"+parrafos[j].innerHTML+"</td>";			
 		}
 		//Agregamos los campos editables
-		fila_nueva = fila_nueva+"<td class='celdas_tabla_cantidades' id='celda_cantidad_defectuoso_"+productosMarcados[i]+"' contenteditable>0</td><td class='celdas_tabla_cantidades' id='celda_cantidad_buena_"+productosMarcados[i]+"' contenteditable>0</td>";
+		fila_nueva = fila_nueva+"<td class='celdas_tabla_cantidades' ><input type='text' class='cantidades-devolver' value='0' id='celda_cantidad_defectuoso_"+productosMarcados[i]+"'/></td><td class='celdas_tabla_cantidades'><input type='text' class='cantidades-devolver' value='0' id='celda_cantidad_buena_"+productosMarcados[i]+"'/></td>";
 		//row_a_copiar = $("#producto_row_"+productosMarcados[i]).html();		
 		$("#tbody_productos_seleccionados").append("<tr class='bordes_tabla_creditar' id='producto_a_creditar_"+productosMarcados[i]+"'>"+fila_nueva+"</tr>");
 		//Agregamos el producto a ser acreditado
