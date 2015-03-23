@@ -70,6 +70,9 @@ function seleccionarTipoDocumento(d, data){
 		case 'nd':
 			imprimirNotaDebito(data);			
 		break;
+		case 'rp':
+			imprimirRetiroParcial(data);			
+		break;
 	}
 	comenzarCierre();
 }
@@ -359,6 +362,98 @@ function imprimirNotaDebito(data){
 	qz.print();
 }
 
+function imprimirRetiroParcial(data){
+	empresa = data.empresa[0];
+	retiro = data.retiro;
+	billetes = data.billetes;
+	monedas = data.monedas;
+	dolares = data.dolares;
+	
+	qz = document.getElementById("qz");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x10");
+	//Centramos
+	qz.append("\x1B\x61\x01");
+	qz.append(" "+empresa.nombre+" \r\n");
+	//Seleccionamos tipo de letra
+	qz.append("\x1B\x21\x01");
+	qz.append(" Ced. Jur.: "+empresa.cedula+" \r\n");
+	qz.append(" Tel.: "+empresa.telefono+" \r\n");
+	qz.append(" Email: "+empresa.email+" \r\n");
+	qz.append(" \r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("----------------------------------------\r\n");
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x08");	
+	qz.append("Retiro Parcial de Dinero\r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("Numero: "+retiro.consecutivo+"\r\n");
+	qz.append("Fecha: "+retiro.fecha+"\r\n");
+	qz.append("Cajero: "+retiro.usuario+"\r\n");
+	qz.append("Tipo de Cambio: "+formatearCantidad(retiro.tipo)+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append(" Denominacion      Cant.         Total  \r\n");
+	qz.append("----------------------------------------\r\n");
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x08");	
+	qz.append("Billetes\r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	// PONEMOS LOS BILLETES EN COLONES   formatearDenominacion(cadena)  formatearCantidadDenominacion(cadena)   formatearTotalDenominacion(cadena)
+	for(i = 0; billetes.length>i; i++){
+		cantidad = parseInt(billetes[i].cantidad);		
+		denominacion = parseInt(billetes[i].denominacion);
+		total = cantidad * denominacion;
+		total = total+""; //Para pasarlo a string
+		
+		qz.append(formatearDenominacion(billetes[i].denominacion)+formatearCantidadDenominacion(billetes[i].cantidad)+formatearTotalDenominacion(formatearCantidad(total))+"\r\n");
+	}
+	// -------------------------------
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x08");	
+	qz.append("Monedas\r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	// PONEMOS LAS MONEDAS EN COLONES
+	for(i = 0; monedas.length>i; i++){
+		cantidad = parseInt(monedas[i].cantidad);		
+		denominacion = parseInt(monedas[i].denominacion);
+		total = cantidad * denominacion;
+		total = total+""; //Para pasarlo a string
+		
+		qz.append(formatearDenominacion(monedas[i].denominacion)+formatearCantidadDenominacion(monedas[i].cantidad)+formatearTotalDenominacion(formatearCantidad(total))+"\r\n");
+	}
+	// -------------------------------
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x08");	
+	qz.append("Dolares\r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	// PONEMOS LOS DOLARES
+	for(i = 0; dolares.length>i; i++){
+		cantidad = parseInt(dolares[i].cantidad);		
+		denominacion = parseInt(dolares[i].denominacion);
+		tipoCambio = parseFloat(retiro.tipo);
+		total = (cantidad * denominacion) * tipoCambio;
+		total = total+""; //Para pasarlo a string
+		
+		qz.append(formatearDenominacion(dolares[i].denominacion)+formatearCantidadDenominacion(dolares[i].cantidad)+formatearTotalDenominacion(formatearCantidad(total))+"\r\n");
+	}
+	// -------------------------------
+	qz.append("----------------------------------------\r\n");
+	//Centramos 
+	qz.append(" \r\n");
+	qz.append(" \r\n");
+	qz.append("\x1B\x61\x01");
+	qz.append("Realizado Por: ___________\r\n");
+	//Damos espacio al final
+	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.append("\x1B\x69"); //Cortar
+	qz.print();
+}
+
 /**********************************************************************************************************************************
 											         FUNCIONES DE FORMATEO
 **********************************************************************************************************************************/
@@ -448,6 +543,36 @@ function formatearCodigo(codigo){
 function enviarDerecha(cadena){	
 	n = cadena.length;
 	while(n<totalEspacios){
+		cadena = " "+cadena;
+		n++;
+	}
+	return cadena;
+}
+
+function formatearDenominacion(cadena){
+	cadena += "     ";
+	n = cadena.length;
+	while(n<16){
+		cadena = " "+cadena;
+		n++;
+	}
+	return cadena;
+}
+
+function formatearCantidadDenominacion(cadena){
+	cadena += "   ";
+	n = cadena.length;
+	while(n<10){
+		cadena = " "+cadena;
+		n++;
+	}
+	return cadena;
+}
+
+function formatearTotalDenominacion(cadena){
+	cadena += " ";
+	n = cadena.length;
+	while(n<14){
 		cadena = " "+cadena;
 		n++;
 	}
