@@ -914,6 +914,106 @@ Class contabilidad extends CI_Model
 			return $query->result();
 		}
 	}
+	
+	function getRecibosFiltrados($cliente, $desde, $hasta, $tipo, $estado, $sucursal){
+		/*
+			SELECT  tb_26_recibos_dinero.Consecutivo as consecutivo,
+					date_format(tb_26_recibos_dinero.Recibo_Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,        
+					tb_26_recibos_dinero.Recibo_Cantidad as monto,
+					CONCAT(tb_03_cliente.Cliente_Nombre, ' ', tb_03_cliente.Cliente_Apellidos) as cliente
+			FROM tb_26_recibos_dinero
+			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito
+			JOIN tb_03_cliente ON tb_03_cliente.Cliente_Cedula = tb_24_credito.Credito_Cliente_Cedula
+			WHERE tb_24_credito.Credito_Sucursal_Codigo = 0
+			ORDER BY tb_26_recibos_dinero.Consecutivo ASC;
+		*/
+		$this->db->select(" tb_26_recibos_dinero.Consecutivo as consecutivo,
+							date_format(tb_26_recibos_dinero.Recibo_Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,        
+							tb_26_recibos_dinero.Recibo_Cantidad as total,
+							CONCAT(tb_03_cliente.Cliente_Nombre, ' ', tb_03_cliente.Cliente_Apellidos) as cliente
+							", false);
+		$this->db->from("tb_26_recibos_dinero");
+		$this->db->join('tb_24_credito', 'tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito');
+		$this->db->join('tb_03_cliente','tb_03_cliente.Cliente_Cedula = tb_24_credito.Credito_Cliente_Cedula');
+		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
+		$this->setFiltradoCliente($cliente, 'tb_24_credito.Credito_Cliente_Cedula');
+		$this->setFiltradoFechaDesde($desde, 'tb_26_recibos_dinero.Recibo_Fecha');
+		$this->setFiltradoFechaHasta($hasta, 'tb_26_recibos_dinero.Recibo_Fecha');
+		$this->setFiltradoTipo($tipo, 'tb_26_recibos_dinero.Tipo_Pago');
+		$this->setFiltradoEstado($estado, 'tb_26_recibos_dinero.Anulado');
+		$this->db->order_by('tb_26_recibos_dinero.Consecutivo', 'ASC');
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    return $query->result();			
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function getNotasCreditoFiltrados($cliente, $desde, $hasta, $sucursal){
+		$this->db->select("Consecutivo as consecutivo, Nombre_Cliente as cliente, date_format(Fecha_Creacion, '%d-%m-%Y %h:%i:%s %p') as fecha", false);
+		$this->db->from("tb_27_notas_credito");
+		$this->db->where("Sucursal", $sucursal);
+		$this->setFiltradoCliente($cliente, "Cliente");
+		$this->setFiltradoFechaDesde($desde, "Fecha_Creacion");
+		$this->setFiltradoFechaHasta($hasta, "Fecha_Creacion");
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    return $query->result();			
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function setFiltradoCliente($cliente, $campo){
+		if(trim($cliente)!=''){
+			$this->db->where($campo, $cliente);
+		}
+	}
+	
+	function setFiltradoFechaDesde($fecha, $campo){
+		if(trim($fecha)!=''){
+			$fecha = $this->convertirFecha($fecha);
+			$this->db->where("$campo >=", $fecha);
+		}
+	}
+	
+	function setFiltradoFechaHasta($fecha, $campo){
+		if(trim($fecha)!=''){
+			$fecha = $this->convertirFecha($fecha);
+			$this->db->where("$campo <=", $fecha);
+		}
+	}
+	
+	function setFiltradoTipo($tipos, $campo){
+		if(sizeOf($tipos)>0){
+			$this->db->where_in($campo, $tipos);
+		}
+	}
+	
+	function setFiltradoEstado($estados, $campo){
+		if(sizeOf($estados)>0){
+			$this->db->where_in($campo, $estados);
+		}
+	}
+	
+	function convertirFecha($fecha){		
+		if(trim($fecha)!=''){
+			$fecha = explode("/",$fecha);
+			$fecha = $fecha[0]."-".$fecha[1]."-".$fecha[2]." 00:00:00";
+			//echo $fecha;
+			date_default_timezone_set("America/Costa_Rica");
+			return date("Y-m-d : H:i:s", strtotime($fecha));
+		}		
+		return $fecha;
+	}
+	
 }
 
 
