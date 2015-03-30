@@ -971,6 +971,26 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
+	function getNotasDebitoFiltrados($desde, $hasta, $sucursal){
+		$this->db->select("tb_30_notas_debito.Consecutivo as consecutivo, 
+												date_format(tb_30_notas_debito.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,
+												CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as cliente", false);
+		$this->db->from("tb_30_notas_debito");
+		$this->db->join("tb_01_usuario","tb_01_usuario.Usuario_Codigo = tb_30_notas_debito.Usuario");
+		$this->db->where("tb_30_notas_debito.Sucursal", $sucursal);
+		$this->setFiltradoFechaDesde($desde, "tb_30_notas_debito.Fecha");
+		$this->setFiltradoFechaHasta($hasta, "tb_30_notas_debito.Fecha");
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    return $query->result();			
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	function setFiltradoCliente($cliente, $campo){
 		if(trim($cliente)!=''){
 			$this->db->where($campo, $cliente);

@@ -44,9 +44,9 @@ $(function() {
 function llamarFacturas(){
 	if(validarFechas()){		
 		$.ajax({
-			url : location.protocol+'//'+document.domain+'/consulta/getNotasCreditoFiltradas',
+			url : location.protocol+'//'+document.domain+'/consulta/getNotasDebitoFiltradas',
 			type: "POST",	
-			data: {'cliente':$("#cedula").val(),'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val()},				
+			data: {'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val()},				
 			success: function(data, textStatus, jqXHR)
 			{
 				try{
@@ -204,7 +204,7 @@ function cargaServerFactura(consecutivo){
 
 function cargarEncabezado(consecutivo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/consulta/getNotaCredito",
+		url : location.protocol+'//'+document.domain+"/consulta/getNotaDebito",
 		type: "POST",
 		data: {'nota':consecutivo},		
 		success: function(data, textStatus, jqXHR)
@@ -284,10 +284,9 @@ function setProductosFactura(productos){
 	{
 		fila = "<tr>";
 		fila += "<td><label class='contact'>"+productos[i].codigo+"</label></td>";
-		fila += "<td><div class='contact' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].descripcion+"</div>"
-				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+productos[i].imagen+"' height='200' width='200'></div></td>";
-		fila += "<td style='text-align: center;'><label class='contact' id='cantidad_defectuoso_articulo_"+(i+1)+"'>"+productos[i].defectuoso+"</label></td>";	
-		fila += "<td style='text-align: center;'><label class='contact' id='cantidad_bueno_articulo_"+(i+1)+"'>"+productos[i].bueno+"</label></td>";		
+		fila += "<td><div class='contact' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].descripcion+"</div>";				
+		fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].cantidad+"</label></td>";	
+		
 		
 		//Traemos decimales
 		decimales = parseInt(decimales); //Esta variable se inicializa en la vista!!		
@@ -300,8 +299,6 @@ function setProductosFactura(productos){
 		
 		fila += "</tr>";
 		
-		agregarTooltip("#descripcion_articulo_"+(i+1));	
-
 		$("#contenidoArticulos").append(fila);
 	}
 	setCostos(cantidad);
@@ -330,14 +327,13 @@ function setCostos(cantidad){
 function actualizaCostoTotalArticulo(id){
 	
 	num_row = id.replace("cantidad_articulo_","");
-	cantidadBueno = document.getElementById("cantidad_bueno_articulo_"+num_row).innerHTML;
-	cantidadDefectuoso = document.getElementById("cantidad_defectuoso_articulo_"+num_row).innerHTML;
+	cantidad = document.getElementById("cantidad_articulo_"+num_row).innerHTML;
 	precio_unidad = document.getElementById('costo_unidad_articulo_'+num_row).value;
 	
 			
 	//Conversion de tipos
 	precio_unidad_float = parseFloat(precio_unidad);
-	cantidad_float = parseFloat(cantidadBueno)+parseFloat(cantidadDefectuoso);
+	cantidad_float = parseFloat(cantidad);
 		
 	//Calculos matematicos
 	precio_total = precio_unidad_float * cantidad_float;

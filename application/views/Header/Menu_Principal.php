@@ -94,7 +94,7 @@
 				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>
 				<li><a href='".$Ruta_Base."consulta/recibos'>Recibos de Dinero</a></li>
 				<li><a href='".$Ruta_Base."consulta/notasCredito'>Notas Crédito</a></li>
-				<li><a href='#'>Notas Débito</a></li>
+				<li><a href='".$Ruta_Base."consulta/notasDebito'>Notas Débito</a></li>
 				<li class='last'><a href='#'>Cierres de Caja</a></li>
 			</ul>
 		</li>

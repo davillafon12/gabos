@@ -149,14 +149,13 @@ class consulta extends CI_Controller {
 			$hasta = $_POST['hasta'];
 			
 			if($this->verificarFecha($desde)&&$this->verificarFecha($hasta)){				
-				include 'get_session_data.php';
-				
+				include 'get_session_data.php';				
 				if($notas = $this->contabilidad->getNotasCreditoFiltrados($cliente, $desde, $hasta, $data['Sucursal_Codigo'])){
 					unset($retorno['error']);
 					$retorno['status'] = 'success';
 					$retorno['notas'] = $notas;		
 				}else{
-					$this->retorno['error'] = '11';
+					$retorno['error'] = '3';
 				}				
 			}else{
 				//Fechas con mal formato
@@ -197,6 +196,83 @@ class consulta extends CI_Controller {
 					$notaCreditoHead[0]->total_iva = $total_iva;
 					
 					
+					//Para efecto de impresion
+					$retorno['sucursal']= $data['Sucursal_Codigo'];
+					$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+					$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");							
+				}else{
+					$this->retorno['error'] = '12';
+				}
+			}else{
+				$this->retorno['error'] = '11';
+			}
+		}else{
+			//URL MALA
+			$retorno['error'] = '2';
+		}
+		echo json_encode($retorno);
+	}
+	
+	function notasDebito(){
+		include 'get_session_data.php';
+		$this->load->view('consulta/notas_debito_consulta_view', $data);
+	}
+	
+	function getNotasDebitoFiltradas(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		
+		if(isset($_POST['desde'])&&isset($_POST['hasta'])){
+			$desde = $_POST['desde'];
+			$hasta = $_POST['hasta'];
+			
+			if($this->verificarFecha($desde)&&$this->verificarFecha($hasta)){				
+				include 'get_session_data.php';				
+				if($notas = $this->contabilidad->getNotasDebitoFiltrados($desde, $hasta, $data['Sucursal_Codigo'])){
+					unset($retorno['error']);
+					$retorno['status'] = 'success';
+					$retorno['notas'] = $notas;		
+				}else{
+					$retorno['error'] = '3';
+				}				
+			}else{
+				//Fechas con mal formato
+				$retorno['error'] = '4';
+			}
+		}else{
+			//URL MALA
+			$retorno['error'] = '2';
+		}
+		echo json_encode($retorno);
+	}
+	
+	function getNotaDebito(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		if(isset($_POST['nota'])){
+			$consecutivo = $_POST['nota'];
+			include 'get_session_data.php';
+			if($notaCreditoHead = $this->contabilidad->getHeadNotaDebito($consecutivo, $data['Sucursal_Codigo'])){
+				if($notaCreditoBody = $this->contabilidad->getProductosNotaDebito($consecutivo, $data['Sucursal_Codigo'])){
+					unset($retorno['error']);
+					$retorno['status'] = 'success';
+					$retorno['notaHead'] = $notaCreditoHead;
+					$retorno['notaBody'] = $notaCreditoBody;
+					
+					$total = 0;
+					$subtotal = 0;
+					$total_iva = 0;
+					
+					foreach($notaCreditoBody as $art){
+						$total = $total + ($art->precio * ($art->cantidad));
+						$total_iva = $total_iva + (($art->precio * ($art->cantidad)) * ($notaCreditoHead[0]->iva/100));
+						$subtotal = $subtotal + (($art->precio * ($art->cantidad)) - (($art->precio * ($art->cantidad)) * ($notaCreditoHead[0]->iva/100)));
+					}
+					
+					$notaCreditoHead[0]->total = $total;
+					$notaCreditoHead[0]->subtotal = $subtotal;
+					$notaCreditoHead[0]->total_iva = $total_iva;
+														
 					//Para efecto de impresion
 					$retorno['sucursal']= $data['Sucursal_Codigo'];
 					$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
