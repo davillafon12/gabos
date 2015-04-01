@@ -127,3 +127,8 @@
 	border-collapse: collapse;
 	*margin-left: 10px;
 }
+
+.contenedor-total-denominaciones{
+	position: relative;
+  top: 80px;
+}

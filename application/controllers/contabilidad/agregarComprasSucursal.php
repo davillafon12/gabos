@@ -55,9 +55,10 @@ class agregarComprasSucursal extends CI_Controller {
 	function agregarCompras(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1';
-		if(isset($_POST['factura']) && isset($_POST['sucursal'])){
+		if(isset($_POST['factura']) && isset($_POST['sucursal']) && isset($_POST['prefijo'])){
 			$factura = $_POST['factura'];	
 			$sucursal = $_POST['sucursal'];
+			$prefijo = trim($_POST['prefijo']);
 			if(is_numeric($factura)){
 				if($productos = $this->factura->getItemsFactura($factura, $this->configuracion->getEmpresaDefectoTraspasoCompras())){ 
 					if($this->empresa->getEmpresa($sucursal)){
@@ -78,7 +79,7 @@ class agregarComprasSucursal extends CI_Controller {
 									$descuento = $pro->Articulo_Factura_Descuento;
 									$costo -= $costo * ( $descuento / 100 ); 
 									$this->bodega_m->agregarCompra($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Descripcion, $costo, $pro->Articulo_Factura_Cantidad, $fecha, $data['Usuario_Codigo'], $sucursal);
-									$this->agregarAInventario($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Cantidad, $pro->Articulo_Factura_Descripcion, $costo, $this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $traspaso);
+									$this->agregarAInventario($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Cantidad, $pro->Articulo_Factura_Descripcion, $costo, $this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $traspaso, $prefijo);
 								}
 								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario agrego la factura #$factura como compras de la sucursal $sucursal",$data['Sucursal_Codigo'],'compras');
 								
@@ -110,8 +111,8 @@ class agregarComprasSucursal extends CI_Controller {
 		echo json_encode($retorno);
 	}
 	
-	private function agregarAInventario($codigo, $cantidad, $descripcion, $costo, $sucursalSalida, $sucursalEntrada, $traspaso){
-		if($this->articulo->get_Articulo($codigo, $sucursalEntrada)){
+	private function agregarAInventario($codigo, $cantidad, $descripcion, $costo, $sucursalSalida, $sucursalEntrada, $traspaso, $prefijo){
+		if($this->articulo->get_Articulo($prefijo."".$codigo, $sucursalEntrada)){
 			//El articulo si esta creado en la sucursal de entrada
 			$this->articulo->actualizarInventarioSUMA($codigo, $cantidad, $sucursalEntrada);
 		}else{
@@ -128,7 +129,7 @@ class agregarComprasSucursal extends CI_Controller {
 			}
 			
 			
-			$this->articulo->registrar(	$codigo, 
+			$this->articulo->registrar(	$prefijo."".$codigo, 
 										$descripcion, 
 										$articulo->Articulo_Codigo_Barras, 
 										$cantidad, 
@@ -146,7 +147,7 @@ class agregarComprasSucursal extends CI_Controller {
 										$costo);
 		}
 		//Agregamos el producto al traspaso
-		$this->contabilidad->agregarArticuloTraspaso($codigo, $descripcion, $cantidad, $traspaso);
+		$this->contabilidad->agregarArticuloTraspaso($prefijo."".$codigo, $descripcion, $cantidad, $traspaso);
 	}
 	
 	

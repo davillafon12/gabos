@@ -443,6 +443,8 @@ function imprimirRetiroParcial(data){
 	}
 	// -------------------------------
 	qz.append("----------------------------------------\r\n");
+	qz.append(enviarDerecha("Total:"+formatearMontoTotal(formatearNumero(retiro.monto)))+"\r\n");
+	qz.append("----------------------------------------\r\n");
 	//Centramos 
 	qz.append(" \r\n");
 	qz.append(" \r\n");

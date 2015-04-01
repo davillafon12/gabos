@@ -1,7 +1,7 @@
 var signo = '₡'; //Guarda el signo de la moneda para uso general
 var denMonedas = [500, 100, 50, 25, 10, 5]; //Guarda las denominacions de monedas
 var denBilletes = [50000, 20000, 10000, 5000, 2000, 1000]; //Guarda las denominacions de monedas
-var denDolares = [50, 10, 1]; //Guarda las denominacions de dolares
+var denDolares = [50, 20, 10, 1]; //Guarda las denominacions de dolares
 
 $(function(){
 	//Cuando se cargue la pag ejecuta este codigo
@@ -20,6 +20,7 @@ $(function(){
 	
 	//Dolares
 	$("#cant_do_50").numeric();
+	$("#cant_do_20").numeric();
 	$("#cant_do_10").numeric();
 	$("#cant_do_1").numeric();
 	
@@ -131,6 +132,7 @@ function actualizarTotalesDenominaciones(cantidad, denominacion){
 		total = total.format(2, 3, '.', ',');
 		$("#total_billetes").html(signo+total);
 	}
+	actualizarMontoTotalRetiro();
 }
 
 function actualizarTotalesDenominacionesDolares(cantidad, denominacion){
@@ -145,6 +147,20 @@ function actualizarTotalesDenominacionesDolares(cantidad, denominacion){
 	}
 	total = total.format(2, 3, '.', ',');
 	$("#total_dolares").html(signo+total);
+	actualizarMontoTotalRetiro();
+}
+
+function actualizarMontoTotalRetiro(){
+	signo = '$';
+	dolares = $("#total_dolares").html().aFlotante();	
+	signo = '₡';
+	billetes = $("#total_billetes").html().aFlotante();
+	monedas = $("#total_monedas").html().aFlotante();
+	tipo_cambio = $("#tipo_cambio_dolar").val();
+	tipo_cambio = parseFloat(tipo_cambio);
+	total = (dolares*tipo_cambio)+billetes+monedas;
+	$("#input_retiro_parcial").html(total.format(2, 3, '.', ','));
+	//validarYFormatearCantidadEscrita($("#input_retiro_parcial").val());
 }
 
 function validarYFormatearCantidadEscritaTipoCambio(cantidad){
@@ -158,6 +174,23 @@ function validarYFormatearCantidadEscritaTipoCambio(cantidad){
 		cantidad = parseFloat(cantidad);
 		cantidad = cantidad.format(2, 3, '.', ',');
 		$("#tipo_cambio_dolar").val(cantidad);
+	}else{
+		cantidadValida = false;
+		notyMsg('¡La cantidad ingresada no es válida!', 'error');
+	}
+}
+
+function validarYFormatearCantidadEscrita(cantidad){
+	if(isCantidadValida(cantidad)){
+		cantidadValida = true;	
+
+		//Cambiamos los puntos por nada
+		cantidad = cantidad.replace('.','');
+		//Cambiamos las comas por un punto, cambiar a notacion del numeric
+		cantidad = cantidad.replace(',','.');
+		cantidad = parseFloat(cantidad);
+		cantidad = cantidad.format(2, 3, '.', ',');
+		$("#input_retiro_parcial").val(cantidad);
 	}else{
 		cantidadValida = false;
 		notyMsg('¡La cantidad ingresada no es válida!', 'error');

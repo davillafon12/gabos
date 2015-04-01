@@ -150,7 +150,7 @@ function agregarFacturaASucursal(){
 		url : location.protocol+'//'+document.domain+'/contabilidad/agregarComprasSucursal/agregarCompras',
 		type: "POST",		
 		async: false,
-		data: {'factura': factura, 'sucursal':sucursalAgregar},				
+		data: {'factura': factura, 'sucursal':sucursalAgregar, 'prefijo':$("#prefijo").val()},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{

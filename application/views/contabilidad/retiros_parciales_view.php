@@ -164,6 +164,11 @@ PARA:
 									<td class="alg-right"><p class="parrafo" id="total_do_50">$0,00</p></td>
 								</tr>
 								<tr>
+									<td><p class="parrafo">$ 20</p><input type="hidden" id="deno_do_20"></td>
+									<td><p class="parrafo"><input type="text" id="cant_do_20" class="input-deno alg-right" value="0" onkeyup="actualizarCantidadDolar(this.value, 20)" onclick="this.select()"></p></td>
+									<td class="alg-right"><p class="parrafo" id="total_do_20">$0,00</p></td>
+								</tr>
+								<tr>
 									<td><p class="parrafo">$ 10</p><input type="hidden" id="deno_do_10"></td>
 									<td><p class="parrafo"><input type="text" id="cant_do_10" class="input-deno alg-right" value="0" onkeyup="actualizarCantidadDolar(this.value, 10)" onclick="this.select()"></p></td>
 									<td class="alg-right"><p class="parrafo" id="total_do_10">$0,00</p></td>

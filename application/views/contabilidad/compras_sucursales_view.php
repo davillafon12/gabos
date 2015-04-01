@@ -63,6 +63,7 @@ PARA:
 						<td><p class="contact">Sucursal a agregar compras:</p></td>
 						<td><p class="contact">Número de factura a agregar:</p></td>
 						<td><p class="contact"><small>Factura de <?php echo $this->empresa->getNombreEmpresa($this->configuracion->getEmpresaDefectoTraspasoCompras());?></small></p></td>
+						<td><p class="contact">Prefijo:</p></td>
 					</tr>
 					<tr>
 						<td>
@@ -80,6 +81,7 @@ PARA:
 							<input class="input_dos" type="text" id="numero_factura"/>
 						</td>
 						<td><input type="button" value="Cargar Factura" class="boton-cargar" onclick="cargarFactura()"/></td>
+						<td><input type="text" class="input_dos" id="prefijo"/></td>
 					</tr>
 				</table>
 				

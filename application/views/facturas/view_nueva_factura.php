@@ -65,7 +65,8 @@ PARA:
 		<!--HERRAMIENTAS PARA ENVIO A CAJA-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_envio_caja.js'); ?>"></script>
 		<script>
-			var token_factura_temporal = '<?php echo $token_factura_temp;?>'; 
+			var token_factura_temporal = '<?php echo $token_factura_temp;?>';
+			var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
 		</script>
 	</head>
 	<body onload="setMainValues()" oncopy="return false" oncut="return false" onpaste="return false">

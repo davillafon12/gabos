@@ -6,6 +6,7 @@ window.onkeydown = keydown;
 
 
 
+
 function keydown(e) {
 	var evtobj = window.event? event : e
     if (evtobj.keyCode == 65 && evtobj.altKey){ agregarFila(-1);}
@@ -296,8 +297,11 @@ function buscarArticulo(e, value, id){
 				return false;
 			}else{
 				if (articuloYaIngresado(codigo, id)&&codigo!='00'&&isFromAgregarCantidad) { //Si viene por primera vez
-					isFromAgregarCantidad=false;
-					agregarCantidadArticulosPopUp(id.replace("codigo_articulo_",""));
+					
+					if(!puedeRepetirProducto){
+						isFromAgregarCantidad=false;
+						agregarCantidadArticulosPopUp(id.replace("codigo_articulo_",""));
+					}
 				}
 				else if(isFromAgregarCantidad==false){
 					isFromAgregarCantidad=true;
@@ -319,7 +323,7 @@ function buscarArticulo(e, value, id){
 	
 	// 3 Verificamos si el articulo esta repetido, si no lo buscamos normal
 	
-	if(articuloYaIngresado(codigo, id)&&codigo!='00')
+	if(articuloYaIngresado(codigo, id)&&codigo!='00'&&!puedeRepetirProducto)
 	{
 		resetRowFields(id_row, false);
 		//Esto para que nos permita realizar cambios de articulo a la primera

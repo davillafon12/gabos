@@ -333,6 +333,23 @@ function existe_Nombre_Usuario($nombre){
 		}
 	}
 	
+	function isAdministradorPorCodigo($codigoUsuario)
+	{			
+		$this -> db -> from('TB_01_Usuario');
+		$this -> db -> where('Usuario_Codigo', $codigoUsuario); 
+		$this -> db -> where_in('Usuario_Rango', array('administra','avanzado'));
+		$query = $this -> db -> get();
+		//var_dump($query->result());
+		if($query -> num_rows() != 0)
+		{
+		 return 1;
+		}
+		else
+		{
+		 return 0;
+		}
+	}
+	
 	function agregarPermiso($usuario, $sucursal, $area, $valor){
 		$data = array(
                         'Permisos_Area'=>mysql_real_escape_string($area),

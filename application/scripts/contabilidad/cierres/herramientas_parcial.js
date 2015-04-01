@@ -2,7 +2,7 @@ var cantidadValida = false; //Variable guarda la condicion de si la cantidad ing
 var signo = '₡'; //Guarda el signo de la moneda para uso general
 var denMonedas = [500, 100, 50, 25, 10, 5]; //Guarda las denominacions de monedas
 var denBilletes = [50000, 20000, 10000, 5000, 2000, 1000]; //Guarda las denominacions de monedas
-var denDolares = [50, 10, 1]; //Guarda las denominacions de dolares
+var denDolares = [50, 20, 10, 1]; //Guarda las denominacions de dolares
 
 
 function isNumber(n) {
@@ -205,6 +205,7 @@ $(function(){
 	
 	//Dolares
 	$("#cant_do_50").numeric();
+	$("#cant_do_20").numeric();
 	$("#cant_do_10").numeric();
 	$("#cant_do_1").numeric();
 	
@@ -331,7 +332,7 @@ function colonesToJSON(){
 }
 
 function dolaresToJSON(){
-	return {'50':$("#cant_do_50").val(), '10':$("#cant_do_10").val(), '1':$("#cant_do_1").val()};
+	return {'50':$("#cant_do_50").val(), '20':$("#cant_do_20").val(), '10':$("#cant_do_10").val(), '1':$("#cant_do_1").val()};
 }
 
 // Para el tamaño del windows open
