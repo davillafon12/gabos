@@ -289,6 +289,80 @@ class consulta extends CI_Controller {
 		}
 		echo json_encode($retorno);
 	}
+	
+	function retiroParcial(){
+		include 'get_session_data.php';
+		$this->load->view('consulta/retiros_parciales_consulta_view', $data);
+	}
+	
+	function getRetirosParcialesFiltrados(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		
+		if(isset($_POST['desde'])&&isset($_POST['hasta'])){
+			$desde = $_POST['desde'];
+			$hasta = $_POST['hasta'];
+			
+			if($this->verificarFecha($desde)&&$this->verificarFecha($hasta)){				
+				include 'get_session_data.php';				
+				if($retiros = $this->contabilidad->getRetirosParcialesFiltrados($desde, $hasta, $data['Sucursal_Codigo'])){
+					unset($retorno['error']);
+					$retorno['status'] = 'success';
+					$retorno['retiros'] = $retiros;
+				}else{
+					$retorno['error'] = '3';
+				}				
+			}else{
+				//Fechas con mal formato
+				$retorno['error'] = '4';
+			}
+		}else{
+			//URL MALA
+			$retorno['error'] = '2';
+		}
+		echo json_encode($retorno);		
+	}
+	
+	
+	function getRetiroParcial(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		if(isset($_POST['retiro'])){
+			$consecutivo = $_POST['retiro'];
+			include 'get_session_data.php';
+			if($retiro = $this->contabilidad->getRetiroParcialHeadImpresion($consecutivo)){
+				if($billetes = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'colones')){
+					if($monedas = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'moneda', 'colones')){
+						if($dolares = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'dolares')){
+							unset($retorno['error']);
+							$retorno['status'] = 'success';
+							$retorno['retiro'] = $retiro;
+							$retorno['billetes'] = $billetes;
+							$retorno['monedas'] = $monedas;
+							$retorno['dolares'] = $dolares;
+							
+							//Para efecto de impresion
+							$retorno['sucursal']= $data['Sucursal_Codigo'];
+							$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+							$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");	
+						}else{
+							$retorno['error'] = '18';
+						}
+					}else{
+						$retorno['error'] = '17';
+					}
+				}else{
+					$retorno['error'] = '16';
+				}
+			}else{
+				$retorno['error'] = '15';
+			}
+		}else{
+			//URL MALA
+			$retorno['error'] = '2';
+		}
+		echo json_encode($retorno);
+	}
 
 } 
 
