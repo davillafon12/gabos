@@ -303,5 +303,10 @@
 			$this->db->update('tb_39_configuracion', array('Valor'=>$protocolo));
 		}
 		
+		function actualizarAplicarRetencion($aplica){
+			$this->db->where('Parametro', 'aplicar_retencion');
+			$this->db->update('tb_39_configuracion', array('Valor'=>$aplica));
+		}
+		
 	}
 ?>

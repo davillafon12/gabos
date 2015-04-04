@@ -40,7 +40,8 @@ class config extends CI_Controller {
 			isset($_POST['cant_ses'])&&
 			isset($_POST['iva_cant'])&&
 			isset($_POST['ret_cant'])&&
-			isset($_POST['sucursal'])){
+			isset($_POST['sucursal'])
+			){
 				$email = $_POST['email'];
 				$decimales = $_POST['cant_dec'];
 				$compra_dolar = $_POST['compra_dolar'];
@@ -73,6 +74,12 @@ class config extends CI_Controller {
 							$this->configuracion->actualizarPorcentajeIVA($por_iva);
 							$this->configuracion->actualizarPorcentajeRetencion($por_retencion);
 							$this->configuracion->actualizarSucursalDefectoTraspasoCompras($sucursal_compras);
+							
+							if(isset($_POST['retencion'])){
+								$this->configuracion->actualizarAplicarRetencion(1);
+							}else{
+								$this->configuracion->actualizarAplicarRetencion(0);
+							}							
 							
 							redirect('config', 'refresh');	
 						}else{

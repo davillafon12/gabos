@@ -169,7 +169,14 @@ PARA:
 								</select>
 							</td>
 						</tr>
-						
+						<tr>
+							<td>
+								<p class="contact"><label for="retencion">Aplicar retención:</label> </p>
+							</td>
+							<td>
+								<input type="checkbox" name="retencion" <?php if($c_array['aplicar_retencion']){echo "checked";}?>/>
+							</td>
+						</tr>
 						
 						
 					</table>
