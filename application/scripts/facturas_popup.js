@@ -143,10 +143,11 @@ function setArticuloFromPopup(){
 	8 => nombre de la imagen del producto
 	9 => si esta o no exento
 	*/
-	datosArticulo = "1,00,"+pop_descripcion+","+pop_inventario+","+pop_descuento+",0,"+pop_costo_unidad+","+pop_costo_unidad+",00,0";
-	//alert(datosArticulo);
+	articuloJSON = {"codigo":"00","descripcion":pop_descripcion,"inventario":pop_inventario,"descuento":pop_descuento,"familia":"0","precio_cliente":pop_costo_unidad,"precio_no_afiliado":pop_costo_unidad,"imagen":"Default.png","exento":"0"};
+	//datosArticulo = "1,00,"+pop_descripcion+","+pop_inventario+","+pop_descuento+",0,"+pop_costo_unidad+","+pop_costo_unidad+",00,0";
 	num_row = rowIDpopup.replace("codigo_articulo_","");
-	setDatosArticulo(datosArticulo.split(','), rowIDpopup, num_row,pop_cantidad);
+	//setDatosArticulo(datosArticulo.split(','), rowIDpopup, num_row,pop_cantidad);
+	setArticulo(articuloJSON, num_row);
 }
 
 

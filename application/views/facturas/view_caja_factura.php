@@ -78,7 +78,11 @@ PARA:
 		<script><?php
 			echo "var sucursal=$Sucursal_Codigo;
 				  var tipoImpresion='t';";
-		?></script>
+		?>
+			var token_factura_temporal = '<?php echo $token_factura_temp;?>';
+			var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
+			var aplicarRetencionHacienda = <?php echo $this->configuracion->getAplicarRetencion();?>
+		</script>
 	
 		<!--JQEURY SOLO NUMEROS-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>"></script>
@@ -351,6 +355,15 @@ PARA:
 					<td>
 						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
 						<input id="iva" class="input_dos" autocomplete="off" name="iva" type="text" disabled> 
+					</td>
+					</tr>
+					<tr>
+					<td>
+						<p class="contact"><label for="retencion">Retención:</label></p> 
+					</td>
+					<td>
+						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
+						<input id="retencion" class="input_dos" autocomplete="off" name="retencion" type="text" disabled> 
 					</td>
 					</tr>
 					<tr>

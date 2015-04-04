@@ -104,14 +104,15 @@ Class factura extends CI_Model
 		}
 	}
 	
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
 		$dataItem = array(
 	                        'Articulo_Factura_Codigo'=>mysql_real_escape_string($codigo),
 	                        'Articulo_Factura_Descripcion'=>mysql_real_escape_string($descripcion), 
 							'Articulo_Factura_Cantidad'=>mysql_real_escape_string($cantidad),
 							'Articulo_Factura_Descuento'=>mysql_real_escape_string($descuento),
 							'Articulo_Factura_Exento'=>mysql_real_escape_string($exento),
-							'Articulo_Factura_Precio_Unitario'=>mysql_real_escape_string($precio),	
+							'Articulo_Factura_Precio_Unitario'=>mysql_real_escape_string($precio),
+							'Articulo_Factura_Precio_Final' => 	$precioFinal,
 							'Articulo_Factura_Imagen'=>mysql_real_escape_string($imagen),
 							'TB_07_Factura_Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
 							'TB_07_Factura_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
@@ -126,6 +127,10 @@ Class factura extends CI_Model
 		$costo_total = 0;
 		$iva = 0;
 		$costo_sin_iva = 0;
+		$retencion = 0;
+		$this->load->model('articulo','',TRUE);
+		//Traemos el array de configuracion para obtener el porcentaje
+		$c_array = $this->getConfgArray();
 		
 		if($articulos = $this->getItemsFactura($consecutivo, $sucursal)){
 			foreach($articulos as $articulo)
@@ -133,12 +138,16 @@ Class factura extends CI_Model
 				//Calculamos el precio total de los articulos
 				$precio_total_articulo = (($articulo->Articulo_Factura_Precio_Unitario)-(($articulo->Articulo_Factura_Precio_Unitario)*(($articulo->Articulo_Factura_Descuento)/100)))*$articulo->Articulo_Factura_Cantidad;
 				
+				$precio_articulo_final = $articulo->Articulo_Factura_Precio_Final;
+				$precio_articulo_final = $precio_articulo_final * $articulo->Articulo_Factura_Cantidad;
+				
 				//Calculamos los impuestos
-				//Traemos el array de configuracion para obtener el porcentaje
-				$c_array = $this->getConfgArray();
+				
 				$isExento = $articulo->Articulo_Factura_Exento;
 				if($isExento=='0'){
 					$costo_sin_iva += $precio_total_articulo/(1+(floatval($c_array['iva'])/100));
+					$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($c_array['iva'])/100));
+					$retencion += $precio_articulo_final - $precio_final_sin_iva;
 				}
 				else if($isExento=='1'){
 					$costo_sin_iva += $precio_total_articulo;
@@ -148,8 +157,15 @@ Class factura extends CI_Model
 			}
 			$iva = $costo_total-$costo_sin_iva;
 		}
+		$retencion -= $iva;
+		//Si aplica la retencion entonces modificamos los costos
+		if(!$c_array['aplicar_retencion']){
+			$retencion = 0;
+		}
 		
-		return array('Factura_Monto_Total'=>$costo_total, 'Factura_Monto_IVA'=>$iva, 'Factura_Monto_Sin_IVA'=>$costo_sin_iva);
+		$costo_total += $retencion;
+		
+		return array('Factura_Monto_Total'=>$costo_total, 'Factura_Monto_IVA'=>$iva, 'Factura_Monto_Sin_IVA'=>$costo_sin_iva, 'Factura_Retencion'=>$retencion);
 	}
 	
 	function getItemsFactura($consecutivo, $sucursal){

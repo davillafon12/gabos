@@ -18,6 +18,22 @@
 			}
 		}
 		
+		function getAplicarRetencion(){
+			$this->db->from('tb_39_configuracion');
+			$this->db->where('Parametro', 'aplicar_retencion');
+			$this->db-> limit(1);
+			$query = $this->db->get();		
+			if($query->num_rows()==0)
+			{
+				return 0;
+			}
+			else
+			{	
+				$result = $query->result();
+				return $result[0]->Valor;
+			}
+		}
+		
 		function getEmpresaDefectoTraspasoCompras(){
 			$this->db->from('tb_39_configuracion');
 			$this->db->where('Parametro', 'codigo_empresa_traspaso_compras');

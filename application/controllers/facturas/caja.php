@@ -31,6 +31,9 @@ class caja extends CI_Controller {
 		$data['c_array'] = $conf_array;
 		$bancos = $this->banco->getBancos();
 		$data['bancos'] = $bancos;
+		date_default_timezone_set("America/Costa_Rica");
+		$fecha = date("y/m/d : H:i:s", now());
+		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$this->load->view('facturas/view_caja_factura', $data);	
 	}
 	
@@ -192,7 +195,7 @@ class caja extends CI_Controller {
 					$articulo['descuento']=$row->Articulo_Factura_Descuento;
 					$articulo['exento']=$row->Articulo_Factura_Exento;
 					$articulo['precio']=$row->Articulo_Factura_Precio_Unitario;
-					
+					$articulo['precioFinal']=$row->Articulo_Factura_Precio_Final;
 					//Procesamos la imagen
 					$articulo['imagen'] = $row->Articulo_Factura_Imagen;				
 					$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$articulo['imagen'];
@@ -571,14 +574,8 @@ class caja extends CI_Controller {
 	}
 	
 	function cambiarFactura(){
-		//Limpiamos el log
-		$myfile = fopen("application/logs/cambiarFactura.txt", "w");
-		fwrite($myfile, '');
-		fclose($myfile);
-		
-		//file_put_contents('application/logs/cambiarFactura.txt', "Entro\n", FILE_APPEND);
-		if(isset($_POST['head'])&&isset($_POST['items'])&&isset($_POST['consecutivo'])){
-		    //Obtener las dos partes del post
+			if(isset($_POST['head'])&&isset($_POST['items'])&&isset($_POST['consecutivo'])&&isset($_POST['token'])){
+		  //Obtener las dos partes del post
 			$info_factura = $_POST['head'];
 			$items_factura = $_POST['items'];
 			$consecutivo = $_POST['consecutivo'];
@@ -598,47 +595,37 @@ class caja extends CI_Controller {
 								'Factura_Moneda'=>$info_factura['cu'],
 								'Factura_Observaciones'=>$info_factura['ob']
 							);
+			//Borramos la factura temporal
+			$this->articulo->eliminarFacturaTemporal($_POST['token']);
 							
 			//ELIMINAMOS LOS PRODUCTOS
 			$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
-			//file_put_contents('application/logs/cambiarFactura.txt', "Elimino los articulos\n", FILE_APPEND);
+			
 			$this->factura->actualizarFacturaHead($datosHead, $consecutivo, $data['Sucursal_Codigo']);
-			//file_put_contents('application/logs/cambiarFactura.txt', "Actualiza la factura $consecutivo\n", FILE_APPEND);
-			/*if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'])){
-				$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
-				$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
-				echo '7'; //El ingreso fue correcto											
-			}else{
-				echo '11'; //Error al crear la factura
-			}	*/	
-
-			//ELIMINAMOS LOS PRODUCTOS
-			//$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
+						
 			//LOS VOLVEMOS A AGREGAR LOS NUEVOS
 			$cliente = $this->factura->getCliente($consecutivo, $data['Sucursal_Codigo']);
-			//file_put_contents('application/logs/cambiarFactura.txt', "Cliente $cliente\n", FILE_APPEND);
+			
 			$vendedor = $this->factura->getVendedor($consecutivo, $data['Sucursal_Codigo']);
-			//file_put_contents('application/logs/cambiarFactura.txt', "Vendedor $vendedor\n", FILE_APPEND);
-			//print_r($items_factura);
+			
+			
 			$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
-			//file_put_contents('application/logs/cambiarFactura.txt', "Agrego los items\n", FILE_APPEND);
+			
 			$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-			//file_put_contents('application/logs/cambiarFactura.txt', "Actualizo costos\n", FILE_APPEND);
+		
 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_edicion');
 		
 		}
 		else{
-			//file_put_contents('application/logs/cambiarFactura.txt', "--MAL URL\n", FILE_APPEND);
+			
 		} //Numero de error mal post	
 	}
 	
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
 		foreach($items_factura as $item){
-		//file_put_contents('application/logs/cambiarFactura.txt', "--Se valora ".$item['co']."\n", FILE_APPEND);
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico					
-					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
+					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, '00.png');
 			}else{ //Si es normal					
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
@@ -646,7 +633,8 @@ class caja extends CI_Controller {
 					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
-					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $precio, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
+					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 2, $sucursal);
+					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
 				}
 			}
 			
@@ -792,7 +780,7 @@ class caja extends CI_Controller {
 					$articulo['descuento']=$row->Articulo_Proforma_Descuento;
 					$articulo['exento']=$row->Articulo_Proforma_Exento;
 					$articulo['precio']=$row->Articulo_Proforma_Precio_Unitario;
-					
+					$articulo['precioFinal']=$row->Articulo_Proforma_Precio_Final;
 					//Procesamos la imagen
 					$articulo['imagen'] = $row->Articulo_Proforma_Imagen;				
 					$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$articulo['imagen'].'.jpg';
@@ -959,16 +947,18 @@ class caja extends CI_Controller {
 	
 	function hayProductosParaProforma($sucursal, $productos){  //Verifica que los articulos existan y tengan inventario
 		foreach($productos as $producto){
-			if($this->articulo->existe_Articulo($producto['co'],$sucursal)){
-				//Calculamos el inventario disponible
-				$invActual = (Int)$this->articulo->inventarioActual($producto['co'], $sucursal);
-				$canProforma = (Int)$producto['ca'];
-				$diferencia = $invActual-$canProforma;
-				
-				if($diferencia<0){return false;} //Si alguna cantidad queda en negativo significa que no hay suficiente en inevntario
-			}else{
-				return false;
-			}			
+			if(trim($producto['co'])!='00'){
+					if($this->articulo->existe_Articulo($producto['co'],$sucursal)){
+						//Calculamos el inventario disponible
+						$invActual = (Int)$this->articulo->inventarioActual($producto['co'], $sucursal);
+						$canProforma = (Int)$producto['ca'];
+						$diferencia = $invActual-$canProforma;
+						
+						if($diferencia<0){return false;} //Si alguna cantidad queda en negativo significa que no hay suficiente en inevntario
+					}else{
+						return false;
+					}	
+			}		
 		}
 		return true;
 		//return false;

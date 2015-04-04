@@ -80,14 +80,15 @@ Class proforma_m extends CI_Model
 		}
 	}
 	
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
 		$dataItem = array(
 	                        'Articulo_Proforma_Codigo'=>mysql_real_escape_string($codigo),
 	                        'Articulo_Proforma_Descripcion'=>mysql_real_escape_string($descripcion), 
 							'Articulo_Proforma_Cantidad'=>mysql_real_escape_string($cantidad),
 							'Articulo_Proforma_Descuento'=>mysql_real_escape_string($descuento),
 							'Articulo_Proforma_Exento'=>mysql_real_escape_string($exento),
-							'Articulo_Proforma_Precio_Unitario'=>mysql_real_escape_string($precio),	
+							'Articulo_Proforma_Precio_Unitario'=>mysql_real_escape_string($precio),
+							'Articulo_Proforma_Precio_Final'=>mysql_real_escape_string($precioFinal),	
 							'Articulo_Proforma_Imagen'=>mysql_real_escape_string($imagen),
 							'TB_10_Proforma_Proforma_Consecutivo'=>mysql_real_escape_string($consecutivo),
 							'TB_10_Proforma_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
@@ -102,6 +103,10 @@ Class proforma_m extends CI_Model
 		$costo_total = 0;
 		$iva = 0;
 		$costo_sin_iva = 0;
+		$retencion = 0;
+		$this->load->model('articulo','',TRUE);
+		//Traemos el array de configuracion para obtener el porcentaje
+		$c_array = $this->getConfgArray();
 		
 		$head = $this->getProformasHeaders($consecutivo, $sucursal)[0];
 		if($articulos = $this->getArticulosProforma($consecutivo, $sucursal)){
@@ -110,12 +115,15 @@ Class proforma_m extends CI_Model
 				//Calculamos el precio total de los articulos
 				$precio_total_articulo = (($articulo->Articulo_Proforma_Precio_Unitario)-(($articulo->Articulo_Proforma_Precio_Unitario)*(($articulo->Articulo_Proforma_Descuento)/100)))*$articulo->Articulo_Proforma_Cantidad;
 				
+				$precio_articulo_final = $articulo->Articulo_Proforma_Precio_Final;
+				$precio_articulo_final = $precio_articulo_final * $articulo->Articulo_Proforma_Cantidad;
+				
 				//Calculamos los impuestos
-				//Traemos el array de configuracion para obtener el porcentaje
-				$c_array = $this->getConfgArray();
 				$isExento = $articulo->Articulo_Proforma_Exento;
 				if($isExento=='0'){
 					$costo_sin_iva += $precio_total_articulo/(1+(floatval($head->Proforma_Porcentaje_IVA)/100));
+					$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($c_array['iva'])/100));
+					$retencion += $precio_articulo_final - $precio_final_sin_iva;
 				}
 				else if($isExento=='1'){
 					$costo_sin_iva += $precio_total_articulo;
@@ -126,7 +134,15 @@ Class proforma_m extends CI_Model
 			$iva = $costo_total-$costo_sin_iva;
 		}
 		
-		return array('Proforma_Monto_Total'=>$costo_total, 'Proforma_Monto_IVA'=>$iva, 'Proforma_Monto_Sin_IVA'=>$costo_sin_iva);
+		$retencion -= $iva;
+		//Si aplica la retencion entonces modificamos los costos
+		if(!$c_array['aplicar_retencion']){
+			$retencion = 0;
+		}
+		
+		$costo_total += $retencion;
+		
+		return array('Proforma_Monto_Total'=>$costo_total, 'Proforma_Monto_IVA'=>$iva, 'Proforma_Monto_Sin_IVA'=>$costo_sin_iva, 'Proforma_Retencion'=>$retencion);
 	}	
 	
 	function getConfgArray()

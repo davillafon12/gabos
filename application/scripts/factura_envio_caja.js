@@ -79,7 +79,7 @@ function validarCampos(){
 function createJSON(){
 	invoiceItemsJSON=[]; //Limpiamos el array
 	lengthArray = getTamañoIndexArray();
-	for (var i = 0; i < lengthArray; i++) {
+	for (i = 0; i < lengthArray; i++) {
 		index = array_pos_rows[i]; //Obtenemos el index
 		j_ob = parseRowToJSON(index);
 		if(j_ob){invoiceItemsJSON.push(j_ob);}//Se verifica que sea un item real de la factura

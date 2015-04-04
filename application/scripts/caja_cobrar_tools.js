@@ -358,11 +358,12 @@ function enviarCobro(URL){
 
 function cambiarFactura(URL){
 	createJSON();
+	
 	$.ajax({
 		url : location.protocol+'//'+document.domain+URL,
 		type: "POST",		
 		async: false,
-		data: {'consecutivo':consecutivoActual,'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON)},				
+		data: {'consecutivo':consecutivoActual,'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON), 'token':token_factura_temporal},				
 		success: function(data, textStatus, jqXHR)
 		{},
 		error: function (jqXHR, textStatus, errorThrown)

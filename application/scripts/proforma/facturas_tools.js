@@ -296,8 +296,11 @@ function buscarArticulo(e, value, id){
 				return false;
 			}else{
 				if (articuloYaIngresado(codigo, id)&&codigo!='00'&&isFromAgregarCantidad) { //Si viene por primera vez
-					isFromAgregarCantidad=false;
-					agregarCantidadArticulosPopUp(id.replace("codigo_articulo_",""));
+					
+					if(!puedeRepetirProducto){
+						isFromAgregarCantidad=false;
+						agregarCantidadArticulosPopUp(id.replace("codigo_articulo_",""));
+					}
 				}
 				else if(isFromAgregarCantidad==false){
 					isFromAgregarCantidad=true;
@@ -319,7 +322,7 @@ function buscarArticulo(e, value, id){
 	
 	// 3 Verificamos si el articulo esta repetido, si no lo buscamos normal
 	
-	if(articuloYaIngresado(codigo, id)&&codigo!='00')
+	if(articuloYaIngresado(codigo, id)&&codigo!='00'&&!puedeRepetirProducto)
 	{
 		resetRowFields(id_row, false);
 		//Esto para que nos permita realizar cambios de articulo a la primera
@@ -738,46 +741,59 @@ function actualizaCostoTotalArticulo(id){
 }
 
 function actualizaCostosTotales(decimales_int){
-	//alert(porcentaje_iva);
-	//Reiniciamos los valores
 	costo_sin_IVA_factura = 0.0;
 	costo_total_factura = 0.0;
 	IVA_Factura = 0.0;
 	costo_cliente_final = 0.0;
-	//var costo_total_sin_iva_float = 0.0;
+	costo_retencion = 0.0;
 	
-	var table = document.getElementById("tabla_productos");
-	var rows = cantidadFilas(table);
-	for (var i = 0; i < rows; i++) 
+	table = document.getElementById("tabla_productos");
+	rows = cantidadFilas(table);
+	
+	//Recorremos la tabla
+	for (i = 0; i < rows; i++) 
 	{	
-		precio_unitario_articulo = getPrecioTotalRow(i+1);
-		precio_cliente_final_articulo = getPrecioTotalRowFINAL(i+1);
-		//costo_total_sin_iva_float = costo_total_sin_iva_float + getPrecioTotalRow(i+1);
-		
-		isExento = document.getElementById("producto_exento_"+(i+1)).value;
-		
-		costo_unitario_articulo_sin_IVA = 0.0;
-		
-		if(isExento==='0'){
-			costo_unitario_articulo_sin_IVA = precio_unitario_articulo/(1+porcentaje_iva);
-		}
-		else if(isExento==='1'){
-			costo_unitario_articulo_sin_IVA = precio_unitario_articulo;
-		}
-		
-		costo_sin_IVA_factura += costo_unitario_articulo_sin_IVA;
-		//IVA_Factura += IVA_Factura + (precio_unitario_articulo-costo_unitario_articulo_sin_IVA);
-		costo_total_factura += precio_unitario_articulo;
-		costo_cliente_final += precio_cliente_final_articulo;
+		if($("#descripcion_articulo_"+(i+1)).html().trim()===''){}
+		else{
+				//Obtenemos el precio total de la linea del producto
+				precio_unitario_articulo = getPrecioTotalRow(i+1);
+				//Obtenemos el precio de cliente final de la linea del producto
+				precio_cliente_final_articulo = getPrecioTotalRowFINAL(i+1);
+				//Obtenemos si el producto es exento de impuestos	
+				isExento = document.getElementById("producto_exento_"+(i+1)).value;
+				//Iniciamos la variable apra procesar el articulo sin IVA
+				costo_unitario_articulo_sin_IVA = 0.0;
+				
+				if(isExento==='0'){ //SI NO ES exento entonces saca el precio sin IVA
+					costo_unitario_articulo_sin_IVA = precio_unitario_articulo/(1+porcentaje_iva);			
+					//Sacamos el valor de los impuestos por RETENCION
+					precio_cliente_final_articulo_sin_iva = precio_cliente_final_articulo/(1+porcentaje_iva);
+					costo_retencion += precio_cliente_final_articulo-precio_cliente_final_articulo_sin_iva;
+				}
+				else if(isExento==='1'){ //SI ES exento entonces el precio sera el mismo
+					costo_unitario_articulo_sin_IVA = precio_unitario_articulo;
+				}
+				
+				//Sumamos todos los costos SIN IVA
+				costo_sin_IVA_factura += costo_unitario_articulo_sin_IVA;
+				//Sumamos el costo TOTAL de la factura
+				costo_total_factura += precio_unitario_articulo;
+				//Sacamos el total de un CLIENTE FINAL
+				costo_cliente_final += precio_cliente_final_articulo;					
+		}		
 	}
 	
 	moneda = document.getElementById("tipo_moneda").value;
 	if(moneda.indexOf('colone') != -1){
-		costo_cliente_final = costo_cliente_final - costo_total_factura;}
+		costo_cliente_final = costo_cliente_final - costo_total_factura;
+	}
 	else{
 		tipo_cambio_venta = document.getElementById("tipo_cambio_venta").value;
 		factor_tipo_moneda_float = parseFloat(tipo_cambio_venta);
 		costo_cliente_final = (costo_cliente_final/factor_tipo_moneda_float) - costo_total_factura;
+		
+		//Si es dolares, pasamos la retencion de colones a dolares
+		costo_retencion = costo_retencion/factor_tipo_moneda_float;
 	}
 	
 	
@@ -786,27 +802,48 @@ function actualizaCostosTotales(decimales_int){
 	
 	IVA_Factura = costo_total_factura-costo_sin_IVA_factura;
 	
+	//A este punto el costo de la retencion va con todos los impuestos del cliente final
+	//Ahora le quitamos los impuestos del cliente afiliado para onbtener la retencion real
+	costo_retencion -= IVA_Factura;
+	
 	if(clienteEsExento){
 		costo_total_factura -= IVA_Factura;
-		IVA_Factura = 0;}//Si el cliente es exento de impuestos
+		IVA_Factura = 0;
+		costo_retencion = 0;
+	}//Si el cliente es exento de impuestos
 	
+	if(!aplicarRetencionHacienda){
+		//SI NO APLICA RETENCION
+		costo_retencion = 0;
+	}
+	
+	
+	//Calculamos la ganancia y le quitamos la retencion
+	costo_cliente_final -= costo_retencion;
 	costo_cliente_final = costo_cliente_final.toFixed(decimales_int);
+	
 	costo_sin_IVA_factura = costo_sin_IVA_factura.toFixed(decimales_int);
 	IVA_Factura = IVA_Factura.toFixed(decimales_int);
+	
+	//Al costo total le agregamos la retencion
+	costo_total_factura += costo_retencion;
 	costo_total_factura = costo_total_factura.toFixed(decimales_int);
+	
+	costo_retencion = costo_retencion.toFixed(decimales_int);
 	
 	//Como el toFixed devuelve un string debemos convertirlos de nuevo a float para formatear
 	costo_cliente_final = parseFloat(costo_cliente_final);
 	costo_sin_IVA_factura = parseFloat(costo_sin_IVA_factura);
 	IVA_Factura = parseFloat(IVA_Factura);
 	costo_total_factura = parseFloat(costo_total_factura);
+	costo_retencion = parseFloat(costo_retencion);
 	
 	//Formateamos
-	costo_cliente_final = costo_cliente_final.format(2, 3, '.', ',');
-	costo_sin_IVA_factura = costo_sin_IVA_factura.format(2, 3, '.', ',');
-	IVA_Factura = IVA_Factura.format(2, 3, '.', ',');
-	costo_total_factura = costo_total_factura.format(2, 3, '.', ',');
-	
+	costo_cliente_final = costo_cliente_final.format(decimales_int, 3, '.', ',');
+	costo_sin_IVA_factura = costo_sin_IVA_factura.format(decimales_int, 3, '.', ',');
+	IVA_Factura = IVA_Factura.format(decimales_int, 3, '.', ',');
+	costo_total_factura = costo_total_factura.format(decimales_int, 3, '.', ',');
+	costo_retencion = costo_retencion.format(decimales_int, 3, '.', ',');
 	
 	
 	
@@ -814,6 +851,7 @@ function actualizaCostosTotales(decimales_int){
 	$("#ganancia").val(costo_cliente_final);
 	$("#costo").val(costo_sin_IVA_factura);
 	$("#iva").val(IVA_Factura);
+	$("#retencion").val(costo_retencion);
 	$("#costo_total").val(costo_total_factura);
 	
 	/*alert(typeof costo_cliente_final);

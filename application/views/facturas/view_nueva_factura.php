@@ -67,6 +67,7 @@ PARA:
 		<script>
 			var token_factura_temporal = '<?php echo $token_factura_temp;?>';
 			var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
+			var aplicarRetencionHacienda = <?php echo $this->configuracion->getAplicarRetencion();?>
 		</script>
 	</head>
 	<body onload="setMainValues()" oncopy="return false" oncut="return false" onpaste="return false">
@@ -115,7 +116,8 @@ PARA:
 					<p class="contact"><label for="cedula">Cédula:</label></p>
 				</td>
 				<td>
-					<input id="cedula" class="input_uno" placeholder="Inserte el numero de cédula" name="cliente" type="text" onkeyup="buscarCedula(event);" required="" tabindex='1'>					
+					<input id="fakecedula" class="input_uno" placeholder="Inserte el numero de cédula" name="fakecliente" type="hidden" onkeyup="buscarCedula(event);" required="" tabindex='1' autocomplete="">	
+					<input id="cedula" class="input_uno" placeholder="Inserte el numero de cédula" name="cliente" type="text" onkeyup="buscarCedula(event);" required="" tabindex='1' autocomplete="">					
 					<script>document.getElementById('cedula').focus();</script>
 				</td>
 				<td>
@@ -261,6 +263,15 @@ PARA:
 					<td>
 						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
 						<input id="iva" class="input_dos" autocomplete="off" name="iva" type="text" disabled> 
+					</td>
+					</tr>
+					<tr>
+					<td>
+						<p class="contact"><label for="retencion">Retención:</label></p> 
+					</td>
+					<td>
+						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
+						<input id="retencion" class="input_dos" autocomplete="off" name="retencion" type="text" disabled> 
 					</td>
 					</tr>
 					<tr>
