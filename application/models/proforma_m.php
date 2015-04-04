@@ -217,6 +217,7 @@ Class proforma_m extends CI_Model
 				Proforma_Monto_Total as total,
 				Proforma_Monto_Sin_IVA as subtotal,
 				Proforma_Monto_IVA as total_iva,
+				Proforma_Retencion as retencion,
 				Proforma_Observaciones as observaciones,
 				date_format(Proforma_Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha,
 				Proforma_Moneda as moneda,

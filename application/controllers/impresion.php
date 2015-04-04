@@ -1237,11 +1237,13 @@ class impresion extends CI_Controller {
 				$subtotal = $encabezado->subtotal;
 				$totalIVA = $encabezado->total_iva;
 				$total = $encabezado->total;
+				$retencion = $encabezado->retencion;
 				//Valoramos si es en dolares
 				if($encabezado->moneda=='dolares'){
 					$subtotal = $subtotal/$encabezado->cambio;
 					$totalIVA = $totalIVA/$encabezado->cambio;
 					$total = $total/$encabezado->cambio;
+					$retencion = $retencion/$encabezado->cambio;
 				}
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 240);	
@@ -1251,6 +1253,9 @@ class impresion extends CI_Controller {
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
 				$pdf->SetXY(131, 254);	
+				$pdf->Cell(41,7,'Retención:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($retencion),1,0,'R');
+				$pdf->SetXY(131, 261);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
 			break;			
@@ -1295,11 +1300,13 @@ class impresion extends CI_Controller {
 				$subtotal = $encabezado->subtotal;
 				$totalIVA = $encabezado->total_iva;
 				$total = $encabezado->total;
+				$retencion = $encabezado->retencion;
 				//Valoramos si es en dolares
 				if($encabezado->moneda=='dolares'){
 					$subtotal = $subtotal/$encabezado->cambio;
 					$totalIVA = $totalIVA/$encabezado->cambio;
 					$total = $total/$encabezado->cambio;
+					$retencion = $retencion/$encabezado->cambio;
 				}
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 240);	
@@ -1309,6 +1316,9 @@ class impresion extends CI_Controller {
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
 				$pdf->SetXY(131, 254);	
+				$pdf->Cell(41,7,'Retención:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($retencion),1,0,'R');
+				$pdf->SetXY(131, 261);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
 			break;

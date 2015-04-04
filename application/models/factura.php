@@ -254,6 +254,7 @@ Class factura extends CI_Model
 				Factura_Monto_Total AS total,
 				Factura_Monto_Sin_IVA AS subtotal,
 				Factura_Monto_IVA as total_iva,
+				Factura_Retencion as retencion,
 				Factura_Tipo_Pago AS tipo, 
 				Factura_Moneda AS moneda, 
 				Factura_tipo_cambio AS cambio, 

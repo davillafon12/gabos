@@ -282,6 +282,7 @@ function setEncabezadoFactura(facturaHEAD){
 	total = parseFloat(facturaHEAD[0].total);
 	iva = parseFloat(facturaHEAD[0].iva);
 	costo = parseFloat(facturaHEAD[0].costo);
+	retencion = parseFloat(facturaHEAD[0].retencion);
 	
 	if(tipo_moneda==='colones'){
 		$(".tipo_moneda_display").html("₡");
@@ -290,12 +291,13 @@ function setEncabezadoFactura(facturaHEAD){
 		total = total / tipo_cambio;
 		iva = iva / tipo_cambio;
 		costo = costo / tipo_cambio;
+		retencion = retencion / tipo_cambio;
 	}	
 	
 	$("#costo_total").val(total.format(decimales, 3, '.', ','));
 	$("#iva").val(iva.format(decimales, 3, '.', ','));
 	$("#costo").val(costo.format(decimales, 3, '.', ','));
-	
+	$("#retencion").val(retencion.format(decimales, 3, '.', ','));
 	
 }
 
@@ -395,9 +397,9 @@ function actualizaCostoTotalArticulo(id){
 }
 
 // Para el tamaño del windows open
-var anchoImpresion = 290;
-var alturaImpresion = 400;
-var tipoImpresion = 't';
+var anchoImpresion = 1024;
+var alturaImpresion = 768;
+var tipoImpresion = 'c';
 
 function cambiarTipoImpresion(tipo){
 	tipoImpresion = tipo;
@@ -422,13 +424,13 @@ function imprimir(){
 		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
 		return false;
 	}
-	
+	//window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i=c','Impresion de Proformas','width=1024,height=768,resizable=no,toolbar=no,location=no,menubar=no');
 	if(tipoImpresion==='t'){
 		//Impresion termica
-		window.open(servidorImpresion+'/index.html?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(servidorImpresion+'/index.html?t='+token+'&d=p&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Proformas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
-		window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=p&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}
 }
 

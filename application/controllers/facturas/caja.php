@@ -151,6 +151,7 @@ class caja extends CI_Controller {
 					$facturaHEAD['moneda']=$row->Factura_Moneda;
 					$facturaHEAD['total']=$row->Factura_Monto_Total;
 					$facturaHEAD['iva']=$row->Factura_Monto_IVA;
+					$facturaHEAD['retencion']=$row->Factura_Retencion;
 					$facturaHEAD['costo']=$row->Factura_Monto_Sin_IVA;
 					$facturaHEAD['observaciones']=$row->Factura_Observaciones;
 					$facturaHEAD['ivapor']=$row->Factura_porcentaje_iva;
@@ -739,7 +740,12 @@ class caja extends CI_Controller {
 							$facturaHEAD['costo']=$row->Proforma_Monto_Sin_IVA;
 							$facturaHEAD['observaciones']=$row->Proforma_Observaciones;
 							$facturaHEAD['ivapor']=$row->Proforma_Porcentaje_IVA;
-							$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;											
+							$facturaHEAD['retencion']=$row->Proforma_Retencion;
+							$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;	
+							
+							$facturaHEAD['sucursal']= $data['Sucursal_Codigo'];
+							$facturaHEAD['servidor_impresion']= $this->configuracion->getServidorImpresion();
+							$facturaHEAD['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");										
 					}
 				}else{
 					$facturaHEAD['status']='error';
