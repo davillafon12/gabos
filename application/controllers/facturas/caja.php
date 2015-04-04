@@ -666,21 +666,15 @@ class caja extends CI_Controller {
 	//////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
 	
-	function getProformaHeaders(){
-		//var_dump($_POST);
-		$myfile = fopen("application/logs/cambiarFactura.txt", "w");
-		fwrite($myfile, '');
-		fclose($myfile);
+	function getProformaHeaders(){		
 		$facturaHEAD['status']='error';
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
 			include '/../get_session_data.php'; 
-			//header('Content-Type: application/json');	
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
 				if($facturaHEADS = $this->proforma_m->getProformasHeaders($consecutivo, $data['Sucursal_Codigo'])){
-					//var_dump($consecutivo);
-					//echo "crear array";
+					
 					foreach($facturaHEADS as $row){
 						if($row->Proforma_Estado=='pendiente'){	
 							$fecha_proforma = $row->Proforma_Fecha_Hora;
@@ -704,40 +698,133 @@ class caja extends CI_Controller {
 								$facturaHEAD['observaciones']=$row->Proforma_Observaciones;
 								$facturaHEAD['ivapor']=$row->Proforma_Porcentaje_IVA;
 								$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;
-								//echo json_encode($facturaHEAD);
+								
 							}else{
 								$facturaHEAD['status']='error';
 								$facturaHEAD['error']='22';
-								//Factura vencida
+								
 							}							
-							//file_put_contents('application/logs/dias.txt', "Proforma: $fecha_proforma\n", FILE_APPEND);
-							//file_put_contents('application/logs/dias.txt', "Actual: $Current_datetime\n", FILE_APPEND);
+							
 						}else if($row->Proforma_Estado=='cobrada'){
 							$facturaHEAD['status']='error';
 							$facturaHEAD['error']='21';
-							//echo json_encode($facturaHEAD); //Factura ya cobrada
+							//Factura ya cobrada
 						}						
 					}
 				}else{
 					$facturaHEAD['status']='error';
 					$facturaHEAD['error']='10';
-					//echo json_encode($facturaHEAD); //Error para no se pudo cargar los headers
+					 //Error para no se pudo cargar los headers
 				}
 			}else{
 				$facturaHEAD['status']='error';
 				$facturaHEAD['error']='20'; //Error de no existe proforma
 			}
 		}else{
-			//echo "Entro a 13";
+			
 			$facturaHEAD['status']='error';
 			$facturaHEAD['error']='13'; //Error de no leer encabezado del URL
-			//echo json_encode($facturaHEAD);
+			
+		}
+		//echo "Entro a 13";
+		echo json_encode($facturaHEAD);
+	}
+	
+	function getProformaHeadersConsulta(){		
+		$facturaHEAD['status']='error';
+		$facturaHEAD['error']='14'; //No se logro procesar la factura
+		if(isset($_POST['consecutivo'])){
+			$consecutivo=$_POST['consecutivo'];
+			include '/../get_session_data.php'; 
+			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
+				if($facturaHEADS = $this->proforma_m->getProformasHeaders($consecutivo, $data['Sucursal_Codigo'])){
+					
+					foreach($facturaHEADS as $row){							
+							$facturaHEAD['status']='success';				
+							$facturaHEAD['cedula']=$row->TB_03_Cliente_Cliente_Cedula;								
+							$ClienteArray = $this->cliente->getNombreCliente($facturaHEAD['cedula']);
+							$NombreCliente = $ClienteArray['nombre'];								
+							$facturaHEAD['nombre']= $NombreCliente;
+							$facturaHEAD['moneda']=$row->Proforma_Moneda;
+							$facturaHEAD['total']=$row->Proforma_Monto_Total;
+							$facturaHEAD['iva']=$row->Proforma_Monto_IVA;
+							$facturaHEAD['costo']=$row->Proforma_Monto_Sin_IVA;
+							$facturaHEAD['observaciones']=$row->Proforma_Observaciones;
+							$facturaHEAD['ivapor']=$row->Proforma_Porcentaje_IVA;
+							$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;											
+					}
+				}else{
+					$facturaHEAD['status']='error';
+					$facturaHEAD['error']='10';
+					 //Error para no se pudo cargar los headers
+				}
+			}else{
+				$facturaHEAD['status']='error';
+				$facturaHEAD['error']='20'; //Error de no existe proforma
+			}
+		}else{
+			
+			$facturaHEAD['status']='error';
+			$facturaHEAD['error']='13'; //Error de no leer encabezado del URL
+			
 		}
 		//echo "Entro a 13";
 		echo json_encode($facturaHEAD);
 	}
  
 	function getArticulosProforma(){
+		$facturaBODY['status']='error';
+		$facturaBODY['error']='17'; //No se logro procesar ls productos
+		if(isset($_POST['consecutivo'])){
+			$consecutivo=$_POST['consecutivo'];
+			include '/../get_session_data.php'; 
+			//header('Content-Type: application/json');			
+			if($facturaPRODUCTS = $this->proforma_m->getArticulosProforma($consecutivo, $data['Sucursal_Codigo'])){
+				//var_dump($consecutivo);
+				//echo "crear array";
+				$facturaBODY['status']='success';
+				$articulos=[];
+				foreach($facturaPRODUCTS as $row){
+					$articulo=[]; //Limpiamos el array
+					$articulo['codigo']=$row->Articulo_Proforma_Codigo;
+					$articulo['descripcion']=$row->Articulo_Proforma_Descripcion;
+					$articulo['cantidad']=$row->Articulo_Proforma_Cantidad;
+					$articulo['descuento']=$row->Articulo_Proforma_Descuento;
+					$articulo['exento']=$row->Articulo_Proforma_Exento;
+					$articulo['precio']=$row->Articulo_Proforma_Precio_Unitario;
+					
+					//Procesamos la imagen
+					$articulo['imagen'] = $row->Articulo_Proforma_Imagen;				
+					$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$articulo['imagen'].'.jpg';
+					//return $ruta_a_preguntar;
+					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00';}					
+					if($inventario = $this->articulo->inventarioActual($articulo['codigo'], $data['Sucursal_Codigo'])){
+						$articulo['bodega']=$inventario;
+					}else{
+						$articulo['bodega']='0';
+					}
+					if($articulo['codigo']=='00'){
+						$articulo['bodega']='1000';
+					}
+					array_push($articulos, $articulo);
+				}
+				$facturaBODY['productos']=$articulos;
+			}else{
+				$facturaBODY['status']='error';
+				$facturaBODY['error']='15';
+				//echo json_encode($facturaHEAD); //Error para no se pudo cargar los productos
+			}
+		}else{
+			//echo "Entro a 13";
+			$facturaBODY['status']='error';
+			$facturaBODY['error']='16'; //Error de no leer encabezado del URL
+			//echo json_encode($facturaHEAD);
+		}
+		//echo "Entro a 13";
+		echo json_encode($facturaBODY);
+	}
+	
+	function getArticulosProformaConsulta(){
 		$facturaBODY['status']='error';
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){

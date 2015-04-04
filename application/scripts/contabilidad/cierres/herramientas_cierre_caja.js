@@ -208,3 +208,116 @@ function isCantidadValida(valor){
 	valor = valor.replace(',','.');	
 	return isNumber(valor);
 }
+
+
+function realizarCierreCaja(){
+	cantidad = $("#input_retiro_parcial").html().replace("₡", "").trim();
+	if(isCantidadValida(cantidad)){
+			$.prompt("¡Esto realizará un cierre de caja y no puede deshacerse!", {
+							title: "¿Esta seguro que desea realizar este cierre de caja?",
+							buttons: { "Si, estoy seguro": true, "Cancelar": false },
+							submit:function(e,v,m,f){
+														if(v){
+															procesarCierre(cantidad);
+														}
+													}
+						});	
+	}
+}
+
+function procesarCierre(cantidad){
+	tipo_cambio = $("#tipo_cambio_dolar").val();
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/contabilidad/cierre/crearCierre',
+		type: "POST",		
+		data: {'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal, 'base':$("#base_caja").val()},				
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				informacion = $.parseJSON('[' + data.trim() + ']');
+				if(informacion[0].status==="error"){
+					manejarErrores(informacion[0].error);
+				}else if(informacion[0].status==="success"){
+					notyMsg('¡Se realizó el cierre de caja con éxito!', 'success');					
+					window.open(location.protocol+'//'+document.domain+'/impresion?t='+informacion[0].token+'&d=cc&n='+informacion[0].cierre+'&s='+informacion[0].sucursal+'&i=c&server='+document.domain+'&protocol='+location.protocol,'Impresion de Cieere de Caja','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+					window.location.replace(location.protocol+'//'+document.domain+"/home");
+				}
+			}catch(e){				
+				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{}
+	});
+}
+
+function manejarErrores(tipo){
+	switch(tipo){
+		case '1' :
+			notyMsg('¡No se pudo realizar el cierre de caja, contacte al administrador!', 'error');
+		break;
+		case '2' :
+			notyMsg('¡La URL esta incompleta, contacte al administrador!', 'error');
+		break;
+		case '3' :
+			notyMsg('¡La cantidad ingresada no es válida!', 'error');
+		break;
+		case '4' :
+			notyMsg('¡No se puede realizar el cierre, hay facturas pendientes de cobro!', 'error');
+		break;
+	}
+}
+
+function notyMsg(Mensaje, tipo){
+	n = noty({
+			   layout: 'topRight',
+			   text: Mensaje,
+			   type: tipo,
+			   timeout: 4000
+			});
+}
+
+function getJSONColones(){
+	monedas = [];
+	//Procesamos billetes
+	for(i = 0; i<denBilletes.length; i++){
+		cantidad = $("#cant_"+denBilletes[i]).val();
+		monedas.push({'denominacion':denBilletes[i],'cantidad':cantidad});
+	}
+	//Procesamos monedas
+	for(i = 0; i<denMonedas.length; i++){
+		cantidad = $("#cant_"+denMonedas[i]).val();
+		monedas.push({'denominacion':denMonedas[i],'cantidad':cantidad});
+	}
+	return JSON.stringify(monedas);
+}
+
+function getJSONDolares(){
+	dolares = [];
+	//Procesamos billetes
+	for(i = 0; i<denDolares.length; i++){
+		cantidad = $("#cant_do_"+denDolares[i]).val();
+		dolares.push({'denominacion':denDolares[i],'cantidad':cantidad});
+	}
+	return JSON.stringify(dolares);	
+}
+
+
+// Para el tamaño del windows open
+var anchoImpresion = 1024;
+var alturaImpresion = 768;
+var tipoImpresion = 'c';
+
+function cambiarTipoImpresion(tipo){
+	tipoImpresion = tipo;
+	switch(tipo){
+		case 't':
+			anchoImpresion = 290;
+			alturaImpresion = 400;
+		break;
+		case 'c':
+			anchoImpresion = 1024;
+			alturaImpresion = 768;
+		break;
+	}
+}

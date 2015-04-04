@@ -142,7 +142,7 @@ function manejarErrores(tipo){
 			notyMsg('¡La URL esta incompleta, contacte al administrador!', 'error');
 		break;
 		case '3' :
-			notyMsg('¡La cnatidad ingresada no es válida!', 'error');
+			notyMsg('¡La cantidad ingresada no es válida!', 'error');
 		break;
 	}
 }

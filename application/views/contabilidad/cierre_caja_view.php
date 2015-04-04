@@ -40,6 +40,9 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_cierre_caja.css'); ?>">
 		<!--SCRIPT DE HERRAMIENTAS-->		
 		<script src="<?php echo base_url('application/scripts/contabilidad/cierres/herramientas_cierre_caja.js'); ?>" type="text/javascript"></script>
+		<script>
+			 var fechaReal = '<?php echo $fechaRealActual?>';
+		</script>
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
@@ -192,9 +195,9 @@ PARA:
 									<td class="alg-right"><p class="parrafo" id="total_do_10">$0,00</p></td>
 								</tr>
 								<tr>
-									<td><p class="parrafo">$ 1</p><input type="hidden" id="deno_do_1"></td>
-									<td><p class="parrafo"><input type="text" id="cant_do_1" class="input-deno alg-right" value="0" onkeyup="actualizarCantidadDolar(this.value, 1)" onclick="this.select()"></p></td>
-									<td class="alg-right"><p class="parrafo" id="total_do_1">$0,00</p></td>
+									<td  class="borde-abajo"><p class="parrafo">$ 1</p><input type="hidden" id="deno_do_1"></td>
+									<td  class="borde-abajo"><p class="parrafo"><input type="text" id="cant_do_1" class="input-deno alg-right" value="0" onkeyup="actualizarCantidadDolar(this.value, 1)" onclick="this.select()"></p></td>
+									<td class="alg-right borde-abajo"><p class="parrafo" id="total_do_1">$0,00</p></td>
 								</tr>
 								<tr>
 									<td colspan="2" class="alg-right"><p class="parrafo">Total:</p></td>
@@ -370,18 +373,14 @@ PARA:
 											}											
 										}
 									?>
-								</tr>
-									<!--<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalFacturasContado,2,",",".");?></p></td>
-									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalRecibosParciales,2,",",".");?></p></td>
-									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
-									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalCreditos,2,",",".");?></p></td>
-									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalNotasCredito['total'],2,",",".");?></p></td>
-									<td style='text-align: left;'><p class='parrafo'>₡<?php //echo number_format($totalNotasDebito['total'],2,",",".");?></p></td>
-								</tr>		-->						
+								</tr>					
 								<tr>
-									<td colspan="7" class="alg-right borde-arriba"></td>
+									<td colspan="4" class="alg-right borde-arriba"></td>
 								</tr>
+								<tr><td colspan="4"><hr></td></tr>
+								
 							</table>
+							<button class="boton_envio_cobro" id="boton_envio_cobro" onclick="realizarCierreCaja()">Realizar Cierre</button>
 						</td>						
 					</tr>
 				</table>

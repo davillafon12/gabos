@@ -34,6 +34,7 @@ class cierre extends CI_Controller {
 		$fechaHoraActual = date("Y-m-d : H:i:s", now()); //PARA USAR CON LA BASE DE DATOS
 		
 		$data['fechaActual'] = date('d-m-Y', now()); // PARA IMPRIMIR
+		$data['fechaRealActual'] = $fechaHoraActual; //Fecha que se manda a vista para procesar despues
 		$data['baseCaja'] = "30.000";
 		$data['tipo_cambio'] = $this->configuracion->getTipoCambioCompraDolar();
 		
@@ -266,6 +267,60 @@ class cierre extends CI_Controller {
 		}
 		
 		return $vendidoVendedores;
+	}
+	
+	function crearCierre(){
+			//'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal	
+			$retorno['status'] = 'error';
+			$retorno['error'] = '1'; //No se proceso la solicitud
+			if(isset($_POST['cantidadEfectivo'])&&isset($_POST['tipo_cambio'])&&isset($_POST['colones'])&&isset($_POST['dolares'])&&isset($_POST['fechaCierre'])&&isset($_POST['base'])){
+				$cantidad = trim($_POST['cantidadEfectivo']);
+				$cantidad = str_replace(".","",$cantidad);
+				$cantidad = str_replace(",",".",$cantidad);
+				$base = trim($_POST['base']);
+				$base = str_replace(".","",$base);
+				$base = str_replace(",",".",$base);
+				$tipo_cambio = $_POST['tipo_cambio'];
+				if(is_numeric($cantidad)&&is_numeric($tipo_cambio)&&is_numeric($base)){
+					$colones = json_decode($_POST['colones']);
+					$dolares = json_decode($_POST['dolares']);
+					include '/../get_session_data.php';
+					if(!$this->factura->getFacturasPendientes($data['Sucursal_Codigo'])){
+							
+							$cierre = $this->contabilidad->crearCierreCaja($tipo_cambio, $cantidad, $base, $_POST['fechaCierre'], $data['Sucursal_Codigo'], $data['Usuario_Codigo']);
+							
+							foreach($colones as $colon){
+								$tipo = 'moneda';
+								if($colon->denominacion>500){
+									$tipo = 'billete';						
+								}
+								$this->contabilidad->agregarDenominacionCierreCaja($colon->denominacion, $colon->cantidad, $tipo, 'colones', $cierre);					
+							}
+							
+							foreach($dolares as $dolar){
+								$this->contabilidad->agregarDenominacionCierreCaja($dolar->denominacion, $dolar->cantidad, 'billete', 'dolares', $cierre);					
+							}
+							
+							
+							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo un cierre de caja #$cierre Fecha: ".$_POST['fechaCierre'],$data['Sucursal_Codigo'],'cierre_caja');
+							
+							
+							$retorno['status'] = 'success';
+							unset($retorno['error']);
+							$retorno['cierre'] = $cierre;
+							$retorno['sucursal']= $data['Sucursal_Codigo'];
+							$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+							$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+					}else{
+						$retorno['error'] = '4'; //Aun hay facturas pendientes
+					}					
+				}else{
+					$retorno['error'] = '3'; //Cantidad no valida
+				}
+			}else{
+				$retorno['error'] = '2'; //URL mala
+			}
+			echo json_encode($retorno);	
 	}
 	
 }

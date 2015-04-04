@@ -91,9 +91,14 @@
 			<img class='icono' src=".$Ruta_Icono_Consultas." alt='Consultas' width='22' height='22'>
 			<a href='#' class='dir'>Consultas</a>	
 			<ul>
-				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>				
-				<li><a href='".$Ruta_Base."consulta/notasCredito'>Notas Crédito</a></li>
-				<li><a href='".$Ruta_Base."consulta/notasDebito'>Notas Débito</a></li>
+				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>	
+				<li><a href='".$Ruta_Base."consulta/proformas'>Proformas</a></li>			
+				<li><a href='#' class='dir'>Notas</a>
+					<ul>
+						<li class='first'><a href='".$Ruta_Base."consulta/notasCredito'>Crédito</a></li>
+						<li class='last'><a href='".$Ruta_Base."consulta/notasDebito'>Débito</a></li>
+					</ul>
+				</li>
 				<li><a href='#' class='dir'>Cierres</a>
 					<ul>
 						<li class='first'><a href='".$Ruta_Base."consulta/retiroParcial'>Retiro Parcial</a></li>

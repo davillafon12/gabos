@@ -19,6 +19,7 @@ class impresion extends CI_Controller {
 		$this->load->model('factura','',TRUE);
 		$this->load->model('contabilidad','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
+		$this->load->model('banco','',TRUE);
 		include 'get_session_data.php'; //Esto es para traer la informacion de la sesion
 		//Generamos el token de seguridad, el cual debe coincidir con el token de llegada
 		$this->tokenSeguridad = md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
@@ -327,6 +328,7 @@ class impresion extends CI_Controller {
 			nc = nota credito
 			nb = nota debito
 			t = traspaso
+			cc = cierre caja
 		*/
 		switch($_GET['d']){
 			case 'f':				
@@ -523,6 +525,62 @@ class impresion extends CI_Controller {
 								$this->traspasoPDF($empresa, $traspaso, $productos);
 							}
 						}			
+					}
+				}
+			break;
+			case 'cc':
+				if(isset($_GET['n'])&&isset($_GET['s'])){
+					$sucursal = $_GET['s'];
+					$consecutivo = $_GET['n'];
+					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+						if($cierre = $this->contabilidad->getCierreCaja($consecutivo, $sucursal)){
+							$fechaCierre = $cierre->fechaCruda;
+							//Obtener la fecha del cierre que esta antes de este cierre
+							$fechaCierreAnterior = $this->contabilidad->getFechaUltimoCierreCajaAntesDeCierreCaja($sucursal, $consecutivo);
+							
+							$facturas = $this->getPrimeraUltimaFactura($sucursal, $fechaCierre, $fechaCierreAnterior);
+		
+							$datos['primeraFactura'] = $facturas['primera'];
+							$datos['ultimaFactura'] = $facturas['ultima'];
+							
+							$retirosParciales = $this->getRetirosParcialesYTotal($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$datos['retirosParciales'] = $retirosParciales['retiros'];
+							$datos['totalRecibosParciales'] = $retirosParciales['total'];
+								
+							$datos['pagoDatafonos'] = $this->getPagosDatafonos($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$datos['pagoMixto'] = $this->obtenerPagosMixtos($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$datos['recibos'] = $this->obtenerRecibosDeDinero($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$datos['totalFacturasContado'] = $this->obtenerTotalFacturasContado($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$datos['totalCreditos'] = $this->obtenerTotalCreditos($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$datos['totalNotasCredito'] = $this->obtenerTotalesNotasCredito($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$datos['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$datos['vendedores'] = $this->obtenerVendidoPorCadaVendedor($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
+							$cierre->datos = $datos;
+							
+							if($billetes = $this->contabilidad->getDenominacionesCierreCajaPorTipoYMoneda($consecutivo, 'billete', 'colones')){
+								if($monedas = $this->contabilidad->getDenominacionesCierreCajaPorTipoYMoneda($consecutivo, 'moneda', 'colones')){
+									if($dolares = $this->contabilidad->getDenominacionesCierreCajaPorTipoYMoneda($consecutivo, 'billete', 'dolares')){
+										
+										/*echo "<pre>";
+										print_r($cierre);
+										print_r($billetes);
+										print_r($monedas);
+										print_r($dolares);
+										echo "</pre>";*/
+										$this->cierreCajaPDF($empresa, $cierre, $billetes, $monedas, $dolares);
+									}
+								}
+							}						
+						}	
 					}
 				}
 			break;
@@ -732,6 +790,226 @@ class impresion extends CI_Controller {
 		$pdf->Output();
 	}
 	
+	private function cierreCajaPDF($empresa, $cierre, $billetes, $monedas, $dolares){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		$pdf->AddPage();
+		$this->encabezadoDocumentoPDF('cc', $empresa[0], $cierre, $pdf);
+		$pdf->Line(10, 35, 200, 35);
+		$pdf->Text(12, 40, 'Primera Factura: '.$cierre->datos['primeraFactura']);
+		$pdf->Text(90, 40, 'Última Factura: '.$cierre->datos['ultimaFactura']);
+		$pdf->Text(163, 40, 'Base: '.$this->fn($cierre->base));
+		$pdf->Line(10, 42, 200, 42);
+		
+		//DENOMINACIONES
+		$pdf->SetFont('Arial','B',14);
+		$pdf->SetXY(10, 45);	
+		$pdf->Cell(190,5,'Efectivo',0,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(63.33,5,'Billetes',1,0,'C');
+		$pdf->Cell(63.33,5,'Monedas',1,0,'C');
+		$pdf->Cell(63.33,5,'Dolares',1,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',11);
+		$pdf->Cell(20,5,'Deno.',1,0,'C');
+		$pdf->Cell(18,5,'Cant.',1,0,'C');
+		$pdf->Cell(25.3,5,'Total',1,0,'C');
+		$pdf->Cell(20,5,'Deno.',1,0,'C');
+		$pdf->Cell(18,5,'Cant.',1,0,'C');
+		$pdf->Cell(25.3,5,'Total',1,0,'C');
+		$pdf->Cell(20,5,'Deno.',1,0,'C');
+		$pdf->Cell(18,5,'Cant.',1,0,'C');
+		$pdf->Cell(25.3,5,'Total',1,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',10);
+		foreach($billetes as $billete){
+			$total = $billete->denominacion * $billete->cantidad;
+			$pdf->Cell(20,5,$billete->denominacion,1,0,'C');
+			$pdf->Cell(18,5,$billete->cantidad,1,0,'C');
+			$pdf->Cell(25.3,5,$this->fn($total),1,0,'R');
+			$pdf->ln(5);
+		}
+		$pdf->SetXY(73.33, 60);
+		foreach($monedas as $moneda){
+			$total = $moneda->denominacion * $moneda->cantidad;
+			$pdf->Cell(20,5,$moneda->denominacion,1,0,'C');
+			$pdf->Cell(18,5,$moneda->cantidad,1,0,'C');
+			$pdf->Cell(25.3,5,$this->fn($total),1,0,'R');
+			$pdf->ln(5);
+			$pdf->SetX(73.33);
+		}
+		$pdf->SetXY(136.66, 60);
+		foreach($dolares as $dolar){
+			$total = $dolar->denominacion * $dolar->cantidad;
+			$pdf->Cell(20,5,$dolar->denominacion,1,0,'C');
+			$pdf->Cell(18,5,$dolar->cantidad,1,0,'C');
+			$pdf->Cell(25.3,5,$this->fn($total),1,0,'R');
+			$pdf->ln(5);
+			$pdf->SetX(136.66);
+		}
+		$pdf->Cell(63.33,5,'Tipo de Cambio: '.$this->fn($cierre->tipo),1,0,'R');
+		$pdf->ln(5);
+		$pdf->SetX(136.66);
+		$pdf->SetFont('Arial','B',11);
+		$pdf->Cell(63.33,5,'Total Conteo: '.$this->fn($cierre->conteo),1,0,'R');
+		
+		//Retiros parciales y datafonos
+		$pdf->SetFont('Arial','B',14);
+		$pdf->SetXY(10, 92);	
+		$pdf->Cell(95,5,'Retiros Parciales',0,0,'C');
+		$pdf->Cell(95,5,'Datáfonos',0,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',11);
+		$pdf->Cell(10,5,'#',1,0,'C');
+		$pdf->Cell(55,5,'Fecha y Hora',1,0,'C');
+		$pdf->Cell(25,5,'Total',1,0,'C');
+		$pdf->Cell(10,5,'',0,0,'C');
+		$pdf->Cell(15,5,'Banco',1,0,'C');
+		$pdf->Cell(25,5,'Comisión',1,0,'C');
+		$pdf->Cell(25,5,'Retención',1,0,'C');
+		$pdf->Cell(25,5,'Total',1,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',10);
+			
+		if(sizeOf($cierre->datos['retirosParciales'])==0){
+			$pdf->Cell(90,5,'No hay retiros parciales. . .',1,0,'C');			
+			$pdf->ln(5);
+		}else{
+			foreach($cierre->datos['retirosParciales'] as $retiroP){
+				$pdf->Cell(10,5,$retiroP->Id,0,0,'C');
+				$pdf->Cell(55,5,$retiroP->Fecha_Hora,0,0,'C');
+				$pdf->Cell(25,5,$this->fn($retiroP->Monto),0,0,'R');
+				$pdf->ln(5);
+				$pdf->SetX(10);
+			}
+			$pdf->SetXY(10, 102);
+			for($i = 0; $i<8; $i++){
+				$pdf->Cell(10,5,'',1,0,'C');
+				$pdf->Cell(55,5,'',1,0,'C');
+				$pdf->Cell(25,5,'',1,0,'R');
+				$pdf->ln(5);
+				$pdf->SetX(10);
+			}
+		}
+		$pdf->Cell(65,5,'Total:',1,0,'R');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['totalRecibosParciales']),1,0,'R');
+		
+		$pdf->SetXY(110, 102);
+		if(sizeOf($cierre->datos['pagoDatafonos']['datafonos'])==0){
+			$pdf->Cell(90,5,'No hay pagos con datáfono. . .',1,0,'C');
+			$pdf->ln(5);
+			$pdf->SetX(110);
+		}else{
+			foreach($cierre->datos['pagoDatafonos']['datafonos'] as $datafono){
+				$pdf->Cell(15,5,$datafono->Banco_Nombre,1,0,'C');
+				$pdf->Cell(25,5,$this->fn($datafono->Total_Comision),1,0,'R');
+				$pdf->Cell(25,5,$this->fn($datafono->Total_Retencion),1,0,'R');
+				$pdf->Cell(25,5,$this->fn($datafono->Total),1,0,'R');
+				$pdf->ln(5);
+				$pdf->SetX(110);
+			}
+		}
+		$pdf->Cell(15,5,'Totales:',1,0,'C');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoDatafonos']['totalComision']),1,0,'R');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoDatafonos']['totalRetencion']),1,0,'R');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'R');
+				
+		//Pagos Mixtos y Recibos por dinero
+		$pdf->SetFont('Arial','B',14);
+		$pdf->SetXY(10, 149);	
+		$pdf->Cell(95,5,'Pagos Mixtos',0,0,'C');
+		$pdf->Cell(95,5,'Recibos Por Dinero',0,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',11);
+		$pdf->Cell(40,5,'Cant. Facturas',1,0,'C');
+		$pdf->Cell(25,5,'Efectivo',1,0,'C');
+		$pdf->Cell(25,5,'Tarjeta',1,0,'C');
+		$pdf->Cell(10,5,'',0,0,'C');
+		$pdf->Cell(30,5,'Contado',1,0,'C');
+		$pdf->Cell(30,5,'Tarjeta',1,0,'C');
+		$pdf->Cell(30,5,'Depósito',1,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',10);
+		$pdf->Cell(40,5,$cierre->datos['pagoMixto']['cantidadFacturas'],1,0,'C');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['efectivo']),1,0,'R');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['tarjeta']),1,0,'R');
+		$pdf->Cell(10,5,'',0,0,'C');
+		$pdf->Cell(30,5,$this->fn($cierre->datos['recibos']['efectivo']),1,0,'R');
+		$pdf->Cell(30,5,$this->fn($cierre->datos['recibos']['tarjeta']),1,0,'R');
+		$pdf->Cell(30,5,$this->fn($cierre->datos['recibos']['deposito']),1,0,'R');
+		
+		//Otros totales
+		$pdf->SetFont('Arial','B',14);
+		$pdf->ln(8);
+		$pdf->Cell(190,5,'Otros Totales',0,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',11);
+		$pdf->Cell(40,5,'Facturas de Contado',1,0,'C');
+		$pdf->Cell(30,5,'Efectivo',1,0,'C');
+		$pdf->Cell(30,5,'Tarjetas',1,0,'C');
+		$pdf->Cell(30,5,'Créditos',1,0,'C');
+		$pdf->Cell(30,5,'Notas Crédito',1,0,'C');
+		$pdf->Cell(30,5,'Notas Débito',1,0,'C');
+		$pdf->ln(5);
+		$pdf->Cell(40,5,$this->fn($cierre->datos['totalFacturasContado']),1,0,'C');
+		$pdf->Cell(30,5,$this->fn($cierre->datos['totalRecibosParciales']),1,0,'C');
+		$pdf->Cell(30,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'C');
+		$pdf->Cell(30,5,$this->fn($cierre->datos['totalCreditos']),1,0,'C');
+		$pdf->Cell(30,5,$this->fn($cierre->datos['totalNotasCredito']['total']),1,0,'C');
+		$pdf->Cell(30,5,$this->fn($cierre->datos['totalNotasDebito']['total']),1,0,'C');
+		
+		//Vendedores
+		$pdf->SetFont('Arial','B',14);
+		$pdf->ln(8);
+		$pdf->Cell(190,5,'Vendedores',0,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',11);
+		$pdf->Cell(70,5,'Vendedor',1,0,'C');
+		$pdf->Cell(25,5,'Vendido',1,0,'C');
+		$pdf->Cell(70,5,'Vendedor',1,0,'C');
+		$pdf->Cell(25,5,'Vendido',1,0,'C');
+		$pdf->ln(5);
+		for($i = 0;$i<10;$i++){
+			$pdf->Cell(70,5,'',1,0,'C');
+			$pdf->Cell(25,5,'',1,0,'C');
+			$pdf->Cell(70,5,'',1,0,'C');
+			$pdf->Cell(25,5,'',1,0,'C');
+			$pdf->ln(5);
+		}
+		$pdf->SetXY(10, 195);
+		$contador = 1;			
+		foreach($cierre->datos['vendedores'] as $vendedor){
+			if($contador <= 10){
+				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
+				$pdf->Cell(25,5,$this->fn($vendedor[0]->total_vendido),0,0,'C');
+				$pdf->ln(5);
+			}
+			if($contador == 11){
+				$pdf->SetXY(105,195);
+			}
+			if($contador > 10){
+				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
+				$pdf->Cell(25,5,$this->fn($vendedor[0]->total_vendido),0,0,'C');
+				$pdf->ln(5);
+				$pdf->SetX(105);
+			}
+			$contador++;
+		}
+		
+		
+		//Realizado Por:
+		$pdf->SetFont('Arial','B',14);
+		$pdf->SetXY(80,260);
+		$pdf->Cell(120,5,'Realizado por: '.$cierre->usuario,0,0,'R');
+		$pdf->ln(10);
+		$pdf->SetX(80);
+		$pdf->Cell(120,5,'Firma: _______________________',0,0,'R');
+		
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
 	private function encabezadoDocumentoPDF($tipo, $empresa, $encabezado, &$pdf){
 		//var_dump($empresa);
 		$pdf->SetFont('Arial','B',14);
@@ -930,6 +1208,18 @@ class impresion extends CI_Controller {
 				$pdf->Text(152, 42, $encabezado->factura);
 				$pdf->Text(112, 49, 'Realizador:');
 				$pdf->Text(137, 49, $encabezado->usuario." - ".$encabezado->usuario_nombre);				
+			break;
+			case 'cc':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Cierre de Caja #'.$encabezado->consecutivo);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha);
+				
+				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+								
 			break;
 		}
 	}
@@ -1305,7 +1595,218 @@ class impresion extends CI_Controller {
 	}
 	
 	
+	
+	
+	
+	function getPrimeraUltimaFactura($sucursal, $fechaHoraActual, $fechaUltimoCierra){				
+		$primeraFactura = 0;
+		$ultimaFactura = 0;
+		
+		if($facturas = $this->contabilidad->getFacturasEntreRangoFechas($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){					
+			$contador = 1;
+			foreach($facturas as $factura){
+				if($contador == 1){
+					//Si es la primera factura la metemos en la variable de la primera
+					$primeraFactura = $factura->Factura_Consecutivo;
+					$contador++;
+				}
+				//Siempre actualizara el valor hasta llegar al final
+				$ultimaFactura = $factura->Factura_Consecutivo;				
+			}
+		}
+		return array("primera"=>$primeraFactura, "ultima"=>$ultimaFactura);
+	}
+	
+	function getRetirosParcialesYTotal($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		
+		if($retiros = $this->contabilidad->getRetirosParcialesRangoFechas($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			foreach($retiros as $ret){
+				$total = $total + $ret->Monto;
+			}
+		}
+		
+		return array("retiros" => $retiros, "total" => $total);
+	}
+	
+	function getPagosDatafonos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		if(!$bancos = $this->banco->getBancos()){
+			return array('datafonos' => array(), 'totalDatafonos' => 0, 'totalComision' => 0, 'totalRetencion' => 0);
+		}
+			
+		$totalPagosTarjeta = 0;
+		$totalComisionFinal = 0;
+		$totalRetencionFinal = 0;
+		$procentajeRetencion = $this->configuracion->getPorRetencionHaciendaTarjeta();
+		
+		for($count = 0; $count < sizeOf($bancos); $count++){
+			$totalComision = 0;
+			$totalRetencion = 0;
+			$total = 0;
+						
+			//Pagos con tarjeta en facturas
+			if($facturasTarjeta = $this->contabilidad->getFacturasPagasTarjetaRangoFechasYBanco($sucursal, $bancos[$count]->Banco_Codigo, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+				foreach($facturasTarjeta as $fac){
+					if($fac->Factura_Tipo_Pago == 'tarjeta'){
+						$totalPagado = $this->factura->getMontoTotalPago($sucursal, $fac->Factura_Consecutivo);
+						$porcentajeComision = $fac->Tarjeta_Comision_Banco;						
+					}else if($fac->Factura_Tipo_Pago == 'mixto'){
+						$totalPagado = $this->factura->getMontoPagoTarjetaMixto($sucursal, $fac->Factura_Consecutivo);
+						$porcentajeComision = $fac->Tarjeta_Comision_Banco;
+					}					
+					$totalComision = $totalComision + ($totalPagado * ($porcentajeComision/100));
+					$totalRetencion = $totalRetencion + ($totalPagado * ($procentajeRetencion/100));
+					$total = $total + $totalPagado;
+				}				
+			}
+			
+			//Pagos con tarjeta en recibos
+			if($recibos = $this->contabilidad->getRecibosPagadosConTarjetaRangoFecha($sucursal, $bancos[$count]->Banco_Codigo, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+				foreach($recibos as $recibo){
+					$totalPagado = $recibo->Recibo_Cantidad;
+					$porcentajeComision = $recibo->Comision_Por;
+					$totalComision = $totalComision + ($totalPagado * ($porcentajeComision/100));	
+					$totalRetencion = $totalRetencion + ($totalPagado * ($procentajeRetencion/100));
+					$total = $total + $totalPagado;
+				}
+			}
+			
+			
+			$totalPagosTarjeta = $totalPagosTarjeta + $total;
+			$totalComisionFinal = $totalComisionFinal + $totalComision;
+			$totalRetencionFinal = $totalRetencionFinal + $totalRetencion;
+			$bancos[$count]->Total_Comision = $totalComision;
+			$bancos[$count]->Total_Retencion = $totalRetencion;
+			$bancos[$count]->Total = $total;					
+		}
+		return array('datafonos' => $bancos, 'totalDatafonos' => $totalPagosTarjeta, 'totalComision' => $totalComisionFinal, 'totalRetencion' => $totalRetencionFinal);
+	}
+	
+	function obtenerPagosMixtos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$pagos = $this->contabilidad->getPagosMixtosPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual);
+		$cantidadFacturas = 0;
+		$total = 0;
+		$tarjeta = 0;
+		$efectivo = 0;			
+		if($pagos->num_rows()!=0){
+			$cantidadFacturas = $pagos->num_rows();
+			$pagos = $pagos->result();			
+			foreach($pagos as $pago){
+				$total += $pago->monto;
+				$tarjeta += $pago->pago_tarjeta;
+			}			
+			$efectivo = $total - $tarjeta;
+		}		
+		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo);
+	}
+	
+	function obtenerRecibosDeDinero($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		$efectivo = 0;
+		$tarjeta = 0;
+		$deposito = 0;
+		if($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($recibos as $recibo){
+				$total += $recibo->Recibo_Cantidad;
+				switch($recibo->Tipo_Pago){
+					case 'contado':
+						$efectivo += $recibo->Recibo_Cantidad;
+					break;
+					case 'deposito':
+						$deposito += $recibo->Recibo_Cantidad;
+					break;
+					case 'tarjeta':
+						$tarjeta += $recibo->Recibo_Cantidad;
+					break;
+				}
+			}
+		}
+		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito);
+	}
+	
+	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasContadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
+	}
+	
+	function obtenerTotalCreditos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		//INCLUYE LOS APARTADOS!!!!!!!
+		$totalCredito = 0;
+		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
+		if($facturas = $this->contabilidad->getFacturasCreditoYApartadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($facturas as $factura){
+				$totalCredito += $factura->Factura_Monto_Total;
+			}
+		}
+		$totalCredito -= $totalAbonoApartado;
+		return $totalCredito;
+	}
+	
+	function obtenerTotalesNotasCredito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		$subtotal = 0;
+		$total_iva = 0;
+		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($notas as $nota){
+				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $sucursal)){
+					foreach($notaCreditoBody as $art){
+						$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
+						$total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($notaCreditoHead[0]->iva/100));
+						$subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($notaCreditoHead[0]->iva/100)));
+					}
+				}
+			}
+		}
+		return array('total'=>$total, 'subtotal'=>$subtotal, 'iva'=>$total_iva);		
+	}
+	
+	function obtenerTotalesNotasDebito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		$subtotal = 0;
+		$total_iva = 0;
+		if($notas = $this->contabilidad->getNotaDebitoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+			foreach($notas as $nota){
+				if($notaDebitoBody = $this->contabilidad->getProductosNotaDebito($nota->Consecutivo, $sucursal)){
+					foreach($notaDebitoBody as $art){
+						$total += ($art->precio * $art->cantidad);
+						$total_iva += (($art->precio * $art->cantidad) * ($nota->Impuesto_Porcentaje/100));
+						$subtotal += (($art->precio * $art->cantidad) - (($art->precio * $art->cantidad) * ($nota->Impuesto_Porcentaje/100)));
+					}
+				}
+			}
+		}
+		return array('total'=>$total, 'subtotal'=>$subtotal, 'iva'=>$total_iva);		
+	}
+	
+	function obtenerVendidoPorCadaVendedor($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+				
+		$vendidoVendedores = array();
+		
+		if($vendedores = $this->user->getVendedores($sucursal)){
+			foreach($vendedores as $vendedor){
+				if($vendido = $this->contabilidad->getVendidoPorVendedor($vendedor->Factura_Vendedor_Codigo, $sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+					array_push($vendidoVendedores, $vendido);
+				}
+			}
+		}
+		
+		return $vendidoVendedores;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }// FIN DE LA CLASE
+
 
 
 

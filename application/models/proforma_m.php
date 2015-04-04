@@ -316,6 +316,58 @@ Class proforma_m extends CI_Model
 		$this->db->update('TB_10_Proforma' ,$data);		
 	}
 	
+	function getProformasFiltradas($cliente, $desde, $hasta, $sucursal){
+		$this->db->select("Proforma_Consecutivo as consecutivo,
+		                   Proforma_Monto_Total as total,
+						   Proforma_Nombre_Cliente as cliente,
+						   date_format(Proforma_Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha", false);
+		$this->db->from('tb_10_proforma');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->setFiltradoCliente($cliente);
+		$this->setFiltradoFechaDesde($desde);
+		$this->setFiltradoFechaHasta($hasta);
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    return $query->result();			
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function setFiltradoCliente($cliente){
+		if(trim($cliente)!=''){
+			$this->db->where('TB_03_Cliente_Cliente_Cedula', $cliente);
+		}
+	}
+	
+	function setFiltradoFechaDesde($fecha){
+		if(trim($fecha)!=''){
+			$fecha = $this->convertirFecha($fecha);
+			$this->db->where('Proforma_Fecha_Hora >=', $fecha);
+		}
+	}
+	
+	function setFiltradoFechaHasta($fecha){
+		if(trim($fecha)!=''){
+			$fecha = $this->convertirFecha($fecha);
+			$this->db->where('Proforma_Fecha_Hora <=', $fecha);
+		}
+	}
+	
+	function convertirFecha($fecha){		
+		if(trim($fecha)!=''){
+			$fecha = explode("/",$fecha);
+			$fecha = $fecha[0]."-".$fecha[1]."-".$fecha[2]." 00:00:00";
+			//echo $fecha;
+			date_default_timezone_set("America/Costa_Rica");
+			return date("Y-m-d : H:i:s", strtotime($fecha));
+		}		
+		return $fecha;
+	}
+	
 	
 }
 

@@ -568,6 +568,29 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
+	function getFechaUltimoCierreCajaAntesDeCierreCaja($sucursal, $consecutivo){
+		$this->db->where('Sucursal', $sucursal);
+		$this->db->from('tb_37_cierre_caja');
+		$query = $this->db->get();
+		if($query->num_rows()==0||$query->num_rows()==1) //Si tiene un cieere quiere decir que no tiene fecha anterior
+		{
+			//Si no hay cierres de caja devolvemos una fecha vieja para que agarre todas facturas
+			return strtotime('01-01-2000 00:00:00');
+		}
+		else
+		{			
+			$result = $query->result();
+			foreach($result as $row)
+			{ 
+					if($row->Id==$consecutivo){
+						break; //Antes de que cargue la fecha de el, rompemos el ciclo para que quede con la fecha del ultimo cierre antes de el
+					}
+					$fecha = $row->Fecha; 
+			}
+			return strtotime($fecha);
+		}
+	}
+	
 	function getFacturasEntreRangoFechas($sucursal, $inicio, $final){
 		$this->db->where('Factura_Fecha_Hora >', $inicio);
 		$this->db->where('Factura_Fecha_Hora <', $final);
@@ -1054,6 +1077,92 @@ Class contabilidad extends CI_Model
 			return date("Y-m-d : H:i:s", strtotime($fecha));
 		}		
 		return $fecha;
+	}
+	
+	
+	function crearCierreCaja($tipo_cambio, $conteo, $base, $fecha, $sucursal, $usuario){
+		$datos = array(
+										'Fecha'=>$fecha,
+										'Base'=>$base,
+										'Tipo_Cambio'=>$tipo_cambio,
+										'Total_Conteo'=>$conteo,
+										'Sucursal'=>$sucursal,
+										'Usuario'=>$usuario
+										);
+		$this->db->insert('tb_37_cierre_caja', $datos);
+		return $this->db->insert_id();
+	}
+	
+	function agregarDenominacionCierreCaja($denominacion, $cantidad, $tipo, $moneda, $cierre){
+		$datos = array(
+						'Denominacion' => $denominacion,
+						'Cantidad' => $cantidad,
+						'Tipo' => $tipo,
+						'Moneda' => $moneda,
+						'Cierre_Caja' => $cierre
+						);
+		$this->db->insert('tb_38_moneda_cierre_caja', $datos);
+	}
+	
+	function getCierreCaja($consecutivo, $sucursal){
+			$this->db->select("
+												tb_37_cierre_caja.Id as consecutivo,
+												date_format(tb_37_cierre_caja.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,
+												tb_37_cierre_caja.Fecha as fechaCruda,
+												tb_37_cierre_caja.Base as base,
+												tb_37_cierre_caja.Tipo_Cambio as tipo,
+												tb_37_cierre_caja.Total_Conteo as conteo,
+												CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario
+												", false);
+			$this->db->from("tb_37_cierre_caja");
+			$this->db->join("tb_01_usuario","tb_01_usuario.Usuario_Codigo = tb_37_cierre_caja.Usuario");
+			$this->db->where("Id", $consecutivo);
+			$this->db->where("Sucursal", $sucursal);
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+				return false;
+			}else{
+				return $query->result()[0];
+			}
+	}
+	
+	function getDenominacionesCierreCajaPorTipoYMoneda($cierre, $tipo, $moneda){
+		$this->db->select('Denominacion as denominacion, Cantidad as cantidad');
+		$this->db->from('tb_38_moneda_cierre_caja');
+		$this->db->where('Tipo',$tipo);
+		$this->db->where('Moneda',$moneda);
+		$this->db->where('Cierre_Caja',$cierre);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
+	
+	
+	function getCierresFiltrados($desde, $hasta, $sucursal){
+		$this->db->select("tb_37_cierre_caja.Id as consecutivo, 
+												date_format(tb_37_cierre_caja.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,
+												CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as cliente,
+												tb_37_cierre_caja.Total_Conteo as total,
+												tb_37_cierre_caja.Tipo_Cambio as tipo,
+												tb_37_cierre_caja.Base as base", false);
+		$this->db->from("tb_37_cierre_caja");
+		$this->db->join("tb_01_usuario","tb_01_usuario.Usuario_Codigo = tb_37_cierre_caja.Usuario");
+		$this->db->where("tb_37_cierre_caja.Sucursal", $sucursal);
+		$this->setFiltradoFechaDesde($desde, "tb_37_cierre_caja.Fecha");
+		$this->setFiltradoFechaHasta($hasta, "tb_37_cierre_caja.Fecha");
+		$this->db->order_by("tb_37_cierre_caja.Id", "desc"); 
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    return $query->result();			
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 }
