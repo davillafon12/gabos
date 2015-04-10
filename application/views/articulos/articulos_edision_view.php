@@ -224,7 +224,7 @@ PARA:
 				</fieldset>
 				<div class="divButton">			
 					<input class="boton" name="submit" value="Actualizar" type="submit">
-					<a class="boton_a" href='<?php echo base_url('home')?>' class='boton_volver'>Volver</a>
+					<a class="boton_a" href='<?php echo base_url('articulos/editar')?>' class='boton_volver'>Volver</a>
 				</div>
 			</form>
 			</div><!-- contenedor -->
