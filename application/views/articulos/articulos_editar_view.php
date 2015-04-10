@@ -80,10 +80,10 @@ PARA:
                             Costo
                         </th>
                         <th>
-                            Precio Afiliado 
+                            Precio No Afiliado 
                         </th>
                         <th>
-                            Precio No Afiliado
+                            Precio Afiliado
                         </th>
 						<th >
                             Opciones
