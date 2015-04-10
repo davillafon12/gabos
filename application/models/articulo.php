@@ -335,7 +335,7 @@ Class articulo extends CI_Model
 				$articulo['descuento'] = $descuento;
 				$articulo['familia'] = $row->TB_05_Familia_Familia_Codigo;
 				$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
-				$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 2, $sucursal);
+				$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 1, $sucursal);
 				$articulo['imagen'] = $URL_IMAGEN;
 				$articulo['exento'] = $row->Articulo_Exento;
 								
