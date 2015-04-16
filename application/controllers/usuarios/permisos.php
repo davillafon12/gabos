@@ -44,6 +44,9 @@
 						'traspaso_individual_articulo' => 'Traspaso Individual Articulo',
 						'traspaso_articulos_masivo' => 'Traspaso Masivo Articulos',
 						'ver_autorizacion' => 'Ver Autorizaciones',
+						'consulta_normal' => 'Reportes Básicos', 
+						'consulta_administradores' => 'Reportes Administración', 
+						'consulta_cajas' => 'Reportes Cajas',
 						'ver_bitacora' => 'Ver Bitacora'						
 	);
 	
