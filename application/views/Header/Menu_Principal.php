@@ -105,9 +105,7 @@
 						<li class='last'><a href=".$Ruta_Base."consulta/cierreCaja>Cierre de Caja</a></li>
 					</ul>
 				</li>
-				<li><a href='".$Ruta_Base."consulta/recibos'>Recibos de Dinero</a></li>				
-				<li><a href='".$Ruta_Base."reportes/reportes/usuarios'>Usuarios</a></li>
-				<li class='last'><a href='".$Ruta_Base."reportes/reportes/articulos'>Articulos</a></li>
+				<li class='last'><a href='".$Ruta_Base."consulta/recibos'>Recibos de Dinero</a></li>				
 			</ul>
 		</li>
 		<li class='last_last'>
