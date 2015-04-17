@@ -1,6 +1,7 @@
 $(document).ready(function(){
 	setTable();
 	setTableTemporal();
+	setTableBodega();
 });
 
 function setTable(){
@@ -30,6 +31,31 @@ function setTable(){
 					],
 		 "drawCallback": function( settings ) {
 							$("#contenido").css( "display", 'block' );
+						}
+	});
+}
+
+function setTableBodega(){
+	$('#tabla_editar_bodega').dataTable({
+		"processing": true,
+		"serverSide": true,
+		"ajax": {
+			"url": location.protocol+'//'+document.domain+'/articulos/editar/obtenerArticulosBodegaTablaManejo',
+			"type": "POST",
+			"data": function ( d ) {
+					d.sucursal = $("#sucursalListaArticulosBodega").val();
+				}
+		},		
+		'oLanguage': {
+				'sUrl': location.protocol+'//'+document.domain+'/application/scripts/datatables/Spanish.txt'
+			},
+		"columns": [ 					   
+					   null,    
+					   null,
+					   null, 
+					],
+		 "drawCallback": function( settings ) {
+							$("#contenido-bodega").css( "display", 'block' );
 						}
 	});
 }

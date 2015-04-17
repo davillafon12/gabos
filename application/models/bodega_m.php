@@ -90,6 +90,63 @@ Class bodega_m extends CI_Model
 		$this->db->insert("TB_09_Compras", $datos);
 	}
 	
+	function obtenerArticulosBodegaParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal){
+		/*
+			SELECT 	Codigo AS codigo,
+					Descripcion AS descripcion,
+					Cantidad AS inventario
+			FROM tb_34_bodega
+			WHERE (Codigo LIKE '%%' OR
+				   Descripcion LIKE '%%' OR
+				   Cantidad LIKE '%%' )
+			AND    Sucursal = $sucursal
+			ORDER BY Codigo DESC
+			LIMIT 40,60
+		*/
+		return $this->db->query("
+			SELECT 	Codigo AS codigo,
+					Descripcion AS descripcion,
+					Cantidad AS inventario
+			FROM tb_34_bodega
+			WHERE (Codigo LIKE '%%' OR
+				   Descripcion LIKE '%%' OR
+				   Cantidad LIKE '%%' )
+			AND    Sucursal = $sucursal
+			ORDER BY $columnaOrden $tipoOrden
+			LIMIT $inicio,$cantidad		
+		");		
+	}
+	
+	function obtenerArticulosBodegaParaTablaFiltrados($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal){
+		/*
+			SELECT 	Codigo AS codigo,
+					Descripcion AS descripcion,
+					Cantidad AS inventario
+			FROM tb_34_bodega
+			WHERE (Codigo LIKE '%%' OR
+				   Descripcion LIKE '%%' OR
+				   Cantidad LIKE '%%' )
+			AND    Sucursal = $sucursal
+		*/
+		return $this->db->query("
+			SELECT 	Codigo AS codigo,
+					Descripcion AS descripcion,
+					Cantidad AS inventario
+			FROM tb_34_bodega
+			WHERE (Codigo LIKE '%%' OR
+				   Descripcion LIKE '%%' OR
+				   Cantidad LIKE '%%' )
+			AND    Sucursal = $sucursal	
+		");	
+	}
+	
+	function getTotalArticulosBodegaEnSucursal($sucursal){
+		$this->db->from('tb_34_bodega');
+		$this->db->where('Sucursal', $sucursal);
+		$query = $this -> db -> get();
+		return $query -> num_rows();
+	}
+	
 	
 	
 } //FIN DE LA CLASE

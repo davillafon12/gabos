@@ -531,6 +531,13 @@
 	display: none;
 }
 
+.lista-articulos-bodega{
+	width:1024px;
+	*min-height: 430px;
+	margin:auto;
+	display: none;
+}
+
 .lista-articulos-temporales-fieldset{
 	width:1024px;
 	margin:auto;

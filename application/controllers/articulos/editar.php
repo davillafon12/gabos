@@ -9,6 +9,7 @@ class editar extends CI_Controller {
 	$this->load->model('empresa','',TRUE);
 	$this->load->model('familia','',TRUE);
 	$this->load->model('user','',TRUE);
+	$this->load->model('bodega_m','',TRUE);
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -212,6 +213,40 @@ class editar extends CI_Controller {
 		$retorno = array(
 					'draw' => $_POST['draw'],
 					'recordsTotal' => $this->articulo->getTotalArticulosEnSucursal($_POST['sucursal']),
+					'recordsFiltered' => $filtrados -> num_rows(),
+					'data' => $articulosAMostrar
+				);
+		echo json_encode($retorno);
+	}
+	
+	
+	
+	function obtenerArticulosBodegaTablaManejo(){
+		include '/../get_session_data.php';
+		//Un array que contiene el nombre de las columnas que se pueden ordenar
+		$columnas = array(
+								'0' => 'Codigo',
+								'1' => 'Descripcion',
+								'2' => 'Cantidad'
+								);
+		$query = $this->bodega_m->obtenerArticulosBodegaParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $_POST['sucursal']);
+		
+		
+		$articulosAMostrar = array();
+		foreach($query->result() as $art){
+			$auxArray = array(				
+				$art->codigo,
+				$art->descripcion,
+				$art->inventario				
+			);
+			array_push($articulosAMostrar, $auxArray);
+		}
+		
+		$filtrados = $this->bodega_m->obtenerArticulosBodegaParaTablaFiltrados($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $_POST['sucursal']);
+		
+		$retorno = array(
+					'draw' => $_POST['draw'],
+					'recordsTotal' => $this->bodega_m->getTotalArticulosBodegaEnSucursal($_POST['sucursal']),
 					'recordsFiltered' => $filtrados -> num_rows(),
 					'data' => $articulosAMostrar
 				);

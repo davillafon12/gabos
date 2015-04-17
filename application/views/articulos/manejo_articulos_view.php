@@ -62,7 +62,7 @@ PARA:
 		    
 			<div class="contenido">
 				<fieldset class="lista-articulos-fieldset" id="contenido">
-					<legend>Lista de Artículos</legend>
+					<legend>Lista de Artículos en Inventario</legend>
 					<div class="contenedor-sucursal">
 						<p class="contact label-sucursal">Sucursal:</p>
 						<select class="input_dos" onchange="cargarArticulosSucursal()" id="sucursalListaArticulos">
@@ -112,6 +112,34 @@ PARA:
 						<label class="contact">Descuento: </label><input type="text" class="descuento-input" id="descuento" autocomplete="off" /><label class="contact">%</label>
 						<a href='javascript:;' onClick='agregarDescuentoMasivo()' class='boton_descuento'>Agregar</a>
 					</div>
+				</fieldset>
+				<fieldset class="lista-articulos-bodega" id="contenido-bodega">
+					<legend>Lista de Artículos en Bodega</legend>
+					<div class="contenedor-sucursal">
+						<p class="contact label-sucursal">Sucursal:</p>
+						<select class="input_dos" onchange="cargarArticulosBodegaSucursal()" id="sucursalListaArticulosBodega">
+							<?php
+								foreach($Familia_Empresas as $en => $ek){
+									echo "<option value='$ek'>$en</option>";								
+								}
+							?>			
+						</select>
+					</div>
+					<table id='tabla_editar_bodega' class='tablaPrincipal'>
+						<thead> 
+							<th class='Sorted_enabled'>
+								Código
+							</th>
+							<th class='Sorted_enabled'>
+								Descripción
+							</th>
+							<th class='Sorted_enabled'>
+								Inventario
+							</th>							
+						</thead> 
+						<tbody>
+						</tbody>
+					</table>				
 				</fieldset>
 				<fieldset class="lista-articulos-temporales-fieldset">
 					<legend>Artículos Temporales</legend>

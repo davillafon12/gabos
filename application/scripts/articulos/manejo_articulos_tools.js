@@ -123,6 +123,10 @@ function cargarArticulosSucursal(){
 	$("#tabla_editar").dataTable().fnDraw();	
 }
 
+function cargarArticulosBodegaSucursal(){
+	$("#tabla_editar_bodega").dataTable().fnDraw();	
+}
+
 function actualizarProductosTemporales(){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/articulos/editar/obtenerArticulosTemporales',
