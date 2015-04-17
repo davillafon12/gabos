@@ -204,6 +204,8 @@ function do_upload($cedula)
 		if($permisos['traspaso_articulos_masivo'])
 		{
 			$this->load->helper(array('form'));
+			$empresas_actuales = $this->empresa->get_empresas_ids_array();
+			$data['Familia_Empresas'] = $empresas_actuales;	
 			$this->load->view('articulos/registro_masivo_articulos', $data);	
 		}
 		else{
@@ -216,9 +218,10 @@ function do_upload($cedula)
 		//print_r($_FILES);
 		
 		include '/../get_session_data.php';
-		if(isset($_FILES['archivo_excel'])){		
-			if($_FILES['archivo_excel']['type']=='application/vnd.ms-excel'){
-				$resultado = $this->procesarExcel();
+		if(isset($_FILES['archivo_excel'])&&isset($_POST['sucursal'])){
+			$sucursal = $_POST['sucursal'];
+			if($this->empresa->getEmpresa($sucursal)){	
+				$resultado = $this->procesarExcel($sucursal);
 				//print_r($resultado);
 				if($resultado['status']=='success'){
 					//Verificamos que no hayan erroes, si los hay no procesar nada
@@ -292,6 +295,8 @@ function do_upload($cedula)
 						$data['erroresDescuento'] = $resultado["erroresDescuento"];
 						$data['erroresCodBrasil'] = $resultado["erroresCodBrasil"];
 						$data['erroresCantidadMayor'] = $resultado["erroresCantidadMayor"];
+						$empresas_actuales = $this->empresa->get_empresas_ids_array();
+						$data['Familia_Empresas'] = $empresas_actuales;	
 						$this->load->view('articulos/registro_masivo_articulos', $data);
 					}
 				}else{
@@ -300,21 +305,26 @@ function do_upload($cedula)
 						$this->load->helper(array('form'));
 						$data['error'] = '4';
 						$data['msj'] = 'No se pudo procesar el archivo excel';
+						$empresas_actuales = $this->empresa->get_empresas_ids_array();
+						$data['Familia_Empresas'] = $empresas_actuales;	
 						$this->load->view('articulos/registro_masivo_articulos', $data);
 					}else if($resultado['error']=='2'){
 						//echo "Columnas requeridas no vienen o estan en mal formato";
 						$this->load->helper(array('form'));
 						$data['error'] = '3';
 						$data['msj'] = 'Columnas no válidas, o no están en orden';
+						$empresas_actuales = $this->empresa->get_empresas_ids_array();
+						$data['Familia_Empresas'] = $empresas_actuales;	
 						$this->load->view('articulos/registro_masivo_articulos', $data);
 					}
 				}
 			}else{
-				//Formato no válido
-				//echo "formato no valido";
+				//Sucursal no existe			
 				$this->load->helper(array('form'));
 				$data['error'] = '2';
-				$data['msj'] = 'Formato de archivo incorrecto, use excel 97-2003 - xls';
+				$data['msj'] = 'Sucursal seleccionada no existe';
+				$empresas_actuales = $this->empresa->get_empresas_ids_array();
+				$data['Familia_Empresas'] = $empresas_actuales;	
 				$this->load->view('articulos/registro_masivo_articulos', $data);
 			}			
 		}else{
@@ -323,6 +333,8 @@ function do_upload($cedula)
 			$this->load->helper(array('form'));
 			$data['error'] = '1';
 			$data['msj'] = 'La URL está incompleta, contacte al administrador';
+			$empresas_actuales = $this->empresa->get_empresas_ids_array();
+			$data['Familia_Empresas'] = $empresas_actuales;	
 			$this->load->view('articulos/registro_masivo_articulos', $data);
 		}
 		
@@ -351,7 +363,7 @@ function do_upload($cedula)
 		}*/
     }  
 
-	function procesarExcel(){
+	function procesarExcel($sucursal){
 		$resultado = array('status'=>'error','error'=>'1'); //Error generico de no se pudo realizar el proceso
 		require_once './application/libraries/PHPExcel/IOFactory.php';
     	$objPHPExcel = PHPExcel_IOFactory::load($_FILES['archivo_excel']['tmp_name']);
@@ -423,7 +435,7 @@ function do_upload($cedula)
 						$p5 = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
 						$familia = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
 						//$sucursal = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
-						$sucursal = 0; //Siempre se pasara a Garotas Bonitas Central
+						//$sucursal = 0; //Siempre se pasara a Garotas Bonitas Central
 						$cantidad = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
 						$exento = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
 						$descuento = $worksheet->getCellByColumnAndRow(11, $row)->getValue();

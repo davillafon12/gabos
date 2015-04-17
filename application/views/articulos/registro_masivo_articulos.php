@@ -90,7 +90,15 @@ PARA:
 					$attributes = array('name' => 'traspaso_inventario_masivo', 'class' => 'traspaso_inventario_masivo', 'id' => 'traspaso_inventario_masivo');
 					
 					echo form_open_multipart('articulos/registrar/carga_excel', $attributes); 
-				?>					
+				?>
+					<p class="contact label-sucursal">Sucursal:</p>
+					<select class="input_dos" name="sucursal">
+						<?php
+							foreach($Familia_Empresas as $en => $ek){
+								echo "<option value='$ek'>$en</option>";								
+							}
+						?>			
+					</select>					
 					<p class="contact">Seleccione el archivo a cargar:</p>
 					<div class="pad-l mar-top">
 						<input type="file" name="archivo_excel" id="archivo_excel" accept="application/vnd.ms-excel"/>
