@@ -230,28 +230,32 @@ PARA:
 					<legend>Permisos</legend>					
 							<table id="tablaPermisos">
 								<?php
-									include ('/../../controllers/usuarios/permisos.php');
-									$fila = 0;
-									echo "<tr>";
-									foreach($permisos as $valor => $contenido){
-										if($fila % 5 == 0){echo "</tr><tr>";}
-										$fila++;
-										if(array_key_exists($valor,$permisos_usuario)){
-											echo "<td><input class='input-permisos-checkbox' type='checkbox' name='permisos[]' id='ch_$valor' value='$valor'checked/></td><td><label class='permisos-label'>$contenido</label></td>";
-										}else{
-											echo "<td><input class='input-permisos-checkbox' type='checkbox' name='permisos[]' id='ch_$valor' value='$valor'/></td><td><label class='permisos-label'>$contenido</label></td>";
-										}
+									if(isset($permisosUserLogin['editar_permisos'])&&$permisosUserLogin['editar_permisos']){
+											include ('/../../controllers/usuarios/permisos.php');
+											$fila = 0;
+											echo "<tr>";
+											foreach($permisos as $valor => $contenido){
+												if($fila % 5 == 0){echo "</tr><tr>";}
+												$fila++;
+												if(array_key_exists($valor,$permisos_usuario)){
+													echo "<td><input class='input-permisos-checkbox' type='checkbox' name='permisos[]' id='ch_$valor' value='$valor'checked/></td><td><label class='permisos-label'>$contenido</label></td>";
+												}else{
+													echo "<td><input class='input-permisos-checkbox' type='checkbox' name='permisos[]' id='ch_$valor' value='$valor'/></td><td><label class='permisos-label'>$contenido</label></td>";
+												}
+											}
+											echo "</tr>";
+											
+											echo "<script>
+														var permisosVendedor = ".json_encode($permisosVendedor).";
+														var permisosCajero = ".json_encode($permisosCajero).";
+														var permisosAdmin = ".json_encode($permisosAdmin).";
+														var permisosAvanz = ".json_encode($permisosAvanz).";
+														
+														
+													</script>";
+									}else{
+											echo "<tr><td>Usted no puede editar permisos.</td></tr>";
 									}
-									echo "</tr>";
-									
-									echo "<script>
-												var permisosVendedor = ".json_encode($permisosVendedor).";
-												var permisosCajero = ".json_encode($permisosCajero).";
-												var permisosAdmin = ".json_encode($permisosAdmin).";
-												var permisosAvanz = ".json_encode($permisosAvanz).";
-												
-												
-											</script>";
 								?>
 							</table>
 					</fieldset>	

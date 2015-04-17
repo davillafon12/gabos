@@ -23,6 +23,7 @@
 						'editar_codigo' => 'Editar Codigo',
 						'editar_empresa' => 'Editar Empresa',
 						'editar_familias' => 'Editar Familias',
+						'editar_permisos' => 'Editar Permisos',
 						'editar_usuarios' => 'Editar Usuarios',
 						'entrada_familias' => 'Entrar a Familias',
 						'entrar_banco' => 'Entrar a Bancos',

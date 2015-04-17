@@ -185,6 +185,8 @@ class editar extends CI_Controller {
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
+		$data['permisosUserLogin'] = $permisos;
+		
 		if(!$permisos['editar_usuarios'])
 		{	
 			redirect('accesoDenegado', 'location');	
@@ -216,6 +218,7 @@ class editar extends CI_Controller {
 				$data['Familia_Empresas'] = $empresas_actuales;
 				$data['Sucursal_Codigo'] = $row -> TB_02_Sucursal_Codigo; 
 				$data['permisos_usuario'] = $this->user->get_permisos($row -> Usuario_Codigo, $row -> TB_02_Sucursal_Codigo);	
+				//$data['permisos_usuario'] = $permisos;
 			}
 			//echo 'formato fecha  = '.$data['Usuario_Fecha_Ingreso'];
 			//if(!$data['Usuario_Codigo']==$data['Usuario_Codigo_Modificar'] ){
@@ -313,19 +316,21 @@ class editar extends CI_Controller {
 				$this->user->actualizar($codigo_usuario, $data_update);
 				
 				//Edicion de permisos
-				
-				
-				//Eliminar todos los permisos
-				$this->user->eliminarPermisosUsuario($codigo_usuario, $sucursal_usuario);
-				
-				//Agregamos nuevos permisos
-				if(isset($_POST['permisos'])){
-					foreach($_POST['permisos'] as $permiso){			
-						$this->user->agregarPermiso($codigo_usuario, $sucursal_usuario, $permiso, 1);
-					}			
-				}			
-				
 				include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				$permisosArray = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+				if(isset($permisosArray['editar_permisos'])&&$permisosArray['editar_permisos']){
+						//Eliminar todos los permisos
+						$this->user->eliminarPermisosUsuario($codigo_usuario, $sucursal_usuario);
+						
+						//Agregamos nuevos permisos
+						if(isset($_POST['permisos'])){
+							foreach($_POST['permisos'] as $permiso){			
+								$this->user->agregarPermiso($codigo_usuario, $sucursal_usuario, $permiso, 1);
+							}			
+						}	
+				}		
+				
+				
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el usuario codigo: ".mysql_real_escape_string($codigo_usuario),$data['Sucursal_Codigo'],'edicion');
 				//echo "tipo cedula ".$tipo_cedula_usuario;
 			}
