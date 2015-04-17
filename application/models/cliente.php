@@ -180,7 +180,8 @@ Class cliente extends CI_Model
 				return array('nombre'=>$row->Cliente_Nombre." ".$row->Cliente_Apellidos,
 							 'estado'=>$row->Cliente_Estado,
 							 'descuento'=>$this->getClienteDescuento(mysql_real_escape_string($id), $data['Sucursal_Codigo']),
-							 'exento' => $row->Cliente_EsExento
+							 'exento' => $row->Cliente_EsExento,
+							 'sucursal' => $row->Cliente_EsSucursal
 							);
 			}
 		}	
