@@ -57,6 +57,9 @@ var infoClientePostAutorizacion = false;
 var cedulaPostAuto = false;
 var clienteEsExento = false;
 
+var clienteEsDeTipoSucursal = "0";
+var clienteEsDeTipoExento = "0";
+
 function getNombreCliente(str){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/facturas/nueva/getNombreCliente?cedula='+str,
@@ -73,6 +76,8 @@ function getNombreCliente(str){
 					disableArticulosInputs();
 				}else if(result[0].status==="success"){	
 				//SI EXISTE EL CLIENTE
+					clienteEsDeTipoSucursal = result[0].sucursal;
+					clienteEsDeTipoExento = result[0].exento;
 					switch(result[0].estado.trim()){ //Segun el estado del cliente debemos reportarlo
 						case 'activo':						
 							if(result[0].descuento){
