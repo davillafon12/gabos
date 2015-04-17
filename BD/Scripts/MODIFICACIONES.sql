@@ -3,10 +3,10 @@ UPDATE `garotas_bonitas_main_db`.`tb_03_cliente` SET `Cliente_Numero_Pago` = '2'
 
 -- Creación de Usuario de Consultas con permisos de lectura y ejecución de Procedimientos 
 
-create user 'consulta'@'localhost' identified by 'consulta';
+create user 'consulta'@'%' identified by 'consulta';
 GRANT SELECT ON garotas_bonitas_main_db . * TO  'consulta'@'%'
 IDENTIFIED BY  'consulta'
-GRANT SELECT , EXECUTE ON `garotas\_bonitas\_main\_db` . * TO 'consulta'@'localhost';
+GRANT SELECT , EXECUTE ON `garotas\_bonitas\_main\_db` . * TO 'consulta'@'%';
 
 
 -- PROCEDIMIENTOS ALMACENADOS
@@ -14,7 +14,7 @@ GRANT SELECT , EXECUTE ON `garotas\_bonitas\_main\_db` . * TO 'consulta'@'localh
 USE garotas_bonitas_main_db; 
 DELIMITER ;;
 
-CREATE DEFINER = 'consulta'@'localhost' PROCEDURE PA_ConsultaUsuarios
+CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_ConsultaUsuarios
 (
 	IN paSucursal VARCHAR(10),
 	IN paFechaI VARCHAR(30), 
