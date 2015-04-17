@@ -8,6 +8,7 @@ class bodega extends CI_Controller {
 		
 		$this->load->model('bodega_m','',TRUE);
 		$this->load->model('user','',TRUE);	
+		$this->load->model('empresa','',TRUE);	
 	}
 
 	function index()
@@ -22,6 +23,8 @@ class bodega extends CI_Controller {
 		}else{	
 			$this->load->helper(array('form'));
 			$data['nueva_subida'] = true;
+			$empresas_actuales = $this->empresa->get_empresas_ids_array();
+			$data['Familia_Empresas'] = $empresas_actuales;		
 			$this->load->view('articulos/articulos_ingreso_bodega_view', $data);
 		}
 	}
@@ -29,8 +32,9 @@ class bodega extends CI_Controller {
 	function cargar(){
 		//print_r($_FILES);
 		include '/../get_session_data.php';
-		if(isset($_FILES['archivo_excel'])){		
-			if($_FILES['archivo_excel']['type']=='application/vnd.ms-excel'){
+		if(isset($_FILES['archivo_excel'])&&isset($_POST['sucursal'])){	
+			$sucursal = $_POST['sucursal'];
+			if($this->empresa->getEmpresa($sucursal)){		
 				$resultado = $this->procesarExcel();
 				//print_r($resultado);
 				if($resultado['status']=='success'){
@@ -46,18 +50,18 @@ class bodega extends CI_Controller {
 								$fecha = date("y/m/d : H:i:s", now());
 								
 								//Se agrega a bodega para validar a la hora del traspaso
-								if($this->bodega_m->existeArticuloEnBodega($articulo['cod'], $data['Sucursal_Codigo'])){
+								if($this->bodega_m->existeArticuloEnBodega($articulo['cod'], $sucursal)){
 									//Si existe actualizamos
-									$this->bodega_m->actualizarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $data['Sucursal_Codigo']);
+									$this->bodega_m->actualizarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $sucursal);
 								}else{
 									//Si no existe lo agregamos
-									$this->bodega_m->agregarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+									$this->bodega_m->agregarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $data['Usuario_Codigo'], $sucursal);
 								}								
 								
 								//Se agrega como compra para generar reportes y llevar el record de compras
-								$this->bodega_m->agregarCompra($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $fecha, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+								$this->bodega_m->agregarCompra($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $fecha, $data['Usuario_Codigo'], $sucursal);
 								
-								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingresó a bodega/compra el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'bodega');
+								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingresó a bodega/compra el articulo: ".$articulo['cod']." en la sucursal: ".$sucursal,$data['Sucursal_Codigo'],'bodega');
 							}
 						}
 						//Todo salio bien
@@ -70,6 +74,8 @@ class bodega extends CI_Controller {
 						$data['msj'] = 'Algunos artículos presentan problemas';
 						$data['errorCosto'] = $resultado['erroresCosto'];
 						$data['errorCantidad'] = $resultado['erroresCantidad'];
+						$empresas_actuales = $this->empresa->get_empresas_ids_array();
+						$data['Familia_Empresas'] = $empresas_actuales;		
 						$this->load->view('articulos/articulos_ingreso_bodega_view', $data);
 					}
 				}else{
@@ -78,21 +84,26 @@ class bodega extends CI_Controller {
 						$this->load->helper(array('form'));
 						$data['error'] = '4';
 						$data['msj'] = 'No se pudo procesar el archivo excel';
+						$empresas_actuales = $this->empresa->get_empresas_ids_array();
+						$data['Familia_Empresas'] = $empresas_actuales;		
 						$this->load->view('articulos/articulos_ingreso_bodega_view', $data);
 					}else if($resultado['error']=='2'){
 						//echo "Columnas requeridas no vienen o estan en mal formato";
 						$this->load->helper(array('form'));
 						$data['error'] = '3';
 						$data['msj'] = 'Columnas no válidas, o no están en orden';
+						$empresas_actuales = $this->empresa->get_empresas_ids_array();
+						$data['Familia_Empresas'] = $empresas_actuales;		
 						$this->load->view('articulos/articulos_ingreso_bodega_view', $data);
 					}
 				}
 			}else{
-				//Formato no válido
-				//echo "formato no valido";
+				//Sucursal no existe				
 				$this->load->helper(array('form'));
 				$data['error'] = '2';
-				$data['msj'] = 'Formato de archivo incorrecto, use excel 97-2003 - xls';
+				$data['msj'] = 'Sucursal seleccionada no existe';
+				$empresas_actuales = $this->empresa->get_empresas_ids_array();
+				$data['Familia_Empresas'] = $empresas_actuales;		
 				$this->load->view('articulos/articulos_ingreso_bodega_view', $data);
 			}			
 		}else{
@@ -101,6 +112,8 @@ class bodega extends CI_Controller {
 			$this->load->helper(array('form'));
 			$data['error'] = '1';
 			$data['msj'] = 'La URL está incompleta, contacte al administrador';
+			$empresas_actuales = $this->empresa->get_empresas_ids_array();
+			$data['Familia_Empresas'] = $empresas_actuales;		
 			$this->load->view('articulos/articulos_ingreso_bodega_view', $data);
 		}		
 	}	
@@ -160,7 +173,7 @@ class bodega extends CI_Controller {
 		$retorno['status'] = 'error';
 		if(isset($_POST['codigo'])){
 			include '/../get_session_data.php';
-			if($articulos = $this->bodega_m->existeArticuloEnBodega($_POST['codigo'], $data['Sucursal_Codigo'])){
+			if($articulos = $this->bodega_m->existeArticuloEnBodega($_POST['codigo'], $sucursal)){
 				$retorno['status'] = 'success';
 				foreach($articulos as $articulo){
 					$retorno['cantidad'] = $articulo->Cantidad;

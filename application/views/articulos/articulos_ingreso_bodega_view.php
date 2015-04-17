@@ -91,7 +91,14 @@ PARA:
 					echo form_open_multipart('articulos/bodega/cargar', $attributes); 
 				?>
 					<!-- Campo guarda una bandera para evitar reenviar el form-->
-					
+					<p class="contact label-sucursal">Sucursal:</p>
+					<select class="input_dos" name="sucursal">
+						<?php
+							foreach($Familia_Empresas as $en => $ek){
+								echo "<option value='$ek'>$en</option>";								
+							}
+						?>			
+					</select>
 					<p class="contact">Seleccione el archivo a cargar:</p>
 					<div class="pad-l mar-top">
 						<input type="file" name="archivo_excel" id="archivo_excel" accept="application/vnd.ms-excel"/>

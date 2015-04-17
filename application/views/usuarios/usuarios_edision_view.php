@@ -87,7 +87,7 @@ PARA:
 							</td>
 							<td>
 								<?php echo form_dropdown ( 'tipo_cedula_usuario' , $opc_Cedula ,  $Usuario_Tipo_Cedula, $opcCedulaMetodo);  ?>
-								<input id="cedula_usuario" autocomplete="off" name="cedula_usuario"  placeholder="" required="" tabindex="2" style="position: absolute;" value="<?php echo $Usuario_Cedula;?>"> 
+								<input id="cedula_usuario" autocomplete="off" name="cedula_usuario"  placeholder="" required="" tabindex="2" style="width: 100px;" value="<?php echo $Usuario_Cedula;?>"> 
 							</td>						
 						</tr>
 						<tr>
