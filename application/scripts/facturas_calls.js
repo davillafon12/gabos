@@ -58,6 +58,7 @@ var cedulaPostAuto = false;
 var clienteEsExento = false;
 
 var clienteEsDeTipoSucursal = "0";
+var clienteEsDeTipoExento = "0";
 
 function getNombreCliente(str){
 	$.ajax({
@@ -76,6 +77,7 @@ function getNombreCliente(str){
 				}else if(result[0].status==="success"){	
 				//SI EXISTE EL CLIENTE
 					clienteEsDeTipoSucursal = result[0].sucursal;
+					clienteEsDeTipoExento = result[0].exento;
 					switch(result[0].estado.trim()){ //Segun el estado del cliente debemos reportarlo
 						case 'activo':						
 							if(result[0].descuento){
@@ -90,13 +92,11 @@ function getNombreCliente(str){
 								numeroPopUp='5';
 								infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
 								cedulaPostAuto = str; //Se guarda la info para ser utilizada despues
-								clienteEsExento = parseInt(result[0].exento);
 							}else{
 								$("#nombre").val(result[0].nombre);
 								enableArticulosInputs();
 								actualizaPreciosArticulos(str);
 								clienteCanBuy = true;
-								clienteEsExento = parseInt(result[0].exento);
 							}
 							break;
 							
@@ -112,20 +112,13 @@ function getNombreCliente(str){
 								document.getElementById("pop_usuario").select();
 								numeroPopUp='5';
 								infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
-								cedulaPostAuto = str; //Se guarda la info para ser utilizada despues
-								/*$("#nombre").val(result[0].nombre);
-								enableArticulosInputs();
-								actualizaPreciosArticulos(str);
-								notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'warning');
-								clienteCanBuy = true;*/
-								clienteEsExento = parseInt(result[0].exento);
+								cedulaPostAuto = str; //Se guarda la info para ser utilizada despues								
 							}else{
 								$("#nombre").val(result[0].nombre);
 								enableArticulosInputs();
 								actualizaPreciosArticulos(str);
 								notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'error');
 								clienteCanBuy = true;
-								clienteEsExento = parseInt(result[0].exento);
 							}
 							break;
 							
@@ -135,7 +128,6 @@ function getNombreCliente(str){
 							disableArticulosInputs();
 							notyConTipo('¡Este cliente esta inactivo, contacte un administrador para poder activarlo!','error');
 							clienteCanBuy = false;
-							clienteEsExento = false;
 							break;
 					}									
 				}

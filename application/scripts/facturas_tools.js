@@ -810,7 +810,7 @@ function actualizaCostosTotales(decimales_int){
 	//Ahora le quitamos los impuestos del cliente afiliado para onbtener la retencion real
 	costo_retencion -= IVA_Factura;
 	
-	if(clienteEsExento){
+	if(clienteEsDeTipoExento=="1"){
 		costo_total_factura -= IVA_Factura;
 		IVA_Factura = 0;
 		costo_retencion = 0;
