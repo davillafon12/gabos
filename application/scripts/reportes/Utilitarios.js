@@ -2,6 +2,19 @@
 // Patrón Module    
 
 var Utilitarios = (function (window, undefined) {
+	/*-----------------------------------------VARIABLES-----------------------------------------------------------------------------------*/
+	/*-------------------------------------------------------------------------------------------------------------------------------------*/
+	var _Reporte_ListaUsuario = "ListaUsuario"; 
+	var _Reporte_ListaDefacturasPorUsuario = "ListaDefacturasPorUsuario"; 
+	var _Reporte_VentaXClienteFacturas = "VentaXClienteFacturas"; 
+	var _Reporte_VentaXClienteFacturasResumen = "VentaXClienteFacturasResumido"; 
+	
+	
+	// ----------RANGOS ------------
+
+	
+	/*-----------------------------------------FUNCIONES ----------------------------------------------------------------------------------*/
+	/*-------------------------------------------------------------------------------------------------------------------------------------*/
     /*Función Privada*/
     // <descripcion>
     // Inicialización en español para la extensión 'UI date picker' para jQuery.
@@ -149,9 +162,27 @@ var Utilitarios = (function (window, undefined) {
             });
     }
 	
+	// <descripcion>
+    // Función que recibe dos parametros y se encarga de verificar si se muestra o no un .class|
+    // </descripcion>
+    // <parametro name="paCheckbox" type="checkbox"> es un Tipo checkbox que se le asignara la opción change</parametro>
+    // <parametro name="paClase" type=".class">Es el .class que se modificara para mostrarse o ocultarse</parametro>
+    function _eventoCheckbox(paCheckbox, paClase) {
+	paCheckbox.change(function(){
+		if($(this).is(":checked")){
+			paClase.show();
+		}else{
+			paClase.hide();
+		}
+	}); 
+    }
 	
 	
-    return {       
+    return {   
+		paReporte_ListaUsuario: _Reporte_ListaUsuario, 
+		paReporte_ListaDefacturasPorUsuario: _Reporte_ListaDefacturasPorUsuario, 
+		paReporte_VentaXClienteFacturas: _Reporte_VentaXClienteFacturas,
+		paReporte_VentaXClienteFacturasResumen: _Reporte_VentaXClienteFacturasResumen,
         fnInicializarCalendario: function (selector, conBoton, fechaParaMostrar, fechaMaxima) {
             return _InicializarCalendario(selector, conBoton, fechaParaMostrar, fechaMaxima); 
         },       
@@ -169,7 +200,10 @@ var Utilitarios = (function (window, undefined) {
         },       
         lfUcwords: function (cadena) {
             return _pfUcwords(cadena); 
-        }
+        },
+		lfEventoCheckbox: function (paCheckbox, paClase){
+			return _eventoCheckbox(paCheckbox, paClase);
+		}
     };//fin del return
 })();//fin de variable Utilitarios
 

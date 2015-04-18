@@ -68,7 +68,8 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-.oculto , .rFechas, .uFacturas, .fFechas{
+.oculto , .rFechas, .uFacturas, .fFechas, .mNombre, .fNombre,
+.mCedula, .fCedula, .mRango, .fRango, .fRango1, .fRango2{
     display: none;
 }
 
@@ -79,6 +80,10 @@ input[type=number]::-webkit-outer-spin-button {
 	margin-bottom: 10px;
 	padding-bottom: 20px;
 	padding-top: 20px;
+}
+
+.input_Small{
+	width: 95%;
 }
 
 .styleSelect{

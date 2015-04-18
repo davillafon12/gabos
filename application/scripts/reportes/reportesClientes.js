@@ -4,8 +4,10 @@ $(document).ready(function (){
 	Utilitarios.fnInicializarCalendario("#fecha_final", true, new Date());
 	$("#submit").attr("disabled", true);
 	eventoTipoReporte();	
-	Utilitarios.lfEventoCheckbox($("#mFecha"), $(".rFechas")); 
-	eventoCheckbox();
+	eventoRangos();
+	Utilitarios.lfEventoCheckbox($("#mNombre"), $(".fNombre")); 
+	Utilitarios.lfEventoCheckbox($("#mCedula"), $(".fCedula")); 
+	Utilitarios.lfEventoCheckbox($("#mRango"), $(".fRango")); 
 	$.validator.addMethod("MayorOIgualQue", function (value, element, params) {
         return Utilitarios.fnVerificarFechaMayor(params, value);
     }, '.   Debe ser mayor a: Fecha');
@@ -18,18 +20,33 @@ function eventoTipoReporte(){
 			$("#submit").attr("disabled", true); 
 			ocultarTodo();
 		}
-		if($("#tipo_reporte").val() == Utilitarios.paReporte_ListaUsuario){
-			$("#submit").attr("disabled", false);
-			$(".rFechas").hide();
-			$(".uFacturas").hide();
-			$(".fFechas").show();
-		}
-		if($("#tipo_reporte").val() == Utilitarios.paReporte_ListaDefacturasPorUsuario){
-			$(".fFechas").hide();
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturas){
 			$(".rFechas").show();
 			$(".uFacturas").show();
+			$(".mNombre").show();
+			$(".mCedula").show();
+			$(".mRango").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturasResumen){
+			$(".rFechas").show();
+			$(".uFacturas").show();
+			$(".mNombre").show();
+			$(".mCedula").show();
+			$(".mRango").show();
+			$("#mFecha").attr("checked", false);
+			$("#submit").attr("disabled", false);
+		}
+	}); 
+}
+
+function eventoCheckbox(){
+	$("#mFecha").change(function(){
+		if($(this).is(":checked")){
+			$(".rFechas").show();
+		}else{
+			$(".rFechas").hide();
 		}
 	}); 
 }
@@ -39,7 +56,37 @@ function ocultarTodo(){
 	$(".uFacturas").hide();
 	$(".oculto").hide();
 	$(".fFechas").hide();
+	$(".mNombre").hide();
+	$(".fNombre").hide();
+	$(".mCedula").hide();
+	$(".fCedula").hide();
+	$(".fRango").hide();
+	$(".mRango").hide();
+	$(".fRango1").hide();
+	$(".fRango2").hide();
 	$("#mFecha").attr("checked", false);
+}
+
+function eventoRangos(){
+	$("#rangoM").change(function(){
+		if($("#rangoM").val() == 'null'){	
+			$(".fRango1").hide();
+			$(".fRango2").hide();
+		}
+		if($("#rangoM").val() == 'menorIgual'){	
+			$(".fRango1").show();
+			$(".fRango2").hide();
+		}
+		if($("#rangoM").val() == 'mayorIgual'){	
+			$(".fRango1").show();
+			$(".fRango2").hide();
+		}
+		if($("#rangoM").val() == 'between'){	
+			$(".fRango1").show();
+			$(".fRango2").show();
+		}
+		
+	}); 	
 }
 
 function lpvalidarCampos() {
@@ -64,3 +111,4 @@ function lpvalidarCampos() {
         }
     });
 }
+
