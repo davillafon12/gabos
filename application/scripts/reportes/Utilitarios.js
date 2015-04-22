@@ -6,9 +6,11 @@ var Utilitarios = (function (window, undefined) {
 	/*-------------------------------------------------------------------------------------------------------------------------------------*/
 	var _Reporte_ListaUsuario = "ListaUsuario"; 
 	var _Reporte_ListaDefacturasPorUsuario = "ListaDefacturasPorUsuario"; 
+	
 	var _Reporte_VentaXClienteFacturas = "VentaXClienteFacturas"; 
 	var _Reporte_VentaXClienteFacturasResumen = "VentaXClienteFacturasResumido"; 
-	
+	var _Reporte_VentaXClienteProforma = "VentaXClienteProforma"; 
+	var _Reporte_ClienteEstado = "ClienteEstado"; 
 	
 	// ----------RANGOS ------------
 
@@ -183,6 +185,8 @@ var Utilitarios = (function (window, undefined) {
 		paReporte_ListaDefacturasPorUsuario: _Reporte_ListaDefacturasPorUsuario, 
 		paReporte_VentaXClienteFacturas: _Reporte_VentaXClienteFacturas,
 		paReporte_VentaXClienteFacturasResumen: _Reporte_VentaXClienteFacturasResumen,
+		paReporte_VentaXClienteProforma:_Reporte_VentaXClienteProforma,
+		paReporte_ClienteEstado:_Reporte_ClienteEstado,
         fnInicializarCalendario: function (selector, conBoton, fechaParaMostrar, fechaMaxima) {
             return _InicializarCalendario(selector, conBoton, fechaParaMostrar, fechaMaxima); 
         },       

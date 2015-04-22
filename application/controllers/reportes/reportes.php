@@ -123,7 +123,9 @@ class reportes extends CI_Controller {
 		$reportes = array(
 						'null' =>'Seleccione',
 						'VentaXClienteFacturas' =>'Venta por Clientes Facturación',
-						'VentaXClienteFacturasResumido' => 'Venta Resumida por Clientes Facturación'
+						'VentaXClienteFacturasResumido' => 'Venta Resumida por Clientes Facturación',
+						'VentaXClienteProforma' => 'Venta por Clientes Proforma',
+						'ClienteEstado' => 'Mostrar Clientes por Estado'
 		);
 		return $reportes;
 	}
@@ -139,6 +141,7 @@ class reportes extends CI_Controller {
 			$data['Reportes'] = $this->reportesClientes();
 			$data['EstadoFacturas'] = $this->comboEstadosFactura();
 			$data['Rangos'] = $this->comboRangos();
+			$data['EstadoCliente'] = $this->estadosClientes();
 			$this->load->view('reportes/reportes_clientes_view', $data);	
 		}
 		else{
@@ -165,6 +168,8 @@ class reportes extends CI_Controller {
 		$paMontoI = $this->input->post('paMontoI');
 		$paMontoF = $this->input->post('paMontoF');
 		
+		$paEstado = $this->input->post('paEstado'); 
+		
 		if($mNombre != 1){ $paNombre = 'null'; }
 		if($mCedula != 1){ $paCedula = 'null'; }
 		if($mRango != 1){ 
@@ -189,7 +194,12 @@ class reportes extends CI_Controller {
 			$parametro1 = "paSucursal=".$Sucural; 
 			$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial); 
 			$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal); 
-			$parametro4 = "paEstadoFactura=".$EstadoFactura; 			
+			if($Reporte == 'VentaXClienteProforma'){
+				$parametro4 = "paEstadoProforma=".$EstadoFactura; 				
+			}
+			else{
+				$parametro4 = "paEstadoFactura=".$EstadoFactura; 			
+			}			
 			if($EsSucursal != 1){
 				$EsSucursal = 0; 
 			}
@@ -198,8 +208,15 @@ class reportes extends CI_Controller {
 			$parametro7 = "paCedula=".$paCedula; 		
 			$parametro8 = "paRango=".$paRangoM; 		
 			$parametro9 = "paMontoI=".$paMontoI; 		
-			$parametro10 = "paMontoF=".$paMontoF; 		
-			$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6.'&'.$parametro7.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10;			
+			$parametro10 = "paMontoF=".$paMontoF; 	
+			$parametro11 = "paEstado=".$paEstado; 
+			if($Reporte == 'ClienteEstado'){
+				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro11;			
+			}	
+			else{
+				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6.'&'.$parametro7.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10;			
+			}			
+			
 			$this->llamarReporte($txtRutaFinal);
 		}	
 	}	
@@ -279,6 +296,15 @@ class reportes extends CI_Controller {
 						'pendiente' => 'PENDIENTES'
 		);
 		return $estadoFactura;
+	}
+	
+	function estadosClientes(){
+		$reportes = array(
+						'activo' =>'Activo',
+						'inactivo' => 'Inactivo',
+						'semiactivo' => 'Semi Activo'
+		);
+		return $reportes;
 	}
 	
 	function comboRangos(){

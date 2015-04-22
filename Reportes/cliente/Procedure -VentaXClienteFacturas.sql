@@ -57,13 +57,13 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturas
 	end if; -- FIN paRango = 'menorIgual' 
   end If;   -- FIN paRango <> 'null'
   -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  select @QUERY as 'Resultado';  
+  -- select @QUERY as 'Resultado';  
   -- preparamos el objete Statement a partir de nuestra variable
-  -- PREPARE smpt FROM @Query;
+  PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
-  -- EXECUTE smpt;
+  EXECUTE smpt;
   -- liberamos la memoria
-  -- DEALLOCATE PREPARE smpt;
+  DEALLOCATE PREPARE smpt;
  END
 ;;
 

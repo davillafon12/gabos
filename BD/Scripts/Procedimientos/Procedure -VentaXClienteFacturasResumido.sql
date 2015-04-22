@@ -27,6 +27,7 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturasResumido
 								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
 								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
 								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
+ IF paSucursal <> 'null' then 								 
 	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula, 
 									CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 									(select  Sum(fac2.Factura_Monto_Total) v
@@ -39,6 +40,16 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturasResumido
 									 from tb_07_factura fac2',@WhereGenerico, ' ) retencion       
 							from    tb_03_cliente cli inner join 
 									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
+ELSE
+	set @QUERY 			= CONCAT('select  cli.Cliente_Cedula cedula, 
+									CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
+									fac.Factura_Monto_Total as montoTotal,
+									fac.Factura_Monto_IVA as montoIVA,
+									fac.Factura_Monto_Sin_IVA as montoSinIVA,  
+									fac.Factura_Retencion as retencion       
+							from    tb_03_cliente cli inner join 
+									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');								
+end If; 
   IF paSucursal <> 'null' then 
     SET @QUERY = CONCAT (@QUERY, @where2);      
   end If; 
@@ -68,7 +79,9 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturasResumido
 		end if; -- FIN paRango = 'mayorIgual'	
 	end if; -- FIN paRango = 'menorIgual' 
   end If;   -- FIN paRango <> 'null'
-  SET @QUERY = CONCAT (@QUERY, 'group by cli.Cliente_Cedula'); 
+  IF paSucursal <> 'null' then 
+    SET @QUERY = CONCAT (@QUERY, 'group by cli.Cliente_Cedula');   
+  end If;  
   -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
   -- select @QUERY as 'Resultado';  
   -- preparamos el objete Statement a partir de nuestra variable

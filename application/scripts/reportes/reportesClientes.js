@@ -26,6 +26,19 @@ function eventoTipoReporte(){
 			$(".mNombre").show();
 			$(".mCedula").show();
 			$(".mRango").show();
+			$(".mEstado").hide();
+			$(".mSucursal").show();
+			$("#mFecha").attr("checked", false);
+			$("#submit").attr("disabled", false);
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProforma){
+			$(".rFechas").show();
+			$(".uFacturas").show();
+			$(".mNombre").show();
+			$(".mCedula").show();
+			$(".mRango").show();
+			$(".mEstado").hide();
+			$(".mSucursal").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
 		}
@@ -35,8 +48,16 @@ function eventoTipoReporte(){
 			$(".mNombre").show();
 			$(".mCedula").show();
 			$(".mRango").show();
+			$(".mEstado").hide();
+			$(".mSucursal").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_ClienteEstado){
+			$("#submit").attr("disabled", false); 
+			ocultarTodo();
+			$(".mEstado").show();
+			
 		}
 	}); 
 }
@@ -64,6 +85,8 @@ function ocultarTodo(){
 	$(".mRango").hide();
 	$(".fRango1").hide();
 	$(".fRango2").hide();
+	$(".mEstado").hide();
+	$(".mSucursal").hide();
 	$("#mFecha").attr("checked", false);
 }
 

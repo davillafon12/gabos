@@ -69,7 +69,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .oculto , .rFechas, .uFacturas, .fFechas, .mNombre, .fNombre,
-.mCedula, .fCedula, .mRango, .fRango, .fRango1, .fRango2{
+.mCedula, .fCedula, .mRango, .fRango, .fRango1, .fRango2, 
+.mEstado, .mSucursal{
     display: none;
 }
 

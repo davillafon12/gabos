@@ -75,10 +75,10 @@ PARA:
 								?>
 								</select> 
 							</td>
-							<td>
+							<td class="mSucursal">
 								<label for="sucursal"  class="labelMedium">Empresa:</label>							
 							</td>
-							<td>
+							<td class="mSucursal">
 								<select name="sucursal" class="styleSelect" tabindex="8">
 								<?php 					
 									foreach($Empresas as $Nombre_Empresa => $codigo_empresa)
@@ -100,18 +100,34 @@ PARA:
 						</tr>
 						<tr class="rFechas">
 							<td>
-								<label for="lafecha_inicial"  class="labelMedium">Fecha Inicial:</label>							
+								<label for="fecha_inicial"  class="labelMedium">Fecha Inicial:</label>							
 							</td>
 							<td>
 								<input id="fecha_inicial" class="labelMedium" autocomplete="off" name="fecha_inicial">
 							</td>
 							<td>
-								<label for="lafecha_final"  class="labelMedium">Fecha Final:</label>							
+								<label for="fecha_final"  class="labelMedium">Fecha Final:</label>							
 							</td>
 							<td>
 								<input id="fecha_final" class="labelMedium" autocomplete="off" name="fecha_final"><br>						
 							</td>
 						</tr>	
+						<tr class="mEstado">
+							<td>
+								<label for="Nombre_Estado"  class="labelMedium">Estado:</label>							
+							</td>
+							<td>
+								<select name="paEstado" class="styleSelect" tabindex="8">
+								<?php 					
+									foreach($EstadoCliente as $Codigo_Fstado => $Nombre_Estado)
+									{
+										echo "<option value='".$Codigo_Fstado."'";
+										echo">".$Nombre_Estado."</option>";
+									}
+								?>
+								</select> 
+							</td>
+						</tr>
 						<tr class="uFacturas">
 							<td>
 								<label for="paEstadoFactura"  class="labelMedium">Estado Factura:</label>							
