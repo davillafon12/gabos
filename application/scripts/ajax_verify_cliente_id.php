@@ -19,13 +19,15 @@ echo
 			var estatus = document.getElementById('status');
 			var input = document.getElementById('cedula');
             var codigo =  input.value;
-            for (var i = 0; i < 13; i++) {
-		        var str = codigo; 
-		        var res = str.replace(\"_\", \"\");
-		        codigo = res;
-		    }
+			if(valor != 4){
+				for (var i = 0; i < 13; i++) {
+					var str = codigo; 
+					var res = str.replace(\"_\", \"\");
+					codigo = res;
+				}	
+			}            
 		    var tamano = codigo.length; 
-			if((valor==1 && tamano ==9) || (valor==2 && tamano == 13) || (valor==3 && tamano ==10)){
+			if((valor==1 && tamano ==9) || (valor==2 && tamano == 12) || (valor==3 && tamano ==10) || (valor ==4)){
 				if(!codigo==' '){
 					estatus.innerHTML='<img src=".$ruta_imagen." />' ;
 					callPage('".$Ruta_Base."clientes/registrar/es_Cedula_Utilizada?id='+codigo, estatus);
