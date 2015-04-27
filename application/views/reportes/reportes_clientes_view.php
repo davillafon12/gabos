@@ -164,9 +164,22 @@ PARA:
 								<input type="text" id="paNombre" class="input_Small" name="paNombre" value=""><br>
 							</td>
 						</tr>
+						<tr class="mArticulo">
+							<td rowspan= "3">
+								<label for="mFiltro"  class="labelMedium">Filtrar Por:</label>							
+							</td>
+							<td colspan= "3">
+								<input type="checkbox" id="paArticulo" name="paArticulo" value="1" checked>Artículos<br>
+							</td>
+						</tr>
+						<tr class="mFamilia">
+							<td colspan= "4">
+								<input type="checkbox" id="paFamilia" name="paFamilia" value="1" checked>Familia<br>
+							</td>
+						</tr>
 						<tr class="mCedula">
 							<td>
-								<input type="checkbox" id="mCedula" name="mCedula" value="">Cédula<br>
+								<input type="checkbox" id="mCedula" name="mCedula" value="1">Cédula<br>
 							</td>
 							<td class="fCedula">
 								<label for="fCedula"  class="input_Small">Cédula</label>							

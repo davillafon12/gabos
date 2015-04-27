@@ -125,7 +125,8 @@ class reportes extends CI_Controller {
 						'VentaXClienteFacturas' =>'Venta por Clientes Facturación',
 						'VentaXClienteFacturasResumido' => 'Venta Resumida por Clientes Facturación',
 						'VentaXClienteProforma' => 'Venta por Clientes Proforma',
-						'ClienteEstado' => 'Mostrar Clientes por Estado'
+						'ClienteEstado' => 'Mostrar Clientes por Estado',
+						'ClientesXDescuento' => 'Clientes x Descuentos'
 		);
 		return $reportes;
 	}
@@ -167,6 +168,9 @@ class reportes extends CI_Controller {
 		$paRangoM = $this->input->post('rangoM');
 		$paMontoI = $this->input->post('paMontoI');
 		$paMontoF = $this->input->post('paMontoF');
+		$paArticulo = $this->input->post('paArticulo'); 
+		$paFamilia = $this->input->post('paFamilia');
+		echo 'sivi ced: '.$paCedula;
 		
 		$paEstado = $this->input->post('paEstado'); 
 		
@@ -210,11 +214,18 @@ class reportes extends CI_Controller {
 			$parametro9 = "paMontoI=".$paMontoI; 		
 			$parametro10 = "paMontoF=".$paMontoF; 	
 			$parametro11 = "paEstado=".$paEstado; 
+			$parametro12 = "paArticulo=".$paArticulo; 
+			$parametro13 = "paFamilia=".$paFamilia;
 			if($Reporte == 'ClienteEstado'){
 				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro11;			
 			}	
 			else{
-				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6.'&'.$parametro7.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10;			
+				if($Reporte == 'ClientesXDescuento'){
+						$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro7.'&'.$parametro12.'&'.$parametro13;		
+				}
+				else{
+					$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6.'&'.$parametro7.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10;			
+				}				
 			}			
 			
 			$this->llamarReporte($txtRutaFinal);

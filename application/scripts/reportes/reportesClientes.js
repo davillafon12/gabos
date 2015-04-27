@@ -23,6 +23,7 @@ function eventoTipoReporte(){
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturas){
 			$(".rFechas").show();
 			$(".uFacturas").show();
+			$(".mFiltro").show();
 			$(".mNombre").show();
 			$(".mCedula").show();
 			$(".mRango").show();
@@ -34,6 +35,7 @@ function eventoTipoReporte(){
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProforma){
 			$(".rFechas").show();
 			$(".uFacturas").show();
+			$(".mFiltro").show();
 			$(".mNombre").show();
 			$(".mCedula").show();
 			$(".mRango").show();
@@ -45,6 +47,7 @@ function eventoTipoReporte(){
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturasResumen){
 			$(".rFechas").show();
 			$(".uFacturas").show();
+			$(".mFiltro").show();
 			$(".mNombre").show();
 			$(".mCedula").show();
 			$(".mRango").show();
@@ -56,8 +59,17 @@ function eventoTipoReporte(){
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_ClienteEstado){
 			$("#submit").attr("disabled", false); 
 			ocultarTodo();
-			$(".mEstado").show();
-			
+			$(".mEstado").show();			
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_ClientesXDescuento){
+			$("#submit").attr("disabled", false); 			
+			ocultarTodo();	
+			$(".mCedula").show();
+			$(".mSucursal").show();
+			$(".mArticulo").show();
+			$(".mFamilia").show();
+			$(".mFiltro").show();
+						
 		}
 	}); 
 }
@@ -87,6 +99,9 @@ function ocultarTodo(){
 	$(".fRango2").hide();
 	$(".mEstado").hide();
 	$(".mSucursal").hide();
+	$(".mFiltro").hide();
+	$(".mFamilia").hide();
+	$(".mFiltro").hide();
 	$("#mFecha").attr("checked", false);
 }
 

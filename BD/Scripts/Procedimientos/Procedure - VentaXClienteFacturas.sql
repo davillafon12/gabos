@@ -57,34 +57,12 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturas
 	end if; -- FIN paRango = 'menorIgual' 
   end If;   -- FIN paRango <> 'null'
   -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  select @QUERY as 'Resultado';  
+  -- select @QUERY as 'Resultado';  
   -- preparamos el objete Statement a partir de nuestra variable
-  -- PREPARE smpt FROM @Query;
+  PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
-  -- EXECUTE smpt;
+  EXECUTE smpt;
   -- liberamos la memoria
-  -- DEALLOCATE PREPARE smpt;
+  DEALLOCATE PREPARE smpt;
  END
 ;;
-
-
-
--- select  cli.Cliente_Cedula cedula, 
---        CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
---        fac.Factura_Fecha_Hora fecha,
---        fac.Factura_Consecutivo consecutivo, 
---        fac.Factura_Monto_Total montoTotal, 
---        fac.Factura_Monto_IVA montoIVA, 
---        fac.Factura_Monto_Sin_IVA montoSinIVA,
---         fac.Factura_Retencion
--- from    tb_03_cliente cli inner join 
---         tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula
--- where   cli.Cliente_EsSucursal = 0 and 
---         fac.TB_02_Sucursal_Codigo = 0 and 
---        fac.Factura_Estado = 'cobrada' and 
---        UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP('2015-01-01 00:00:00') AND UNIX_TIMESTAMP('2015-04-09 00:00:00')   
-		
-		
-
-		
-		
