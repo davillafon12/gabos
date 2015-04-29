@@ -14,7 +14,9 @@ var Utilitarios = (function (window, undefined) {
 	var _Reporte_ClientesXDescuento = "ClientesXDescuento"; 
 	
 	// ----------RANGOS ------------
-
+	var _menorIgual = "menorIgual"; 
+	var _mayorIgual = "mayorIgual"; 
+	var _between = "between"; 
 	
 	/*-----------------------------------------FUNCIONES ----------------------------------------------------------------------------------*/
 	/*-------------------------------------------------------------------------------------------------------------------------------------*/
@@ -171,14 +173,39 @@ var Utilitarios = (function (window, undefined) {
     // <parametro name="paCheckbox" type="checkbox"> es un Tipo checkbox que se le asignara la opción change</parametro>
     // <parametro name="paClase" type=".class">Es el .class que se modificara para mostrarse o ocultarse</parametro>
     function _eventoCheckbox(paCheckbox, paClase) {
-	paCheckbox.change(function(){
-		if($(this).is(":checked")){
-			paClase.show();
-		}else{
-			paClase.hide();
-		}
-	}); 
+		paCheckbox.change(function(){
+			if($(this).is(":checked")){
+				paClase.show();
+			}else{
+				paClase.hide();
+			}
+		}); 
     }
+	
+	// <descripcion>
+    // Función que se encarga de agregarle una función a un combobox, encargado de mostrar o ocultar campos
+    // </descripcion>
+    // <parametro name="idSelector" type="select"> es un Tipo select que se le asignara la opción change</parametro>
+    // <parametro name="classInicial" type=".class">Es el .class que se modificara para mostrarse o ocultarse</parametro>
+	// <parametro name="classFinal" type=".class">Es el .class que se modificara para mostrarse o ocultarse</parametro>
+	function _ComboRangos(idSelector, classInicial, classFinal){
+		idSelector.change(function(){
+			if(idSelector.val()!= "null"){
+				if(idSelector.val()!=Utilitarios.paMenorIgual ||
+				   idSelector.val()!=Utilitarios.paMayorIgual){
+					classInicial.show(); 
+					classFinal.hide(); 	
+				}else{
+					classInicial.show(); 
+					classFinal.show(); 
+				}
+			}
+			else{
+				classInicial.hide(); 
+				classFinal.hide(); 
+			}
+		});	
+	}
 	
 	
     return {   
@@ -189,6 +216,9 @@ var Utilitarios = (function (window, undefined) {
 		paReporte_VentaXClienteProforma:_Reporte_VentaXClienteProforma,
 		paReporte_ClienteEstado:_Reporte_ClienteEstado,
 		paReporte_ClientesXDescuento: _Reporte_ClientesXDescuento,
+		paMenorIgual:_menorIgual,
+		paMayorIgual:_mayorIgual,
+		paBetween:_between,
         fnInicializarCalendario: function (selector, conBoton, fechaParaMostrar, fechaMaxima) {
             return _InicializarCalendario(selector, conBoton, fechaParaMostrar, fechaMaxima); 
         },       
@@ -209,6 +239,9 @@ var Utilitarios = (function (window, undefined) {
         },
 		lfEventoCheckbox: function (paCheckbox, paClase){
 			return _eventoCheckbox(paCheckbox, paClase);
+		}, 
+		lfComboRangos: function(idSelector, classInicial, classFinal) {
+			return _ComboRangos(idSelector, classInicial, classFinal);			
 		}
     };//fin del return
 })();//fin de variable Utilitarios

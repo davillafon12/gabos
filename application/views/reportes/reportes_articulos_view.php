@@ -45,7 +45,7 @@ PARA:
 		<!--Incluir informacion log in-->
 		<?php include '/../Header/Log_In_Information.php';?>
 		<!--CSS ESTILO DEL FORMULARIO-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/reportes/reporte.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/reportes/articulo.css'); ?>">
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
 			<p class="titulo_wrapper">Consulta De Artículos</p>
@@ -59,7 +59,7 @@ PARA:
 				
 					<fieldset class="recuadro">	
 					<legend>Filtración Reportes</legend>							
-					<table>
+					<table border="1">
 						<tr>
 							<td>
 								<label for="tipo_reporte_Seleccionado" class="labelMedium">Tipo Reporte:</label>							
@@ -114,7 +114,7 @@ PARA:
 								<label for="rango_codigo"  class="labelMedium">Rango Código:</label>						
 							</td>
 							<td>
-								<select name="rangoCodigo" class="styleSelect" tabindex="8">
+								<select name="rangoCodigo" id="rangoCodigo" class="styleSelect" tabindex="8">
 								<?php 				
 									foreach($Rangos as $codigo_Rango => $Nombre_Rango)
 									{
@@ -124,16 +124,16 @@ PARA:
 								?>
 								</select> 
 							</td>
-							<td>
+							<td class="rCodigoI">
 								<label for="CodigoI"  class="labelMedium">Código Inicial:</label>						
 							</td>
-							<td>
+							<td class="rCodigoI"> 
 								<input id="CodigoI" class="input_Small" autocomplete="off" name="CodigoI"><br>
 							</td>
-							<td>
+							<td class="rCodigoF">
 								<label for="CodigoF"  class="labelMedium">Código Final:</label>						
 							</td>
-							<td>
+							<td class="rCodigoF">
 								<input id="CodigoF" class="input_Small" autocomplete="off" name="CodigoF"><br>
 							</td>
 						</tr>
@@ -170,16 +170,16 @@ PARA:
 								?>
 								</select> 
 							</td>
-							<td>
+							<td class="rPrecioI">
 								<label for="PrecioI"  class="labelMedium">Precio Inicial:</label>						
 							</td>
-							<td>
+							<td class="rPrecioI">
 								<input id="PrecioI" class="input_Small" autocomplete="off" name="PrecioI"><br>
 							</td>
-							<td>
+							<td class="rPrecioF">
 								<label for="PrecioF"  class="labelMedium">Precio Final:</label>						
 							</td>
-							<td>
+							<td class="rPrecioF">
 								<input id="PrecioF" class="input_Small" autocomplete="off" name="PrecioF"><br>
 							</td>
 						</tr>	
@@ -198,16 +198,16 @@ PARA:
 								?>
 								</select> 
 							</td>
-							<td>
+							<td class="rArticulosI">
 								<label for="CantidadI"  class="labelMedium">Cantidad Inicial:</label>						
 							</td>
-							<td>
+							<td class="rArticulosI">
 								<input id="CantidadI" class="input_Small" autocomplete="off" name="CantidadI"><br>
 							</td>
-							<td>
+							<td class="rArticulosF">
 								<label for="CantidadF"  class="labelMedium">Cantidad Final:</label>						
 							</td>
-							<td>
+							<td class="rArticulosF">
 								<input id="CantidadF" class="input_Small" autocomplete="off" name="CantidadF"><br>
 							</td>
 						</tr>	
@@ -226,16 +226,16 @@ PARA:
 								?>
 								</select> 
 							</td>
-							<td>
+							<td class="rArticulosDefI">
 								<label for="CantidadDefI"  class="labelMedium">Cantidad Inicial:</label>						
 							</td>
-							<td>
+							<td class="rArticulosDefI">
 								<input id="CantidadDefI" class="input_Small" autocomplete="off" name="CantidadDefI"><br>
 							</td>
-							<td>
+							<td class="rArticulosDefF">
 								<label for="CantidadDefF"  class="labelMedium">Cantidad Final:</label>						
 							</td>
-							<td>
+							<td class="rArticulosDefF">
 								<input id="CantidadDefF" class="input_Small" autocomplete="off" name="CantidadDefF"><br>
 							</td>
 						</tr>							

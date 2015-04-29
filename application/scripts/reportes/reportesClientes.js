@@ -74,16 +74,6 @@ function eventoTipoReporte(){
 	}); 
 }
 
-function eventoCheckbox(){
-	$("#mFecha").change(function(){
-		if($(this).is(":checked")){
-			$(".rFechas").show();
-		}else{
-			$(".rFechas").hide();
-		}
-	}); 
-}
-
 function ocultarTodo(){
 	$(".rFechas").hide();
 	$(".uFacturas").hide();
