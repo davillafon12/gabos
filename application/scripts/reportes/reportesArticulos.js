@@ -1,7 +1,9 @@
 $(document).ready(function (){
 	ocultartodo();
 	Utilitarios.lfComboRangos($("#rangoCodigo"), $(".rCodigoI"), $(".rCodigoF"));
-	//ComboRangoCodigo();
+	Utilitarios.lfComboRangos($("#rangoPrecios"), $(".rPrecioI"), $(".rPrecioF"));
+	Utilitarios.lfComboRangos($("#rangoArticulos"), $(".rArticulosI"), $(".rArticulosF"));
+	Utilitarios.lfComboRangos($("#rangoArticulosDef"), $(".rArticulosDefI"), $(".rArticulosDefF"));
 	
 }); 
 
@@ -15,23 +17,4 @@ function ocultartodo(){
 	$(".rArticulosF").hide(); 
 	$(".rArticulosDefI").hide(); 
 	$(".rArticulosDefF").hide(); 
-}
-
-function ComboRangoCodigo(){
-	$("#rangoCodigo").change(function(){
-		if($("#rangoCodigo").val()!= "null"){
-			if($("#rangoCodigo").val()!=Utilitarios.paMenorIgual ||
-			   $("#rangoCodigo").val()!=Utilitarios.paMayorIgual){
-				$(".rCodigoI").show(); 
-				$(".rCodigoF").hide(); 	
-			}else{
-				$(".rCodigoI").show(); 
-				$(".rCodigoF").show(); 
-			}
-		}
-		else{
-			$(".rCodigoI").hide(); 
-			$(".rCodigoF").hide(); 
-		}
-	});	
 }

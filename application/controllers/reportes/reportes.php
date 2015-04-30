@@ -170,7 +170,6 @@ class reportes extends CI_Controller {
 		$paMontoF = $this->input->post('paMontoF');
 		$paArticulo = $this->input->post('paArticulo'); 
 		$paFamilia = $this->input->post('paFamilia');
-		echo 'sivi ced: '.$paCedula;
 		
 		$paEstado = $this->input->post('paEstado'); 
 		
@@ -242,9 +241,8 @@ class reportes extends CI_Controller {
 	Reportes de Articulos*/
 	function reportesArticulos(){
 		$reportes = array(
-						'ListaArticulos1' =>'ListaArticulos1Sivi',
-						'ListaArticulos2' => 'ListaArticulos2Sivi',						
-						'ListaArticulos3' =>'ListaArticulos3Sivi'
+						'InventarioArticulos' =>'Inventario Artículos',
+						'prueba' => 'prueba'
 		);
 		return $reportes;
 	}
@@ -281,6 +279,117 @@ class reportes extends CI_Controller {
 		}		
 	}
 	
+	
+	function articulosReportes(){
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la session
+		// parametros Obtenidos desde Interfaz 
+		$paReporte =$this->input->post('tipo_reporte');	
+		$paSucursal = $this->input->post('sucursal');
+		$paFamilia = $this->input->post('familia');		
+		$paRangoC = $this->input->post('rangoCodigo');
+		$paCodigoI = $this->input->post('CodigoI');
+		$paCodigoF = $this->input->post('CodigoF');
+		$paNumPrecio = $this->input->post('precio');
+		$paRangoP = $this->input->post('rango_precio');
+		$paPrecioI = $this->input->post('PrecioI');
+		$paPrecioF = $this->input->post('PrecioF');
+		$paRangoCant = $this->input->post('rango_articulos');
+		$paCantidadI = $this->input->post('CantidadI');
+		$paCantidadF = $this->input->post('CantidadF');
+		$paRangoDef = $this->input->post('rango_articulosDef');
+		$paCantidadDefI = $this->input->post('CantidadDefI');
+		$paCantidadDefF = $this->input->post('CantidadDefF');
+		$paExento = $this->input->post('paExento');
+		//Switch para Rango Codigos
+		if($paSucursal == ''){ $paSucursal = 'null';}		
+		switch ($paRangoC) {
+			case "null":
+				$paCodigoI = "null";
+				$paCodigoF = "null";
+				break;
+			case "menorIgual":
+				$paCodigoF = "null";
+				break;
+			case "mayorIgual":
+				$paCodigoF = "null";
+				break;
+			default;
+		}
+		//Switch para Rango Precios
+		switch ($paRangoP) {
+			case "null":
+				$paPrecioI = "null";
+				$paPrecioF = "null";
+				break;
+			case "menorIgual":
+				$paPrecioF = "null";
+				break;
+			case "mayorIgual":
+				$paPrecioF = "null";
+				break;
+			default;
+		}
+		//Switch para Rango Articulos
+		switch ($paRangoCant) {
+			case "null":
+				$paCantidadI = "null";
+				$paCantidadF = "null";
+				break;
+			case "menorIgual":
+				$paCantidadF = "null";
+				break;
+			case "mayorIgual":
+				$paCantidadF = "null";
+				break;
+			default;
+		}
+		//Switch para Rango Articulos Defectuosos 
+		switch ($paRangoDef) {
+			case "null":
+				$paCantidadDefI = "null";
+				$paCantidadDefF = "null";
+				break;
+			case "menorIgual":
+				$paCantidadDefF = "null";
+				break;
+			case "mayorIgual":
+				$paCantidadDefF = "null";
+				break;
+			default;
+		}
+		if($paExento != 1){ $paExento = 0;}
+		//Parametros quemados en codigo 			
+		$direccion = "/reports/Gabo/Articulos/";
+		$txtRutaFinal = "";
+		$ip = ""; 
+		if($data['Sucursal_Codigo'] == 0){
+			$ip = $this->IpInterna; 
+		}
+		else {
+			$ip = $this->IpExterna; 
+		}
+		if($paReporte != 'null'){
+			 $parametro1 = "paSucursal=".$paSucursal; 
+			 $parametro2 = "paFamilia=".$paFamilia; 		
+			 $parametro3 = "paRangoC=".$paRangoC; 		
+			 $parametro4 = "paCodigoI=".$paCodigoI; 		
+			 $parametro5 = "paCodigoF=".$paCodigoF; 		
+			 $parametro6 = "paNumPrecio=".$paNumPrecio; 		
+			 $parametro7 = "paRangoP=".$paRangoP; 		
+			 $parametro8 = "paPrecioI=".$paPrecioI; 		
+			 $parametro9 = "paPrecioF=".$paPrecioF; 		
+			 $parametro10 = "paRangoCant=".$paRangoCant; 		
+			 $parametro11 = "paCantidadI=".$paCantidadI; 		
+			 $parametro12 = "paCantidadF=".$paCantidadF;
+			 $parametro13 = "paRangoDef=".$paRangoDef;
+			 $parametro14 = "paCantidadDefI=".$paCantidadDefI;
+			 $parametro15 = "paCantidadDefF=".$paCantidadDefF;
+			 $parametro16 = "paExento=".$paExento;
+			 $txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6;			
+			 $txtRutaFinal = $txtRutaFinal.'&'.$parametro7.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10.'&'.$parametro11.'&'.$parametro12.'&'.$parametro13.'&'.$parametro14.'&'.$parametro15.'&'.$parametro16;
+			 $this->llamarReporte($txtRutaFinal);
+		}	
+	}	
 	
 	/*----------------------------------------------------------------------*/
 	/*-------------FUNCIONES GENERICAS PARA CONVERSIONES O UTILIDADES-------*/

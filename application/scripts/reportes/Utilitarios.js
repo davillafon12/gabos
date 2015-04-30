@@ -191,13 +191,13 @@ var Utilitarios = (function (window, undefined) {
 	function _ComboRangos(idSelector, classInicial, classFinal){
 		idSelector.change(function(){
 			if(idSelector.val()!= "null"){
-				if(idSelector.val()!=Utilitarios.paMenorIgual ||
+				if(idSelector.val()!=Utilitarios.paMenorIgual &&
 				   idSelector.val()!=Utilitarios.paMayorIgual){
 					classInicial.show(); 
-					classFinal.hide(); 	
+					classFinal.show(); 				
 				}else{
 					classInicial.show(); 
-					classFinal.show(); 
+					classFinal.hide(); 
 				}
 			}
 			else{

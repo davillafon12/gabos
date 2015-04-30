@@ -54,11 +54,12 @@ PARA:
 			<div  class="form">
 				<?php 
 					$attributes = array('name' => 'reporte_articulo_form', 'class' => 'reporte_articulo_form-form');					
-					echo form_open_multipart('reportes/reportes/articulosReporte', $attributes); 
+					echo form_open_multipart('reportes/reportes/articulosReportes', $attributes); 
 				?>	 
 				
 					<fieldset class="recuadro">	
-					<legend>Filtración Reportes</legend>							
+					<legend>Filtración Reportes</legend>	
+					<p id="temp"></p>
 					<table border="1">
 						<tr>
 							<td>
@@ -139,7 +140,7 @@ PARA:
 						</tr>
 						<tr>
 							<td colspan=2>
-								<label for="familia"  class="labelMedium">Número de Precio que se va a filtrar:</label>							
+								<label for="precio"  class="labelMedium">Número de Precio que se va a filtrar:</label>							
 							</td>
 							<td>
 								<select name="precio" class="styleSelect" tabindex="8">
@@ -160,7 +161,7 @@ PARA:
 								<label for="rango_precio"  class="labelMedium">Rango Precio:</label>						
 							</td>
 							<td>
-								<select name="rangoPrecios" class="styleSelect" tabindex="8">
+								<select name="rangoPrecios" id="rangoPrecios" class="styleSelect" tabindex="8">
 								<?php 				
 									foreach($Rangos as $codigo_Rango => $Nombre_Rango)
 									{
@@ -188,7 +189,7 @@ PARA:
 								<label for="rango_articulos"  class="labelMedium">Rango Artículos:</label>						
 							</td>
 							<td>
-								<select name="rangoArticulos" class="styleSelect" tabindex="8">
+								<select name="rangoArticulos" id="rangoArticulos" class="styleSelect" tabindex="8">
 								<?php 				
 									foreach($Rangos as $codigo_Rango => $Nombre_Rango)
 									{
@@ -216,7 +217,7 @@ PARA:
 								<label for="rango_articulosDef"  class="labelMedium">Rango Artículos Def:</label>						
 							</td>
 							<td>
-								<select name="rangoArticulosDef" class="styleSelect" tabindex="8">
+								<select name="rangoArticulosDef" id="rangoArticulosDef" class="styleSelect" tabindex="8">
 								<?php 				
 									foreach($Rangos as $codigo_Rango => $Nombre_Rango)
 									{
@@ -238,7 +239,15 @@ PARA:
 							<td class="rArticulosDefF">
 								<input id="CantidadDefF" class="input_Small" autocomplete="off" name="CantidadDefF"><br>
 							</td>
-						</tr>							
+						</tr>	
+						<tr>
+							<td>
+								<label for="paExento"  class="labelMedium">Exento:</label>						
+							</td>
+							<td>
+								<input id="paExento" type="Checkbox" name="paExento" value="1">Exento<br>
+							</td>
+						</tr>
 					</table>
 					</fieldset>
 					<div class="divButton">		
