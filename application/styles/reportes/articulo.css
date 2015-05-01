@@ -69,7 +69,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .rCodigoI, .rCodigoF, .rPrecioI, .rPrecioF, .rArticulosI, .rArticulosF,
-.rArticulosDefI, .rArticulosDefF{
+.rArticulosDefI, .rArticulosDefF, .mRangoPrecios{
     display: none;
 }
 

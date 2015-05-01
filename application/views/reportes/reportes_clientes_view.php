@@ -59,7 +59,7 @@ PARA:
 				
 					<fieldset class="recuadro">	
 					<legend>Filtración Reportes</legend>							
-					<table border = "1">
+					<table>
 						<tr>
 							<td>
 								<label for="tipo_Reporte_seleccionado" class="labelMedium">Tipo Reporte:</label>							

@@ -60,7 +60,7 @@ PARA:
 					<fieldset class="recuadro">	
 					<legend>Filtración Reportes</legend>	
 					<p id="temp"></p>
-					<table border="1">
+					<table>
 						<tr>
 							<td>
 								<label for="tipo_reporte_Seleccionado" class="labelMedium">Tipo Reporte:</label>							
@@ -140,10 +140,10 @@ PARA:
 						</tr>
 						<tr>
 							<td colspan=2>
-								<label for="precio"  class="labelMedium">Número de Precio que se va a filtrar:</label>							
+								<label for="precio"  class="labelMedium">Número de Precio:</label>							
 							</td>
 							<td>
-								<select name="precio" class="styleSelect" tabindex="8">
+								<select name="precio" id="precio" class="styleSelect" tabindex="8">
 								<?php 				
 									foreach($Precios as $codigo_Precio =>$Nombre_Precio)
 									{
@@ -156,7 +156,7 @@ PARA:
 							<td colspan=3>
 							</td>
 						</tr>
-						<tr>
+						<tr class="mRangoPrecios">
 							<td>
 								<label for="rango_precio"  class="labelMedium">Rango Precio:</label>						
 							</td>
@@ -253,8 +253,7 @@ PARA:
 					<div class="divButton">		
 						<input class="buttom" value="Volver" type="button" onclick="window.location.assign('<?php echo base_url('home')?>')">
 						<input class="buttom" name="submit" id="submit" onsubmit="" tabindex="18" value="Consultar" type="submit">						
-					</div>
-			
+					</div>			
 				<?php
 					echo form_close();
 				?>

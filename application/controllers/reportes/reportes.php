@@ -290,18 +290,20 @@ class reportes extends CI_Controller {
 		$paCodigoI = $this->input->post('CodigoI');
 		$paCodigoF = $this->input->post('CodigoF');
 		$paNumPrecio = $this->input->post('precio');
-		$paRangoP = $this->input->post('rango_precio');
+		$paRangoP = $this->input->post('rangoPrecios');
 		$paPrecioI = $this->input->post('PrecioI');
 		$paPrecioF = $this->input->post('PrecioF');
-		$paRangoCant = $this->input->post('rango_articulos');
+		$paRangoCant = $this->input->post('rangoArticulos');
 		$paCantidadI = $this->input->post('CantidadI');
 		$paCantidadF = $this->input->post('CantidadF');
-		$paRangoDef = $this->input->post('rango_articulosDef');
+		$paRangoDef = $this->input->post('rangoArticulosDef');
 		$paCantidadDefI = $this->input->post('CantidadDefI');
 		$paCantidadDefF = $this->input->post('CantidadDefF');
 		$paExento = $this->input->post('paExento');
 		//Switch para Rango Codigos
-		if($paSucursal == ''){ $paSucursal = 'null';}		
+		if($paSucursal == ''){ $paSucursal = 'null';}	
+		if($paExento != 1){ $paExento = 0;}		
+		//if($paNumPrecio == ''){$paNumPrecio = 'null';}
 		switch ($paRangoC) {
 			case "null":
 				$paCodigoI = "null";
@@ -316,19 +318,26 @@ class reportes extends CI_Controller {
 			default;
 		}
 		//Switch para Rango Precios
-		switch ($paRangoP) {
-			case "null":
-				$paPrecioI = "null";
-				$paPrecioF = "null";
-				break;
-			case "menorIgual":
-				$paPrecioF = "null";
-				break;
-			case "mayorIgual":
-				$paPrecioF = "null";
-				break;
-			default;
+		if($paNumPrecio != 'null'){
+			switch ($paRangoP) {
+				case "null":
+					$paPrecioI = "null";
+					$paPrecioF = "null";
+					break;
+				case "menorIgual":
+					$paPrecioF = "null";
+					break;
+				case "mayorIgual":
+					$paPrecioF = "null";
+					break;
+				default;
+			}
 		}
+		else{
+			$paRangoP = "null";
+			$paPrecioI = "null";
+			$paPrecioF = "null";
+		}	
 		//Switch para Rango Articulos
 		switch ($paRangoCant) {
 			case "null":
@@ -357,7 +366,6 @@ class reportes extends CI_Controller {
 				break;
 			default;
 		}
-		if($paExento != 1){ $paExento = 0;}
 		//Parametros quemados en codigo 			
 		$direccion = "/reports/Gabo/Articulos/";
 		$txtRutaFinal = "";
@@ -384,7 +392,7 @@ class reportes extends CI_Controller {
 			 $parametro13 = "paRangoDef=".$paRangoDef;
 			 $parametro14 = "paCantidadDefI=".$paCantidadDefI;
 			 $parametro15 = "paCantidadDefF=".$paCantidadDefF;
-			 $parametro16 = "paExento=".$paExento;
+			 $parametro16 = "paExento=".$paExento;		 
 			 $txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6;			
 			 $txtRutaFinal = $txtRutaFinal.'&'.$parametro7.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10.'&'.$parametro11.'&'.$parametro12.'&'.$parametro13.'&'.$parametro14.'&'.$parametro15.'&'.$parametro16;
 			 $this->llamarReporte($txtRutaFinal);
@@ -405,8 +413,8 @@ class reportes extends CI_Controller {
 	}
 	
 	function llamarReporte($rutafinal){
-			echo 'Prueba: '.$rutafinal; 
-		//	header('Location:'.$rutafinal.'');	
+		//	echo 'Prueba: '.$rutafinal; 
+			header('Location:'.$rutafinal.'');	
 	}
 	
 	function comboEstadosFactura(){
