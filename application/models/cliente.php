@@ -571,6 +571,23 @@ Class cliente extends CI_Model
 			return $result[0]->TOTAL;
 		}
 	}
+	
+	
+	function eliminarAutorizacionCliente($secuencia, $cliente){
+			$autorizacion = $this->verificarSiYaTieneAutorizacion($cliente, $secuencia);
+			if($autorizacion){
+					$nombreImagen = $autorizacion[0]->AuthClientes_Carta_URL;
+					//Eliminamos el archivo de la imagen de la carta
+					$ruta_a_preguntar = FCPATH.'application\\images\\cartas\\'.$nombreImagen;
+					if (file_exists($ruta_a_preguntar)) {
+			        unlink($ruta_a_preguntar);
+			    }
+			}
+	    //Eliminamos el registro en la base de datos
+			$this->db->where("AuthClientes_Seq", $secuencia);
+			$this->db->where("TB_03_Cliente_Cliente_Cedula", $cliente);
+			$this->db->delete("tb_16_authclientes");
+	}
 }
 
 

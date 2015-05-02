@@ -157,6 +157,7 @@ class autorizaciones extends CI_Controller {
 	function verificarSiSeDebeEliminar($valores){ 
 	//Me indica que si todos los campos son vacios y eso 
 	//significa que debo eleiminar esa autorizacion 
+		
 		foreach($valores as $valor){
 			if(trim($valor)!=''){return false;}
 		}
@@ -165,16 +166,21 @@ class autorizaciones extends CI_Controller {
 	
 	function guardarAutorizacion($persona, $cedula, $secuencia){
 		$accion = true;
-		if($this->verificarSiSeDebeCambiar($persona)){			
-			$persona['secuencia'] = $secuencia;  //Lo metemos en persona para procesarlo en cliente
-			if($this->verificarSiYaTieneAutorizacion($cedula, $secuencia))
-			{
-				$this->cliente->actualizarAutorizacion($persona, $cedula);
-				$accion = 'actualizo';
-			}else{				
-				$this->cliente->agregarAutorizacion($persona, $cedula);
-				$accion = "agrego";
-			}
+		if($this->verificarSiSeDebeEliminar($persona)){
+				$this->cliente->eliminarAutorizacionCliente($secuencia, $cedula);
+				$accion = "elimino";
+		}else{
+				if($this->verificarSiSeDebeCambiar($persona)){	
+					$persona['secuencia'] = $secuencia;  //Lo metemos en persona para procesarlo en cliente
+					if($this->verificarSiYaTieneAutorizacion($cedula, $secuencia))
+					{
+						$this->cliente->actualizarAutorizacion($persona, $cedula);
+						$accion = 'actualizo';
+					}else{			
+						$this->cliente->agregarAutorizacion($persona, $cedula);
+						$accion = "agrego";
+					}
+				}
 		}
 		return $accion;
 	}
