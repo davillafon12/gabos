@@ -817,7 +817,7 @@ function actualizaCostosTotales(decimales_int){
 		costo_retencion = 0;
 	}
 	
-	if(clienteEsDeTipoSucursal=="1"){
+	if(clienteNoAplicaRetencion=="1"){
 		//Variable se inicializa en facturas_call
 		//SI NO APLICA RETENCION
 		costo_retencion = 0;

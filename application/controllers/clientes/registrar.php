@@ -81,11 +81,15 @@ class registrar extends CI_Controller {
 	$exento = 0;
 	$exento = isset($_POST['esexento']) && $_POST['esexento']  ? "1" : "0";
 	
+	//Aplica Retencion
+	$aplicaRetencion = 0;
+	$aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
+
 	$this->do_upload($cedula); // metodo encargado de cargar la imagen con la cedula del usuario
 			
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
-	if($this->cliente->registrar($nombre, $apellidos , $cedula, $tipo_Cedula, $carnet, $celular, $telefono, $pais, $direccion, $observaciones, $this->direccion_url_imagen, $email, $estado_Cliente, $this->calidad_Cliente, $tipo_pago_cliente, $this->isSucursal, $exento))
+	if($this->cliente->registrar($nombre, $apellidos , $cedula, $tipo_Cedula, $carnet, $celular, $telefono, $pais, $direccion, $observaciones, $this->direccion_url_imagen, $email, $estado_Cliente, $this->calidad_Cliente, $tipo_pago_cliente, $this->isSucursal, $exento, $aplicaRetencion))
 	{ //Si se ingreso bien a la BD
 		//Titulo de la pagina
 		$data['Titulo_Pagina'] = "Transacción Exitosa";
@@ -111,7 +115,7 @@ class registrar extends CI_Controller {
 								 <p class='titles'>-Observaciones:</h3> </p><br><p class='content_ob'>
 								 ".$observaciones.".</p>
 								 <input class='buttom' tabindex='4' value='Registrar otro cliente' type='submit'>
-								 <a href='".base_url('home')."' class='boton_volver'>Volver</a>
+								 <a href='".base_url('home')."' class='boton_volver' style='  top: 15px;  left: 80px;  padding: 4px 10px 4px;'>Volver</a>
 				                 </form>
 								 </div>";
 		$this->load->view('clientes/view_informacion_guardado', $data);

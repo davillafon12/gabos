@@ -322,64 +322,61 @@ class editar extends CI_Controller {
 
  function edicion()
  {
-	$id_request=$_GET['id'];
-	$ruta_base_imagenes_script = base_url('application/images/scripts');
-	$ruta_imagen_cliente = base_url('application/images/Client_Photo/thumb');
-	$nombre_cliente_edision = $this->cliente->getClientes_Cedula($id_request);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	
-	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-	
-	if(!$permisos['editar_cliente'])
-	{	
-	    redirect('accesoDenegado', 'location');	
-	}
-	
-	//echo $nombre_empresa;
-	if($result = $this->cliente->getClientes_Cedula($id_request))
-	{
-	    $this->load->helper(array('form'));
-	    foreach($result as $row)
-		{
-		    $data['Cliente_Tipo_Cedula'] = $row -> Cliente_Tipo_Cedula;
-			$data['Cliente_Cedula'] = $row -> Cliente_Cedula;
-			$data['Cliente_Estado'] = $row -> Cliente_Estado;
-			$data['Cliente_Imagen_URL'] = $ruta_imagen_cliente."/".$row -> Cliente_Imagen_URL;
-			$data['Cliente_Nombre'] = $row -> Cliente_Nombre;
-			$data['Cliente_Apellidos'] = $row -> Cliente_Apellidos;
-			$data['Cliente_Carnet_Numero'] = $row -> Cliente_Carnet_Numero;
-			$data['Cliente_Celular'] = $row -> Cliente_Celular;
-			$data['Cliente_Telefono'] = $row -> Cliente_Telefono;
-			$data['Cliente_Correo_Electronico'] = $row -> Cliente_Correo_Electronico;
-			$formato_Fecha = substr($row -> Cliente_Fecha_Ingreso, -20, 10);
-			$data['Cliente_Fecha_Ingreso'] = $formato_Fecha;
-			$data['Cliente_Pais'] = $row -> Cliente_Pais;
-			$data['Cliente_Direccion'] = $row -> Cliente_Direccion;
-			$data['isSucursal'] = $row -> Cliente_EsSucursal;
-			$data['isExento'] = $row -> Cliente_EsExento;
-			$descuento = $this->cliente->getClienteDescuento($row -> Cliente_Cedula, $data['Sucursal_Codigo']);
-			$maxCredito = $this->cliente->getClienteMaximoCredito($row -> Cliente_Cedula, $data['Sucursal_Codigo']);
+			$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 			
-			$data['cliente_descuento'] = $descuento;
-			$data['maxCredito'] = $maxCredito;
+			if(!$permisos['editar_cliente'])
+			{	
+			    redirect('accesoDenegado', 'location');	
+			}
 			
-			$data['Cliente_Observaciones'] = $row -> Cliente_Observaciones;
-			$data['Cliente_Numero_Pago'] = $row -> Cliente_Numero_Pago;
-		}
-		$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
-		$data['Familias'] = $familias_actuales;
-		$this->load->view('clientes/clientes_edision_view', $data);
-	}
-	else
-	{
-		$data['Titulo_Pagina'] = "Transacción Fallida";
-		$data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>Hubo un error al actualizar el cliente ".$nombre_cliente_edision."! <img src=".$ruta_base_imagenes_script."/error.gif /></p></div><br>
-		                         <div class='Informacion'>								 
-					             <form action=".base_url('clientes/editar').">
-									 <input class='buttom' tabindex='2' value='Volver' type='submit' >
-				                 </form>								 
-								 </div>";
-	}
+			if(isset($_GET['id'])){
+					$id_request=trim($_GET['id']);
+					$ruta_base_imagenes_script = base_url('application/images/scripts');
+					$ruta_imagen_cliente = base_url('application/images/Client_Photo/thumb');
+					$nombre_cliente_edision = $this->cliente->getClientes_Cedula($id_request);
+					
+					if($result = $this->cliente->getClientes_Cedula($id_request))
+					{
+					    $this->load->helper(array('form'));
+					    foreach($result as $row)
+						{
+						    $data['Cliente_Tipo_Cedula'] = $row -> Cliente_Tipo_Cedula;
+								$data['Cliente_Cedula'] = $row -> Cliente_Cedula;
+								$data['Cliente_Estado'] = $row -> Cliente_Estado;
+								$data['Cliente_Imagen_URL'] = $ruta_imagen_cliente."/".$row -> Cliente_Imagen_URL;
+								$data['Cliente_Nombre'] = $row -> Cliente_Nombre;
+								$data['Cliente_Apellidos'] = $row -> Cliente_Apellidos;
+								$data['Cliente_Carnet_Numero'] = $row -> Cliente_Carnet_Numero;
+								$data['Cliente_Celular'] = $row -> Cliente_Celular;
+								$data['Cliente_Telefono'] = $row -> Cliente_Telefono;
+								$data['Cliente_Correo_Electronico'] = $row -> Cliente_Correo_Electronico;
+								$formato_Fecha = substr($row -> Cliente_Fecha_Ingreso, -20, 10);
+								$data['Cliente_Fecha_Ingreso'] = $formato_Fecha;
+								$data['Cliente_Pais'] = $row -> Cliente_Pais;
+								$data['Cliente_Direccion'] = $row -> Cliente_Direccion;
+								$data['isSucursal'] = $row -> Cliente_EsSucursal;
+								$data['isExento'] = $row -> Cliente_EsExento;
+								$data['aplicaRetencion'] = $row -> Aplica_Retencion;
+								$descuento = $this->cliente->getClienteDescuento($row -> Cliente_Cedula, $data['Sucursal_Codigo']);
+								$maxCredito = $this->cliente->getClienteMaximoCredito($row -> Cliente_Cedula, $data['Sucursal_Codigo']);
+								
+								$data['cliente_descuento'] = $descuento;
+								$data['maxCredito'] = $maxCredito;
+								
+								$data['Cliente_Observaciones'] = $row -> Cliente_Observaciones;
+								$data['Cliente_Numero_Pago'] = $row -> Cliente_Numero_Pago;
+						}
+						$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
+						$data['Familias'] = $familias_actuales;
+						$this->load->view('clientes/clientes_edision_view', $data);
+					}else{
+						redirect("clientes/editar","location");
+					}
+			}else{
+				redirect("clientes/editar","location");
+			}
  }
  
 	 function actualizarCliente()
@@ -411,6 +408,10 @@ class editar extends CI_Controller {
 		//Si es exento
 		$exento = 0;
 		$exento = isset($_POST['esexento']) && $_POST['esexento']  ? "1" : "0";
+		
+		//Aplica Retencion
+		$aplicaRetencion = 0;
+		$aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
 		
 
 		if($result = $this->cliente->obtener_Imagen_Cliente($cedula)){
@@ -450,6 +451,7 @@ class editar extends CI_Controller {
 		$data_update['Cliente_Numero_Pago'] = mysql_real_escape_string($tipo_pago_cliente);
 		$data_update['Cliente_EsSucursal'] = $isSucursal; 
 		$data_update['Cliente_EsExento'] = $exento;
+		$data_update['Aplica_Retencion'] = $aplicaRetencion;
 		
 		$this->cliente->actualizar(mysql_real_escape_string($cedula), $data_update);
 		

@@ -41,7 +41,7 @@ Class cliente extends CI_Model
 	}	
 
 
-	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $carnet_cliente, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento)
+	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $carnet_cliente, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento, $aplicaRetencion)
 	{
 		
 		if($this->existe_Cliente($cedula)){
@@ -68,7 +68,8 @@ Class cliente extends CI_Model
 							'Cliente_Calidad'=>mysql_real_escape_string($calidad_Cliente),								
 							'Cliente_Numero_Pago'=>mysql_real_escape_string($tipo_pago_Cliente),
 							'Cliente_EsSucursal' => mysql_real_escape_string($isSucursal),
-							'Cliente_EsExento' => mysql_real_escape_string($exento)
+							'Cliente_EsExento' => mysql_real_escape_string($exento),
+							'Aplica_Retencion' => $aplicaRetencion
 	                    );
 			try{
 	        $this->db->insert('TB_03_Cliente',$data); }
@@ -181,7 +182,8 @@ Class cliente extends CI_Model
 							 'estado'=>$row->Cliente_Estado,
 							 'descuento'=>$this->getClienteDescuento(mysql_real_escape_string($id), $data['Sucursal_Codigo']),
 							 'exento' => $row->Cliente_EsExento,
-							 'sucursal' => $row->Cliente_EsSucursal
+							 'sucursal' => $row->Cliente_EsSucursal,
+							 'retencion' => $row->Aplica_Retencion
 							);
 			}
 		}	

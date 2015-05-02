@@ -59,6 +59,7 @@ var clienteEsExento = false;
 
 var clienteEsDeTipoSucursal = "0";
 var clienteEsDeTipoExento = "0";
+var clienteNoAplicaRetencion = "0";
 
 function getNombreCliente(str){
 	$.ajax({
@@ -78,6 +79,7 @@ function getNombreCliente(str){
 				//SI EXISTE EL CLIENTE
 					clienteEsDeTipoSucursal = result[0].sucursal;
 					clienteEsDeTipoExento = result[0].exento;
+					clienteNoAplicaRetencion = result[0].retencion;
 					switch(result[0].estado.trim()){ //Segun el estado del cliente debemos reportarlo
 						case 'activo':						
 							if(result[0].descuento){
