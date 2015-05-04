@@ -142,6 +142,12 @@ PARA:
 							<td>
 								<input type="file" id="foto_articulo" class="input_dos" name="userfile" size="10" accept=".jpg,.png,.ico,.bmp" disabled>
 							</td>
+							<td>
+								<label class="contact" > Sin Retención</label>
+							</td>
+							<td>
+								<input type="checkbox" name="retencion" id="retencion"  value="1" >
+							</td>
 						</tr>
 					</table>
 				</fieldset>

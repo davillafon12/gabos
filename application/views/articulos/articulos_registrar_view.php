@@ -126,13 +126,12 @@ PARA:
 								<label for="sucursal"  class="contact">Empresa:</label>					
 							</td>
 							<td>
-								<select name="sucursal" class="input_dos" id="sucursal" onchange="verificarCodigoArticulo()" disabled>
+								<select name="sucursal" class="input_dos" id="sucursal" onchange="verificarCodigoBodega('0')" >
 									<?php 
 										foreach($Familia_Empresas as $Nombre_Empresa => $codigo_empresa)
 										{
 											echo "<option value='".$codigo_empresa."'";
 											echo">".$codigo_empresa." - ".$Nombre_Empresa."</option>";
-											break;
 										}
 									?>
 								</select> 
@@ -165,6 +164,12 @@ PARA:
 							</td>
 							<td>
 								<input type="file" id="foto_articulo" class="input_dos" name="userfile" size="10" accept=".jpg,.png,.ico,.bmp" disabled>
+							</td>
+							<td>
+								<label class="contact" > Sin Retención</label>
+							</td>
+							<td>
+								<input type="checkbox" name="retencion" id="retencion"  value="1" disabled>
 							</td>
 						</tr>
 					</table>

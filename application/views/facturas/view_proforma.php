@@ -205,6 +205,7 @@ PARA:
 							<input id='costo_unidad_articulo_ORIGINAL_".$numero_id."' type='hidden' >
 							<input id='costo_unidad_articulo_FINAL_".$numero_id."' type='hidden' >
 							<input id='producto_exento_".$numero_id."' type='hidden' >
+							<input id='producto_retencion_".$numero_id."' type='hidden' >
 						</td>
 						<td>
 							<div class='articulo_specs' id='costo_total_articulo_".$numero_id."'></div>

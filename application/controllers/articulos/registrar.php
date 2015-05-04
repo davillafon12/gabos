@@ -71,6 +71,7 @@ class registrar extends CI_Controller {
 	$descuento_Articulo = $this->input->post('descuento');
 	$this->do_upload($codigo_Articulo); // aqui jala la imagen 
 	$exento_articulo = $this->input->post('exento');
+	$retencion = $this->input->post('retencion');
 	$familia_articulo = $this->input->post('familia');	
 	$empresa_Articulo = $this->input->post('sucursal');
 	$costo_Articulo = $this->input->post('costo');
@@ -83,7 +84,7 @@ class registrar extends CI_Controller {
 
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
-	if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo,  $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo))
+	if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo))
 	{ //Si se ingreso bien a la BD
 		$this->bodega_m->restarCantidadBodega($cantidad_Articulos, $codigoBrasil, $empresa_Articulo);
 		
@@ -215,152 +216,122 @@ function do_upload($cedula)
 
 
     function carga_excel(){
-		//print_r($_FILES);
 		
-		include '/../get_session_data.php';
-		if(isset($_FILES['archivo_excel'])&&isset($_POST['sucursal'])){
-			$sucursal = $_POST['sucursal'];
-			if($this->empresa->getEmpresa($sucursal)){	
-				$resultado = $this->procesarExcel($sucursal);
-				//print_r($resultado);
-				if($resultado['status']=='success'){
-					//Verificamos que no hayan erroes, si los hay no procesar nada
-					if(	sizeOf($resultado["erroresCodigo"])==0 &&
-						sizeOf($resultado["erroresCosto"])==0 &&
-						sizeOf($resultado["erroresPrecio1"])==0 &&
-						sizeOf($resultado["erroresPrecio2"])==0 &&
-						sizeOf($resultado["erroresPrecio3"])==0 &&
-						sizeOf($resultado["erroresPrecio4"])==0 &&
-						sizeOf($resultado["erroresPrecio5"])==0 &&
-						sizeOf($resultado["erroresCantidad"])==0 &&
-						sizeOf($resultado["erroresFamilia"])==0 &&
-						sizeOf($resultado["erroresSucursal"])==0 &&
-						sizeOf($resultado["erroresExento"])==0 &&
-						sizeOf($resultado["erroresDescuento"])==0 &&
-						sizeOf($resultado["erroresCodBrasil"])==0 &&
-						sizeOf($resultado["erroresCantidadMayor"])==0 ){
-						$articulos = $resultado['articulos'];
-						foreach($articulos as $articulo){
-							/*//Filtramos que el articulo no este dentro de los articulos con errores
-							if(!in_array($articulo['cod'], $resultado['erroresCantidad']) && !in_array($articulo['cod'], $resultado['erroresCosto'])){
-								//echo "<br>".$articulo['cod'];
-								
-								date_default_timezone_set("America/Costa_Rica");
-								$fecha = date("y/m/d : H:i:s", now());
-								$this->bodega_m->agregarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $fecha, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingresó a bodega el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'nota');
-							}*/
-							/*
-								"cod"=>$codigo,
-								"des"=>$descripcion,
-								"cos"=>$costo,
-								"p1"=>$p1,
-								"p2"=>$p2,
-								"p3"=>$p3,
-								"p4"=>$p4,
-								"p5"=>$p5,
-								"fam"=>$familia,
-								"suc"=>$sucursal,
-								"can"=>$cantidad,
-								"exe"=>$exento,
-								"desc"=>$descuento,
-								"ima"=>$imagen,
-								"cbra"=>$cod_brasil
-							*/
-							$this->articulo->registrar($articulo['cod'], $articulo['des'], $articulo['cod'], $articulo['can'], 0, $articulo['desc'], $articulo['ima'], $articulo['exe'],  $articulo['fam'], $articulo['suc'], $articulo['cos'], $articulo['p1'], $articulo['p2'], $articulo['p3'],  $articulo['p4'], $articulo['p5']);
-							$this->bodega_m->restarCantidadBodega($articulo['can'], $articulo['cbra'], $articulo['suc']);
-							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario traspaso a inventario el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'traspaso');
+				include '/../get_session_data.php';
+				if(isset($_FILES['archivo_excel'])&&isset($_POST['sucursal'])){
+					$sucursal = $_POST['sucursal'];
+					if($this->empresa->getEmpresa($sucursal)){	
+						$resultado = $this->procesarExcel($sucursal);
+						//print_r($resultado);
+						if($resultado['status']=='success'){
+							//Verificamos que no hayan erroes, si los hay no procesar nada
+							if(	sizeOf($resultado["erroresCodigo"])==0 &&
+								sizeOf($resultado["erroresCosto"])==0 &&
+								sizeOf($resultado["erroresPrecio1"])==0 &&
+								sizeOf($resultado["erroresPrecio2"])==0 &&
+								sizeOf($resultado["erroresPrecio3"])==0 &&
+								sizeOf($resultado["erroresPrecio4"])==0 &&
+								sizeOf($resultado["erroresPrecio5"])==0 &&
+								sizeOf($resultado["erroresCantidad"])==0 &&
+								sizeOf($resultado["erroresFamilia"])==0 &&
+								sizeOf($resultado["erroresSucursal"])==0 &&
+								sizeOf($resultado["erroresExento"])==0 &&
+								sizeOf($resultado["erroresRetencion"])==0 &&
+								sizeOf($resultado["erroresDescuento"])==0 &&
+								sizeOf($resultado["erroresCodBrasil"])==0 &&
+								sizeOf($resultado["erroresCantidadMayor"])==0 ){
+								$articulos = $resultado['articulos'];
+								foreach($articulos as $articulo){
+									
+									/*
+										"cod"=>$codigo,
+										"des"=>$descripcion,
+										"cos"=>$costo,
+										"p1"=>$p1,
+										"p2"=>$p2,
+										"p3"=>$p3,
+										"p4"=>$p4,
+										"p5"=>$p5,
+										"fam"=>$familia,
+										"suc"=>$sucursal,
+										"can"=>$cantidad,
+										"exe"=>$exento,
+										"ret"=>$retencion,
+										"desc"=>$descuento,
+										"ima"=>$imagen,
+										"cbra"=>$cod_brasil
+									*/
+									$this->articulo->registrar($articulo['cod'], $articulo['des'], $articulo['cod'], $articulo['can'], 0, $articulo['desc'], $articulo['ima'], $articulo['exe'],  $articulo['ret'], $articulo['fam'], $articulo['suc'], $articulo['cos'], $articulo['p1'], $articulo['p2'], $articulo['p3'],  $articulo['p4'], $articulo['p5']);
+									$this->bodega_m->restarCantidadBodega($articulo['can'], $articulo['cbra'], $articulo['suc']);
+									$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario traspaso a inventario el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'traspaso');
+								}
+								//Todo salio bien
+								redirect('articulos/registrar/registro_masivo?s=1', 'location');
+							}else{
+								//Error en ciertos articulos
+								//echo "Error en ciertos articulos";
+								$this->load->helper(array('form'));
+								$data['error'] = '5';
+								$data['msj'] = 'Algunos artículos presentan problemas';
+								//$data['errorCosto'] = $resultado['erroresCosto'];
+								//$data['errorCantidad'] = $resultado['erroresCantidad'];
+								$data['erroresCodigo'] = $resultado["erroresCodigo"];
+								$data['erroresCosto'] = $resultado["erroresCosto"];
+								$data['erroresPrecio1'] = $resultado["erroresPrecio1"];
+								$data['erroresPrecio2'] = $resultado["erroresPrecio2"];
+								$data['erroresPrecio3'] = $resultado["erroresPrecio3"];
+								$data['erroresPrecio4'] = $resultado["erroresPrecio4"];
+								$data['erroresPrecio5'] = $resultado["erroresPrecio5"];
+								$data['erroresCantidad'] = $resultado["erroresCantidad"];
+								$data['erroresFamilia'] = $resultado["erroresFamilia"];
+								$data['erroresSucursal'] = $resultado["erroresSucursal"];
+								$data['erroresExento'] = $resultado["erroresExento"];
+								$data['erroresRetencion'] = $resultado["erroresRetencion"];
+								$data['erroresDescuento'] = $resultado["erroresDescuento"];
+								$data['erroresCodBrasil'] = $resultado["erroresCodBrasil"];
+								$data['erroresCantidadMayor'] = $resultado["erroresCantidadMayor"];
+								$empresas_actuales = $this->empresa->get_empresas_ids_array();
+								$data['Familia_Empresas'] = $empresas_actuales;	
+								$this->load->view('articulos/registro_masivo_articulos', $data);
+							}
+						}else{
+							if($resultado['error']=='1'){
+								//echo "No se pudo leer y procesar el excel";
+								$this->load->helper(array('form'));
+								$data['error'] = '4';
+								$data['msj'] = 'No se pudo procesar el archivo excel';
+								$empresas_actuales = $this->empresa->get_empresas_ids_array();
+								$data['Familia_Empresas'] = $empresas_actuales;	
+								$this->load->view('articulos/registro_masivo_articulos', $data);
+							}else if($resultado['error']=='2'){
+								//echo "Columnas requeridas no vienen o estan en mal formato";
+								$this->load->helper(array('form'));
+								$data['error'] = '3';
+								$data['msj'] = 'Columnas no válidas, o no están en orden';
+								$empresas_actuales = $this->empresa->get_empresas_ids_array();
+								$data['Familia_Empresas'] = $empresas_actuales;	
+								$this->load->view('articulos/registro_masivo_articulos', $data);
+							}
 						}
-						//Todo salio bien
-						redirect('articulos/registrar/registro_masivo?s=1', 'location');
 					}else{
-						//Error en ciertos articulos
-						//echo "Error en ciertos articulos";
+						//Sucursal no existe			
 						$this->load->helper(array('form'));
-						$data['error'] = '5';
-						$data['msj'] = 'Algunos artículos presentan problemas';
-						//$data['errorCosto'] = $resultado['erroresCosto'];
-						//$data['errorCantidad'] = $resultado['erroresCantidad'];
-						$data['erroresCodigo'] = $resultado["erroresCodigo"];
-						$data['erroresCosto'] = $resultado["erroresCosto"];
-						$data['erroresPrecio1'] = $resultado["erroresPrecio1"];
-						$data['erroresPrecio2'] = $resultado["erroresPrecio2"];
-						$data['erroresPrecio3'] = $resultado["erroresPrecio3"];
-						$data['erroresPrecio4'] = $resultado["erroresPrecio4"];
-						$data['erroresPrecio5'] = $resultado["erroresPrecio5"];
-						$data['erroresCantidad'] = $resultado["erroresCantidad"];
-						$data['erroresFamilia'] = $resultado["erroresFamilia"];
-						$data['erroresSucursal'] = $resultado["erroresSucursal"];
-						$data['erroresExento'] = $resultado["erroresExento"];
-						$data['erroresDescuento'] = $resultado["erroresDescuento"];
-						$data['erroresCodBrasil'] = $resultado["erroresCodBrasil"];
-						$data['erroresCantidadMayor'] = $resultado["erroresCantidadMayor"];
+						$data['error'] = '2';
+						$data['msj'] = 'Sucursal seleccionada no existe';
 						$empresas_actuales = $this->empresa->get_empresas_ids_array();
 						$data['Familia_Empresas'] = $empresas_actuales;	
 						$this->load->view('articulos/registro_masivo_articulos', $data);
-					}
+					}			
 				}else{
-					if($resultado['error']=='1'){
-						//echo "No se pudo leer y procesar el excel";
-						$this->load->helper(array('form'));
-						$data['error'] = '4';
-						$data['msj'] = 'No se pudo procesar el archivo excel';
-						$empresas_actuales = $this->empresa->get_empresas_ids_array();
-						$data['Familia_Empresas'] = $empresas_actuales;	
-						$this->load->view('articulos/registro_masivo_articulos', $data);
-					}else if($resultado['error']=='2'){
-						//echo "Columnas requeridas no vienen o estan en mal formato";
-						$this->load->helper(array('form'));
-						$data['error'] = '3';
-						$data['msj'] = 'Columnas no válidas, o no están en orden';
-						$empresas_actuales = $this->empresa->get_empresas_ids_array();
-						$data['Familia_Empresas'] = $empresas_actuales;	
-						$this->load->view('articulos/registro_masivo_articulos', $data);
-					}
-				}
-			}else{
-				//Sucursal no existe			
-				$this->load->helper(array('form'));
-				$data['error'] = '2';
-				$data['msj'] = 'Sucursal seleccionada no existe';
-				$empresas_actuales = $this->empresa->get_empresas_ids_array();
-				$data['Familia_Empresas'] = $empresas_actuales;	
-				$this->load->view('articulos/registro_masivo_articulos', $data);
-			}			
-		}else{
-			//URL Mala
-			//echo "URL mala";
-			$this->load->helper(array('form'));
-			$data['error'] = '1';
-			$data['msj'] = 'La URL está incompleta, contacte al administrador';
-			$empresas_actuales = $this->empresa->get_empresas_ids_array();
-			$data['Familia_Empresas'] = $empresas_actuales;	
-			$this->load->view('articulos/registro_masivo_articulos', $data);
-		}
-		
-		
-		
-		
-		
-		
-		/*if(isset($_POST["submit"])){
-			 $limite = 4194304;
-			 $nombre_archivo = "cargarArticulos.xlsx";
-			 $tipo_archivo = $_FILES['file']["type"];
-			 $tamano_archivo = $_FILES['file']["size"];
-
-			 if($tamano_archivo<=$limite){
-				if(move_uploaded_file($_FILES['file']["tmp_name"], "application/upload/".$nombre_archivo)){
-					include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-					$data["contenedor"] = $this->leer_excel();
+					//URL Mala
+					//echo "URL mala";
 					$this->load->helper(array('form'));
-					$this->load->view('articulos/registro_masivo_articulos', $data);	
+					$data['error'] = '1';
+					$data['msj'] = 'La URL está incompleta, contacte al administrador';
+					$empresas_actuales = $this->empresa->get_empresas_ids_array();
+					$data['Familia_Empresas'] = $empresas_actuales;	
+					$this->load->view('articulos/registro_masivo_articulos', $data);
 				}
-				else{
-					echo "No se ha podido transferir el archivo, verifique el tamaño del archivo e intente nuevamente.";
-				}
-		 	}
-		}*/
     }  
 
 	function procesarExcel($sucursal){
@@ -381,12 +352,12 @@ function do_upload($cedula)
 				$c7 = $worksheet->getCellByColumnAndRow(6, 1)->getValue();
 				$c8 = $worksheet->getCellByColumnAndRow(7, 1)->getValue();
 				$c9 = $worksheet->getCellByColumnAndRow(8, 1)->getValue();
-				//$c10 = $worksheet->getCellByColumnAndRow(9, 1)->getValue(); 
 				$c11 = $worksheet->getCellByColumnAndRow(9, 1)->getValue();
 				$c12 = $worksheet->getCellByColumnAndRow(10, 1)->getValue();
-				$c13 = $worksheet->getCellByColumnAndRow(11, 1)->getValue();
-				$c14 = $worksheet->getCellByColumnAndRow(12, 1)->getValue();
-				$c15 = $worksheet->getCellByColumnAndRow(13, 1)->getValue();
+				$c10 = $worksheet->getCellByColumnAndRow(11, 1)->getValue(); 
+				$c13 = $worksheet->getCellByColumnAndRow(12, 1)->getValue();
+				$c14 = $worksheet->getCellByColumnAndRow(13, 1)->getValue();
+				$c15 = $worksheet->getCellByColumnAndRow(14, 1)->getValue();
 				
 				if(	trim($c1) == 'CODIGO' && 
 					trim($c2) == 'DESCRIPCION' && 
@@ -396,7 +367,8 @@ function do_upload($cedula)
 					trim($c6) == 'PRECIO_3' &&
 					trim($c7) == 'PRECIO_4' &&
 					trim($c8) == 'PRECIO_5' &&
-					trim($c9) == 'FAMILIA' &&					
+					trim($c9) == 'FAMILIA' &&	
+					trim($c10) == 'SIN_RETENCION' &&					
 					trim($c11) == 'CANTIDAD' &&
 					trim($c12) == 'EXENTO_IVA' &&
 					trim($c13) == 'DESCUENTO' &&
@@ -418,6 +390,7 @@ function do_upload($cedula)
 					$erroresFamilia = array();
 					$erroresSucursal = array();
 					$erroresExento = array();
+					$erroresRetencion = array();
 					$erroresDescuento = array();
 					$erroresCodBrasil = array();
 					$erroresCantidadMayor = array();
@@ -438,9 +411,10 @@ function do_upload($cedula)
 						//$sucursal = 0; //Siempre se pasara a Garotas Bonitas Central
 						$cantidad = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
 						$exento = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
-						$descuento = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
-						$imagen = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
-						$cod_brasil = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
+						$retencion = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
+						$descuento = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
+						$imagen = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
+						$cod_brasil = $worksheet->getCellByColumnAndRow(14, $row)->getValue();
 						
 						//Revisamos si el codigo esta repetido
 						if($this->articulo->existe_Articulo($codigo,$sucursal)){
@@ -494,6 +468,10 @@ function do_upload($cedula)
 						if(trim($exento)!='0'&&trim($exento)!='1'){
 							array_push($erroresExento, $codigo);
 						}
+						//Revisamos que la retencion sea valida
+						if(trim($retencion)!='0'&&trim($retencion)!='1'){
+							array_push($erroresRetencion, $codigo);
+						}
 						//Revisamos que el descuento sea numerico y este entre 0 y 100
 						if(!is_numeric($descuento)||$descuento<0||$descuento>100){
 							array_push($erroresDescuento, $codigo);
@@ -516,6 +494,7 @@ function do_upload($cedula)
 														"suc"=>$sucursal,
 														"can"=>$cantidad,
 														"exe"=>$exento,
+														"ret"=>$retencion,
 														"desc"=>$descuento,
 														"ima"=>$imagen,
 														"cbra"=>$cod_brasil
@@ -537,6 +516,7 @@ function do_upload($cedula)
 					$resultado["erroresFamilia"] = $erroresFamilia;
 					$resultado["erroresSucursal"] = $erroresSucursal;
 					$resultado["erroresExento"] = $erroresExento;
+					$resultado["erroresRetencion"] = $erroresRetencion;
 					$resultado["erroresDescuento"] = $erroresDescuento;
 					$resultado["erroresCodBrasil"] = $erroresCodBrasil;
 					$resultado["erroresCantidadMayor"] = $erroresCantidadMayor;
@@ -549,99 +529,7 @@ function do_upload($cedula)
 		return $resultado;
 	}
 
-     function leer_excel(){
-    	require_once './application/libraries/PHPExcel/IOFactory.php';
-    	$objPHPExcel = PHPExcel_IOFactory::load("application/upload/cargarArticulos.xlsx");
-		$flag = true;
-		$contenedor = array();
-		$cont = 0;
-		/*$conf_array = $this->XMLParser->getConfigArray();
-		$monto_minimo_defecto = $conf_array['monto_minimo_compra'];
-		$monto_maximo_defecto = $conf_array['monto_minimo_venta'];*/
-		//echo "<table border=1>";
-		foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
-				if($flag){
-					$worksheetTitle     = $worksheet->getTitle();
-					$highestRow         = $worksheet->getHighestRow(); // e.g. 10
-					$highestColumn      = $worksheet->getHighestColumn(); // e.g 'F'
-					$highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
-					$nrColumns = ord($highestColumn) - 64;
-					//echo "<br>Pagina ".$worksheetTitle." Tiene  ".$nrColumns . ' Columnas (A-' . $highestColumn . ') ';
-					//echo ' y  ' . $highestRow . ' Filas.';	
-					
-					for ($row = 1; $row <= $highestRow; ++ $row) {  // numero de filas      
-							//echo"<tr>";
-						    $cell = $worksheet->getCellByColumnAndRow(0, $row);
-						    $codigoBarras_articulo = $cell->getValue();
-							//echo '<td>' . $codigoBarras_articulo . '</td>';
-							$cell = $worksheet->getCellByColumnAndRow(1, $row);
-							$codigo_Articulo = $cell->getValue();
-							//echo '<td>' . $codigo_Articulo . '</td>';
-							$contenedor[$cont][0]  = $codigo_Articulo;
-							$cell = $worksheet->getCellByColumnAndRow(2, $row);
-							$descripcion_Articulo = $cell->getValue();
-							//echo '<td>' . $descripcion_Articulo . '</td>';
-							$contenedor[$cont][1]  = $descripcion_Articulo;
-							$cell = $worksheet->getCellByColumnAndRow(3, $row); // celda costo-articulo
-							//$costo_Articulo = $cell->getValue();// celda costo-articulo
-							$cell = $worksheet->getCellByColumnAndRow(4, $row); // obtenr valor precio1 articulo BORRAR
-							$costo_temporal =$cell->getValue()/1.8; // obtiene valor precio1 articulo borrar
-							$costo_Articulo = number_format($costo_temporal, 2, '.', '');
-							//echo '<td>' . $costo_Articulo . '</td>';
-							$contenedor[$cont][2]  = $costo_Articulo;
-							$cell = $worksheet->getCellByColumnAndRow(4, $row);
-							$precio1_Articulo =$cell->getValue();
-							//echo '<td>' . $precio1_Articulo . '</td>';	
-							$contenedor[$cont][3]  = $precio1_Articulo;
-							$cell = $worksheet->getCellByColumnAndRow(5, $row);
-							$precio2_Articulo =$cell->getValue();
-							//echo '<td>' . $precio2_Articulo . '</td>';
-							$contenedor[$cont][4]  = $precio2_Articulo;
-							$cell = $worksheet->getCellByColumnAndRow(6, $row);
-							$precio3_Articulo = $cell->getValue();
-							//echo '<td>' . $precio3_Articulo . '</td>';
-							$cell = $worksheet->getCellByColumnAndRow(7, $row);
-							$precio4_Articulo = $cell->getValue();
-							//echo '<td>' . $precio4_Articulo . '</td>';
-							$cell = $worksheet->getCellByColumnAndRow(8, $row);
-							$precio5_Articulo =$cell->getValue() ;
-							//echo '<td>' . $precio5_Articulo . '</td>';
-							$cell = $worksheet->getCellByColumnAndRow(9, $row);
-							$familia_articulo = $cell->getValue();
-							//echo '<td>' . $familia_articulo . '</td>';
-							$cell = $worksheet->getCellByColumnAndRow(10, $row);
-							$cantidad_Articulos = $cell->getValue();
-							//echo '<td>' . $cantidad_Articulos . '</td>';							
-							$cell = $worksheet->getCellByColumnAndRow(11, $row);
-							$empresa_Articulo = $cell->getValue();
-							//echo '<td>' . $empresa_Articulo . '</td>';
-							$cell = $worksheet->getCellByColumnAndRow(12, $row);
-							$exento_articulo = $cell->getValue();
-							//echo '<td>' . $exento_articulo. '</td>';
-							$cell = $worksheet->getCellByColumnAndRow(13, $row);
-							$this->direccion_url_imagen = $cell->getValue();
-							//echo '<td>' . $this->direccion_url_imagen. '</td>';	
-							if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, 0, 0, $this->direccion_url_imagen, $exento_articulo,  $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo)){
-								$contenedor[$cont][5]  = '<td class=\'estado_Ac\'>Guardado</td>';
-							//	echo '<td> Agregado Correctamente</td>';
-							}
-							else{
-								$contenedor[$cont][5]  = '<td class=\'estado_De\'>Error</td>';
-							//	echo '<td> Error Agregandolo</td>';
-							}
-							$cont++;
-							//echo"</tr>";
-							
-							
-						
-					}
-					
-					$flag = false; 	
-				} // fin del if $flag 
-		} // fin del foreach 
-		//echo "</table>";
-	return $contenedor;
-    }// fin metodo leer_excel 
+     
 
 }
 

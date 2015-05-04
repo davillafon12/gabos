@@ -15,13 +15,7 @@ function toCajaSubmit(){
 function doSubmit(){
 	createJSON();
 	if(validarCampos()){
-		//alert(JSON.stringify(invoiceItemsJSON, null, 4));
-		//data = [];
-		//data.push(getFullData());
 		url = "/facturas/nueva/crearPendiente";
-		//data.push(invoiceItemsJSON);
-		//alert(JSON.stringify(data));
-		//alert(url);
 		$('#envio_factura').bPopup({
 				modalClose: false
 			});
@@ -112,8 +106,9 @@ function parseRowToJSON(numRow){
 	}
 	
 	exento = document.getElementById("producto_exento_"+numRow).value;
+	retencion = $("#producto_retencion_"+numRow).val();
 	
-	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento};
+	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento, re:retencion};
 	
 	return JSONRow;
 	

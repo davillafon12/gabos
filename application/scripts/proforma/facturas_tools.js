@@ -54,7 +54,8 @@ function agregarFila(index){
 	cell6.innerHTML = "<div class='articulo_specs' id='costo_unidad_articulo_"+siguienteFila+"'>"
 					 +"</div><input id='costo_unidad_articulo_ORIGINAL_"+siguienteFila+"' type='hidden' >"
 					 +"<input id='costo_unidad_articulo_FINAL_"+siguienteFila+"' type='hidden' >"
-					 +"<input id='producto_exento_"+siguienteFila+"' type='hidden' >";
+					 +"<input id='producto_exento_"+siguienteFila+"' type='hidden' >"
+					 +"<input id='producto_retencion_"+siguienteFila+"' type='hidden' >";;
 	cell7.innerHTML = "<div class='articulo_specs' id='costo_total_articulo_"+siguienteFila+"'></div>";
 
 	//Agrega la nueva fila al array de indices
@@ -415,6 +416,8 @@ function setArticulo(articulo, num_fila){
 	
 	//Seteamos si es exento
 	$("#producto_exento_"+num_fila).val(articulo.exento);
+	//Seteamos si no se le aplica retencion
+	$("#producto_retencion_"+num_fila).val(articulo.retencion);
 	
 	//Funciones Finales
 	actualizaCostoTotalArticulo("cantidad_articulo_"+num_fila);
@@ -761,14 +764,22 @@ function actualizaCostosTotales(decimales_int){
 				precio_cliente_final_articulo = getPrecioTotalRowFINAL(i+1);
 				//Obtenemos si el producto es exento de impuestos	
 				isExento = document.getElementById("producto_exento_"+(i+1)).value;
+				//Obtenemos si el producto es exento de retencion	
+				noRetencion = document.getElementById("producto_retencion_"+(i+1)).value;
 				//Iniciamos la variable apra procesar el articulo sin IVA
 				costo_unitario_articulo_sin_IVA = 0.0;
 				
 				if(isExento==='0'){ //SI NO ES exento entonces saca el precio sin IVA
 					costo_unitario_articulo_sin_IVA = precio_unitario_articulo/(1+porcentaje_iva);			
-					//Sacamos el valor de los impuestos por RETENCION
-					precio_cliente_final_articulo_sin_iva = precio_cliente_final_articulo/(1+porcentaje_iva);
-					costo_retencion += precio_cliente_final_articulo-precio_cliente_final_articulo_sin_iva;
+					if(noRetencion==='0'){//Sacamos el valor de los impuestos por RETENCION
+							//Si aplica la retencion sacamos la base imponible del producto final
+							precio_cliente_final_articulo_sin_iva = precio_cliente_final_articulo/(1+porcentaje_iva);
+							//Luego obtenemos la cantidad de IVA por pagar
+							costo_retencion += precio_cliente_final_articulo-precio_cliente_final_articulo_sin_iva;
+					}else if(noRetencion==='1'){
+							//Si no aplica la retencion tons realizamos la sumatoria del impuesto del producto normal
+							costo_retencion += precio_unitario_articulo-costo_unitario_articulo_sin_IVA;
+					}	
 				}
 				else if(isExento==='1'){ //SI ES exento entonces el precio sera el mismo
 					costo_unitario_articulo_sin_IVA = precio_unitario_articulo;

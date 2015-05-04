@@ -78,11 +78,13 @@ class impresion extends CI_Controller {
 			nc = nota credito
 			nb = nota debito
 		*/
+		
 		switch($_GET['d']){
 			case 'f':				
 				if(isset($_GET['n'])&&isset($_GET['s'])){
 					$sucursal = $_GET['s'];
 					$consecutivo = $_GET['n'];
+					
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)){
 							//Valoramos si un credito para poner la fecha de vencimiento
@@ -120,7 +122,6 @@ class impresion extends CI_Controller {
 								$facturaHead[0]->total_iva = $totalIVA/$facturaHead[0]->cambio;
 								$facturaHead[0]->total = $total/$facturaHead[0]->cambio;
 							}		
-						
 							if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
 							
 								//Valoramos si es en dolares
@@ -365,6 +366,7 @@ class impresion extends CI_Controller {
 							}
 							
 							if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
+								
 								$this->facturaPDF($empresa, $facturaHead, $facturaBody);								
 							}else{
 								$this->retorno['error'] = '9';

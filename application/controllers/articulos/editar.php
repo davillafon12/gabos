@@ -283,6 +283,7 @@ class editar extends CI_Controller {
 				$data['Articulo_Descuento'] = $row -> Articulo_Descuento;
 				//$data['Articulo_Imagen_URL'] = $row -> Articulo_Imagen_URL;
 				$data['Articulo_Exento'] = $row -> Articulo_Exento;
+				$data['retencion'] = $row -> Articulo_No_Retencion;
 				
 				
 				$URL_IMAGEN = $row->Articulo_Imagen_URL;				
@@ -321,54 +322,11 @@ class editar extends CI_Controller {
 		redirect('articulos/editar', 'location');	
 	}
 	
-	/*
 	
-	
-	if($result = $this->articulo->get_Articulos($data['Sucursal_Codigo']))
-	{
-	    $this->load->helper(array('form'));
-	    foreach($result as $row)
-		{
-		    $data['Articulo_Codigo'] = $row -> Articulo_Codigo;
-			$data['Articulo_Descripcion'] = $row -> Articulo_Descripcion;
-			$data['Articulo_Codigo_Barras'] = $row -> Articulo_Codigo_Barras;
-			$data['Articulo_Cantidad_Inventario'] = $row -> Articulo_Cantidad_Inventario;
-			$data['Articulo_Cantidad_Defectuoso'] = $row -> Articulo_Cantidad_Defectuoso;
-			$data['Articulo_Descuento'] = $row -> Articulo_Descuento;
-			$data['Articulo_Imagen_URL'] = $row -> Articulo_Imagen_URL;
-			$data['Articulo_Exento'] = $row -> Articulo_Exento;
-			$data['TB_05_Familia_Familia_Codigo'] = $row -> TB_05_Familia_Familia_Codigo;
-			$data['TB_02_Sucursal_Codigo'] = $row -> TB_02_Sucursal_Codigo;
-			$data['costo_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 0, $data['Sucursal_Codigo']);
-			$data['precio1_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 1, $data['Sucursal_Codigo']);
-			$data['precio2_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 2, $data['Sucursal_Codigo']);
-			$data['precio3_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 3, $data['Sucursal_Codigo']);
-			$data['precio4_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 4, $data['Sucursal_Codigo']);
-			$data['precio5_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 5, $data['Sucursal_Codigo']);
-			$empresas_actuales = $this->empresa->get_empresas_ids_array($data['Sucursal_Codigo']);
-			$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
-			$data['Familia_Empresas'] = $empresas_actuales;
-			$data['Familias'] = $familias_actuales;
-		}
-		$this->load->view('articulos/articulos_edision_view', $data);
-	}
-	else
-	{
-		$data['Titulo_Pagina'] = "Transacción Fallida";
-		$data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>Hubo un error al actualizar el articulo ".$articulo_codigo."! <img src=".$ruta_base_imagenes_script."/error.gif /></p></div><br>
-		                         <div class='Informacion'>								 
-					             <form action=".base_url('empresas/editar').">
-									 <input class='buttom' tabindex='2' value='Volver' type='submit' >
-				                 </form>								 
-								 </div>";
-		$this->load->view('articulos/view_informacion_guardado', $data);
-	}*/
  }
  
  function actualizarArticulos()
  {
-	//print_r($_POST);
-	//print_r($_FILES);
 	if(isset($_POST['articulo_codigo'])&&
 		isset($_POST['sucursal'])){
 		if($this->articulo->existe_Articulo($_POST['articulo_codigo'],$_POST['sucursal'])){
@@ -385,11 +343,17 @@ class editar extends CI_Controller {
 			$precio4 = $this->input->post('precio4');
 			$precio5 = $this->input->post('precio5');
 			
-			if(isset($_POST['exento'])){
-				$exento = '1';
-			}else{
-				$exento = '0';
-			}
+			
+			
+			//Si es exento
+			$exento = 0;
+			$exento = isset($_POST['exento']) && $_POST['exento']  ? "1" : "0";
+			
+			//Aplica Retencion
+			$retencion = 0;
+			$retencion = isset($_POST['retencion']) && $_POST['retencion']  ? "1" : "0";
+			
+			
 			
 			$foto = $this->articulo->getArticuloImagen($_POST['articulo_codigo'], $_POST['sucursal']);
 			if(isset($_FILES['userfile']['name'])){
@@ -413,39 +377,45 @@ class editar extends CI_Controller {
 				if(is_numeric($cantidadDefectuosa)&&$cantidadDefectuosa>=0){
 					if(is_numeric($descuento)&&$descuento>=0&&$descuento<=100){
 						if(is_numeric($exento)&&($exento=='0'||$exento=='1')){
-							if(is_numeric($costo)&&
-								is_numeric($precio1)&&
-								is_numeric($precio2)&&
-								is_numeric($precio3)&&
-								is_numeric($precio4)&&
-								is_numeric($precio5)){
-									//Actualizar info
-									$info['dataBD'] = array(													
-														'Articulo_Descripcion' => $descripcion,
-														'Articulo_Cantidad_Inventario' => $cantidad,
-														'Articulo_Cantidad_Defectuoso' => $cantidadDefectuosa,
-														'Articulo_Descuento' => $descuento,
-														'Articulo_Imagen_URL' => $foto,
-														'Articulo_Exento' => $exento													
-													);
-									$info['precios'] = array(
-														'p0' => $costo,
-														'p1' => $precio1,
-														'p2' => $precio2,
-														'p3' => $precio3,
-														'p4' => $precio4,
-														'p5' => $precio5
-													);
-									$this->articulo->actualizar($_POST['articulo_codigo'], $_POST['sucursal'], $info['dataBD']);
-									$this->articulo->actualizarPrecios($_POST['articulo_codigo'], $_POST['sucursal'], $info['precios']);
-									
-									include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-									$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el artículo código: ".$_POST['articulo_codigo'],$data['Sucursal_Codigo'],'edicion');
-							
-									redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=s&suc='.$_POST['sucursal'], 'location');
+							if(is_numeric($retencion)&&($retencion=='0'||$retencion=='1')){
+								if(is_numeric($costo)&&
+									is_numeric($precio1)&&
+									is_numeric($precio2)&&
+									is_numeric($precio3)&&
+									is_numeric($precio4)&&
+									is_numeric($precio5)){
+										//Actualizar info
+										$info['dataBD'] = array(													
+															'Articulo_Descripcion' => $descripcion,
+															'Articulo_Cantidad_Inventario' => $cantidad,
+															'Articulo_Cantidad_Defectuoso' => $cantidadDefectuosa,
+															'Articulo_Descuento' => $descuento,
+															'Articulo_Imagen_URL' => $foto,
+															'Articulo_Exento' => $exento,
+															'Articulo_No_Retencion'	 => $retencion											
+														);
+										$info['precios'] = array(
+															'p0' => $costo,
+															'p1' => $precio1,
+															'p2' => $precio2,
+															'p3' => $precio3,
+															'p4' => $precio4,
+															'p5' => $precio5
+														);
+										$this->articulo->actualizar($_POST['articulo_codigo'], $_POST['sucursal'], $info['dataBD']);
+										$this->articulo->actualizarPrecios($_POST['articulo_codigo'], $_POST['sucursal'], $info['precios']);
+										
+										include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+										$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el artículo código: ".$_POST['articulo_codigo'],$data['Sucursal_Codigo'],'edicion');
+								
+										redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=s&suc='.$_POST['sucursal'], 'location');
+								}else{
+									//echo "Algun precio no es valido";
+									redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=e&e=7', 'location');
+								}
 							}else{
-								//echo "Algun precio no es valido";
-								redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=e&e=7', 'location');
+								//echo "Retencion no valida";
+								redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=e&e=8', 'location');
 							}
 						}else{
 							//echo "Exento no valido";

@@ -78,6 +78,8 @@ PARA:
 							break;
 							case '7': $errorMsg = '7 - Alguno de los precios no es válido';
 							break;
+							case '8': $errorMsg = '8 - Sin retención no válida';
+							break;
 						}
 					}
 					echo "
@@ -163,6 +165,12 @@ PARA:
 							</td>
 							<td>
 								<input type="file" id="foto_articulo" class="input_dos" name="userfile" size="10" accept=".jpg,.png,.ico,.bmp" >
+							</td>
+							<td>
+								<label class="contact" > Sin Retención</label>
+							</td>
+							<td>
+								<input type="checkbox" name="retencion" id="retencion"  value="1" <?php if($retencion){echo "checked";}?> >
 							</td>
 						</tr>
 					</table>

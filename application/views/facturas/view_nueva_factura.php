@@ -152,21 +152,7 @@ PARA:
 					<div class="division_hora">:</div>
 					<div id="segundos" class="segundos">00</div>
 				</td>
-				<!--
-				<td>
-					<p class="contact"><label for="tipo">Tipo:</label></p>
-				</td>
-				<td>
-					<input type="hidden" name="tipo" onClick="numTransaccion(this.value)" value="contado" checked><div class="tipos_de_pago">Contado</div>
-					<input type="hidden" name="tipo" onClick="numTransaccion(this.value)" value="tarjeta"><div class="tipos_de_pago">Tarjeta</div>
-					<input type="hidden" name="tipo" onClick="numTransaccion(this.value)" value="cheque"><div class="tipos_de_pago">Cheque</div>
-					<input type="hidden" name="tipo" onClick="numTransaccion(this.value)" value="deposito"><div class="tipos_de_pago">Deposito</div>
-					<input type="hidden" name="tipo" onClick="numTransaccion(this.value)" value="mixto"><div class="tipos_de_pago">Mixto</div>
-				</td>
-				<td id="numero_transaccion">
-					
-				</td>
-				-->
+				
 				</tr>
 			</table>
 					
@@ -214,6 +200,7 @@ PARA:
 							<input id='costo_unidad_articulo_ORIGINAL_".$numero_id."' type='hidden' >
 							<input id='costo_unidad_articulo_FINAL_".$numero_id."' type='hidden' >
 							<input id='producto_exento_".$numero_id."' type='hidden' >
+							<input id='producto_retencion_".$numero_id."' type='hidden' >
 						</td>
 						<td>
 							<div class='articulo_specs' id='costo_total_articulo_".$numero_id."'></div>

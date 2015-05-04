@@ -195,6 +195,7 @@ class caja extends CI_Controller {
 					$articulo['cantidad']=$row->Articulo_Factura_Cantidad;
 					$articulo['descuento']=$row->Articulo_Factura_Descuento;
 					$articulo['exento']=$row->Articulo_Factura_Exento;
+					$articulo['retencion']=$row->Articulo_Factura_No_Retencion;
 					$articulo['precio']=$row->Articulo_Factura_Precio_Unitario;
 					$articulo['precioFinal']=$row->Articulo_Factura_Precio_Final;
 					//Procesamos la imagen

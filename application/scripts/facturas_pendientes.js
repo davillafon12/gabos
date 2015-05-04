@@ -3,7 +3,6 @@ function getFacturas(){
 	  url: location.protocol+'//'+document.domain+'/facturas/caja/getFacturasPendientes'	  
 	})
 	.done(function( data ) {
-		//alert(data);
 		document.getElementById("cuerpoTablaPendientes").innerHTML = data;
 	});
 }
@@ -36,13 +35,10 @@ function cargarEncabezado(consecutivo){
 					displayErrors(facturaHEAD[0].error);
 					cleanTable();
 				}else if(facturaHEAD[0].status==="success"){
-					//alert("bien");
 					setEncabezadoFactura(facturaHEAD);
 				}
 			}
 			catch(e){
-				//notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-				//window.location = location.protocol+'//'+document.domain+'/facturas/caja';
 				if(seCambioFactura){deshacerFacturaCaja();}
 				location.reload();
 			}			
@@ -122,21 +118,7 @@ function setEncabezadoFactura(facturaHEAD){
 	//Valores ocultos
 	$("#iva_porcentaje").val(facturaHEAD[0].ivapor);
 	$("#tipo_cambio_venta").val(facturaHEAD[0].cambio);
-	//Traemos decimales
-	/*decimales = $("#cantidad_decimales").val();
-	decimales = parseInt(decimales);
-	toFixed(decimales_int);
-	//Costos totales
-	total = parseFloat(facturaHEAD[0].total);
-	iva = parseFloat(facturaHEAD[0].iva);
-	costo = parseFloat(facturaHEAD[0].costo);
-	
-	$("#costo_total").val(total.toFixed(decimales));
-	$("#iva").val(iva.toFixed(decimales));
-	$("#costo").val(costo.toFixed(decimales));*/
-	
-	//PASAR AL METODO DONDE SE CARGAN LOS PRODUCTOS
-	//cambiarDisplayMoneda(facturaHEAD[0].moneda)//Procesamos el tipo de moneda
+
 }
 
 function cargarProductos(consecutivo){
@@ -150,15 +132,13 @@ function cargarProductos(consecutivo){
 				facturaBODY = $.parseJSON('[' + data.trim() + ']');
 				if(facturaBODY[0].status==="error"){
 					displayErrors(facturaBODY[0].error);
-					//cleanTable();
 				}else if(facturaBODY[0].status==="success"){
 					setProductosFactura(facturaBODY[0].productos);
 				}
 			}
 			catch(e){
-				//notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-				//window.location = location.protocol+'//'+document.domain+'/facturas/caja';
 				if(seCambioFactura){deshacerFacturaCaja();}
+				//alert(e);
 				location.reload();
 			}			
 		},
@@ -168,16 +148,7 @@ function cargarProductos(consecutivo){
 }
 
 function setProductosFactura(productos){
-	//alert(productos.length);
 	$("#contenidoArticulos").html('');
-	//cleanTable();
-	/*new_tbody = document.createElement('tbody');
-	new_tbody.setAttribute("id","contenidoArticulos");
-	//populate_with_new_rows(new_tbody);
-	old_tbody = document.getElementById("contenidoArticulos");
-	old_tbody.parentNode.replaceChild(new_tbody, old_tbody);*/
-	
-	
 	table = document.getElementById("tabla_productos").getElementsByTagName('tbody')[0];
 	isCajaLoad=false;
 	cantidad = productos.length;
@@ -186,48 +157,12 @@ function setProductosFactura(productos){
 	for (var i = 0; i < cantidad; i++) 
 	{
 		array_pos_rows[i] = i+1;
-		/*artHTML = artHTML + "<tr id='articulo_"+(i+1)+"'>"
-			+"<td class='th_codigo'>"	
-				+"<img class='imagen_arrow' title='Agregar Fila' src='/../application/scripts/Images/agregar_row.gif' width='14' height='7' onClick='agregarByCM("+(i+1)+")'/>"
-				+"<input tabindex='"+(i+1)+"' id='codigo_articulo_"+(i+1)+"' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);' value='"+productos[i].codigo+"' disabled>"
-				+"<input id='codigo_articulo_anterior_"+(i+1)+"' type='hidden' value='"+productos[i].codigo+"'>"
-			+"</td>"
-			+"<td>"
-				+"<div class='articulo_specs' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].descripcion+"</div>"
-				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'></div>"
-			+"</td>"
-			+"<td>"
-				+"<input id='cantidad_articulo_"+(i+1)+"' class='cantidad_articulo' autocomplete='off' name='cantidad_articulo' type='number' min='1'  onchange='cambiarCantidad(this.id, event, this.value);' onkeyup='cambiarCantidad(this.id, event, this.value);' value='"+productos[i].cantidad+"' disabled>"
-				+"<input id='cantidad_articulo_anterior_"+(i+1)+"' type='hidden' value='"+productos[i].cantidad+"'>"
-			+"</td>"
-			+"<td>"
-				+"<div class='articulo_specs' id='bodega_articulo_"+(i+1)+"'></div>"
-			+"</td>"					
-			+"<td>"
-				+"<div class='articulo_specs' id='descuento_articulo_"+(i+1)+"' ondblclick='changeDiscount("+(i+1)+")'>"+productos[i].descuento+"</div>"
-			+"</td>"
-			+"<td>"
-				+"<div class='articulo_specs' id='costo_unidad_articulo_"+(i+1)+"'>"+productos[i].precio+"</div>"
-				+"<input id='costo_unidad_articulo_ORIGINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precio+"'>"
-				+"<input id='costo_unidad_articulo_FINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precio+"'>"
-				+"<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'>"
-			+"</td>"
-			+"<td>"
-				+"<div class='articulo_specs' id='costo_total_articulo_"+(i+1)+"'></div>"
-			+"</td>"
-		+"</tr>";*/
-		
 		row = table.insertRow(table.rows.length);	
 		row.setAttribute("id","articulo_"+(i+1));
-		
 		decimales = $("#cantidad_decimales").val();
 		decimales = parseInt(decimales);
-		
 		precio = parseFloat(productos[i].precio);
 		precio = precio.toFixed(decimales);
-		//precio='0';
-
-		// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
 		cell1 = row.insertCell(0);
 		cell2 = row.insertCell(1);
 		cell3 = row.insertCell(2);
@@ -235,7 +170,6 @@ function setProductosFactura(productos){
 		cell5 = row.insertCell(4);
 		cell6 = row.insertCell(5);
 		cell7 = row.insertCell(6);
-		
 		if(!isProforma){
 			bodegaINT = parseInt(productos[i].cantidad)+parseInt(productos[i].bodega);
 		}else{
@@ -258,23 +192,17 @@ function setProductosFactura(productos){
 		cell6.innerHTML = "<div class='articulo_specs' id='costo_unidad_articulo_"+(i+1)+"'>"+precioUI+"</div>"
 				+"<input id='costo_unidad_articulo_ORIGINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precio+"'>"
 				+"<input id='costo_unidad_articulo_FINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precioFinal+"'>"
-				+"<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'>";
+				+"<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'>"
+				+"<input id='producto_retencion_"+(i+1)+"' type='hidden' value='"+productos[i].retencion+"'>";
 		cell7.innerHTML = "<div class='articulo_specs' id='costo_total_articulo_"+(i+1)+"'></div>";
 		
 		
 		//Agregamos las demas funciones de cada row
 		agregarTooltip("#descripcion_articulo_"+(i+1));
-		//maxima = parseInt(productos[i].bodega)+parseInt(productos[i].cantidad);		
-		//document.getElementById("cantidad_articulo_"+(i+1)).setAttribute("max",maxima);
-		//actualizaCostoTotalArticulo("cantidad_articulo_"+(i+1));
 		updateProductsTotal();
 	}
-	//Evento eliminado de cantidad 
-	
-	//$("#contenidoArticulos").html(artHTML);
 	setCostos(cantidad);
 	isCajaLoad=true;
-	//$("#contenidoArticulos").append(artHTML);
 }
 
 function setCostos(cantidad){

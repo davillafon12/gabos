@@ -10,12 +10,13 @@ function verificarCodigoBodega(codigo){
 		$("#cantidad_bodega").html('');
 		return false;
 	}
-	
+	codigo = $("#codigo_bodega").val().trim();
+	sucursal = $("#sucursal").val();
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/articulos/bodega/existeEnBodega',
 		type: "POST",		
 		async: false,
-		data: {'codigo':codigo},				
+		data: {'codigo':codigo, 'sucursal':sucursal},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
@@ -38,6 +39,7 @@ function verificarCodigoBodega(codigo){
 		error: function (jqXHR, textStatus, errorThrown)
 		{}
 	});
+	cargarFamilias();
 }
 
 function habilitarCampos(){
@@ -46,7 +48,7 @@ function habilitarCampos(){
 	$("#articulos_cantidad").prop('disabled', false);
 	$("#articulos_cantidad_defectuoso").prop('disabled', false);
 	$("#exento").prop('disabled', false);
-	$("#sucursal").prop('disabled', false);
+	$("#retencion").prop('disabled', false);
 	$("#familia").prop('disabled', false);
 	$("#descuento").prop('disabled', false);
 	$("#foto_articulo").prop('disabled', false);
@@ -64,7 +66,7 @@ function deshabilitarCampos(){
 	$("#articulos_cantidad").prop('disabled', true);
 	$("#articulos_cantidad_defectuoso").prop('disabled', true);
 	$("#exento").prop('disabled', true);
-	$("#sucursal").prop('disabled', true);
+	$("#retencion").prop('disabled', true);
 	$("#familia").prop('disabled', true);
 	$("#descuento").prop('disabled', true);
 	$("#foto_articulo").prop('disabled', true);
@@ -99,13 +101,6 @@ function verificarCodigoArticulo(){
 		$("#status").html('');		
 		return false;
 	}
-	
-	/*if(!isNumber(codigo)){
-		codigoDisponible = false;
-		$("#status").html('');	
-		notyMsg('Código de Artículo no Válido', 'error');
-		return false;
-	}*/
 	
 	$.ajax({
 		url : location.protocol+'//'+document.domain+'/articulos/registrar/es_Codigo_Utilizado',
@@ -152,4 +147,39 @@ $(function() {
 function llamarCodigoBarras(codigo){
 	codigo_barras = document.getElementById('');
 	codigo_barras.innerHTML='<img alt=\"12345\" src=\"../application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/>';
+}
+
+
+function cargarFamilias(){
+	sucursal = $("#sucursal").val();
+	
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/articulos/ingresar/getFamiliasSucursal',
+		type: "POST",		
+		async: false,
+		data: {'sucursal':sucursal},				
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				informacion = $.parseJSON('[' + data.trim() + ']');
+				if(informacion[0].status==="error"){					
+					
+				}else if(informacion[0].status==="success"){					
+					setFamilias(informacion[0].familias);
+				}
+			}catch(e){				
+				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{}
+	});
+}
+
+function setFamilias(familias){	
+	cuerpo = '';
+	for(i=0; i<familias.length; i++){
+		cuerpo += "<option value='"+familias[i].codigo+"'>"+familias[i].nombre+"</option>";
+	}
+	$("#familia").html(cuerpo);
 }

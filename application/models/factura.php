@@ -104,13 +104,14 @@ Class factura extends CI_Model
 		}
 	}
 	
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
 		$dataItem = array(
 	                        'Articulo_Factura_Codigo'=>mysql_real_escape_string($codigo),
 	                        'Articulo_Factura_Descripcion'=>mysql_real_escape_string($descripcion), 
 							'Articulo_Factura_Cantidad'=>mysql_real_escape_string($cantidad),
 							'Articulo_Factura_Descuento'=>mysql_real_escape_string($descuento),
 							'Articulo_Factura_Exento'=>mysql_real_escape_string($exento),
+							'Articulo_Factura_No_Retencion'=>mysql_real_escape_string($retencion),
 							'Articulo_Factura_Precio_Unitario'=>mysql_real_escape_string($precio),
 							'Articulo_Factura_Precio_Final' => 	$precioFinal,
 							'Articulo_Factura_Imagen'=>mysql_real_escape_string($imagen),
@@ -365,7 +366,6 @@ Class factura extends CI_Model
 	}
 	
 	function getArticulosFactura($consecutivo, $sucursal){
-		//echo "entro";
 		$this -> db -> select('*');
 		$this -> db -> from('TB_08_Articulos_Factura');
 		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);

@@ -200,6 +200,15 @@ PARA:
 								}
 							}
 							
+							echo "<br><br><small class='bold'>Formato de la retención No Válido:</small>";
+							if(sizeOf($erroresRetencion)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresRetencion as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+							
 							echo "<br><br><small class='bold'>Con Descuento no Válido:</small>";
 							if(sizeOf($erroresDescuento)<1){
 								echo "<br><small>No hay artículos.</small>";

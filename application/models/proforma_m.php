@@ -80,13 +80,14 @@ Class proforma_m extends CI_Model
 		}
 	}
 	
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
 		$dataItem = array(
 	                        'Articulo_Proforma_Codigo'=>mysql_real_escape_string($codigo),
 	                        'Articulo_Proforma_Descripcion'=>mysql_real_escape_string($descripcion), 
 							'Articulo_Proforma_Cantidad'=>mysql_real_escape_string($cantidad),
 							'Articulo_Proforma_Descuento'=>mysql_real_escape_string($descuento),
 							'Articulo_Proforma_Exento'=>mysql_real_escape_string($exento),
+							'Articulo_Proforma_No_Retencion'=>mysql_real_escape_string($retencion),
 							'Articulo_Proforma_Precio_Unitario'=>mysql_real_escape_string($precio),
 							'Articulo_Proforma_Precio_Final'=>mysql_real_escape_string($precioFinal),	
 							'Articulo_Proforma_Imagen'=>mysql_real_escape_string($imagen),

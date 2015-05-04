@@ -112,8 +112,8 @@ function parseRowToJSON(numRow){
 	}
 	
 	exento = document.getElementById("producto_exento_"+numRow).value;
-	
-	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento};
+	retencion = $("#producto_exento_"+numRow).val();
+	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento, re:retencion};
 	
 	return JSONRow;
 	
@@ -142,19 +142,7 @@ function sendInvoice(URL){
 		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON)},	
 		success: function(data, textStatus, jqXHR)
 		{
-			/*if(data.trim()==='7'){//Todo salio bien
-				window.onbeforeunload=null;
-				window.onunload=null;
-				window.location = location.protocol+'//'+document.domain+'/home';
-			}else{
-				n = noty({
-					   layout: 'topRight',
-					   text: '¡Hubo un error en el envio de la proforma. #'+data.trim(),
-					   type: 'error',
-					   timeout: 4000
-					});
-				$('#envio_factura').bPopup().close(); 
-			}	*/
+			
 			try{
 				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
 				if(facturaHEAD[0].status==="error"){
