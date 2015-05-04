@@ -312,7 +312,13 @@ function existe_Nombre_Usuario($nombre){
 	function isAdministrador($username, $password)
 	{
 		include '/../controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
-		$this -> db -> select('Usuario_Codigo');
+		$query = $this->db->query("Select * 
+															from TB_01_Usuario 
+															WHERE Usuario_Nombre_Usuario = '$username' 
+															AND Usuario_Password = '$password'
+															AND TB_02_Sucursal_Codigo = {$data['Sucursal_Codigo']}
+															AND (Usuario_Rango = 'administra' || Usuario_Rango = 'avanzado')");
+		/*$this -> db -> select('Usuario_Codigo');
 		$this -> db -> from('TB_01_Usuario');
 		$this -> db -> where('Usuario_Nombre_Usuario', mysql_real_escape_string($username));
 		$this -> db -> where('Usuario_Password', mysql_real_escape_string($password));
@@ -321,7 +327,7 @@ function existe_Nombre_Usuario($nombre){
 		$this -> db -> where('TB_02_Sucursal_Codigo', $data['Sucursal_Codigo']); //Que pertenezca a la surcusal de factura
 		$this -> db -> limit(1);
 
-		$query = $this -> db -> get();
+		$query = $this -> db -> get();*/
 
 		if($query -> num_rows() == 1)
 		{

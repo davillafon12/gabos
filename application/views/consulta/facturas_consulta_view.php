@@ -34,12 +34,20 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
 		<!--CARGA DEL NOTY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>"></script>
+		<!--CARGA DEL POPUP MODAL-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
 		<!--CARGA DEL NUMERIC-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>"></script>
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_facturas.css'); ?>">
 		<!--CARGA DEL SCRIPT DE HERRAMIENTAS-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/facturas_tools.js'); ?>"></script>
+		<!--JQUERY IMPROMPTU-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
+		<!--CSS ESTILO DEL MODAL-->
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
+		<!--LIBRERIA ENCRYPTACION-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js'); ?>"></script>
 		<script>
 			var decimales = '<?php echo $this->configuracion->getDecimales();?>';
 		</script>
@@ -155,6 +163,7 @@ PARA:
 					<option value="c">A4</option>
 				</select>
 				<input type="button" class="boton_busqueda" onclick="imprimir()" value="Imprimir"/>
+				<input type="button" class="boton_anular" onclick="anularFactura()" value="Anular"/>
 				<table id="tabla_productos" class="tabla_productos">
 					<thead>
 						<tr><th class="th_codigo">Código</th>
@@ -225,7 +234,25 @@ PARA:
 				</div>
 			</div><!--CONTENEDOR-->
         </div>		
-
+		
+		<div class="pop_up_administrador" id="pop_up_administrador">
+			<p class="titulo_wrapper">Administrador</p>
+			<hr class="division_wrapper_2">
+			
+			<div class="inputs_popup">
+				<p class="contact"><label for="pop_usuario">Usuario:</label></p> 
+				<input id="pop_usuario" class="pop_usuario" autocomplete="off" name="pop_usuario" type="text" onkeyup="validateNpass(this.id, 'pop_password', event)">
+				<p class="contact"><label for="pop_password">Contraseña:</label></p> 
+				<input id="pop_password" class="pop_password" autocomplete="off" name="pop_password" type="password" onkeyup="validateNpass(this.id, 'boton_aceptar_popup_admin', event)">
+			</div>			
+			<br>
+			<div class="buttoms_popup">
+				<a href='javascript:;' onClick='closePopUp_Admin();' class='boton_desall' >Cancelar</a>
+				<a href='javascript:;' onClick="clickAceptar_Admin(event)" class='boton_act_all' id="boton_aceptar_popup_admin" onkeyup="validateNpass(this.id, 'administrador', event)">Aceptar</a>
+			</div>
+		</div>
+		
+		
 		<!--Incluir footer-->
 		<?php include '/../Footer/Default_Footer.php';?>
 	</body>

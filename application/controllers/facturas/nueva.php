@@ -230,18 +230,25 @@ class nueva extends CI_Controller {
 		$tipo=$_GET['tipo'];
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		
+		$repuesta = '-1';
+		
 		if($this->user->isAdministrador($usuario, $contraseña)){
-			echo '200'; //Si se encontro	
+			$repuesta = '200'; //Si se encontro	
 			$codigo_usuario = $this->user->getIdFromUserID($usuario, $data['Sucursal_Codigo']);
 			if($tipo=='1'){ //Autorizo un articulo generico
 				$this->user->guardar_transaccion($codigo_usuario, "$usuario autorizo articulo generico, sesion de: ".$data['Usuario_Codigo'], $data['Sucursal_Codigo'],'autoriza');
 			}elseif($tipo=='2'){  //Autorizo descuento
 				$this->user->guardar_transaccion($codigo_usuario, "$usuario autorizo un descuento, sesion de: ".$data['Usuario_Codigo'], $data['Sucursal_Codigo'],'autoriza');
+			}elseif($tipo=='3'){  //Autorizo anular factura
+				$permisos = $this->user->get_permisos($codigo_usuario, $data['Sucursal_Codigo']);
+				if(isset($permisos['anular_facturas'])&&$permisos['anular_facturas']){
+					$this->user->guardar_transaccion($codigo_usuario, "$usuario autorizo anular factura, sesion de: ".$data['Usuario_Codigo'], $data['Sucursal_Codigo'],'autoriza');
+				}else{
+					$repuesta = '-1';
+				}
 			}
 		}
-		else{
-			echo '-1'; //No se encontro
-		}
+		echo $repuesta; //No se encontro
 	}
 	
 	function crearPendiente(){

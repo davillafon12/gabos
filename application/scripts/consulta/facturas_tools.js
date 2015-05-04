@@ -439,3 +439,159 @@ function imprimir(){
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+// ANULAR FACTURAS
+var numeroPopUp = '3'; // Dice que anula factura
+function anularFactura(){	
+	if(validarFactura()){
+		$('#pop_up_administrador').bPopup({
+			modalClose: false
+		});
+		$("#pop_usuario").select();
+	}	
+}
+
+function validarFactura(){
+	consecutivo = $("#consecutivo").val();
+	if(consecutivo.trim()===''){
+		notyMsg('Debe ingresar un consecutivo válido', 'error');
+		return false;
+	}else if(consecutivo!=consecutivoActual){
+		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
+		return false;
+	}else if(tipo_factura === 'pendiente' || tipo_factura === 'anulada'){
+		notyMsg('No puede anular facturas pendientes, ni anuladas', 'error');
+		return false;
+	}
+	return true;
+}
+
+function closePopUp_Admin(){
+	$('#pop_up_administrador').bPopup().close();
+}
+
+
+function validateNpass(currentID, nextID, e){
+	if(e!=null){
+		if (e.keyCode == 13) 
+		{ 
+			if(nextID=='administrador'){
+				//anularPost(); 
+				return false;
+			}
+			if(nextID=='boton_aceptar_popup_admin'){
+				document.getElementById(nextID).focus();
+			}
+			else if(nextID!=''){
+				document.getElementById(nextID).select();
+			}//Nos pasamos luego validamos			
+				
+		}
+	}
+}
+
+function anularPost(){
+	$.prompt("¡Esto anulará la factura!", {
+				title: "¿Esta seguro que desea anular esta factura?",
+				buttons: { "Si, estoy seguro": true, "Cancelar": false },
+				submit:function(e,v,m,f){
+											if(v){
+												$('#pop_up_administrador').bPopup().close(); 
+												
+												anularFacturaAJAX("/facturas/caja/anularFactura");												
+											}
+										}
+			});
+}
+
+function clickAceptar_Admin(event){
+	if(checkAdminLog()){
+		closePopUp_Admin();
+		anularPost();
+	}
+	else{
+		n = noty({
+					   layout: 'topRight',
+					   text: 'Información incorrecta!!!',
+					   type: 'error',
+					   timeout: 4000
+					});		
+		
+		document.getElementById("pop_usuario").select();
+	}
+}
+
+function checkAdminLog(){
+	usuario_check = document.getElementById("pop_usuario").value;
+	contra_usuario = CryptoJS.MD5(document.getElementById("pop_password").value); //Lo encriptamos de una vez
+	document.getElementById("pop_password").value=''; //Lo limpiamos para que no quede evidencia del pass
+	document.getElementById("pop_usuario").value=''; //Limpiamos 
+	
+	url = '/facturas/nueva/checkUSR?user='+usuario_check+'&pass='+contra_usuario+'&tipo='+numeroPopUp;
+    
+	contra_usuario=''; //Limpiamos
+	
+	flag = getandmakeCall(url);
+		
+	if(flag.trim()=='-1'){return false;}
+	else if(flag.trim()=='200'){return true;}
+}
+
+function getXMLHTTP(){
+	if (window.XMLHttpRequest) 
+	{
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	} 
+	else 
+	{  // code for IE6, IE5
+		xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+	}
+	return xmlhttp;
+}
+
+function getandmakeCall(URL){
+	AJAX = getXMLHTTP();
+	if (AJAX) {
+		AJAX.open("GET", location.protocol+'//'+document.domain+URL, false);                             
+		AJAX.send(null);
+		return AJAX.responseText;                                         
+	} else {
+		return false;
+	}
+}
+
+function anularFacturaAJAX(URL){
+	$.ajax({
+		url : location.protocol+'//'+document.domain+URL,
+		type: "POST",
+		data: {'consecutivo':consecutivoActual},		
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				result = $.parseJSON('[' + data.trim() + ']');
+				if(result[0].status==="error"){
+					displayErrors(result[0].error);
+				}else if(result[0].status==="success"){
+					location.reload();
+				}
+			}catch(e){
+				notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+	 
+		}
+	});
+}
+
