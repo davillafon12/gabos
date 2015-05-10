@@ -26,6 +26,7 @@ function cargarEncabezado(consecutivo){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+"/facturas/caja/getFacturaHeaders",
 		type: "POST",
+		async: false,
 		data: {'consecutivo':consecutivo},		
 		success: function(data, textStatus, jqXHR)
 		{			
@@ -118,7 +119,11 @@ function setEncabezadoFactura(facturaHEAD){
 	//Valores ocultos
 	$("#iva_porcentaje").val(facturaHEAD[0].ivapor);
 	$("#tipo_cambio_venta").val(facturaHEAD[0].cambio);
-
+	
+	//Cargamos info del cliente
+	clienteEsDeTipoSucursal = facturaHEAD[0].cliente_sucursal;
+	clienteEsDeTipoExento = facturaHEAD[0].cliente_exento;
+	clienteNoAplicaRetencion = facturaHEAD[0].cliente_retencion;
 }
 
 function cargarProductos(consecutivo){
@@ -220,6 +225,14 @@ function cleanTable(){
 	for (var x=rowCount-1; x>0; x--) {
 	   elmtTable.removeChild(tableRows[x]);
 	}
+	
+	$("#costo").val(0);
+	$("#iva").val(0);
+	$("#retencion").val(0);
+	$("#costo_total").val(0);
+	var clienteEsDeTipoSucursal = "0";
+	var clienteEsDeTipoExento = "0";
+	var clienteNoAplicaRetencion = "0";
 }
 
 function mostrarFacturas(){

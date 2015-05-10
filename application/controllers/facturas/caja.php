@@ -103,7 +103,12 @@ class caja extends CI_Controller {
 						$facturaHEAD['observaciones']=$row->Factura_Observaciones;
 						$facturaHEAD['ivapor']=$row->Factura_porcentaje_iva;
 						$facturaHEAD['cambio']=$row->Factura_tipo_cambio;
-						//echo json_encode($facturaHEAD);
+						
+						//Cargamos la variable que ocupamos de cliente
+						$facturaHEAD['cliente_sucursal'] = $row->Factura_Cliente_Sucursal;
+						$facturaHEAD['cliente_exento'] = $row->Factura_Cliente_Exento;
+						$facturaHEAD['cliente_retencion'] = $row->Factura_Cliente_No_Retencion;
+						
 					}else if($row->Factura_Estado=='cobrada'){
 						$facturaHEAD['status']='error';
 						$facturaHEAD['error']='11';
@@ -688,6 +693,11 @@ class caja extends CI_Controller {
 								$facturaHEAD['observaciones']=$row->Proforma_Observaciones;
 								$facturaHEAD['ivapor']=$row->Proforma_Porcentaje_IVA;
 								$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;
+								
+								//Cargamos la variable que ocupamos de cliente
+								$facturaHEAD['cliente_sucursal'] = $row->Proforma_Cliente_Sucursal;
+								$facturaHEAD['cliente_exento'] = $row->Proforma_Cliente_Exento;
+								$facturaHEAD['cliente_retencion'] = $row->Proforma_Cliente_No_Retencion;
 								
 							}else{
 								$facturaHEAD['status']='error';

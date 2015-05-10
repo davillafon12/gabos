@@ -39,19 +39,24 @@ Class proforma_m extends CI_Model
 			//return $consecutivo;
 			date_default_timezone_set("America/Costa_Rica");
 			$Current_datetime = date("y/m/d : H:i:s", now());
+			$this->load->model('cliente','',TRUE);
+			$clienteArray = $this->cliente->getNombreCliente($cedula);
 			$dataProforma = array(
 	                        'Proforma_Consecutivo'=>mysql_real_escape_string($consecutivo),
 	                        'Proforma_Observaciones'=>mysql_real_escape_string($observaciones), 
-							'Proforma_Estado'=>'pendiente',
-							'Proforma_Moneda'=>mysql_real_escape_string($currency),
-							'Proforma_Porcentaje_IVA'=>$c_array['iva'],
-							'Proforma_Tipo_Cambio'=>$c_array['dolar_venta'],
-							'Proforma_Nombre_Cliente'=>mysql_real_escape_string($nombre),
-							'Proforma_Fecha_Hora'=>$Current_datetime,
-							'TB_02_Sucursal_Codigo'=>$sucursal,
-							'Proforma_Vendedor_Codigo'=>$vendedor,	
-							'Proforma_Vendedor_Sucursal'=>$sucursal,	
-							'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula)													
+													'Proforma_Estado'=>'pendiente',
+													'Proforma_Moneda'=>mysql_real_escape_string($currency),
+													'Proforma_Porcentaje_IVA'=>$c_array['iva'],
+													'Proforma_Tipo_Cambio'=>$c_array['dolar_venta'],
+													'Proforma_Nombre_Cliente'=>mysql_real_escape_string($nombre),
+													'Proforma_Fecha_Hora'=>$Current_datetime,
+													'TB_02_Sucursal_Codigo'=>$sucursal,
+													'Proforma_Vendedor_Codigo'=>$vendedor,	
+													'Proforma_Vendedor_Sucursal'=>$sucursal,	
+													'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+													'Proforma_Cliente_Sucursal'=>$clienteArray['sucursal'],
+													'Proforma_Cliente_Exento'=>$clienteArray['exento'],
+													'Proforma_Cliente_No_Retencion'=>$clienteArray['retencion']													
 	                    );			
 	        $this->db->insert('TB_10_Proforma',$dataProforma); 
 			return $this->existe_Proforma($consecutivo, $sucursal);

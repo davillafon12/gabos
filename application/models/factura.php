@@ -44,18 +44,23 @@ Class factura extends CI_Model
 		}
 		if($consecutivo = $this->getConsecutivo($sucursal)){
 			//return $consecutivo;
+			$this->load->model('cliente','',TRUE);
+			$clienteArray = $this->cliente->getNombreCliente($cedula);
 			$dataFactura = array(
 	                        'Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
 	                        'Factura_Observaciones'=>mysql_real_escape_string($observaciones), 
-							'Factura_Estado'=>'pendiente',
-							'Factura_Moneda'=>mysql_real_escape_string($currency),
-							'Factura_porcentaje_iva'=>$c_array['iva'],
-							'Factura_tipo_cambio'=>$c_array['dolar_venta'],
-							'Factura_Nombre_Cliente'=>mysql_real_escape_string($nombre),
-							'TB_02_Sucursal_Codigo'=>$sucursal,
-							'Factura_Vendedor_Codigo'=>$vendedor,	
-							'Factura_Vendedor_Sucursal'=>$sucursal,	
-							'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula)													
+													'Factura_Estado'=>'pendiente',
+													'Factura_Moneda'=>mysql_real_escape_string($currency),
+													'Factura_porcentaje_iva'=>$c_array['iva'],
+													'Factura_tipo_cambio'=>$c_array['dolar_venta'],
+													'Factura_Nombre_Cliente'=>mysql_real_escape_string($nombre),
+													'TB_02_Sucursal_Codigo'=>$sucursal,
+													'Factura_Vendedor_Codigo'=>$vendedor,	
+													'Factura_Vendedor_Sucursal'=>$sucursal,	
+													'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+													'Factura_Cliente_Exento'=>$clienteArray['exento'],
+													'Factura_Cliente_No_Retencion'=>$clienteArray['retencion'],
+													'Factura_Cliente_Sucursal'=>$clienteArray['sucursal']												
 	                    );			
 	        $this->db->insert('TB_07_Factura',$dataFactura); 
 			return $this->existe_Factura($consecutivo, $sucursal);
@@ -130,8 +135,14 @@ Class factura extends CI_Model
 		$costo_sin_iva = 0;
 		$retencion = 0;
 		$this->load->model('articulo','',TRUE);
+		$this->load->model('cliente','',TRUE);
 		//Traemos el array de configuracion para obtener el porcentaje
 		$c_array = $this->getConfgArray();
+		
+		//Obtenemos la info del cliente para ver si es exento y/o aplica retencion
+		$facturaEncabezado = $this->getFacturasHeaders($consecutivo, $sucursal)[0];
+		$clienteEsExento = $this->cliente->clienteEsExentoDeIVA($facturaEncabezado->TB_03_Cliente_Cliente_Cedula);
+		$clienteNoAplicaRetencion = $this->cliente->clienteEsExentoDeRetencion($facturaEncabezado->TB_03_Cliente_Cliente_Cedula);
 		
 		if($articulos = $this->getItemsFactura($consecutivo, $sucursal)){
 			foreach($articulos as $articulo)
@@ -148,10 +159,13 @@ Class factura extends CI_Model
 				if($isExento=='0'){
 					$costo_sin_iva += $precio_total_articulo/(1+(floatval($c_array['iva'])/100));
 					$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($c_array['iva'])/100));
-					$retencion += $precio_articulo_final - $precio_final_sin_iva;
+					if($articulo->Articulo_Factura_No_Retencion=='0'){ //Si aplica la retencion
+							$retencion += $precio_articulo_final - $precio_final_sin_iva;
+					}
 				}
 				else if($isExento=='1'){
 					$costo_sin_iva += $precio_total_articulo;
+					$retencion = 0;
 				}
 				$costo_total += $precio_total_articulo;
 				//$costo_sin_iva += (($articulo->Articulo_Factura_Precio_Unitario)-(($articulo->Articulo_Factura_Precio_Unitario)*(($articulo->Articulo_Factura_Descuento)/100)))*$articulo->Articulo_Factura_Cantidad;
@@ -162,6 +176,16 @@ Class factura extends CI_Model
 		//Si aplica la retencion entonces modificamos los costos
 		if(!$c_array['aplicar_retencion']){
 			$retencion = 0;
+		}
+		
+		//Si el cliente es exento o no aplica retencion, lo valoramos
+		if($clienteEsExento){
+				$costo_total -= $iva;
+				$iva = 0;
+				$retencion = 0;
+		}
+		if($clienteNoAplicaRetencion){
+				$retencion = 0;
 		}
 		
 		$costo_total += $retencion;

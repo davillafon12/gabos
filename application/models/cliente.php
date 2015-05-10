@@ -211,6 +211,32 @@ Class cliente extends CI_Model
 		}
 	}
 	
+	function clienteEsExentoDeIVA($cedula){
+			$this -> db -> from('TB_03_Cliente');
+			$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($cedula));
+			$this -> db -> limit(1);
+			$query = $this -> db -> get();
+			if($query->num_rows()==0)
+			{return false;}
+			else
+			{
+				return $query->result()[0]->Cliente_EsExento;
+			}	
+	}
+	
+	function clienteEsExentoDeRetencion($cedula){
+			$this -> db -> from('TB_03_Cliente');
+			$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($cedula));
+			$this -> db -> limit(1);
+			$query = $this -> db -> get();
+			if($query->num_rows()==0)
+			{return false;}
+			else
+			{
+				return $query->result()[0]->Aplica_Retencion;
+			}	
+	}
+	
 	function existeClienteDescuento($cedula, $sucursal){
 		$this -> db -> select('*');
 		$this -> db -> from('TB_21_Descuento_Cliente');
