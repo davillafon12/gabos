@@ -158,7 +158,7 @@ function manejarErrores(error){
 function montarFacturas(facturas){
 	cuerpoTabla = '';
 	for(i = 0; i<facturas.length; i++){
-		cuerpoTabla += "<tr class='bordes_tabla_factura' onclick='seleccionarFactura("+facturas[i].consecutivo+")'><td class='contact' style='text-align:center;'>"+facturas[i].consecutivo+"</td><td class='contact'>"+facturas[i].cliente+"</td><td class='contact' style='text-align:center;'>"+facturas[i].fecha+"</td><td class='contact' style='text-align:right;'>"+parseFloat(facturas[i].total).format(2, 3, '.', ',')+"</td></tr>";
+		cuerpoTabla += "<tr class='bordes_tabla_factura' onclick='seleccionarFactura("+facturas[i].consecutivo+")'><td class='contact' style='text-align:center;'>"+facturas[i].consecutivo+"</td><td class='contact'>"+facturas[i].cliente+"</td><td class='contact' style='text-align:center;'>"+facturas[i].fecha+"</td></tr>";
 	}
 	$("#facturas_filtradas").html(cuerpoTabla);
 }

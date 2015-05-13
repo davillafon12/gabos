@@ -99,7 +99,6 @@ PARA:
 								<td class="titulo_header_tabla contact" style="  width: 50px;">#</td>
 								<td class="titulo_header_tabla contact">Usuario</td>
 								<td class="titulo_header_tabla contact" >Fecha</td>
-								<td class="titulo_header_tabla contact" >Total</td>
 							</tr>
 						</thead>
 						<tbody id="facturas_filtradas">

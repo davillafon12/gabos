@@ -26,12 +26,11 @@ class cierre extends CI_Controller {
 		{
 			redirect('accesoDenegado', 'location');						
 		}
-		
-		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($data['Sucursal_Codigo']);
-		
 		date_default_timezone_set("America/Costa_Rica");
 		
-		$fechaHoraActual = date("Y-m-d : H:i:s", now()); //PARA USAR CON LA BASE DE DATOS
+		//Esta fecha no va formateada, ya que se formatea cuando se trae la info de la BD
+		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($data['Sucursal_Codigo']);
+		$fechaHoraActual = date("Y-m-d  H:i:s", now()); //PARA USAR CON LA BASE DE DATOS
 		
 		$data['fechaActual'] = date('d-m-Y', now()); // PARA IMPRIMIR
 		$data['fechaRealActual'] = $fechaHoraActual; //Fecha que se manda a vista para procesar despues
@@ -65,7 +64,6 @@ class cierre extends CI_Controller {
 		$data['vendedores'] = $this->obtenerVendidoPorCadaVendedor($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
 		
-		
 		$this->load->view('contabilidad/cierre_caja_view', $data);
 	}	
 	
@@ -74,6 +72,7 @@ class cierre extends CI_Controller {
 		$ultimaFactura = 0;
 		
 		if($facturas = $this->contabilidad->getFacturasEntreRangoFechas($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){					
+			
 			$contador = 1;
 			foreach($facturas as $factura){
 				if($contador == 1){
@@ -154,7 +153,7 @@ class cierre extends CI_Controller {
 	}
 	
 	function obtenerPagosMixtos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
-		$pagos = $this->contabilidad->getPagosMixtosPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual);
+		$pagos = $this->contabilidad->getPagosMixtosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual);
 		$cantidadFacturas = 0;
 		$total = 0;
 		$tarjeta = 0;
@@ -176,7 +175,7 @@ class cierre extends CI_Controller {
 		$efectivo = 0;
 		$tarjeta = 0;
 		$deposito = 0;
-		if($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+		if($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($recibos as $recibo){
 				$total += $recibo->Recibo_Cantidad;
 				switch($recibo->Tipo_Pago){
@@ -197,7 +196,7 @@ class cierre extends CI_Controller {
 	
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		$total = 0;
-		if($facturas = $this->contabilidad->getFacturasContadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+		if($facturas = $this->contabilidad->getFacturasContadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($facturas as $factura){
 				$total += $factura->Factura_Monto_Total;
 			}
@@ -208,8 +207,8 @@ class cierre extends CI_Controller {
 	function obtenerTotalCreditos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		//INCLUYE LOS APARTADOS!!!!!!!
 		$totalCredito = 0;
-		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
-		if($facturas = $this->contabilidad->getFacturasCreditoYApartadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
+		if($facturas = $this->contabilidad->getFacturasCreditoYApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($facturas as $factura){
 				$totalCredito += $factura->Factura_Monto_Total;
 			}
@@ -222,7 +221,7 @@ class cierre extends CI_Controller {
 		$total = 0;
 		$subtotal = 0;
 		$total_iva = 0;
-		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($notas as $nota){
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $sucursal)){
 					
@@ -241,7 +240,7 @@ class cierre extends CI_Controller {
 		$total = 0;
 		$subtotal = 0;
 		$total_iva = 0;
-		if($notas = $this->contabilidad->getNotaDebitoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+		if($notas = $this->contabilidad->getNotaDebitoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($notas as $nota){
 				if($notaDebitoBody = $this->contabilidad->getProductosNotaDebito($nota->Consecutivo, $sucursal)){
 					foreach($notaDebitoBody as $art){
@@ -261,7 +260,7 @@ class cierre extends CI_Controller {
 		
 		if($vendedores = $this->user->getVendedores($sucursal)){
 			foreach($vendedores as $vendedor){
-				if($vendido = $this->contabilidad->getVendidoPorVendedor($vendedor->Factura_Vendedor_Codigo, $sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+				if($vendido = $this->contabilidad->getVendidoPorVendedor($vendedor->Factura_Vendedor_Codigo, $sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 					array_push($vendidoVendedores, $vendido);
 				}
 			}
