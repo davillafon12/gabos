@@ -143,7 +143,7 @@ function manejarErrores(error){
 			notyMsg('No URL tiene un formato inválido, por favor contacte al administrador', 'error');
 		break;
 		case '3':
-			notyMsg('No hay notas crédito con los filtros ingresados', 'warning');
+			notyMsg('No hay cierres de caja con los filtros ingresados', 'warning');
 			$("#facturas_filtradas").html('');
 		break;
 		case '4':
@@ -212,7 +212,7 @@ function cargarEncabezado(consecutivo){
 			try{
 				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
 				if(facturaHEAD[0].status==="error"){
-					notyMsg("Error al cargar la factura, contacte al administrador. ERROR E"+facturaHEAD[0].error, "error");
+					notyMsg("Error al cargar el cierre de caja, contacte al administrador. ERROR E"+facturaHEAD[0].error, "error");
 					cleanTable();
 				}else if(facturaHEAD[0].status==="success"){
 					setEncabezadoFactura(facturaHEAD[0]);
@@ -224,7 +224,7 @@ function cargarEncabezado(consecutivo){
 			}
 			catch(e){
 				alert(e);
-				notyMsg("Error al cargar la factura, contacte al administrador. ERROR E0", "error");
+				notyMsg("Error al cargar el cierre de caja, contacte al administrador. ERROR E0", "error");
 			}			
 		},
 		error: function (jqXHR, textStatus, errorThrown)
@@ -235,13 +235,7 @@ function cargarEncabezado(consecutivo){
 
 
 function cleanTable(){
-	elmtTable = document.getElementById('tabla_productos');
-	tableRows = elmtTable.getElementsByTagName('tr');
-	rowCount = tableRows.length;
-
-	for (var x=rowCount-1; x>0; x--) {
-	   elmtTable.removeChild(tableRows[x]);
-	}
+	
 }
 
 function setEncabezadoFactura(cab){	

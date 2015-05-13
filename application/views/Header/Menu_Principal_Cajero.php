@@ -3,6 +3,7 @@
 	$Ruta_Icono_Clientes = base_url('application/images/Icons/Clientes.ico');	
 	$Ruta_Icono_Facturacion = base_url('application/images/Icons/Facturacion.ico');	
 	$Ruta_Base = base_url('');
+	$Ruta_Icono_Consultas = base_url('application/images/Icons/Consultas.ico');
 	$Ruta_Icono_Contabilidad = base_url('application/images/Icons/Contabilidad.png');
 	
 	echo 
@@ -33,11 +34,28 @@
 			<img class='icono' src=".$Ruta_Icono_Consultas." alt='Consultas' width='22' height='22'>
 			<a href='#' class='dir'>Consultas</a>	
 			<ul>
-				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>
-				<li><a href='#'>Recibos</a></li>
-				<li><a href='#'>Notas Crédito</a></li>
-				<li><a href='#'>Notas Débito</a></li>
-				<li class='last'><a href='#'>Cierres de Caja</a></li>
+				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>	
+				<li><a href='".$Ruta_Base."consulta/proformas'>Proformas</a></li>			
+				<li><a href='#' class='dir'>Notas</a>
+					<ul>
+						<li class='first'><a href='".$Ruta_Base."consulta/notasCredito'>Crédito</a></li>
+						<li class='last'><a href='".$Ruta_Base."consulta/notasDebito'>Débito</a></li>
+					</ul>
+				</li>
+				<li><a href='#' class='dir'>Cierres</a>
+					<ul>
+						<li class='first'><a href='".$Ruta_Base."consulta/retiroParcial'>Retiro Parcial</a></li>
+						<li class='last'><a href=".$Ruta_Base."consulta/cierreCaja>Cierre de Caja</a></li>
+					</ul>
+				</li>
+				<li><a href='#' class='dir'>Reportes</a>
+					<ul>
+						<li class='first'><a href='".$Ruta_Base."reportes/reportes/usuarios'>Usuarios</a></li>
+						<li><a href='".$Ruta_Base."reportes/reportes/clientes'>Clientes</a></li>
+						<li class='last'><a href='".$Ruta_Base."reportes/reportes/articulos'>Articulos</a></li>
+					</ul>
+				</li>
+				<li class='last'><a href='".$Ruta_Base."consulta/recibos'>Recibos de Dinero</a></li>
 			</ul>
 		</li>
 		<li class='last_last'>
