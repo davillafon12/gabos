@@ -30,7 +30,9 @@ PARA:
 		
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>" type="text/javascript"></script>
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.maskedinput.js'); ?>" type="text/javascript"></script>
-		<script type="text/javascript" src="<?php //echo base_url('application/scripts/jquery-1.2.6.min.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
+		
+		
 		<?php include '/../../scripts/ajax_verify_cliente_id.php';?>	
 		
 	</head>

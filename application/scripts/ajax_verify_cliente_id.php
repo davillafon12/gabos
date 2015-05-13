@@ -86,7 +86,7 @@ echo
 		/*Metodo encargado de validar cedula y otros digitos numericos		*/
 		jQuery(function($){		 
 			$(\"#cedula\").mask(\"999999999\");   
-		   $(\"#carnet\").mask(\"9999\"); 	
+		   $(\"#carnet\").numeric(); 	
 		   $(\"#celular\").mask(\"9999-9999\");
 		   $(\"#telefono\").mask(\"9999-9999\");
 		   $(\"#descuento\").mask(\"99\");

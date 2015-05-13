@@ -35,6 +35,7 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/clientes/style_registrar.css'); ?>">
 		<!--SCRIPT DE AJAX JQUERY-->
 		<script src="<?php echo base_url('application/scripts/jquery.maskedinput.js'); ?>" type="text/javascript"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
 		<?php include '/../../scripts/ajax_verify_cliente_id.php';?>	
 	
 	
