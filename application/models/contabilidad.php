@@ -580,6 +580,7 @@ Class contabilidad extends CI_Model
 		else
 		{			
 			$result = $query->result();
+			$fecha = '';
 			foreach($result as $row)
 			{ 
 					if($row->Id==$consecutivo){
