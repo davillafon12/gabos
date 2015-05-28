@@ -12,7 +12,9 @@ var Utilitarios = (function (window, undefined) {
 	var _Reporte_VentaXClienteProforma = "VentaXClienteProforma"; 
 	var _Reporte_ClienteEstado = "ClienteEstado"; 
 	var _Reporte_ClientesXDescuento = "ClientesXDescuento"; 
-	
+
+	var _Reporte_RentabilidadXCliente = "RentabilidadXCliente"; 
+	var _Reporte_VentasXMes = "VentasXMes";
 	// ----------RANGOS ------------
 	var _menorIgual = "menorIgual"; 
 	var _mayorIgual = "mayorIgual"; 
@@ -216,6 +218,8 @@ var Utilitarios = (function (window, undefined) {
 		paReporte_VentaXClienteProforma:_Reporte_VentaXClienteProforma,
 		paReporte_ClienteEstado:_Reporte_ClienteEstado,
 		paReporte_ClientesXDescuento: _Reporte_ClientesXDescuento,
+		paReporte_RentabilidadXCliente: _Reporte_RentabilidadXCliente,
+		paReporte_VentasXMes: _Reporte_VentasXMes,
 		paMenorIgual:_menorIgual,
 		paMayorIgual:_mayorIgual,
 		paBetween:_between,

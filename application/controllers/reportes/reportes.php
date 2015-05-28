@@ -399,6 +399,69 @@ class reportes extends CI_Controller {
 		}	
 	}	
 	
+	
+	/*----------------------------------------------------------------------*/
+	/*---------------------REPORTES FACTURAS--------------------------------*/
+	/*----------------------------------------------------------------------*/
+	
+	function reportesFacturas(){
+		$reportes = array(
+						'null' =>'Seleccione',
+						'RentabilidadXCliente' => 'Rentabilidad por Clientes',
+						'VentasXMes' => 'Ventas por Mes'						
+		);
+		return $reportes;
+	}
+	function facturas(){
+			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+			if($permisos['consulta_administradores'])
+			{
+				$this->load->helper(array('form')); 
+				$empresas_actuales = $this->empresa->get_empresas_ids_array();
+				$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
+				$data['Empresas'] = $empresas_actuales;
+				$data['EstadoFacturas'] = $this->comboEstadosFactura();
+				$data['Reportes'] = $this->reportesFacturas();
+				//$data['Rangos'] = $this->comboRangos();
+				//$data['Precios'] = $this->comboPrecios();
+				$this->load->view('reportes/reportes_facturas_view', $data);	
+			}
+			else{
+			   redirect('accesoDenegado', 'location');
+			}		
+		}
+			
+			
+		 function facturasReporte(){
+			 include '/../get_session_data.php'; //Esto es para traer la informacion de la session
+			
+			//parametros Obtenidos desde Interfaz 
+			 $fechaInicial = $this->input->post('fecha_inicial');
+			 $fechaFinal = $this->input->post('fecha_final');
+			 $Sucural = $this->input->post('sucursal');
+			 $paReporte =$this->input->post('tipo_reporte');	
+			 $EstadoFactura = $this->input->post('paEstadoFactura');	
+			//Parametros quemados en codigo 		
+			$parametro1 = "paSucursal=".$Sucural; 
+			$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial); 
+			$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal); 
+			$parametro4 = "paEstadoFactura=".$EstadoFactura; 			
+			$direccion = "/reports/Gabo/Facturas/";
+			$txtRutaFinal = "";
+			$ip = ""; 
+			if($data['Sucursal_Codigo'] == 0){
+				$ip = $this->IpInterna; 
+			}
+			else {
+				$ip = $this->IpExterna; 
+			}
+			$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4;
+			$this->llamarReporte($txtRutaFinal);
+			// aqui va la estructura del query 
+	
+		 }		
+	
 	/*----------------------------------------------------------------------*/
 	/*-------------FUNCIONES GENERICAS PARA CONVERSIONES O UTILIDADES-------*/
 	/*----------------------------------------------------------------------*/
@@ -413,8 +476,8 @@ class reportes extends CI_Controller {
 	}
 	
 	function llamarReporte($rutafinal){
-		//	echo 'Prueba: '.$rutafinal; 
-			header('Location:'.$rutafinal.'');	
+			echo 'Prueba: '.$rutafinal; 
+		//	header('Location:'.$rutafinal.'');	
 	}
 	
 	function comboEstadosFactura(){

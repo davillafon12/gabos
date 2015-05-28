@@ -4,13 +4,9 @@ $(document).ready(function (){
 	Utilitarios.fnInicializarCalendario("#fecha_final", true, new Date());
 	$("#submit").attr("disabled", true);
 	eventoTipoReporte();	
-	Utilitarios.lfEventoCheckbox($("#mFecha"), $(".rFechas")); 
-	eventoCheckbox();
-	$.validator.addMethod("MayorOIgualQue", function (value, element, params) {
-        return Utilitarios.fnVerificarFechaMayor(params, value);
-    }, '.   Debe ser mayor a: Fecha');
-    lpvalidarCampos();	
-}); 
+	//Utilitarios.lfEventoCheckbox($("#mFecha"), $(".rFechas"));
+	
+});
 
 function eventoTipoReporte(){	
 	$("#tipo_reporte").change(function(){
@@ -20,16 +16,13 @@ function eventoTipoReporte(){
 		}
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_RentabilidadXCliente){
 			$("#submit").attr("disabled", false);
-			$(".rFechas").hide();
-			$(".uFacturas").hide();
-			$(".fFechas").show();
-		}
-		if($("#tipo_reporte").val() == Utilitarios.paReporte_ListaDefacturasPorUsuario){
-			$(".fFechas").hide();
 			$(".rFechas").show();
 			$(".uFacturas").show();
-			$("#mFecha").attr("checked", false);
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentasXMes){
 			$("#submit").attr("disabled", false);
+			$(".rFechas").show();
+			$(".uFacturas").show();
 		}
 	}); 
 }

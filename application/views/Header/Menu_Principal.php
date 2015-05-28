@@ -109,6 +109,7 @@
 					<ul>
 						<li class='first'><a href='".$Ruta_Base."reportes/reportes/usuarios'>Usuarios</a></li>
 						<li><a href='".$Ruta_Base."reportes/reportes/clientes'>Clientes</a></li>
+						<li><a href='".$Ruta_Base."reportes/reportes/facturas'>Facturas</a></li>						
 						<li class='last'><a href='".$Ruta_Base."reportes/reportes/articulos'>Articulos</a></li>
 					</ul>
 				</li>
