@@ -1,6 +1,11 @@
 <?php
 Class factura extends CI_Model
 {
+	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
+	con los docs de garotas*/
+	public $cod_desampa = 1;
+	public $cod_garotas = 0;
+	public $trueque = true; 
 	
 	function getConsecutivo($id_empresa) //Traer el siguiente consecutivo de una empresa en particular
 	{
@@ -41,6 +46,9 @@ Class factura extends CI_Model
 				$c_array['iva']=$head->Proforma_Porcentaje_IVA;
 				$c_array['dolar_venta']=$head->Proforma_Tipo_Cambio;
 			}
+		}
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
 		}
 		if($consecutivo = $this->getConsecutivo($sucursal)){
 			//return $consecutivo;
@@ -110,6 +118,9 @@ Class factura extends CI_Model
 	}
 	
 	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$dataItem = array(
 	                        'Articulo_Factura_Codigo'=>mysql_real_escape_string($codigo),
 	                        'Articulo_Factura_Descripcion'=>mysql_real_escape_string($descripcion), 
@@ -130,6 +141,9 @@ Class factura extends CI_Model
 	}
 	
 	function getCostosTotalesFactura($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$costo_total = 0;
 		$iva = 0;
 		$costo_sin_iva = 0;
@@ -226,6 +240,9 @@ Class factura extends CI_Model
 	}
 	
 	function getFacturasPendientes($sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('*');
 		$this -> db -> from('TB_07_Factura');
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
@@ -243,6 +260,9 @@ Class factura extends CI_Model
 	}
 	
 	function getFacturasHeaders($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('*');
 		$this -> db -> from('TB_07_Factura');
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
@@ -390,6 +410,9 @@ Class factura extends CI_Model
 	}
 	
 	function getArticulosFactura($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('*');
 		$this -> db -> from('TB_08_Articulos_Factura');
 		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
