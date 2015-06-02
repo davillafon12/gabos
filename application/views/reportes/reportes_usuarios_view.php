@@ -103,13 +103,13 @@ PARA:
 								<label for="lafecha_inicial"  class="labelMedium">Fecha Inicial:</label>							
 							</td>
 							<td>
-								<input id="fecha_inicial" class="input_Small" autocomplete="off" name="fecha_inicial">
+								<input id="fecha_inicial" class="input_calendar" autocomplete="off" name="fecha_inicial">
 							</td>
 							<td>
 								<label for="lafecha_final"  class="labelMedium">Fecha Final:</label>							
 							</td>
 							<td>
-								<input id="fecha_final" class="input_Small" autocomplete="off" name="fecha_final"><br>						
+								<input id="fecha_final" class="input_calendar" autocomplete="off" name="fecha_final"><br>						
 							</td>
 						</tr>	
 						<tr class="uFacturas">

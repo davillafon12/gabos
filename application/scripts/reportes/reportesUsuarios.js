@@ -5,7 +5,6 @@ $(document).ready(function (){
 	$("#submit").attr("disabled", true);
 	eventoTipoReporte();	
 	Utilitarios.lfEventoCheckbox($("#mFecha"), $(".rFechas")); 
-	eventoCheckbox();
 	$.validator.addMethod("MayorOIgualQue", function (value, element, params) {
         return Utilitarios.fnVerificarFechaMayor(params, value);
     }, '.   Debe ser mayor a: Fecha');
@@ -18,7 +17,7 @@ function eventoTipoReporte(){
 			$("#submit").attr("disabled", true); 
 			ocultarTodo();
 		}
-		if($("#tipo_reporte").val() == Utilitarios.paReporte_RentabilidadXCliente){
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_ListaUsuario){
 			$("#submit").attr("disabled", false);
 			$(".rFechas").hide();
 			$(".uFacturas").hide();
