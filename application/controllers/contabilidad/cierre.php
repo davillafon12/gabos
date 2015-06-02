@@ -34,7 +34,7 @@ class cierre extends CI_Controller {
 		
 		$data['fechaActual'] = date('d-m-Y', now()); // PARA IMPRIMIR
 		$data['fechaRealActual'] = $fechaHoraActual; //Fecha que se manda a vista para procesar despues
-		$data['baseCaja'] = "30.000";
+		$data['baseCaja'] = "30000";
 		$data['tipo_cambio'] = $this->configuracion->getTipoCambioCompraDolar();
 		
 		$facturas = $this->getPrimeraUltimaFactura($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
@@ -175,6 +175,7 @@ class cierre extends CI_Controller {
 		$efectivo = 0;
 		$tarjeta = 0;
 		$deposito = 0;
+		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
 		if($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($recibos as $recibo){
 				$total += $recibo->Recibo_Cantidad;
@@ -191,7 +192,8 @@ class cierre extends CI_Controller {
 				}
 			}
 		}
-		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito);
+		$total += $totalAbonoApartado;
+		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito, 'abonos'=>$totalAbonoApartado);
 	}
 	
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){
@@ -207,14 +209,19 @@ class cierre extends CI_Controller {
 	function obtenerTotalCreditos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		//INCLUYE LOS APARTADOS!!!!!!!
 		$totalCredito = 0;
+		$totalApartado = 0;
 		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
 		if($facturas = $this->contabilidad->getFacturasCreditoYApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($facturas as $factura){
-				$totalCredito += $factura->Factura_Monto_Total;
+					if($factura->Factura_Tipo_Pago == 'credito'){
+							$totalCredito += $factura->Factura_Monto_Total;
+					}elseif($factura->Factura_Tipo_Pago == 'apartado'){
+							$totalApartado += $factura->Factura_Monto_Total;
+					}
 			}
 		}
-		$totalCredito -= $totalAbonoApartado;
-		return $totalCredito;
+		$totalApartado -= $totalAbonoApartado;
+		return array('totalCredito'=>$totalCredito, 'totalApartado'=>$totalApartado);
 	}
 	
 	function obtenerTotalesNotasCredito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
@@ -257,16 +264,18 @@ class cierre extends CI_Controller {
 	function obtenerVendidoPorCadaVendedor($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 				
 		$vendidoVendedores = array();
+		$totalVendido = 0;
 		
 		if($vendedores = $this->user->getVendedores($sucursal)){
 			foreach($vendedores as $vendedor){
 				if($vendido = $this->contabilidad->getVendidoPorVendedor($vendedor->Factura_Vendedor_Codigo, $sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 					array_push($vendidoVendedores, $vendido);
+					$totalVendido += $vendido[0]->total_vendido;
 				}
 			}
 		}
 		
-		return $vendidoVendedores;
+		return array('vendidoVendedores'=>$vendidoVendedores,'totalVendido'=>$totalVendido);
 	}
 	
 	function crearCierre(){

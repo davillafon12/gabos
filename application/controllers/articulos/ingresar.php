@@ -457,18 +457,18 @@ class ingresar extends CI_Controller {
 						array_push($articulos, array(	
 														"cod"=>$codigo,
 														"des"=>$descripcion,
-														"cos"=>$costo,
-														"p1"=>$p1,
-														"p2"=>$p2,
-														"p3"=>$p3,
-														"p4"=>$p4,
-														"p5"=>$p5,
+														"cos"=>str_replace(",",".",$costo),
+														"p1"=>str_replace(",",".",$p1),
+														"p2"=>str_replace(",",".",$p2),
+														"p3"=>str_replace(",",".",$p3),
+														"p4"=>str_replace(",",".",$p4),
+														"p5"=>str_replace(",",".",$p5),
 														"fam"=>$familia,
 														"suc"=>$sucursal,
 														"can"=>$cantidad,
 														"exe"=>$exento,
 														"ret"=>$retencion,
-														"desc"=>$descuento,
+														"desc"=>str_replace(",",".",$descuento),
 														"ima"=>$imagen
 													)
 									);

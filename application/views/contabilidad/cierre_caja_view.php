@@ -68,7 +68,7 @@ PARA:
 						</td>
 						<td>
 							<label class="titulo-2" for="base_caja">Base: ₡</label>
-							<input type="text" class="input-base-caja alg-right" id="base_caja" value="<?php echo $baseCaja;?>"/>
+							<input type="text" class="input-base-caja alg-right" id="base_caja" onblur="actualizarMontoTotalRetiro()" value="<?php echo $baseCaja;?>"/>
 						</td>
 					</tr>
 					<tr>
@@ -302,19 +302,21 @@ PARA:
 						</td>
 						<td>
 							<table class="tabla-recibos-dinero">
-								<tr><td colspan="3"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
+								<tr><td colspan="4"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Contado</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
 									<td class="borde-abajo"><p class="parrafo">Deposito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Abonos</p></td>
 								</tr>
 								<tr>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['efectivo'],2,",",".");?></p></td>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['tarjeta'],2,",",".");?></p></td>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['deposito'],2,",",".");?></p></td>
+									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['abonos'],2,",",".");?></p></td>
 								</tr>								
 								<tr>
-									<td colspan="2" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
+									<td colspan="3" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
 									<td class="alg-right borde-arriba"><p class="parrafo">₡<?php echo number_format($recibos['total'],2,",",".");?></p></td>
 								</tr>
 							</table>
@@ -330,14 +332,19 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjetas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Créditos</p></td>
+									<td class="borde-abajo"><p class="parrafo">Apartados</p></td>
 									<td class="borde-abajo"><p class="parrafo">Notas Crédito</p></td>
 									<td class="borde-abajo"><p class="parrafo">Notas Débito</p></td>
 								</tr>
 								<tr>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalFacturasContado,2,",",".");?></p></td>
-									<td class=''><p class='parrafo'>₡<?php echo number_format($totalRecibosParciales,2,",",".");?></p></td>
+									<td class=''>
+										<input id="totalRetirosParciales" value="<?php echo $totalRecibosParciales; ?>" type="hidden"/>
+										<p class='parrafo' id="parrafoTotalRetirosParciales">₡<?php echo number_format($totalRecibosParciales,2,",",".");?></p>
+									</td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
-									<td class=''><p class='parrafo'>₡<?php echo number_format($totalCreditos,2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalCreditos['totalCredito'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalCreditos['totalApartado'],2,",",".");?></p></td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalNotasCredito['total'],2,",",".");?></p></td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalNotasDebito['total'],2,",",".");?></p></td>
 								</tr>								
@@ -361,7 +368,7 @@ PARA:
 								<tr>
 									<?php
 										$contador = 1;
-										foreach($vendedores as $vendedor){
+										foreach($vendedores['vendidoVendedores'] as $vendedor){
 											$vendedor = $vendedor[0];											
 											echo "<td style='text-align: left; width: 250px;'><p class='parrafo'>{$vendedor->usuario}</p></td>";
 											echo "<td class='' style='width: 120px;'><p class='parrafo'>₡".number_format($vendedor->total_vendido,2,",",".")."</p></td>";
@@ -376,6 +383,12 @@ PARA:
 								</tr>					
 								<tr>
 									<td colspan="4" class="alg-right borde-arriba"></td>
+								</tr>
+								<tr>
+									<td colspan="4" class="alg-right">
+											<label class="parrafo" style="font-size: 20px;">Total vendedores:</label>
+											<label class="parrafo" style="font-size: 20px;">₡<?php echo number_format($vendedores['totalVendido'],2,",",".");?></label>	
+									</td>
 								</tr>
 								<tr><td colspan="4"><hr></td></tr>
 								

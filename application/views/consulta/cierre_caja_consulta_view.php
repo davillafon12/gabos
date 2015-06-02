@@ -327,19 +327,21 @@ PARA:
 						</td>
 						<td>
 							<table class="tabla-recibos-dinero">
-								<tr><td colspan="3"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
+								<tr><td colspan="4"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Contado</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
 									<td class="borde-abajo"><p class="parrafo">Deposito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Abonos</p></td>
 								</tr>
 								<tr>
 									<td class='alg-right'><p class='parrafo' id="recibo_contado">₡0</p></td>
 									<td class='alg-right'><p class='parrafo' id="recibo_tarjeta">₡0</p></td>
 									<td class='alg-right'><p class='parrafo' id="recibo_deposito">₡0</p></td>
+									<td class='alg-right'><p class='parrafo' id="recibo_abono">₡0</p></td>
 								</tr>								
 								<tr>
-									<td colspan="2" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
+									<td colspan="3" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
 									<td class="alg-right borde-arriba"><p class="parrafo" id="total_recibos_dinero">₡0</p></td>
 								</tr>
 							</table>
@@ -355,6 +357,7 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjetas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Créditos</p></td>
+									<td class="borde-abajo"><p class="parrafo">Apartados</p></td>
 									<td class="borde-abajo"><p class="parrafo">Notas Crédito</p></td>
 									<td class="borde-abajo"><p class="parrafo">Notas Débito</p></td>
 								</tr>
@@ -363,6 +366,7 @@ PARA:
 									<td class=''><p class='parrafo' id="totales_efectivo">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_tarjetas">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_creditos">₡0</p></td>
+									<td class=''><p class='parrafo' id="totales_apartados">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_notas_credito">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_notas_debito">₡0</p></td>
 								</tr>								
@@ -380,6 +384,9 @@ PARA:
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Vendedor</p></td>
 									<td class="borde-abajo"><p class="parrafo">Vendido</p></td>
+								</tr>
+								<tr>
+									<td colspan="7" class="alg-right borde-arriba"></td>
 								</tr>														
 							</table>							
 						</td>						

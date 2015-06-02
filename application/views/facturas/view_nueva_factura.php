@@ -14,61 +14,68 @@ PARA:
 		<title>Factura Nueva</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="shortcut icon" href="<?php echo base_url('application/images/header_icon.png'); ?>">
-		<!--CSS ESTILO BASICO E IMAGEN HEADER DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Estilo_Basico.css'); ?>">		
-		<!--CSS ESTILO DEL MENU-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Menu/Default_Style.css'); ?>">
-		<!--CSS ESTILO DE LA INFO DE LOG IN-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Log_Out_Info_Style.css'); ?>">
-		<!--CSS ESTILO DEL FOOTER-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Footer/Default_Style.css'); ?>">
-		<!--CSS ESTILO DEL MAIN WRAPPER-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
-		<!--CSS ESTILO DE LA FACTURA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Facturas/factura_nueva_style.css'); ?>">
-		<!--CARGA DEL RELOJ-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_reloj.js'); ?>"></script>
-		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include '/../../scripts/factura_log_out_from_browser.php';?>
-		<!--SCRIPT DE BUSQUEDA DE CLIENTES-->
-		<?php //include '/../../scripts/ajax_busqueda_clientes.php';?>
-		<!--SCRIPT DE BUSQUEDA DE ARTICULOS-->
-		<?php //include '/../../scripts/ajax_busqueda_articulo.php';?>
-		<!--CARGA DEL JQUERY-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script>
-		<!--CARGA DEL JQUERYUI-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.js'); ?>"></script>
-		<!--CSS ESTILO DEL JQUERYUI-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
 		
-		<!--CARGA DEL POPUP MODAL-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
-		<!--CARGA DEL NOTY-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>"></script>
+		<!--                   ESTILOS                     -->
 		
-		<!--CARGA DEL TOOLTIP-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tooltips.js'); ?>"></script>
-		<!--SCRIPT DE LLAMADAS AJAX-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_calls.js'); ?>"></script>
-		<!--SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tools.js'); ?>"></script>
-		<!--SCRIPT DE CAMBIO MONEDA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_currency.js'); ?>"></script>
-		<!--CARGA DE LAS HERRAMIENTAS DEL POPUP MODAL-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_popup.js'); ?>"></script>
-		<!--CARGA DE LAS HERRAMIENTAS DE INVENTARIO-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_inventario.js'); ?>"></script>
-		<!--BUSQUEDA POR NOMBRE-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_searchName.js'); ?>"></script>
-		<!--LIBRERIA ENCRYPTACION-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js'); ?>"></script>
-		<!--HERRAMIENTAS PARA ENVIO A CAJA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_envio_caja.js'); ?>"></script>
-		<script>
-			var token_factura_temporal = '<?php echo $token_factura_temp;?>';
-			var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
-			var aplicarRetencionHacienda = <?php echo $this->configuracion->getAplicarRetencion();?>
-		</script>
+				<!--CSS ESTILO BASICO E IMAGEN HEADER DE LA PAGINA-->
+				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Estilo_Basico.css'); ?>">		
+				<!--CSS ESTILO DEL MENU-->
+				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Menu/Default_Style.css'); ?>">
+				<!--CSS ESTILO DE LA INFO DE LOG IN-->
+				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Log_Out_Info_Style.css'); ?>">
+				<!--CSS ESTILO DEL FOOTER-->
+				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Footer/Default_Style.css'); ?>">
+				<!--CSS ESTILO DEL MAIN WRAPPER-->
+				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
+				<!--CSS ESTILO DE LA FACTURA-->
+				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Facturas/factura_nueva_style.css'); ?>">
+				<!--CSS ESTILO DEL JQUERYUI-->
+				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
+		
+		<!--                      JS                       -->
+		
+				<!--CARGA DEL JQUERY-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script>
+				<!--CARGA DEL JQUERYUI-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.js'); ?>"></script>
+				
+				<!--CARGA DEL POPUP MODAL-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
+				<!--CARGA DEL NOTY-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>"></script>
+				<!--LIBRERIA ENCRYPTACION-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js'); ?>"></script>
+				
+				
+				<!--CARGA DEL TOOLTIP-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tooltips.js'); ?>"></script>
+				<!--SCRIPT DE LLAMADAS AJAX-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_calls.js'); ?>"></script>
+				<!--SCRIPT DE HERRAMIENTAS-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tools.js'); ?>"></script>
+				<!--SCRIPT DE CAMBIO MONEDA-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_currency.js'); ?>"></script>
+				<!--CARGA DE LAS HERRAMIENTAS DEL POPUP MODAL-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_popup.js'); ?>"></script>
+				<!--CARGA DE LAS HERRAMIENTAS DE INVENTARIO-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_inventario.js'); ?>"></script>
+				<!--BUSQUEDA POR NOMBRE-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_searchName.js'); ?>"></script>
+				
+				<!--HERRAMIENTAS PARA ENVIO A CAJA-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_envio_caja.js'); ?>"></script>
+				<script>
+					var token_factura_temporal = '<?php echo $token_factura_temp;?>';
+					var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
+					var aplicarRetencionHacienda = <?php echo $this->configuracion->getAplicarRetencion();?>;
+					var IDLE_TIMEOUT = <?php echo $this->configuracion->getTiempoSesion();?>;
+				</script>
+				
+				<!--CARGA DEL RELOJ Y EXPIRACION DE LA SESION-->
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_reloj.js'); ?>"></script>
+				<!--SCRIPT DE -->
+				
+		
 	</head>
 	<body onload="setMainValues()" oncopy="return false" oncut="return false" onpaste="return false">
 		<!--Incluir imagen de cabezera-->

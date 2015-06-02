@@ -804,16 +804,17 @@ Class contabilidad extends CI_Model
 	function getAbonoFacturasApartadoPorRangoFecha($sucursal, $inicio, $final){
 		/*
 			SELECT SUM(Abono) 
-			FROM tb_40_apartado
-			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_40_apartado.Id
-			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
-			WHERE tb_24_credito.Credito_Sucursal_Codigo = 0
-			AND tb_07_factura.TB_02_Sucursal_Codigo = 0
+			FROM tb_40_apartado 
+			JOIN tb_24_credito ON tb_40_apartado.Credito = tb_24_credito.Credito_Id 
+			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo 
+			WHERE tb_24_credito.Credito_Sucursal_Codigo = 0 
+			AND tb_07_factura.TB_02_Sucursal_Codigo = 0 
+			AND tb_07_factura.Factura_Estado = 'cobrada'
 			;
 		*/	
 		$this->db->select('SUM(Abono) AS abono');
 		$this->db->from('tb_40_apartado');
-		$this->db->join('tb_24_credito','tb_24_credito.Credito_Id = tb_40_apartado.Id');
+		$this->db->join('tb_24_credito','tb_24_credito.Credito_Id = tb_40_apartado.Credito');
 		$this->db->join('tb_07_factura','tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo');
 		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
@@ -853,17 +854,21 @@ Class contabilidad extends CI_Model
 					CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario
 			FROM tb_07_factura
 			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = tb_07_factura.Factura_Vendedor_Codigo
+     JOIN tb_03_cliente ON tb_03_cliente.Cliente_Cedula = tb_07_factura.TB_03_Cliente_Cliente_Cedula
 			WHERE tb_07_factura.TB_02_Sucursal_Codigo = 0
 			AND Factura_Estado = 'cobrada'
-			AND Factura_Vendedor_Codigo = 1;
+			AND Factura_Vendedor_Codigo = 1
+            AND tb_03_cliente.Cliente_EsSucursal = 0;
 		*/
 		$this->db->select("SUM(tb_07_factura.Factura_Monto_Total) AS total_vendido, 
 					CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario", false);
 		$this->db->from('tb_07_factura');
 		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = tb_07_factura.Factura_Vendedor_Codigo');
+		$this->db->join('tb_03_cliente', 'tb_03_cliente.Cliente_Cedula = tb_07_factura.TB_03_Cliente_Cliente_Cedula');
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('tb_07_factura.Factura_Estado', 'cobrada');
 		$this->db->where('tb_07_factura.Factura_Vendedor_Codigo', $vendedor);
+		$this->db->where('tb_03_cliente.Cliente_EsSucursal', 0);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);	
 		$query = $this->db->get();

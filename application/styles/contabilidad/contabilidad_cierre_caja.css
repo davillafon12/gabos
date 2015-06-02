@@ -130,7 +130,11 @@
 
 .contenedor-total-denominaciones{
 	position: relative;
-  top: 80px;
+  top: 40px;
+}
+
+.contenedor-total-denominaciones label{
+	font-size: 20px;
 }
 
 .boton_envio_cobro {

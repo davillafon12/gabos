@@ -452,16 +452,17 @@ class caja extends CI_Controller {
 	}
 	
 	function devolverProductosdeFactura($consecutivo, $sucursal){
-		$productos = $this->factura->getArticulosFactura($consecutivo, $sucursal);
-		foreach($productos as $producto){
-			if($this->articulo->existe_Articulo($producto->Articulo_Factura_Codigo,$sucursal)){
-				//si el producto existe
-				if($producto->Articulo_Factura_Codigo=='00'){
-					//si es generico no hacer nada
-				}else{
-					$this->articulo->actualizarInventarioSUMA($producto->Articulo_Factura_Codigo, $producto->Articulo_Factura_Cantidad, $sucursal);
+		if($productos = $this->factura->getArticulosFactura($consecutivo, $sucursal)){
+				foreach($productos as $producto){
+					if($this->articulo->existe_Articulo($producto->Articulo_Factura_Codigo,$sucursal)){
+						//si el producto existe
+						if($producto->Articulo_Factura_Codigo=='00'){
+							//si es generico no hacer nada
+						}else{
+							$this->articulo->actualizarInventarioSUMA($producto->Articulo_Factura_Codigo, $producto->Articulo_Factura_Cantidad, $sucursal);
+						}
+					}else{}
 				}
-			}else{}
 		}
 	}
 	

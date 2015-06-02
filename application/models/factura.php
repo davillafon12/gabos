@@ -5,7 +5,7 @@ Class factura extends CI_Model
 	con los docs de garotas*/
 	public $cod_desampa = 1;
 	public $cod_garotas = 0;
-	public $trueque = true; 
+	public $trueque = false; 
 	
 	function getConsecutivo($id_empresa) //Traer el siguiente consecutivo de una empresa en particular
 	{

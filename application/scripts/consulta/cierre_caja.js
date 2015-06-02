@@ -273,7 +273,7 @@ function setEncabezadoFactura(cab){
 	cargarDatafonos(cab.datos);
 	cargarMixto(cab.datos.pagoMixto);
 	cargarRecibosDinero(cab.datos.recibos);
-	cargarTotales(cab.datos);
+	cargarTotales(cab);
 	cargarVendedores(cab.datos.vendedores);
 }
 
@@ -393,19 +393,28 @@ function cargarRecibosDinero(recibos){
 	$("#recibo_contado").html("₡"+parseFloat(recibos.efectivo).format(2, 3, '.', ','));
 	$("#recibo_tarjeta").html("₡"+parseFloat(recibos.tarjeta).format(2, 3, '.', ','));
 	$("#recibo_deposito").html("₡"+parseFloat(recibos.deposito).format(2, 3, '.', ','));
+	$("#recibo_abono").html("₡"+parseFloat(recibos.abonos).format(2, 3, '.', ','));
 	$("#total_recibos_dinero").html("₡"+parseFloat(recibos.total).format(2, 3, '.', ','));
 }
 
 function cargarTotales(datos){
+	baseCaja = parseFloat(datos.cierre.base);
+	totalRetiroFinal = parseFloat(datos.cierre.conteo)
+	datos = datos.datos;
+	totalRetiros = parseFloat(datos.totalRecibosParciales);
+	totalEfectivo = baseCaja + totalRetiros + totalRetiros;
 	$("#totales_factura_contado").html("₡"+parseFloat(datos.totalFacturasContado).format(2, 3, '.', ','));
-	$("#totales_efectivo").html("₡"+parseFloat(datos.totalRecibosParciales).format(2, 3, '.', ','));
+	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
 	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos).format(2, 3, '.', ','));
-	$("#totales_creditos").html("₡"+parseFloat(datos.totalCreditos).format(2, 3, '.', ','));
+	$("#totales_creditos").html("₡"+parseFloat(datos.totalCreditos.totalCredito).format(2, 3, '.', ','));
+	$("#totales_apartados").html("₡"+parseFloat(datos.totalCreditos.totalApartado).format(2, 3, '.', ','));
 	$("#totales_notas_credito").html("₡"+parseFloat(datos.totalNotasCredito.total).format(2, 3, '.', ','));
 	$("#totales_notas_debito").html("₡"+parseFloat(datos.totalNotasDebito.total).format(2, 3, '.', ','));
 }
 
 function cargarVendedores(vendedores){
+	totalVendedores = vendedores.totalVendido;
+	vendedores = vendedores.vendidoVendedores;
 	/*
 		<?php
 				$contador = 1;
@@ -429,12 +438,18 @@ function cargarVendedores(vendedores){
 									+	"</tr>	";
 	
 	for(i=0;i<vendedores.length;i++){
-		filas = filas + "<tr>"
-									+	"	<td><p class='parrafo'>"+vendedores[i][0].usuario+"</p></td>"
-									+	"	<td><p class='parrafo'>"+parseFloat(vendedores[i][0].total_vendido).format(2, 3, '.', ',')+"</p></td>"
-									+	"</tr>	";
+		if(vendedores[i][0].usuario != null){
+				filas = filas + "<tr>"
+											+	"	<td><p class='parrafo'>"+vendedores[i][0].usuario+"</p></td>"
+											+	"	<td><p class='parrafo'>"+parseFloat(vendedores[i][0].total_vendido).format(2, 3, '.', ',')+"</p></td>"
+											+	"</tr>	"
+											;
+		}
 	}
 	
+	filas = filas + "<tr>"
+									+ "<td colspan='7' class='alg-right borde-arriba'><p class='parrafo'>Total Vendedores: ₡"+parseFloat(totalVendedores).format(2, 3, '.', ',')+"</p></td>"
+								  + "</tr>";
 										
 	
 	$("#tabla_vendedores").html(filas);

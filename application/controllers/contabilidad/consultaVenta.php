@@ -33,10 +33,10 @@ class consultaVenta extends CI_Controller {
 		if(isset($_POST['sucursal'])){
 			$sucursal = $_POST['sucursal'];
 			if($this->empresa->getEmpresa($sucursal)){
-				$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($sucursal);
-				
 				date_default_timezone_set("America/Costa_Rica");
-				$fechaHoraActual = date("Y-m-d : H:i:s", now());
+				
+				$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($sucursal);
+				$fechaHoraActual = date("Y-m-d  H:i:s", now());
 				
 				$primeraFactura = 0;
 				$ultimaFactura = 0;

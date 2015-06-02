@@ -29,6 +29,9 @@ $(function(){
 	
 	//Base caja 
 	$("#base_caja").numeric();
+	
+	//Actualizar monto efectivo
+	actualizarMontoTotalRetiro();
 });
 
 function replaceAll(find, replace, str) {
@@ -159,8 +162,14 @@ function actualizarMontoTotalRetiro(){
 	tipo_cambio = $("#tipo_cambio_dolar").val();
 	tipo_cambio = parseFloat(tipo_cambio);
 	total = (dolares*tipo_cambio)+billetes+monedas;
+	totalRetirosParciales = parseFloat($("#totalRetirosParciales").val());
+	totalRetirosParciales += total;
+	baseCaja = parseFloat($("#base_caja").val());
+	total -= baseCaja;
+	
 	$("#input_retiro_parcial").html(total.format(2, 3, '.', ','));
-	//validarYFormatearCantidadEscrita($("#input_retiro_parcial").val());
+	$("#parrafoTotalRetirosParciales").html("₡"+totalRetirosParciales.format(2, 3, '.', ','));
+	
 }
 
 function validarYFormatearCantidadEscritaTipoCambio(cantidad){
@@ -174,6 +183,7 @@ function validarYFormatearCantidadEscritaTipoCambio(cantidad){
 		cantidad = parseFloat(cantidad);
 		cantidad = cantidad.format(2, 3, '.', ',');
 		$("#tipo_cambio_dolar").val(cantidad);
+		actualizarMontoTotalRetiro();
 	}else{
 		cantidadValida = false;
 		notyMsg('¡La cantidad ingresada no es válida!', 'error');
