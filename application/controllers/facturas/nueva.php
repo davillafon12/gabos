@@ -261,21 +261,26 @@ class nueva extends CI_Controller {
 			$items_factura = json_decode($items_factura, true);
 			//Obtenemos la primera posicion del info_factura para obtener el array final
 			$info_factura = $info_factura[0];
-						
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 			
-			//Borramos la factura temporal
-			$this->articulo->eliminarFacturaTemporal($_POST['token']);
-			
-			if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
-				$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
-				$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
-				//$this->
-				echo '7'; //El ingreso fue correcto											
+			//Verificamos que vengan productos
+			if(sizeOf($items_factura)>0){			
+					include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+					
+					//Borramos la factura temporal
+					$this->articulo->eliminarFacturaTemporal($_POST['token']);
+					
+					if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
+						$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
+						$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
+						$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
+						//$this->
+						echo '7'; //El ingreso fue correcto											
+					}else{
+						echo '11'; //Error al crear la factura
+					}	
 			}else{
-				echo '11'; //Error al crear la factura
-			}			
+					echo '99'; //No vienen productos
+			}		
 		}
 		else{echo '10';} //Numero de error mal post		
 	}
