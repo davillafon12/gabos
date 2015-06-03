@@ -168,7 +168,7 @@ class caja extends CI_Controller {
 				}
 			}else{
 				$facturaHEAD['status']='error';
-				$facturaHEAD['error']='10';
+				$facturaHEAD['error']='10'; // No existe factura
 			}
 		}else{
 			$facturaHEAD['status']='error';
@@ -221,16 +221,12 @@ class caja extends CI_Controller {
 				$facturaBODY['productos']=$articulos;
 			}else{
 				$facturaBODY['status']='error';
-				$facturaBODY['error']='15';
-				//echo json_encode($facturaHEAD); //Error para no se pudo cargar los productos
+				$facturaBODY['error']='15'; //Error para no se pudo cargar los productos
 			}
 		}else{
-			//echo "Entro a 13";
 			$facturaBODY['status']='error';
 			$facturaBODY['error']='16'; //Error de no leer encabezado del URL
-			//echo json_encode($facturaHEAD);
 		}
-		//echo "Entro a 13";
 		echo json_encode($facturaBODY);
 	}
 	

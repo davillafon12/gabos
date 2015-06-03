@@ -212,8 +212,8 @@ function cargarEncabezado(consecutivo){
 			try{
 				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
 				if(facturaHEAD[0].status==="error"){
-					notyMsg("Error al cargar la factura, contacte al administrador. ERROR E"+facturaHEAD[0].error, "error");
-					cleanTable();
+					erroresCarga(facturaHEAD[0].error);
+					$("#contenidoArticulos").html('');
 				}else if(facturaHEAD[0].status==="success"){
 					setEncabezadoFactura(facturaHEAD);
 					cargarProductos(consecutivo);
@@ -225,7 +225,6 @@ function cargarEncabezado(consecutivo){
 				}
 			}
 			catch(e){
-				alert(e);
 				notyMsg("Error al cargar la factura, contacte al administrador. ERROR E0", "error");
 			}			
 		},
@@ -244,8 +243,8 @@ function cargarProductos(consecutivo){
 			try{
 				facturaBODY = $.parseJSON('[' + data.trim() + ']');
 				if(facturaBODY[0].status==="error"){
-					notyMsg("Error al cargar la factura, contacte al administrador. ERROR B"+facturaHEAD[0].error, "error");
-					cleanTable();
+					erroresCarga(facturaBODY[0].error);
+					$("#contenidoArticulos").html('');
 				}else if(facturaBODY[0].status==="success"){
 					setProductosFactura(facturaBODY[0].productos);
 				}
@@ -257,6 +256,26 @@ function cargarProductos(consecutivo){
 		error: function (jqXHR, textStatus, errorThrown)
 		{notyError('¡Hubo un error al cargar la factura!');}
 	});
+}
+
+function erroresCarga(error){
+	switch(error){
+			case '10':
+					notyMsg("Hubo un error al cargar la factura, Factura No Existe", "error");
+			break;
+			case '13':
+					notyMsg("Hubo un error al cargar la factura, URL Incompleta De Encabezado", "error");
+			break;
+			case '14':
+					notyMsg("Hubo un error al cargar la factura, No se procesó la solicitud", "error");
+			break;
+			case '16':
+					notyMsg("Hubo un error al cargar la factura, URL Incompleta De Productos", "error");
+			break;
+			case '15':
+					notyMsg("Hubo un error al cargar la factura, Factura no tiene articulos asociados", "error");
+			break;
+	}
 }
 
 function cleanTable(){

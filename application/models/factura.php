@@ -170,23 +170,30 @@ Class factura extends CI_Model
 				//Calculamos los impuestos
 				
 				$isExento = $articulo->Articulo_Factura_Exento;
+				
 				if($isExento=='0'){
 					$costo_sin_iva += $precio_total_articulo/(1+(floatval($c_array['iva'])/100));
+					
+					
+					$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($c_array['iva'])/100)));
+					
 					$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($c_array['iva'])/100));
-					if($articulo->Articulo_Factura_No_Retencion=='0'){ //Si aplica la retencion
-							$retencion += $precio_articulo_final - $precio_final_sin_iva;
+					$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+					
+					if(!$articulo->Articulo_Factura_No_Retencion){
+							$retencion += ($iva_precio_final - $iva_precio_total_cliente);
 					}
 				}
 				else if($isExento=='1'){
 					$costo_sin_iva += $precio_total_articulo;
-					$retencion = 0;
+					//$retencion = 0;
 				}
 				$costo_total += $precio_total_articulo;
 				//$costo_sin_iva += (($articulo->Articulo_Factura_Precio_Unitario)-(($articulo->Articulo_Factura_Precio_Unitario)*(($articulo->Articulo_Factura_Descuento)/100)))*$articulo->Articulo_Factura_Cantidad;
 			}
 			$iva = $costo_total-$costo_sin_iva;
 		}
-		$retencion -= $iva;
+		//$retencion -= $iva;
 		//Si aplica la retencion entonces modificamos los costos
 		if(!$c_array['aplicar_retencion']){
 			$retencion = 0;
@@ -656,6 +663,7 @@ Class factura extends CI_Model
 		$this->setFiltradoFechaHasta($hasta);
 		$this->setFiltradoTipo($tipo);
 		$this->setFiltradoEstado($estado);
+		$this->db->order_by('Factura_Consecutivo','desc');
 		$query = $this -> db -> get();
 		if($query -> num_rows() != 0)
 		{
