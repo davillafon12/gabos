@@ -578,6 +578,8 @@ class caja extends CI_Controller {
 	}
 	
 	function cambiarFactura(){
+			$retorno['status'] = 'error';
+			$retorno['error'] = 'cf_1';
 			if(isset($_POST['head'])&&isset($_POST['items'])&&isset($_POST['consecutivo'])&&isset($_POST['token'])){
 		  //Obtener las dos partes del post
 			$info_factura = $_POST['head'];
@@ -591,54 +593,59 @@ class caja extends CI_Controller {
 						
 			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 			
-			//ce:cedula_field, no:nombre_field, cu:tipo_moneda, ob:observaciones
-			//CAMBIAMOS EL ENCABEZADO
-			$datosHead = array(
-								'TB_03_Cliente_Cliente_Cedula'=>$info_factura['ce'],
-								'Factura_Nombre_Cliente'=>$info_factura['no'],
-								'Factura_Moneda'=>$info_factura['cu'],
-								'Factura_Observaciones'=>$info_factura['ob']
-							);
-			//Borramos la factura temporal
-			$this->articulo->eliminarFacturaTemporal($_POST['token']);
-							
-			//ELIMINAMOS LOS PRODUCTOS
-			$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
-			
-			$this->factura->actualizarFacturaHead($datosHead, $consecutivo, $data['Sucursal_Codigo']);
-						
-			//LOS VOLVEMOS A AGREGAR LOS NUEVOS
-			$cliente = $this->factura->getCliente($consecutivo, $data['Sucursal_Codigo']);
-			
-			$vendedor = $this->factura->getVendedor($consecutivo, $data['Sucursal_Codigo']);
-			
-			
-			$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
-			
-			$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-		
-			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_edicion');
-		
-		}
-		else{
-			
-		} //Numero de error mal post	
+			if(sizeOf($items_factura)>0){
+					//ce:cedula_field, no:nombre_field, cu:tipo_moneda, ob:observaciones
+					//CAMBIAMOS EL ENCABEZADO
+					$datosHead = array(
+										'TB_03_Cliente_Cliente_Cedula'=>$info_factura['ce'],
+										'Factura_Nombre_Cliente'=>$info_factura['no'],
+										'Factura_Moneda'=>$info_factura['cu'],
+										'Factura_Observaciones'=>$info_factura['ob']
+									);
+					//Borramos la factura temporal
+					$this->articulo->eliminarFacturaTemporal($_POST['token']);
+									
+					//ELIMINAMOS LOS PRODUCTOS
+					$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
+					
+					$this->factura->actualizarFacturaHead($datosHead, $consecutivo, $data['Sucursal_Codigo']);
+								
+					//LOS VOLVEMOS A AGREGAR LOS NUEVOS
+					$cliente = $this->factura->getCliente($consecutivo, $data['Sucursal_Codigo']);
+					
+					$vendedor = $this->factura->getVendedor($consecutivo, $data['Sucursal_Codigo']);
+					
+					
+					$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
+					
+					$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
+				
+					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_edicion');
+					
+					unset($retorno['error']);
+					$retorno['status'] = 'success';
+			}else{
+					$retorno['error'] = 'cf_3'; //No hay productos
+			}
+		}else{
+			$retorno['error'] = 'cf_2'; //URL con mal formato
+		} 
+		echo json_encode($retorno);
 	}
 	
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico					
-					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, '00.png');
+					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'');
 			}else{ //Si es normal					
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
-					//file_put_contents('application/logs/cambiarFactura.txt', "--Se agrega ".$item['co']."\n", FILE_APPEND);
 					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 2, $sucursal);
-					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
+					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
 				}
 			}
 			

@@ -20,6 +20,7 @@ function cargaFactura(consecutivo){
 	window.onbeforeunload=null; //Eliminamos los eventos de salida
 	window.onunload=null; //Eliminamos los eventos de salida	 
 	disableInputs(); //Deshabilitamos las entradas
+	$("#boton_guardar_editar").css('display','none'); // Qutar el boton de guardar factura editada
 }
 
 function cargarEncabezado(consecutivo){
@@ -97,6 +98,15 @@ function displayErrors(NumError){
 			break;
 		case "24":
 			notyError('El cliente ya no tiene credito disponible para esta factura. \nERROR: '+NumError);
+			break;
+		case "cf_1":
+			notyError('No se pudo actualizar la factura editada. \nERROR: '+NumError);
+			break;
+		case "cf_2":
+			notyError('El formato de la URL es inebido para actualizar factura. \nERROR: '+NumError);
+			break;
+		case "cf_3":
+			notyError('No se puede actualizar una factura sin productos. \nERROR: '+NumError);
 			break;
 	}
 }

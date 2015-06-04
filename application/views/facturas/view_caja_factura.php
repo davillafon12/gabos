@@ -32,16 +32,15 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
 		<?php include '/../Header/log_out_from_browser_script_caja.php';?>
-		<!--SCRIPT DE BUSQUEDA DE CLIENTES-->
-		<?php //include '/../../scripts/ajax_busqueda_clientes.php';?>
-		<!--SCRIPT DE BUSQUEDA DE ARTICULOS-->
-		<?php //include '/../../scripts/ajax_busqueda_articulo.php';?>
+		
 		<!--CARGA DEL JQUERY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script>
 		<!--CARGA DEL JQUERYUI-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.js'); ?>"></script>
 		<!--CSS ESTILO DEL JQUERYUI-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
+		<!--CSS ESTILO AWESOME FONT-->
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 		
 		<!--CARGA DEL POPUP MODAL-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
@@ -116,6 +115,7 @@ PARA:
 			<a href='javascript:;' onClick='mostrarFacturas();' id="boton_mostrarFactura" class='boton_mostrarFactura' >Mostrar Facturas</a>
 			<a href='javascript:;' onClick='anularFactura()' class='boton_anular' >Anular</a>
 			<a href='javascript:;' onClick='editarFactura()' class='boton_editar' >Editar</a>
+			<a href='javascript:;' onClick='actualizarFactura()' id="boton_guardar_editar" class='boton_guardar_editar' title="Guardar factura editada"><i class="fa fa-floppy-o"></i></a>
 			<a href='javascript:;' onClick='cobrarFactura()' class='boton_cobrar' >Cobrar</a>			
 		<div class="selector_facturas" id="selector_facturas">
 			<table id='facturas_pendientes' class='facturas_pendientes'>
@@ -150,9 +150,6 @@ PARA:
 				<td>
 				</td>
 				<td>
-					<!--<p class="contact"><label for="vendedor">Vendedor:&nbsp;<?php echo $Usuario_Nombre." ".$Usuario_Apellidos;?></label></p> 
-					<input id="vendedor_id" autocomplete="off" name="vendedor_id" type="hidden" value="<?php echo $Usuario_Codigo;?>" disabled>
-					-->
 				</td>
     			</tr>
 				<tr>
@@ -274,46 +271,7 @@ PARA:
 				</thead>
 				<tbody id="contenidoArticulos" class="contenidoArticulos">
 				
-				<?php
-				//<input id='cantidad_articulo_".$numero_id."' class='cantidad_articulo' autocomplete='off' name='cantidad_articulo' type='number' min='1' onchange='actualizaCostoTotalArticulo(this.value, this.id, event);' onkeyup='manejarEventoCantidadArticulo(event, this.value, this.id);' disabled>
-				//Creamos las filas de la tabla
-				/*for($contador=0;$contador<10;$contador++)
-				{
-					$numero_id = $contador+1;
-					$numero_tab = $contador+2;
-					echo "<tr id='articulo_".$numero_id."'>
-						<td>	
-							<img class='imagen_arrow' title='Agregar Fila' src='/../application/scripts/Images/agregar_row.gif' width='14' height='7' onClick='agregarByCM(".$numero_id.")'/>
-							<input tabindex='".$numero_tab."' id='codigo_articulo_".$numero_id."' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);' disabled>
-							<input id='codigo_articulo_anterior_".$numero_id."' type='hidden' >
-						</td>
-						<td>
-							<div class='articulo_specs' id='descripcion_articulo_".$numero_id."'></div>
-							<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_".$numero_id."'></div>
-						</td>
-						<td>
-							<input id='cantidad_articulo_".$numero_id."' class='cantidad_articulo' autocomplete='off' name='cantidad_articulo' type='number' min='1' onchange='cambiarCantidad(this.id, event, this.value);' onkeyup='cambiarCantidad(this.id, event, this.value);' disabled>
-							<input id='cantidad_articulo_anterior_".$numero_id."' type='hidden' value='-1'>
-						</td>
-						<td>
-							<div class='articulo_specs' id='bodega_articulo_".$numero_id."'></div>
-						</td>						
-						<td>
-							<div class='articulo_specs' id='descuento_articulo_".$numero_id."' ondblclick='changeDiscount(".$numero_id.")'></div>
-						</td>
-						<td>
-							<div class='articulo_specs' id='costo_unidad_articulo_".$numero_id."'></div>
-							<input id='costo_unidad_articulo_ORIGINAL_".$numero_id."' type='hidden' >
-							<input id='costo_unidad_articulo_FINAL_".$numero_id."' type='hidden' >
-							<input id='producto_exento_".$numero_id."' type='hidden' >
-						</td>
-						<td>
-							<div class='articulo_specs' id='costo_total_articulo_".$numero_id."'></div>
-						</td>
-					</tr>";
-				}*/
 				
-				?>
 				</tbody>				
 			</table>
 			

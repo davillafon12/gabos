@@ -1,6 +1,7 @@
 var consecutivoActual = 0; //Alamacena el consecutivo de la factura cargada
 var seCambioFactura = false; //EN el momento que se le da editar a una factura esto apsa a true
 var isProforma = false; //Para ver si lo que se cargo es una proforma
+var actualizarYCobrar = true; //Esto es para cobrar o no despues de actualizar una factura
 isCajaLoaded = true; //Le decimos que esta en caja para validar si cliente tiene descuento y limpiar campos
 
 function cobrarFactura(){
@@ -124,8 +125,11 @@ function cobrarEImprimirPostPopUp(){
 		});
 		window.onbeforeunload=null;
 		window.onunload=null;
-		if(seCambioFactura){cambiarFactura('/facturas/caja/cambiarFactura');}
-		enviarCobro('/facturas/caja/cobrarFactura');
+		if(seCambioFactura){
+			cambiarFactura('/facturas/caja/cambiarFactura');
+		}else{
+			enviarCobro('/facturas/caja/cobrarFactura');
+		}
 	}
 }
 
@@ -150,9 +154,21 @@ function validarFactura(){
 					});
 		return false;
 	}
-	productosCantidad = document.getElementById("tabla_productos").rows.length;
-	//tamJSONArray = invoiceItemsJSON.length;
+	productosCantidad = document.getElementById("tabla_productos").rows.length-1;
+	//Verifica si hay productos por cantidad de filas de la tabla
 	if(productosCantidad<1){
+		n = noty({
+					   layout: 'topRight',
+					   text: '¡No hay articulos en la factura!',
+					   type: 'error',
+					   timeout: 4000
+					});
+		return false;
+	}
+	//Verifica si hay productos ingresados
+	createJSON();
+	tamJSONArray = invoiceItemsJSON.length;
+	if(tamJSONArray<1){
 		n = noty({
 					   layout: 'topRight',
 					   text: '¡No hay articulos en la factura!',
@@ -288,17 +304,7 @@ function enviarCobro(URL){
 		data: {'consecutivo':consecutivoActual,'tipoPago':JSON.stringify(tipoPagoJSON())},		
 		success: function(data, textStatus, jqXHR)
 		{
-			/*if(data.trim()==='7'){//Todo salio bien
-				window.location = location.protocol+'//'+document.domain+'/home';
-			}else{
-				n = noty({
-					   layout: 'topRight',
-					   text: '¡Hubo un error en el cobro de la factura. #'+data.trim(),
-					   type: 'error',
-					   timeout: 4000
-					});
-				$('#envio_factura').bPopup().close(); 
-			}*/
+			
 			try{
 				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
 			if(facturaHEAD[0].status==="error"){
@@ -327,34 +333,6 @@ function enviarCobro(URL){
 	});
 }
 
-/*function imprimirFactura(t, d, n, s, i){
-	$.ajax({
-		url : location.protocol+'//'+document.domain+"/impresion",
-		type: "GET",
-		data: {'t':t,'d':d,'n':n,'s':s,'i':i},		
-		success: function(data, textStatus, jqXHR)
-		{
-			try{
-				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
-				if(facturaHEAD[0].status==="error"){
-					alert("Error");
-				}else if(facturaHEAD[0].status==="success"){
-					
-					ventana = window.open('http://127.0.0.1:8080');
-					ventana.factura = facturaHEAD[0];
-					//window.location = location.protocol+'//'+document.domain+'/facturas/caja';
-				}
-			}catch(e){
-				alert("Error e");
-				//notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-			}
-		},
-		error: function (jqXHR, textStatus, errorThrown)
-		{
-	 
-		}
-	});
-}*/
 
 function cambiarFactura(URL){
 	createJSON();
@@ -365,7 +343,30 @@ function cambiarFactura(URL){
 		async: false,
 		data: {'consecutivo':consecutivoActual,'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON), 'token':token_factura_temporal},				
 		success: function(data, textStatus, jqXHR)
-		{},
+		{
+				try{
+						facturaHEAD = $.parseJSON('[' + data.trim() + ']');
+						if(facturaHEAD[0].status==="error"){
+								displayErrors(facturaHEAD[0].error);
+								return false;
+						}else if(facturaHEAD[0].status==="success"){
+								if(actualizarYCobrar){ //Si se actualiza al cobrar tons que lo haga, puede ser que se actualice pero no se cobre
+										enviarCobro('/facturas/caja/cobrarFactura');
+								}else{
+										n = noty({
+										   layout: 'topRight',
+										   text: 'Se ha actualizado la factura con éxito',
+										   type: 'success',
+										   timeout: 4000
+										});
+										actualizarYCobrar = true;
+								}
+						}
+				}
+				catch(e){
+					notyError('¡No se pudo actaulizar la factura, contacte al administrador!');
+				}
+		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{}
 	});
@@ -510,10 +511,27 @@ function makeFacturaEditable(){  // FALTA VALIDAR seCambioFactura en dos metodos
 												$("#observaciones").attr("disabled", false);
 												window.onbeforeunload=advertenciaSalida;
 												window.onunload=deshacerFacturaCaja;
+												
+												//Agregar boton de guardar
+												$("#boton_guardar_editar").css('display','inline-block');
+												
+												
+												
 											}
 										}
 			});
 	}	
+}
+
+function actualizarFactura(){
+				if(validarFactura()){
+						if(seCambioFactura){
+								actualizarYCobrar = false;
+								cambiarFactura('/facturas/caja/cambiarFactura');
+						}else{
+								notyError('¡La edición d ela factura debe estar habilitada!');
+						}																																																																																																																														
+				}	
 }
 
 function enableArticulosCantidades()
