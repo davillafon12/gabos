@@ -332,24 +332,28 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjetas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Créditos</p></td>
-									<td class="borde-abajo"><p class="parrafo">Apartados</p></td>
-									<td class="borde-abajo"><p class="parrafo">Notas Crédito</p></td>
-									<td class="borde-abajo"><p class="parrafo">Notas Débito</p></td>
 								</tr>
 								<tr>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalFacturasContado,2,",",".");?></p></td>
 									<td class=''>
 										<input id="totalRetirosParciales" value="<?php echo $totalRecibosParciales; ?>" type="hidden"/>
 										<p class='parrafo' id="parrafoTotalRetirosParciales">₡<?php echo number_format($totalRecibosParciales,2,",",".");?></p>
-									</td>
+									</td> 
 									<td class=''><p class='parrafo'>₡<?php echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalCreditos['totalCredito'],2,",",".");?></p></td>
+									
+								</tr>								
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Encomiendas (Depo.)</p></td>
+									<td class="borde-abajo"><p class="parrafo">Apartados</p></td>
+									<td class="borde-abajo"><p class="parrafo">Notas Crédito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Notas Débito</p></td>
+								</tr>
+								<tr>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalFacturasDeposito,2,",",".");?></p></td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalCreditos['totalApartado'],2,",",".");?></p></td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalNotasCredito['total'],2,",",".");?></p></td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalNotasDebito['total'],2,",",".");?></p></td>
-								</tr>								
-								<tr>
-									<td colspan="7" class="alg-right borde-arriba"></td>
 								</tr>
 							</table>
 						</td>						

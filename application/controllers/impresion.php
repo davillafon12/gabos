@@ -564,6 +564,8 @@ class impresion extends CI_Controller {
 							
 							$datos['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($sucursal, $fechaCierre, $fechaCierreAnterior);
 							
+							$datos['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
 							$datos['vendedores'] = $this->obtenerVendidoPorCadaVendedor($sucursal, $fechaCierre, $fechaCierreAnterior);
 							
 							$cierre->datos = $datos;
@@ -962,21 +964,27 @@ class impresion extends CI_Controller {
 		$pdf->Cell(190,5,'Otros Totales',0,0,'C');
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',11);
-		$pdf->Cell(38,5,'Facturas de Contado',1,0,'C');
-		$pdf->Cell(26,5,'Efectivo',1,0,'C');
-		$pdf->Cell(26,5,'Tarjetas',1,0,'C');
-		$pdf->Cell(25,5,'Créditos',1,0,'C');
-		$pdf->Cell(25,5,'Apartados',1,0,'C');
-		$pdf->Cell(25,5,'Notas Crédito',1,0,'C');
-		$pdf->Cell(25,5,'Notas Débito',1,0,'C');
+		$pdf->Cell(47.5,5,'Facturas de Contado',1,0,'C');
+		$pdf->Cell(47.5,5,'Efectivo',1,0,'C');
+		$pdf->Cell(47.5,5,'Tarjetas',1,0,'C');
+		$pdf->Cell(47.5,5,'Créditos',1,0,'C');
 		$pdf->ln(5);
-		$pdf->Cell(38,5,$this->fn($cierre->datos['totalFacturasContado']),1,0,'C');
-		$pdf->Cell(26,5,$this->fn($efectivoTotal),1,0,'C');
-		$pdf->Cell(26,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'C');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['totalCreditos']['totalCredito']),1,0,'C');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['totalCreditos']['totalApartado']),1,0,'C');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['totalNotasCredito']['total']),1,0,'C');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['totalNotasDebito']['total']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalFacturasContado']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($efectivoTotal),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalCredito']),1,0,'C');
+		
+		
+		$pdf->ln(5);
+		$pdf->Cell(47.5,5,'Encomiendas (Depos.)',1,0,'C');
+		$pdf->Cell(47.5,5,'Apartados',1,0,'C');
+		$pdf->Cell(47.5,5,'Notas Crédito',1,0,'C');
+		$pdf->Cell(47.5,5,'Notas Débito',1,0,'C');
+		$pdf->ln(5);
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalFacturasDeposito']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalApartado']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalNotasCredito']['total']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalNotasDebito']['total']),1,0,'C');
 		
 		//Vendedores
 		$pdf->SetFont('Arial','B',14);
@@ -989,25 +997,25 @@ class impresion extends CI_Controller {
 		$pdf->Cell(70,5,'Vendedor',1,0,'C');
 		$pdf->Cell(25,5,'Vendido',1,0,'C');
 		$pdf->ln(5);
-		for($i = 0;$i<10;$i++){
+		for($i = 0;$i<8;$i++){
 			$pdf->Cell(70,5,'',1,0,'C');
 			$pdf->Cell(25,5,'',1,0,'C');
 			$pdf->Cell(70,5,'',1,0,'C');
 			$pdf->Cell(25,5,'',1,0,'C');
 			$pdf->ln(5);
 		}
-		$pdf->SetXY(10, 200);
+		$pdf->SetXY(10, 210);
 		$contador = 1;			
 		foreach($cierre->datos['vendedores']['vendidoVendedores'] as $vendedor){
-			if($contador <= 10){
+			if($contador <= 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
 				$pdf->Cell(25,5,$this->fn($vendedor[0]->total_vendido),0,0,'C');
 				$pdf->ln(5);
 			}
-			if($contador == 11){
+			if($contador == 9){
 				$pdf->SetXY(105,195);
 			}
-			if($contador > 10){
+			if($contador > 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
 				$pdf->Cell(25,5,$this->fn($vendedor[0]->total_vendido),0,0,'C');
 				$pdf->ln(5);
@@ -1021,11 +1029,11 @@ class impresion extends CI_Controller {
 		
 		//Realizado Por:
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(80,260);
-		$pdf->Cell(120,5,'Realizado por: '.$cierre->usuario,0,0,'R');
-		$pdf->ln(10);
-		$pdf->SetX(80);
-		$pdf->Cell(120,5,'Firma: _______________________',0,0,'R');
+		$pdf->SetXY(10,270);
+		$pdf->Cell(95,5,'Realizado por: '.$cierre->usuario,0,0,'R');
+		//$pdf->ln(10);
+		//$pdf->SetX(80);
+		$pdf->Cell(95,5,'Firma: _______________________',0,0,'R');
 		
 		//Imprimimos documento
 		$pdf->Output();
@@ -1819,6 +1827,17 @@ class impresion extends CI_Controller {
 			}
 		}
 		return array('total'=>$total, 'subtotal'=>$subtotal, 'iva'=>$total_iva);		
+	}
+	
+	function obtenerTotalFacturasDeposito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasDepositoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
 	}
 	
 	function obtenerVendidoPorCadaVendedor($sucursal, $fechaHoraActual, $fechaUltimoCierra){

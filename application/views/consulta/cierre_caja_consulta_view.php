@@ -357,21 +357,25 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjetas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Créditos</p></td>
-									<td class="borde-abajo"><p class="parrafo">Apartados</p></td>
-									<td class="borde-abajo"><p class="parrafo">Notas Crédito</p></td>
-									<td class="borde-abajo"><p class="parrafo">Notas Débito</p></td>
+									
 								</tr>
 								<tr>
 									<td class=''><p class='parrafo' id="totales_factura_contado">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_efectivo">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_tarjetas">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_creditos">₡0</p></td>
+								</tr>								
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Encomiendas (Depo.)</p></td>
+									<td class="borde-abajo"><p class="parrafo">Apartados</p></td>
+									<td class="borde-abajo"><p class="parrafo">Notas Crédito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Notas Débito</p></td>
+								</tr>
+								<tr>
+									<td class=''><p class='parrafo' id="totales_encomienda">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_apartados">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_notas_credito">₡0</p></td>
 									<td class=''><p class='parrafo' id="totales_notas_debito">₡0</p></td>
-								</tr>								
-								<tr>
-									<td colspan="7" class="alg-right borde-arriba"></td>
 								</tr>
 							</table>
 						</td>						

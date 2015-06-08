@@ -407,6 +407,7 @@ function cargarTotales(datos){
 	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
 	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos).format(2, 3, '.', ','));
 	$("#totales_creditos").html("₡"+parseFloat(datos.totalCreditos.totalCredito).format(2, 3, '.', ','));
+	$("#totales_encomienda").html("₡"+parseFloat(datos.totalFacturasDeposito).format(2, 3, '.', ','));
 	$("#totales_apartados").html("₡"+parseFloat(datos.totalCreditos.totalApartado).format(2, 3, '.', ','));
 	$("#totales_notas_credito").html("₡"+parseFloat(datos.totalNotasCredito.total).format(2, 3, '.', ','));
 	$("#totales_notas_debito").html("₡"+parseFloat(datos.totalNotasDebito.total).format(2, 3, '.', ','));
@@ -415,22 +416,7 @@ function cargarTotales(datos){
 function cargarVendedores(vendedores){
 	totalVendedores = vendedores.totalVendido;
 	vendedores = vendedores.vendidoVendedores;
-	/*
-		<?php
-				$contador = 1;
-				foreach($vendedores as $vendedor){
-					$vendedor = $vendedor[0];											
-					echo "<td style='text-align: left; width: 250px;'><p class='parrafo'>{$vendedor->usuario}</p></td>";
-					echo "<td class='' style='width: 120px;'><p class='parrafo'>₡".number_format($vendedor->total_vendido,2,",",".")."</p></td>";
-					if($contador == 2){
-						$contador = 1;
-						echo "</tr><tr>";
-					}else{
-						$contador++;
-					}											
-				}
-			?>
-	*/
+	
 	filas = "<tr><td colspan='7'><p class='titulo-2'>Vendedores</p></td></tr>"
 								+"<tr>"
 									+	"	<td class='borde-abajo'><p class='parrafo'>Vendedor</p></td>"

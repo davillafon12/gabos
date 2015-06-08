@@ -61,6 +61,8 @@ class cierre extends CI_Controller {
 		
 		$data['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
+		$data['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		
 		$data['vendedores'] = $this->obtenerVendidoPorCadaVendedor($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
 		
@@ -199,6 +201,18 @@ class cierre extends CI_Controller {
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		$total = 0;
 		if($facturas = $this->contabilidad->getFacturasContadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
+	}
+	
+	
+	function obtenerTotalFacturasDeposito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasDepositoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			
 			foreach($facturas as $factura){
 				$total += $factura->Factura_Monto_Total;
 			}

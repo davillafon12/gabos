@@ -467,6 +467,8 @@ class consulta extends CI_Controller {
 					
 					$datos['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
+					$datos['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($sucursal, $fechaCierre, $fechaCierreAnterior);
+					
 					$datos['vendedores'] = $this->obtenerVendidoPorCadaVendedor($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
 					
@@ -700,6 +702,17 @@ class consulta extends CI_Controller {
 			}
 		}
 		return array('total'=>$total, 'subtotal'=>$subtotal, 'iva'=>$total_iva);		
+	}
+	
+	function obtenerTotalFacturasDeposito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasDepositoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
 	}
 	
 	function obtenerVendidoPorCadaVendedor($sucursal, $fechaHoraActual, $fechaUltimoCierra){
