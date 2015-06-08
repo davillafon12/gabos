@@ -395,7 +395,23 @@ PARA:
 									</td>
 								</tr>
 								<tr><td colspan="4"><hr></td></tr>
-								
+								<tr>
+									<td colspan="4">
+										<table style="width:100%; text-align:center;">
+											<tr>
+													<td><label class="parrafo" style="font-size: 20px;">Total Vendido</label></td>
+													<td><label class="parrafo" style="font-size: 20px;">Total IVA</label></td>
+													<td><label class="parrafo" style="font-size: 20px;">Total Retención</label></td>
+											</tr>
+											<tr>
+													<td><label class="parrafo" style="font-size: 20px;">₡<?php echo number_format($valoresFinales['totalFacturas'],2,",",".");?> </label></td>
+													<td><label class="parrafo" style="font-size: 20px;">₡<?php echo number_format($valoresFinales['totalIVA'],2,",",".");?> </label></td>
+													<td><label class="parrafo" style="font-size: 20px;">₡<?php echo number_format($valoresFinales['totalRetencion'],2,",",".");?> </label></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr><td colspan="4"><hr></td></tr>
 							</table>
 							<button class="boton_envio_cobro" id="boton_envio_cobro" onclick="realizarCierreCaja()">Realizar Cierre</button>
 						</td>						

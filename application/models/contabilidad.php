@@ -801,6 +801,24 @@ Class contabilidad extends CI_Model
 			return $query->result();
 		}
 	}
+	
+	function getFacturasPorRangoFecha($sucursal, $inicio, $final){
+		$this->db->from('tb_07_factura');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('Factura_Fecha_Hora >', $inicio);
+		$this->db->where('Factura_Fecha_Hora <', $final);
+		$this->db->where('Factura_Estado','cobrada');
+		$query = $this->db->get();		
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
 	function getFacturasCreditoYApartadoPorRangoFecha($sucursal, $inicio, $final){
 		$this->db->from('tb_07_factura');
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);

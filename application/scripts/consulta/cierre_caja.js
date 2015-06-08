@@ -411,6 +411,10 @@ function cargarTotales(datos){
 	$("#totales_apartados").html("₡"+parseFloat(datos.totalCreditos.totalApartado).format(2, 3, '.', ','));
 	$("#totales_notas_credito").html("₡"+parseFloat(datos.totalNotasCredito.total).format(2, 3, '.', ','));
 	$("#totales_notas_debito").html("₡"+parseFloat(datos.totalNotasDebito.total).format(2, 3, '.', ','));
+	
+	$("#totalVendido").html("₡"+parseFloat(datos.valoresFinales.totalFacturas).format(2, 3, '.', ','));
+	$("#totalIVA").html("₡"+parseFloat(datos.valoresFinales.totalIVA).format(2, 3, '.', ','));
+	$("#totalRetencion").html("₡"+parseFloat(datos.valoresFinales.totalRetencion).format(2, 3, '.', ','));
 }
 
 function cargarVendedores(vendedores){

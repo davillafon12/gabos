@@ -395,6 +395,24 @@ PARA:
 							</table>							
 						</td>						
 					</tr>
+					<tr><td colspan="4"><hr></td></tr>
+					<tr>
+						<td colspan="4">
+							<table style="width:100%; text-align:center;">
+								<tr>
+										<td><label class="parrafo" style="font-size: 20px;">Total Vendido</label></td>
+										<td><label class="parrafo" style="font-size: 20px;">Total IVA</label></td>
+										<td><label class="parrafo" style="font-size: 20px;">Total Retención</label></td>
+								</tr>
+								<tr>
+										<td><label class="parrafo" style="font-size: 20px;" id="totalVendido">₡0</label></td>
+										<td><label class="parrafo" style="font-size: 20px;" id="totalIVA">₡0</label></td>
+										<td><label class="parrafo" style="font-size: 20px;" id="totalRetencion">₡0</label></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr><td colspan="4"><hr></td></tr>
 				</table>
 		
 		

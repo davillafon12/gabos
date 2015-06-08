@@ -471,7 +471,7 @@ class consulta extends CI_Controller {
 					
 					$datos['vendedores'] = $this->obtenerVendidoPorCadaVendedor($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
-					
+					$datos['valoresFinales'] = $this->obtenerValoresFinales($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
 					if($billetes = $this->contabilidad->getDenominacionesCierreCajaPorTipoYMoneda($consecutivo, 'billete', 'colones')){
 						if($monedas = $this->contabilidad->getDenominacionesCierreCajaPorTipoYMoneda($consecutivo, 'moneda', 'colones')){
@@ -730,6 +730,30 @@ class consulta extends CI_Controller {
 		}
 		
 		return array('vendidoVendedores'=>$vendidoVendedores,'totalVendido'=>$totalVendido);
+	}
+	
+	function obtenerValoresFinales($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+			$totalFacturas = 0;
+			$totalIVA = 0;
+			$totalRetencion = 0;
+			
+			$totalNotasCredito = 0;
+			$totalIVANotaCredito = 0;
+			if($facturas = $this->contabilidad->getFacturasPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+					foreach($facturas as $factura){
+						$totalFacturas += $factura->Factura_Monto_Total;
+						$totalIVA += $factura->Factura_Monto_IVA;
+						$totalRetencion += $factura->Factura_Retencion;
+					}
+					$notasCredito = $this->obtenerTotalesNotasCredito($sucursal, $fechaHoraActual, $fechaUltimoCierra);
+					$totalNotasCredito = $notasCredito['total'];
+					$totalIVANotaCredito = $notasCredito['iva'];
+			}
+			//Le restamos la parte de las notas debito
+			$totalFacturas -= $totalNotasCredito;
+			$totalIVA -= $totalIVANotaCredito;
+			
+			return array("totalFacturas"=>$totalFacturas,"totalIVA"=>$totalIVA,"totalRetencion"=>$totalRetencion);
 	}
 
 } 

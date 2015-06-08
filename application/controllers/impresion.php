@@ -568,6 +568,8 @@ class impresion extends CI_Controller {
 							
 							$datos['vendedores'] = $this->obtenerVendidoPorCadaVendedor($sucursal, $fechaCierre, $fechaCierreAnterior);
 							
+							$datos['valoresFinales'] = $this->obtenerValoresFinales($sucursal, $fechaCierre, $fechaCierreAnterior);
+							
 							$cierre->datos = $datos;
 							
 							if($billetes = $this->contabilidad->getDenominacionesCierreCajaPorTipoYMoneda($consecutivo, 'billete', 'colones')){
@@ -1026,6 +1028,16 @@ class impresion extends CI_Controller {
 		$pdf->SetFont('Arial','B',11);
 		$pdf->SetXY(10,250);
 		$pdf->Cell(190,5,'Total Vendedores: '.$this->fn($cierre->datos['vendedores']['totalVendido']),1,0,'R');
+		
+		//Valores finales
+		$pdf->ln(6);
+		$pdf->Cell(64,5,'Total Vendido ',1,0,'C');
+		$pdf->Cell(64,5,'Total IVA ',1,0,'C');
+		$pdf->Cell(62,5,'Total Retención ',1,0,'C');
+		$pdf->ln(5);
+		$pdf->Cell(64,5,$this->fn($cierre->datos['valoresFinales']['totalFacturas']),1,0,'C');
+		$pdf->Cell(64,5,$this->fn($cierre->datos['valoresFinales']['totalIVA']),1,0,'C');
+		$pdf->Cell(62,5,$this->fn($cierre->datos['valoresFinales']['totalRetencion']),1,0,'C');
 		
 		//Realizado Por:
 		$pdf->SetFont('Arial','B',14);
@@ -1855,6 +1867,30 @@ class impresion extends CI_Controller {
 		}
 		
 		return array('vendidoVendedores'=>$vendidoVendedores,'totalVendido'=>$totalVendido);
+	}
+	
+	function obtenerValoresFinales($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+			$totalFacturas = 0;
+			$totalIVA = 0;
+			$totalRetencion = 0;
+			
+			$totalNotasCredito = 0;
+			$totalIVANotaCredito = 0;
+			if($facturas = $this->contabilidad->getFacturasPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+					foreach($facturas as $factura){
+						$totalFacturas += $factura->Factura_Monto_Total;
+						$totalIVA += $factura->Factura_Monto_IVA;
+						$totalRetencion += $factura->Factura_Retencion;
+					}
+					$notasCredito = $this->obtenerTotalesNotasCredito($sucursal, $fechaHoraActual, $fechaUltimoCierra);
+					$totalNotasCredito = $notasCredito['total'];
+					$totalIVANotaCredito = $notasCredito['iva'];
+			}
+			//Le restamos la parte de las notas debito
+			$totalFacturas -= $totalNotasCredito;
+			$totalIVA -= $totalIVANotaCredito;
+			
+			return array("totalFacturas"=>$totalFacturas,"totalIVA"=>$totalIVA,"totalRetencion"=>$totalRetencion);
 	}
 	
 	

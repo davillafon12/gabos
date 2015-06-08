@@ -65,6 +65,7 @@ class cierre extends CI_Controller {
 		
 		$data['vendedores'] = $this->obtenerVendidoPorCadaVendedor($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
+		$data['valoresFinales'] = $this->obtenerValoresFinales($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
 		$this->load->view('contabilidad/cierre_caja_view', $data);
 	}	
@@ -218,6 +219,30 @@ class cierre extends CI_Controller {
 			}
 		}
 		return $total;
+	}
+	
+	function obtenerValoresFinales($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+			$totalFacturas = 0;
+			$totalIVA = 0;
+			$totalRetencion = 0;
+			
+			$totalNotasCredito = 0;
+			$totalIVANotaCredito = 0;
+			if($facturas = $this->contabilidad->getFacturasPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+					foreach($facturas as $factura){
+						$totalFacturas += $factura->Factura_Monto_Total;
+						$totalIVA += $factura->Factura_Monto_IVA;
+						$totalRetencion += $factura->Factura_Retencion;
+					}
+					$notasCredito = $this->obtenerTotalesNotasCredito($sucursal, $fechaHoraActual, $fechaUltimoCierra);
+					$totalNotasCredito = $notasCredito['total'];
+					$totalIVANotaCredito = $notasCredito['iva'];
+			}
+			//Le restamos la parte de las notas debito
+			$totalFacturas -= $totalNotasCredito;
+			$totalIVA -= $totalIVANotaCredito;
+			
+			return array("totalFacturas"=>$totalFacturas,"totalIVA"=>$totalIVA,"totalRetencion"=>$totalRetencion);
 	}
 	
 	function obtenerTotalCreditos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
