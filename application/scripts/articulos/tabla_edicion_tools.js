@@ -26,6 +26,7 @@ function setTable(){
 					],
 		 "drawCallback": function( settings ) {
 							$("#contenido").css( "display", 'block' );
-						}
+						},
+			"aLengthMenu": [[20, 50, 100, 500, 1000], [20, 50, 100, 500, 1000]]
 	});
 }

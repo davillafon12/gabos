@@ -218,6 +218,7 @@ class ingresar extends CI_Controller {
 	
 	
 	function cargaMasiva(){
+		
 		include '/../get_session_data.php';
 		if(isset($_FILES['archivo_excel'])){		
 				$resultado = $this->procesarExcel();
@@ -322,6 +323,178 @@ class ingresar extends CI_Controller {
 	}
 	
 	function procesarExcel(){
+				$resultado = array('status'=>'error','error'=>'1'); //Error generico de no se pudo realizar el proceso
+				require './application/libraries/excel_reader2.php';
+				$data = new Spreadsheet_Excel_Reader($_FILES['archivo_excel']['tmp_name']);
+				
+				$c1 = $data->val(1,1);
+				$c2 = $data->val(1,2);
+				$c3 = $data->val(1,3);
+				$c4 = $data->val(1,4);
+				$c5 = $data->val(1,5);
+				$c6 = $data->val(1,6);
+				$c7 = $data->val(1,7);
+				$c8 = $data->val(1,8);
+				$c9 = $data->val(1,9);
+				$c10 = $data->val(1,10); 
+				$c11 = $data->val(1,11);
+				$c12 = $data->val(1,12);
+				$c13 = $data->val(1,13);
+				$c14 = $data->val(1,14);
+				$c15 = $data->val(1,15);
+				
+				if(	trim($c1) == 'CODIGO' && 
+					trim($c2) == 'DESCRIPCION' && 
+					trim($c3) == 'COSTO' && 
+					trim($c4) == 'PRECIO_1' &&
+					trim($c5) == 'PRECIO_2' &&
+					trim($c6) == 'PRECIO_3' &&
+					trim($c7) == 'PRECIO_4' &&
+					trim($c8) == 'PRECIO_5' &&
+					trim($c9) == 'SUCURSAL' &&
+					trim($c10) == 'FAMILIA' &&					
+					trim($c11) == 'CANTIDAD' &&
+					trim($c12) == 'EXENTO_IVA' &&
+					trim($c13) == 'SIN_RETENCION' &&
+					trim($c14) == 'DESCUENTO' &&
+					trim($c15) == 'NOMBRE_IMAGEN' 
+					){
+								$cantidadFilas = $data->rowcount($sheet_index=0);
+								//Lleva el control de cuales productos presentaron errores
+								$erroresCodigo = array();
+								$erroresCosto = array();
+								$erroresPrecio1 = array();
+								$erroresPrecio2 = array();
+								$erroresPrecio3 = array();
+								$erroresPrecio4 = array();
+								$erroresPrecio5 = array();
+								$erroresCantidad = array();
+								$erroresFamilia = array();
+								$erroresSucursal = array();
+								$erroresExento = array();
+								$erroresRetencion = array();
+								$erroresDescuento = array();
+								$erroresCantidadMayor = array();
+								
+								$articulos = array();
+								
+								for ($row = 2; $row <= $cantidadFilas; ++ $row){ 
+									$codigo = $data->val($row,1);
+									$descripcion = $data->val($row,2);
+									$costo = $data->val($row,3);
+									$p1 = $data->val($row,4);
+									$p2 = $data->val($row,5);
+									$p3 = $data->val($row,6);
+									$p4 = $data->val($row,7);
+									$p5 = $data->val($row,8);
+									$sucursal = $data->val($row,9);
+									$familia = $data->val($row,10);
+									$cantidad = $data->val($row,11);
+									$exento = $data->val($row,12);
+									$retencion = $data->val($row,13);
+									$descuento = $data->val($row,14);
+									$imagen = $data->val($row,15);
+									
+									//Revisamos si el codigo existe
+									if($this->articulo->existe_Articulo($codigo,$sucursal)){
+										array_push($erroresCodigo, $codigo);
+									}
+									//Revisamos que el costo sea numerico
+									if(!is_numeric($costo)){
+										array_push($erroresCosto, $codigo);
+									}						
+									//Revisamos que el precio 2 sea numerico
+									if(!is_numeric($p2)){
+										array_push($erroresPrecio2, $codigo);
+									}
+									//Revisamos que el precio 3 sea numerico
+									if(!is_numeric($p3)){
+										array_push($erroresPrecio3, $codigo);
+									}
+									//Revisamos que el precio 3 sea numerico
+									if(!is_numeric($p3)){
+										array_push($erroresPrecio3, $codigo);
+									}
+									//Revisamos que el precio 4 sea numerico
+									if(!is_numeric($p4)){
+										array_push($erroresPrecio4, $codigo);
+									}
+									//Revisamos que el precio 5 sea numerico
+									if(!is_numeric($p5)){
+										array_push($erroresPrecio5, $codigo);
+									}
+									//Revisamos que la cantidad sea numerica y mayor a 0
+									if(!is_numeric($cantidad)||$cantidad<0){
+										array_push($erroresCantidad, $codigo);												
+									}						
+									
+									//Revisamos que la sucursal exista
+									if(!$this->empresa->getEmpresa($sucursal)){
+										array_push($erroresSucursal, $codigo);
+									}
+									//Revisamos que la familia exista
+									if(!$this->familia->existeFamilia($familia, $sucursal)){
+										array_push($erroresFamilia, $codigo);
+									}
+									//Revisamos que el exento sea valido
+									if(trim($exento)!='0'&&trim($exento)!='1'){
+										array_push($erroresExento, $codigo);
+									}
+									//Revisamos que la retencion sea valida
+									if(trim($retencion)!='0'&&trim($retencion)!='1'){
+										array_push($erroresRetencion, $codigo);
+									}
+									//Revisamos que el descuento sea numerico y este entre 0 y 100
+									if(!is_numeric($descuento)||$descuento<0||$descuento>100){
+										array_push($erroresDescuento, $codigo);
+									}
+														
+									array_push($articulos, array(	
+																	"cod"=>$codigo,
+																	"des"=>$descripcion,
+																	"cos"=>str_replace(",",".",$costo),
+																	"p1"=>str_replace(",",".",$p1),
+																	"p2"=>str_replace(",",".",$p2),
+																	"p3"=>str_replace(",",".",$p3),
+																	"p4"=>str_replace(",",".",$p4),
+																	"p5"=>str_replace(",",".",$p5),
+																	"fam"=>$familia,
+																	"suc"=>$sucursal,
+																	"can"=>$cantidad,
+																	"exe"=>$exento,
+																	"ret"=>$retencion,
+																	"desc"=>str_replace(",",".",$descuento),
+																	"ima"=>$imagen
+																)
+												);
+								}
+								$resultado["status"] = "success";
+								unset($resultado["error"]);
+								$resultado["articulos"] = $articulos;
+								
+								$resultado["erroresCodigo"] = $erroresCodigo;
+								$resultado["erroresCosto"] = $erroresCosto;
+								$resultado["erroresPrecio1"] = $erroresPrecio1;
+								$resultado["erroresPrecio2"] = $erroresPrecio2;
+								$resultado["erroresPrecio3"] = $erroresPrecio3;
+								$resultado["erroresPrecio4"] = $erroresPrecio4;
+								$resultado["erroresPrecio5"] = $erroresPrecio5;
+								$resultado["erroresCantidad"] = $erroresCantidad;
+								$resultado["erroresFamilia"] = $erroresFamilia;
+								$resultado["erroresSucursal"] = $erroresSucursal;
+								$resultado["erroresExento"] = $erroresExento;
+								$resultado["erroresRetencion"] = $erroresRetencion;
+								$resultado["erroresDescuento"] = $erroresDescuento;
+				}else{
+					//No tiene las columnas requeridas
+					$resultado['error'] = '2';
+				}
+				return $resultado;
+	}
+	
+	
+	/*
+				function procesarExcel(){
 		$resultado = array('status'=>'error','error'=>'1'); //Error generico de no se pudo realizar el proceso
 		require_once './application/libraries/PHPExcel/IOFactory.php';
     	$objPHPExcel = PHPExcel_IOFactory::load($_FILES['archivo_excel']['tmp_name']);
@@ -499,6 +672,14 @@ class ingresar extends CI_Controller {
 		}
 		return $resultado;
 	}
+	
+	
+	
+	*/
+	
+	
+	
+	
 }
 
 ?>
