@@ -5,7 +5,8 @@ Class factura extends CI_Model
 	con los docs de garotas*/
 	public $cod_desampa = 1;
 	public $cod_garotas = 0;
-	public $trueque = false; 
+	public $trueque = true;
+	public $isDesampa = false; 
 	
 	function getConsecutivo($id_empresa) //Traer el siguiente consecutivo de una empresa en particular
 	{
@@ -47,8 +48,10 @@ Class factura extends CI_Model
 				$c_array['dolar_venta']=$head->Proforma_Tipo_Cambio;
 			}
 		}
+		$sucursalVendedor =  $sucursal;
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
+				$this->isDesampa = true;
 		}
 		if($consecutivo = $this->getConsecutivo($sucursal)){
 			//return $consecutivo;
@@ -64,13 +67,21 @@ Class factura extends CI_Model
 													'Factura_Nombre_Cliente'=>mysql_real_escape_string($nombre),
 													'TB_02_Sucursal_Codigo'=>$sucursal,
 													'Factura_Vendedor_Codigo'=>$vendedor,	
-													'Factura_Vendedor_Sucursal'=>$sucursal,	
+													'Factura_Vendedor_Sucursal'=>$sucursalVendedor,	
 													'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
 													'Factura_Cliente_Exento'=>$clienteArray['exento'],
 													'Factura_Cliente_No_Retencion'=>$clienteArray['retencion'],
 													'Factura_Cliente_Sucursal'=>$clienteArray['sucursal']												
 	                    );			
 	        $this->db->insert('TB_07_Factura',$dataFactura); 
+	        
+	    if($this->trueque && $this->isDesampa){ //Si viene de desampa se guarda la factura
+					$datos = array("Consecutivo" => $consecutivo,
+													"Documento" => 'factura');
+					$this->db->insert("TB_46_Relacion_Desampa", $datos);
+					$this->isDesampa = false;
+			}
+	     
 			return $this->existe_Factura($consecutivo, $sucursal);
 		}else{
 			return false;
@@ -98,6 +109,10 @@ Class factura extends CI_Model
 	}
 	
 	function existe_Factura($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
+		
 		$this -> db -> select('Factura_Consecutivo');
 		$this -> db -> from('TB_07_Factura');
 		$this -> db -> where('Factura_Consecutivo', $consecutivo);
@@ -118,6 +133,7 @@ Class factura extends CI_Model
 	}
 	
 	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+		$sucursalVendedor = $sucursal;
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 		}
@@ -134,16 +150,14 @@ Class factura extends CI_Model
 							'TB_07_Factura_Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
 							'TB_07_Factura_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
 							'TB_07_Factura_Factura_Vendedor_Codigo'=>mysql_real_escape_string($vendedor),
-							'TB_07_Factura_Factura_Vendedor_Sucursal'=>mysql_real_escape_string($sucursal),
+							'TB_07_Factura_Factura_Vendedor_Sucursal'=>mysql_real_escape_string($sucursalVendedor),
 							'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cliente)							
 	                    );			
 	        $this->db->insert('TB_08_Articulos_Factura',$dataItem);
 	}
 	
 	function getCostosTotalesFactura($consecutivo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-		}
+		
 		$costo_total = 0;
 		$iva = 0;
 		$costo_sin_iva = 0;
@@ -216,6 +230,9 @@ Class factura extends CI_Model
 	
 	function getItemsFactura($consecutivo, $sucursal){
 		//$this -> db -> select('Articulo_Factura_Cantidad, Articulo_Factura_Descuento, Articulo_Factura_Precio_Unitario, Articulo_Factura_Exento');
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> from('TB_08_Articulos_Factura');
 		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
 		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
@@ -241,6 +258,9 @@ Class factura extends CI_Model
 	}
 	
 	function updateCostosTotales($data, $consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this->db->where('Factura_Consecutivo', $consecutivo);
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->update('TB_07_Factura' ,$data);
@@ -249,7 +269,13 @@ Class factura extends CI_Model
 	function getFacturasPendientes($sucursal){
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->getFacturasDesampa();
+				$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->getFacturasDesampa();
+				$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
 		}
+		
 		$this -> db -> select('*');
 		$this -> db -> from('TB_07_Factura');
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
@@ -329,6 +355,9 @@ Class factura extends CI_Model
 	}
 	
 	function getCliente($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('TB_03_Cliente_Cliente_Cedula');
 		$this -> db -> from('TB_07_Factura');
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
@@ -351,6 +380,10 @@ Class factura extends CI_Model
 	}
 	
 	function getVendedor($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				//Aunque el bretee en desampa, las facturas son de garotas y se guarda su id en gartas no en desampa
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('Factura_Vendedor_Codigo');
 		$this -> db -> from('TB_07_Factura');
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
@@ -395,6 +428,9 @@ Class factura extends CI_Model
 	}
 	
 	function getMoneda($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('Factura_Moneda');
 		$this -> db -> from('TB_07_Factura');
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
@@ -457,19 +493,26 @@ Class factura extends CI_Model
 	
 	
 	function actualizarFacturaHead($datos, $consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this->db->where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
 		$this->db->where('Factura_Consecutivo', mysql_real_escape_string($consecutivo));
 		$this->db->update('TB_07_Factura' ,$datos);
 	}
 	
 	function guardarPagoTarjeta($consecutivo, $sucursal, $transaccion, $comision, $vendedor, $cliente, $banco){		
+				$sucursalVendedor = $sucursal;
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$dataFactura = array(
 						'Tarjeta_Numero_Transaccion'=>mysql_real_escape_string($transaccion),
 						'Tarjeta_Comision_Banco'=>mysql_real_escape_string($comision), 
 						'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
 						'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
-						'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursal,
+						'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursalVendedor,
 						'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>$cliente,
 						'TB_22_Banco_Banco_Codigo'=>$banco												
 					);			
@@ -478,33 +521,46 @@ Class factura extends CI_Model
 	}
 	
 	function guardarPagoCheque($consecutivo, $sucursal, $transaccion, $vendedor, $cliente){		
+		$sucursalVendedor = $sucursal;
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$dataFactura = array(
 						'Cheque_Numero'=>mysql_real_escape_string($transaccion), 
 						'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
 						'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
-						'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursal,
+						'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursalVendedor,
 						'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>$cliente												
 					);			
 		$this->db->insert('TB_13_Cheque',$dataFactura); 			
 	}
 	
-	function guardarPagoDeposito($consecutivo, $sucursal, $transaccion, $vendedor, $cliente, $banco){		
+	function guardarPagoDeposito($consecutivo, $sucursal, $transaccion, $vendedor, $cliente, $banco){	
+		$sucursalVendedor = $sucursal;	
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$dataFactura = array(
 						'Deposito_Numero_Transaccion'=>mysql_real_escape_string($transaccion), 
 						'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
 						'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
-						'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursal,
+						'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursalVendedor,
 						'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>$cliente,
 						'TB_22_Banco_Banco_Codigo'=>$banco
 					);			
 		$this->db->insert('TB_19_Deposito',$dataFactura); 			
 	}
 	
-	function guardarPagoMixto($consecutivo, $sucursal, $transaccion, $comision, $vendedor, $cliente, $banco, $cantidadPagoTarjeta){		
+	function guardarPagoMixto($consecutivo, $sucursal, $transaccion, $comision, $vendedor, $cliente, $banco, $cantidadPagoTarjeta){
+		
 		//Creamos el pago con tarjeta primero
 		$tarjeta = $this->guardarPagoTarjeta($consecutivo, $sucursal, $transaccion, $comision, $vendedor, $cliente, $banco);
+		$sucursalVendedor = $sucursal;		
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		//Creamos el pago mixto
 		$dataFactura = array(
 						'Mixto_Cantidad_Paga'=>mysql_real_escape_string($cantidadPagoTarjeta), 
@@ -512,7 +568,7 @@ Class factura extends CI_Model
 						'TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
 						'TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
-						'TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursal,
+						'TB_18_Tarjeta_TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursalVendedor,
 						'TB_18_Tarjeta_TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>$cliente,
 						'TB_18_Tarjeta_TB_22_Banco_Banco_Codigo'=>$banco						
 					);			
@@ -520,6 +576,10 @@ Class factura extends CI_Model
 	}
 	
 	function guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, $numeroDias, $fecha, $saldo){
+		$sucursalVendedor = $sucursal;
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$dataGuardar = array(
 							'Credito_Numero_Dias' => $numeroDias,
 							'Credito_Saldo_Actual' => $saldo,
@@ -528,7 +588,7 @@ Class factura extends CI_Model
 							'Credito_Factura_Consecutivo' => $consecutivo,
 							'Credito_Sucursal_Codigo' => $sucursal,
 							'Credito_Vendedor_Codigo' => $vendedor,
-							'Credito_Vendedor_Sucursal' => $sucursal,
+							'Credito_Vendedor_Sucursal' => $sucursalVendedor,
 							'Credito_Cliente_Cedula' => $cliente
 							);
 		$this->db->insert('TB_24_Credito',$dataGuardar);
@@ -544,6 +604,9 @@ Class factura extends CI_Model
 	}
 	
 	function getAbonoApartado($sucursal, $consecutivo){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		/*
 			SELECT 	tb_40_apartado.Abono		
 			FROM tb_40_apartado
@@ -569,6 +632,7 @@ Class factura extends CI_Model
 	}
 	
 	function getCreditosClientePorSucursal($cedula, $sucursal){
+		
 		$this -> db -> select('*');
 		$this -> db -> from('TB_24_Credito');
 		$this -> db -> where('Credito_Sucursal_Codigo', $sucursal);
@@ -716,6 +780,22 @@ Class factura extends CI_Model
 			return date("Y-m-d : H:i:s", strtotime($fecha));
 		}		
 		return $fecha;
+	}
+	
+	function getFacturasDesampa(){
+			$this->db->select("Consecutivo");
+			$this->db->from("tb_46_relacion_desampa");
+			$this->db->where("Documento", "factura");
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+					return array();
+			}else{
+					$facturas = array();
+					foreach($query->result() as $f){
+							array_push($facturas, $f->Consecutivo);
+					}
+					return $facturas;
+			}
 	}
 	
 }
