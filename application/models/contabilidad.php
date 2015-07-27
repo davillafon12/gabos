@@ -54,7 +54,7 @@ Class contabilidad extends CI_Model
 		$this -> db -> select('Consecutivo');
 		$this -> db -> from('TB_26_Recibos_Dinero');
 		$this -> db -> join('TB_24_Credito', 'TB_26_Recibos_Dinero.Credito = TB_24_Credito.Credito_Id');
-		$this -> db -> where('TB_24_Credito.Credito_Vendedor_Sucursal', $sucursal);
+		$this -> db -> where('TB_24_Credito.Credito_Sucursal_Codigo', $sucursal);
 		$this -> db -> order_by('Consecutivo', 'desc');
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
@@ -72,6 +72,9 @@ Class contabilidad extends CI_Model
 	}
 	
 	function agregarRecibo($sucursal, $codigoCredito, $saldo, $montoPagado, $tipoPago){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		date_default_timezone_set("America/Costa_Rica");
 		$Current_datetime = date("y/m/d : H:i:s", now());
 		$consecutivo = $this->getConsecutivoUltimoRecibo($sucursal)+1;
@@ -95,6 +98,9 @@ Class contabilidad extends CI_Model
 	
 	function getConsecutivoUltimaNotaCredito($sucursal)
 	{
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('Consecutivo');
 		$this -> db -> from('TB_27_Notas_Credito');
 		$this -> db -> where('Sucursal', $sucursal);
@@ -115,6 +121,15 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getReciboParaImpresion($recibo, $sucursal){
+		$queryLoco = "";
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->factura->getFacturasDesampa();
+				$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_desampa,',').")";
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->factura->getFacturasDesampa();
+				$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_desampa,',').")";
+		}
 		$query = $this->db->query("
 			SELECT  tb_26_recibos_dinero.Consecutivo AS recibo,
 					tb_26_recibos_dinero.Recibo_Cantidad AS monto,
@@ -133,6 +148,7 @@ Class contabilidad extends CI_Model
 			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
 			WHERE  tb_24_credito.Credito_Sucursal_Codigo = $sucursal
 			AND    tb_26_recibos_dinero.Consecutivo = $recibo
+			$queryLoco
 		");
 		if($query -> num_rows() != 0)
 		{
@@ -171,6 +187,10 @@ Class contabilidad extends CI_Model
 	}
 	
 	function agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cliente, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $por_iva, $tipo_cambio){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$this->isDesampa = true;
+		}
 		$datos = array(
 						'Consecutivo' => $consecutivo,
 						'Nombre_Cliente' => $nombre,
@@ -185,6 +205,14 @@ Class contabilidad extends CI_Model
 						'Cliente' => $cliente
 						);
 		$this->db->insert('TB_27_Notas_Credito', $datos);
+		
+		if($this->trueque && $this->isDesampa){ //Si viene de desampa se guarda la factura
+				$datos = array("Consecutivo" => $consecutivo,
+												"Documento" => 'nota_credito');
+				$this->db->insert("TB_46_Relacion_Desampa", $datos);
+				$this->isDesampa = false;
+		}
+		
 		return $this->existeNotaCredito($consecutivo, $sucursal);
 	}
 	
@@ -233,6 +261,9 @@ Class contabilidad extends CI_Model
 	}
 	
 	function precioArticuloEnFacturaDeterminada($factura, $sucursal, $articulo){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this->db->select('Articulo_Factura_Descuento as descuento, Articulo_Factura_Precio_Unitario as precio');
 		$this->db->from('tb_08_articulos_factura');
 		$this->db->where('TB_07_Factura_Factura_Consecutivo',$factura);
@@ -245,6 +276,9 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$query = $this->db->query("
 			SELECT 	Consecutivo AS nota, 
 					Nombre_Cliente AS cliente_nombre, 
@@ -301,6 +335,10 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getRecibos($cliente, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$this -> db -> where('Credito_Vendedor_Sucursal', $sucursal);
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('Consecutivo, Credito, Recibo_Cantidad, Recibo_Fecha, Recibo_Saldo, Credito_Factura_Consecutivo');
 		$this -> db -> from('TB_26_recibos_dinero');
 		$this -> db -> join('TB_24_credito','Credito_Id = Credito');
@@ -1083,6 +1121,11 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getRecibosFiltrados($cliente, $desde, $hasta, $tipo, $estado, $sucursal){
+		
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$this->db->where("Credito_Vendedor_Sucursal", $sucursal);
+				$sucursal = $this->cod_garotas;
+		}
 		/*
 			SELECT  tb_26_recibos_dinero.Consecutivo as consecutivo,
 					date_format(tb_26_recibos_dinero.Recibo_Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,        

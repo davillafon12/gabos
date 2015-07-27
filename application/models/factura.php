@@ -489,6 +489,9 @@ Class factura extends CI_Model
 	}
 	
 	function getArticulosFacturaImpresion($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		//echo "entro";
 		$this -> db -> select('Articulo_Factura_Codigo AS codigo, Articulo_Factura_Descripcion AS descripcion, Articulo_Factura_Cantidad AS cantidad, Articulo_Factura_Descuento AS descuento, Articulo_Factura_Exento AS exento, Articulo_Factura_Precio_Unitario AS precio');
 		$this -> db -> from('TB_08_Articulos_Factura');

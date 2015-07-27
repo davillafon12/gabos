@@ -53,7 +53,7 @@ class impresion extends CI_Controller {
 						case 'c':
 							$this->filtrarDocumentosCarta();
 							//Salimos del script ya que el pdf es la salida final y no el json
-							die();
+							//die();
 						break;
 						default:
 							$this->retorno['error'] = '4';

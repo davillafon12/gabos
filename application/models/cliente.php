@@ -2,7 +2,12 @@
 Class cliente extends CI_Model
 {
 	private $contador=1;
-
+	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
+	con los docs de garotas*/
+	public $cod_desampa = 1;
+	public $cod_garotas = 0;
+	public $trueque = true;
+	public $isDesampa = false;
 
 	function existe_Cliente($cedula){
 		$this -> db -> select('Cliente_Cedula');
@@ -520,6 +525,10 @@ Class cliente extends CI_Model
 	
 	
 	function getFacturasConSaldo($cliente, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$this->db->where('Credito_Vendedor_Sucursal', $sucursal);
+				$sucursal = $this->cod_garotas;
+		}
 		$this->db->where('Credito_Cliente_Cedula', $cliente);
 		$this->db->where('Credito_Sucursal_Codigo', $sucursal);
 		$this->db->where('Credito_Saldo_Actual !=', '0'); //Facturas con saldo 
@@ -533,6 +542,15 @@ Class cliente extends CI_Model
 	}
 	
 	function getFacturasDeClienteEnSucursal($cliente, $sucursal){
+		$this->load->model("factura", "", true);
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->factura->getFacturasDesampa();
+				$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->factura->getFacturasDesampa();
+				$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+		}
 		//Solo cargamos facturas cobradas
 		$this->db->where('Factura_Estado', 'cobrada');
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
@@ -569,6 +587,15 @@ Class cliente extends CI_Model
 	}
 	
 	function getFacturaDeClienteCobrada($consecutivo, $sucursal, $cliente){
+		$this->load->model("factura", "", true);
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->factura->getFacturasDesampa();
+				$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->factura->getFacturasDesampa();
+				$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+		}
 		//Solo cargamos facturas cobradas
 		$this->db->where('Factura_Estado', 'cobrada');
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
