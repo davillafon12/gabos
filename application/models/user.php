@@ -2,6 +2,15 @@
 <?php
 Class User extends CI_Model
 {
+	
+		/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
+		con los docs de garotas*/
+		public $cod_desampa = 1;
+		public $cod_garotas = 0;
+		public $trueque = true;
+		public $isDesampa = false; 	
+	
+	
  function login($username, $password)
  {
    $this -> db -> select('Usuario_Codigo, Usuario_Cedula, Usuario_Nombre_Usuario, Usuario_Password, TB_02_Sucursal_Codigo, Usuario_Imagen_URL, Usuario_Nombre, Usuario_Apellidos, Usuario_Observaciones, Usuario_Rango');
@@ -480,6 +489,15 @@ function existe_Nombre_Usuario($nombre){
 			AND Factura_Estado = 'cobrada'
 			GROUP BY Factura_Vendedor_Codigo;
 		*/
+		$this->load->model("factura", "", true);
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->factura->getFacturasDesampa();
+				$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->factura->getFacturasDesampa();
+				$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+		}
 		$this->db->select('Factura_Vendedor_Codigo');
 		$this->db->from('tb_07_factura');
 		$this->db->where('TB_02_Sucursal_Codigo',$sucursal);
