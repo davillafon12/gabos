@@ -304,6 +304,7 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal){
+		
 		$this->db->select("Codigo AS codigo, Descripcion AS descripcion, Cantidad_Bueno AS bueno, Cantidad_Defectuoso AS defectuoso, Precio_Unitario AS precio");
 		$this->db->from("tb_28_productos_notas_credito");
 		$this->db->where("Nota_Credito_Consecutivo",$consecutivo);

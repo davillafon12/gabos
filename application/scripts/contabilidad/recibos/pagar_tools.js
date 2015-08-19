@@ -129,7 +129,8 @@ function validarPago(){
 
 function validarTarjeta(){
 	numeroTransaccion = $('#numero_transaccion').val();
-	return $.isNumeric(numeroTransaccion);
+	if(numeroTransaccion.trim() == ''){return false;}
+	return true;
 }
 
 function tipoPagoJSON(){

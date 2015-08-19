@@ -172,10 +172,13 @@ class consulta extends CI_Controller {
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1';
 		if(isset($_POST['nota'])){
+			
 			$consecutivo = $_POST['nota'];
 			include 'get_session_data.php';
 			if($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $data['Sucursal_Codigo'])){
+				
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $data['Sucursal_Codigo'])){
+					
 					unset($retorno['error']);
 					$retorno['status'] = 'success';
 					$retorno['notaHead'] = $notaCreditoHead;
