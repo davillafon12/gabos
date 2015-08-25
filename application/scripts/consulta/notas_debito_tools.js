@@ -383,10 +383,10 @@ function imprimir(){
 	
 	if(tipoImpresion==='t'){
 		//Impresion termica
-		window.open(servidorImpresion+'/index.html?t='+token+'&d=nc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(servidorImpresion+'/index.html?t='+token+'&d=nd&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
-		window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=nc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=nd&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}
 }
 

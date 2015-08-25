@@ -711,7 +711,7 @@ Class articulo extends CI_Model
 	
 	function getArticuloDescripcion($codigo, $sucursal){
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+				//$sucursal = $this->cod_garotas;
 		}
 		$this -> db -> select('Articulo_Descripcion');
 		$this -> db -> from('TB_06_Articulo');

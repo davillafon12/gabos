@@ -463,6 +463,9 @@ Class contabilidad extends CI_Model
 	
 	function getConsecutivoUltimaNotaDebito($sucursal)
 	{
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> select('Consecutivo');
 		$this -> db -> from('tb_30_notas_debito');
 		$this -> db -> where('Sucursal', $sucursal);
@@ -483,6 +486,10 @@ Class contabilidad extends CI_Model
 	}
 	
 	function crearNotaDebito($consecutivo, $fecha, $porcentaje_iva, $usuario, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$this->isDesampa = true;
+		}
 		$datos = array(
 						'Consecutivo' => $consecutivo,
 						'Fecha' => $fecha,
@@ -491,9 +498,18 @@ Class contabilidad extends CI_Model
 						'Sucursal' => $sucursal
 						);
 		$this->db->insert('tb_30_notas_debito', $datos);
+		if($this->trueque && $this->isDesampa){ //Si viene de desampa se guarda la factura
+				$datos = array("Consecutivo" => $consecutivo,
+												"Documento" => 'nota_debito');
+				$this->db->insert("TB_46_Relacion_Desampa", $datos);
+				$this->isDesampa = false;
+		}
 	}
 	
 	function agregarArticuloNotaDebito($codigo, $descripcion, $cantidad, $costo, $notaConsecutivo, $sucursal, $usuario){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$datos = array(
 						'Codigo' => $codigo,
 						'Descripcion' => $descripcion,
@@ -507,6 +523,9 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getHeadNotaDebito($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$query = $this->db->query("
 			SELECT 	Consecutivo AS nota, 
 					date_format(Fecha, '%d-%m-%Y %h:%i:%s %p') AS fecha,
@@ -527,6 +546,9 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getProductosNotaDebito($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this->db->select("Codigo AS codigo, Descripcion AS descripcion, Cantidad_Debitar AS cantidad, Precio_Unitario AS precio");
 		$this->db->from("tb_31_productos_notas_debito");
 		$this->db->where("Sucursal", $sucursal);
@@ -836,7 +858,14 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getNotaCreditoPorRangoFecha($sucursal, $inicio, $final){
-		
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->getNotasCreditoDesampa();
+				$this->db->where_in("Consecutivo", $facturas_desampa);
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->getNotasCreditoDesampa();
+				$this->db->where_not_in("Consecutivo", $facturas_desampa);
+		}
 		$this->db->from('TB_27_Notas_Credito');
 		$this->db->where('Sucursal', $sucursal);
 		$this->db->where('Fecha_Creacion >', $inicio);
@@ -1001,6 +1030,14 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getNotaDebitoPorRangoFecha($sucursal, $inicio, $final){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->getNotasDebitoDesampa();
+				$this->db->where_in("Consecutivo", $facturas_desampa);
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->getNotasDebitoDesampa();
+				$this->db->where_not_in("Consecutivo", $facturas_desampa);
+		}
 		$this->db->from('tb_30_notas_debito');
 		$this->db->where('Sucursal', $sucursal);
 		$this->db->where('Fecha >', $inicio);
@@ -1165,6 +1202,15 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getNotasCreditoFiltrados($cliente, $desde, $hasta, $sucursal){
+		
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->getNotasCreditoDesampa();
+				$this->db->where_in("Consecutivo", $facturas_desampa);
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->getNotasCreditoDesampa();
+				$this->db->where_not_in("Consecutivo", $facturas_desampa);
+		}
 		$this->db->select("Consecutivo as consecutivo, Nombre_Cliente as cliente, date_format(Fecha_Creacion, '%d-%m-%Y %h:%i:%s %p') as fecha", false);
 		$this->db->from("tb_27_notas_credito");
 		$this->db->where("Sucursal", $sucursal);
@@ -1182,7 +1228,47 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
+	function getNotasCreditoDesampa(){
+			$this->db->select("Consecutivo");
+			$this->db->from("tb_46_relacion_desampa");
+			$this->db->where("Documento", "nota_credito");
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+					return array();
+			}else{
+					$facturas = array();
+					foreach($query->result() as $f){
+							array_push($facturas, $f->Consecutivo);
+					}
+					return $facturas;
+			}
+	}
+	
+	function getNotasDebitoDesampa(){
+			$this->db->select("Consecutivo");
+			$this->db->from("tb_46_relacion_desampa");
+			$this->db->where("Documento", "nota_debito");
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+					return array();
+			}else{
+					$facturas = array();
+					foreach($query->result() as $f){
+							array_push($facturas, $f->Consecutivo);
+					}
+					return $facturas;
+			}
+	}
+	
 	function getNotasDebitoFiltrados($desde, $hasta, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$facturas_desampa = $this->getNotasDebitoDesampa();
+				$this->db->where_in("Consecutivo", $facturas_desampa);
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$facturas_desampa = $this->getNotasDebitoDesampa();
+				$this->db->where_not_in("Consecutivo", $facturas_desampa);
+		}
 		$this->db->select("tb_30_notas_debito.Consecutivo as consecutivo, 
 												date_format(tb_30_notas_debito.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,
 												CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as cliente", false);
