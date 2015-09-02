@@ -128,7 +128,23 @@ class agregarComprasSucursal extends CI_Controller {
 				$this->familia->registrar($fa->Familia_Codigo, $fa->Familia_Nombre, $fa->Familia_Observaciones, $sucursalEntrada, $data['Usuario_Nombre']);
 			}
 			
-			
+			/*($articulo_Codigo, 
+			   $articulo_Descripcion, 
+			   $articulo_Codigo_Barras, 
+			   $articulo_Cantidad_Inventario, 
+			   $articulo_Cantidad_Defectuoso, 
+			   $articulo_Descuento, 
+			   $Articulo_Imagen_URL, 
+			   $Articulo_Exento, 
+			   $retencion, 
+			   $TB_05_Familia_Familia_Codigo, 
+			   $TB_02_Sucursal_Codigo, 
+			   $costo, 
+			   $precio1, 
+			   $precio2, 
+			   $precio3, 
+			   $precio4, 
+			   $precio5)*/
 			$this->articulo->registrar(	$prefijo."".$codigo, 
 										$descripcion, 
 										$articulo->Articulo_Codigo_Barras, 
@@ -137,6 +153,7 @@ class agregarComprasSucursal extends CI_Controller {
 										0, 
 										$articulo->Articulo_Imagen_URL, 
 										$articulo->Articulo_Exento, 
+										0,
 										$familia, 
 										$sucursalEntrada, 
 										$costo, 
