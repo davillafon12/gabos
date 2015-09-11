@@ -35,6 +35,7 @@ function traerDocumento(t,d,n,s,i){
 		data : "t="+t+"&d="+d+"&n="+n+"&s="+s+"&i="+i,
 		success: function(data, textStatus, jqXHR)
 		{
+			console.log(data);
 			try{				
 				if(data.status==="error"){
 					alert("Error: "+data.error);
