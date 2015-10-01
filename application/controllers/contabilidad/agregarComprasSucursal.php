@@ -157,11 +157,11 @@ class agregarComprasSucursal extends CI_Controller {
 										$familia, 
 										$sucursalEntrada, 
 										$costo, 
-										$costo, 
-										$costo, 
-										$costo, 
-										$costo, 
-										$costo);
+										$this->articulo->getPrecioProducto($codigo, 1, $sucursalSalida), 
+										$this->articulo->getPrecioProducto($codigo, 2, $sucursalSalida), 
+										$this->articulo->getPrecioProducto($codigo, 3, $sucursalSalida), 
+										$this->articulo->getPrecioProducto($codigo, 4, $sucursalSalida), 
+										$this->articulo->getPrecioProducto($codigo, 5, $sucursalSalida));
 		}
 		//Agregamos el producto al traspaso
 		$this->contabilidad->agregarArticuloTraspaso($prefijo."".$codigo, $descripcion, $cantidad, $traspaso);
