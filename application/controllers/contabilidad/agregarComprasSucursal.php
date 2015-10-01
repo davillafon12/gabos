@@ -114,7 +114,7 @@ class agregarComprasSucursal extends CI_Controller {
 	private function agregarAInventario($codigo, $cantidad, $descripcion, $costo, $sucursalSalida, $sucursalEntrada, $traspaso, $prefijo){
 		if($this->articulo->get_Articulo($prefijo."".$codigo, $sucursalEntrada)){
 			//El articulo si esta creado en la sucursal de entrada
-			$this->articulo->actualizarInventarioSUMA($codigo, $cantidad, $sucursalEntrada);
+			$this->articulo->actualizarInventarioSUMA($prefijo."".$codigo, $cantidad, $sucursalEntrada);
 		}else{
 			//No existe debemos registrarlo
 			$articulo = $this->articulo->get_Articulo($codigo, $sucursalSalida)[0];

@@ -526,9 +526,9 @@ Class articulo extends CI_Model
 	}
 	
 	function actualizarInventarioSUMA($codigo_producto, $cantidad, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-		}
+		//if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+		//		$sucursal = $this->cod_garotas;
+		//}
 		//echo 'Paso 1';
 		if($codigo_producto!='00'){// Si no es generico sigue
 			//La cantidad que ingresa por parametro es la cantidad a restar al inventario
