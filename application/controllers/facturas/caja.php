@@ -365,7 +365,7 @@ class caja extends CI_Controller {
 				$this->factura->guardarPagoDeposito($consecutivo, $sucursal, $tipoPago['deposito'], $vendedor, $cliente, $tipoPago['banco']);
 				break;
 			case 'cheque':
-				$this->factura->guardarPagoCheque($consecutivo, $sucursal, $tipoPago['cheque'], $vendedor, $cliente);
+				$this->factura->guardarPagoCheque($consecutivo, $sucursal, $tipoPago['cheque'], $vendedor, $cliente, $tipoPago['banco']);
 				break;
 			case 'mixto':
 				$comision = $this->banco->getComision($tipoPago['banco']);

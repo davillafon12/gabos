@@ -539,13 +539,14 @@ Class factura extends CI_Model
 		return $this->db->insert_id();
 	}
 	
-	function guardarPagoCheque($consecutivo, $sucursal, $transaccion, $vendedor, $cliente){		
+	function guardarPagoCheque($consecutivo, $sucursal, $transaccion, $vendedor, $cliente, $banco){		
 		$sucursalVendedor = $sucursal;
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 		}
 		$dataFactura = array(
 						'Cheque_Numero'=>mysql_real_escape_string($transaccion), 
+						'Banco'=>mysql_real_escape_string($banco), 
 						'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
 						'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,

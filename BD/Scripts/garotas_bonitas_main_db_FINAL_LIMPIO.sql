@@ -352,18 +352,29 @@ CREATE TABLE IF NOT EXISTS `tb_12_transacciones` (
 --
 -- Estructura de tabla para la tabla `tb_13_cheque`
 --
-
-CREATE TABLE IF NOT EXISTS `tb_13_cheque` (
-  `Cheque_Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Cheque_Numero` varchar(45) DEFAULT NULL,
-  `TB_07_Factura_Factura_Consecutivo` int(11) NOT NULL,
-  `TB_07_Factura_TB_02_Sucursal_Codigo` int(11) NOT NULL,
-  `TB_07_Factura_Factura_Vendedor_Codigo` int(11) NOT NULL,
-  `TB_07_Factura_Factura_Vendedor_Sucursal` int(11) NOT NULL,
-  `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` bigint(20) NOT NULL,
-  PRIMARY KEY (`Cheque_Id`,`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`),
-  KEY `fk_TB_13_Cheque_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo`,`TB_07_Factura_TB_02_Sucursal_Codigo`,`TB_07_Factura_Factura_Vendedor_Codigo`,`TB_07_Factura_Factura_Vendedor_Sucursal`,`TB_07_Factura_TB_03_Cliente_Cliente_Cedula`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+CREATE TABLE IF NOT EXISTS `GAROTAS_BONITAS_MAIN_DB`.`TB_13_Cheque` (
+  `Cheque_Id` INT NOT NULL AUTO_INCREMENT,
+  `Cheque_Numero` VARCHAR(45) NULL,
+  `Banco` INT NOT NULL,
+  `TB_07_Factura_Factura_Consecutivo` INT NOT NULL,
+  `TB_07_Factura_TB_02_Sucursal_Codigo` INT NOT NULL,
+  `TB_07_Factura_Factura_Vendedor_Codigo` INT NOT NULL,
+  `TB_07_Factura_Factura_Vendedor_Sucursal` INT NOT NULL,
+  `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` BIGINT NOT NULL,
+  PRIMARY KEY (`Cheque_Id`, `TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`),
+  INDEX `fk_TB_13_Cheque_TB_07_Factura1_idx` (`TB_07_Factura_Factura_Consecutivo` ASC, `TB_07_Factura_TB_02_Sucursal_Codigo` ASC, `TB_07_Factura_Factura_Vendedor_Codigo` ASC, `TB_07_Factura_Factura_Vendedor_Sucursal` ASC, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` ASC),
+  INDEX `fk_TB_13_Cheque_TB_22_Banco1_idx` (`Banco` ASC),
+  CONSTRAINT `fk_TB_13_Cheque_TB_07_Factura1`
+    FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo` , `TB_07_Factura_TB_02_Sucursal_Codigo` , `TB_07_Factura_Factura_Vendedor_Codigo` , `TB_07_Factura_Factura_Vendedor_Sucursal` , `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`)
+    REFERENCES `GAROTAS_BONITAS_MAIN_DB`.`TB_07_Factura` (`Factura_Consecutivo` , `TB_02_Sucursal_Codigo` , `Factura_Vendedor_Codigo` , `Factura_Vendedor_Sucursal` , `TB_03_Cliente_Cliente_Cedula`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TB_13_Cheque_TB_22_Banco1`
+    FOREIGN KEY (`Banco`)
+    REFERENCES `GAROTAS_BONITAS_MAIN_DB`.`TB_22_Banco` (`Banco_Codigo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 -- --------------------------------------------------------
 
@@ -967,12 +978,6 @@ ALTER TABLE `tb_11_precios`
 --
 ALTER TABLE `tb_12_transacciones`
   ADD CONSTRAINT `fk_TB_12_Transacciones_TB_01_Usuario1` FOREIGN KEY (`TB_01_Usuario_Usuario_Codigo`, `TB_01_Usuario_TB_02_Sucursal_Codigo`) REFERENCES `tb_01_usuario` (`Usuario_Codigo`, `TB_02_Sucursal_Codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `tb_13_cheque`
---
-ALTER TABLE `tb_13_cheque`
-  ADD CONSTRAINT `fk_TB_13_Cheque_TB_07_Factura1` FOREIGN KEY (`TB_07_Factura_Factura_Consecutivo`, `TB_07_Factura_TB_02_Sucursal_Codigo`, `TB_07_Factura_Factura_Vendedor_Codigo`, `TB_07_Factura_Factura_Vendedor_Sucursal`, `TB_07_Factura_TB_03_Cliente_Cliente_Cedula`) REFERENCES `tb_07_factura` (`Factura_Consecutivo`, `TB_02_Sucursal_Codigo`, `Factura_Vendedor_Codigo`, `Factura_Vendedor_Sucursal`, `TB_03_Cliente_Cliente_Cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tb_15_permisos`

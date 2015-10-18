@@ -233,8 +233,9 @@ function validarDeposito(){
 }
 
 function validarCheque(){
-	numeroTransaccion = $('#numero_cheque').val();
-	return $.isNumeric(numeroTransaccion);
+	//numeroTransaccion = $('#numero_cheque').val();
+	//return $.isNumeric(numeroTransaccion);
+	return true;
 }
 
 function validarMixto(){
@@ -286,7 +287,7 @@ function tipoPagoJSON(){
 	}else if(tipoPago.trim()==='deposito'){
 		return [{'tipo':'deposito','deposito':$('#numero_deposito').val(),'banco':$('#banco_sel').val()}];
 	}else if(tipoPago.trim()==='cheque'){
-		return [{'tipo':'cheque','cheque':$('#numero_cheque').val()}];
+		return [{'tipo':'cheque','cheque':$('#numero_cheque').val(),'banco':$('#banco_sel').val()}];
 	}else if(tipoPago.trim()==='mixto'){
 		return [{'tipo':'mixto','transaccion':$('#numero_transaccion').val(),'cantidad':$('#cantidad_mixto').val(),'banco':$('#banco_sel').val()}];
 	}else if(tipoPago.trim()==='credito'){

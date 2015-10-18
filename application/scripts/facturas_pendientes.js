@@ -315,8 +315,8 @@ function numTransaccion(tipo)
 		inyectado.html("<input id='numero_cheque' class='input_uno' style='width: 100px; margin-left: 5px;' autocomplete='off' name='numero_cheque' required='' type='text'>");
 		mxt.html('');
 		mxtLabel.html('');
-		banco_title.html('');
-		banco_sel.css('display', 'none');
+		banco_title.html('Datáfono:');
+		banco_sel.css('display', 'block');
 		mxtLabelContado.html('');
 		mxtContado.html('');
 	}
