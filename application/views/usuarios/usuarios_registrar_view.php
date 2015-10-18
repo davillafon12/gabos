@@ -192,7 +192,7 @@ PARA:
 						</tr>
 						<tr>
 							<td>
-								<input id="usuario_password" class="montos" required="" autocomplete="off" name="usuario_password"  type="password" readonly />
+								<input id="usuario_password" class="montos" required="" autocomplete="off" name="usuario_password"  type="password"  />
 							</td>
 						</tr>				
 					</table>

@@ -63,12 +63,12 @@ function callPage(url, div){
 				//div.innerHTML=ajax.responseText;
 				if(ajax.responseText.indexOf("tr") != -1)
 				{						
-					div.innerHTML = "<div class='status_2'><img src="+ruta_base_imagenes_script+"/error.gif /><p class='text_status'>¡No esta disponible!</p></div>";							
+					div.innerHTML = "<div class='status_2' onclick='this.style.display = \"none\";'><img src="+ruta_base_imagenes_script+"/error.gif /><p class='text_status'>¡No esta disponible!</p></div>";							
 					boton.disabled=true;
 				}
 				else
 				{
-					div.innerHTML = "<div class='status_2'><img src="+ruta_base_imagenes_script+"/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>";
+					div.innerHTML = "<div class='status_2' onclick='this.style.display = \"none\";'><img src="+ruta_base_imagenes_script+"/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>";
 					boton.disabled=false;
 				}
 			}
