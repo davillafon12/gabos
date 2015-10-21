@@ -187,7 +187,7 @@ function obtenerIndex(where, row_num){
 function buscarCedula (e) 
 {
 	var cedula = document.getElementById('cedula').value;
-	if(!isNumber(cedula))
+	if(cedula.trim() === "")
 	{ 
 		document.getElementById('nombre').value="";
 		//document.getElementById('nombre').disabled=true;
