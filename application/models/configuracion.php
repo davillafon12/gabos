@@ -1,5 +1,5 @@
 <?php
-	class configuracion extends CI_Model
+	class configuracion extends CI_Model 
 	{
 		//Este modelo maneja todos los parametros de configuracion del sistema, sera el remplazo del XML a futuro
 		function getPorRetencionHaciendaTarjeta(){

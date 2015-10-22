@@ -1,13 +1,8 @@
-<?php
+<?php 
 Class contabilidad extends CI_Model
 {
 	
-	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
-	con los docs de garotas*/
-	public $cod_desampa = 1;
-	public $cod_garotas = 0;
-	public $trueque = true;
-	public $isDesampa = false; 
+	 
 	
 	function existeFacturaPorId($id){
 		$this->db->where('Credito_Id', mysql_real_escape_string($id));
@@ -125,10 +120,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_desampa,',').")";
+				if(!empty($facturas_desampa)){
+						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_desampa,',').")";
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_desampa,',').")";
+				if(!empty($facturas_desampa)){
+						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_desampa,',').")";
+				}
 		}
 		$query = $this->db->query("
 			SELECT  tb_26_recibos_dinero.Consecutivo AS recibo,
@@ -666,10 +665,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		$this->db->where('Factura_Fecha_Hora >', $inicio);
 		$this->db->where('Factura_Fecha_Hora <', $final);
@@ -729,10 +732,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_desampa,',').")";
+				if(!empty($facturas_desampa)){
+						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_desampa,',').")";
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_desampa,',').")";
+				if(!empty($facturas_desampa)){
+						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_desampa,',').")";
+				}
 		}
 		
 		$query = $this->db->query("
@@ -811,10 +818,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		$this->db->select('tb_07_factura.Factura_Monto_Total AS monto, tb_07_factura.Factura_Fecha_Hora AS fecha, tb_23_mixto.Mixto_Cantidad_Paga AS pago_tarjeta');
 		$this->db->from('tb_07_factura');
@@ -860,11 +871,15 @@ Class contabilidad extends CI_Model
 	function getNotaCreditoPorRangoFecha($sucursal, $inicio, $final){
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
-				$facturas_desampa = $this->getNotasCreditoDesampa();
-				$this->db->where_in("Consecutivo", $facturas_desampa);
+				$notas_credito_desampa = $this->getNotasCreditoDesampa();
+				if(!empty($notas_credito_desampa)){
+						$this->db->where_in("Consecutivo", $notas_credito_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$facturas_desampa = $this->getNotasCreditoDesampa();
-				$this->db->where_not_in("Consecutivo", $facturas_desampa);
+				$notas_credito_desampa = $this->getNotasCreditoDesampa();
+				if(!empty($notas_credito_desampa)){
+						$this->db->where_not_in("Consecutivo", $notas_credito_desampa);
+				}
 		}
 		$this->db->from('TB_27_Notas_Credito');
 		$this->db->where('Sucursal', $sucursal);
@@ -886,10 +901,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		$this->db->from('tb_07_factura');
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
@@ -914,10 +933,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		$this->db->from('tb_07_factura');
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
@@ -941,10 +964,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		$this->db->from('tb_07_factura');
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
@@ -967,10 +994,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		$this->db->from('tb_07_factura');
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
@@ -1004,10 +1035,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		$this->db->select('SUM(Abono) AS abono');
 		$this->db->from('tb_40_apartado');
@@ -1032,11 +1067,15 @@ Class contabilidad extends CI_Model
 	function getNotaDebitoPorRangoFecha($sucursal, $inicio, $final){
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
-				$facturas_desampa = $this->getNotasDebitoDesampa();
-				$this->db->where_in("Consecutivo", $facturas_desampa);
+				$notas_debito_desampa = $this->getNotasDebitoDesampa();
+				if(!empty($notas_debito_desampa)){
+						$this->db->where_in("Consecutivo", $notas_debito_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$facturas_desampa = $this->getNotasDebitoDesampa();
-				$this->db->where_not_in("Consecutivo", $facturas_desampa);
+				$notas_debito_desampa = $this->getNotasDebitoDesampa();
+				if(!empty($notas_debito_desampa)){
+						$this->db->where_not_in("Consecutivo", $notas_debito_desampa);
+				}
 		}
 		$this->db->from('tb_30_notas_debito');
 		$this->db->where('Sucursal', $sucursal);
@@ -1069,10 +1108,14 @@ Class contabilidad extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($notas_debito_desampa)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				if(!empty($notas_debito_desampa)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		$this->db->select("SUM(tb_07_factura.Factura_Monto_Total) AS total_vendido, 
 					CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario", false);
@@ -1205,11 +1248,15 @@ Class contabilidad extends CI_Model
 		
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
-				$facturas_desampa = $this->getNotasCreditoDesampa();
-				$this->db->where_in("Consecutivo", $facturas_desampa);
+				$notas_credito_desampa = $this->getNotasCreditoDesampa();
+				if(!empty($notas_credito_desampa)){
+						$this->db->where_in("Consecutivo", $notas_credito_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$facturas_desampa = $this->getNotasCreditoDesampa();
-				$this->db->where_not_in("Consecutivo", $facturas_desampa);
+				$notas_credito_desampa = $this->getNotasCreditoDesampa();
+				if(!empty($notas_credito_desampa)){
+						$this->db->where_not_in("Consecutivo", $notas_credito_desampa);
+				}
 		}
 		$this->db->select("Consecutivo as consecutivo, Nombre_Cliente as cliente, date_format(Fecha_Creacion, '%d-%m-%Y %h:%i:%s %p') as fecha", false);
 		$this->db->from("tb_27_notas_credito");
@@ -1263,11 +1310,15 @@ Class contabilidad extends CI_Model
 	function getNotasDebitoFiltrados($desde, $hasta, $sucursal){
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
-				$facturas_desampa = $this->getNotasDebitoDesampa();
-				$this->db->where_in("Consecutivo", $facturas_desampa);
+				$notas_debito_desampa = $this->getNotasDebitoDesampa();
+				if(!empty($notas_debito_desampa)){
+						$this->db->where_in("Consecutivo", $notas_debito_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$facturas_desampa = $this->getNotasDebitoDesampa();
-				$this->db->where_not_in("Consecutivo", $facturas_desampa);
+				$notas_debito_desampa = $this->getNotasDebitoDesampa();
+				if(!empty($notas_debito_desampa)){
+						$this->db->where_not_in("Consecutivo", $notas_debito_desampa);
+				}
 		}
 		$this->db->select("tb_30_notas_debito.Consecutivo as consecutivo, 
 												date_format(tb_30_notas_debito.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,

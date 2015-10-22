@@ -1,4 +1,4 @@
-<?php
+<?php 
 Class empresa extends CI_Model
 {
 	function es_codigo_usado($Codigo_evaluar){

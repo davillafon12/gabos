@@ -1,4 +1,4 @@
-<?php
+<?php 
 Class XMLParser extends CI_Model
 {	
 	function getConfigArray()

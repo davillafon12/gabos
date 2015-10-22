@@ -1,4 +1,4 @@
-<?php
+<?php 
 Class familia extends CI_Model
 {
 	function es_codigo_usado($codigo, $sucursal){

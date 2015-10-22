@@ -1,13 +1,8 @@
-<?php
+<?php 
 Class articulo extends CI_Model
 {
 	
-	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
-	con los docs de garotas*/
-	public $cod_desampa = 1;
-	public $cod_garotas = 0;
-	public $trueque = true;
-	public $isDesampa = false;
+	
 	
 	
 	function existe_Articulo($Codigo,$sucursal){

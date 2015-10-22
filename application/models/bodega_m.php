@@ -1,4 +1,4 @@
-<?php
+<?php 
 Class bodega_m extends CI_Model
 {
 	function existeArticuloEnBodega($codigo, $sucursal){

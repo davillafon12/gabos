@@ -1,13 +1,8 @@
-<?php
+<?php 
 Class cliente extends CI_Model
 {
 	private $contador=1;
-	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
-	con los docs de garotas*/
-	public $cod_desampa = 1;
-	public $cod_garotas = 0;
-	public $trueque = true;
-	public $isDesampa = false;
+	
 
 	function existe_Cliente($cedula){
 		$this -> db -> select('Cliente_Cedula');
@@ -546,10 +541,14 @@ Class cliente extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		//Solo cargamos facturas cobradas
 		$this->db->where('Factura_Estado', 'cobrada');
@@ -591,10 +590,14 @@ Class cliente extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$facturas_desampa = $this->factura->getFacturasDesampa();
-				$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+				if(!empty($facturas_desampa)){
+						$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+				}
 		}
 		//Solo cargamos facturas cobradas
 		$this->db->where('Factura_Estado', 'cobrada');

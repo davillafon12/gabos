@@ -1,13 +1,6 @@
-<?php
+<?php 
 Class proforma_m extends CI_Model
 {
-	
-	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
-	con los docs de garotas*/
-	public $cod_desampa = 1;
-	public $cod_garotas = 0;
-	public $trueque = true;
-	public $isDesampa = false; 
 	
 	function getConsecutivo($id_empresa) //Traer el siguiente consecutivo de una empresa en particular
 	{
@@ -219,10 +212,14 @@ Class proforma_m extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$proformas_desampa = $this->getProformasDesampa();
-				$this->db->where_in("Proforma_Consecutivo", $proformas_desampa);
+				if(!empty($proformas_desampa)){
+						$this->db->where_in("Proforma_Consecutivo", $proformas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$proformas_desampa = $this->getProformasDesampa();
-				$this->db->where_not_in("Proforma_Consecutivo", $proformas_desampa);
+				if(!empty($proformas_desampa)){
+						$this->db->where_not_in("Proforma_Consecutivo", $proformas_desampa);
+				}
 		}
 		$this -> db -> select('*');
 		$this -> db -> from('TB_10_Proforma');
@@ -402,10 +399,14 @@ Class proforma_m extends CI_Model
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$proformas_desampa = $this->getProformasDesampa();
-				$this->db->where_in("Proforma_Consecutivo", $proformas_desampa);
+				if(!empty($proformas_desampa)){
+						$this->db->where_in("Proforma_Consecutivo", $proformas_desampa);
+				}
 		}elseif($this->trueque && $sucursal == $this->cod_garotas){
 				$proformas_desampa = $this->getProformasDesampa();
-				$this->db->where_not_in("Proforma_Consecutivo", $proformas_desampa);
+				if(!empty($proformas_desampa)){
+						$this->db->where_not_in("Proforma_Consecutivo", $proformas_desampa);
+				}
 		}
 		$this->db->select("Proforma_Consecutivo as consecutivo,
 		                   Proforma_Monto_Total as total,

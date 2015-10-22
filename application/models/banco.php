@@ -1,4 +1,4 @@
-<?php
+<?php 
 Class banco extends CI_Model
 {
 	function getBancos()
