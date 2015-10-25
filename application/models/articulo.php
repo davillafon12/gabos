@@ -780,6 +780,13 @@ Class articulo extends CI_Model
 		$this->db->update('tb_06_articulo', $datos);
 	}
 	
+	function cambiarRetencion($codigo, $sucursal, $estado){
+		$datos = array('Articulo_No_Retencion'=>$estado);
+		$this->db->where('Articulo_Codigo',$codigo);
+		$this->db->where('TB_02_Sucursal_Codigo',$sucursal);
+		$this->db->update('tb_06_articulo', $datos);
+	}
+	
 	function getArticulosFacturasTemporales($sucursal){
 		$this->db->where('Sucursal', $sucursal);
 		$this->db->from('tb_41_productos_factura_temporal');

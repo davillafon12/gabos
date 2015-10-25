@@ -565,6 +565,49 @@ class editar extends CI_Controller {
 		}
 		echo json_encode($retorno);
 	}
+	
+	function actualizarRetencionMasivo(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		if(isset($_POST['articulos'])&&isset($_POST['estado'])){
+			$articulos = json_decode($_POST['articulos']);
+			$estado = $_POST['estado'];
+			if(sizeof($articulos)>0){
+				if(is_numeric($estado)){
+					if($estado == '1' || $estado == '0'){
+						
+						include '/../get_session_data.php';
+						$sucursal = $data['Sucursal_Codigo'];
+						
+						//Si viene sucursal usamos la que viene, sino deja la del log del usuario
+						if(isset($_POST['sucursal'])){
+							if($this->empresa->getEmpresa($_POST['sucursal'])){
+								$sucursal = $_POST['sucursal'];
+							}							
+						}					
+						
+						foreach($articulos as $art){
+							if($this->articulo->existe_Articulo($art,$sucursal)){
+									$this->articulo->cambiarRetencion($art, $sucursal, $estado);
+							}
+						}
+						$retorno['status'] = 'success';
+						unset($retorno['error']);
+					}else{
+						$retorno['error'] = '6'; //Estado invalido
+					}
+				}else{
+					$retorno['error'] = '6'; //Estado invalido
+				}
+			}else{
+				$retorno['error'] = '3'; //Sin articulos
+			}
+		}else{
+			$retorno['error'] = '2'; //Mala URL			
+		}
+		echo json_encode($retorno);
+	}
+	
  
 	function manejoArticulos()
 	{	

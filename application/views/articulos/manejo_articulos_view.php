@@ -112,6 +112,11 @@ PARA:
 						<label class="contact">Descuento: </label><input type="text" class="descuento-input" id="descuento" autocomplete="off" /><label class="contact">%</label>
 						<a href='javascript:;' onClick='agregarDescuentoMasivo()' class='boton_descuento'>Agregar</a>
 					</div>
+					<div class='div_descuento_ingreso'>
+						<label class="contact">Retención: </label>
+						<a href='javascript:;' onClick='habilitarRetencion()' class='boton_descuento'>Habilitar</a>
+						<a href='javascript:;' onClick='deshabilitarRetencion()' class='boton_descuento' style="background: #FF5400">Deshabilitar</a>
+					</div>
 				</fieldset>
 				<fieldset class="lista-articulos-bodega" id="contenido-bodega">
 					<legend>Lista de Artículos en Bodega</legend>

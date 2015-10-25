@@ -115,7 +115,10 @@ function manejarErrores(error){
 				break;
 		case '5':
 				notyMsg('¡No habían artículos que devolver!', 'error');
-				break;		
+				break;
+		case '6':
+				notyMsg('¡Estado de retención inválido!', 'error');
+				break;			
 	}	
 }
 
@@ -205,4 +208,62 @@ function retornarArticulos(){
 	});	
 }
 	
-	
+
+function habilitarRetencion(){
+		seleccionados = getSelectedCheckboxes();
+		if(seleccionados.length>0){
+			$.prompt("¡Esto habilitará la retención a todos los artículos seleccionados!", {
+					title: "¿Esta seguro que desea realizar esta operación?",
+					buttons: { "Si, estoy seguro": true, "Cancelar": false },
+					submit:function(e,v,m,f){
+											if(v){													
+													actualizarRetencion(convertirArray(seleccionados), 0);
+											}
+									}
+				});	
+		}else{
+			notyMsg('Debe seleccionar al menos un artículo', 'error');					
+		}
+}
+
+function deshabilitarRetencion(){
+		seleccionados = getSelectedCheckboxes();
+		if(seleccionados.length>0){
+			$.prompt("¡Esto deshabilitará la retención a todos los artículos seleccionados!", {
+					title: "¿Esta seguro que desea realizar esta operación?",
+					buttons: { "Si, estoy seguro": true, "Cancelar": false },
+					submit:function(e,v,m,f){
+											if(v){													
+													actualizarRetencion(convertirArray(seleccionados), 1);
+											}
+									}
+				});	
+		}else{
+			notyMsg('Debe seleccionar al menos un artículo', 'error');					
+		}
+}
+
+function actualizarRetencion(articulos, estado){
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/articulos/editar/actualizarRetencionMasivo',
+		type: "POST",		
+		async: false,
+		data: {'estado':estado, 'articulos':JSON.stringify(articulos), 'sucursal':$("#sucursalListaArticulos").val()},				
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				informacion = $.parseJSON('[' + data.trim() + ']');				
+				if(informacion[0].status==="error"){					
+					manejarErrores(informacion[0].error);
+				}else if(informacion[0].status==="success"){
+					$("#tabla_editar").dataTable().fnDraw();
+					notyMsg('¡Se actualizó la retención con éxito a los artículos seleccionados!', 'success');
+				}
+			}catch(e){
+				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{}
+	});	
+}
