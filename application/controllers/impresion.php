@@ -618,9 +618,9 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
+			$cantidadTotalArticulos = $this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
 			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('f', $fhead[0], $empresa[0], $pdf);
+			$this->pieDocumentoPDF('f', $fhead[0], $empresa[0], $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
 		}
 		//Imprimimos documento
@@ -647,9 +647,9 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
+			$cantidadTotalArticulos = $this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
 			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('p', $fhead[0], $empresa[0], $pdf);
+			$this->pieDocumentoPDF('p', $fhead[0], $empresa[0], $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
 		}
 		//Imprimimos documento
@@ -676,10 +676,12 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			//$this->printProducts($fbody, $inicio, $final-1, $pdf);
-			$this->printArticulosTraspaso($fbody, $inicio, $final-1, $pdf);
-			//Definimos el pie de pagina
-	//		$this->pieDocumentoPDF('p', $fhead[0], $empresa[0], $pdf);
+			$cantidadTotalArticulos = $this->printArticulosTraspaso($fbody, $inicio, $final-1, $pdf);
+			if($cantidadTotalArticulos != 0){
+					//Cantidad total de articulos
+					$pdf->SetXY(74, 240);
+					$pdf->Cell(20,5,"Cantidad Total de Artículos:      ".$cantidadTotalArticulos);
+			}
 			$this->numPagina++;
 		}
 		//Imprimimos documento
@@ -706,9 +708,9 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf);
+			$cantidadTotalArticulos = $this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf);
 			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('nc', $head, $empresa, $pdf);
+			$this->pieDocumentoPDF('nc', $head, $empresa, $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
 		}
 		//Imprimimos documento
@@ -735,9 +737,9 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$this->printProductsNotaDebito($productos, $inicio, $final-1, $pdf);
+			$cantidadTotalArticulos = $this->printProductsNotaDebito($productos, $inicio, $final-1, $pdf);
 			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('nd', $head, $empresa, $pdf);
+			$this->pieDocumentoPDF('nd', $head, $empresa, $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
 		}
 		//Imprimimos documento
@@ -787,7 +789,7 @@ class impresion extends CI_Controller {
 			//$pdf->Line(162, 88, 162, 95); //Sexto divisor vertical
 			
 			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('r', $recibo, $empresa, $pdf);
+			$this->pieDocumentoPDF('r', $recibo, $empresa, $pdf, 0);
 			
 			//Aumentamos la cantidad de paginas
 			$this->numPagina++;
@@ -1265,7 +1267,12 @@ class impresion extends CI_Controller {
 		}
 	}
 	
-	private function pieDocumentoPDF($tipo, $encabezado, $empresa, &$pdf){
+	private function pieDocumentoPDF($tipo, $encabezado, $empresa, &$pdf, $cantidadTotalArticulos){
+		if($cantidadTotalArticulos != 0){
+				//Cantidad total de articulos
+				$pdf->SetXY(74, 240);
+				$pdf->Cell(20,5,"Cantidad Total de Artículos:      ".$cantidadTotalArticulos);
+		}
 		switch($tipo){
 			case 'f':
 				//Parte de observaciones
@@ -1446,7 +1453,7 @@ class impresion extends CI_Controller {
 		$sl = 5; //Salto de linea
 		$pl = 79; //Primera linea
 		
-		
+		$cantidadTotalArticulos = 0;
 		for($cc = $inicio; $cc<=$fin; $cc++){
 			//Calculamos precio total con descuento
 			$total = $productos[$cc]->cantidad * ($productos[$cc]->precio - ($productos[$cc]->precio * ($productos[$cc]->descuento/100))); 
@@ -1467,14 +1474,9 @@ class impresion extends CI_Controller {
 			$pdf->ln($sl);
 			$pdf->SetX(110);
 			$pl += $sl;
+			$cantidadTotalArticulos += $productos[$cc]->cantidad;
 		}
-		
-		// MAXIMO 33 PRODUCTOS POR PAGINA
-		
-		/*for($cc = 0; $cc<33; $cc++){
-			$pdf->Text(11, $pl, $cc);
-			$pl += $sl;
-		}*/
+		return $cantidadTotalArticulos;
 	}
 	
 	private function printProductsNotaCredito($productos, $inicio, $fin, &$pdf){
@@ -1485,16 +1487,11 @@ class impresion extends CI_Controller {
 		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
 		//Divisores verticales de productos
 		$pdf->Line(10, 74, 200, 74);		
-		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
-		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
 		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
 		$pdf->Line(110, 67, 110, 240); //Divisor de descripcion y cantidad
 		$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
-		//$pdf->Line(131, 67, 131, 240); //Divisor de exento y descuento
 		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total		
-		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
-		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
+		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total	
 		//Encabezado de productos
 		$pdf->SetFont('Arial','',10);
 		$pdf->Text(13, 72, 'Código');
@@ -1510,7 +1507,7 @@ class impresion extends CI_Controller {
 		$sl = 5; //Salto de linea
 		$pl = 79; //Primera linea
 		
-		
+		$cantidadTotalArticulos = 0;
 		for($cc = $inicio; $cc<=$fin; $cc++){
 			//Calculamos la cantidad
 			$cantidad = $productos[$cc]->bueno + $productos[$cc]->defectuoso;
@@ -1527,14 +1524,9 @@ class impresion extends CI_Controller {
 			$pdf->ln($sl);
 			$pdf->SetX(110);
 			$pl += $sl;
+			$cantidadTotalArticulos += $cantidad;
 		}
-		
-		// MAXIMO 33 PRODUCTOS POR PAGINA
-		
-		/*for($cc = 0; $cc<33; $cc++){
-			$pdf->Text(11, $pl, $cc);
-			$pl += $sl;
-		}*/
+		return $cantidadTotalArticulos;
 	}
 	
 	private function printProductsNotaDebito($productos, $inicio, $fin, &$pdf){
@@ -1545,16 +1537,10 @@ class impresion extends CI_Controller {
 		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
 		//Divisores verticales de productos
 		$pdf->Line(10, 74, 200, 74);		
-		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
-		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
 		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
 		$pdf->Line(125, 67, 125, 240); //Divisor de descripcion y cantidad
-		//$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
-		//$pdf->Line(131, 67, 131, 240); //Divisor de exento y descuento
 		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total		
-		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
-		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
+		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total	
 		//Encabezado de productos
 		$pdf->SetFont('Arial','',10);
 		$pdf->Text(13, 72, 'Código');
@@ -1569,7 +1555,7 @@ class impresion extends CI_Controller {
 		$sl = 5; //Salto de linea
 		$pl = 79; //Primera linea
 		
-		
+		$cantidadTotalArticulos = 0;
 		for($cc = $inicio; $cc<=$fin; $cc++){
 			//Calculamos precio total con descuento
 			$total = $productos[$cc]->cantidad * $productos[$cc]->precio; 
@@ -1582,14 +1568,9 @@ class impresion extends CI_Controller {
 			$pdf->ln($sl);
 			$pdf->SetX(125);
 			$pl += $sl;
+			$cantidadTotalArticulos += $productos[$cc]->cantidad;
 		}
-		
-		// MAXIMO 33 PRODUCTOS POR PAGINA
-		
-		/*for($cc = 0; $cc<33; $cc++){
-			$pdf->Text(11, $pl, $cc);
-			$pl += $sl;
-		}*/
+		return $cantidadTotalArticulos;
 	}
 	
 	private function printArticulosTraspaso($productos, $inicio, $fin, &$pdf){
@@ -1600,16 +1581,8 @@ class impresion extends CI_Controller {
 		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
 		//Divisores verticales de productos
 		$pdf->Line(10, 74, 200, 74);		
-		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
-		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
 		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
-		//$pdf->Line(125, 67, 125, 240); //Divisor de descripcion y cantidad
-		//$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
-		//$pdf->Line(131, 67, 131, 240); //Divisor de exento y descuento
-		//$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total		
-		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
-		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
+		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total
 		//Encabezado de productos
 		$pdf->SetFont('Arial','',10);
 		$pdf->Text(13, 72, 'Código');
@@ -1622,10 +1595,9 @@ class impresion extends CI_Controller {
 		$sl = 5; //Salto de linea
 		$pl = 79; //Primera linea
 		
-		
+		$cantidadTotalArticulos = 0;
 		for($cc = $inicio; $cc<=$fin; $cc++){
 			//Calculamos precio total con descuento
-		//	$total = $productos[$cc]->cantidad * $productos[$cc]->precio; 
 			
 			$pdf->Text(11, $pl, $productos[$cc]->Codigo);
 			$pdf->Text(31, $pl, substr($productos[$cc]->Descripcion,0,33));
@@ -1635,14 +1607,9 @@ class impresion extends CI_Controller {
 			$pdf->ln($sl);
 			$pdf->SetX(125);
 			$pl += $sl;
+			$cantidadTotalArticulos += $productos[$cc]->Cantidad;
 		}
-		
-		// MAXIMO 33 PRODUCTOS POR PAGINA
-		
-		/*for($cc = 0; $cc<33; $cc++){
-			$pdf->Text(11, $pl, $cc);
-			$pl += $sl;
-		}*/
+		return $cantidadTotalArticulos;
 	}
 	
 	
