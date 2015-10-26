@@ -149,14 +149,14 @@ function validarMaxMinCantidad(id){
 	cantidad_validar = parseInt(cantidad_validar);	
 	cantidad_bodega = $("#bodega_articulo_"+id).html();
 	cantidad_bodega = parseInt(cantidad_bodega);
-	if(cantidad_validar<0){
-		$("#cantidad_articulo_"+id).val(0);
+	if(cantidad_validar<=0){
+		$("#cantidad_articulo_"+id).val(1);
 	}
 	else if(cantidad_validar>cantidad_bodega){
 		$("#cantidad_articulo_"+id).val(cantidad_bodega);
 	}
 	else if(!isNumber(cantidad_validar)){
-		$("#cantidad_articulo_"+id).val(0);
+		$("#cantidad_articulo_"+id).val(1);
 	}
 	else{
 		$("#cantidad_articulo_"+id).val(cantidad_validar);

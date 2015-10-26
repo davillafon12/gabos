@@ -1041,6 +1041,13 @@ var isCajaLoad = true;
 
 function cambiarCantidad(id, e, value){
 	if(isCajaLoad){
+		//No permitir valores en cero, si es asi ponerlos en uno
+		if(value == 0){
+			console.log(value+" "+id);
+			value = 1;
+			$("#"+id).val(value);
+			
+		}
 		manejarEventoCantidadArticulo(e, value, id);
 		//alert(id);
 		actualizaCostoTotalArticulo(id);
