@@ -143,7 +143,7 @@ function manejarErrores(error){
 			notyMsg('No URL tiene un formato inválido, por favor contacte al administrador', 'error');
 		break;
 		case '3':
-			notyMsg('No hay notas crédito con los filtros ingresados', 'warning');
+			notyMsg('No hay retiros parciales con los filtros ingresados', 'warning');
 			$("#facturas_filtradas").html('');
 		break;
 		case '4':
