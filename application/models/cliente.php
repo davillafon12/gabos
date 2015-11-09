@@ -524,8 +524,10 @@ Class cliente extends CI_Model
 				$this->db->where('Credito_Vendedor_Sucursal', $sucursal);
 				$sucursal = $this->cod_garotas;
 		}
+		$this->db->join("tb_07_factura","Credito_Factura_Consecutivo = Factura_Consecutivo");
 		$this->db->where('Credito_Cliente_Cedula', $cliente);
 		$this->db->where('Credito_Sucursal_Codigo', $sucursal);
+		$this->db->where('Factura_Estado', 'cobrada');
 		$this->db->where('Credito_Saldo_Actual !=', '0'); //Facturas con saldo 
 		$query = $this->db->get('tb_24_credito');	
 		if($query->num_rows()==0)
