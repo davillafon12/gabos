@@ -242,6 +242,8 @@ function setEncabezadoFactura(facturaHEAD){
 	$("#saldo_inicial").html(parseFloat(facturaHEAD[0].Saldo_inicial).format(2, 3, '.', ','));	
 	$("#saldo_actual").html(parseFloat(facturaHEAD[0].saldo).format(2, 3, '.', ','));
 	$("#monto_recibo").html(parseFloat(facturaHEAD[0].monto).format(2, 3, '.', ','));
+	
+	$("#comentarios").html(facturaHEAD[0].comentarios);
 }
 
 

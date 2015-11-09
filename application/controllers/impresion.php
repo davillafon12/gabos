@@ -758,7 +758,7 @@ class impresion extends CI_Controller {
 			$this->encabezadoDocumentoPDF('r', $empresa, $recibo, $pdf);
 			//Agregamos el cuerpo del recibo
 			//Caja redondeada 1
-			$pdf->RoundedRect(10, 67, 190, 28, 5, '124', 'D');
+			$pdf->RoundedRect(10, 67, 190, 28, 5, '12', 'D');
 			$pdf->SetFont('Arial','',11);
 			$pdf->Text(12, 72, 'Recibimos de: ');
 			$pdf->Text(42, 72, $recibo->cliente_cedula." - ".$recibo->cliente_nombre);
@@ -775,6 +775,12 @@ class impresion extends CI_Controller {
 			$pdf->Text(84, 93, $recibo->fecha_expedicion);
 			$pdf->Text(132, 93, 'Por el monto de ');
 			$pdf->Text(164, 93, $this->fn($recibo->Saldo_inicial));
+			
+			//Comentarios
+			$pdf->Text(12, 100, 'Comentarios: ');
+			$pdf->SetXY(12, 102);	
+			$pdf->SetFont('Arial','',8);
+			$pdf->MultiCell(118,3,$recibo->comentarios,0,'L');
 			
 			//Divisores
 			$pdf->Line(10, 74, 200, 74); //Primer divisor			

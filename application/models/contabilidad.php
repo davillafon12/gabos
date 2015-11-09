@@ -66,7 +66,7 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
-	function agregarRecibo($sucursal, $codigoCredito, $saldo, $montoPagado, $tipoPago){
+	function agregarRecibo($sucursal, $codigoCredito, $saldo, $montoPagado, $tipoPago, $comentarios){
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 		}
@@ -79,7 +79,8 @@ Class contabilidad extends CI_Model
 						'Recibo_Fecha' => $Current_datetime,
 						'Recibo_Saldo' => $saldo,
 						'Tipo_Pago' => $tipoPago,
-						'Credito' => $codigoCredito
+						'Credito' => $codigoCredito,
+						'Comentarios' => $comentarios
 						);
 		$this->db->insert('tb_26_recibos_dinero',$datos);
 		//return $this->db->insert_id();
@@ -141,7 +142,8 @@ Class contabilidad extends CI_Model
 					tb_07_factura.Factura_Moneda AS moneda,
 					tb_07_factura.Factura_Nombre_Cliente AS cliente_nombre,
 					tb_07_factura.TB_03_Cliente_Cliente_Cedula AS cliente_cedula,
-					tb_26_recibos_dinero.Credito AS c
+					tb_26_recibos_dinero.Credito AS c,
+					tb_26_recibos_dinero.Comentarios AS comentarios
 			FROM tb_26_recibos_dinero
 			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito
 			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo

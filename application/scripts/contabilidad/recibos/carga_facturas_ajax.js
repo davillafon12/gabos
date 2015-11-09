@@ -93,6 +93,7 @@ function resetFields(){
 	facturasMarcadas = [];
     facturasSaldar = [];
     facturasMarcadasEliminar = [];
+    $("#comentarios").val("");
 }
 
 function setUpLiveSearch(){	

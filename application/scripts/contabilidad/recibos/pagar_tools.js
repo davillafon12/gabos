@@ -62,7 +62,7 @@ function enviarCobro(cedula, saldo){
 		url : location.protocol+'//'+document.domain+'/contabilidad/recibos/saldarFacturas',
 		type: "POST",		
 		//async: false,
-		data: {'cedula':cedula, 'saldoAPagar':saldo, 'facturas':JSON.stringify(facturasSaldar), 'tipoPago':JSON.stringify(tipoPagoJSON())},				
+		data: {'cedula':cedula, 'saldoAPagar':saldo, 'facturas':JSON.stringify(facturasSaldar), 'tipoPago':JSON.stringify(tipoPagoJSON()), comentarios:$("#comentarios").val()},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{

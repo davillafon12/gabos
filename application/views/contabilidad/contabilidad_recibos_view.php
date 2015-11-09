@@ -181,6 +181,10 @@ PARA:
 					</div>
 				</div>
 				<hr class="division-contenido">
+				<div class="comentarios-container">
+						<p class="contact">Comentarios:</p>
+						<textarea class="comentarios-recibo" id="comentarios"></textarea>
+				</div>
 				<div class="footer_recibos">
 					<p class="titulo_saldo">Saldo a Pagar</p>
 					<input type="text" onclick="seleccionarSaldoInput()" onblur="formatearSaldoInput()" onkeyup="filtrarEventosInputSaldo(event)" class="input_saldo_pagar" id="saldo_a_pagar_input"><br>

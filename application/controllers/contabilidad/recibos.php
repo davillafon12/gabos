@@ -80,7 +80,7 @@ class recibos extends CI_Controller {
 	function saldarFacturas(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
-		if(isset($_POST['cedula'])&&isset($_POST['saldoAPagar'])&&isset($_POST['facturas'])&&isset($_POST['tipoPago'])){
+		if(isset($_POST['cedula'])&&isset($_POST['saldoAPagar'])&&isset($_POST['facturas'])&&isset($_POST['tipoPago'])&&isset($_POST['comentarios'])){
 			$cedula = $_POST['cedula'];
 			if($this->cliente->getClientes_Cedula($cedula)){
 				$saldoAPagar = $_POST['saldoAPagar'];
@@ -92,7 +92,8 @@ class recibos extends CI_Controller {
 					if($tipoPago['tipo']=='contado'||$tipoPago['tipo']=='tarjeta'||$tipoPago['tipo']=='deposito'){
 						//Estas facturas son los creditos realizados					
 						$facturas = json_decode($_POST['facturas'], true);
-						if($recibos = $this->procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago)){
+						$comentarios = trim($_POST['comentarios']);
+						if($recibos = $this->procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago, $comentarios)){
 							include '/../get_session_data.php';					
 							$retorno['status'] = 'success';
 							unset($retorno['error']);
@@ -119,7 +120,7 @@ class recibos extends CI_Controller {
 		echo json_encode($retorno);
 	}
 	
-	private function procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago){
+	private function procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago, $comentarios){
 		//Creamos un array que contendra las facturas que realmente existen
 		$facturasExistentes = array();
 		foreach($facturas as $factura){
@@ -158,7 +159,7 @@ class recibos extends CI_Controller {
 					$this->contabilidad->saldarFactura($codigoCredito, 0);
 					
 					//Agregar recibo
-					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, 0, $saldoActual, $tipoPago['tipo']);
+					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, 0, $saldoActual, $tipoPago['tipo'], $comentarios);
 					
 					//Agregamos tipo de pago
 					$this->guardarPago($tipoPago, $codigoRecibo, $codigoCredito);
@@ -174,7 +175,7 @@ class recibos extends CI_Controller {
 					$this->contabilidad->saldarFactura($codigoCredito, $saldoActual);
 					
 					//Agregar recibo
-					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, $saldoActual, $saldoALiquidar, $tipoPago['tipo']);
+					$codigoRecibo = $this->contabilidad->agregarRecibo($sucursal, $codigoCredito, $saldoActual, $saldoALiquidar, $tipoPago['tipo'], $comentarios);
 					
 					//Agregamos tipo de pago
 					$this->guardarPago($tipoPago, $codigoRecibo, $codigoCredito);

@@ -225,3 +225,13 @@
 	font-size: 14px;
 	display: inline-block;
 }
+
+.comentarios-recibo{
+		resize: none;
+    width: 400px;
+    height: 100px;
+}
+
+.comentarios-container{
+		    float: left;
+}

@@ -190,7 +190,16 @@ PARA:
 						<td><label class="contact" id="saldo_actual"></label></td>
 						<td><label class="contact">Monto: </label></td>
 						<td><label class="contact" id="monto_recibo"></label></td>
-					</tr>					
+					</tr>	
+					<tr>
+						<td>
+							<label class="contact">Comentarios:</label>
+						</td>
+					</tr>	
+					<tr>
+						<td colspan="8" id="comentarios" style="padding-left: 10px; font-size: 14px;">
+						</td>
+					</tr>				
 				</table>
 				
 			</div><!--CONTENEDOR-->
