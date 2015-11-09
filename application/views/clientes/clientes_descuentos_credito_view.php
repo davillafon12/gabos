@@ -110,7 +110,7 @@ PARA:
 								<p class="tiny-font">Descripción</p>
 							</th>
 							<th class="borde-abajo">
-								<p class="tiny-font">Descuento</p>
+								<p class="tiny-font">Precio</p>
 							</th>
 							<th class="borde-abajo">
 							</th>
@@ -146,7 +146,7 @@ PARA:
 								<p class="tiny-font">Descripción</p>
 							</th>
 							<th class="borde-abajo">
-								<p class="tiny-font">Descuento</p>
+								<p class="tiny-font">Porcentaje</p>
 							</th>
 							<th class="borde-abajo">
 							</th>

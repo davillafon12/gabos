@@ -370,6 +370,9 @@ Class articulo extends CI_Model
 			}
 			return $desClienteProducto;
 		}elseif($desClienteFamilia){  //Prioridad 2
+			if($desClienteFamilia == -1){
+					return 0;
+			}
 			if($desClienteFamilia<$descuento_producto){//Si el descuento del producto es mayor que al descuento de la familia con ese cliente
 				if(!$esSucursal){ //Si no es sucursal si ejecuta la condicion
 					return $descuento_producto;
@@ -416,7 +419,12 @@ Class articulo extends CI_Model
 			$result = $query->result();
 			foreach($result as $row)
 			{			
-				return $row->Descuento_familia_porcentaje;
+				//Si se seteo que el cliente tiene un descuento de cero con una familia, este descuento debe ser prioritario
+				//Si es cero se devuelve -1, para que en el metodo que valida descuento envie cero en lugar de seguir buscando descuentos
+				$descuento = $row->Descuento_familia_porcentaje == 0 ? -1 : $row->Descuento_familia_porcentaje;
+				return $descuento;
+				
+				//return $row->Descuento_familia_porcentaje;
 			}			
 		}else{return 0;}
 	}
@@ -448,11 +456,7 @@ Class articulo extends CI_Model
 		$query = $this -> db -> get();
 		if($query -> num_rows() != 0)
 		{
-			$result = $query->result();
-			foreach($result as $row)
-			{			
-				return $row->Descuento_producto_porcentaje;
-			}			
+			return $query->result()[0]->Descuento_producto_porcentaje;
 		}else{return 0;}
 	}
 	
