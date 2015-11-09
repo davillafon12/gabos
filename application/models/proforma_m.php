@@ -280,7 +280,10 @@ Class proforma_m extends CI_Model
 
 		if($query -> num_rows() != 0)
 		{
-		   return $query->result();
+				$articulosDescontados = $this->getProformaConArticulosDescontados($consecutivo, $sucursal) ? true : false;
+				$result = $query->result();
+				$result[0]->articulosDescontados = $articulosDescontados;
+		   	return $result;
 		}
 		else
 		{
@@ -474,6 +477,26 @@ Class proforma_m extends CI_Model
 					}
 					return $facturas;
 			}
+	}
+	
+	function getProformaConArticulosDescontados($proforma, $sucursal){
+			$this->db->from("TB_47_Descuento_Proforma");
+			$this->db->where("Sucursal", $sucursal);
+			$this->db->where("Proforma", $proforma);
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+					return false;
+			}else{
+					return $query->result();
+			}
+	}
+	
+	function marcarProformaConDescuentoProductos($proforma, $sucursal){
+			$datos = array(
+					"Proforma" => $proforma,
+					"Sucursal" => $sucursal
+			);
+			$this->db->insert("TB_47_Descuento_Proforma", $datos);
 	}
 	
 	

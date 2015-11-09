@@ -40,6 +40,10 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_proformas.css'); ?>">
 		<!--CARGA DEL SCRIPT DE HERRAMIENTAS-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/proformas_tools.js'); ?>"></script>
+		<!--JQUERY IMPROMPTU-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
+		<!--CSS ESTILO DEL MODAL-->
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<script>
 			var decimales = '<?php echo $this->configuracion->getDecimales();?>';
 		</script>
@@ -126,6 +130,7 @@ PARA:
 					<option value="c">A4</option>
 				</select>
 				<input type="button" class="boton_busqueda" onclick="imprimir()" value="Imprimir"/>
+				<input type="button" class="boton_busqueda" onclick="descontarArticulos()" value="Descontar Artículos" style="    background: #F5913B;"/>
 				<table id="tabla_productos" class="tabla_productos">
 					<thead>
 						<tr><th class="th_codigo">Código</th>

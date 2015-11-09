@@ -147,6 +147,58 @@ class proforma extends CI_Controller {
 		$costosArray = $this->proforma_m->getCostosTotalesProforma($consecutivo, $sucursal);
 		$this->proforma_m->updateCostosTotales($costosArray, $consecutivo, $sucursal);
 	}
+	
+	function descontarArticulosProforma(){
+			$retorno['status'] = 'error';
+			$retorno['error'] = 'No se pudo realizar el descuento de artículos.';
+			if(isset($_POST['consecutivo']) && trim($_POST['consecutivo']) != ""){
+					include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+					$consecutivo = trim($_POST['consecutivo']);
+					$sucursal = $data['Sucursal_Codigo'];
+					if($this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
+							if(!$this->proforma_m->getProformaConArticulosDescontados($consecutivo, $sucursal)){
+									if($articulos = $this->proforma_m->getArticulosProforma($consecutivo, $sucursal)){
+											if($this->valorarSiHayExistenciaDeProductos($articulos, $sucursal)){
+													foreach($articulos as $art){
+															$this->articulo->actualizarInventarioRESTA($art->Articulo_Proforma_Codigo, $art->Articulo_Proforma_Cantidad, $sucursal);
+													}
+													$this->proforma_m->marcarProformaConDescuentoProductos($consecutivo, $sucursal);
+													unset($retorno['error']);
+													$retorno['status'] = 'success'; 
+											}else{
+													$retorno['error'] = 'No hay suficiente existencia en inventario para realizar el descuento de artículos.';
+											}
+									}else{
+											$retorno['error'] = 'La proforma no posee artículos.';
+									}
+							}else{
+									$retorno['error'] = 'Los artículos de esta proforma ya fueron descontados.';
+							}
+					}else{
+							$retorno['error'] = 'La proforma no existe.';
+					}
+			}else{
+					$retorno['error'] = 'URL con formato indebido.';
+			}	
+			echo json_encode($retorno);
+	}
+	
+	function valorarSiHayExistenciaDeProductos($articulos, $sucursal){
+			foreach($articulos as $art){
+					if($art->Articulo_Proforma_Codigo != '00'){
+							if($articuloInventario = $this->articulo->get_Articulo($art->Articulo_Proforma_Codigo, $sucursal)){
+									$cantidadProforma = $art->Articulo_Proforma_Cantidad;
+									$cantidadInventario = $articuloInventario[0]->Articulo_Cantidad_Inventario;
+									if($cantidadProforma > $cantidadInventario){
+											return false;  //No hay suficiente en inventario
+									}
+							}else{
+									return false; //No existe codigo
+							}
+					}
+			}
+			return true;
+	}
 
 	
  

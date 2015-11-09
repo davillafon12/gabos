@@ -1188,6 +1188,12 @@ class impresion extends CI_Controller {
 				$pdf->Text(102, 42, 'Descripción');
 				$pdf->SetFont('Arial','',11);
 				$pdf->Text(102, 49, 'Moneda: '.$encabezado->moneda);
+				
+				//Preguntamos si los productos de esta factura ya fueron descontados de inventario
+				if($encabezado->articulosDescontados){
+						$pdf->Text(102, 54, '- - - ARTÍCULOS DESCONTADOS - - -');
+				}
+				
 				$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);				
 			break;
 			case 'r':

@@ -434,3 +434,44 @@ function imprimir(){
 	}
 }
 
+function descontarArticulos(){
+	consecutivo = $("#consecutivo").val();
+	if(consecutivo.trim()===''){
+		notyMsg('Debe ingresar un consecutivo válido', 'error');
+		return false;
+	}else if(consecutivo!=consecutivoActual){
+		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
+		return false;
+	}
+	$.prompt("¡Esto descontará los artículos del inventario!", {
+			title: "¿Esta seguro que desea descontar los artículos?",
+			buttons: { "Si, estoy seguro": true, "Cancelar": false },
+			submit:function(e,v,m,f){
+										if(v){
+													$.ajax({
+														url : location.protocol+'//'+document.domain+"/facturas/proforma/descontarArticulosProforma",
+														type: "POST",
+														data: {'consecutivo':consecutivo},		
+														success: function(data, textStatus, jqXHR)
+														{			
+															try{
+																dataR = $.parseJSON('[' + data.trim() + ']');
+																if(dataR[0].status==="error"){
+																		notyMsg(dataR[0].error, "error");
+																}else{
+																		notyMsg("Los Artículos fueron descontados del inventario con éxito.", "success");
+																}
+															}
+															catch(e){
+																	notyMsg("Error al mostrar resultado.", "error");
+															}			
+														},
+														error: function (jqXHR, textStatus, errorThrown)
+														{}
+													});				
+										}
+									}
+	});
+	
+}
+
