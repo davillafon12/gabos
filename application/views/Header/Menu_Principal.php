@@ -84,6 +84,12 @@
 						<li class='last'><a href=".$Ruta_Base."contabilidad/cierre/caja>Cierre de Caja</a></li>
 					</ul>
 				</li>	
+				<li><a href='#' class='dir'>Consignaciones</a>
+					<ul>
+						<li class='first'><a href='".$Ruta_Base."contabilidad/consignaciones/crear'>Crear</a></li>
+						<li class='last'><a href=".$Ruta_Base."contabilidad/consignaciones/facturar>Facturar</a></li>
+					</ul>
+				</li>	
 				<li class='last'><a href='".$Ruta_Base."contabilidad/consultaVenta'>Consulta de Ventas</a></li>
 			</ul>
 		</li>

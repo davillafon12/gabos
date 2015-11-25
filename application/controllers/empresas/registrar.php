@@ -7,6 +7,7 @@ class registrar extends CI_Controller {
     parent::__construct(); 
 	$this->load->model('user','',TRUE);
 	$this->load->model('empresa','',TRUE);
+	$this->load->model('cliente','',TRUE);
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -64,6 +65,7 @@ class registrar extends CI_Controller {
 	$direccion_empresa = $this->input->post('direccion');
 	$administrador_empresa = $this->input->post('administrador');
 	$leyenda_tributacion = $this->input->post('leyenda');
+	$cliente_liga = trim($this->input->post("cliente_liga_id"));
 	
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	
@@ -74,28 +76,16 @@ class registrar extends CI_Controller {
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	if($this->empresa->registrar($id_empresa, $nombre_empresa, $telefono_empresa, $observaciones_empresa, $direccion_empresa, $nombre, $administrador_empresa, $leyenda_tributacion, $cedula_empresa, $fax_empresa, $email_empresa))
 	{ //Si se ingreso bien a la BD
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la empresa ".mysql_real_escape_string($nombre_empresa)." codigo: ".$id_empresa,$data['Sucursal_Codigo'],'registro');
-
-		//Titulo de la pagina
-		/*$data['Titulo_Pagina'] = "Transacción Exitosa";
-	     
-		//$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la empresa ".mysql_real_escape_string($nombre_empresa)." codigo: ".$id_empresa,$data['Sucursal_Codigo'],'registro');
-	    $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso de la empresa ".$nombre_empresa." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
-		                         <div class='Informacion'>
-					             <form action=".base_url('empresas/editar').">
-				                 				
-								 <p class='titles'>Datos de la empresa:</p><br><hr>
-								 <p class='titles'>-Codigo:</p> <p class='content'>".$id_empresa.".</p><br>
-								 <p class='titles'>-Nombre:</p> <p class='content'>".$nombre_empresa.".</p><br>
-								 <p class='titles'>-Dirección:</p> <p class='content'>".$direccion_empresa.".</p><br>
-								 <p class='titles'>-Administrador(a):</p> <p class='content'>".$administrador_empresa.".</p><br>
-								 <p class='titles'>-Observaciones:</h3> </p><br><p class='content_ob'>
-								 ".$observaciones_empresa.".</p>
-								 <input class='buttom' tabindex='6' value='Aceptar' type='submit' >
-				                 </form>
-								 </div>";
-		$this->load->view('empresas/view_informacion_guardado', $data);*/
-		redirect('empresas/editar', 'location');
+			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la empresa ".mysql_real_escape_string($nombre_empresa)." codigo: ".$id_empresa,$data['Sucursal_Codigo'],'registro');
+			
+			if($cliente_liga != ""){
+				if($this->cliente->existe_Cliente($cliente_liga)){
+					//Guardamos la liga de la empresa con su cliente
+					$this->empresa->registrarClienteConEmpresaLiga($id_empresa, $cliente_liga);
+				}
+			}
+			
+			redirect('empresas/editar', 'location');
 	}
 	else
 	{ //Hubo un error  no se ingreso a la BD
@@ -111,7 +101,6 @@ class registrar extends CI_Controller {
 	
 	
  }
- 
  
  
  

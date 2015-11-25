@@ -11,6 +11,7 @@
 						'cierre_caja' => 'Crear Cierre de Caja',
 						'crear_factura' => 'Crear Factura',
 						'crear_proforma' => 'Crear Proforma',
+						'crear_consignaciones' => 'Crear Consignaciones',
 						'crear_retiros' => 'Retiros Parciales',
 						'entrar_notas' => 'Crear Notas Crédito',
 						'entrar_notas_d' => 'Crear Notas Débito',

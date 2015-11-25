@@ -168,6 +168,42 @@ Class empresa extends CI_Model
 	   
 	   return $data;  
     }
+    
+    function getClienteLigaByEmpresa($empresa){
+    		$this->db->where("Sucursal", $empresa);
+    		$this->db->from("tb_48_relacion_sucursal_cliente");
+    		$query = $this->db->get();
+    		if($query->num_rows() == 0){ 
+    				return false;
+    		}else{
+    				$this->load->model("cliente", "", true);
+    				$result = $query->result()[0];
+    				//Traemos la info del cliente
+    				$result->informacion = $this->cliente->getNombreCliente($result->Cliente);  
+    				return $result;
+    		}
+    }
+    
+    function registrarClienteConEmpresaLiga($empresa, $cliente){
+    		$datos = array("Cliente"=>$cliente, "Sucursal"=>$empresa);
+    		$this->db->insert("tb_48_relacion_sucursal_cliente", $datos);
+    }
+    
+    function actualizarLigaEmpresaCliente($empresa, $cliente){
+    		//Primero eliminamos cualquier relacion
+    		$this->eliminarLigaConCliente($empresa);
+    		
+    		//Verificamos si existe el cliente
+    		$this->load->model("cliente", "", true);
+    		if($this->cliente->existe_Cliente($cliente)){
+    				$this->registrarClienteConEmpresaLiga($empresa, $cliente);
+    		}
+    }
+    
+    function eliminarLigaConCliente($empresa){
+    		$this->db->where("Sucursal", $empresa);
+    		$this->db->delete("tb_48_relacion_sucursal_cliente");
+    }
 }
 
 

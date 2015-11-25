@@ -1492,6 +1492,84 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
+	function crearConsignacion($fecha_hora, $porcentaje_iva, $iva, $retencion, $costo, $total, $sucursal_recibe_exenta, $sucursal_recibe_no_retencion, $usuario, $sucursal_entrega, $sucursal_recibe, $sucursal_recibe_cliente){
+			$datos = array(
+										"Fecha_Hora" => $fecha_hora,
+										"Porcentaje_IVA" => $porcentaje_iva,
+										"IVA" => $iva,
+										"Retencion" => $retencion,
+										"Costo" => $costo,
+										"Total" => $total,
+										"Sucursal_Recibe_Exenta" => $sucursal_recibe_exenta,
+										"Sucursal_Recibe_No_retencion" => $sucursal_recibe_no_retencion,
+										"Usuario" => $usuario,
+										"Sucursal_Entrega" => $sucursal_entrega,
+										"Sucursal_Recibe" => $sucursal_recibe,
+										"Sucursal_Recibe_Cliente_Liga" => $sucursal_recibe_cliente
+								);	
+			$this->db->insert("tb_49_consignacion", $datos);
+			return $this->db->insert_id();
+	}
+	
+	function registrarArticuloConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $consignacion){
+			$datos = array(
+										"Codigo"=> $codigo,
+										"Descripcion" => $descripcion,
+										"Cantidad" => $cantidad,
+										"Descuento" => $descuento,
+										"Precio_Unidad" => $precio_unidad,
+										"Precio_Total" => $precio_total,
+										"Exento" => $exento,
+										"Retencion" => $retencion,
+										"Imagen" => $imagen,
+										"Consignacion" => $consignacion
+										);
+			$this->db->insert("tb_50_articulos_consignacion", $datos);
+	}
+	
+	function getConsignacionParaImpresion($codigo){
+			$this->db->select("
+				Id as consecutivo,
+				Costo as costo,
+				IVA as iva,
+				Retencion as retencion,
+				Total as total,
+				date_format(Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') AS fecha,
+				Usuario as usuario,
+				Sucursal_Entrega as sucursal_entrega,
+				Sucursal_Recibe as sucursal_recibe,
+				Sucursal_Recibe_Cliente_Liga as cliente
+			", false);
+			$this->db->from("tb_49_consignacion");
+			$this->db->where("Id", $codigo);
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+				return false;
+			}else{
+				return $query->result()[0];
+			}
+	}
+	
+	function getArticulosDeConsignacionParaImpresion($consignacion){
+			$this->db->select("
+				Codigo as codigo,
+				Descripcion as descripcion,
+				Cantidad as cantidad,
+				Descuento as descuento,
+				Precio_Unidad as precio,
+				Precio_Total as precio_total,
+				Exento as exento
+			");
+			$this->db->from("tb_50_articulos_consignacion");
+			$this->db->where("Consignacion", $consignacion);
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+				return false;
+			}else{
+				return $query->result();
+			}
+	}
+	
 }
 
 

@@ -216,16 +216,25 @@ class editar extends CI_Controller {
 	    foreach($result as $row)
 		{
 		    $data['Empresa_codigo'] = $id_request;
-			$data['Empresa_Cedula'] = $row -> Sucursal_Cedula;
-			$data['Empresa_nombre'] = $row -> Sucursal_Nombre;
-			$data['Empresa_Telefono'] = $row -> Sucursal_Telefono;
-			$data['Empresa_Fax'] = $row -> Sucursal_Fax;
-			$data['Empresa_Email'] = $row -> Sucursal_Email;
-			$data['Empresa_Direccion'] = $row -> Sucursal_Direccion;
-			$data['Empresa_Administrador']=$row-> Sucursal_Administrador;
-			$data['Empresa_Tributacion']=$row-> Sucursal_leyenda_tributacion;
-			$data['Empresa_Observaciones'] = $row -> Sucursal_Observaciones;
-			//echo $data['Empresa_Observaciones'];
+				$data['Empresa_Cedula'] = $row -> Sucursal_Cedula;
+				$data['Empresa_nombre'] = $row -> Sucursal_Nombre;
+				$data['Empresa_Telefono'] = $row -> Sucursal_Telefono;
+				$data['Empresa_Fax'] = $row -> Sucursal_Fax;
+				$data['Empresa_Email'] = $row -> Sucursal_Email;
+				$data['Empresa_Direccion'] = $row -> Sucursal_Direccion;
+				$data['Empresa_Administrador']=$row-> Sucursal_Administrador;
+				$data['Empresa_Tributacion']=$row-> Sucursal_leyenda_tributacion;
+				$data['Empresa_Observaciones'] = $row -> Sucursal_Observaciones;
+				
+				$ligaCliente = $this->empresa->getClienteLigaByEmpresa($id_request);
+				
+				if($ligaCliente){
+					$data['Empresa_Cliente_Nombre'] = $ligaCliente->informacion['nombre'];
+					$data['Empresa_Cliente_Id'] = $ligaCliente->Cliente;
+				}else{
+					$data['Empresa_Cliente_Nombre'] = "";
+					$data['Empresa_Cliente_Id'] = "";
+				}
 		}
 		$this->load->view('empresas/edicion_view_empresas', $data);
 	}
@@ -254,6 +263,10 @@ class editar extends CI_Controller {
 	$administrador_empresa = $this->input->post('administrador');
 	$observaciones_empresa = $this->input->post('observaciones');
 	$leyenda_tributacion = $this->input->post('leyenda');
+	
+	$liga_cliente_nombre = trim($this->input->post("cliente_asociado"));
+	$liga_cliente = $liga_cliente_nombre != "" ? trim($this->input->post('cliente_liga_id')) : "";
+	
 		
 	$data_update['Sucursal_Cedula'] = mysql_real_escape_string($cedula_empresa);
 	$data_update['Sucursal_Nombre'] = mysql_real_escape_string($nombre_empresa);
@@ -265,10 +278,11 @@ class editar extends CI_Controller {
 	$data_update['Sucursal_Observaciones'] = mysql_real_escape_string($observaciones_empresa);
 	$data_update['Sucursal_leyenda_tributacion'] = mysql_real_escape_string($leyenda_tributacion);
 	
-	//echo $id_empresa;
-	//echo $nombre_empresa;
-	
 	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
+	
+	
+	$this->empresa->actualizarLigaEmpresaCliente($id_empresa, $liga_cliente);
+	
 	
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".mysql_real_escape_string($id_empresa),$data['Sucursal_Codigo'],'edicion');

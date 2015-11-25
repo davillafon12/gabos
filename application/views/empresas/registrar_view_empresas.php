@@ -31,7 +31,13 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/empresas/style_registrar.css'); ?>">
 		
 		<?php include '/../../scripts/ajax_verify_empresa_id.php';?>
-		
+		<!--CARGA DEL JQUERY-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script>
+		<!--CARGA DEL JQUERYUI-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.js'); ?>"></script>
+		<!--CSS ESTILO DEL JQUERYUI-->
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/empresas/buscarCliente.js'); ?>"></script>
 		
 	</head>
 	<body >
@@ -102,6 +108,11 @@ PARA:
 					<td>
 						<p class="contact"><label for="direccion">Dirección:</label></p> 
 						<input id="direccion" autocomplete="off" name="direccion" placeholder="Dirección de la empresa"  tabindex="6" type="text" > 
+					</td>
+					<td>
+						<p class="contact"><label for="cliente_asociado">Cliente Asociado:</label></p> 
+						<input id="cliente_asociado" autocomplete="off" name="cliente_asociado" placeholder="Seleccione Cliente"  tabindex="6" type="text"/> 
+						<input type="hidden" name="cliente_liga_id" id="cliente_liga_id"/>
 					</td>
 				</tr>				
 				<tr>

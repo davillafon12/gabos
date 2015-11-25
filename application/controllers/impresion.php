@@ -20,6 +20,7 @@ class impresion extends CI_Controller {
 		$this->load->model('contabilidad','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
 		$this->load->model('banco','',TRUE);
+		$this->load->model('cliente','',TRUE);
 		include 'get_session_data.php'; //Esto es para traer la informacion de la sesion
 		//Generamos el token de seguridad, el cual debe coincidir con el token de llegada
 		$this->tokenSeguridad = md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
@@ -590,6 +591,28 @@ class impresion extends CI_Controller {
 					}
 				}
 			break;
+			case 'con':
+				if(isset($_GET['n'])&&isset($_GET['s'])){
+						$sucursal = $_GET['s'];
+						$consecutivo = $_GET['n'];
+						if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+								if($consignacion = $this->contabilidad->getConsignacionParaImpresion($consecutivo)){
+										$consignacion->sucursal_entrega = $consignacion->sucursal_entrega." - ".$this->empresa->getNombreEmpresa($consignacion->sucursal_entrega);
+										$consignacion->sucursal_recibe = $consignacion->sucursal_recibe." - ".$this->empresa->getNombreEmpresa($consignacion->sucursal_recibe);
+										$consignacion->moneda = "colones";
+										$consignacion->cliente = $consignacion->cliente." - ".$this->cliente->getNombreCliente($consignacion->cliente)['nombre'];
+										$consignacion->usuario = $this->user->getUsuario_Codigo($consignacion->usuario)[0];
+										$consignacion->usuario = $consignacion->usuario->Usuario_Nombre." ".$consignacion->usuario->Usuario_Apellidos;
+										if($articulos = $this->contabilidad->getArticulosDeConsignacionParaImpresion($consignacion->consecutivo)){
+												//print_r($empresa);
+												//print_r($consignacion);
+												//print_r($articulos);
+												$this->consignacionPDF($empresa, $consignacion, $articulos);
+										}
+								}
+						}
+				}
+			break;
 			default:
 				$this->retorno['error'] = '5';
 			break;
@@ -1059,6 +1082,36 @@ class impresion extends CI_Controller {
 		$pdf->Output();
 	}
 	
+	private function consignacionPDF($empresa, $head, $body){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		
+		$cantidadProductos = sizeOf($body);
+		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		$this->cantidadPaginas = $paginasADibujar + 1;
+		
+		while($paginasADibujar>=$this->numPagina){
+			//Agregamos pag		
+			$pdf->AddPage();			
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('con', $empresa[0], $head, $pdf);
+			//Agregamos Productos
+			$inicio = $this->numPagina*33;
+			if((($this->numPagina+1)*33)<$cantidadProductos){
+				$final = ($this->numPagina+1)*33;
+			}else{
+				$final = $cantidadProductos;
+			}
+			
+			$cantidadTotalArticulos = $this->printProducts($body, $inicio, $final-1, $pdf, $head);
+			//Definimos el pie de pagina
+			$this->pieDocumentoPDF('con', $head, $empresa[0], $pdf, $cantidadTotalArticulos);
+			$this->numPagina++;
+		}
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
 	private function encabezadoDocumentoPDF($tipo, $empresa, $encabezado, &$pdf){
 		//var_dump($empresa);
 		$pdf->SetFont('Arial','B',14);
@@ -1276,6 +1329,43 @@ class impresion extends CI_Controller {
 				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
 								
 			break;
+			case 'con':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Consignación #'.$encabezado->consecutivo);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha);
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(172, 16, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
+				
+				//Info del cliente
+				$pdf->SetFont('Arial','B',11);
+				$pdf->Text(12, 41.5, 'Sucursal que entrega');
+				$pdf->Text(12, 52.5, 'Sucursal que recibe');
+				$pdf->SetFont('Arial','',10);
+				$pdf->Text(12, 47, $encabezado->sucursal_entrega);
+				$pdf->Text(12, 58, $encabezado->sucursal_recibe);
+				$pdf->SetXY(11, 50);
+				//$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
+				//Caja redondeada 1
+				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
+				//Divisores				
+				//$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
+				$pdf->Line(100, 37, 100, 60); //Centro caja
+				$pdf->Line(10, 43, 200, 43); //Borde debajo sucursal que entrega y descripcion
+				$pdf->Line(10, 49, 200, 49); //Borde debajo sucursal que entrega
+				$pdf->Line(10, 54, 200, 54); //Borde debajo sucursal que entrega
+				//Info de la factura
+				$pdf->SetFont('Arial','B',11);
+				$pdf->Text(102, 41.5, 'Cliente Utilizado Por Sucursal que Recibe');
+				$pdf->Text(102, 52.5, 'Usuario que realizó la consignación');
+				$pdf->SetFont('Arial','',10);
+				$pdf->Text(102, 47, substr($encabezado->cliente, 0,49));
+				$pdf->Text(102, 58, $encabezado->usuario);
+				
+			break;
 		}
 	}
 	
@@ -1395,6 +1485,30 @@ class impresion extends CI_Controller {
 				$pdf->Cell(42,7,'Saldo Actual:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->saldo),1,0,'R');
 			break;
+			case 'con':
+				//Leyenda de tributacion
+				$pdf->SetFont('Arial','',8);
+				$pdf->SetXY(10, 270);	
+				$pdf->MultiCell(190,3, "ESTE DOCUMENTO NO TIENE LA VALIDEZ DE UNA FACTURA",0,'C');
+				//Costos totales
+				$subtotal = $encabezado->costo;
+				$totalIVA = $encabezado->iva;
+				$total = $encabezado->total;
+				$retencion = $encabezado->retencion;
+				$pdf->SetFont('Arial','',11);
+				$pdf->SetXY(131, 240);	
+				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
+				$pdf->SetXY(131, 247);	
+				$pdf->Cell(41,7,'IVA:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
+				$pdf->SetXY(131, 254);	
+				$pdf->Cell(41,7,'Retención:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($retencion),1,0,'R');
+				$pdf->SetXY(131, 261);	
+				$pdf->Cell(41,7,'Total:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
+			break;	
 		}		
 	}
 	

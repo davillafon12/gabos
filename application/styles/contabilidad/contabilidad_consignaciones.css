@@ -1,0 +1,215 @@
+.tabla_productos{	
+	width: 99%;
+	margin: auto;
+	margin-top: 10px;
+	border-collapse: collapse; 
+    text-align: left;
+	font: normal 12px/150% Arial, Helvetica, sans-serif; 
+	background: #fff; 
+	overflow: hidden; 
+	border: 1px solid #8C8C8C; 
+	-webkit-border-radius: 5px;
+	 -moz-border-radius: 5px; 
+	 border-radius: 5px;
+}
+
+.tabla_productos  td, .tabla_productos  th { 
+	padding: 3px 10px; 
+}
+
+.tabla_productos  thead th {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #999999), color-stop(1, #DBDBDB) );
+	background:-moz-linear-gradient( center top, #999999 5%, #DBDBDB 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#DBDBDB');
+	background-color:#999999; 
+	color:#000000; 
+	font-size: 14px; 
+	font-weight: bold; 
+	border-left: 1px solid #A3A3A3; 
+}
+ 
+.tabla_productos  thead th:first-child { border: none; }
+ 
+.tabla_productos  tbody td {
+	color: #7D7D7D; 
+	border-left: 1px solid #DBDBDB;
+	font-size: 12px;
+	font-weight: normal; 
+}
+
+.tabla_productos  tbody .alt td { 
+	background: #EBEBEB; 
+	color: #7D7D7D; 
+}
+
+.tabla_productos  tbody td:first-child { border-left: none; }
+
+.tabla_productos  tbody tr:last-child td { border-bottom: none; }
+
+.th_codigo {width: 100px;}
+.th_bodega {width: 50px;}
+.th_cantidad {width: 50px;}
+
+.input_codigo_articulo{
+	width: 100%; 
+	box-sizing: border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing: border-box;
+	z-index:2;
+}
+
+.articulo_specs, .precio_articulo{
+	color: #000; 
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica;
+}
+
+.tooltip_imagen_articulo{
+	display: none;
+	position: absolute;
+	z-index: 2;
+	margin-top: -10px;
+	margin-left: 30px;
+}
+
+.cantidad_articulo{
+	width: 100%; 
+	box-sizing: border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing: border-box;
+	text-align: center;
+	color: #000; 
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica;
+}
+
+.th_precio{
+	    width: 110px;
+	    text-align:center;	
+}
+
+.contact {
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: Arial, Helvetica;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.contact-2{
+		color: #000;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: Arial, Helvetica;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 10px;
+}
+
+.input_uno {
+    width: 250px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(51, 51, 51, 0.15);
+    font-family: Keffeesatz, Arial;
+    color: #4b4b4b;
+    font-size: 14px;
+    -webkit-border-radius: 5px;
+    padding-left: 2px;
+}
+
+.input_dos {
+    width: 100px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(51, 51, 51, 0.15);
+    font-family: Keffeesatz, Arial;
+    color: #4b4b4b;
+    font-size: 14px;
+    -webkit-border-radius: 5px;
+    padding-left: 2px;
+}
+
+.tabla-info{
+	    margin-left: 5px;
+}
+
+.tabla_costos {
+    float: right;
+}
+
+.factura_wrapper {
+    width: 98%;
+    margin: 0 auto;
+    border: 1px #c9c9c9 solid;
+    margin-bottom: 10px;
+    background-color: #f0f0f0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 0px 0px 7px 0px #888888;
+    -webkit-box-shadow: 0px 0px 7px 0px #888888;
+    box-shadow: 0px 0px 7px 0px #888888;
+    overflow: hidden;
+}
+
+.tipo_moneda_display {
+    float: left;
+    font-family: Keffeesatz, Arial;
+    color: #4b4b4b;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.cant_total_articulos_div {
+    margin-left: 10px;
+}
+
+.cant_total_articulos_p {
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: Arial, Helvetica;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    display: inline;
+}
+
+.boton_act_all {
+    margin-left: 5px;
+    margin-bottom: 5px;
+    background: #59B659;
+    display: inline-block;
+    padding: 5px 10px 6px;
+    color: #fbf7f7;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 1;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px #999;
+    -webkit-box-shadow: 0 1px 3px #999;
+    box-shadow: 0 1px 3px #999;
+    text-shadow: 0 -1px 1px #222;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+.boton_act_all:hover {
+	background-color: #199A19;
+}
+
+.boton_act_all:active {
+	position:relative;
+	top:1px;
+}
+
+.botones_final {
+    width: 98%;
+    margin: 0 auto;
+    text-align: right;
+}
