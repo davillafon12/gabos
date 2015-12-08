@@ -52,6 +52,8 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/marca_seleccion_articulos.js'); ?>"></script>
 		<!--ENVIO DE NOTA-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/envio_nota_credito.js'); ?>"></script>
+		<!--NUMERIC-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>"></script>
 	</head>
 	<body onload="cambiarEstiloBotones()">
 		<!--Incluir imagen de cabezera-->
@@ -196,7 +198,29 @@ PARA:
 					
 				</div><!-- div_botones_acciones -->
 				<hr class="divisor_footer">
-				<div class="footer_notas">					
+				<div class="footer_notas">	
+					<div class="contenedor-producto-generico" style="    width: 600px; display: inline-block;     float: left;     text-align: left;">
+						<label class="contact">Artículo Genérico:</label>
+						<table  class="titulo_header_tabla" style="text-align:left;">
+							<tr>
+								<td>
+									Descripción:
+								</td>
+								<td>
+									<input type="text" id="descripcion_articulo_generico" class="input_uno" style="width: 400px;"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Precio:
+								</td>
+								<td>
+									<input type="text" id="precio_articulo_generico" class="input_uno" style="width: 100px;"/>
+								</td>
+							</tr>
+						</table>
+						<button class="boton-articulo-generico" id="boton_agregar_articulo_generico">Agregar</button>
+					</div>				
 					<button class="boton_generar" id="boton_generar" onclick="enviarNotaCredito()">Generar Nota</button>
 				</div>
 			</div><!-- contenedor -->			

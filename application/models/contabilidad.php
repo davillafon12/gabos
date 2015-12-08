@@ -1570,6 +1570,48 @@ Class contabilidad extends CI_Model
 			}
 	}
 	
+	function getArticuloEnListaConsignacion($codigo, $sucursalEntrega, $sucursalRecibe, $precio_unitario){
+			$this->db->where("Codigo", $codigo);
+			$this->db->where("Sucursal_Entrega", $sucursalEntrega);
+			$this->db->where("Sucursal_Recibe", $sucursalRecibe);
+			$this->db->where("Precio_Unidad", $precio_unitario);
+			$this->db->from("tb_51_lista_consignacion");
+			$query = $this->db->get();
+			if($query->num_rows() == 0){
+					return false;
+			}else{
+					return $query->result()[0];
+			}
+	}
+	
+	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe){
+			$datos = array(
+										"Codigo"=> $codigo,
+										"Descripcion" => $descripcion,
+										"Cantidad" => $cantidad,
+										"Descuento" => $descuento,
+										"Precio_Unidad" => $precio_unidad,
+										"Precio_Total" => $precio_total,
+										"Exento" => $exento,
+										"Retencion" => $retencion,
+										"Imagen" => $imagen,
+										"Sucursal_Entrega" => $sucursalEntrega,
+										"Sucursal_Recibe" => $sucursalRecibe
+										);
+			$this->db->insert("tb_51_lista_consignacion", $datos);
+	}
+	
+	function actualizarArticuloEnListaConsignacion($codigo, $nuevaCantidad, $precio_unidad, $sucursalEntrega, $sucursalRecibe){
+			$datos = array(
+										"Cantidad" => $nuevaCantidad
+										);
+			$this->db->where("Codigo", $codigo);
+			$this->db->where("Precio_Unidad", $precio_unidad);
+			$this->db->where("Sucursal_Entrega", $sucursalEntrega);
+			$this->db->where("Sucursal_Recibe", $sucursalRecibe);
+			$this->db->update("tb_51_lista_consignacion", $datos);
+	}
+	
 }
 
 

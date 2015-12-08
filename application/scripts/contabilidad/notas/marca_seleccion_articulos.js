@@ -1,6 +1,31 @@
 var productosMarcados = [];
 var productosCreditar = [];
 var productosMarcadosEliminar = [];
+var contadorArticuloGenerico = 10000000; //Nuemro alto para que nunca llegue a ese punto
+
+$(document).ready(function(){
+	$("#precio_articulo_generico").numeric();
+	$("#boton_agregar_articulo_generico").on('click', function(event){
+			var descripcion = $("#descripcion_articulo_generico").val().trim();
+			var precio = $("#precio_articulo_generico").val().trim();
+			if(validarCedulaNombre()){
+				if(descripcion !== "" && precio !== ""){
+					if($.isNumeric(precio)){
+							var cantProductosSeleccionados = parseInt($('#tabla_productos tr').length - 1) + parseInt($('#tabla_productos_seleccionados tr').length - 1);
+					
+							var html = "<tr class='bordes_tabla' onclick='marcarArticulo("+cantProductosSeleccionados+")' id='producto_row_"+cantProductosSeleccionados+"'><td class='celdas_tabla'><p class='contact' id='codigo_producto_"+cantProductosSeleccionados+"'>00</p></td><td class='celdas_tabla'><p class='contact' id='descripcion_"+cantProductosSeleccionados+"'>"+descripcion+"</p><input id='precio_"+cantProductosSeleccionados+"' type='hidden' value='"+precio+"'/></td><td class='celdas_tabla'><p class='contact' id='p_cantidad_original_"+cantProductosSeleccionados+"'>100</p></td></tr>";
+							$("#tbody_productos").append(html);
+					}else{
+							notyMsg('¡El precio tiene un formato incorrecto!', 'error');
+					}
+				}else{
+						notyMsg('¡La descripción y/o precio no pueden ser vacíos!', 'error');
+				}
+			}
+		
+			
+	});
+});
 
 function marcarArticulo(id){
 	//alert(id);
@@ -84,19 +109,21 @@ function eliminarProductosSeleccion(){
 	for(i = productosMarcadosEliminar.length - 1; i >= 0; i--) {
 		//Obtenemos los parrafos de la fila
 		parrafos = $("#producto_a_creditar_"+productosMarcadosEliminar[i]+" td");
-		//alert(parrafos.length);
+		
 		//Creamos una cadena para crear la fila con los parrafos, esto para agregar el onclick solo a estos td
 		fila_nueva = '';
 		for(j = 0; j < parrafos.length && j<3; j++){ //Seleccione los primeros tres
 			fila_nueva = fila_nueva+"<td class='celdas_tabla'>"+parrafos[j].innerHTML+"</td>";			
 		}
 		$("#tbody_productos").append("<tr class='bordes_tabla' onclick='marcarArticulo("+productosMarcadosEliminar[i]+")' id='producto_row_"+productosMarcadosEliminar[i]+"'>"+fila_nueva+"</tr>");
+		
 		//Eliminamos la factura a facturas por saldar
 		for(j = productosCreditar.length - 1; j >= 0; j--) {
 			if(productosCreditar[j] === productosMarcadosEliminar[i]) {
 			   productosCreditar.splice(j, 1);
 			}
 		}		
+		
 	}
 	//Eliminamos los productos del segundo cuadro
 	eliminarProductosMarcadosEliminar();

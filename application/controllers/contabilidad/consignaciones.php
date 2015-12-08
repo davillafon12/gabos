@@ -231,6 +231,14 @@ class consignaciones extends CI_Controller {
 					$articuloDeSucursalEntrega = $this->articulo->existe_Articulo($art->codigo,$sucursalEntrega);
 					$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
 					$this->contabilidad->registrarArticuloConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $consignacion);
+			
+					// Agregamos el articulo a la lista de conignaciones
+					if($larticulo = $this->contabilidad->getArticuloEnListaConsignacion($art->codigo, $sucursalEntrega, $sucursalRecibe, $art->precio_unidad)){
+							$nuevaCantidad = $larticulo->Cantidad + $art->cantidad;
+							$this->contabilidad->actualizarArticuloEnListaConsignacion($art->codigo, $nuevaCantidad, $art->precio_unidad, $sucursalEntrega, $sucursalRecibe);
+					}else{
+							$this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe);
+					}
 			}
 	}
 	
@@ -278,6 +286,14 @@ class consignaciones extends CI_Controller {
 																	$precio3, 
 																	$precio4, 
 																	$precio5);
+	}
+	
+	
+	/*
+	* Esta funcion agrega el articulo a la lista que se cargara en el momento de facturar consignaciones
+	*/
+	private function ponerArticuloEnListaDeConsignacion(){
+	
 	}
 }
 
