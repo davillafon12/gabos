@@ -253,7 +253,7 @@ class notas extends CI_Controller {
 	
 	private function existeProductosAcreditar($productos, $sucursal){
 		foreach($productos as $producto){
-			if(!$this->articulo->existe_Articulo($producto->c,$sucursal)){return false;}
+			if(!$this->articulo->existe_Articulo($producto->c,$sucursal) && trim($producto->c) != "00"){return false;}
 		}
 		return true;
 	}

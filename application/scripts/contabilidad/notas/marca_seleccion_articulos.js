@@ -15,6 +15,8 @@ $(document).ready(function(){
 					
 							var html = "<tr class='bordes_tabla' onclick='marcarArticulo("+cantProductosSeleccionados+")' id='producto_row_"+cantProductosSeleccionados+"'><td class='celdas_tabla'><p class='contact' id='codigo_producto_"+cantProductosSeleccionados+"'>00</p></td><td class='celdas_tabla'><p class='contact' id='descripcion_"+cantProductosSeleccionados+"'>"+descripcion+"</p><input id='precio_"+cantProductosSeleccionados+"' type='hidden' value='"+precio+"'/></td><td class='celdas_tabla'><p class='contact' id='p_cantidad_original_"+cantProductosSeleccionados+"'>100</p></td></tr>";
 							$("#tbody_productos").append(html);
+							$("#descripcion_articulo_generico").val("");
+							$("#precio_articulo_generico").val("");
 					}else{
 							notyMsg('¡El precio tiene un formato incorrecto!', 'error');
 					}

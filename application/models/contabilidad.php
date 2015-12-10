@@ -240,13 +240,22 @@ Class contabilidad extends CI_Model
 		// esto porque puede que al cliente se le vendio con descuento 
 		
 		foreach($productos as $producto){
-			//Agregamos los datos a un arrya para ser agregado a la bd
+			$descripcion = ""; 
+			$precio = ""; 
+			if(trim($producto->c) == "00"){
+				$descripcion = trim($producto->ds);
+				$precio = trim($producto->p);
+			}else{
+				$descripcion = $this->articulo->getArticuloDescripcion($producto->c, $sucursal);
+				$precio = $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c);
+			}
+			//Agregamos los datos a un array para ser agregado a la bd
 			$pro = array(
 						'Codigo' => $producto->c,
-						'Descripcion' => $this->articulo->getArticuloDescripcion($producto->c, $sucursal),
+						'Descripcion' => $descripcion,
 						'Cantidad_Bueno' => $producto->b,
 						'Cantidad_Defectuoso' => $producto->d,
-						'Precio_Unitario' => $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c),
+						'Precio_Unitario' => $precio,
 						'Nota_Credito_Consecutivo' => $consecutivo,
 						'Sucursal' => $sucursal
 						);
