@@ -23,7 +23,8 @@ function actualizarCantidadProductoInventario(cantidad, codigo, num_row)
 		cantidad=document.getElementById("cantidad_articulo_"+num_row).value;
 		//alert();
 	}
-	if(codigo=='00'){} //Si es generico no lo valora
+	var cedula = $("#cedula").val().trim();
+	if(codigo=='00' || cedula === "2"){} //Si es generico no lo valora
 	else{
 		/*antes = document.getElementById("cantidad_articulo_anterior_"+num_row).value;
 		//alert("Antes: "+antes+" Despues: "+cantidad);

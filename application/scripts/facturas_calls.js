@@ -76,62 +76,73 @@ function getNombreCliente(str){
 					$("#nombre").val('No existe cliente!!!');
 					disableArticulosInputs();
 				}else if(result[0].status==="success"){	
-				//SI EXISTE EL CLIENTE
-					clienteEsDeTipoSucursal = result[0].sucursal;
-					clienteEsDeTipoExento = result[0].exento;
-					clienteNoAplicaRetencion = result[0].retencion;
-					switch(result[0].estado.trim()){ //Segun el estado del cliente debemos reportarlo
-						case 'activo':						
-							if(result[0].descuento){
-								isCallByDescuento = true;
-								//$("#nombre").val('');
-								//$("#cedula").val('');
-								$('#pop_up_administrador').bPopup({
-									modalClose: false
-								});
-								notyConTipo('¡Este cliente tiene descuento y necesita autorización!', 'warning');
-								document.getElementById("pop_usuario").select();
-								numeroPopUp='5';
-								infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
-								cedulaPostAuto = str; //Se guarda la info para ser utilizada despues
-							}else{
-								$("#nombre").val(result[0].nombre);
-								enableArticulosInputs();
-								actualizaPreciosArticulos(str);
-								clienteCanBuy = true;
-							}
-							break;
-							
-							
-						case 'semiactivo':
-							//alert(result[0].descuento);
-							if(result[0].descuento){ //Si el cliente tiene descuento pide autorizacion
-								isCallByDescuento = true;
-								$('#pop_up_administrador').bPopup({
-									modalClose: false
-								});
-								notyConTipo('¡Este cliente tiene descuento y necesita autorización!', 'warning');
-								document.getElementById("pop_usuario").select();
-								numeroPopUp='5';
-								infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
-								cedulaPostAuto = str; //Se guarda la info para ser utilizada despues								
-							}else{
-								$("#nombre").val(result[0].nombre);
-								enableArticulosInputs();
-								actualizaPreciosArticulos(str);
-								notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'error');
-								clienteCanBuy = true;
-							}
-							break;
-							
-							
-						case 'inactivo':
-							$("#nombre").val('');
-							disableArticulosInputs();
-							notyConTipo('¡Este cliente esta inactivo, contacte un administrador para poder activarlo!','error');
-							clienteCanBuy = false;
-							break;
-					}									
+					if(str.trim() === "2"){
+						$('#pop_up_administrador').bPopup({
+							modalClose: false
+						});
+						notyConTipo('¡Este cliente requiere de autorización!', 'warning');
+						document.getElementById("pop_usuario").select();
+						numeroPopUp='5';
+						infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
+						cedulaPostAuto = str; //Se guarda la info para ser utilizada despues
+					}else{
+							//SI EXISTE EL CLIENTE
+							clienteEsDeTipoSucursal = result[0].sucursal;
+							clienteEsDeTipoExento = result[0].exento;
+							clienteNoAplicaRetencion = result[0].retencion;
+							switch(result[0].estado.trim()){ //Segun el estado del cliente debemos reportarlo
+								case 'activo':						
+									if(result[0].descuento){
+										isCallByDescuento = true;
+										//$("#nombre").val('');
+										//$("#cedula").val('');
+										$('#pop_up_administrador').bPopup({
+											modalClose: false
+										});
+										notyConTipo('¡Este cliente tiene descuento y necesita autorización!', 'warning');
+										document.getElementById("pop_usuario").select();
+										numeroPopUp='5';
+										infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
+										cedulaPostAuto = str; //Se guarda la info para ser utilizada despues
+									}else{
+										$("#nombre").val(result[0].nombre);
+										enableArticulosInputs();
+										actualizaPreciosArticulos(str);
+										clienteCanBuy = true;
+									}
+									break;
+									
+									
+								case 'semiactivo':
+									//alert(result[0].descuento);
+									if(result[0].descuento){ //Si el cliente tiene descuento pide autorizacion
+										isCallByDescuento = true;
+										$('#pop_up_administrador').bPopup({
+											modalClose: false
+										});
+										notyConTipo('¡Este cliente tiene descuento y necesita autorización!', 'warning');
+										document.getElementById("pop_usuario").select();
+										numeroPopUp='5';
+										infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
+										cedulaPostAuto = str; //Se guarda la info para ser utilizada despues								
+									}else{
+										$("#nombre").val(result[0].nombre);
+										enableArticulosInputs();
+										actualizaPreciosArticulos(str);
+										notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'error');
+										clienteCanBuy = true;
+									}
+									break;
+									
+									
+								case 'inactivo':
+									$("#nombre").val('');
+									disableArticulosInputs();
+									notyConTipo('¡Este cliente esta inactivo, contacte un administrador para poder activarlo!','error');
+									clienteCanBuy = false;
+									break;
+						}	
+					}							
 				}
 			}catch(e){
 				notyConTipo('¡La respuesta tiene un formato indebido, contacte al administrador!','error');

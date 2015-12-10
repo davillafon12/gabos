@@ -101,7 +101,7 @@ class editar extends CI_Controller {
 						{
 							echo "<div class='estado_De'>DESACTIVADO</div><br>"; 
 						}                        
-                        if($row->Cliente_Cedula!=0&&$row->Cliente_Cedula!=1){
+                        if($row->Cliente_Cedula!="0"&&$row->Cliente_Cedula!="1"&&$row->Cliente_Cedula!="2"){
 		                    echo
 		                    "</td>
 							<td >

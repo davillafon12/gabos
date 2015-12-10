@@ -338,7 +338,8 @@ Class articulo extends CI_Model
 				
 				$articulo['codigo'] = $codigo;
 				$articulo['descripcion'] = $row->Articulo_Descripcion;
-				$articulo['inventario'] = $row->Articulo_Cantidad_Inventario;
+				//Si es cliente defectuoso
+				$articulo['inventario'] = trim($cedula) == "2" ? $row->Articulo_Cantidad_Defectuoso : $row->Articulo_Cantidad_Inventario;
 				$articulo['descuento'] = $descuento;
 				$articulo['familia'] = $row->TB_05_Familia_Familia_Codigo;
 				$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
