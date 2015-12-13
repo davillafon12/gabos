@@ -2300,7 +2300,7 @@ CREATE TABLE IF NOT EXISTS `TB_13_Cheque` (
   `TB_07_Factura_Factura_Vendedor_Sucursal` INT NOT NULL,
   `TB_07_Factura_TB_03_Cliente_Cliente_Cedula` VARCHAR(50) NOT NULL
 )
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;;
 
 -- --------------------------------------------------------
 
@@ -3779,7 +3779,7 @@ ALTER TABLE `tb_38_moneda_cierre_caja`
 -- Indices de la tabla `tb_39_configuracion`
 --
 ALTER TABLE `tb_39_configuracion`
- ADD PRIMARY KEY (`Parametro`), ADD FULLTEXT KEY `Parametro` (`Parametro`);
+ ADD PRIMARY KEY (`Parametro`), ADD KEY `Parametro` (`Parametro`);
 
 --
 -- Indices de la tabla `tb_40_apartado`
@@ -4283,12 +4283,12 @@ CREATE TABLE IF NOT EXISTS `TB_47_Descuento_Proforma` (
     REFERENCES `TB_02_Sucursal` (`Codigo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `tb_26_recibos_dinero` ADD `Comentarios` VARCHAR(1000) NOT NULL AFTER `Tipo_Pago`;
 
 CREATE TABLE IF NOT EXISTS `TB_48_Relacion_Sucursal_Cliente` (
-  `Id` INT NOT NULL,
+  `Id` INT NOT NULL AUTO_INCREMENT,
   `Sucursal` INT NOT NULL,
   `Cliente` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`Id`),
@@ -4304,9 +4304,7 @@ CREATE TABLE IF NOT EXISTS `TB_48_Relacion_Sucursal_Cliente` (
     REFERENCES `TB_03_Cliente` (`Cliente_Cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-ALTER TABLE `tb_48_relacion_sucursal_cliente` CHANGE `Id` `Id` INT(11) NOT NULL AUTO_INCREMENT;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `TB_49_Consignacion` (
   `Id` INT NOT NULL AUTO_INCREMENT,
@@ -4341,7 +4339,7 @@ CREATE TABLE IF NOT EXISTS `TB_49_Consignacion` (
     REFERENCES `TB_02_Sucursal` (`Codigo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `TB_50_Articulos_Consignacion` (
   `Id` INT NOT NULL AUTO_INCREMENT,
@@ -4362,4 +4360,4 @@ CREATE TABLE IF NOT EXISTS `TB_50_Articulos_Consignacion` (
     REFERENCES `TB_49_Consignacion` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
