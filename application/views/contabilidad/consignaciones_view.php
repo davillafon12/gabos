@@ -147,6 +147,7 @@ PARA:
 									<td>
 										<div class='precio_articulo' id='articulo_precio_total_muestra_".$numero_id."'></div>
 										<input id='articulo_precio_total_".$numero_id."' type='hidden'/>
+										<input id='articulo_precio_total_sin_descuento_".$numero_id."' type='hidden'/>
 									</td>
 								</tr>";
 							}					

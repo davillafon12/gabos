@@ -209,7 +209,8 @@ function setProductosFactura(productos){
 				+"<input id='costo_unidad_articulo_FINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precioFinal+"'>"
 				+"<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'>"
 				+"<input id='producto_retencion_"+(i+1)+"' type='hidden' value='"+productos[i].retencion+"'>";
-		cell7.innerHTML = "<div class='articulo_specs' id='costo_total_articulo_"+(i+1)+"'></div>";
+		cell7.innerHTML = "<div class='articulo_specs' id='costo_total_articulo_"+(i+1)+"'></div>"
+						  +"<input type='hidden' id='costo_total_articulo_sin_descuento_"+(i+1)+"'/>";
 		
 		
 		//Agregamos las demas funciones de cada row

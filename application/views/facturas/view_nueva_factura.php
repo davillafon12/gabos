@@ -211,6 +211,7 @@ PARA:
 						</td>
 						<td>
 							<div class='articulo_specs' id='costo_total_articulo_".$numero_id."'></div>
+							<input type='hidden' id='costo_total_articulo_sin_descuento_".$numero_id."'/>
 						</td>
 					</tr>";
 				}

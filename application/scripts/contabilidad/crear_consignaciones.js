@@ -349,6 +349,7 @@ function resetFila(fila, resetCodigo){
 		$("#articulo_precio_unidad_final_"+fila).val("");
 		$("#articulo_precio_total_muestra_"+fila).html("");
 		$("#articulo_precio_total_"+fila).val("");
+		$("#articulo_precio_total_sin_descuento_"+fila).val("");
 		$("#exento_articulo_"+fila).val("");
 		$("#retencion_articulo_"+fila).val("");
 		actualizarPrecioTotalFila(fila);
@@ -366,10 +367,12 @@ function actualizarPrecioTotalFila(fila){
 		var montoDeDescuento = precioUnidad * descuento;
 		
 		var precioTotal = cantidad * precioUnidad;
+		var precioTotalSinDescuento = precioTotal;
 				precioTotal -= montoDeDescuento;
 		
 		$("#articulo_precio_total_muestra_"+fila).html(precioTotal.format(_CANTIDAD_DECIMALES, 3, '.', ','));
 		$("#articulo_precio_total_"+fila).val(precioTotal);
+		$("#articulo_precio_total_sin_descuento_"+fila).val(precioTotalSinDescuento);
 		actualizarTotales();
 }
 
@@ -377,6 +380,7 @@ function actualizarTotales(){
 		var montoSinIVA = 0.0;
 		var iva = 0.0;
 		var total = 0.0;
+		var ivaSinDescuento = 0.0;
 		var retencion = 0.0;
 		
 		var cantidadFilas = $("#tabla_productos tr").length - 1;
@@ -384,6 +388,7 @@ function actualizarTotales(){
 		
 		for(var i=1; i <= cantidadFilas; i++){
 				var precioTotalArticulo = $("#articulo_precio_total_"+i).val().trim() === "" ? 0.0 : parseFloat($("#articulo_precio_total_"+i).val());
+				var precioTotalArticuloSinDescuento = $("#articulo_precio_total_sin_descuento_"+i).val().trim() === "" ? 0.0 : parseFloat($("#articulo_precio_total_sin_descuento_"+i).val());
 				total += precioTotalArticulo;
 				cantidadArticulos += parseInt($("#cantidad_articulo_"+i).val().trim() === "" ? 0 : $("#cantidad_articulo_"+i).val().trim());
 				
@@ -393,8 +398,10 @@ function actualizarTotales(){
 						
 				if(!isExento){
 						iva += precioTotalArticulo - (precioTotalArticulo / ( 1 + (_PORCENTAJE_IVA / 100)));
+						ivaSinDescuento += precioTotalArticuloSinDescuento - (precioTotalArticuloSinDescuento / ( 1 + (_PORCENTAJE_IVA / 100)));
 						//Si no es exento quiere decir que puede o no aplicar retencion
 						if(aplicaRetencion){
+								
 								//Obtenemos el precio por unidad del cliente final
 								var precioUnidadClienteFinal = $("#articulo_precio_unidad_final_"+i).val().trim() === "" ? 0.0 : parseFloat($("#articulo_precio_unidad_final_"+i).val().trim());
 								//Obtenemos la cantidad de articulos
@@ -403,7 +410,7 @@ function actualizarTotales(){
 								//Obtenemos el costo final
 								var precioTotalClienteFinalDeArticulo = precioUnidadClienteFinal * cantidad;
 								var ivaArticuloClienteFinal = precioTotalClienteFinalDeArticulo - (precioTotalClienteFinalDeArticulo / ( 1 + (_PORCENTAJE_IVA / 100)));
-								retencion += ivaArticuloClienteFinal - iva;
+								retencion += ivaArticuloClienteFinal - ivaSinDescuento;
 						}
 				}
 		}
@@ -478,6 +485,7 @@ function agregarFila(siguienteFila){
 											+"<td>"
 												+"<div class='precio_articulo' id='articulo_precio_total_muestra_"+siguienteFila+"'></div>"
 												+"<input id='articulo_precio_total_"+siguienteFila+"' type='hidden'/>"
+												+"<input id='articulo_precio_total_sin_descuento_"+siguienteFila+"' type='hidden'/>"
 											+"</td>"
 										+"</tr>";
 		$("#cuerpo_tabla_articulos").append(filaHTML);

@@ -79,8 +79,7 @@ class consignaciones extends CI_Controller {
 			//Si cliente no aplica retencion mandar ese
 			//Si cliente aplica retencion, enviar la retencion del articulo
 			$clienteInfo = $this->cliente->getNombreCliente($cliente);
-			if($clienteInfo['retencion'] == '1'){ return '1';}
-			else{ return $retencionDelArticulo;}
+			return $clienteInfo['retencion'] == '1' ? '1' : $retencionDelArticulo;
 	}
 	
 	function getExentoReal($cliente, $exentoDelArticulo){
