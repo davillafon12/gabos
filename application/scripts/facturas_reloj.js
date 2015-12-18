@@ -59,7 +59,7 @@ function CheckIdleTime() {
 }
 
 function LogOut(){
-		window.onbeforeunload = null; //Eliminamos el evento de salida
-		resetAll();
-		document.location.href = location.protocol+'//'+document.domain+'/home/logout';
+		//window.onbeforeunload = null; //Eliminamos el evento de salida
+		//resetAll();
+		//document.location.href = location.protocol+'//'+document.domain+'/home/logout';
 }	

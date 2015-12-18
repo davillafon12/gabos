@@ -185,7 +185,36 @@ var codigoFacturaTemporal = -1;
 var tokenFacturaTemporal = -1;
 
 function setFacturaTemporal(){
-	url = '/facturas/nueva/crearFacturaTemporal';
+	$.ajax({
+		url : location.protocol+'//'+document.domain+'/facturas/nueva/crearFacturaTemporal',
+		type: "GET",
+		async: false,		
+		success: function(data, textStatus, jqXHR)
+		{
+				if(datosFacturaTemporal.indexOf('fals') != -1){
+					$('#error_crear_factura_popup').bPopup({
+						modalClose: false
+					});
+					//Deshabilitamos la entrada de teclas
+					$('html').bind('keypress', function(e)
+					{
+					   return false;
+					});
+				}
+				else{
+					if(codigoFacturaTemporal==-1&&tokenFacturaTemporal==-1){
+						arrayFacturaTemporal = datosFacturaTemporal.split('|');
+						codigoFacturaTemporal = arrayFacturaTemporal[0].trim();
+						tokenFacturaTemporal = arrayFacturaTemporal[1];
+					}
+				}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+	 
+		}
+	});
+	/*url = '/facturas/nueva/crearFacturaTemporal';
 	datosFacturaTemporal = getandmakeCall(url);
 	if(datosFacturaTemporal.indexOf('fals') != -1){
 		$('#error_crear_factura_popup').bPopup({
@@ -203,7 +232,7 @@ function setFacturaTemporal(){
 			codigoFacturaTemporal = arrayFacturaTemporal[0].trim();
 			tokenFacturaTemporal = arrayFacturaTemporal[1];
 		}
-	}
+	}*/
 }
 
 function agregarArticuloFactura(datosArticulo)
