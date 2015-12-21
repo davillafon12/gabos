@@ -644,7 +644,7 @@ class caja extends CI_Controller {
 					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
-					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 2, $sucursal);
+					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
 					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
 				}
 			}
