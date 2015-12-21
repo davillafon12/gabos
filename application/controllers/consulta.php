@@ -644,8 +644,8 @@ class consulta extends CI_Controller {
 	}
 	
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){
-		$total = 0;
-		if($facturas = $this->contabilidad->getFacturasContadoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+		$total = 0;                                                              //         INICIO               FINAL
+		if($facturas = $this->contabilidad->getFacturasContadoPorRangoFecha($sucursal,  date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($facturas as $factura){
 				$total += $factura->Factura_Monto_Total;
 			}
@@ -675,7 +675,7 @@ class consulta extends CI_Controller {
 		$total = 0;
 		$subtotal = 0;
 		$total_iva = 0;
-		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal,  date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($notas as $nota){
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $sucursal)){
 					foreach($notaCreditoBody as $art){

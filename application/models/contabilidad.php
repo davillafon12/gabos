@@ -927,6 +927,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
 		$this->db->where('Factura_Tipo_Pago','contado');
+		
 		$query = $this->db->get();		
 		if($query->num_rows()==0)
 		{

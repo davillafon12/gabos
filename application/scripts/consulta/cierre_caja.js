@@ -402,7 +402,7 @@ function cargarTotales(datos){
 	totalRetiroFinal = parseFloat(datos.cierre.conteo)
 	datos = datos.datos;
 	totalRetiros = parseFloat(datos.totalRecibosParciales);
-	totalEfectivo = baseCaja + totalRetiros + totalRetiros;
+	totalEfectivo = totalRetiros + totalRetiros;
 	$("#totales_factura_contado").html("₡"+parseFloat(datos.totalFacturasContado).format(2, 3, '.', ','));
 	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
 	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos).format(2, 3, '.', ','));
