@@ -326,6 +326,32 @@ PARA:
 					<tr>
 						<td colspan="2">
 							<table class="tabla-costos-totales">
+								<tr><td colspan="7"><p class="titulo-2">Notas Crédito</p></td></tr>
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Contado</p></td>
+									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
+									<td class="borde-abajo"><p class="parrafo">Cheque</p></td>
+									<td class="borde-abajo"><p class="parrafo">Depósito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Mixto</p></td>
+									<td class="borde-abajo"><p class="parrafo">Crédito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Apartado</p></td>
+								</tr>
+								<tr>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($detalleNotasCredito['contado'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($detalleNotasCredito['tarjeta'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($detalleNotasCredito['cheque'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($detalleNotasCredito['deposito'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($detalleNotasCredito['mixto'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($detalleNotasCredito['credito'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($detalleNotasCredito['apartado'],2,",",".");?></p></td>
+								</tr>	
+							</table>
+						</td>						
+					</tr>
+					<tr><td colspan="2"><hr></td></tr>
+					<tr>
+						<td colspan="2">
+							<table class="tabla-costos-totales">
 								<tr><td colspan="7"><p class="titulo-2">Otros Totales</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Facturas de Contado</p></td>

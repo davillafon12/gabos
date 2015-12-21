@@ -351,6 +351,32 @@ PARA:
 					<tr>
 						<td colspan="2">
 							<table class="tabla-costos-totales">
+								<tr><td colspan="7"><p class="titulo-2">Notas Crédito</p></td></tr>
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Contado</p></td>
+									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
+									<td class="borde-abajo"><p class="parrafo">Cheque</p></td>
+									<td class="borde-abajo"><p class="parrafo">Depósito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Mixto</p></td>
+									<td class="borde-abajo"><p class="parrafo">Crédito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Apartado</p></td>
+								</tr>
+								<tr>
+									<td class=''><p class='parrafo' id="nota_credito_contado">₡0</p></td>
+									<td class=''><p class='parrafo' id="nota_credito_tarjeta">₡0</p></td>
+									<td class=''><p class='parrafo' id="nota_credito_cheque">₡0</p></td>
+									<td class=''><p class='parrafo' id="nota_credito_deposito">₡0</p></td>
+									<td class=''><p class='parrafo' id="nota_credito_mixto">₡0</p></td>
+									<td class=''><p class='parrafo' id="nota_credito_credito">₡0</p></td>
+									<td class=''><p class='parrafo' id="nota_credito_apartado">₡0</p></td>
+								</tr>	
+							</table>
+						</td>						
+					</tr>
+					<tr><td colspan="2"><hr></td></tr>
+					<tr>
+						<td colspan="2">
+							<table class="tabla-costos-totales">
 								<tr><td colspan="7"><p class="titulo-2">Otros Totales</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Facturas de Contado</p></td>

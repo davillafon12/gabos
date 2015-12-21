@@ -275,6 +275,17 @@ function setEncabezadoFactura(cab){
 	cargarRecibosDinero(cab.datos.recibos);
 	cargarTotales(cab);
 	cargarVendedores(cab.datos.vendedores);
+	cargarDetalleNotasCredito(cab.datos.detalleNotasCredito);
+}
+
+function cargarDetalleNotasCredito(detalle){
+	$("#nota_credito_contado").html("₡"+parseFloat(detalle.contado).format(2, 3, '.', ','));
+	$("#nota_credito_tarjeta").html("₡"+parseFloat(detalle.tarjeta).format(2, 3, '.', ','));
+	$("#nota_credito_cheque").html("₡"+parseFloat(detalle.cheque).format(2, 3, '.', ','));
+	$("#nota_credito_credito").html("₡"+parseFloat(detalle.credito).format(2, 3, '.', ','));
+	$("#nota_credito_deposito").html("₡"+parseFloat(detalle.deposito).format(2, 3, '.', ','));
+	$("#nota_credito_mixto").html("₡"+parseFloat(detalle.mixto).format(2, 3, '.', ','));
+	$("#nota_credito_apartado").html("₡"+parseFloat(detalle.apartado).format(2, 3, '.', ','));
 }
 
 function cargarRetiros(datos){
@@ -393,7 +404,8 @@ function cargarRecibosDinero(recibos){
 	$("#recibo_contado").html("₡"+parseFloat(recibos.efectivo).format(2, 3, '.', ','));
 	$("#recibo_tarjeta").html("₡"+parseFloat(recibos.tarjeta).format(2, 3, '.', ','));
 	$("#recibo_deposito").html("₡"+parseFloat(recibos.deposito).format(2, 3, '.', ','));
-	$("#recibo_abono").html("₡"+parseFloat(recibos.abonos).format(2, 3, '.', ','));
+	var abonos = $.isNumeric(recibos.abonos) ? parseFloat(recibos.abonos).format(2, 3, '.', ',') : "0.00";
+	$("#recibo_abono").html("₡"+abonos);
 	$("#total_recibos_dinero").html("₡"+parseFloat(recibos.total).format(2, 3, '.', ','));
 }
 

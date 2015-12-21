@@ -468,6 +468,9 @@ class consulta extends CI_Controller {
 					
 					$datos['totalNotasCredito'] = $this->obtenerTotalesNotasCredito($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
+					$datos['detalleNotasCredito'] = $this->contabilidad->getInfoGeneralNotaCreditoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaCierreAnterior), $fechaCierre);
+
+					
 					$datos['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
 					$datos['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($sucursal, $fechaCierre, $fechaCierreAnterior);

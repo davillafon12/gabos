@@ -907,6 +907,81 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
+	function getInfoGeneralNotaCreditoPorRangoFecha($sucursal, $inicio, $final){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+				$notas_credito_desampa = $this->getNotasCreditoDesampa();
+				if(!empty($notas_credito_desampa)){
+						$this->db->where_in("tb_27_notas_credito.Consecutivo", $notas_credito_desampa);
+				}
+		}elseif($this->trueque && $sucursal == $this->cod_garotas){
+				$notas_credito_desampa = $this->getNotasCreditoDesampa();
+				if(!empty($notas_credito_desampa)){
+						$this->db->where_not_in("tb_27_notas_credito.Consecutivo", $notas_credito_desampa);
+				}
+		}
+		$this->db->select('tb_27_notas_credito.Consecutivo, tb_27_notas_credito.Sucursal, tb_07_factura.Factura_Tipo_Pago as Tipo');
+		$this->db->from('TB_27_Notas_Credito');
+		$this->db->join('tb_07_factura', 'tb_07_factura.Factura_Consecutivo = tb_27_notas_credito.Factura_Aplicar');
+		$this->db->where('TB_27_Notas_Credito.Sucursal', $sucursal);
+		$this->db->where('TB_27_Notas_Credito.Fecha_Creacion >', $inicio);
+		$this->db->where('TB_27_Notas_Credito.Fecha_Creacion <', $final);
+		$query = $this->db->get();	
+		// SELECT tb_27_notas_credito.Consecutivo, tb_27_notas_credito.Sucursal, tb_07_factura.Factura_Tipo_Pago as Factura 
+		// FROM tb_27_notas_credito 
+		// JOIN tb_07_factura on tb_07_factura.Factura_Consecutivo = tb_27_notas_credito.Factura_Aplicar 
+		// WHERE tb_07_factura.TB_02_Sucursal_Codigo = tb_27_notas_credito.Sucursal
+		$contado = 0;
+		$tarjeta = 0;
+		$cheque = 0;
+		$deposito = 0;
+		$mixto = 0;
+		$credito = 0;
+		$apartado = 0;
+		$totalNotas = 0;
+		
+		if($query->num_rows()!=0){
+			$this->load->model("contabilidad", "", true);
+			foreach($query->result() as $nota){
+			
+				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $nota->Sucursal)){
+					$total = 0;
+					foreach($notaCreditoBody as $art){
+						$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));					
+					}
+					$totalNotas += $total;
+					switch($nota->Tipo){
+						case 'contado':
+							$contado += $total;
+						break;
+						case 'tarjeta':
+							$tarjeta += $total;
+						break;
+						case 'cheque':
+							$cheque += $total;
+						break;
+						case 'deposito':
+							$deposito += $total;
+						break;
+						case 'mixto':
+							$mixto += $total;
+						break;
+						case 'credito':
+							$credito += $total;
+						break;
+						case 'apartado':
+							$apartado += $total;
+						break;
+					}
+				}
+			}
+		}
+		
+		return array("contado"=>$contado, "tarjeta"=>$tarjeta, "cheque"=>$cheque, "deposito"=>$deposito, "mixto"=>$mixto, "credito"=>$credito, "apartado"=>$apartado, "total"=>$totalNotas);
+	
+		
+	}
+	
 	function getFacturasContadoPorRangoFecha($sucursal, $inicio, $final){
 		$this->load->model("factura", "", true);
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
