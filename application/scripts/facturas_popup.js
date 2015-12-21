@@ -199,6 +199,11 @@ function clickAceptar_Admin(event){
 				modalClose: false
 			});	
 		}
+		else if(numeroPopUp=='4'){ //Si es descuento
+			event.stopPropagation();
+			event.preventDefault();
+			makeFacturaEditable();
+		}
 		//document.getElementById("pop_descripcion").select();
 		//rowIDpopup = rowID;
 	}
@@ -235,6 +240,9 @@ function checkAdminLog(){
 }
 
 function changeDiscount(row_num){
+	if (typeof seCambioFactura !== 'undefined') {
+	    if(!seCambioFactura){return false;}
+	}
 	//alert(row_num);
 	$('#pop_up_administrador').bPopup({
 		modalClose: false

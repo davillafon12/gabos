@@ -366,7 +366,7 @@ function cambiarFactura(URL){
 						}
 				}
 				catch(e){
-					notyError('¡No se pudo actaulizar la factura, contacte al administrador!');
+					notyError('¡No se pudo actualizar la factura, contacte al administrador!');
 				}
 		},
 		error: function (jqXHR, textStatus, errorThrown)
@@ -498,10 +498,24 @@ function editarFactura(){
 function makeFacturaEditable(){  // FALTA VALIDAR seCambioFactura en dos metodos
 	if(consecutivoActual===0){return false;} //Si no se ha ingresado una factura
 	else{
-		$.prompt("¡Esto habilitará los cambios en la factura!", {
+		seCambioFactura = true;
+		$('#cedula').attr("disabled", false);
+		$('#nombre').attr("disabled", false);
+		$('#tipo_moneda').attr("disabled", false);
+		enableArticulosInputs();
+		enableArticulosCantidades();
+		enableArticulosArrows();
+		$("#observaciones").attr("disabled", false);
+		window.onbeforeunload=advertenciaSalida;
+		window.onunload=deshacerFacturaCaja;
+		
+		//Agregar boton de guardar
+		$("#boton_guardar_editar").css('display','inline-block');
+		/*$.prompt("¡Esto habilitará los cambios en la factura!", {
 				title: "¿Esta seguro que desea editar esta factura?",
 				buttons: { "Si, estoy seguro": true, "Cancelar": false },
 				submit:function(e,v,m,f){
+											console.log("ENTRO");
 											if(v){												
 												seCambioFactura = true;
 												$('#cedula').attr("disabled", false);
@@ -520,8 +534,9 @@ function makeFacturaEditable(){  // FALTA VALIDAR seCambioFactura en dos metodos
 												
 												
 											}
+											$.prompt.close();
 										}
-			});
+			});*/
 	}	
 }
 
@@ -531,7 +546,7 @@ function actualizarFactura(){
 								actualizarYCobrar = false;
 								cambiarFactura('/facturas/caja/cambiarFactura');
 						}else{
-								notyError('¡La edición d ela factura debe estar habilitada!');
+								notyError('¡La edición de la factura debe estar habilitada!');
 						}																																																																																																																														
 				}	
 }
