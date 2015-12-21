@@ -12,6 +12,7 @@ class agregarComprasSucursal extends CI_Controller {
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('familia','',TRUE);
 		$this->load->model('contabilidad','',TRUE);
+		$this->load->model('configuracion','',TRUE);
 	}
 
 	function index()
@@ -74,10 +75,16 @@ class agregarComprasSucursal extends CI_Controller {
 								
 								$traspaso = $this->contabilidad->crearTraspasoArticulos($this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $data['Usuario_Codigo'], $fecha, $factura);
 								
+								//Traemos el array de configuracion para obtener el porcentaje
+								$c_array = $this->getConfgArray();
+								
 								foreach($productos as $pro){
 									$costo = $pro->Articulo_Factura_Precio_Unitario;
 									$descuento = $pro->Articulo_Factura_Descuento;
-									$costo -= $costo * ( $descuento / 100 ); 
+									//Aplicamos descuento
+									$costo -= $costo * ( $descuento / 100 );
+									//Le quitamos el iva 
+									$costo /= 1+(floatval($c_array['iva'])/100);
 									$this->bodega_m->agregarCompra($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Descripcion, $costo, $pro->Articulo_Factura_Cantidad, $fecha, $data['Usuario_Codigo'], $sucursal);
 									$this->agregarAInventario($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Cantidad, $pro->Articulo_Factura_Descripcion, $costo, $this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $traspaso, $prefijo);
 								}
@@ -168,7 +175,10 @@ class agregarComprasSucursal extends CI_Controller {
 	}
 	
 	
-	
+	function getConfgArray()
+	{
+		return $this->configuracion->getConfiguracionArray();
+	}
 	
 }
 
