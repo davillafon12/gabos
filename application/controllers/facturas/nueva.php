@@ -226,13 +226,13 @@ class nueva extends CI_Controller {
 	
 	function checkUSR(){
 		$usuario=$_GET['user'];
-		$contraseña=$_GET['pass'];
+		$contrasena=$_GET['pass'];
 		$tipo=$_GET['tipo'];
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		
 		$repuesta = '-1';
 		
-		if($this->user->isAdministrador($usuario, $contraseña)){
+		if($this->user->isAdministrador($usuario, $contrasena, $data['Sucursal_Codigo'])){
 			$repuesta = '200'; //Si se encontro	
 			$codigo_usuario = $this->user->getIdFromUserID($usuario, $data['Sucursal_Codigo']);
 			if($tipo=='1'){ //Autorizo un articulo generico
