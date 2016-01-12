@@ -33,6 +33,7 @@
 						'entrar_configuracion' => 'Entrar a Configuración',
 						'entrar_empresa' => 'Entrar a Empresas',						
 						'entrar_recibos' => 'Entrar a recibos',
+						'facturar_consignaciones' => 'Facturar Consignaciones',
 						'ingreso_bodega' => 'Ingreso a Bodega',
 						'manejo_articulos' => 'Manejo de Artículos',
 						'otros_cliente' => 'Editar Descuentos y Credito',

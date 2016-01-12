@@ -277,11 +277,12 @@ function cargarArrayArticulos(){
 				var descuento = $("#descuento_articulo_"+i).val().trim();
 				var precio_unidad = $("#articulo_precio_unidad_"+i).val().trim();
 				var precio_total = $("#articulo_precio_total_"+i).val().trim();
+				var precio_final = $("#articulo_precio_unidad_final_"+i).val().trim();
 				var exento = $("#exento_articulo_"+i).val().trim();
 				var retencion = $("#retencion_articulo_"+i).val().trim();
 				
 				if(codigo !== "" && descripcion !== ""){
-						_ARRAY_ARTICULOS.push({codigo:codigo, descripcion:descripcion, cantidad:cantidad, descuento:descuento, exento:exento, retencion:retencion, precio_unidad:precio_unidad, precio_total:precio_total});
+						_ARRAY_ARTICULOS.push({codigo:codigo, descripcion:descripcion, cantidad:cantidad, descuento:descuento, exento:exento, retencion:retencion, precio_unidad:precio_unidad, precio_total:precio_total, precio_final:precio_final});
 				}
 				
 		}
@@ -420,7 +421,6 @@ function actualizarTotales(){
 		}
 		
 		montoSinIVA = total / ( 1 + (_PORCENTAJE_IVA / 100)); 
-		iva = total - montoSinIVA;
 		total +=  retencion;
 		
 		//console.log("Total: "+total+" IVA: "+iva+" Retencion: "+retencion+" "+" Costo: "+montoSinIVA);

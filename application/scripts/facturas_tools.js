@@ -779,7 +779,6 @@ function actualizaCostosTotales(decimales_int){
 	//precio_unidad_FACTOR_float = precio_unidad_FACTOR_float.format(2, 3, '.', ',');
 	
 	IVA_Factura = costo_total_factura-costo_sin_IVA_factura;
-	
 	//A este punto el costo de la retencion va con todos los impuestos del cliente final
 	//Ahora le quitamos los impuestos del cliente afiliado para onbtener la retencion real
 	costo_retencion -= costo_sin_IVA_factura_sin_descuento;

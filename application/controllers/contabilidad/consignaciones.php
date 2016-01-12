@@ -11,6 +11,7 @@ class consignaciones extends CI_Controller {
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('contabilidad','',TRUE);
 		$this->load->model('familia','',TRUE);
+		$this->load->model('factura','',TRUE);
 	}
 
 	function index()
@@ -206,37 +207,39 @@ class consignaciones extends CI_Controller {
 					//Primero verificamos que exista en la sucursal que recibe, si no lo creamos
 					if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
 							$this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data);
-					}else{
-							//Si el articulo existe, solo debemos actualizar la info del mismo.
-							$conf_array = $this->configuracion->getConfiguracionArray();
-							$porcentajeIVA = $conf_array['iva'];
-							//Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
-							$precioUnidadReal = $art->precio_total / $art->cantidad; //El precio unidad que viene no cuenta con el descuento, tons el precio por unidad lo sacamos de esta manera
-							$precios["p0"] = $precioUnidadReal - ($precioUnidadReal / (1 + $porcentajeIVA));
-							$precios["p1"] = $this->articulo->getPrecioProducto($art->codigo, 1, $sucursalEntrega);
-							$precios["p2"] = $this->articulo->getPrecioProducto($art->codigo, 2, $sucursalEntrega);
-							$precios["p3"] = $this->articulo->getPrecioProducto($art->codigo, 3, $sucursalEntrega);
-							$precios["p4"] = $this->articulo->getPrecioProducto($art->codigo, 4, $sucursalEntrega);
-							$precios["p5"] = $this->articulo->getPrecioProducto($art->codigo, 5, $sucursalEntrega);
-							//Actualizamos el inventario
-							$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
-							//Sobreescribimos los precios
-							$this->articulo->actualizarPrecios($art->codigo, $sucursalRecibe, $precios);
 					}
+					
+					
+					//Si el articulo existe, solo debemos actualizar la info del mismo.
+					$conf_array = $this->configuracion->getConfiguracionArray();
+					$porcentajeIVA = $conf_array['iva'];
+					//Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
+					$precioUnidadReal = $art->precio_total / $art->cantidad; //El precio unidad que viene no cuenta con el descuento, tons el precio por unidad lo sacamos de esta manera
+					$precios["p0"] = $precioUnidadReal - ($precioUnidadReal / (1 + $porcentajeIVA));
+					$precios["p1"] = $this->articulo->getPrecioProducto($art->codigo, 1, $sucursalEntrega);
+					$precios["p2"] = $this->articulo->getPrecioProducto($art->codigo, 2, $sucursalEntrega);
+					$precios["p3"] = $this->articulo->getPrecioProducto($art->codigo, 3, $sucursalEntrega);
+					$precios["p4"] = $this->articulo->getPrecioProducto($art->codigo, 4, $sucursalEntrega);
+					$precios["p5"] = $this->articulo->getPrecioProducto($art->codigo, 5, $sucursalEntrega);
+					//Actualizamos el inventario
+					$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
+					//Sobreescribimos los precios
+					$this->articulo->actualizarPrecios($art->codigo, $sucursalRecibe, $precios);
+					
 					//Indiferentemente de si registro o actualizo el articulo
 					//debemos restar dicha cantidad del inventario de la sucursal que entrega
 					$this->articulo->actualizarInventarioRESTA($art->codigo, $art->cantidad, $sucursalEntrega);
 					//Agregamos dicho articulo a la consignacion
 					$articuloDeSucursalEntrega = $this->articulo->existe_Articulo($art->codigo,$sucursalEntrega);
 					$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
-					$this->contabilidad->registrarArticuloConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $consignacion);
+					$this->contabilidad->registrarArticuloConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $consignacion, $art->precio_final);
 			
-					// Agregamos el articulo a la lista de conignaciones
-					if($larticulo = $this->contabilidad->getArticuloEnListaConsignacion($art->codigo, $sucursalEntrega, $sucursalRecibe, $art->precio_unidad)){
+					// Agregamos el articulo a la lista de consignaciones
+					if($larticulo = $this->contabilidad->getArticuloEnListaConsignacion($art->codigo, $sucursalEntrega, $sucursalRecibe, $art->precio_unidad, $art->descuento, $art->exento, $art->retencion, $art->precio_final)){
 							$nuevaCantidad = $larticulo->Cantidad + $art->cantidad;
 							$this->contabilidad->actualizarArticuloEnListaConsignacion($art->codigo, $nuevaCantidad, $art->precio_unidad, $sucursalEntrega, $sucursalRecibe);
 					}else{
-							$this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe);
+							$this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $art->precio_final);
 					}
 			}
 	}
@@ -287,12 +290,154 @@ class consignaciones extends CI_Controller {
 																	$precio5);
 	}
 	
+	public function facturar(){
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				
+		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+
+		if(!$permisos['facturar_consignaciones'])
+		{
+				redirect('accesoDenegado', 'location');						
+		}
+		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+		$this->load->view("contabilidad/facturar_consignaciones_view", $data);
+	}
 	
-	/*
-	* Esta funcion agrega el articulo a la lista que se cargara en el momento de facturar consignaciones
-	*/
-	private function ponerArticuloEnListaDeConsignacion(){
 	
+	public function getArticulosEnListaConsignados(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = 'No se pudo procesar la solicitud';
+		if(isset($_POST['SR']) && isset($_POST['SE'])){
+			$sucursalRecibe = trim($_POST['SR']);
+			$sucursalEntrega = trim($_POST['SE']);
+			if($sucursalRecibe != '' && $sucursalEntrega != ''){
+				if($this->empresa->getEmpresa($sucursalRecibe) && $this->empresa->getEmpresa($sucursalEntrega)){
+					if($articulos = $this->contabilidad->getArticulosEnListaDeConsignacion($sucursalEntrega, $sucursalRecibe)){
+						$retorno['status'] = 'success';
+						unset($retorno['error']);
+						$retorno['articulos'] = $articulos;
+					}else{
+						$retorno['error'] = 'No existen artículos consignados entre las sucursales ingresadas';
+					}
+				}else{
+					$retorno['error'] = 'Alguna de las sucursales ingresadas no existe';
+				}
+			}else{
+				$retorno['error'] = 'Datos requeridos están vacíos';
+			}
+		}else{
+			$retorno['error'] = 'URL con formato indebido';
+		}
+		echo json_encode($retorno);
+	}
+	
+	
+	function crearFactura(){
+			$retorno['status'] = 'error';
+			$retorno['error'] = 'No se pudo procesar la solicitud.';
+			if(isset($_POST["sucursalRecibe"]) && isset($_POST["sucursalEntrega"]) &&
+				 isset($_POST["articulos"]) && isset($_POST["devolver"])){
+				 	try{
+						 	$sucursalEntrega = trim($_POST["sucursalEntrega"]);
+						 	$sucursalRecibe = trim($_POST["sucursalRecibe"]);
+						 	$articulos = json_decode($_POST["articulos"]);
+						 	$debeDevolver = trim($_POST["devolver"]) == '1' ? true : false;
+						 	
+						 	if($this->empresa->getEmpresa($sucursalEntrega)){
+							 		if($this->empresa->getEmpresa($sucursalRecibe)){
+							 				if(sizeOf($articulos) > 0){					
+			 										if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
+				 											if($this->hayProductosAProcesar($articulos, $debeDevolver)){
+					 												include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+					 												if($consecutivo = $this->factura->crearfactura($clienteLiga->Cliente, $clienteLiga->informacion['nombre'], 'colones', 'Factura Generada Por Consignación', $sucursalEntrega, $data['Usuario_Codigo'], false)){
+																		$this->registrarArticuloEnFactura($articulos, $debeDevolver, $sucursalEntrega, $data['Usuario_Codigo'], $clienteLiga->Cliente, $consecutivo);
+																		
+																		$this->actualizarCostosFactura($consecutivo, $sucursalEntrega);
+																		
+																		$retorno['status'] = 'success';
+																		unset($retorno['error']);										
+																	}else{
+																		$retorno['error'] = 'No se pudo crear la factura.';
+																	}
+				 											}else{
+					 												$retorno['error'] = 'No hay artículos que facturar.';
+				 											}
+				 									}else{
+				 											$retorno['error'] = 'La empresa que recibe consignación no tiene liga con algún cliente.';
+							 						}
+							 				}else{
+							 						$retorno['error'] = 'No se ingresaron artículos para crear factura.';
+							 				}
+									}else{
+											$retorno['error'] = 'Sucursal que recibe consignación no existe.';
+									}
+							}else{
+									$retorno['error'] = 'Sucursal que consigna no existe.';
+							}
+					}catch(Exception $e){
+							$retorno['error'] = 'Error desconocido... Exception Thrown...';
+					}
+			}else{
+					$retorno['error'] = 'URL con formato indebido.';
+			}
+			echo json_encode($retorno);
+	}
+	
+	private function hayProductosAProcesar($articulos, $debeDevolver){
+		foreach($articulos as $articulo){
+			if($articulo->cantidad > 0){
+				return true;
+			}
+		}
+		return $debeDevolver ? true : false;
+	}
+	
+	private function registrarArticuloEnFactura($articulos, $debeDevolver, $sucursal, $vendedor, $cliente, $factura){
+		foreach($articulos as $articulo){
+			if($articuloBD = $this->contabilidad->getArticuloEnListaConsignacionById($articulo->codigo)){
+					
+					$cantidadConsignadaAFacturar = $articulo->cantidad;
+				
+					//Agregamos el articulo a la factura
+					$this->factura->addItemtoInvoice(
+						$articuloBD->Codigo, 
+						$articuloBD->Descripcion, 
+						$cantidadConsignadaAFacturar, 
+						$articuloBD->Descuento, 
+						$articuloBD->Exento, 
+						$articuloBD->Retencion, 
+						$articuloBD->Precio_Unidad, 
+						$articuloBD->Precio_Final, 
+						$factura, 
+						$sucursal, 
+						$vendedor, 
+						$cliente, 
+						$articuloBD->Imagen
+					);
+					
+					$nuevaCantidad = $articuloBD->Cantidad - $cantidadConsignadaAFacturar;
+					
+					if($nuevaCantidad == 0){
+						//Eliminamos la fila ya que no hay mas articulos consignados
+						$this->contabilidad->eliminarArticuloDeListaConsignacionById($articulo->codigo);
+					}
+					
+					//Debemos devolver y la cantidad es mayor a cero
+					if($debeDevolver && $nuevaCantidad > 0){
+						//Si devuelve, eliminamos el articulo de la lista y luego lo agregamos al inventario de la sucursal de entrega
+						$this->contabilidad->eliminarArticuloDeListaConsignacionById($articulo->codigo);
+						$this->articulo-> actualizarInventarioSUMA($articuloBD->Codigo, $nuevaCantidad, $sucursal);
+					}else{
+						//Si no devuelve, tons solo actualizamos el valor de la cantidad de las seleccionadas
+						$this->contabilidad->actualizarCantidadArticuloListaConsignacion($articulo->codigo, $nuevaCantidad);
+					}
+			}
+		}
+	}
+	
+	private function actualizarCostosFactura($consecutivo, $sucursal){
+		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
+		$this->factura->updateCostosTotales($costosArray, $consecutivo, $sucursal);
 	}
 }
 

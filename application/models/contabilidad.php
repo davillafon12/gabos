@@ -1596,7 +1596,7 @@ Class contabilidad extends CI_Model
 			return $this->db->insert_id();
 	}
 	
-	function registrarArticuloConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $consignacion){
+	function registrarArticuloConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $consignacion, $precio_final){
 			$datos = array(
 										"Codigo"=> $codigo,
 										"Descripcion" => $descripcion,
@@ -1604,6 +1604,7 @@ Class contabilidad extends CI_Model
 										"Descuento" => $descuento,
 										"Precio_Unidad" => $precio_unidad,
 										"Precio_Total" => $precio_total,
+										"Precio_Final" => $precio_final,
 										"Exento" => $exento,
 										"Retencion" => $retencion,
 										"Imagen" => $imagen,
@@ -1655,11 +1656,15 @@ Class contabilidad extends CI_Model
 			}
 	}
 	
-	function getArticuloEnListaConsignacion($codigo, $sucursalEntrega, $sucursalRecibe, $precio_unitario){
+	function getArticuloEnListaConsignacion($codigo, $sucursalEntrega, $sucursalRecibe, $precio_unitario, $descuento, $exento, $retencion, $precio_final){
 			$this->db->where("Codigo", $codigo);
 			$this->db->where("Sucursal_Entrega", $sucursalEntrega);
 			$this->db->where("Sucursal_Recibe", $sucursalRecibe);
 			$this->db->where("Precio_Unidad", $precio_unitario);
+			$this->db->where("Precio_Final", $precio_final);
+			$this->db->where("Descuento", $descuento);
+			$this->db->where("Exento", $exento);
+			$this->db->where("Retencion", $retencion);
 			$this->db->from("tb_51_lista_consignacion");
 			$query = $this->db->get();
 			if($query->num_rows() == 0){
@@ -1669,7 +1674,18 @@ Class contabilidad extends CI_Model
 			}
 	}
 	
-	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe){
+	function getArticuloEnListaConsignacionById($id){
+			$this->db->where("Id", $id);
+			$this->db->from("tb_51_lista_consignacion");
+			$query = $this->db->get();
+			if($query->num_rows() == 0){
+					return false;
+			}else{
+					return $query->result()[0];
+			}
+	}
+	
+	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final){
 			$datos = array(
 										"Codigo"=> $codigo,
 										"Descripcion" => $descripcion,
@@ -1677,6 +1693,7 @@ Class contabilidad extends CI_Model
 										"Descuento" => $descuento,
 										"Precio_Unidad" => $precio_unidad,
 										"Precio_Total" => $precio_total,
+										"Precio_Final" => $precio_final,
 										"Exento" => $exento,
 										"Retencion" => $retencion,
 										"Imagen" => $imagen,
@@ -1695,6 +1712,28 @@ Class contabilidad extends CI_Model
 			$this->db->where("Sucursal_Entrega", $sucursalEntrega);
 			$this->db->where("Sucursal_Recibe", $sucursalRecibe);
 			$this->db->update("tb_51_lista_consignacion", $datos);
+	}
+	
+	function getArticulosEnListaDeConsignacion($sucursalEntrega, $sucursalRecibe){
+		$this->db->from('tb_51_lista_consignacion');
+		$this->db->where('Sucursal_Entrega', $sucursalEntrega);
+		$this->db->where('Sucursal_Recibe', $sucursalRecibe);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
+	
+	function eliminarArticuloDeListaConsignacionById($id){
+		$this->db->where("Id", $id);
+		$this->db->delete("tb_51_lista_consignacion");
+	}
+	
+	function actualizarCantidadArticuloListaConsignacion($id, $nuevaCantidad){
+		$this->db->where("Id", $id);
+		$this->db->update("tb_51_lista_consignacion", array("Cantidad"=>$nuevaCantidad));
 	}
 	
 }

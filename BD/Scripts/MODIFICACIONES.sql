@@ -27,3 +27,7 @@ CREATE TABLE IF NOT EXISTS `TB_51_Lista_Consignacion` (
 ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `tb_03_cliente` (`Cliente_Cedula`, `Cliente_Nombre`, `Cliente_Apellidos`, `Cliente_Tipo_Cedula`, `Cliente_Carnet_Numero`, `Cliente_Celular`, `Cliente_Telefono`, `Cliente_Fecha_Ingreso`, `Cliente_Pais`, `Cliente_Direccion`, `Cliente_Observaciones`, `Cliente_Imagen_URL`, `Cliente_Correo_Electronico`, `Cliente_Estado`, `Cliente_Calidad`, `Cliente_Numero_Pago`, `Cliente_EsSucursal`, `Cliente_EsExento`, `Aplica_Retencion`) VALUES ('2', 'Cliente Contado', 'Defectuoso', 'nacional', '0', NULL, NULL, '2015-12-09 00:00:00', 'Costa Rica', 'San Jose', NULL, NULL, NULL, 'activo', '5', '0', '0', '0', '0');
+
+ALTER TABLE `tb_51_lista_consignacion` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Total`;
+
+ALTER TABLE `tb_50_articulos_consignacion` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Total`;
