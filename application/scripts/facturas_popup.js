@@ -203,6 +203,9 @@ function clickAceptar_Admin(event){
 			event.stopPropagation();
 			event.preventDefault();
 			makeFacturaEditable();
+		}else if(numeroPopUp=='5'){ //Si es cliente con descuento
+			autorizadoClienteDescuento(); 
+			return false;
 		}
 		//document.getElementById("pop_descripcion").select();
 		//rowIDpopup = rowID;
