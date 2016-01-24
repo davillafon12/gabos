@@ -54,10 +54,8 @@ Class articulo extends CI_Model
 					Articulo_Cantidad_Inventario AS inventario,
 					Articulo_Descuento AS descuento
 			FROM tb_06_articulo
-			WHERE (Articulo_Codigo LIKE '%$busqueda%' OR
-				   Articulo_Descripcion LIKE '%$busqueda%' OR
-				   Articulo_Cantidad_Inventario LIKE '%$busqueda%' OR
-				   Articulo_Descuento LIKE '%$busqueda%')
+			WHERE (Articulo_Codigo = '$busqueda' OR
+				   Articulo_Descripcion LIKE '%$busqueda%')
 			AND    TB_02_Sucursal_Codigo = $sucursal
 			ORDER BY $columnaOrden $tipoOrden
 			LIMIT $inicio,$cantidad		
