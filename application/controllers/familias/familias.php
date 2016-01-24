@@ -68,13 +68,10 @@ class familias extends CI_Controller {
 						</tr></thead> <tbody>";
 				foreach($result as $row)
 				{
-					/*<td>
-								".$row->Familia_Descuento."%
-							</td>*/
 					$nombre_empresa = $this->empresa->getNombreEmpresa($row->TB_02_Sucursal_Codigo);
 					echo "<tr class='table_row'>
 							<td >
-								<input class='checkbox'  type='checkbox' name='checkbox' value='".$row->Familia_Codigo."'>
+								<input class='checkbox'  type='checkbox' name='checkbox' value='".$row->Familia_Codigo."_".$row->TB_02_Sucursal_Codigo."'>
 							</td>
 							<td>
 								".$row->Familia_Codigo."
@@ -107,9 +104,9 @@ class familias extends CI_Controller {
 							</td>
 							<td >
 								<div class='tab_opciones'>
-									<a href='".base_url('')."familias/familias/edicion?id=".$row->Familia_Codigo."' ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>
-									<a href='javascript:;' onclick='goDesactivar(".$row->Familia_Codigo.")'><img src=".$ruta_imagen."/eliminar.png width='17' height='17' title='Desactivar'></a>
-									<a href='javascript:;' onclick='goActivar(".$row->Familia_Codigo.")'><img src=".$ruta_imagen."/activar.png width='21' height='21' title='Activar'></a>
+									<a href='".base_url('')."familias/familias/edicion?id=".$row->Familia_Codigo."&sucursal=".$row->TB_02_Sucursal_Codigo."' ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>
+									<a href='javascript:;' onclick='goDesactivar(\"".$row->Familia_Codigo."_".$row->TB_02_Sucursal_Codigo."\")' '><img src=".$ruta_imagen."/eliminar.png width='17' height='17' title='Desactivar'></a>
+									<a href='javascript:;' onclick='goActivar(\"".$row->Familia_Codigo."_".$row->TB_02_Sucursal_Codigo."\")' '><img src=".$ruta_imagen."/activar.png width='21' height='21' title='Activar'></a>
 								</div>
 							</td>
 						</tr>";
@@ -185,11 +182,14 @@ class familias extends CI_Controller {
 		$data_update['Familia_Estado'] = 0;
 		foreach($familias as $familia_id)
 		{
-			if($this->familia->isActivated($familia_id, $data['Sucursal_Codigo']))
+			$familia_array = explode("_", $familia_id);
+			$familia_id = $familia_array[0];
+			$familia_sucursal = $familia_array[1];
+			if($this->familia->isActivated($familia_id, $familia_sucursal))
 			{ 
-				$this->familia->actualizar($familia_id, $data['Sucursal_Codigo'], $data_update);
+				$this->familia->actualizar($familia_id, $familia_sucursal, $data_update);
 				
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario desactivo a la familia codigo: ".$familia_id,$data['Sucursal_Codigo'],'edicion');
+				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario desactivo a la familia codigo: ".$familia_id." de la sucursal: ".$familia_sucursal,$data['Sucursal_Codigo'],'edicion');
 			}
 		}
 	 }
@@ -213,10 +213,13 @@ class familias extends CI_Controller {
 		$data_update['Familia_Estado'] = 1;
 		foreach($familias as $familia_id)
 		{
-			if(!$this->familia->isActivated($familia_id, $data['Sucursal_Codigo']))
+			$familia_array = explode("_", $familia_id);
+			$familia_id = $familia_array[0];
+			$familia_sucursal = $familia_array[1];
+			if(!$this->familia->isActivated($familia_id, $familia_sucursal))
 			{
-				$this->familia->actualizar($familia_id, $data['Sucursal_Codigo'], $data_update);
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario activo a la empresa codigo: ".$familia_id,$data['Sucursal_Codigo'],'edicion');
+				$this->familia->actualizar($familia_id, $familia_sucursal, $data_update);
+				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario activo a la empresa codigo: ".$familia_id." de la sucursal ".$familia_sucursal,$data['Sucursal_Codigo'],'edicion');
 			}
 		}
 	}
@@ -224,9 +227,10 @@ class familias extends CI_Controller {
 	function edicion()
 	{
 		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-		$id_request=$_GET['id'];
+		$id_request = $_GET['id'];
+		$sucursal = $_GET['sucursal'];
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
-		$nombre_familia = $this->familia->getNombreFamiliaSucursal($id_request, $data['Sucursal_Codigo']);
+		$nombre_familia = $this->familia->getNombreFamiliaSucursal($id_request, $sucursal);
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -236,7 +240,7 @@ class familias extends CI_Controller {
 		}
 		
 		//echo $nombre_empresa;
-		if($result = $this->familia->getFamilia($id_request, $data['Sucursal_Codigo']))
+		if($result = $this->familia->getFamilia($id_request, $sucursal))
 		{
 			$this->load->helper(array('form'));
 			foreach($result as $row)

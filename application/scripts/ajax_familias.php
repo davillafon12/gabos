@@ -1,6 +1,6 @@
 <?php
     
-	$Ruta_Base = base_url('');
+	$Ruta_Base = base_url(''); 
 	
 echo 
 	"<script type='text/javascript'>

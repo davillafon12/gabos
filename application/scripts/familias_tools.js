@@ -33,7 +33,7 @@
 				submit:function(e,v,m,f){
 											if(v){deactiveFamilias(selected);}
 										}
-			});
+			}); 
 		}		
 	}
 	
