@@ -20,7 +20,7 @@ function getArticuloCambiar(){
 	}
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/cambio/getArticulo',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/cambio/getArticulo',
 		type: "POST",		
 		async: false,
 		data: {'codigo':codigo, 'sucursal':sucursal},				
@@ -65,7 +65,7 @@ function getArticuloAbonar(){
 	}
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/cambio/getArticulo',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/cambio/getArticulo',
 		type: "POST",		
 		async: false,
 		data: {'codigo':codigo, 'sucursal':sucursal},				
@@ -218,7 +218,7 @@ function ingresarFila(cod_cambiar, cod_abonar, cantidad, des_cambiar, des_abonar
 	fila = "<tr class='fila_articulo'>"
 	+	"<td class='contactSmall'>"+cod_cambiar+"</td>"
 	+	"<td class='contactSmall'>"+des_cambiar+"</td>"
-	+	"<td class='contactSmall'><img src="+location.protocol+"//"+document.domain+"/application/images/recibos/flecha_derecha.png></td>"
+	+	"<td class='contactSmall'><img src="+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/recibos/flecha_derecha.png></td>"
 	+	"<td class='contactSmall'>"+cod_abonar+"</td>"
 	+	"<td class='contactSmall'>"+des_abonar+"</td>"
 	+	"<td class='contactSmall'>"+cantidad+"</td>"
@@ -264,7 +264,7 @@ function limpiarTodo(){
 
 function sendCambio(sucursal, articulos){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/cambio/realizarCambio',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/cambio/realizarCambio',
 		type: "POST",		
 		async: false,
 		data: {'sucursal':sucursal, 'articulos':articulos},				

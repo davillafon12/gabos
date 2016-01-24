@@ -21,7 +21,7 @@ function setProforma(consecutivo){
 
 function cargarEncabezadoProforma(consecutivo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/facturas/caja/getProformaHeaders",
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/getProformaHeaders",
 		type: "POST",
 		async: false,
 		data: {'consecutivo':consecutivo},		
@@ -62,7 +62,7 @@ function cargarEncabezadoProforma(consecutivo){
 
 function cargarProductosProforma(consecutivo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/facturas/caja/getArticulosProforma",
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/getArticulosProforma",
 		type: "POST",
 		data: {'consecutivo':consecutivo},		
 		success: function(data, textStatus, jqXHR)

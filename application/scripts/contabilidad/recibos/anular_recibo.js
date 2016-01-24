@@ -13,7 +13,7 @@ function anularRecibo(recibo, credito){
 
 function sendAnular(recibo, credito){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/anular/anularRecibo',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/anular/anularRecibo',
 		type: "POST",		
 		//async: false,
 		data: {'recibo':recibo, 'credito':credito},				

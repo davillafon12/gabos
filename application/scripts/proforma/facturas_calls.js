@@ -2,7 +2,7 @@ var isCallByDescuento = false; // Variable usada para restear campos de nombre y
 
 function getArticulo(codigo, id_fila, num_fila, cedula) {
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/facturas/nueva/getArticuloJSON',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getArticuloJSON',
 		type: "POST",
 		async: true,
 		data: {'cedula':cedula, 'codigo':codigo},		
@@ -63,7 +63,7 @@ var clienteNoAplicaRetencion = "0";
 
 function getNombreCliente(str){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/facturas/nueva/getNombreCliente?cedula='+str,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombreCliente?cedula='+str,
 		type: "POST",
 		//async: false,
 		data: {'cedula':str},		
@@ -246,7 +246,7 @@ function getandmakeCall(URL){
 	xmlhttp.send();*/
 	AJAX = getXMLHTTP();
 	if (AJAX) {
-		AJAX.open("GET", location.protocol+'//'+document.domain+URL, false);                             
+		AJAX.open("GET", location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL, false);                             
 		AJAX.send(null);
 		return AJAX.responseText;                                         
 	} else {

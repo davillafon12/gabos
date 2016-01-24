@@ -11,8 +11,8 @@ function verify_ID(){
 	var tamano = codigo.length; 
 	if((valor==1 && tamano ==9) || (valor==2 && tamano == 13) || (valor==3 && tamano ==10)){
 		if(codigo){
-			estatus.innerHTML='<img src='+location.protocol+'//'+document.domain+'/application/images/scripts/loader.gif />' ;
-			callPage(location.protocol+'//'+document.domain+'/usuarios/registrar/es_Cedula_Utilizada?id='+codigo, estatus);
+			estatus.innerHTML='<img src='+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/images/scripts/loader.gif />' ;
+			callPage(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/usuarios/registrar/es_Cedula_Utilizada?id='+codigo, estatus);
 		}
 	}
 	else
@@ -25,8 +25,8 @@ function verify_Name(){
 	codigo =  input.value;
 	nombre_original = $("#nombre_usuario_original").val();
 	if(codigo.trim()&&nombre_original!=codigo.trim()){
-		estatus.innerHTML='<img src='+location.protocol+'//'+document.domain+'/application/images/scripts/loader.gif />' ;
-		callPage(location.protocol+'//'+document.domain+'/usuarios/registrar/es_Nombre_Utilizada?id='+codigo, estatus);
+		estatus.innerHTML='<img src='+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/images/scripts/loader.gif />' ;
+		callPage(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/usuarios/registrar/es_Nombre_Utilizada?id='+codigo, estatus);
 	}
 	else
 	{estatus.innerHTML='';}
@@ -63,12 +63,12 @@ function callPage(url, div){
 				//div.innerHTML=ajax.responseText;
 				if(ajax.responseText.indexOf('tr') != -1)
 				{						
-					div.innerHTML = "<div class='status_2'><img src="+location.protocol+"//"+document.domain+"/application/images/scripts/error.gif /><p class='text_status'>¡No esta disponible!</p></div>";							
+					div.innerHTML = "<div class='status_2'><img src="+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/error.gif /><p class='text_status'>¡No esta disponible!</p></div>";							
 					boton.disabled=true;
 				}
 				else
 				{
-					div.innerHTML = "<div class='status_2'><img src="+location.protocol+"//"+document.domain+"/application/images/scripts/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>";
+					div.innerHTML = "<div class='status_2'><img src="+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>";
 					boton.disabled=false;
 				}
 			}

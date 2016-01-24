@@ -7,7 +7,7 @@ function cargarInfoSucursal(){
 	}
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/consultaVenta/getDatosConsultaVenta',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')'/contabilidad/consultaVenta/getDatosConsultaVenta',
 		type: "POST",		
 		async: false,
 		data: {'sucursal':sucursal},				

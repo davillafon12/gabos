@@ -1,6 +1,6 @@
 function setUpLiveSearch(){	
 	$( "#nombre" ).autocomplete({
-		  source: location.protocol+'//'+document.domain+'/facturas/nueva/getNombresClientesBusqueda',
+		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
 			document.getElementById("cedula").value=ui.item.id;

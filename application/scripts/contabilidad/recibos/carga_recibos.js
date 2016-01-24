@@ -18,7 +18,7 @@ function isNumber(n) {
 
 function getNombreCliente(cedula){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/anular/getRecibos',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/anular/getRecibos',
 		type: "POST",		
 		//async: false,
 		data: {'cedula':cedula},				
@@ -104,7 +104,7 @@ function setInformacion(informacionArray){
 
 function setUpLiveSearch(){	
 	$("#nombre").autocomplete({
-		  source: location.protocol+'//'+document.domain+'/facturas/nueva/getNombresClientesBusqueda',
+		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
 			$("#cedula").val(ui.item.id);

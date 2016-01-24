@@ -69,7 +69,7 @@ function convertirArray(array){
 	
 function ingresarDescuento(articulos, descuento){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/editar/agregarDescuentoMasivo',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/agregarDescuentoMasivo',
 		type: "POST",		
 		async: false,
 		data: {'descuento':descuento, 'articulos':JSON.stringify(articulos)},				
@@ -149,7 +149,7 @@ function deshabilitarRetencion(){
 
 function actualizarRetencion(articulos, estado){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/editar/actualizarRetencionMasivo',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/actualizarRetencionMasivo',
 		type: "POST",		
 		async: false,
 		data: {'estado':estado, 'articulos':JSON.stringify(articulos)},				

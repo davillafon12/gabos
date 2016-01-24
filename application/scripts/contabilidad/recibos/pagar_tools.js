@@ -59,7 +59,7 @@ function enviarCobro(cedula, saldo){
 	
 
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/recibos/saldarFacturas',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/recibos/saldarFacturas',
 		type: "POST",		
 		//async: false,
 		data: {'cedula':cedula, 'saldoAPagar':saldo, 'facturas':JSON.stringify(facturasSaldar), 'tipoPago':JSON.stringify(tipoPagoJSON()), comentarios:$("#comentarios").val()},				
@@ -79,7 +79,7 @@ function enviarCobro(cedula, saldo){
 						window.open(informacion[0].servidor_impresion+'/index.html?t='+informacion[0].token+'&d=r&n='+informacion[0].recibos.join()+'&s='+informacion[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Recibos','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}else if(tipoImpresion==='c'){
 						//Impresion carta
-						window.open(location.protocol+'//'+document.domain+'/impresion?t='+informacion[0].token+'&d=r&n='+informacion[0].recibos.join()+'&s='+informacion[0].sucursal+'&i='+tipoImpresion,'Impresion de Recibos de Dinero','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+informacion[0].token+'&d=r&n='+informacion[0].recibos.join()+'&s='+informacion[0].sucursal+'&i='+tipoImpresion,'Impresion de Recibos de Dinero','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}
 				}
 			}catch(e){

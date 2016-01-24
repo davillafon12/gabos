@@ -23,7 +23,7 @@ function actualizarEstadoClientes(){
 
 function procesarActualizacion(){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/config/actualizarEstadoClientes',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/config/actualizarEstadoClientes',
 		type: "POST",		
 		//async: false,
 		data: {},				
@@ -126,7 +126,7 @@ function actualizarImpresion(){
 	puerto = $("#puerto_servidor_impresion").val();
 	protocolo = $("#protocolo_servidor_impresion").val();
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/config/actualizarServidorImpresion',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/config/actualizarServidorImpresion',
 		type: "POST",	
 		data: {'ip':ip.trim(),'puerto':puerto.trim(),'protocolo':protocolo.trim()},				
 		success: function(data, textStatus, jqXHR)

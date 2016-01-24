@@ -144,7 +144,7 @@ function ajaxArticulo(codigo, sucursal, sucursalRecibe, fila){
 function cargarInfoArticulo(articulo, fila){
 		$("#descripcion_articulo_"+fila).html(articulo.descripcion);
 		//Seteamos el tootltip de la imagen del articulo
-		$("#tooltip_imagen_articulo_"+fila).html("<img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+articulo.imagen+"' height='200' width='200'>");
+		$("#tooltip_imagen_articulo_"+fila).html("<img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/articulos/"+articulo.imagen+"' height='200' width='200'>");
 		agregarTooltip("#descripcion_articulo_"+fila);
 		$("#cantidad_articulo_"+fila).val(1);
 		$("#bodega_articulo_"+fila).html(articulo.inventario);
@@ -314,7 +314,7 @@ function notyMsg(Mensaje, tipo){
 
 function doAjax(url, method, async, parametros, datatype, successCallback, errorCallback){
 		$.ajax({
-			url : location.protocol+'//'+document.domain+url,
+			url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+url,
 			type: method,		
 			async: async,
 			data: parametros,		

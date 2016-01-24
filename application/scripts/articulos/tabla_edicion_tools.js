@@ -7,11 +7,11 @@ function setTable(){
 		"processing": true,
 		"serverSide": true,
 		"ajax": {
-			"url": location.protocol+'//'+document.domain+'/articulos/editar/obtenerArticulosTabla',
+			"url": location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/obtenerArticulosTabla',
 			"type": "POST",
 		},
 		'oLanguage': {
-				'sUrl': location.protocol+'//'+document.domain+'/application/scripts/datatables/Spanish.txt'
+				'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/datatables/Spanish.txt'
 			},
 		"columns": [ 
 					   { 'orderable': false }, 

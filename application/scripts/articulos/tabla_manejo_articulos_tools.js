@@ -9,14 +9,14 @@ function setTable(){
 		"processing": true,
 		"serverSide": true,
 		"ajax": {
-			"url": location.protocol+'//'+document.domain+'/articulos/editar/obtenerArticulosTablaManejo',
+			"url": location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/obtenerArticulosTablaManejo',
 			"type": "POST",
 			"data": function ( d ) {
 					d.sucursal = $("#sucursalListaArticulos").val();
 				}
 		},		
 		'oLanguage': {
-				'sUrl': location.protocol+'//'+document.domain+'/application/scripts/datatables/Spanish.txt'
+				'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/datatables/Spanish.txt'
 			},
 		"columns": [ 
 					   { 'orderable': false }, 
@@ -41,14 +41,14 @@ function setTableBodega(){
 		"processing": true,
 		"serverSide": true,
 		"ajax": {
-			"url": location.protocol+'//'+document.domain+'/articulos/editar/obtenerArticulosBodegaTablaManejo',
+			"url": location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/obtenerArticulosBodegaTablaManejo',
 			"type": "POST",
 			"data": function ( d ) {
 					d.sucursal = $("#sucursalListaArticulosBodega").val();
 				}
 		},		
 		'oLanguage': {
-				'sUrl': location.protocol+'//'+document.domain+'/application/scripts/datatables/Spanish.txt'
+				'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/datatables/Spanish.txt'
 			},
 		"columns": [ 					   
 					   null,    
@@ -64,7 +64,7 @@ function setTableBodega(){
 function setTableTemporal(){
 	$('#tabla_temporal').dataTable({
 		'oLanguage': {
-				'sUrl': location.protocol+'//'+document.domain+'/application/scripts/datatables/Spanish.txt'
+				'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/datatables/Spanish.txt'
 			},
 		"columns": [ 
 					   null,    

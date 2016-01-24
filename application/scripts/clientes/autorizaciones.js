@@ -18,7 +18,7 @@ function isNumber(n) {
 
 function getNombreCliente(cedula){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/autorizaciones/getCliente',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/autorizaciones/getCliente',
 		type: "POST",		
 		//async: false,
 		data: {'cedula':cedula},				
@@ -106,7 +106,7 @@ function setPersonaDos(persona2){
 
 function setUpLiveSearch(){	
 	$("#nombre").autocomplete({
-		  source: location.protocol+'//'+document.domain+'/facturas/nueva/getNombresClientesBusqueda',
+		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
 			$("#cedula").val(ui.item.id);

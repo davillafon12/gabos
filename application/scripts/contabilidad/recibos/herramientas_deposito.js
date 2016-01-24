@@ -49,7 +49,7 @@ function notyMsg(Mensaje, tipo){
 
 function envioDeposito(recibo, deposito, banco){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/deposito/guardarDeposito',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/deposito/guardarDeposito',
 		type: "POST",	
 		data: {'recibo':recibo, 'deposito':deposito, 'banco':banco},				
 		success: function(data, textStatus, jqXHR)

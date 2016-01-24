@@ -137,7 +137,7 @@ function getFullData(){
 
 function sendInvoice(URL){	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+URL,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
 		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON)},	
 		success: function(data, textStatus, jqXHR)
@@ -156,8 +156,8 @@ function sendInvoice(URL){
 					$('#envio_factura').bPopup().close();
 				}else if(facturaHEAD[0].status==="success"){
 					$('#envio_factura').bPopup().close();	
-					window.open(location.protocol+'//'+document.domain+'/impresion?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i=c','Impresion de Proforma','width=768,height=1024,resizable=no,toolbar=no,location=no,menubar=no');
-					window.location = location.protocol+'//'+document.domain+'/home';
+					window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i=c','Impresion de Proforma','width=768,height=1024,resizable=no,toolbar=no,location=no,menubar=no');
+					window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/home';
 				}
 			}catch(e){
 				n = noty({

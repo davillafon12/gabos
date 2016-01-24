@@ -31,7 +31,7 @@ $(function() {
 	
 	
 	$( "#nombre" ).autocomplete({
-		  source: location.protocol+'//'+document.domain+'/facturas/nueva/getNombresClientesBusqueda',
+		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
 			$("#cedula").val(ui.item.id);				  
@@ -44,7 +44,7 @@ $(function() {
 function llamarFacturas(){
 	if(validarFechas()){		
 		$.ajax({
-			url : location.protocol+'//'+document.domain+'/consulta/getCierresFiltrados',
+			url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/getCierresFiltrados',
 			type: "POST",	
 			data: {'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val()},				
 			success: function(data, textStatus, jqXHR)
@@ -204,7 +204,7 @@ function cargaServerFactura(consecutivo){
 
 function cargarEncabezado(consecutivo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/consulta/getCierreCaja",
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/consulta/getCierreCaja",
 		type: "POST",
 		data: {'cierre':consecutivo},		
 		success: function(data, textStatus, jqXHR)
@@ -494,7 +494,7 @@ function imprimir(){
 		//window.open(servidorImpresion+'/index.html?t='+token+'&d=nc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
-		window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=cc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+token+'&d=cc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}
 }
 

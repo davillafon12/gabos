@@ -238,7 +238,7 @@ function realizarCierreCaja(){
 function procesarCierre(cantidad){
 	tipo_cambio = $("#tipo_cambio_dolar").val();
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/cierre/crearCierre',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/cierre/crearCierre',
 		type: "POST",		
 		data: {'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal, 'base':$("#base_caja").val()},				
 		success: function(data, textStatus, jqXHR)
@@ -249,8 +249,8 @@ function procesarCierre(cantidad){
 					manejarErrores(informacion[0].error);
 				}else if(informacion[0].status==="success"){
 					notyMsg('¡Se realizó el cierre de caja con éxito!', 'success');					
-					window.open(location.protocol+'//'+document.domain+'/impresion?t='+informacion[0].token+'&d=cc&n='+informacion[0].cierre+'&s='+informacion[0].sucursal+'&i=c&server='+document.domain+'&protocol='+location.protocol,'Impresion de Cieere de Caja','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-					window.location.replace(location.protocol+'//'+document.domain+"/home");
+					window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+informacion[0].token+'&d=cc&n='+informacion[0].cierre+'&s='+informacion[0].sucursal+'&i=c&server='+document.domain+'&protocol='+location.protocol,'Impresion de Cieere de Caja','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+					window.location.replace(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/home");
 				}
 			}catch(e){				
 				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');

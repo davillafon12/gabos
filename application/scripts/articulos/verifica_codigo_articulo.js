@@ -62,4 +62,5 @@ function llamarCodigoBarras(){
 	codigo_barras = document.getElementById('cod_Barras');
 	codigo =  input.value;
 	codigo_barras.innerHTML='<center><img alt=\"12345\" src=\"../application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/></center>';
-}
+}/application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/></center>';
+}*/

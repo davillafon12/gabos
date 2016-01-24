@@ -98,14 +98,14 @@ PARA:
 					"processing": true,
 					"serverSide": true,
 					"ajax": {
-						"url": location.protocol+'//'+document.domain+'/usuarios/bitacora/obtenerTransaccionesTabla',
+						"url": location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/usuarios/bitacora/obtenerTransaccionesTabla',
 						"type": "POST",
 						"data": function ( d ) {
 								d.sucursal = $("#sucursal").val();
 							}
 					},		
 					'oLanguage': {
-							'sUrl': location.protocol+'//'+document.domain+'/application/scripts/datatables/Spanish.txt'
+							'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/datatables/Spanish.txt'
 						},
 					"columns": [ 								   
 								   null,    

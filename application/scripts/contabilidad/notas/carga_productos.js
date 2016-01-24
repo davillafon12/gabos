@@ -22,7 +22,7 @@ function resetFieldsFromProductos(){
 
 function cargarProductos(){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/notas/getProductosDeFactura',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')'/contabilidad/notas/getProductosDeFactura',
 		type: "POST",	
 		data: {'factura':facturaSeleccionada},				
 		success: function(data, textStatus, jqXHR)

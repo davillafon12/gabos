@@ -31,7 +31,7 @@ $(function() {
 	
 	
 	$( "#nombre" ).autocomplete({
-		  source: location.protocol+'//'+document.domain+'/facturas/nueva/getNombresClientesBusqueda',
+		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
 			$("#cedula").val(ui.item.id);				  
@@ -44,7 +44,7 @@ $(function() {
 function llamarFacturas(){
 	if(validarFechas()){		
 		$.ajax({
-			url : location.protocol+'//'+document.domain+'/consulta/getFacturasFiltradas',
+			url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/getFacturasFiltradas',
 			type: "POST",	
 			data: {'cliente':$("#cedula").val(),'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val(),'tipo':tiposSeleccionados(), 'estado':estadosSeleccionados()},				
 			success: function(data, textStatus, jqXHR)
@@ -204,7 +204,7 @@ function cargaServerFactura(consecutivo){
 
 function cargarEncabezado(consecutivo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/facturas/caja/getFacturaHeadersConsulta",
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/getFacturaHeadersConsulta",
 		type: "POST",
 		data: {'consecutivo':consecutivo},		
 		success: function(data, textStatus, jqXHR)
@@ -235,7 +235,7 @@ function cargarEncabezado(consecutivo){
 
 function cargarProductos(consecutivo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/facturas/caja/getArticulosFactura",
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/getArticulosFactura",
 		type: "POST",
 		data: {'consecutivo':consecutivo},		
 		success: function(data, textStatus, jqXHR)
@@ -331,7 +331,7 @@ function setProductosFactura(productos){
 		fila = "<tr>";
 		fila += "<td><label class='contact'>"+productos[i].codigo+"</label></td>";
 		fila += "<td><div class='contact' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].descripcion+"</div>"
-				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+productos[i].imagen+"' height='200' width='200'></div></td>";
+				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/articulos/"+productos[i].imagen+"' height='200' width='200'></div></td>";
 		fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].cantidad+"</label></td>";	
 		
 		if(productos[i].exento==='1'){fila += "<td><label class='contact'>E</label>";}else{fila += "<td><label class='contact'></label>";};
@@ -454,7 +454,7 @@ function imprimir(){
 		window.open(servidorImpresion+'/index.html?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
-		window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}
 }
 
@@ -581,7 +581,7 @@ function getXMLHTTP(){
 function getandmakeCall(URL){
 	AJAX = getXMLHTTP();
 	if (AJAX) {
-		AJAX.open("GET", location.protocol+'//'+document.domain+URL, false);                             
+		AJAX.open("GET", location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL, false);                             
 		AJAX.send(null);
 		return AJAX.responseText;                                         
 	} else {
@@ -591,7 +591,7 @@ function getandmakeCall(URL){
 
 function anularFacturaAJAX(URL){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+URL,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
 		data: {'consecutivo':consecutivoActual},		
 		success: function(data, textStatus, jqXHR)

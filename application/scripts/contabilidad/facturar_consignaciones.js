@@ -85,7 +85,7 @@ function notyMsg(Mensaje, tipo){
 
 function doAjax(url, method, async, parametros, datatype, successCallback, errorCallback){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+url,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+url,
 		type: method,		
 		async: async,
 		data: parametros,		
@@ -220,5 +220,4 @@ function seleccionarCheckboxes(e){
 	});
 	
 	
-	console.log(seleccion);
 }

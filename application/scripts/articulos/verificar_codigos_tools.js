@@ -13,7 +13,7 @@ function verificarCodigoBodega(codigo){
 	codigo = $("#codigo_bodega").val().trim();
 	sucursal = $("#sucursal").val();
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/bodega/existeEnBodega',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/bodega/existeEnBodega',
 		type: "POST",		
 		async: false,
 		data: {'codigo':codigo, 'sucursal':sucursal},				
@@ -24,12 +24,12 @@ function verificarCodigoBodega(codigo){
 				if(informacion[0].status==="error"){
 					deshabilitarCampos();
 					existeEnBodega = false;
-					$("#status_bodega").html("<img src="+location.protocol+'//'+document.domain+"/application/images/scripts/error.gif />");					 
+					$("#status_bodega").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/error.gif />");					 
 					$("#cantidad_bodega").html('');
 				}else if(informacion[0].status==="success"){
 					habilitarCampos();
 					existeEnBodega = true;
-					$("#status_bodega").html("<img src="+location.protocol+'//'+document.domain+"/application/images/scripts/tick.gif />");
+					$("#status_bodega").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/tick.gif />");
 					$("#cantidad_bodega").html(informacion[0].cantidad);
 				}
 			}catch(e){				
@@ -103,7 +103,7 @@ function verificarCodigoArticulo(){
 	}
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/registrar/es_Codigo_Utilizado',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/registrar/es_Codigo_Utilizado',
 		type: "POST",		
 		async: false,
 		data: {'codigo':codigo, 'sucursal':sucursal},				
@@ -113,11 +113,11 @@ function verificarCodigoArticulo(){
 				informacion = $.parseJSON('[' + data.trim() + ']');
 				if(informacion[0].status==="error"){					
 					codigoDisponible = false;
-					$("#status").html("<img src="+location.protocol+'//'+document.domain+"/application/images/scripts/error.gif />");
+					$("#status").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/error.gif />");
 					$("#cod_Barras").html('');
 				}else if(informacion[0].status==="success"){					
 					codigoDisponible = true;
-					$("#status").html("<img src="+location.protocol+'//'+document.domain+"/application/images/scripts/tick.gif />");
+					$("#status").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/tick.gif />");
 					
 					//Crear codigo barras
 					$("#cod_Barras").html('<img alt=\"12345\" src=\"../application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/>');					
@@ -154,7 +154,7 @@ function cargarFamilias(){
 	sucursal = $("#sucursal").val();
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/ingresar/getFamiliasSucursal',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/ingresar/getFamiliasSucursal',
 		type: "POST",		
 		async: false,
 		data: {'sucursal':sucursal},				

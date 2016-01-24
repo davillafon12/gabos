@@ -103,7 +103,7 @@ function realizarRetiroParcial(){
 function enviarRetiro(cantidad){
 	tipo_cambio = $("#tipo_cambio_dolar").val();
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/retiro/crearRetiro',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/retiro/crearRetiro',
 		type: "POST",		
 		//async: false,
 		data: {'cantidad':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares()},				

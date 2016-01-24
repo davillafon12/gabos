@@ -15,7 +15,7 @@ function cargarFactura(){
 	resetFields();
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/agregarComprasSucursal/cargarFactura',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/agregarComprasSucursal/cargarFactura',
 		type: "POST",		
 		//async: false,
 		data: {'factura': factura},				
@@ -147,7 +147,7 @@ function agregarFacturaASucursal(){
 	}
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/contabilidad/agregarComprasSucursal/agregarCompras',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/agregarComprasSucursal/agregarCompras',
 		type: "POST",		
 		async: false,
 		data: {'factura': factura, 'sucursal':sucursalAgregar, 'prefijo':$("#prefijo").val()},				
@@ -161,7 +161,7 @@ function agregarFacturaASucursal(){
 				}else if(informacion[0].status==="success"){
 					resetFields();
 					$("#numero_factura").val('');
-					window.open(location.protocol+'//'+document.domain+'/impresion?t='+informacion[0].token+'&d=t&n='+informacion[0].traspaso+'&s='+informacion[0].sucursal+'&i=c','Impresion de Traspaso','width=768,height=1024,resizable=no,toolbar=no,location=no,menubar=no');
+					window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+informacion[0].token+'&d=t&n='+informacion[0].traspaso+'&s='+informacion[0].sucursal+'&i=c','Impresion de Traspaso','width=768,height=1024,resizable=no,toolbar=no,location=no,menubar=no');
 					notyMsg('¡Se han agregado los artículos como compras con éxito!', 'success');					
 				}
 			}catch(e){

@@ -38,7 +38,7 @@ function buscarArticulo(e, value, id){
 
 function getArticulo(fila, articulo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/facturas/nueva/getArticuloJSON',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getArticuloJSON',
 		type: "POST",		
 		async: false,
 		data: {'cedula':0, 'codigo':articulo},				

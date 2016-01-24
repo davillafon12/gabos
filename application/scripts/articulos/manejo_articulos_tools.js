@@ -72,7 +72,7 @@ function convertirArray(array){
 	
 function ingresarDescuento(articulos, descuento){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/editar/agregarDescuentoMasivo',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/agregarDescuentoMasivo',
 		type: "POST",		
 		async: false,
 		data: {'descuento':descuento, 'articulos':JSON.stringify(articulos), 'sucursal':$("#sucursalListaArticulos").val()},				
@@ -132,7 +132,7 @@ function cargarArticulosBodegaSucursal(){
 
 function actualizarProductosTemporales(){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/editar/obtenerArticulosTemporales',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/obtenerArticulosTemporales',
 		type: "POST",		
 		async: false,
 		data: {'sucursal':$("#sucursalTemporalesArticulos").val()},				
@@ -185,7 +185,7 @@ function devolverProductosTemporales(){
 	
 function retornarArticulos(){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/editar/retornarArticulosTemporales',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/retornarArticulosTemporales',
 		type: "POST",		
 		async: false,
 		data: {'sucursal':$("#sucursalTemporalesArticulos").val()},				
@@ -245,7 +245,7 @@ function deshabilitarRetencion(){
 
 function actualizarRetencion(articulos, estado){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/editar/actualizarRetencionMasivo',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/actualizarRetencionMasivo',
 		type: "POST",		
 		async: false,
 		data: {'estado':estado, 'articulos':JSON.stringify(articulos), 'sucursal':$("#sucursalListaArticulos").val()},				

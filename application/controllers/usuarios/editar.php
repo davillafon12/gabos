@@ -80,7 +80,7 @@ class editar extends CI_Controller {
 					echo "<tr class='table_row'>
 
 						<td >
-                            <input class='checkbox'  type='checkbox' name='checkbox' value='".$row->Usuario_Cedula."'>
+                            <input class='checkbox'  type='checkbox' name='checkbox' value='".$row->Usuario_Codigo."'>
                         </td>
 						<td>
 							".$row->Usuario_Codigo."

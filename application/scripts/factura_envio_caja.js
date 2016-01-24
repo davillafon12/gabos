@@ -132,7 +132,7 @@ function getFullData(){
 
 function sendInvoice(URL){	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+URL,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
 		async: false,
 		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON), 'token':token_factura_temporal},		
@@ -141,7 +141,7 @@ function sendInvoice(URL){
 			if(data.trim()==='7'){//Todo salio bien
 				window.onbeforeunload=null;
 				window.onunload=null;
-				window.location = location.protocol+'//'+document.domain+'/home';
+				window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/home';
 			}else{
 				n = noty({
 					   layout: 'topRight',

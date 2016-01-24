@@ -18,7 +18,7 @@ function AjaxCaller(){
 
 function getTable(){
 	var tabla = document.getElementById('contenido');
-	getContentTable(location.protocol+'//'+document.domain+'/bancos/editar/getMainTable', tabla);
+	getContentTable(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/bancos/editar/getMainTable', tabla);
 }
 		
 function getContentTable(url, div){	
@@ -39,7 +39,7 @@ function getContentTable(url, div){
 								],
 					'sPaginationType': 'full_numbers',
 					'oLanguage': {
-						'sUrl': location.protocol+'//'+document.domain+'/application/scripts/Spanish.txt'
+						'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/Spanish.txt'
 				   }
 				} );
 		}

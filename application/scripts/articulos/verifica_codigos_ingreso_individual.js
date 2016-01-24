@@ -67,7 +67,7 @@ function verificarCodigoArticulo(){
 	}*/
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/registrar/es_Codigo_Utilizado',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/registrar/es_Codigo_Utilizado',
 		type: "POST",		
 		async: false,
 		data: {'codigo':codigo, 'sucursal':sucursal},				
@@ -77,15 +77,15 @@ function verificarCodigoArticulo(){
 				informacion = $.parseJSON('[' + data.trim() + ']');
 				if(informacion[0].status==="error"){					
 					codigoDisponible = false;
-					$("#status").html("<img src="+location.protocol+'//'+document.domain+"/application/images/scripts/error.gif />");
+					$("#status").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/error.gif />");
 					$("#cod_Barras").html('');
 					deshabilitarCampos();
 				}else if(informacion[0].status==="success"){					
 					codigoDisponible = true;
-					$("#status").html("<img src="+location.protocol+'//'+document.domain+"/application/images/scripts/tick.gif />");
+					$("#status").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/tick.gif />");
 					
 					//Crear codigo barras
-					$("#cod_Barras").html("<img src="+location.protocol+'//'+document.domain+"/application/libraries/barcode.php?codetype=Code25&size=40&text="+codigo+"/>");	
+					$("#cod_Barras").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/libraries/barcode.php?codetype=Code25&size=40&text="+codigo+"/>");	
 					habilitarCampos();
 				}
 			}catch(e){				
@@ -124,7 +124,7 @@ function cargarFamilias(){
 	sucursal = $("#sucursal").val();
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/articulos/ingresar/getFamiliasSucursal',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/ingresar/getFamiliasSucursal',
 		type: "POST",		
 		async: false,
 		data: {'sucursal':sucursal},				

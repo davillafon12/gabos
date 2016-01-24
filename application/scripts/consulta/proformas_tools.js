@@ -31,7 +31,7 @@ $(function() {
 	
 	
 	$( "#nombre" ).autocomplete({
-		  source: location.protocol+'//'+document.domain+'/facturas/nueva/getNombresClientesBusqueda',
+		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
 			$("#cedula").val(ui.item.id);				  
@@ -44,7 +44,7 @@ $(function() {
 function llamarFacturas(){
 	if(validarFechas()){		
 		$.ajax({
-			url : location.protocol+'//'+document.domain+'/consulta/getProformasFiltradas',
+			url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/getProformasFiltradas',
 			type: "POST",	
 			data: {'cliente':$("#cedula").val(),'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val()},				
 			success: function(data, textStatus, jqXHR)
@@ -204,7 +204,7 @@ function cargaServerFactura(consecutivo){
 
 function cargarEncabezado(consecutivo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/facturas/caja/getProformaHeadersConsulta",
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/getProformaHeadersConsulta",
 		type: "POST",
 		data: {'consecutivo':consecutivo},		
 		success: function(data, textStatus, jqXHR)
@@ -235,7 +235,7 @@ function cargarEncabezado(consecutivo){
 
 function cargarProductos(consecutivo){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/facturas/caja/getArticulosProformaConsulta",
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/getArticulosProformaConsulta",
 		type: "POST",
 		data: {'consecutivo':consecutivo},		
 		success: function(data, textStatus, jqXHR)
@@ -310,7 +310,7 @@ function setProductosFactura(productos){
 		fila = "<tr>";
 		fila += "<td><label class='contact'>"+productos[i].codigo+"</label></td>";
 		fila += "<td><div class='contact' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].descripcion+"</div>"
-				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+productos[i].imagen+"' height='200' width='200'></div></td>";
+				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/articulos/"+productos[i].imagen+"' height='200' width='200'></div></td>";
 		fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].cantidad+"</label></td>";	
 		
 		if(productos[i].exento==='1'){fila += "<td><label class='contact'>E</label>";}else{fila += "<td><label class='contact'></label>";};
@@ -430,7 +430,7 @@ function imprimir(){
 		window.open(servidorImpresion+'/index.html?t='+token+'&d=p&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Proformas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
-		window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=p&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+token+'&d=p&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}
 }
 
@@ -449,7 +449,7 @@ function descontarArticulos(){
 			submit:function(e,v,m,f){
 										if(v){
 													$.ajax({
-														url : location.protocol+'//'+document.domain+"/facturas/proforma/descontarArticulosProforma",
+														url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/descontarArticulosProforma",
 														type: "POST",
 														data: {'consecutivo':consecutivo},		
 														success: function(data, textStatus, jqXHR)

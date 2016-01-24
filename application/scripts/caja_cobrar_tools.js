@@ -301,7 +301,7 @@ function tipoPagoJSON(){
 
 function enviarCobro(URL){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+URL,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
 		data: {'consecutivo':consecutivoActual,'tipoPago':JSON.stringify(tipoPagoJSON())},		
 		success: function(data, textStatus, jqXHR)
@@ -319,9 +319,9 @@ function enviarCobro(URL){
 					window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 				}else if(tipoImpresion==='c'){
 					//Impresion carta
-					window.open(location.protocol+'//'+document.domain+'/impresion?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+					window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 				}
-				window.location = location.protocol+'//'+document.domain+'/facturas/caja';
+				window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/caja';
 			}
 			}
 			catch(e){
@@ -340,7 +340,7 @@ function cambiarFactura(URL){
 	createJSON();
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+URL,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",		
 		async: false,
 		data: {'consecutivo':consecutivoActual,'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON), 'token':token_factura_temporal},				
@@ -417,7 +417,7 @@ function anularPost(){
 
 function anularFacturaAJAX(URL){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+URL,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
 		data: {'consecutivo':consecutivoActual},		
 		success: function(data, textStatus, jqXHR)
@@ -427,7 +427,7 @@ function anularFacturaAJAX(URL){
 				if(result[0].status==="error"){
 					displayErrors(result[0].error);
 				}else if(result[0].status==="success"){
-					window.location = location.protocol+'//'+document.domain+'/facturas/caja';
+					window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/caja';
 				}
 			}catch(e){
 				notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
@@ -442,7 +442,7 @@ function anularFacturaAJAX(URL){
 
 function crearFacturaFromProforma(URL){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+URL,
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
 		async: false,
 		data: {'consecutivo':consecutivoActual},		
@@ -574,7 +574,7 @@ function deshacerFacturaCaja(){
 	createJSON();
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+"/facturas/caja/devolverInventario",
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/devolverInventario",
 		type: "POST",
 		async: false,
 		data: {'consecutivo':consecutivoActual,'items':JSON.stringify(invoiceItemsJSON)},		
@@ -586,7 +586,7 @@ function deshacerFacturaCaja(){
 function salidaSesion(){
 	if(seCambioFactura){deshacerFacturaCaja();}
 	window.onbeforeunload=null;
-	window.location = location.protocol+'//'+document.domain+'/home/logout';
+	window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/home/logout';
 }
 
 // Para el tamaño del windows open

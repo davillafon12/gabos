@@ -33,7 +33,7 @@ function resetFields(){
 
 function getNombreCliente(cedula){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/otros/getCliente',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/getCliente',
 		type: "POST",		
 		//async: false,
 		data: {'cedula':cedula},				
@@ -160,7 +160,7 @@ Number.prototype.format = function(n, x, s, c) {
 
 function setUpLiveSearch(){	
 	$("#nombre").autocomplete({
-		  source: location.protocol+'//'+document.domain+'/facturas/nueva/getNombresClientesBusqueda',
+		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
 			$("#cedula").val(ui.item.id);
@@ -178,7 +178,7 @@ function updateDescuento(){
 			cedula = $("#cedula").val();
 			if(isNumber(cedula)){
 				$.ajax({
-						url : location.protocol+'//'+document.domain+'/clientes/otros/actualizarDescuento',
+						url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarDescuento',
 						type: "POST",		
 						async: false,
 						data: {'cedula':cedula, 'descuento':descuento},				
@@ -238,7 +238,7 @@ function updateCredito(){
 			cedula = $("#cedula").val();
 			if(isNumber(cedula)){
 				$.ajax({
-						url : location.protocol+'//'+document.domain+'/clientes/otros/actualizarCredito',
+						url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarCredito',
 						type: "POST",		
 						async: false,
 						data: {'cedula':cedula, 'credito':credito},				
@@ -295,7 +295,7 @@ function formatCreditoField(){
 
 function eliminarDesProducto(idDescuento){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/otros/eliminarDescuentoProducto',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/eliminarDescuentoProducto',
 		type: "POST",		
 		async: false,
 		data: {'id':idDescuento},				
@@ -333,7 +333,7 @@ function buscarArticulo(value){
 	codigo = codigo.replace(";","");
 	
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/otros/getArticulo',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/getArticulo',
 		type: "POST",		
 		//async: false,
 		data: {'codigo':codigo},				
@@ -396,7 +396,7 @@ function agregarDescuentoProducto(){
 
 function envioDescuentoProducto(codigo, descuento){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/otros/setDescuentoProducto',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/setDescuentoProducto',
 		type: "POST",		
 		async: false,
 		data: {'codigo':codigo, 'descuento':descuento, 'cedula':cedula},				
@@ -437,7 +437,7 @@ function envioDescuentoProducto(codigo, descuento){
 
 function eliminarDesFamilia(idDescuento){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/otros/eliminarDescuentoFamilia',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/eliminarDescuentoFamilia',
 		type: "POST",		
 		async: false,
 		data: {'id':idDescuento},				
@@ -479,7 +479,7 @@ function buscarFamilia(){
 		return false;
 	}
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/otros/getFamilia',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/getFamilia',
 		type: "POST",		
 		//async: false,
 		data: {'codigo':codigo},				
@@ -543,7 +543,7 @@ function agregarDescuentoFamilia(){
 
 function envioDescuentoFamilia(codigo, descuento){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/otros/setDescuentoFamilia',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/setDescuentoFamilia',
 		type: "POST",		
 		async: false,
 		data: {'codigo':codigo, 'descuento':descuento, 'cedula':cedula},				

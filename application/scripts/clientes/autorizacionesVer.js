@@ -18,7 +18,7 @@ function isNumber(n) {
 
 function getNombreCliente(cedula){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+'/clientes/autorizaciones/getCliente',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/autorizaciones/getCliente',
 		type: "POST",		
 		//async: false,
 		data: {'cedula':cedula},				
@@ -97,19 +97,19 @@ function setPersonaUno(persona1){
 	$("#cedula_persona_uno").val(persona1.cedula);
 	$("#nombre_persona_uno").val(persona1.nombre);
 	$("#apellido_persona_uno").val(persona1.apellidos);
-	$("#carta_persona_1").html("<img src='"+location.protocol+"//"+document.domain+"/application/images/cartas/"+persona1.carta+"' width='400' height='500'/>");
+	$("#carta_persona_1").html("<img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/cartas/"+persona1.carta+"' width='400' height='500'/>");
 }
 
 function setPersonaDos(persona2){
 	$("#cedula_persona_dos").val(persona2.cedula);
 	$("#nombre_persona_dos").val(persona2.nombre);
 	$("#apellido_persona_dos").val(persona2.apellidos);
-	$("#carta_persona_2").html("<img src='"+location.protocol+"//"+document.domain+"/application/images/cartas/"+persona2.carta+"' width='400' height='500'/>");
+	$("#carta_persona_2").html("<img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/cartas/"+persona2.carta+"' width='400' height='500'/>");
 }
 
 function setUpLiveSearch(){	
 	$("#nombre").autocomplete({
-		  source: location.protocol+'//'+document.domain+'/facturas/nueva/getNombresClientesBusqueda',
+		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
 			$("#cedula").val(ui.item.id);

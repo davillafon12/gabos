@@ -58,7 +58,7 @@
 	
 	function deactiveBancos(sel_empr_array){
 		var bancos = sel_empr_array.join(',');
-		actualizarBancos(location.protocol+'//'+document.domain+'/bancos/editar/eliminar?array='+sel_empr_array);
+		actualizarBancos(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/bancos/editar/eliminar?array='+sel_empr_array);
 	}
 	
 	function actualizarBancos(url){

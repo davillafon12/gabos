@@ -338,7 +338,7 @@ function setArticulo(articulo, num_fila){
 	//Seteamos la descripcion
 	$("#descripcion_articulo_"+num_fila).html(articulo.descripcion);
 	//Seteamos el tootltip de la imagen del articulo
-	$("#tooltip_imagen_articulo_"+num_fila).html("<img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+articulo.imagen+"' height='200' width='200'>");
+	$("#tooltip_imagen_articulo_"+num_fila).html("<img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/articulos/"+articulo.imagen+"' height='200' width='200'>");
 	agregarTooltip("#descripcion_articulo_"+num_fila);
 	//Seteamos la bodega
 	$("#bodega_articulo_"+num_fila).html(articulo.inventario);
@@ -467,7 +467,7 @@ function setDatosArticulo(articuloARRAY, id_input, num_row, cantidadArticulos){
 		
 		document.getElementById("descripcion_articulo_"+num_row).innerHTML=articuloARRAY[2];
 		
-		document.getElementById("tooltip_imagen_articulo_"+num_row).innerHTML = "<img src='"+location.protocol+"//"+document.domain+"/application/images/articulos/"+articuloARRAY[8]+".jpg' height='200' width='200'>";
+		document.getElementById("tooltip_imagen_articulo_"+num_row).innerHTML = "<img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/articulos/"+articuloARRAY[8]+".jpg' height='200' width='200'>";
 		agregarTooltip("#descripcion_articulo_"+num_row);
 		
 		document.getElementById("bodega_articulo_"+num_row).innerHTML=articuloARRAY[3];
@@ -599,7 +599,7 @@ function deshacerFactura(){
 function salidaSesion(){
 	resetAll();
 	window.onbeforeunload=null;
-	window.location = location.protocol+'//'+document.domain+'/home/logout';
+	window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/home/logout';
 	
 }
 
@@ -931,7 +931,7 @@ function actualizaPreciosArticulos(cedula){
 		if(codigo!=""&&descripcion!=""&&codigo!='00'){
 			num_fila = incremental;
 			$.ajax({
-				url : location.protocol+'//'+document.domain+'/facturas/nueva/getArticuloJSON',
+				url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getArticuloJSON',
 				type: "POST",
 				async: false,
 				data: {'cedula':cedula, 'codigo':codigo},		
