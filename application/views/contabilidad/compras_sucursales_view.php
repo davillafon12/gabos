@@ -91,6 +91,7 @@ PARA:
 					<table>
 						<thead>
 							<tr class="header">
+								<th class="titulo_header_tabla" style="width: 20px;"></th>
 								<th class="titulo_header_tabla" style="width: 110px;">Código</th>
 								<th class="titulo_header_tabla" style="width: 350px;">Descripción</th>
 								<th class="titulo_header_tabla" style="width: 110px;">Cantidad</th>

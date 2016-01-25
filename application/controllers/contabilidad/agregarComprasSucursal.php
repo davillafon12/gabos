@@ -56,10 +56,11 @@ class agregarComprasSucursal extends CI_Controller {
 	function agregarCompras(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1';
-		if(isset($_POST['factura']) && isset($_POST['sucursal']) && isset($_POST['prefijo'])){
+		if(isset($_POST['factura']) && isset($_POST['sucursal']) && isset($_POST['prefijo']) && isset($_POST['conPrefijo'])){
 			$factura = $_POST['factura'];	
 			$sucursal = $_POST['sucursal'];
 			$prefijo = trim($_POST['prefijo']);
+			$conPrefijo = explode(",",trim($_POST['conPrefijo'])); 
 			if(is_numeric($factura)){
 				if($productos = $this->factura->getItemsFactura($factura, $this->configuracion->getEmpresaDefectoTraspasoCompras())){ 
 					if($this->empresa->getEmpresa($sucursal)){
@@ -86,7 +87,8 @@ class agregarComprasSucursal extends CI_Controller {
 									//Le quitamos el iva 
 									$costo /= 1+(floatval($c_array['iva'])/100);
 									$this->bodega_m->agregarCompra($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Descripcion, $costo, $pro->Articulo_Factura_Cantidad, $fecha, $data['Usuario_Codigo'], $sucursal);
-									$this->agregarAInventario($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Cantidad, $pro->Articulo_Factura_Descripcion, $costo, $this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $traspaso, $prefijo);
+									$prefijoFinal = in_array($pro->Articulo_Factura_Codigo, $conPrefijo) ? $prefijo : '';
+									$this->agregarAInventario($pro->Articulo_Factura_Codigo, $pro->Articulo_Factura_Cantidad, $pro->Articulo_Factura_Descripcion, $costo, $this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $traspaso, $prefijoFinal);
 								}
 								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario agrego la factura #$factura como compras de la sucursal $sucursal",$data['Sucursal_Codigo'],'compras');
 								

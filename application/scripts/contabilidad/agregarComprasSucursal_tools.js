@@ -112,7 +112,7 @@ function setProductos(productos){
 		precio = cantidad * ( precioUnitario - ( precioUnitario * (descuento / 100) ));
 		precio = precio.format(2, 3, '.', ',');
 		precioUnitario = precioUnitario.format(2, 3, '.', ',');
-		$("#productos_tabla").append("<tr><td class='productos-p txt-center'>"+productos[i].Articulo_Factura_Codigo+"</td><td class='productos-p'>"+productos[i].Articulo_Factura_Descripcion+"</td><td class='productos-p txt-center'>"+cantidad+"</td><td class='productos-p txt-center'>"+descuento+"</td><td class='productos-p txt-right'>"+precioUnitario+"</td><td class='productos-p txt-right'>"+precio+"</td></tr>");
+		$("#productos_tabla").append("<tr><td><input type='checkbox' class='articulos-con-prefijo' value='"+productos[i].Articulo_Factura_Codigo+"'></td><td class='productos-p txt-center'>"+productos[i].Articulo_Factura_Codigo+"</td><td class='productos-p'>"+productos[i].Articulo_Factura_Descripcion+"</td><td class='productos-p txt-center'>"+cantidad+"</td><td class='productos-p txt-center'>"+descuento+"</td><td class='productos-p txt-right'>"+precioUnitario+"</td><td class='productos-p txt-right'>"+precio+"</td></tr>");
 	}	
 }
 
@@ -135,7 +135,7 @@ function procesarSolicitud(){
 	}else{
 		notyMsg('Primero cargue una factura a agregar como compra', 'error');
 	}
-}
+} 
 
 function agregarFacturaASucursal(){
 	factura = $("#numero_factura").val();
@@ -146,11 +146,17 @@ function agregarFacturaASucursal(){
 		return false;
 	}
 	
+	var arrayArticulosConPrefijo = [];
+	
+	$.each($(".articulos-con-prefijo:checked"), function(index, content){
+		arrayArticulosConPrefijo.push($(content).prop("value"));
+	});
+	
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/agregarComprasSucursal/agregarCompras',
 		type: "POST",		
 		async: false,
-		data: {'factura': factura, 'sucursal':sucursalAgregar, 'prefijo':$("#prefijo").val()},				
+		data: {'factura': factura, 'sucursal':sucursalAgregar, 'prefijo':$("#prefijo").val(), 'conPrefijo':arrayArticulosConPrefijo.join(",")},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
