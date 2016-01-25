@@ -475,3 +475,45 @@ function descontarArticulos(){
 	
 }
 
+function convertirEnFactura(){
+	consecutivo = $("#consecutivo").val();
+	if(consecutivo.trim()===''){
+		notyMsg('Debe ingresar un consecutivo válido', 'error');
+		return false;
+	}else if(consecutivo!=consecutivoActual){
+		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
+		return false;
+	}
+	
+	
+	$.prompt("¡Esto convertirá la proforma en una factura pendiente!", {
+			title: "¿Esta seguro que desea convertir la proforma en factura pendiente?",
+			buttons: { "Si, estoy seguro": true, "Cancelar": false },
+			submit:function(e,v,m,f){
+										if(v){
+													$.ajax({
+														url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/convertirEnFactura",
+														type: "POST",
+														data: {'consecutivo':consecutivo},		
+														success: function(data, textStatus, jqXHR)
+														{			
+															try{
+																dataR = $.parseJSON('[' + data.trim() + ']');
+																if(dataR[0].status==="error"){
+																		notyMsg(dataR[0].error, "error");
+																}else{
+																		notyMsg("La proforma se creó con éxito. <br>Número de factura: "+dataR[0].consecutivo, "success");
+																}
+															}
+															catch(e){
+																	notyMsg("Error al mostrar resultado.", "error");
+															}			
+														},
+														error: function (jqXHR, textStatus, errorThrown)
+														{}
+													});				
+										}
+									}
+	});
+}
+

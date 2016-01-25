@@ -134,7 +134,7 @@ class proforma extends CI_Controller {
 					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
-					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 2, $sucursal);
+					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
 					$this->proforma_m->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
 				}
 			}
@@ -199,7 +199,62 @@ class proforma extends CI_Controller {
 			}
 			return true;
 	}
+	
+	function convertirEnFactura(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = 'No se pudo realizar la conversión.';
+		if(isset($_POST['consecutivo']) && trim($_POST['consecutivo']) != ""){
+				include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				$consecutivo = trim($_POST['consecutivo']);
+				$sucursal = $data['Sucursal_Codigo'];
+				if($proformaHeaders = $this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
+						$proformaHeaders = $proformaHeaders[0];
+						if($articulos = $this->proforma_m->getArticulosProforma($consecutivo, $sucursal)){
+								if($this->valorarSiHayExistenciaDeProductos($articulos, $sucursal)){
+									if($consecutivoFactura = $this->factura->crearfactura($proformaHeaders->TB_03_Cliente_Cliente_Cedula, $proformaHeaders->Proforma_Nombre_Cliente, $proformaHeaders->Proforma_Moneda, $proformaHeaders->Proforma_Observaciones, $proformaHeaders->TB_02_Sucursal_Codigo, $proformaHeaders->Proforma_Vendedor_Codigo, false)){
+										$this->agregarItemsFactura($articulos, $consecutivoFactura, $proformaHeaders->TB_02_Sucursal_Codigo, $proformaHeaders->Proforma_Vendedor_Codigo, $proformaHeaders->TB_03_Cliente_Cliente_Cedula);
+										$this->actualizarCostosFactura($consecutivoFactura, $proformaHeaders->TB_02_Sucursal_Codigo);
+										$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." convirtió la proforma $consecutivo en la factura pendiente $consecutivoFactura", $data['Sucursal_Codigo'],'factura_envio');
+										foreach($articulos as $art){
+												$this->articulo->actualizarInventarioRESTA($art->Articulo_Proforma_Codigo, $art->Articulo_Proforma_Cantidad, $sucursal);
+										}
+										unset($retorno['error']);
+										$retorno['status'] = 'success';
+										$retorno['consecutivo'] = $consecutivoFactura;
+									}
+								}else{
+										$retorno['error'] = 'No hay suficiente existencia en inventario para realizar la factura.';
+								}
+						}else{
+								$retorno['error'] = 'La proforma no posee artículos.';
+						}
+				}else{
+						$retorno['error'] = 'La proforma no existe.';
+				}
+		}else{
+				$retorno['error'] = 'URL con formato indebido.';
+		}	
+		echo json_encode($retorno);
+	}
+	
+	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
+		foreach($items_factura as $item){
+			if($item->Articulo_Proforma_Codigo == '00'){ //Si es generico					
+					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Unitario, $consecutivo, $sucursal, $vendedor, $cliente,'');
+			}else{ //Si es normal					
+				if($this->articulo->existe_Articulo($item->Articulo_Proforma_Codigo, $sucursal)){ //Verificamos que el codigo exista
+					
+					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Final, $consecutivo, $sucursal, $vendedor, $cliente, $item->Articulo_Proforma_Imagen);
+				}
+			}
+			
+		}
+	}
 
+	function actualizarCostosFactura($consecutivo, $sucursal){
+		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
+		$this->factura->updateCostosTotales($costosArray, $consecutivo, $sucursal);
+	}
 	
  
 }// FIN DE LA CLASE

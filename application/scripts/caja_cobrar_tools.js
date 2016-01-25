@@ -484,6 +484,7 @@ function crearFacturaFromProforma(URL){
 
 function editarFactura(){	
 	if(isProforma){
+		notyError('¡No se puede editar una proforma. Si desea modificarla debe crear una factura pendiente, a partir de esta proforma!');
 		return false;
 	}
 	if(validarFactura()){

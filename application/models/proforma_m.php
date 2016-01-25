@@ -129,46 +129,72 @@ Class proforma_m extends CI_Model
 		$costo_sin_iva = 0;
 		$retencion = 0;
 		$this->load->model('articulo','',TRUE);
+		$this->load->model('cliente','',TRUE);
 		//Traemos el array de configuracion para obtener el porcentaje
 		$c_array = $this->getConfgArray();
 		
-		
-		
+		//Obtenemos la info del cliente para ver si es exento y/o aplica retencion
 		$head = $this->getProformasHeaders($consecutivo, $sucursal)[0];
+		$clienteEsExento = $this->cliente->clienteEsExentoDeIVA($head->TB_03_Cliente_Cliente_Cedula);
+		$clienteNoAplicaRetencion = $this->cliente->clienteEsExentoDeRetencion($head->TB_03_Cliente_Cliente_Cedula);
+		
 		if($articulos = $this->getArticulosProforma($consecutivo, $sucursal)){
 			foreach($articulos as $articulo)
 			{
 				//Calculamos el precio total de los articulos
 				$precio_total_articulo = (($articulo->Articulo_Proforma_Precio_Unitario)-(($articulo->Articulo_Proforma_Precio_Unitario)*(($articulo->Articulo_Proforma_Descuento)/100)))*$articulo->Articulo_Proforma_Cantidad;
-				
+				$precio_total_articulo_sin_descuento = $articulo->Articulo_Proforma_Precio_Unitario*$articulo->Articulo_Proforma_Cantidad;
 				$precio_articulo_final = $articulo->Articulo_Proforma_Precio_Final;
 				$precio_articulo_final = $precio_articulo_final * $articulo->Articulo_Proforma_Cantidad;
 				
 				//Calculamos los impuestos
+				
 				$isExento = $articulo->Articulo_Proforma_Exento;
-				if($isExento=='0'){
-					$costo_sin_iva += $precio_total_articulo/(1+(floatval($head->Proforma_Porcentaje_IVA)/100));
+				
+				if($isExento=='0'){ 
+					$costo_sin_iva += $precio_total_articulo/(1+(floatval($c_array['iva'])/100));
+					
+					
+					$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($c_array['iva'])/100)));
+					$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($c_array['iva'])/100))); 
+					
 					$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($c_array['iva'])/100));
-					$retencion += $precio_articulo_final - $precio_final_sin_iva;
+					$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+					
+					if(!$articulo->Articulo_Proforma_No_Retencion){
+							$retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+					}
 				}
 				else if($isExento=='1'){
 					$costo_sin_iva += $precio_total_articulo;
+					//$retencion = 0;
 				}
 				$costo_total += $precio_total_articulo;
-				//$costo_sin_iva += (($articulo->Articulo_Factura_Precio_Unitario)-(($articulo->Articulo_Factura_Precio_Unitario)*(($articulo->Articulo_Factura_Descuento)/100)))*$articulo->Articulo_Factura_Cantidad;
 			}
 			$iva = $costo_total-$costo_sin_iva;
 		}
 		
-		$retencion -= $iva;
+		//$retencion -= $iva;
 		//Si aplica la retencion entonces modificamos los costos
 		if(!$c_array['aplicar_retencion']){
 			$retencion = 0;
 		}
 		
+		//Si el cliente es exento o no aplica retencion, lo valoramos
+		if($clienteEsExento){
+				$costo_total -= $iva;
+				$iva = 0;
+				$retencion = 0;
+		}
+		if($clienteNoAplicaRetencion){
+				$retencion = 0;
+		}
+		
 		$costo_total += $retencion;
 		
 		return array('Proforma_Monto_Total'=>$costo_total, 'Proforma_Monto_IVA'=>$iva, 'Proforma_Monto_Sin_IVA'=>$costo_sin_iva, 'Proforma_Retencion'=>$retencion);
+	
+	
 	}	
 	
 	function getConfgArray()

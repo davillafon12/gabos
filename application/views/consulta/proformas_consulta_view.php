@@ -131,6 +131,8 @@ PARA:
 				</select>
 				<input type="button" class="boton_busqueda" onclick="imprimir()" value="Imprimir"/>
 				<input type="button" class="boton_busqueda" onclick="descontarArticulos()" value="Descontar Artículos" style="    background: #F5913B;"/>
+				<input type="button" class="boton_busqueda" onclick="convertirEnFactura()" value="Convertir En Factura" style="    background: #8e44ad;"/>
+
 				<table id="tabla_productos" class="tabla_productos">
 					<thead>
 						<tr><th class="th_codigo">Código</th>
