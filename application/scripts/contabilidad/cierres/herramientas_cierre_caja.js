@@ -164,8 +164,8 @@ function actualizarMontoTotalRetiro(){
 	total = (dolares*tipo_cambio)+billetes+monedas;
 	totalRetirosParciales = parseFloat($("#totalRetirosParciales").val());
 	totalRetirosParciales += total;
-	//baseCaja = parseFloat($("#base_caja").val());
-	//total -= baseCaja;
+	baseCaja = parseFloat($("#base_caja").val());
+	totalRetirosParciales -= baseCaja;
 	
 	$("#input_retiro_parcial").html(total.format(2, 3, '.', ','));
 	$("#parrafoTotalRetirosParciales").html("₡"+totalRetirosParciales.format(2, 3, '.', ','));

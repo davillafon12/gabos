@@ -1014,7 +1014,7 @@ class impresion extends CI_Controller {
 		$baseDeCaja = $cierre->base;
 		$totalRetirosParciales = $cierre->datos['totalRecibosParciales'];
 		$retiroFinal = $cierre->conteo;
-		$efectivoTotal = $totalRetirosParciales + $retiroFinal;
+		$efectivoTotal = ($totalRetirosParciales + $retiroFinal) - $baseDeCaja;
 		
 		$pdf->SetFont('Arial','B',14);
 		$pdf->ln(7);
