@@ -127,7 +127,7 @@ function obtenerJSON(){
 
 function enviarServer(json){
 	$.ajax({
-		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')'/contabilidad/notas/generarNota',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/notas/generarNota',
 		type: "POST",		
 		async: false,
 		data: json,				
@@ -151,7 +151,7 @@ function enviarServer(json){
 						window.open(informacion[0].servidor_impresion+'/index.html?t='+informacion[0].token+'&d=nc&n='+informacion[0].nota+'&s='+informacion[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Notas Credito','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}else if(tipoImpresion==='c'){
 						//Impresion carta
-						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')'/impresion?t='+informacion[0].token+'&d=nc&n='+informacion[0].nota+'&s='+informacion[0].sucursal+'&i='+tipoImpresion,'Impresion de Nota Crédito','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+informacion[0].token+'&d=nc&n='+informacion[0].nota+'&s='+informacion[0].sucursal+'&i='+tipoImpresion,'Impresion de Nota Crédito','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}
 					
 					

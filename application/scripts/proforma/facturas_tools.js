@@ -635,7 +635,7 @@ function deshacerFactura(){
 function salidaSesion(){
 	resetAll();
 	window.onbeforeunload=null;
-	window.location = location.protocol+'//'+document.domain+'/home/logout';
+	window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/home/logout';
 	
 }
 

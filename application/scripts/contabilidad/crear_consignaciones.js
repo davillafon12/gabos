@@ -230,7 +230,7 @@ function resultadoConsignacion(data){
 				notyMsg('¡Se creó la consignación con éxito!', 'success');
 				
 				//Impresion carta
-				window.open(location.protocol+'//'+document.domain+'/impresion?t='+data.token+'&d=con&n='+data.consignacion+'&s='+data.sucursal+'&i=c','Impresion de Consignación','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+				window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+data.token+'&d=con&n='+data.consignacion+'&s='+data.sucursal+'&i=c','Impresion de Consignación','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 				
 		}else{
 			notyMsg(data.error, 'error');

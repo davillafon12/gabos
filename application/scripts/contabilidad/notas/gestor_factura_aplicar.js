@@ -23,7 +23,7 @@ function validarFacturaAplicar(consecutivo){
 	
 	//Ejecutar
 	$.ajax({
-		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')'/contabilidad/notas/consecutivoFacturaExiste',
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/notas/consecutivoFacturaExiste',
 		type: "POST",		
 		//async: false,
 		data: {'cedula':cedula, 'consecutivo':consecutivo},				
