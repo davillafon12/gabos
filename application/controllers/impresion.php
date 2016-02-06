@@ -636,9 +636,9 @@ class impresion extends CI_Controller {
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('f', $empresa[0], $fhead[0], $pdf);
 			//Agregamos Productos
-			$inicio = $this->numPagina*33;
-			if((($this->numPagina+1)*33)<$cantidadProductos){
-				$final = ($this->numPagina+1)*33;
+			$inicio = $this->numPagina*30;
+			if((($this->numPagina+1)*30)<$cantidadProductos){
+				$final = ($this->numPagina+1)*30;
 			}else{
 				$final = $cantidadProductos;
 			}
@@ -1396,7 +1396,7 @@ class impresion extends CI_Controller {
 	private function pieDocumentoPDF($tipo, $encabezado, $empresa, &$pdf, $cantidadTotalArticulos){
 		if($cantidadTotalArticulos != 0){
 				//Cantidad total de articulos
-				$pdf->SetXY(74, 240);
+				$pdf->SetXY(74, 225);
 				$pdf->Cell(20,5,"Cantidad Total de Artículos:      ".$cantidadTotalArticulos);
 		}
 		switch($tipo){
@@ -1405,7 +1405,7 @@ class impresion extends CI_Controller {
 				$this->observaciones($encabezado->observaciones, $pdf);
 				//Leyenda de tributacion
 				$pdf->SetFont('Arial','',8);
-				$pdf->SetXY(10, 270);	
+				$pdf->SetXY(10, 255);	
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 				//Costos totales
 				$subtotal = $encabezado->subtotal;
@@ -1420,16 +1420,16 @@ class impresion extends CI_Controller {
 					$retencion = $retencion/$encabezado->cambio;
 				}
 				$pdf->SetFont('Arial','',11);
-				$pdf->SetXY(131, 240);	
+				$pdf->SetXY(131, 225);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
-				$pdf->SetXY(131, 247);	
+				$pdf->SetXY(131, 232);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
-				$pdf->SetXY(131, 254);	
+				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($retencion),1,0,'R');
-				$pdf->SetXY(131, 261);	
+				$pdf->SetXY(131, 246);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
 			break;			
@@ -1468,7 +1468,7 @@ class impresion extends CI_Controller {
 				$this->observaciones($encabezado->observaciones, $pdf);
 				//Leyenda de tributacion
 				$pdf->SetFont('Arial','',8);
-				$pdf->SetXY(10, 270);	
+				$pdf->SetXY(10, 255);	
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 				//Costos totales
 				$subtotal = $encabezado->subtotal;
@@ -1483,16 +1483,16 @@ class impresion extends CI_Controller {
 					$retencion = $retencion/$encabezado->cambio;
 				}
 				$pdf->SetFont('Arial','',11);
-				$pdf->SetXY(131, 240);	
+				$pdf->SetXY(131, 225);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
-				$pdf->SetXY(131, 247);	
+				$pdf->SetXY(131, 232);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
-				$pdf->SetXY(131, 254);	
+				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($retencion),1,0,'R');
-				$pdf->SetXY(131, 261);	
+				$pdf->SetXY(131, 246);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
 			break;
@@ -1563,9 +1563,9 @@ class impresion extends CI_Controller {
 	private function observaciones($obs, &$pdf){
 		//Agregamos el cuadro de observaciones
 		$pdf->SetFont('Arial','B',12);
-		$pdf->Text(11, 245, 'Observaciones:');
+		$pdf->Text(11, 230, 'Observaciones:');
 		$pdf->SetFont('Arial','',8);
-		$pdf->SetXY(10, 246);	
+		$pdf->SetXY(10, 231);	
 		$pdf->MultiCell(100,5,$obs);
 	}
 	
@@ -1574,17 +1574,17 @@ class impresion extends CI_Controller {
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Text(90, 65, 'Productos');
 		//Caja redondeada 1
-		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
+		$pdf->RoundedRect(10, 67, 190, 158, 5, '12', 'D');
 		//Divisores verticales de productos
 		$pdf->Line(10, 74, 200, 74);		
 		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
 		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
-		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
-		$pdf->Line(110, 67, 110, 240); //Divisor de descripcion y cantidad
-		$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
-		$pdf->Line(131, 67, 131, 240); //Divisor de exento y descuento
-		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total		
+		$pdf->Line(30, 67, 30, 225); //Divisor de codigo y descripcion
+		$pdf->Line(110, 67, 110, 225); //Divisor de descripcion y cantidad
+		$pdf->Line(125, 67, 125, 225); //Divisor de cantidad y exento
+		$pdf->Line(131, 67, 131, 225); //Divisor de exento y descuento
+		$pdf->Line(145, 67, 145, 225); //Divisor de descuento y precio unitario
+		$pdf->Line(172, 67, 172, 225); //Divisor de precio unitario y precio total		
 		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
 		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
 		//Encabezado de productos

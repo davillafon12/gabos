@@ -1,5 +1,5 @@
-(function($) {
-	"use strict";
+//$(document).ready(function(){
+//	"use strict";
 
 	/**
 	* setDefaults - Sets the default options
@@ -679,4 +679,4 @@
 		$.prompt($(this).clone(options.withDataAndEvents).html(),options);
 	};
 	
-})(jQuery);
+//});

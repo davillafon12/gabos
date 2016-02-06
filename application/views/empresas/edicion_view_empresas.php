@@ -110,8 +110,8 @@ PARA:
 				<tr>
 					<td>
 						<p class="contact"><label for="leyenda">Leyenda de la D.G.T.D.:</label></p> 
-						<textarea id="leyenda" autocomplete="off" class="observaciones" placeholder="" name="leyenda" tabindex="8" cols="25" rows="5" maxlength="150" ><?php echo $Empresa_Tributacion;?></textarea> 
-						<p class="advertencia_longitud">Máximo 150 caracteres</p> 
+						<textarea id="leyenda" autocomplete="off" class="observaciones" placeholder="" name="leyenda" tabindex="8" cols="25" rows="5" maxlength="1000" ><?php echo $Empresa_Tributacion;?></textarea> 
+						<p class="advertencia_longitud">Máximo 1000 caracteres</p> 
 					</td>
 					<td>
 						<p class="contact_observaciones"><label for="observaciones">Observaciones:</label></p> 

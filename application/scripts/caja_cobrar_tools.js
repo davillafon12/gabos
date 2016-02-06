@@ -46,7 +46,7 @@ function cobrarFactura(){
 		
 													tipoPago = $('input[name=tipo]:checked').val();	
 													//alert(totalAPagar);
-													
+													 
 													$("#cuadro_vuelto_total").html(totalAPagar);
 													if(tipoPago.trim()==='tarjeta'||tipoPago.trim()==='cheque'||tipoPago.trim()==='deposito'){
 														totalAPagar = '0';
@@ -240,7 +240,8 @@ function validarCheque(){
 
 function validarMixto(){
 	numeroTransaccion = $('#numero_transaccion').val();
-	transacIsNumber = $.isNumeric(numeroTransaccion);
+	//transacIsNumber = $.isNumeric(numeroTransaccion);
+	transacIsNumber = true;
 	cantidadTransaccion = $('#cantidad_mixto').val();
 	cantidadIsNumber = $.isNumeric(cantidadTransaccion);
 	cantidadTransaccionEfectivo = $('#monto_efectivo_mixto_input').val();

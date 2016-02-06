@@ -197,12 +197,12 @@ function agregarFila(){
 		if(codigoAbonarValido){
 			if(validarCantidad()){
 				if(validarCodigos()){
-					if(verificarCodigoNoRepetido()){
+					//if(verificarCodigoNoRepetido()){
 						ingresarSucursal(); //Bloquemos la sucursal
 						
 						ingresarFila($("#codigo_cambiar").val(), $("#codigo_abonar").val(), $("#cantidad").val(), $("#descripcion_cambiar").html(), $("#descripcion_abonar").html());
 						//Verificar que sea de la misma sucursal, para esto bloquear el combo cuando ya se agrego la primera fila, y verificar que cuando se eliminen todas volver a habilitarlo
-					}
+					//}
 				}
 			}
 		}else{
@@ -222,7 +222,7 @@ function ingresarFila(cod_cambiar, cod_abonar, cantidad, des_cambiar, des_abonar
 	+	"<td class='contactSmall'>"+cod_abonar+"</td>"
 	+	"<td class='contactSmall'>"+des_abonar+"</td>"
 	+	"<td class='contactSmall'>"+cantidad+"</td>"
-	+	"<td class='contactSmall'><a href='javascript:;' onclick='eliminarFila(this)'><img class='eliminar_cruz' title='Eliminar Artículo' src="+location.protocol+"//"+document.domain+"/application/images/Icons/eliminar.png></a></td>"
+	+	"<td class='contactSmall'><a href='javascript:;' onclick='eliminarFila(this)'><img class='eliminar_cruz' title='Eliminar Artículo' src="+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/Icons/eliminar.png></a></td>"
 	+ "</tr>";
 	$("#tbody_articulos").append(fila);
 }

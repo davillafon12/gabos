@@ -78,6 +78,7 @@ PARA:
                   '2'   =>  'Contado Afiliado' ,
                   '3'   =>  'Pago 3' ,
                   '4'   =>  'Pago 4' , 
+                  '5'   =>  'Pago 5' 
                 ); 
 			?>	 
 		
