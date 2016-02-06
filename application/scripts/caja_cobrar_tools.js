@@ -301,10 +301,11 @@ function tipoPagoJSON(){
 }
 
 function enviarCobro(URL){
+	var recibido = $.isNumeric($("#pop_cantidad_a_pagar").val()) ? parseFloat($("#pop_cantidad_a_pagar").val()).format(2, 3, '.', ',') : $("#pop_cantidad_a_pagar").val();
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
-		data: {'consecutivo':consecutivoActual,'tipoPago':JSON.stringify(tipoPagoJSON())},		
+		data: {'consecutivo':consecutivoActual,'tipoPago':JSON.stringify(tipoPagoJSON()),'entregado':recibido,'vuelto':$("#cuadro_vuelto_total").html()},		
 		success: function(data, textStatus, jqXHR)
 		{
 			

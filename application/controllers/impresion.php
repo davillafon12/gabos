@@ -106,11 +106,14 @@ class impresion extends CI_Controller {
 								$facturaHead[0] -> cantidadContado = $cantidadPagaContado;
 							}elseif($facturaHead[0] -> tipo == 'apartado'){								
 								$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
+								$saldo = $facturaHead[0]->total - $abono;
 								//Valorar si fue en colones o dolares								
 								if($facturaHead[0] -> moneda == 'dolares'){
 									$abono = $abono/$facturaHead[0] -> cambio;
+									$saldo = $saldo/$facturaHead[0] -> cambio;
 								}
 								$facturaHead[0] -> abono = $abono;
+								$facturaHead[0] -> saldo = $saldo;
 							}
 							
 							//Costos totales
@@ -122,7 +125,9 @@ class impresion extends CI_Controller {
 								$facturaHead[0]->subtotal = $subtotal/$facturaHead[0]->cambio;
 								$facturaHead[0]->total_iva = $totalIVA/$facturaHead[0]->cambio;
 								$facturaHead[0]->total = $total/$facturaHead[0]->cambio;
-							}		
+							}	
+							
+								
 							if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
 							
 								//Valoramos si es en dolares
@@ -1184,17 +1189,21 @@ class impresion extends CI_Controller {
 				$pdf->Text(102, 49, 'Tipo: '.$encabezado->tipo);
 				$pdf->Text(102, 54, 'Moneda: '.$encabezado->moneda);
 				$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);
+				
+				$factor = $encabezado->moneda=='dolares' ? $encabezado->cambio : 1;
+				
 				switch($encabezado->tipo){
 					case 'credito':
 						$pdf->Text(140, 49, 'Días: '.$encabezado->diasCredito);
 						$pdf->Text(140, 54, 'Vence: '.$encabezado->fechaVencimiento);
 					break;
 					case 'mixto':
-						$pdf->Text(140, 49, 'Pago Tarjeta: '.$this->fn($encabezado->cantidadTarjeta));
-						$pdf->Text(140, 54, 'Pago Contado: '.$this->fn($encabezado->cantidadContado));
+						$pdf->Text(140, 49, 'Pago Tarjeta: '.$this->fn($encabezado->cantidadTarjeta/$factor));
+						$pdf->Text(140, 54, 'Pago Contado: '.$this->fn($encabezado->cantidadContado/$factor));
 					break;
 					case 'apartado':
-						$pdf->Text(140, 49, 'Abono: '.$this->fn($encabezado->abono));
+						$pdf->Text(140, 49, 'Abono: '.$this->fn($encabezado->abono/$factor));
+						$pdf->Text(140, 54, 'Saldo: '.$this->fn(($encabezado->total - $encabezado->abono)/$factor));
 					break;
 				}
 			break;

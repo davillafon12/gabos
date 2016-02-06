@@ -239,6 +239,11 @@ class caja extends CI_Controller {
 			$tipoPago = $_POST['tipoPago']; //Obtenemos el array
 			$tipoPago = json_decode($tipoPago, true);
 			$tipoPago = $tipoPago[0]; //Sacamos el array con los datos
+			
+			$recibidoParaVuelto = $_POST['entregado'];
+			$vuelto = $_POST['vuelto'];
+			
+			
 			include '/../get_session_data.php';	
 			if(isset($tipoPago['tipo'])){
 				if($tipoPago['tipo']=='credito'){ //Si es pago a credito
@@ -258,7 +263,9 @@ class caja extends CI_Controller {
 							$datos = array(         
 								'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
 								'Factura_Fecha_Hora'=>$Current_datetime, 
-								'Factura_Estado'=>'cobrada'
+								'Factura_Estado'=>'cobrada',
+								'Factura_Entregado_Vuelto' => $vuelto,
+								'Factura_Recibido_Vuelto' => $recibidoParaVuelto
 							);
 							
 							$this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
@@ -291,7 +298,9 @@ class caja extends CI_Controller {
 						$datos = array(         
 							'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
 							'Factura_Fecha_Hora'=>$Current_datetime, 
-							'Factura_Estado'=>'cobrada'
+							'Factura_Estado'=>'cobrada',
+							'Factura_Entregado_Vuelto' => $vuelto,
+							'Factura_Recibido_Vuelto' => $recibidoParaVuelto
 						);
 						
 						$this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
