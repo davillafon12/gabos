@@ -9,6 +9,7 @@ class consulta extends CI_Controller {
 		$this->load->model('factura','',TRUE);
 		$this->load->model('contabilidad','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
+		$this->load->model('empresa','',TRUE);
 		include 'get_session_data.php';
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -259,6 +260,12 @@ class consulta extends CI_Controller {
 				if($notaCreditoBody = $this->contabilidad->getProductosNotaDebito($consecutivo, $data['Sucursal_Codigo'])){
 					unset($retorno['error']);
 					$retorno['status'] = 'success';
+					
+					$notaCreditoHead[0] -> entrega = $notaCreditoHead[0] -> entrega ." - ".$this->empresa->getNombreEmpresa($notaCreditoHead[0] -> entrega);
+					$notaCreditoHead[0] -> recibe = $notaCreditoHead[0] -> recibe ." - ".$this->empresa->getNombreEmpresa($notaCreditoHead[0] -> recibe);
+					
+					
+					
 					$retorno['notaHead'] = $notaCreditoHead;
 					$retorno['notaBody'] = $notaCreditoBody;
 					

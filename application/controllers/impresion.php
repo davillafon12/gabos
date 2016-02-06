@@ -670,9 +670,9 @@ class impresion extends CI_Controller {
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('p', $empresa[0], $fhead[0], $pdf);
 			//Agregamos Productos
-			$inicio = $this->numPagina*33;
-			if((($this->numPagina+1)*33)<$cantidadProductos){
-				$final = ($this->numPagina+1)*33;
+			$inicio = $this->numPagina*30;
+			if((($this->numPagina+1)*30)<$cantidadProductos){
+				$final = ($this->numPagina+1)*30;
 			}else{
 				$final = $cantidadProductos;
 			}
@@ -731,9 +731,9 @@ class impresion extends CI_Controller {
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('nc', $empresa, $head, $pdf);
 			//Agregamos Productos
-			$inicio = $this->numPagina*33;
-			if((($this->numPagina+1)*33)<$cantidadProductos){
-				$final = ($this->numPagina+1)*33;
+			$inicio = $this->numPagina*30;
+			if((($this->numPagina+1)*30)<$cantidadProductos){
+				$final = ($this->numPagina+1)*30;
 			}else{
 				$final = $cantidadProductos;
 			}
@@ -760,9 +760,9 @@ class impresion extends CI_Controller {
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('nd', $empresa, $head, $pdf);
 			//Agregamos Productos
-			$inicio = $this->numPagina*33;
-			if((($this->numPagina+1)*33)<$cantidadProductos){
-				$final = ($this->numPagina+1)*33;
+			$inicio = $this->numPagina*30;
+			if((($this->numPagina+1)*30)<$cantidadProductos){
+				$final = ($this->numPagina+1)*30;
 			}else{
 				$final = $cantidadProductos;
 			}
@@ -1125,9 +1125,9 @@ class impresion extends CI_Controller {
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('con', $empresa[0], $head, $pdf);
 			//Agregamos Productos
-			$inicio = $this->numPagina*33;
-			if((($this->numPagina+1)*33)<$cantidadProductos){
-				$final = ($this->numPagina+1)*33;
+			$inicio = $this->numPagina*30;
+			if((($this->numPagina+1)*30)<$cantidadProductos){
+				$final = ($this->numPagina+1)*30;
 			}else{
 				$final = $cantidadProductos;
 			}
@@ -1249,6 +1249,13 @@ class impresion extends CI_Controller {
 				$pdf->Text(122, 27, $encabezado->fecha);
 				
 				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+				
+				
+				$encabezado -> entrega = $encabezado -> entrega ." - ".$this->empresa->getNombreEmpresa($encabezado -> entrega);
+				$encabezado -> recibe = $encabezado -> recibe ." - ".$this->empresa->getNombreEmpresa($encabezado -> recibe);
+				
+				$pdf->Text(12, 42, 'Sucursal Entrega: '.$encabezado -> entrega);
+				$pdf->Text(12, 49, 'Sucursal Recibe: '.$encabezado -> recibe);
 								
 			break;
 			case 'p':
@@ -1462,13 +1469,13 @@ class impresion extends CI_Controller {
 				$this->observaciones('', $pdf);
 				//Costos totales
 				$pdf->SetFont('Arial','',11);
-				$pdf->SetXY(131, 240);	
+				$pdf->SetXY(131, 225);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
-				$pdf->SetXY(131, 247);	
+				$pdf->SetXY(131, 232);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
-				$pdf->SetXY(131, 254);	
+				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
 			break;
@@ -1693,13 +1700,13 @@ class impresion extends CI_Controller {
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Text(90, 65, 'Productos');
 		//Caja redondeada 1
-		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
+		$pdf->RoundedRect(10, 67, 190, 158, 5, '12', 'D');
 		//Divisores verticales de productos
 		$pdf->Line(10, 74, 200, 74);		
-		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
-		$pdf->Line(125, 67, 125, 240); //Divisor de descripcion y cantidad
-		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total	
+		$pdf->Line(30, 67, 30, 225); //Divisor de codigo y descripcion
+		$pdf->Line(125, 67, 125, 225); //Divisor de descripcion y cantidad
+		$pdf->Line(145, 67, 145, 225); //Divisor de descuento y precio unitario
+		$pdf->Line(172, 67, 172, 225); //Divisor de precio unitario y precio total	
 		//Encabezado de productos
 		$pdf->SetFont('Arial','',10);
 		$pdf->Text(13, 72, 'Código');

@@ -114,6 +114,10 @@ PARA:
 					<option value="c">A4</option>
 				</select>
 				<input type="button" class="boton_busqueda" onclick="imprimir()" value="Imprimir"/>
+				<p class="contact" >Sucursal Recibe: </p>
+				<p class="contact" id="sucursal_recibe" style="display:inline;"></p>
+				<p class="contact" >Sucursal Entrega: </p>
+				<p class="contact" id="sucursal_entrega" style="display:inline;"></p>
 				<table id="tabla_productos" class="tabla_productos">
 					<thead>
 						<tr><th class="th_codigo">Código</th>

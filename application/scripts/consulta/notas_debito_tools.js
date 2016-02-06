@@ -273,6 +273,8 @@ function setEncabezadoFactura(facturaHEAD){
 	$("#iva").val(iva.format(decimales, 3, '.', ','));
 	$("#costo").val(costo.format(decimales, 3, '.', ','));
 	
+	$("#sucursal_recibe").html(facturaHEAD[0].recibe);
+	$("#sucursal_entrega").html(facturaHEAD[0].entrega);
 	
 }
 

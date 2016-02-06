@@ -108,6 +108,7 @@ Class empresa extends CI_Model
 	
 	function getNombreEmpresa($id)
 	{
+		if($id==-1){return "N/A";}
 		$this -> db -> select('Sucursal_Nombre');
 		$this -> db -> from('TB_02_sucursal');		
 		$this -> db -> where('Codigo', mysql_real_escape_string($id));

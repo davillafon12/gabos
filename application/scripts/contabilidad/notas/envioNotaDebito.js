@@ -32,7 +32,7 @@ function obtenerJSON(){
 			productos.push({co:codigo, ca:cantidad});
 		}
 	}
-	return {productos:JSON.stringify(productos)};
+	return {productos:JSON.stringify(productos),sucursalRecibe:$("#sucursal_recibe").val(),sucursalEntrega:$("#sucursal_salida").val()};
 }
 
 function enviarNota(){

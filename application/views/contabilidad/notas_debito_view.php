@@ -68,6 +68,27 @@ PARA:
 					<option value="t">PV</option>
 					<option value="c">A4</option>
 				</select>
+				<p class="contact" style="display:inline;"><label for="sucursal_salida">Sucursal de Salida:</label></p> 
+				<select id="sucursal_salida" style="    width: 200px;">
+					<option value="-1">N/A</option>
+					<?php						
+						foreach($Familia_Empresas as $Nombre_Empresa => $codigo_empresa)
+						{
+							echo "<option value='".$codigo_empresa."'";
+							echo">".$codigo_empresa." - ".$Nombre_Empresa."</option>";											
+						}
+					?>				</select>
+				<p class="contact" style="display:inline;"><label for="sucursal_salida">Sucursal Que Recibe:</label></p> 
+				<select id="sucursal_recibe" style="    width: 200px;">
+					<option value="-1">N/A</option>
+					<?php						
+						foreach($Familia_Empresas as $Nombre_Empresa => $codigo_empresa)
+						{
+							echo "<option value='".$codigo_empresa."'";
+							echo">".$codigo_empresa." - ".$Nombre_Empresa."</option>";											
+						}
+					?>
+				</select>
 				<table id="tabla_productos" class="tabla_productos" >
 					<thead>
 						<th class="th_codigo">Código</th>

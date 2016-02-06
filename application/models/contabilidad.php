@@ -495,7 +495,7 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
-	function crearNotaDebito($consecutivo, $fecha, $porcentaje_iva, $usuario, $sucursal){
+	function crearNotaDebito($consecutivo, $fecha, $porcentaje_iva, $usuario, $sucursal, $sucursalRecibe, $sucursalEntrega){
 		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
 				$sucursal = $this->cod_garotas;
 				$this->isDesampa = true;
@@ -505,7 +505,9 @@ Class contabilidad extends CI_Model
 						'Fecha' => $fecha,
 						'Impuesto_Porcentaje' => $porcentaje_iva,
 						'Usuario' => $usuario,
-						'Sucursal' => $sucursal
+						'Sucursal' => $sucursal,
+						'Sucursal_Recibe' => $sucursalRecibe,
+						'Sucursal_Entrega' => $sucursalEntrega
 						);
 		$this->db->insert('tb_30_notas_debito', $datos);
 		if($this->trueque && $this->isDesampa){ //Si viene de desampa se guarda la factura
@@ -540,7 +542,9 @@ Class contabilidad extends CI_Model
 			SELECT 	Consecutivo AS nota, 
 					date_format(Fecha, '%d-%m-%Y %h:%i:%s %p') AS fecha,
 					Impuesto_Porcentaje AS iva,
-					Observaciones AS observaciones        
+					Observaciones AS observaciones,
+					Sucursal_Recibe AS recibe,
+					Sucursal_Entrega AS entrega        
 				   FROM tb_30_notas_debito
 			WHERE Consecutivo = $consecutivo
 			AND Sucursal = $sucursal

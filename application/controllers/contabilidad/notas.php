@@ -11,6 +11,7 @@ class notas extends CI_Controller {
 		$this->load->model('factura','',TRUE);
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('configuracion','',TRUE);
+		$this->load->model('empresa','',TRUE);
 	}
 
 	function index()
@@ -265,6 +266,7 @@ class notas extends CI_Controller {
 
 		if($permisos['entrar_notas_d'])
 		{
+			$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
 			$this->load->view('contabilidad/notas_debito_view', $data);			
 		}
 		else{
@@ -287,7 +289,7 @@ class notas extends CI_Controller {
 				$fecha = date("y/m/d : H:i:s", now());
 				$c_array = $this->configuracion->getConfiguracionArray();				
 				
-				$this->contabilidad->crearNotaDebito($consecutivo, $fecha, $c_array['iva'], $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+				$this->contabilidad->crearNotaDebito($consecutivo, $fecha, $c_array['iva'], $data['Usuario_Codigo'], $data['Sucursal_Codigo'], trim($_POST['sucursalRecibe']), trim($_POST['sucursalEntrega']));
 				
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo la nota debito: $consecutivo",$data['Sucursal_Codigo'],'nota');
 				
