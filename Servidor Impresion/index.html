@@ -11,26 +11,7 @@
 		<script src="js/tools.js"></script>
 			<script type="text/javascript">
 
-/**
- * Re-use the new WebSockets deployment if available.  If not, fallback on the Oracle deployment
- */
-window["deployQZ"] = typeof(deployQZ) == "function" ? deployQZ : deployQZApplet;
 
-function deployQZApplet() {
-    console.log('Starting deploy of qz applet');
-
-    var attributes = {id: "qz", code:'qz.PrintApplet.class',
-        archive:'../qz-print.jar', width:1, height:1};
-    var parameters = {jnlp_href: '../qz-print_jnlp.jnlp',
-        cache_option:'plugin', disable_logging:'false',
-        initial_focus:'false', separate_jvm:'true'};
-    if (deployJava.versionCheck("1.7+") == true) {}
-    else if (deployJava.versionCheck("1.6.0_45+") == true) {}
-    else if (deployJava.versionCheck("1.6+") == true) {
-        delete parameters['jnlp_href'];
-    }
-    deployJava.runApplet(attributes, parameters, '1.6');
-}
 
 /**
  * Deploy tray version of QZ, or
@@ -132,35 +113,17 @@ function signRequest(toSign, callback) {
  * Automatically gets called when applet has loaded.
  */
 function qzReady() {
-    // If the qz object hasn't been created, fallback on the <applet> tags
-    /*if (!qz) {
-        window["qz"] = document.getElementById('qz');
-    }
-    var title = document.getElementById("title");
-    if (qz) {
-        try {
-            title.innerHTML = title.innerHTML + " " + qz.getVersion();
-            document.getElementById("qz-status").style.background = "#F0F0F0";
-        } catch(err) { // LiveConnect error, display a detailed message
-            document.getElementById("qz-status").style.background = "#F5A9A9";
-            alert("ERROR:  \nThe applet did not load correctly.  Communication to the " +
-                    "applet has failed, likely caused by Java Security Settings.  \n\n" +
-                    "CAUSE:  \nJava 7 update 25 and higher block LiveConnect calls " +
-                    "once Oracle has marked that version as outdated, which " +
-                    "is likely the cause.  \n\nSOLUTION:  \n  1. Update Java to the latest " +
-                    "Java version \n          (or)\n  2. Lower the security " +
-                    "settings from the Java Control Panel.");
-        }
-    }*/
 	// Setup our global qz object
-	window["qz"] = document.getElementById('qz');
 	var title = document.getElementById("title");
 	if (qz) {
 		try {
-			//alert("LISTO");		
-			$("#estado").html("Módulo de Impresión -<span class='status-ready'> LISTO  <img class='check' src='img/check.png' width='40'></span>");
-			setEventos();
-			imprimir();
+		findPrinter();
+			if(notReady()){
+				//alert("LISTO");		
+				//$("#estado").html("Módulo de Impresión -<span class='status-ready'> LISTO  <img class='check' src='img/check.png' width='40'></span>");
+				//setEventos();
+				//imprimir();
+			}
 		} catch(err) { 
 			//alert("NO LISTO");						
 	  }
@@ -198,23 +161,7 @@ function qzSocketClose(event) {
     alert("Connection was closed:\n"+ event.reason);
 }
 
-function qzNoConnection() {
-    alert("Unable to connect to QZ, is it running?");
 
-    //run deploy applet After page load
-    var content = '';
-    var oldWrite = document.write;
-    document.write = function(text) {
-        content += text;
-    };
-    deployQZApplet();
-
-    var newElem = document.createElement('del');
-    newElem.innerHTML = content;
-
-    document.write = oldWrite;
-    document.body.appendChild(newElem);
-}
 
 /**
  * Returns whether or not the applet is not ready to print.
@@ -227,7 +174,7 @@ function notReady() {
     }
     // If a printer hasn't been selected, display a message.
     else if (!qz.getPrinter()) {
-        alert('Please select a printer first by using the "Detect Printer" button.');
+       
         return true;
     }
     return false;
@@ -265,8 +212,7 @@ function qzDonePrinting() {
         return;
     }
 
-    // Alert success message
-    alert('Successfully sent print data to "' + qz.getPrinter() + '" queue.');
+    
 }
 
 /***************************************************************************
@@ -308,7 +254,6 @@ function printToFile() {
         window['qzDoneFinding'] = function() {
             // Send characters/raw commands to qz using "append"
             // Hint:  Carriage Return = \r, New Line = \n, Escape Double Quotes= \"
-            qz.append("A590,1600,2,3,1,1,N,\"QZ Print Plugin " + qz.getVersion() + " sample.html\"\n");
             qz.append("A590,1570,2,3,1,1,N,\"Testing qz.printToFile() function\"\n");
             qz.append("P1\n");
 
@@ -338,7 +283,6 @@ function printToHost() {
         window['qzDoneFinding'] = function() {
             // Send characters/raw commands to qz using "append"
             // Hint:  Carriage Return = \r, New Line = \n, Escape Double Quotes= \"
-            qz.append("A590,1600,2,3,1,1,N,\"QZ Print Plugin " + qz.getVersion() + " sample.html\"\n");
             qz.append("A590,1570,2,3,1,1,N,\"Testing qz.printToHost() function\"\n");
             qz.append("P1\n");
 
@@ -374,11 +318,8 @@ function findPrinter(name) {
         window['qzDoneFinding'] = function() {
             var p = document.getElementById('printer');
             var printer = qz.getPrinter();
-
-            // Alert the printer name to user
-            alert(printer !== null ? 'Printer found: "' + printer +
-            '" after searching for "' + p.value + '"' : 'Printer "' +
-            p.value + '" not found.');
+			$("#estado").html("Módulo de Impresión -<span class='status-ready'> LISTO  <img class='check' src='img/check.png' width='40'></span>");
+            imprimir();
 
             // Remove reference to this function
             window['qzDoneFinding'] = null;
@@ -426,7 +367,6 @@ function printEPL() {
     qz.append('Q203,26\n');
     qz.append('B5,26,0,1A,3,7,152,B,"1234"\n');
     qz.append('A310,26,0,3,1,1,N,"SKU 00000 MFG 0000"\n');
-    qz.append('A310,56,0,3,1,1,N,"QZ PRINT APPLET"\n');
     qz.append('A310,86,0,3,1,1,N,"TEST PRINT SUCCESSFUL"\n');
     qz.append('A310,116,0,3,1,1,N,"FROM SAMPLE.HTML"\n');
     qz.append('A310,146,0,3,1,1,N,"QZINDUSTRIES.COM"\n');
@@ -484,7 +424,6 @@ function printZPL() {
     // This example is for ZPL.  Please adapt to your printer language
     // Hint:  Carriage Return = \r, New Line = \n, Escape Double Quotes= \"
     qz.append('^XA\n');
-    qz.append('^FO50,50^ADN,36,20^FDPRINTED USING QZ PRINT PLUGIN ' + qz.getVersion() + '\n');
     qz.appendImage(getPath() + 'assets/img/image_sample_bw.png', 'ZPLII');
 
     // Automatically gets called when "qz.appendImage()" is finished.
@@ -836,7 +775,6 @@ function printHTML() {
     if (notReady()) { return; }
 
     // Preserve formatting for white spaces, etc.
-    var colA = fixHTML('<h2>*  QZ Print Plugin HTML Printing  *</h2>');
     colA = colA + '<color=red>Version:</color> ' + qz.getVersion() + '<br />';
     colA = colA + '<color=red>Visit:</color> http://code.google.com/p/jzebra';
 
@@ -1110,13 +1048,7 @@ function chr(i) {
 	</head>
 	<body>
 		
-		<applet id="qz" archive="./qz-print.jar" name="QZ Print Plugin" code="qz.PrintApplet.class" width="1" height="1">
-			<param name="jnlp_href" value="qz-print_jnlp.jnlp">
-			<param name="cache_option" value="plugin">
-			<param name="disable_logging" value="false">
-			<param name="initial_focus" value="false">
-			<param name="printer" value="TM">
-		</applet><br/>		
+		<input id="printer" value="TM" type="hidden"/>		
 		<div class="contenedor">
 			<img class="logo" src="img/header_pic.png"></img>
 			<hr>

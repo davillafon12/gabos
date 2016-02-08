@@ -25,12 +25,13 @@ function imprimir(){
 	t = parse('t');	
 	servidor = parse('server'); 
 	protocolo = parse('protocol');
+	puerto = 8888;
 	traerDocumento(t,d,n,s,i);	
 }
 
 function traerDocumento(t,d,n,s,i){
 	$.ajax({
-		url : protocolo+'//'+servidor+'/impresion',
+		url : protocolo+'//'+servidor+":"+puerto+'/impresion',
 		dataType : 'jsonp',
 		data : "t="+t+"&d="+d+"&n="+n+"&s="+s+"&i="+i,
 		success: function(data, textStatus, jqXHR)
@@ -87,7 +88,7 @@ function imprimirFactura(data){
 	factura = data.fHead[0];
 	productos = data.fBody;
 	
-	qz = document.getElementById("qz");
+	//qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
