@@ -57,17 +57,17 @@ class impresion extends CI_Controller {
 							//die();
 						break;
 						default:
-							$this->retorno['error'] = '4';
+							$this->retorno['error'] = 'No especifica si es térmica o carta';
 						break;
 					}
 				}else{
-					$this->retorno['error'] = '3';
+					$this->retorno['error'] = 'No vienen las variables de tipo de documento y del documento';
 				}
 			}else{
-				$this->retorno['error'] = '2';
+				$this->retorno['error'] = 'Token no coincide';
 			}
 		}else{
-			$this->retorno['error'] = '1';
+			$this->retorno['error'] = 'Variable de token no incluida';
 		}	
 		echo $_GET['callback'].'('.json_encode($this->retorno).')';
 	}
@@ -144,16 +144,16 @@ class impresion extends CI_Controller {
 								$this->retorno['fHead'] = $facturaHead;
 								$this->retorno['fBody'] = $facturaBody;
 							}else{
-								$this->retorno['error'] = '9';
+								$this->retorno['error'] = 'No se pudo cargar los artículos de la factura';
 							}
 						}else{
-							$this->retorno['error'] = '8';
+							$this->retorno['error'] = 'No se pudo cargar encabezado de factura';
 						}						
 					}else{
-						$this->retorno['error'] = '7';
+						$this->retorno['error'] = 'Sucursal no existe';
 					}
 				}else{
-					$this->retorno['error'] = '6';
+					$this->retorno['error'] = 'Variables de consecutivo y sucursal inválidas';
 				}
 			break;
 			case 'r':
@@ -186,11 +186,11 @@ class impresion extends CI_Controller {
 									array_push($recibosDevolver,$recibo);
 								}else{
 									//Error al carga de la bd algun recibo
-									$this->retorno['error'] = '11';
+									$this->retorno['error'] = 'No se pudo cargar uno de los recibos';
 									break;
 								}
 							}
-							if($this->retorno['error']!='11'){ //Si no se cargo algun recibo salirse
+							if($this->retorno['error']!='No se pudo cargar uno de los recibos'){ //Si no se cargo algun recibo salirse
 								unset($this->retorno['error']);
 								$this->retorno['status'] = 'success';
 								$this->retorno['recibos'] = $recibosDevolver;
@@ -198,13 +198,13 @@ class impresion extends CI_Controller {
 							}
 						}else{
 							//No vienen recibos
-							$this->retorno['error'] = '10';
+							$this->retorno['error'] = 'No vienen recibos a imprimir';
 						}
 					}else{
-						$this->retorno['error'] = '7';
+						$this->retorno['error'] = 'Sucursal no existe';
 					}
 				}else{
-					$this->retorno['error'] = '6';
+					$this->retorno['error'] = 'Variables de consecutivo y sucursal inválidas';
 				}
 			break;
 			case 'nc':
@@ -234,16 +234,16 @@ class impresion extends CI_Controller {
 								$notaCreditoHead[0]->subtotal = $subtotal;
 								$notaCreditoHead[0]->total_iva = $total_iva;							
 							}else{
-								$this->retorno['error'] = '12';
+								$this->retorno['error'] = 'No se pudo cargar los artículos de la nota crédito';
 							}
 						}else{
-							$this->retorno['error'] = '11';
+							$this->retorno['error'] = 'No se pudo cargar el encabezado de la nota crédito';
 						}					
 					}else{
-						$this->retorno['error'] = '7';
+						$this->retorno['error'] = 'Sucursal no existe';
 					}
 				}else{
-					$this->retorno['error'] = '6';
+					$this->retorno['error'] = 'Variables de consecutivo y sucursal inválidas';
 				}
 			break;
 			case 'nd':
@@ -273,16 +273,16 @@ class impresion extends CI_Controller {
 								$notaDebitoHead[0]->subtotal = $subtotal;
 								$notaDebitoHead[0]->total_iva = $total_iva;
 							}else{
-								$this->retorno['error'] = '14';
+								$this->retorno['error'] = 'No se pudo cargar los artículos de la nota débito';
 							}
 						}else{
-							$this->retorno['error'] = '13';
+							$this->retorno['error'] = 'No se pudo cargar el encabezado de la nota débito';
 						}					
 					}else{
-						$this->retorno['error'] = '7';
+						$this->retorno['error'] = 'Sucursal no existe';
 					}
 				}else{
-					$this->retorno['error'] = '6';
+					$this->retorno['error'] = 'Variables de consecutivo y sucursal inválidas';
 				}
 			break;
 			case 'rp':
@@ -302,26 +302,26 @@ class impresion extends CI_Controller {
 										$this->retorno['monedas'] = $monedas;
 										$this->retorno['dolares'] = $dolares;
 									}else{
-										$this->retorno['error'] = '18';
+										$this->retorno['error'] = 'No se pudo cargar los dolares del retiro parcial';
 									}
 								}else{
-									$this->retorno['error'] = '17';
+									$this->retorno['error'] = 'No se pudo cargar las monedas del retiro parcial';
 								}
 							}else{
-								$this->retorno['error'] = '16';
+								$this->retorno['error'] = 'No se pudo cargar los billetes del retiro parcial';
 							}
 						}else{
-							$this->retorno['error'] = '15';
+							$this->retorno['error'] = 'No se pudo cargar el encabezado del retiro parcial';
 						}
 					}else{
-						$this->retorno['error'] = '7';
+						$this->retorno['error'] = 'Sucursal no existe';
 					}
 				}else{
-					$this->retorno['error'] = '6';
+					$this->retorno['error'] = 'Variables de consecutivo y sucursal inválidas';
 				}
 			break;
 			default:
-				$this->retorno['error'] = '5';
+				$this->retorno['error'] = 'Tipo de documento no válido';
 			break;
 		}	
 	}
