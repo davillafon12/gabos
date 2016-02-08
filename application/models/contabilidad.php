@@ -1460,14 +1460,14 @@ Class contabilidad extends CI_Model
 	
 	function setFiltradoFechaDesde($fecha, $campo){
 		if(trim($fecha)!=''){
-			$fecha = $this->convertirFecha($fecha);
+			$fecha = $this->convertirFecha($fecha, " 00:00:00");
 			$this->db->where("$campo >=", $fecha);
 		}
 	}
 	
 	function setFiltradoFechaHasta($fecha, $campo){
 		if(trim($fecha)!=''){
-			$fecha = $this->convertirFecha($fecha);
+			$fecha = $this->convertirFecha($fecha, " 23:59:59");
 			$this->db->where("$campo <=", $fecha);
 		}
 	}
@@ -1484,10 +1484,10 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
-	function convertirFecha($fecha){		
+	function convertirFecha($fecha, $horas){		
 		if(trim($fecha)!=''){
 			$fecha = explode("/",$fecha);
-			$fecha = $fecha[0]."-".$fecha[1]."-".$fecha[2]." 00:00:00";
+			$fecha = $fecha[0]."-".$fecha[1]."-".$fecha[2].$horas;
 			//echo $fecha;
 			date_default_timezone_set("America/Costa_Rica");
 			return date("Y-m-d : H:i:s", strtotime($fecha));

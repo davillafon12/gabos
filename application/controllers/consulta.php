@@ -92,7 +92,7 @@ class consulta extends CI_Controller {
 			$estado = $this->convertirArray($_POST['estado']);
 			if($this->verificarFecha($desde)&&$this->verificarFecha($hasta)){				
 				include 'get_session_data.php';
-				if($recibos = $this->contabilidad->getRecibosFiltrados($cliente, $desde, $hasta, $tipo, $estado, $data['Sucursal_Codigo'])){
+				if($recibos = $this->contabilidad->getRecibosFiltrados($cliente, $desde.' 00:00:00', $hasta.' 23:59:59', $tipo, $estado, $data['Sucursal_Codigo'])){
 					unset($retorno['error']);
 					$retorno['status'] = 'success';
 					$retorno['facturas'] = $recibos;
@@ -314,7 +314,7 @@ class consulta extends CI_Controller {
 			$hasta = $_POST['hasta'];
 			
 			if($this->verificarFecha($desde)&&$this->verificarFecha($hasta)){				
-				include 'get_session_data.php';				
+				include 'get_session_data.php';			
 				if($retiros = $this->contabilidad->getRetirosParcialesFiltrados($desde, $hasta, $data['Sucursal_Codigo'])){
 					unset($retorno['error']);
 					$retorno['status'] = 'success';
