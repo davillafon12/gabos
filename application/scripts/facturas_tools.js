@@ -734,9 +734,11 @@ function actualizaCostosTotales(decimales_int){
 				//Iniciamos la variable apra procesar el articulo sin IVA
 				costo_unitario_articulo_sin_IVA = 0.0;
 				var costoUnitarioSinIvaSinDescuento = 0.0;
+				
 				if(isExento==='0'){ //SI NO ES exento entonces saca el precio sin IVA
 					costo_unitario_articulo_sin_IVA = precio_unitario_articulo/(1+porcentaje_iva);	
-					costoUnitarioSinIvaSinDescuento = precioUnitarioSinDescuento - (precioUnitarioSinDescuento/(1+porcentaje_iva));			
+					costoUnitarioSinIvaSinDescuento = precioUnitarioSinDescuento - (precioUnitarioSinDescuento/(1+porcentaje_iva));	
+					console.log("Re: "+noRetencion);	
 					if(noRetencion==='0'){//Sacamos el valor de los impuestos por RETENCION
 							//Si aplica la retencion sacamos la base imponible del producto final
 							precio_cliente_final_articulo_sin_iva = precio_cliente_final_articulo/(1+porcentaje_iva);
@@ -744,7 +746,7 @@ function actualizaCostosTotales(decimales_int){
 							costo_retencion += precio_cliente_final_articulo-precio_cliente_final_articulo_sin_iva;
 					}else if(noRetencion==='1'){
 							//Si no aplica la retencion tons realizamos la sumatoria del impuesto del producto normal
-							costo_retencion += precio_unitario_articulo-costo_unitario_articulo_sin_IVA;
+							costo_retencion += costoUnitarioSinIvaSinDescuento;
 					}					
 				}
 				else if(isExento==='1'){ //SI ES exento entonces el precio sera el mismo
@@ -773,7 +775,7 @@ function actualizaCostosTotales(decimales_int){
 		//Si es dolares, pasamos la retencion de colones a dolares
 		costo_retencion = costo_retencion/factor_tipo_moneda_float;
 	}
-	
+	console.log("Retencion: "+costo_retencion);
 	
 	//Formateo e impresion a UI
 	//precio_unidad_FACTOR_float = precio_unidad_FACTOR_float.format(2, 3, '.', ',');

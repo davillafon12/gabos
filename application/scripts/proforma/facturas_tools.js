@@ -779,7 +779,7 @@ function actualizaCostosTotales(decimales_int){
 							costo_retencion += precio_cliente_final_articulo-precio_cliente_final_articulo_sin_iva;
 					}else if(noRetencion==='1'){
 							//Si no aplica la retencion tons realizamos la sumatoria del impuesto del producto normal
-							costo_retencion += precio_unitario_articulo-costo_unitario_articulo_sin_IVA;
+							costo_retencion += costoUnitarioSinIvaSinDescuento;
 					}					
 				}
 				else if(isExento==='1'){ //SI ES exento entonces el precio sera el mismo
