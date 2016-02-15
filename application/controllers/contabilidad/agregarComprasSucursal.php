@@ -162,7 +162,7 @@ class agregarComprasSucursal extends CI_Controller {
 										0, 
 										$articulo->Articulo_Imagen_URL, 
 										$articulo->Articulo_Exento, 
-										0,
+										$articulo->Articulo_No_Retencion,
 										$familia, 
 										$sucursalEntrada, 
 										$costo, 
