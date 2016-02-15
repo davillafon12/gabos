@@ -170,7 +170,7 @@ function imprimirRecibo(data){
 	recibo = data[0];
 	empresa = data[1][0];
 	
-	qz = document.getElementById("qz");
+	//qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
@@ -238,7 +238,7 @@ function imprimirNotaCredito(data){
 	nota = data.notaHead[0];
 	productos = data.notaBody;
 
-	qz = document.getElementById("qz");
+	//qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
@@ -315,7 +315,7 @@ function imprimirNotaDebito(data){
 	nota = data.notaHead[0];
 	productos = data.notaBody;
 
-	qz = document.getElementById("qz");
+	//qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
@@ -372,7 +372,7 @@ function imprimirRetiroParcial(data){
 	monedas = data.monedas;
 	dolares = data.dolares;
 	
-	qz = document.getElementById("qz");
+	//qz = document.getElementById("qz");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
