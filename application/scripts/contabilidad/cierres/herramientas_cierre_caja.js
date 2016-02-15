@@ -165,10 +165,10 @@ function actualizarMontoTotalRetiro(){
 	totalRetirosParciales = parseFloat($("#totalRetirosParciales").val());
 	totalRetirosParciales += total;
 	baseCaja = parseFloat($("#base_caja").val());
-	totalRetirosParciales -= baseCaja;
-	
+	//totalRetirosParciales -= baseCaja;
+	total -= baseCaja;
 	$("#input_retiro_parcial").html(total.format(2, 3, '.', ','));
-	$("#parrafoTotalRetirosParciales").html("₡"+totalRetirosParciales.format(2, 3, '.', ','));
+	//$("#parrafoTotalRetirosParciales").html("₡"+totalRetirosParciales.format(2, 3, '.', ','));
 	
 }
 

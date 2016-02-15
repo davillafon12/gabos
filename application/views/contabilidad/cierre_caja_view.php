@@ -363,7 +363,7 @@ PARA:
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalFacturasContado,2,",",".");?></p></td>
 									<td class=''>
 										<input id="totalRetirosParciales" value="<?php echo $totalRecibosParciales; ?>" type="hidden"/>
-										<p class='parrafo' id="parrafoTotalRetirosParciales">₡<?php echo number_format($totalRecibosParciales,2,",",".");?></p>
+										<p class='parrafo' id="parrafoTotalRetirosParciales">₡<?php echo number_format($totalRecibosParciales-$recibos['efectivo'],2,",",".");?></p>
 									</td> 
 									<td class=''><p class='parrafo'>₡<?php echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalCreditos['totalCredito'],2,",",".");?></p></td>
