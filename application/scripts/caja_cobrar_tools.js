@@ -4,6 +4,10 @@ var isProforma = false; //Para ver si lo que se cargo es una proforma
 var actualizarYCobrar = true; //Esto es para cobrar o no despues de actualizar una factura
 isCajaLoaded = true; //Le decimos que esta en caja para validar si cliente tiene descuento y limpiar campos
 
+$(window).ready(function(){
+	numTransaccion("tarjeta");
+});
+
 function cobrarFactura(){
 	//stopEnterProgVuelto = false;
 	if(isProforma){

@@ -227,9 +227,9 @@ PARA:
 						<p class="contact"><label for="tipo">Tipo:</label></p>
 					</td>
 					<td>
-						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="contado" checked><div class="tipos_de_pago">Contado</div>
+						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="contado" ><div class="tipos_de_pago">Contado</div>
 						
-						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="tarjeta"><div class="tipos_de_pago">Tarjeta</div>
+						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="tarjeta" checked><div class="tipos_de_pago">Tarjeta</div>
 						
 						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="cheque"><div class="tipos_de_pago">Cheque</div>
 						
