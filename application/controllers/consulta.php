@@ -457,6 +457,7 @@ class consulta extends CI_Controller {
 		
 					$datos['primeraFactura'] = $facturas['primera'];
 					$datos['ultimaFactura'] = $facturas['ultima'];
+					$datos['bnservicios'] = $cierre->bnservicios;
 					
 					$retirosParciales = $this->getRetirosParcialesYTotal($sucursal, $fechaCierre, $fechaCierreAnterior);
 					

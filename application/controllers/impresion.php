@@ -842,8 +842,9 @@ class impresion extends CI_Controller {
 		$this->encabezadoDocumentoPDF('cc', $empresa[0], $cierre, $pdf);
 		$pdf->Line(10, 35, 200, 35);
 		$pdf->Text(12, 40, 'Primera Factura: '.$cierre->datos['primeraFactura']);
-		$pdf->Text(90, 40, 'Última Factura: '.$cierre->datos['ultimaFactura']);
-		$pdf->Text(163, 40, 'Base: '.$this->fn($cierre->base));
+		$pdf->Text(60, 40, 'Última Factura: '.$cierre->datos['ultimaFactura']);
+		$pdf->Text(106, 40, 'Base: '.$this->fn($cierre->base));
+		$pdf->Text(149, 40, 'BN Servicios: '.$this->fn($cierre->bnservicios));
 		$pdf->Line(10, 42, 200, 42);
 		
 		//DENOMINACIONES
@@ -1020,7 +1021,7 @@ class impresion extends CI_Controller {
 		$totalRetirosParciales = $cierre->datos['totalRecibosParciales'];
 		$retiroFinal = $cierre->conteo;
 		//$efectivoTotal = ($totalRetirosParciales + $retiroFinal) - $baseDeCaja;
-		$efectivoTotal = $totalRetirosParciales - $cierre->datos['recibos']['efectivo'];
+		$efectivoTotal = $totalRetirosParciales - $cierre->datos['recibos']['efectivo'] - $cierre->bnservicios;
 		
 		$pdf->SetFont('Arial','B',14);
 		$pdf->ln(7);

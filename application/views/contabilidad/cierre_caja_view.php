@@ -212,6 +212,10 @@ PARA:
 							<div class="contenedor-total-denominaciones">
 								<label class="parrafo">Total Conteo: ₡</label><label class="parrafo" id="input_retiro_parcial">0,00</label>
 							</div>
+							<div class="contenedor-bn">
+								<label class="parrafo titulo-bn">BN Servicios:</label>
+								<input type="text" id="cantidad_bn_servicios" value="0" onblur="validarCantidadBN(this)" onclick="$(this).select()"/>
+							</div>
 						</td>
 					</tr>
 					<tr><td colspan="2"><hr></td></tr>

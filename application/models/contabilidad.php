@@ -1496,14 +1496,15 @@ Class contabilidad extends CI_Model
 	}
 	
 	
-	function crearCierreCaja($tipo_cambio, $conteo, $base, $fecha, $sucursal, $usuario){
+	function crearCierreCaja($tipo_cambio, $conteo, $base, $fecha, $sucursal, $usuario, $bnServicios){
 		$datos = array(
 										'Fecha'=>$fecha,
 										'Base'=>$base,
 										'Tipo_Cambio'=>$tipo_cambio,
 										'Total_Conteo'=>$conteo,
 										'Sucursal'=>$sucursal,
-										'Usuario'=>$usuario
+										'Usuario'=>$usuario,
+										'BNServicios'=>$bnServicios
 										);
 		$this->db->insert('tb_37_cierre_caja', $datos);
 		return $this->db->insert_id();
@@ -1528,7 +1529,8 @@ Class contabilidad extends CI_Model
 												tb_37_cierre_caja.Base as base,
 												tb_37_cierre_caja.Tipo_Cambio as tipo,
 												tb_37_cierre_caja.Total_Conteo as conteo,
-												CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario
+												CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario,
+												tb_37_cierre_caja.BNServicios as bnservicios
 												", false);
 			$this->db->from("tb_37_cierre_caja");
 			$this->db->join("tb_01_usuario","tb_01_usuario.Usuario_Codigo = tb_37_cierre_caja.Usuario");

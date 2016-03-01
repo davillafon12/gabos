@@ -248,6 +248,7 @@ function setEncabezadoFactura(cab){
 	$("#base_caja").val(parseFloat(cab.cierre.base).format(2, 3, '.', ','));
 	$("#primera_factura").html("Primera Factura: "+cab.datos.primeraFactura);
 	$("#ultima_factura").html("Última Factura: : "+cab.datos.ultimaFactura);
+	$("#input_bn_servicios").val(parseFloat(cab.cierre.bnservicios).format(2, 3, '.', ','));
 	
 	
 	
@@ -412,11 +413,12 @@ function cargarRecibosDinero(recibos){
 function cargarTotales(datos){
 	baseCaja = parseFloat(datos.cierre.base);
 	totalRetiroFinal = parseFloat(datos.cierre.conteo)
+	bnservicios = parseFloat(datos.cierre.bnservicios);
 	datos = datos.datos;
 	totalRetiros = parseFloat(datos.totalRecibosParciales);
 	//totalEfectivo = (totalRetiros + totalRetiros) - baseCaja;
 	//console.log(datos);
-	totalEfectivo = totalRetiros - datos.recibos.efectivo;
+	totalEfectivo = totalRetiros - datos.recibos.efectivo - bnservicios;
 	$("#totales_factura_contado").html("₡"+parseFloat(datos.totalFacturasContado).format(2, 3, '.', ','));
 	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
 	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos).format(2, 3, '.', ','));

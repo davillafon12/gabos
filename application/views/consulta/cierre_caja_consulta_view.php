@@ -265,7 +265,8 @@ PARA:
 						<td>
 							<div class="footer_notas">	
 								<label class="parrafo">Tipo de Cambio ₡</label><input id="tipo_cambio_dolar" class="input-deno alg-right" type="text" disabled /><br>
-								<label class="contact">Total ₡</label><input class="input_uno alg-right" name="input_retiro_parcial" id="input_retiro_parcial" type="text" style="  width: 150px;" disabled />
+								<label class="contact">Total ₡</label><input class="input_uno alg-right" name="input_retiro_parcial" id="input_retiro_parcial" type="text" style="  width: 150px;" disabled /><br>
+								<label class="contact">BN Servicios ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios" type="text" style="  width: 150px;" disabled />
 							</div>							
 						</td>
 					</tr>

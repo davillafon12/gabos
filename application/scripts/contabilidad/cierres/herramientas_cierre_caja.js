@@ -32,6 +32,8 @@ $(function(){
 	
 	//Actualizar monto efectivo
 	actualizarMontoTotalRetiro();
+	
+	$("#cantidad_bn_servicios").numeric();
 });
 
 function replaceAll(find, replace, str) {
@@ -240,7 +242,7 @@ function procesarCierre(cantidad){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/cierre/crearCierre',
 		type: "POST",		
-		data: {'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal, 'base':$("#base_caja").val()},				
+		data: {'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal, 'base':$("#base_caja").val(), 'bnservicios':$("#cantidad_bn_servicios").val()},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
@@ -330,4 +332,26 @@ function cambiarTipoImpresion(tipo){
 			alturaImpresion = 768;
 		break;
 	}
+}
+
+function validarCantidadBN(element){
+	var cantidad = $(element).val();
+	
+	if(cantidad.trim() === ''){
+		$(element).val(0);
+		cantidad = 0;
+	}
+	
+	if(!$.isNumeric(cantidad)){
+		$(element).val(0);
+		cantidad = 0;
+	}
+	
+	cantidad = parseFloat(cantidad);
+	
+	//Recalculamos el total de efectivo
+	var efectivo = parseFloat($("#totalRetirosParciales").val());
+	efectivo -= cantidad;
+	$("#parrafoTotalRetirosParciales").html("₡"+efectivo.format(2, 3, '.', ','));
+	
 }
