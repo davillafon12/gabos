@@ -306,6 +306,7 @@ function tipoPagoJSON(){
 
 function enviarCobro(URL){
 	var recibido = $.isNumeric($("#pop_cantidad_a_pagar").val()) ? parseFloat($("#pop_cantidad_a_pagar").val()).format(2, 3, '.', ',') : $("#pop_cantidad_a_pagar").val();
+	var vuelto = recibido === 0 ? 0 : $("#cuadro_vuelto_total").html();
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
