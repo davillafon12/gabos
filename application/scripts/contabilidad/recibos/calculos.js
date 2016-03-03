@@ -24,7 +24,7 @@ function getSaldoFromCredito(id){ //Le llega un id y lo procesa
 }
 
 function toFloat(valor){ //Para convertir el innerhtml del saldo en float
-	valor = valor = valor.replace('.','');
+	valor = valor = valor.replace('.','').replace(',','.');
 	valor = parseFloat(valor);
 	return valor;
 }
@@ -32,7 +32,7 @@ function toFloat(valor){ //Para convertir el innerhtml del saldo en float
 function seleccionarSaldoInput(){
 	saldo = $("#saldo_a_pagar_input").val();
 	saldo = saldo.replace('.','');
-	saldo = saldo.replace(',','.');
+	//saldo = saldo.replace(',','.');
 	if(isNumber(saldo)){saldo = parseFloat(saldo);}
 	$("#saldo_a_pagar_input").val(saldo);
 	$("#saldo_a_pagar_input").select();		

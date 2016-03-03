@@ -1,3 +1,4 @@
 
 
-ALTER TABLE `tb_37_cierre_caja` ADD `BNServicios` DOUBLE NOT NULL AFTER `Total_Conteo`;
+
+ALTER TABLE `tb_26_recibos_dinero` CHANGE `Recibo_Saldo` `Recibo_Saldo` DOUBLE NULL DEFAULT NULL;
