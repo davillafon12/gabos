@@ -766,6 +766,7 @@ Class contabilidad extends CI_Model
 			AND TB_18_Tarjeta.TB_22_Banco_Banco_Codigo = $banco
 			AND TB_07_Factura.Factura_Fecha_Hora > '$inicio'
 			AND TB_07_Factura.Factura_Fecha_Hora < '$final'
+			AND TB_07_Factura.TB_03_Cliente_Cliente_Cedula != 2
 			$queryLoco
 		");
 		if($query->num_rows()==0)
@@ -849,6 +850,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);
+		$this->db->where('TB_07_Factura.TB_03_Cliente_Cliente_Cedula !=', 2);
 		return $this->db->get();
 	}
 	
@@ -1006,6 +1008,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
 		$this->db->where('Factura_Tipo_Pago','contado');
+		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
 		
 		$query = $this->db->get();		
 		if($query->num_rows()==0)
@@ -1039,6 +1042,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
 		$this->db->where('Factura_Tipo_Pago','deposito');
+		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
 		$query = $this->db->get();		
 		if($query->num_rows()==0)
 		{
@@ -1100,6 +1104,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
 		$this->db->where("(Factura_Tipo_Pago = 'credito' OR Factura_Tipo_Pago = 'apartado')",'',false);
+		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
 		$query = $this->db->get();		
 		if($query->num_rows()==0)
 		{
@@ -1219,6 +1224,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('tb_03_cliente.Cliente_EsSucursal', 0);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);	
+		$this->db->where('TB_07_Factura.TB_03_Cliente_Cliente_Cedula !=', 2);
 		$query = $this->db->get();
 		if($query->num_rows()==0){
 			return false;

@@ -232,6 +232,7 @@ class cierre extends CI_Controller {
 			$totalIVANotaCredito = 0;
 			if($facturas = $this->contabilidad->getFacturasPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 					foreach($facturas as $factura){
+						if($factura->TB_03_Cliente_Cliente_Cedula == 2) continue;
 						$totalFacturas += $factura->Factura_Monto_Total;
 						$totalIVA += $factura->Factura_Monto_IVA;
 						$totalRetencion += $factura->Factura_Retencion;

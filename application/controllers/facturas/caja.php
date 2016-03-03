@@ -189,6 +189,11 @@ class caja extends CI_Controller {
 			include '/../get_session_data.php'; 
 			//header('Content-Type: application/json');			
 			if($facturaPRODUCTS = $this->factura->getArticulosFactura($consecutivo, $data['Sucursal_Codigo'])){
+				
+				
+				$facturaHEADS = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo']);
+				
+				
 				//var_dump($consecutivo);
 				//echo "crear array";
 				$facturaBODY['status']='success';
@@ -216,6 +221,14 @@ class caja extends CI_Controller {
 					if($articulo['codigo']=='00'){
 						$articulo['bodega']='1000';
 					}
+					
+					
+					if(trim($facturaHEADS[0]->TB_03_Cliente_Cliente_Cedula) == 2){
+						// Si es cliente de inventario defectuoso se debe poner la cantidad de bodega
+						$articulo['bodega'] = $this->articulo->inventarioDefectuosoActual($articulo['codigo'], $data['Sucursal_Codigo']) - $articulo['cantidad'];
+					}
+					
+					
 					array_push($articulos, $articulo);
 				}
 				$facturaBODY['productos']=$articulos;
@@ -276,6 +289,14 @@ class caja extends CI_Controller {
 							
 							
 							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
+						
+						
+							//Valorar si factura es de cliente defectuoso
+							$facturaHeader = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])[0];
+							if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
+								$this->descontarArticulosDefectuosos($consecutivo, $data['Sucursal_Codigo']);
+							}
+						
 						}else{
 							$facturaBODY['status']='error';
 							$facturaBODY['error']='19'; //Error no existe esa factura
@@ -311,6 +332,13 @@ class caja extends CI_Controller {
 						
 						
 						$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
+					
+					
+						//Valorar si factura es de cliente defectuoso
+						$facturaHeader = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])[0];
+						if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
+							$this->descontarArticulosDefectuosos($consecutivo, $data['Sucursal_Codigo']);
+						}
 					}else{
 						$facturaBODY['status']='error';
 						$facturaBODY['error']='19'; //Error no existe esa factura
@@ -358,6 +386,13 @@ class caja extends CI_Controller {
 			}
 		}else{
 			return false;
+		}
+	}
+	
+	function descontarArticulosDefectuosos($consecutivo, $sucursal){
+		$articulos = $this->factura->getArticulosFactura($consecutivo, $sucursal);
+		foreach($articulos as $art){
+			$this->articulo->actualizarInventarioRESTADefectuoso($art->Articulo_Factura_Codigo, $art->Articulo_Factura_Cantidad, $sucursal);
 		}
 	}
 	
