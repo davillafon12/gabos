@@ -124,6 +124,7 @@ function imprimirFactura(data){
 		qz.append(" Pagado con Contado: "+formatearNumero(factura.cantidadContado)+"\r\n");
 	}else if(factura.tipo==='apartado'){
 		qz.append(" Abono: "+formatearNumero(factura.abono)+"\r\n");
+		qz.append(" Saldo: "+formatearNumero(factura.saldo)+"\r\n");
 	}
 	qz.append(" Moneda: "+factura.moneda+"\r\n"); 
 	qz.append(" Vendedor: "+factura.vendedor.substring(0, 29)+"\r\n");
@@ -153,6 +154,8 @@ function imprimirFactura(data){
 	qz.append(enviarDerecha("Retencion:"+formatearMontoTotal(formatearNumero(factura.retencion)))+"\r\n");
 	qz.append(enviarDerecha("Total:"+formatearMontoTotal(formatearNumero(factura.total)))+"\r\n");
 	qz.append("----------------------------------------\r\n");
+	qz.append("Comentarios:\r\n");
+	qz.append(factura.observaciones+"\r\n")
 	//Centramos 
 	qz.append("\x1B\x61\x01");
 	qz.append("Recibido conforme: ___________\r\n");
@@ -216,6 +219,9 @@ function imprimirRecibo(data){
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	qz.append("Saldo Actual:  "+formatearMontoTotal(formatearNumero(recibo.saldo))+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append("Comentarios:\r\n");
+	qz.append(recibo.comentarios+"\r\n");
 	qz.append("\r\n\r\n\r\n");
 	//Centramos 
 	qz.append("\x1B\x61\x01");
