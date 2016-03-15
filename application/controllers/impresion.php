@@ -903,18 +903,18 @@ class impresion extends CI_Controller {
 		//Retiros parciales y datafonos
 		$pdf->SetFont('Arial','B',14);
 		$pdf->SetXY(10, 92);	
-		$pdf->Cell(95,5,'Retiros Parciales',0,0,'C');
+		$pdf->Cell(93,5,'Retiros Parciales',0,0,'C');
 		$pdf->Cell(95,5,'Datáfonos',0,0,'C');
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',11);
 		$pdf->Cell(10,5,'#',1,0,'C');
 		$pdf->Cell(55,5,'Fecha y Hora',1,0,'C');
 		$pdf->Cell(25,5,'Total',1,0,'C');
-		$pdf->Cell(10,5,'',0,0,'C');
-		$pdf->Cell(15,5,'Banco',1,0,'C');
-		$pdf->Cell(25,5,'Comisión',1,0,'C');
-		$pdf->Cell(25,5,'Retención',1,0,'C');
-		$pdf->Cell(25,5,'Total',1,0,'C');
+		$pdf->Cell(2,5,'',0,0,'C');
+		$pdf->Cell(26,5,'Banco',1,0,'C');
+		$pdf->Cell(24,5,'Comisión',1,0,'C');
+		$pdf->Cell(24,5,'Retención',1,0,'C');
+		$pdf->Cell(24,5,'Total',1,0,'C');
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',10);
 			
@@ -943,25 +943,25 @@ class impresion extends CI_Controller {
 		$pdf->Cell(65,5,'Total:',1,0,'R');
 		$pdf->Cell(25,5,$this->fn($cierre->datos['totalRecibosParciales']),1,0,'R');
 		
-		$pdf->SetXY(110, 102);
+		$pdf->SetXY(102, 102);
 		if(sizeOf($cierre->datos['pagoDatafonos']['datafonos'])==0){
-			$pdf->Cell(90,5,'No hay pagos con datáfono. . .',1,0,'C');
+			$pdf->Cell(98,5,'No hay pagos con datáfono. . .',1,0,'C');
 			$pdf->ln(5);
-			$pdf->SetX(110);
+			$pdf->SetX(102);
 		}else{
 			foreach($cierre->datos['pagoDatafonos']['datafonos'] as $datafono){
-				$pdf->Cell(15,5,$datafono->Banco_Nombre,1,0,'C');
-				$pdf->Cell(25,5,$this->fn($datafono->Total_Comision),1,0,'R');
-				$pdf->Cell(25,5,$this->fn($datafono->Total_Retencion),1,0,'R');
-				$pdf->Cell(25,5,$this->fn($datafono->Total),1,0,'R');
+				$pdf->Cell(26,5,$datafono->Banco_Nombre,1,0,'C');
+				$pdf->Cell(24,5,$this->fn($datafono->Total_Comision),1,0,'R');
+				$pdf->Cell(24,5,$this->fn($datafono->Total_Retencion),1,0,'R');
+				$pdf->Cell(24,5,$this->fn($datafono->Total),1,0,'R');
 				$pdf->ln(5);
-				$pdf->SetX(110);
+				$pdf->SetX(102);
 			}
 		}
-		$pdf->Cell(15,5,'Totales:',1,0,'C');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoDatafonos']['totalComision']),1,0,'R');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoDatafonos']['totalRetencion']),1,0,'R');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'R');
+		$pdf->Cell(26,5,'Totales:',1,0,'C');
+		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalComision']),1,0,'R');
+		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalRetencion']),1,0,'R');
+		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'R');
 				
 		//Pagos Mixtos y Recibos por dinero
 		$pdf->SetFont('Arial','B',14);
