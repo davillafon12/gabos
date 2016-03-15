@@ -611,7 +611,7 @@ class consulta extends CI_Controller {
 	}
 	
 	function obtenerPagosMixtos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
-		$pagos = $this->contabilidad->getPagosMixtosPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual);
+		$pagos = $this->contabilidad->getPagosMixtosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual);
 		$cantidadFacturas = 0;
 		$total = 0;
 		$tarjeta = 0;
