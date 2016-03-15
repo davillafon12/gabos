@@ -253,6 +253,7 @@ function buscarArticulo(e, value, id){
 			if(codigo==='00'&&descripcion==='')
 			{
 				openGenericProductDialog(id);
+				return false;
 			}	
 			//Si ya cargo producto pasarse a cantidad
 			if(descripcion!="")
@@ -271,34 +272,40 @@ function buscarArticulo(e, value, id){
 					isFromAgregarCantidad=true;
 					return false;
 				}	
-			}					
+			}
+			
+			
+			
+			
+			//Esto es para que no cargue el producto si ya esta ingresado
+			codigo_anterior = $("#codigo_articulo_anterior_"+id_row).val();	
+			if(codigo_anterior===codigo){return false;}
+			
+			// 3 Verificamos si el articulo esta repetido, si no lo buscamos normal
+			
+			if(articuloYaIngresado(codigo, id)&&codigo!='00'&&!puedeRepetirProducto)
+			{
+				resetRowFields(id_row, false);
+				//Esto para que nos permita realizar cambios de articulo a la primera
+				$("#codigo_articulo_anterior_"+num_row).val('');
+			}
+			else
+			{
+				num_row = id.replace("codigo_articulo_","");
+				cedula = $("#cedula").val();
+				
+				getArticulo(codigo, id, num_row, cedula);		
+			}						
+		}
+		
+		// 2 Si codigo es vacio no hace nada
+			
+		if(codigo===''){
+			resetRowFields(id_row, true);
+			return false;
 		}					
 	}	
-	// 2 Si codigo es vacio no hace nada
 	
-	if(codigo===''){
-		resetRowFields(id_row, true);
-		return false;
-	}
-	
-	//Esto es para que no cargue el producto si ya esta ingresado
-	codigo_anterior = $("#codigo_articulo_anterior_"+id_row).val();	
-	if(codigo_anterior===codigo){return false;}
-	
-	// 3 Verificamos si el articulo esta repetido, si no lo buscamos normal
-	
-	if(articuloYaIngresado(codigo, id)&&codigo!='00'&&!puedeRepetirProducto)
-	{
-		resetRowFields(id_row, false);
-		//Esto para que nos permita realizar cambios de articulo a la primera
-		$("#codigo_articulo_anterior_"+num_row).val('');
-	}
-	else
-	{
-		num_row = id.replace("codigo_articulo_","");
-		cedula = $("#cedula").val();
-		getArticulo(codigo, id, num_row, cedula);		
-	}	
 }
 
 var numRowArticuloRepetido = '';
