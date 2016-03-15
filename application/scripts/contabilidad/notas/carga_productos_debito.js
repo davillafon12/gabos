@@ -20,9 +20,10 @@ function buscarArticulo(e, value, id){
 			{
 				pasarSiguienteFila(fila, false);
 				return false;
-			}			
+			}	
+			getArticulo(fila, value);		
 		}
-	
+		
 	
 	}	
 	
@@ -33,7 +34,7 @@ function buscarArticulo(e, value, id){
 		resetRow(fila, true);
 	}*/
 	
-	getArticulo(fila, value);
+	
 }
 
 function getArticulo(fila, articulo){

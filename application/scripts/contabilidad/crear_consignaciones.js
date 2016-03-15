@@ -91,7 +91,7 @@ function cargarArticulo(event){
 		var sucursal = $("#sucursal_entrega").val().trim();
 		var sucursalRecibe = $("#sucursal_recibe").val().trim();
 		
-		if(event.which == 13) {
+	if(event.which == 13) {
         if(contenido !== ""){
         	if(descripcion !== ""){
         		//Nos movemos a cantidad de articulo
@@ -121,7 +121,10 @@ function cargarArticulo(event){
     		return false;
     }
     
-    ajaxArticulo(contenido, sucursal, sucursalRecibe, fila);
+    if(event.which == 13) {
+        ajaxArticulo(contenido, sucursal, sucursalRecibe, fila);
+    }
+    
 }
 
 function ajaxArticulo(codigo, sucursal, sucursalRecibe, fila){
