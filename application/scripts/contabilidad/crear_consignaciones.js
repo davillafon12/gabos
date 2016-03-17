@@ -91,39 +91,40 @@ function cargarArticulo(event){
 		var sucursal = $("#sucursal_entrega").val().trim();
 		var sucursalRecibe = $("#sucursal_recibe").val().trim();
 		
+		
 	if(event.which == 13) {
         if(contenido !== ""){
         	if(descripcion !== ""){
         		//Nos movemos a cantidad de articulo
         		$("#cantidad_articulo_"+fila).select();
+        	}else{
+	        	if(sucursal === ""){
+			    		notyMsg('¡Debe seleccionar una sucursal que entrega consignación!', 'error');
+			    		return false;
+			    }
+			    
+			    if(sucursalRecibe === "-1"){
+			    		notyMsg('¡Debe seleccionar una sucursal que recibe consignación!', 'error');
+			    		return false;
+			    }
+			    
+			    if(CodigoYaFueIngresado(contenido)){
+			    		//notyMsg('¡Artículo ya fue ingresado!', 'error');
+			    		return false;
+			    }
+			    ajaxArticulo(contenido, sucursal, sucursalRecibe, fila);
         	}
         	return false;
         }
+	    
+	    
     }
     
     if(contenido === ""){
-    		resetFila(fila, true);
-    		return false;
+		resetFila(fila, true);
+		return false;
     }
-    
-    if(sucursal === ""){
-    		notyMsg('¡Debe seleccionar una sucursal que entrega consignación!', 'error');
-    		return false;
-    }
-    
-    if(sucursalRecibe === "-1"){
-    		notyMsg('¡Debe seleccionar una sucursal que recibe consignación!', 'error');
-    		return false;
-    }
-    
-    if(CodigoYaFueIngresado(contenido)){
-    		//notyMsg('¡Artículo ya fue ingresado!', 'error');
-    		return false;
-    }
-    
-    if(event.which == 13) {
-        ajaxArticulo(contenido, sucursal, sucursalRecibe, fila);
-    }
+
     
 }
 
