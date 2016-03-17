@@ -54,6 +54,7 @@ class cierre extends CI_Controller {
 		$data['recibos'] = $this->obtenerRecibosDeDinero($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		
 		$data['totalFacturasContado'] = $this->obtenerTotalFacturasContado($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
+		$data['totalFacturasContado'] += $data['pagoMixto']['efectivo'];
 		
 		$data['totalCreditos'] = $this->obtenerTotalCreditos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		

@@ -471,6 +471,7 @@ class consulta extends CI_Controller {
 					$datos['recibos'] = $this->obtenerRecibosDeDinero($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
 					$datos['totalFacturasContado'] = $this->obtenerTotalFacturasContado($sucursal, $fechaCierre, $fechaCierreAnterior);
+					$datos['totalFacturasContado'] += $datos['pagoMixto']['efectivo'];
 					
 					$datos['totalCreditos'] = $this->obtenerTotalCreditos($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
