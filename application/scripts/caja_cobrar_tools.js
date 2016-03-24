@@ -258,12 +258,18 @@ function validarMixto(){
 		cantidadTotalFactura = cantidadTotalFactura.replace(',','');
 		cantidadTotalFactura = parseFloat(cantidadTotalFactura);
 		//alert(parseFloat(cantidadTransaccion)+parseFloat(cantidadTransaccionEfectivo));
-		if((parseFloat(cantidadTransaccion)+parseFloat(cantidadTransaccionEfectivo))===cantidadTotalFactura){
+		if((parseFloat(cantidadTransaccion)+parseFloat(cantidadTransaccionEfectivo)).toFixed(4)==cantidadTotalFactura){
 			return true;
 		}else{
+			console.log("CANTIDADES NO CUADRAN");
+			console.log(parseFloat(cantidadTransaccion));
+			console.log(parseFloat(cantidadTransaccionEfectivo));
+			console.log(cantidadTotalFactura)
+			console.log((parseFloat(cantidadTransaccion)+parseFloat(cantidadTransaccionEfectivo)).toFixed(4));
 			return false;
 		}
 	}
+	console.log("GENERAL");
 	return false;
 }
 

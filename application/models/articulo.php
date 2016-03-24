@@ -831,6 +831,80 @@ Class articulo extends CI_Model
 		$this->db->delete('tb_41_productos_factura_temporal');		
 	}
 	
+	function crearTraspasoInventario($sucursalEntrega, $sucursalRecibe, $fecha, $usuario){
+		$datos = array(
+			"Fecha"=> $fecha,
+			"Sucursal_Entrega"=> $sucursalEntrega,
+			"Sucursal_Recibe"=> $sucursalRecibe,
+			"Usuario"=> $usuario
+		);
+		$this->db->insert("tb_52_traspaso_inventario", $datos);
+		return $this->db->insert_id();
+	}
+	
+	function agregarArticuloTraspasoInventario($traspaso, $codigo, $cantidad, $descripcion){
+		$datos = array(
+			"Traspaso"=>$traspaso,
+			"Codigo"=>$codigo,
+			"Cantidad"=>$cantidad,
+			"Descripcion"=>$descripcion
+		);
+		$this->db->insert("tb_53_articulos_traspaso_inventario",$datos);
+	}
+	
+	function getTraspasoInventario($traspaso){
+		$this->db->where("Id", $traspaso);
+		$this->db->from("tb_52_traspaso_inventario");
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+	
+	function getTraspasoInventarioParaImpresion($traspaso){
+		$this->db->select("
+				Id as consecutivo,
+				date_format(Fecha, '%d-%m-%Y %h:%i:%s %p') AS fecha,
+				Usuario as usuario,
+				Sucursal_Entrega as sucursal_entrega,
+				Sucursal_Recibe as sucursal_recibe
+			", false);
+		$this->db->where("Id", $traspaso);
+		$this->db->from("tb_52_traspaso_inventario");
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+	
+	function getArticulosDeTraspaso($traspaso){
+		$this->db->where("Traspaso", $traspaso);
+		$this->db->from("tb_53_articulos_traspaso_inventario");
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
+	
+	function getArticulosDeTraspasoParaImpresion($traspaso){
+		$this->db->where("Traspaso", $traspaso);
+		$this->db->from("tb_53_articulos_traspaso_inventario");
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
+	
+	
+	
 	
 } //FIN DE LA CLASE
 

@@ -21,6 +21,7 @@ class impresion extends CI_Controller {
 		$this->load->model('proforma_m','',TRUE);
 		$this->load->model('banco','',TRUE);
 		$this->load->model('cliente','',TRUE);
+		$this->load->model('articulo','',TRUE);
 		include 'get_session_data.php'; //Esto es para traer la informacion de la sesion
 		//Generamos el token de seguridad, el cual debe coincidir con el token de llegada
 		$this->tokenSeguridad = md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
@@ -621,6 +622,23 @@ class impresion extends CI_Controller {
 						}
 				}
 			break;
+			case 'ti':
+				if(isset($_GET['n'])&&isset($_GET['s'])){
+						$sucursal = $_GET['s'];
+						$consecutivo = $_GET['n'];
+						if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+								if($traspaso = $this->articulo->getTraspasoInventarioParaImpresion($consecutivo)){
+									$traspaso->sucursal_entrega = $traspaso->sucursal_entrega." - ".$this->empresa->getNombreEmpresa($traspaso->sucursal_entrega);
+									$traspaso->sucursal_recibe = $traspaso->sucursal_recibe." - ".$this->empresa->getNombreEmpresa($traspaso->sucursal_recibe);
+									$traspaso->usuario = $this->user->getUsuario_Codigo($traspaso->usuario)[0];
+									$traspaso->usuario = $traspaso->usuario->Usuario_Nombre." ".$traspaso->usuario->Usuario_Apellidos;
+									if($articulos = $this->articulo->getArticulosDeTraspasoParaImpresion($traspaso->consecutivo)){
+											$this->traspasoInventarioPDF($empresa, $traspaso, $articulos);
+									}
+								}
+						}
+				}
+			break;
 			default:
 				$this->retorno['error'] = '5';
 			break;
@@ -1144,6 +1162,36 @@ class impresion extends CI_Controller {
 		$pdf->Output();
 	}
 	
+	private function traspasoInventarioPDF($empresa, $head, $body){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		
+		$cantidadProductos = sizeOf($body);
+		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		$this->cantidadPaginas = $paginasADibujar + 1;
+		
+		while($paginasADibujar>=$this->numPagina){
+			//Agregamos pag		
+			$pdf->AddPage();			
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('ti', $empresa[0], $head, $pdf);
+			//Agregamos Productos
+			$inicio = $this->numPagina*30;
+			if((($this->numPagina+1)*30)<$cantidadProductos){
+				$final = ($this->numPagina+1)*30;
+			}else{
+				$final = $cantidadProductos;
+			}
+			
+			$cantidadArticulos = $this->printArticulosTraspaso($body, $inicio, $final-1, $pdf);
+			//Definimos el pie de pagina
+			$this->pieDocumentoPDF('ti', $head, $empresa[0], $pdf, $cantidadArticulos);
+			$this->numPagina++;
+		}
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
 	private function encabezadoDocumentoPDF($tipo, $empresa, $encabezado, &$pdf){
 		//var_dump($empresa);
 		$pdf->SetFont('Arial','B',14);
@@ -1409,6 +1457,41 @@ class impresion extends CI_Controller {
 				$pdf->Text(102, 58, $encabezado->usuario);
 				
 			break;
+			case 'ti':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Traspaso #'.$encabezado->consecutivo);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha);
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(172, 16, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
+				
+				//Info del cliente
+				$pdf->SetFont('Arial','B',11);
+				$pdf->Text(12, 41.5, 'Sucursal que entrega');
+				$pdf->Text(12, 52.5, 'Sucursal que recibe');
+				$pdf->SetFont('Arial','',10);
+				$pdf->Text(12, 47, $encabezado->sucursal_entrega);
+				$pdf->Text(12, 58, $encabezado->sucursal_recibe);
+				$pdf->SetXY(11, 50);
+				//$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
+				//Caja redondeada 1
+				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
+				//Divisores				
+				//$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
+				$pdf->Line(100, 37, 100, 60); //Centro caja
+				$pdf->Line(10, 43, 200, 43); //Borde debajo sucursal que entrega y descripcion
+				$pdf->Line(10, 49, 200, 49); //Borde debajo sucursal que entrega
+				$pdf->Line(10, 54, 200, 54); //Borde debajo sucursal que entrega
+				//Info de la factura
+				$pdf->SetFont('Arial','B',11);
+				$pdf->Text(102, 52.5, 'Usuario que realizó el traspaso');
+				$pdf->SetFont('Arial','',10);
+				$pdf->Text(102, 58, $encabezado->usuario);
+				
+			break;
 		}
 	}
 	
@@ -1416,6 +1499,9 @@ class impresion extends CI_Controller {
 		if($cantidadTotalArticulos != 0){
 				//Cantidad total de articulos
 				$pdf->SetXY(74, 225);
+				if($tipo == 'ti'){
+					$pdf->SetXY(150, 240);
+				}
 				$pdf->Cell(20,5,"Cantidad Total de Artículos:      ".$cantidadTotalArticulos);
 		}
 		switch($tipo){

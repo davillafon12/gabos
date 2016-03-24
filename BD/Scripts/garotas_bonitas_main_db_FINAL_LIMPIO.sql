@@ -4405,3 +4405,5 @@ ALTER TABLE `tb_30_notas_debito` ADD `Sucursal_Recibe` VARCHAR(10) NOT NULL , AD
 
 
 ALTER TABLE `tb_37_cierre_caja` ADD `BNServicios` DOUBLE NOT NULL AFTER `Total_Conteo`;
+
+ALTER TABLE `tb_26_recibos_dinero` CHANGE `Recibo_Saldo` `Recibo_Saldo` DOUBLE NULL DEFAULT NULL;

@@ -38,6 +38,7 @@
 				<li><a href='#' class='dir'>Traspaso</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."articulos/registrar>Individual</a></li>
+						<li ><a href=".$Ruta_Base."articulos/traspaso>Tiendas</a></li>
 						<li class='last'><a href=".$Ruta_Base."articulos/registrar/registro_masivo>Masivo</a></li>
 					</ul>
 				</li>
