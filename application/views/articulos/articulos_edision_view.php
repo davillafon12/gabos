@@ -183,7 +183,8 @@ PARA:
 								<label for="costo"  class="contact">Costo:</label>					
 							</td>
 							<td>
-								<input id="costo" class="input_uno" autocomplete="off" name="costo" required="" value="<?php echo $costo_Editar;?>">
+								<input class="input_uno" value="*********">
+								<input id="costo" type="hidden" class="input_uno" autocomplete="off" name="costo" required="" value="<?php echo $costo_Editar;?>">
 							</td>
 							<td>
 								<label for="precio1"  class="contact">Precio 1:</label>					

@@ -104,7 +104,8 @@ class editar extends CI_Controller {
                             ".$row->TB_05_Familia_Familia_Codigo."
                         </td>
                         <td>
-                            ".$this->articulo->getPrecioProducto($row->Articulo_Codigo, 0, $data['Sucursal_Codigo'])."
+                            <input type='hidden' value='".$this->articulo->getPrecioProducto($row->Articulo_Codigo, 0, $data['Sucursal_Codigo'])."'>
+                            ******
                         </td>
                         <td>
                             ".$this->articulo->getPrecioProducto($row->Articulo_Codigo, 1, $data['Sucursal_Codigo'])."
@@ -152,7 +153,7 @@ class editar extends CI_Controller {
 				$art->descripcion,
 				$art->inventario,
 				$art->descuento,
-				number_format($this->articulo->getPrecioProducto($art->codigo, 0, $data['Sucursal_Codigo']),2),
+				"<input type='hidden' value='".number_format($this->articulo->getPrecioProducto($art->codigo, 0, $data['Sucursal_Codigo']),2)."'> *****",
 				number_format($this->articulo->getPrecioProducto($art->codigo, 1, $data['Sucursal_Codigo']),2),
 				number_format($this->articulo->getPrecioProducto($art->codigo, 2, $data['Sucursal_Codigo']),2),
 				"
