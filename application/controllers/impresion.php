@@ -1040,7 +1040,7 @@ class impresion extends CI_Controller {
 		$totalRetirosParciales = $cierre->datos['totalRecibosParciales'];
 		$retiroFinal = $cierre->conteo;
 		//$efectivoTotal = ($totalRetirosParciales + $retiroFinal) - $baseDeCaja;
-		$efectivoTotal = $totalRetirosParciales - $cierre->datos['recibos']['efectivo'] - $cierre->bnservicios;
+		$efectivoTotal = $totalRetirosParciales - $cierre->datos['recibos']['efectivo'] - $cierre->bnservicios - $cierre->datos['recibos']['abonos'];
 		
 		$pdf->SetFont('Arial','B',14);
 		$pdf->ln(7);
