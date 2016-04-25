@@ -49,10 +49,16 @@ function cobrarFactura(){
 													totalAPagar = $("#costo_total").val();	
 		
 													tipoPago = $('input[name=tipo]:checked').val();	
-													//alert(totalAPagar);
+													
+													if(tipoPago == 'mixto'){
+														totalAPagar = $("#monto_efectivo_mixto_input").val();
+													}
+													if(tipoPago == 'apartado'){
+														totalAPagar = $("#cantidad_abono").val();
+													}
 													 
 													$("#cuadro_vuelto_total").html(totalAPagar);
-													if(tipoPago.trim()==='tarjeta'||tipoPago.trim()==='cheque'||tipoPago.trim()==='deposito'){
+													if(tipoPago.trim()==='tarjeta'||tipoPago.trim()==='cheque'||tipoPago.trim()==='deposito'||tipoPago.trim()==='credito'){
 														totalAPagar = '0';
 													}
 													$("#vueltoDar").html('-'+totalAPagar);
@@ -88,6 +94,9 @@ function moverAceptarBoton(e, value){
 		tipoPago = $('input[name=tipo]:checked').val();
 		if(tipoPago.trim()==='mixto'){
 			totalAPagar = $('#monto_efectivo_mixto_input').val();
+		}
+		if(tipoPago.trim()==='apartado'){
+			totalAPagar = $('#cantidad_abono').val();
 		}
 		if(tipoPago.trim()==='tarjeta'||tipoPago.trim()==='cheque'||tipoPago.trim()==='deposito'){
 			totalAPagar = '0';
@@ -312,11 +321,12 @@ function tipoPagoJSON(){
 
 function enviarCobro(URL){
 	var recibido = $.isNumeric($("#pop_cantidad_a_pagar").val()) ? parseFloat($("#pop_cantidad_a_pagar").val()).format(2, 3, '.', ',') : $("#pop_cantidad_a_pagar").val();
-	var vuelto = recibido === 0 ? 0 : $("#cuadro_vuelto_total").html();
+	var vuelto = recibido === 0 ? 0 : $("#vueltoDar").html();
+	vuelto = vuelto == '-0' ? '' : vuelto;
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
-		data: {'consecutivo':consecutivoActual,'tipoPago':JSON.stringify(tipoPagoJSON()),'entregado':recibido,'vuelto':$("#cuadro_vuelto_total").html()},		
+		data: {'consecutivo':consecutivoActual,'tipoPago':JSON.stringify(tipoPagoJSON()),'entregado':recibido,'vuelto':vuelto},		
 		success: function(data, textStatus, jqXHR)
 		{
 			
