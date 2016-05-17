@@ -107,11 +107,13 @@ function cargarArticulo(event){
 			    		notyMsg('¡Debe seleccionar una sucursal que recibe consignación!', 'error');
 			    		return false;
 			    }
+/*
 			    
 			    if(CodigoYaFueIngresado(contenido)){
 			    		//notyMsg('¡Artículo ya fue ingresado!', 'error');
 			    		return false;
 			    }
+*/
 			    ajaxArticulo(contenido, sucursal, sucursalRecibe, fila);
         	}
         	return false;
@@ -501,7 +503,7 @@ function agregarFila(siguienteFila){
 function agregarTooltip(id_Row){
 	$(id_Row).mouseover(function(){
 		eleOffset = $(this).offset();
-
+		$(".tooltip_imagen_articulo").css("display","none");
 		$(this).next().fadeIn("fast").css({
 			left: eleOffset.left + 100,
 			top: eleOffset.top - 100
@@ -509,6 +511,8 @@ function agregarTooltip(id_Row){
 		
 	}).mouseout(function(){
 		$(this).next().hide();
+		$(".tooltip_imagen_articulo").css("display","none");
+
 	});
 } 
 
