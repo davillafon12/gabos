@@ -244,15 +244,15 @@ $config['encryption_key'] = 'REALLY_LONG_NUMBER';
 | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_cookie_name']		= 'ci_session';
-$config['sess_expiration']		= 7200;
-$config['sess_expire_on_close']	= TRUE;
+$config['sess_cookie_name']		= 'gabo_session';
+$config['sess_expiration']		= 1000000000;
+$config['sess_expire_on_close']	= FALSE;
 $config['sess_encrypt_cookie']	= FALSE;
 $config['sess_use_database']	= TRUE;
 $config['sess_table_name']		= 'tb_14_sesiones';
 $config['sess_match_ip']		= FALSE;
-$config['sess_match_useragent']	= TRUE;
-$config['sess_time_to_update']	= 300;
+$config['sess_match_useragent']	= FALSE;
+$config['sess_time_to_update']	= 1000000000;
 
 /*
 |--------------------------------------------------------------------------
