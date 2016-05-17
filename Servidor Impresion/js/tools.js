@@ -134,6 +134,8 @@ function imprimirFactura(data){
 	qz.append(" Articulo      Cant. Desc.      Precio  \r\n");
 	qz.append("----------------------------------------\r\n");
 	
+	var cantidadTotalArticulos = 0;
+	
 	//PROCESADO DE PRODUCTOS
 	for(i = 0; productos.length>i; i++){
 		cantidad = productos[i].cantidad;
@@ -141,13 +143,15 @@ function imprimirFactura(data){
 		
 		cant = parseInt(cantidad);
 		des = parseInt(descuento);
+		cantidadTotalArticulos += cant;
 		precio = parseFloat(productos[i].precio);
 		precio = cantidad * ( precio - ( precio * ( descuento / 100 ) ) );
 		
 		qz.append(formatearCodigo(productos[i].codigo)+formatearCantidad(cantidad)+formatearDescuento(descuento)+acomodarPrecio(formatearNumero(precio))+"\r\n");
 		qz.append(" ->"+productos[i].descripcion.substring(0, 36)+"\r\n");
 	}
-	
+	qz.append("----------------------------------------\r\n");
+	qz.append("Cant. Articulos: "+cantidadTotalArticulos+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	qz.append(enviarDerecha("Subtotal:"+formatearMontoTotal(formatearNumero(factura.subtotal)))+"\r\n");
 	qz.append(enviarDerecha("IVA:"+formatearMontoTotal(formatearNumero(factura.total_iva)))+"\r\n");

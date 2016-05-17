@@ -326,6 +326,7 @@ function setProductosFactura(productos){
 	
 	$("#contenidoArticulos").html('');	
 	cantidad = productos.length;
+	var cantidadTotalDeArticulos = 0;
 	for (var i = 0; i < cantidad; i++) 
 	{
 		fila = "<tr>";
@@ -333,7 +334,7 @@ function setProductosFactura(productos){
 		fila += "<td><div class='contact' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].descripcion+"</div>"
 				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/articulos/"+productos[i].imagen+"' height='200' width='200'></div></td>";
 		fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].cantidad+"</label></td>";	
-		
+		cantidadTotalDeArticulos += parseInt(productos[i].cantidad);
 		if(productos[i].exento==='1'){fila += "<td><label class='contact'>E</label>";}else{fila += "<td><label class='contact'></label>";};
 		fila += "<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'></td>";
 		
@@ -359,6 +360,7 @@ function setProductosFactura(productos){
 
 		$("#contenidoArticulos").append(fila);
 	}
+	$("#cantidad_total_articulos").html(cantidadTotalDeArticulos);
 	setCostos(cantidad);
 }
 

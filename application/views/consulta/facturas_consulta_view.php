@@ -178,6 +178,9 @@ PARA:
 					
 					</tbody>				
 				</table>
+				<div class="cantidad-art-contenedor">
+					<label class="contact">Cantidad Artículos: <span id="cantidad_total_articulos">0</span></label>
+				</div>
 				<div class="observaciones_div">
 					<p class="contact"><label for="observaciones">Observaciones:</label></p>
 					<textarea id="observaciones" autocomplete="off" class="observaciones" placeholder="" name="observaciones" cols="25" rows="5" maxlength="150" disabled=""></textarea> 
