@@ -446,10 +446,13 @@ function imprimir(){
 	}else if(consecutivo!=consecutivoActual){
 		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
 		return false;
-	}else if(tipo_factura === 'pendiente'){
+	}
+/*
+	else if(tipo_factura === 'pendiente'){
 		notyMsg('No puede imprimir facturas pendientes', 'error');
 		return false;
 	}
+*/
 	
 	if(tipoImpresion==='t'){
 		//Impresion termica
