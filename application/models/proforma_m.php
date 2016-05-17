@@ -465,22 +465,22 @@ Class proforma_m extends CI_Model
 	
 	function setFiltradoFechaDesde($fecha){
 		if(trim($fecha)!=''){
-			$fecha = $this->convertirFecha($fecha);
+			$fecha = $this->convertirFecha($fecha, " 00:00:00");
 			$this->db->where('Proforma_Fecha_Hora >=', $fecha);
 		}
 	}
 	
 	function setFiltradoFechaHasta($fecha){
 		if(trim($fecha)!=''){
-			$fecha = $this->convertirFecha($fecha);
+			$fecha = $this->convertirFecha($fecha, " 23:59:59");
 			$this->db->where('Proforma_Fecha_Hora <=', $fecha);
 		}
 	}
 	
-	function convertirFecha($fecha){		
+	function convertirFecha($fecha, $horas){		
 		if(trim($fecha)!=''){
 			$fecha = explode("/",$fecha);
-			$fecha = $fecha[0]."-".$fecha[1]."-".$fecha[2]." 00:00:00";
+			$fecha = $fecha[0]."-".$fecha[1]."-".$fecha[2].$horas;
 			//echo $fecha;
 			date_default_timezone_set("America/Costa_Rica");
 			return date("Y-m-d : H:i:s", strtotime($fecha));
