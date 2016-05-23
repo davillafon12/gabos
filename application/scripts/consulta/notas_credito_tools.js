@@ -259,6 +259,7 @@ function setEncabezadoFactura(facturaHEAD){
 	total = parseFloat(facturaHEAD[0].total);
 	iva = parseFloat(facturaHEAD[0].total_iva);
 	costo = parseFloat(facturaHEAD[0].subtotal);
+	retencion = parseFloat(facturaHEAD[0].retencion);
 	
 	if(tipo_moneda==='colones'){
 		$(".tipo_moneda_display").html("₡");
@@ -267,12 +268,13 @@ function setEncabezadoFactura(facturaHEAD){
 		total = total / tipo_cambio;
 		iva = iva / tipo_cambio;
 		costo = costo / tipo_cambio;
+		retencion = retencion / tipo_cambio;
 	}	
 	
 	$("#costo_total").val(total.format(decimales, 3, '.', ','));
 	$("#iva").val(iva.format(decimales, 3, '.', ','));
 	$("#costo").val(costo.format(decimales, 3, '.', ','));
-	
+	$("#retencion").val(retencion.format(decimales, 3, '.', ','));
 	
 }
 

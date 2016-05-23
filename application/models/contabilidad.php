@@ -238,16 +238,26 @@ Class contabilidad extends CI_Model
 		// Para valorar el precio real unitario debemos obtener el 
 		// precio con el que se hizo la factura y no con el que este en la bd
 		// esto porque puede que al cliente se le vendio con descuento 
-		
+		$this->load->model("factura","",true);
 		foreach($productos as $producto){
 			$descripcion = ""; 
 			$precio = ""; 
+			$descuento = 0;
+			$exento = 0;
+			$noRetencion = 0;
+			$precioFinal = 0;
 			if(trim($producto->c) == "00"){
 				$descripcion = trim($producto->ds);
 				$precio = trim($producto->p);
+				$precioFinal = $precio;
 			}else{
 				$descripcion = $this->articulo->getArticuloDescripcion($producto->c, $sucursal);
 				$precio = $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c);
+				$articuloCompleto = $this->factura->getArticuloFactura($facturaAcreditar, $sucursal, $producto->c);
+				$descuento = $articuloCompleto->Articulo_Factura_Descuento;
+				$exento = $articuloCompleto->Articulo_Factura_Exento;
+				$noRetencion = $articuloCompleto->Articulo_Factura_No_Retencion;
+				$precioFinal = $articuloCompleto->Articulo_Factura_Precio_Final;
 			}
 			//Agregamos los datos a un array para ser agregado a la bd
 			$pro = array(
@@ -256,6 +266,10 @@ Class contabilidad extends CI_Model
 						'Cantidad_Bueno' => $producto->b,
 						'Cantidad_Defectuoso' => $producto->d,
 						'Precio_Unitario' => $precio,
+						'Precio_Final' => $precioFinal,
+						'Descuento' => $descuento,
+						'Exento' => $exento,
+						'No_Retencion' => $noRetencion,
 						'Nota_Credito_Consecutivo' => $consecutivo,
 						'Sucursal' => $sucursal
 						);
@@ -315,7 +329,16 @@ Class contabilidad extends CI_Model
 	
 	function getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal){
 		
-		$this->db->select("Codigo AS codigo, Descripcion AS descripcion, Cantidad_Bueno AS bueno, Cantidad_Defectuoso AS defectuoso, Precio_Unitario AS precio");
+		$this->db->select("
+		Codigo AS codigo, 
+		Descripcion AS descripcion, 
+		Cantidad_Bueno AS bueno, 
+		Cantidad_Defectuoso AS defectuoso, 
+		Precio_Unitario AS precio,
+		Precio_Final AS precio_final,
+		Descuento AS descuento,
+		Exento AS exento,
+		No_Retencion AS no_retencion");
 		$this->db->from("tb_28_productos_notas_credito");
 		$this->db->where("Nota_Credito_Consecutivo",$consecutivo);
 		$this->db->where("Sucursal",$sucursal);
@@ -926,7 +949,7 @@ Class contabilidad extends CI_Model
 						$this->db->where_not_in("tb_27_notas_credito.Consecutivo", $notas_credito_desampa);
 				}
 		}
-		$this->db->select('tb_27_notas_credito.Consecutivo, tb_27_notas_credito.Sucursal, tb_07_factura.Factura_Tipo_Pago as Tipo');
+		$this->db->select('tb_27_notas_credito.Consecutivo, tb_27_notas_credito.Sucursal, tb_27_notas_credito.Por_IVA, tb_07_factura.Factura_Tipo_Pago as Tipo');
 		$this->db->from('TB_27_Notas_Credito');
 		$this->db->join('tb_07_factura', 'tb_07_factura.Factura_Consecutivo = tb_27_notas_credito.Factura_Aplicar');
 		$this->db->where('TB_27_Notas_Credito.Sucursal', $sucursal);
@@ -951,32 +974,70 @@ Class contabilidad extends CI_Model
 			foreach($query->result() as $nota){
 			
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $nota->Sucursal)){
-					$total = 0;
+					$costo_total = 0;
+					$iva = 0;
+					$costo_sin_iva = 0;
+					$retencion = 0;
 					foreach($notaCreditoBody as $art){
-						$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));					
+						//$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));		
+						$cantidadArt = $art->bueno + $art->defectuoso;
+						//Calculamos el precio total de los articulos
+						$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+						$precio_total_articulo_sin_descuento = $art->precio*$cantidadArt;
+						$precio_articulo_final = $art->precio_final;
+						$precio_articulo_final = $precio_articulo_final * $cantidadArt;
+						
+						//Calculamos los impuestos
+						
+						$isExento = $art->exento;
+						
+						if($isExento=='0'){
+							$costo_sin_iva += $precio_total_articulo/(1+(floatval($nota->Por_IVA)/100));
+							
+							
+							$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($nota->Por_IVA)/100)));
+							$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($nota->Por_IVA)/100))); 
+							
+							$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($nota->Por_IVA)/100));
+							$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+							
+							if(!$art->no_retencion){
+									$retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+							}
+						}
+						else if($isExento=='1'){
+							$costo_sin_iva += $precio_total_articulo;
+							//$retencion = 0;
+						}
+						$costo_total += $precio_total_articulo;			
 					}
-					$totalNotas += $total;
+					$iva = $costo_total-$costo_sin_iva;
+					$costo_total += $retencion;
+					
+					
+					
+					$totalNotas += $costo_total;
 					switch($nota->Tipo){
 						case 'contado':
-							$contado += $total;
+							$contado += $costo_total;
 						break;
 						case 'tarjeta':
-							$tarjeta += $total;
+							$tarjeta += $costo_total;
 						break;
 						case 'cheque':
-							$cheque += $total;
+							$cheque += $costo_total;
 						break;
 						case 'deposito':
-							$deposito += $total;
+							$deposito += $costo_total;
 						break;
 						case 'mixto':
-							$mixto += $total;
+							$mixto += $costo_total;
 						break;
 						case 'credito':
-							$credito += $total;
+							$credito += $costo_total;
 						break;
 						case 'apartado':
-							$apartado += $total;
+							$apartado += $costo_total;
 						break;
 					}
 				}

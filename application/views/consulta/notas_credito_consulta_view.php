@@ -175,6 +175,15 @@ PARA:
 						</tr>
 						<tr>
 						<td>
+							<p class="contact"><label for="retencion">Retención:</label></p> 
+						</td>
+						<td>
+							<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
+							<input id="retencion" class="input_dos" autocomplete="off" name="retencion" type="text" disabled=""> 
+						</td>
+						</tr>
+						<tr>
+						<td>
 							<p class="contact"><label for="costo_total">Monto Total:</label></p> 
 						</td>
 						<td>

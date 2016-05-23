@@ -245,6 +245,28 @@ Class factura extends CI_Model
 		}
 	}
 	
+	function getArticuloFactura($consecutivo, $sucursal, $articulo){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$this -> db -> where('TB_07_Factura_Factura_Vendedor_Sucursal', $sucursal);
+				$sucursal = $this->cod_garotas;
+		}
+		$this -> db -> from('TB_08_Articulos_Factura');
+		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
+		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Articulo_Factura_Codigo', $articulo);
+		
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		   return $query->result()[0];
+		}
+		else
+		{
+		   return false;
+		}
+	}
+	
 	function getConfgArray()
 	{
 		/*$CI =& get_instance();

@@ -444,6 +444,7 @@ class impresion extends CI_Controller {
 						if($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
 							if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal)){
 															
+/*
 								$total = 0;
 								$subtotal = 0;
 								$total_iva = 0;
@@ -457,7 +458,65 @@ class impresion extends CI_Controller {
 								$notaCreditoHead[0]->total = $total;
 								$notaCreditoHead[0]->subtotal = $subtotal;
 								$notaCreditoHead[0]->total_iva = $total_iva;
-
+*/
+								
+								$costo_total = 0;
+								$iva = 0;
+								$costo_sin_iva = 0;
+								$retencion = 0;
+								foreach($notaCreditoBody as $art){
+			/*
+									$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
+									$total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100));
+									$subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100)));
+								
+			*/
+								
+									
+									$cantidadArt = $art->bueno + $art->defectuoso;
+									//Calculamos el precio total de los articulos
+									$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+									$precio_total_articulo_sin_descuento = $art->precio*$cantidadArt;
+									$precio_articulo_final = $art->precio_final;
+									$precio_articulo_final = $precio_articulo_final * $cantidadArt;
+									
+									//Calculamos los impuestos
+									
+									$isExento = $art->exento;
+									
+									if($isExento=='0'){
+										$costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
+										
+										
+										$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100)));
+										$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($notaCreditoHead[0]->iva)/100))); 
+										
+										$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
+										$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+										
+										if(!$art->no_retencion){
+												$retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+										}
+									}
+									else if($isExento=='1'){
+										$costo_sin_iva += $precio_total_articulo;
+										//$retencion = 0;
+									}
+									$costo_total += $precio_total_articulo;
+			
+								
+								
+								}
+								$iva = $costo_total-$costo_sin_iva;
+								$costo_total += $retencion;
+								
+								
+								$notaCreditoHead[0]->total = $costo_total;
+								$notaCreditoHead[0]->subtotal = $costo_sin_iva;
+								$notaCreditoHead[0]->total_iva = $iva;
+								$notaCreditoHead[0]->retencion = $retencion;
+								
+								
 								$this->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $notaCreditoBody);
 							}else{
 								$this->retorno['error'] = '12';
@@ -1502,6 +1561,9 @@ class impresion extends CI_Controller {
 				if($tipo == 'ti'){
 					$pdf->SetXY(150, 240);
 				}
+				if($tipo == 'nc'){
+					$pdf->SetXY(74, 240);
+				}
 				$pdf->Cell(20,5,"Cantidad Total de Artículos:      ".$cantidadTotalArticulos);
 		}
 		switch($tipo){
@@ -1539,8 +1601,7 @@ class impresion extends CI_Controller {
 				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
 			break;			
 			case 'nc':
-				//Parte de observaciones
-				$this->observaciones('', $pdf);
+				
 				//Costos totales
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 240);	
@@ -1550,6 +1611,9 @@ class impresion extends CI_Controller {
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
 				$pdf->SetXY(131, 254);	
+				$pdf->Cell(41,7,'Retención:',1,0,'R');
+				$pdf->Cell(28,7,$this->fn($encabezado->retencion),1,0,'R');
+				$pdf->SetXY(131, 261);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
 			break;
@@ -2028,28 +2092,76 @@ class impresion extends CI_Controller {
 	}
 	
 	function obtenerTotalesNotasCredito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+	/*
 		$total = 0;
 		$subtotal = 0;
 		$total_iva = 0;
+		
+*/
+		$costo_total = 0;
+		$iva = 0;
+		$costo_sin_iva = 0;
+		$retencion = 0;
 		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($notas as $nota){
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $sucursal)){
+					
 					foreach($notaCreditoBody as $art){
+/*
 						$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
 						$total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100));
 						$subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100)));
+					
+*/
+					
+						
+						$cantidadArt = $art->bueno + $art->defectuoso;
+						//Calculamos el precio total de los articulos
+						$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+						$precio_total_articulo_sin_descuento = $art->precio*$cantidadArt;
+						$precio_articulo_final = $art->precio_final;
+						$precio_articulo_final = $precio_articulo_final * $cantidadArt;
+						
+						//Calculamos los impuestos
+						
+						$isExento = $art->exento;
+						
+						if($isExento=='0'){
+							$costo_sin_iva += $precio_total_articulo/(1+(floatval($nota->Por_IVA)/100));
+							
+							
+							$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($nota->Por_IVA)/100)));
+							$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($nota->Por_IVA)/100))); 
+							
+							$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($nota->Por_IVA)/100));
+							$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+							
+							if(!$art->no_retencion){
+									$retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+							}
+						}
+						else if($isExento=='1'){
+							$costo_sin_iva += $precio_total_articulo;
+							//$retencion = 0;
+						}
+						$costo_total += $precio_total_articulo;
+
+					
+					
 					}
+					$iva = $costo_total-$costo_sin_iva;
+					$costo_total += $retencion;
 				}
 			}
 		}
-		return array('total'=>$total, 'subtotal'=>$subtotal, 'iva'=>$total_iva);		
+		return array('total'=>$costo_total, 'subtotal'=>$costo_sin_iva, 'iva'=>$iva, 'retencion'=>$retencion);				
 	}
 	
 	function obtenerTotalesNotasDebito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		$total = 0;
 		$subtotal = 0;
 		$total_iva = 0;
-		if($notas = $this->contabilidad->getNotaDebitoPorRangoFecha($sucursal, $fechaUltimoCierra, $fechaHoraActual)){
+		if($notas = $this->contabilidad->getNotaDebitoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($notas as $nota){
 				if($notaDebitoBody = $this->contabilidad->getProductosNotaDebito($nota->Consecutivo, $sucursal)){
 					foreach($notaDebitoBody as $art){
