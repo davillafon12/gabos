@@ -926,6 +926,7 @@ class impresion extends CI_Controller {
 		$pdf->Line(10, 42, 200, 42);
 		
 		//DENOMINACIONES
+/*
 		$pdf->SetFont('Arial','B',14);
 		$pdf->SetXY(10, 45);	
 		$pdf->Cell(190,5,'Efectivo',0,0,'C');
@@ -977,10 +978,11 @@ class impresion extends CI_Controller {
 		$pdf->SetX(136.66);
 		$pdf->SetFont('Arial','B',11);
 		$pdf->Cell(63.33,5,'Total Conteo: '.$this->fn($cierre->conteo),1,0,'R');
+*/
 		
 		//Retiros parciales y datafonos
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(10, 92);	
+		$pdf->SetXY(10, 45);	
 		$pdf->Cell(93,5,'Retiros Parciales',0,0,'C');
 		$pdf->Cell(95,5,'Datáfonos',0,0,'C');
 		$pdf->ln(5);
@@ -1021,7 +1023,7 @@ class impresion extends CI_Controller {
 		$pdf->Cell(65,5,'Total:',1,0,'R');
 		$pdf->Cell(25,5,$this->fn($cierre->datos['totalRecibosParciales']),1,0,'R');
 		
-		$pdf->SetXY(102, 102);
+		$pdf->SetXY(102, 55);
 		if(sizeOf($cierre->datos['pagoDatafonos']['datafonos'])==0){
 			$pdf->Cell(98,5,'No hay pagos con datáfono. . .',1,0,'C');
 			$pdf->ln(5);
@@ -1043,7 +1045,7 @@ class impresion extends CI_Controller {
 				
 		//Pagos Mixtos y Recibos por dinero
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(10, 149);	
+		$pdf->SetXY(10, 102);	
 		$pdf->Cell(95,5,'Pagos Mixtos',0,0,'C');
 		$pdf->Cell(95,5,'Recibos Por Dinero',0,0,'C');
 		$pdf->ln(5);
@@ -1146,7 +1148,7 @@ class impresion extends CI_Controller {
 			$pdf->Cell(25,5,'',1,0,'C');
 			$pdf->ln(5);
 		}
-		$pdf->SetXY(10, 224);
+		$pdf->SetXY(10, 177);
 		$contador = 1;			
 		foreach($cierre->datos['vendedores']['vendidoVendedores'] as $vendedor){
 			if($contador <= 8){
@@ -1155,7 +1157,7 @@ class impresion extends CI_Controller {
 				$pdf->ln(5);
 			}
 			if($contador == 9){
-				$pdf->SetXY(105,195);
+				$pdf->SetXY(105,177);
 			}
 			if($contador > 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
@@ -1166,7 +1168,7 @@ class impresion extends CI_Controller {
 			$contador++;
 		}
 		$pdf->SetFont('Arial','B',11);
-		$pdf->SetXY(10,264);
+		$pdf->SetXY(10,217);
 		$pdf->Cell(190,5,'Total Vendedores: '.$this->fn($cierre->datos['vendedores']['totalVendido']),1,0,'R');
 		
 		//Valores finales
@@ -1181,7 +1183,7 @@ class impresion extends CI_Controller {
 		
 		//Realizado Por:
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(10,287);
+		$pdf->SetXY(10,240);
 		$pdf->Cell(95,5,'Realizado por: '.$cierre->usuario,0,0,'R');
 		//$pdf->ln(10);
 		//$pdf->SetX(80);
