@@ -196,7 +196,9 @@ class notas extends CI_Controller {
 						&&is_numeric($facturaAcreditar)&&$this->factura->existe_Factura($facturaAcreditar, $data['Sucursal_Codigo'])){
 						if($this->existeProductosAcreditar($productosAAcreditar, $data['Sucursal_Codigo'])){
 							//Preguntamos si la factura a aplicar ya fue aplicada en otra nota
-							if(!$this->contabilidad->facturaAplciarYaFueAplicada($facturaAplicar, $data['Sucursal_Codigo'])){
+							$facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $data['Sucursal_Codigo'])[0];
+							if(!$this->contabilidad->facturaAplciarYaFueAplicada($facturaAplicar, $data['Sucursal_Codigo']) ||
+								$facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
 								//Listo para realizar nota
 								//Obtenemos el consecutivo
 								if($consecutivo = $this->contabilidad->getConsecutivo($data['Sucursal_Codigo'])){
