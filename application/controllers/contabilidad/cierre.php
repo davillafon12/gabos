@@ -361,7 +361,7 @@ class cierre extends CI_Controller {
 				if($vendido = $this->contabilidad->getVendidoPorVendedor($vendedor->Factura_Vendedor_Codigo, $sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 					array_push($vendidoVendedores, $vendido);
 					$totalVendido += $vendido[0]->total_vendido;
-				}
+				}  
 			}
 		}
 		
@@ -372,7 +372,7 @@ class cierre extends CI_Controller {
 			//'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal	
 			$retorno['status'] = 'error';
 			$retorno['error'] = '1'; //No se proceso la solicitud
-			if(isset($_POST['cantidadEfectivo'])&&isset($_POST['tipo_cambio'])&&isset($_POST['colones'])&&isset($_POST['dolares'])&&isset($_POST['fechaCierre'])&&isset($_POST['base'])&&isset($_POST['bnservicios'])){
+			if(isset($_POST['cantidadEfectivo'])&&isset($_POST['tipo_cambio'])&&isset($_POST['colones'])&&isset($_POST['dolares'])&&isset($_POST['fechaCierre'])&&isset($_POST['base'])&&isset($_POST['bnservicios'])&&isset($_POST['bnserviciosCredito'])){
 				$cantidad = trim($_POST['cantidadEfectivo']);
 				$cantidad = str_replace(".","",$cantidad);
 				$cantidad = str_replace(",",".",$cantidad);
@@ -381,13 +381,14 @@ class cierre extends CI_Controller {
 				$base = str_replace(",",".",$base);
 				$tipo_cambio = $_POST['tipo_cambio'];
 				$bnServicios = trim($_POST['bnservicios']);
-				if(is_numeric($cantidad)&&is_numeric($tipo_cambio)&&is_numeric($base)&&is_numeric($bnServicios)){
+				$bnServiciosCredito = trim($_POST['bnserviciosCredito']);
+				if(is_numeric($cantidad)&&is_numeric($tipo_cambio)&&is_numeric($base)&&is_numeric($bnServicios)&&is_numeric($bnServiciosCredito)){
 					$colones = json_decode($_POST['colones']);
 					$dolares = json_decode($_POST['dolares']);
 					include '/../get_session_data.php';
 					if(!$this->factura->getFacturasPendientes($data['Sucursal_Codigo'])){
 							
-							$cierre = $this->contabilidad->crearCierreCaja($tipo_cambio, $cantidad, $base, $_POST['fechaCierre'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $bnServicios);
+							$cierre = $this->contabilidad->crearCierreCaja($tipo_cambio, $cantidad, $base, $_POST['fechaCierre'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $bnServicios, $bnServiciosCredito);
 							
 							foreach($colones as $colon){
 								$tipo = 'moneda';

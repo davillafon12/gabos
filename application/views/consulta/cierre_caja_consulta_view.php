@@ -260,13 +260,14 @@ PARA:
 									<td colspan="2" class="alg-right"><p class="parrafo">Total:</p></td>
 									<td class="alg-right"><p class="parrafo" id="total_dolares">$0,00</p></td>
 								</tr>
-							</table>
+							</table> 
 						</td>
 						<td>
 							<div class="footer_notas">	
 								<label class="parrafo">Tipo de Cambio ₡</label><input id="tipo_cambio_dolar" class="input-deno alg-right" type="text" disabled /><br>
 								<label class="contact">Total ₡</label><input class="input_uno alg-right" name="input_retiro_parcial" id="input_retiro_parcial" type="text" style="  width: 150px;" disabled /><br>
-								<label class="contact">BN Servicios ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios" type="text" style="  width: 150px;" disabled />
+								<label class="contact">BN Servicios Contado ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios" type="text" style="  width: 150px;" disabled /><br>
+								<label class="contact">BN Servicios Crédito ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios_credito" type="text" style="  width: 150px;" disabled />
 							</div>							
 						</td>
 					</tr>

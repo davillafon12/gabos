@@ -230,8 +230,8 @@ function cargarEncabezado(consecutivo){
 		error: function (jqXHR, textStatus, errorThrown)
 		{}
 	});
-}
-
+} 
+ 
 
 
 function cleanTable(){
@@ -249,7 +249,7 @@ function setEncabezadoFactura(cab){
 	$("#primera_factura").html("Primera Factura: "+cab.datos.primeraFactura);
 	$("#ultima_factura").html("Última Factura: : "+cab.datos.ultimaFactura);
 	$("#input_bn_servicios").val(parseFloat(cab.cierre.bnservicios).format(2, 3, '.', ','));
-	
+	$("#input_bn_servicios_credito").val(parseFloat(cab.cierre.bnserviciosc).format(2, 3, '.', ','));
 	
 	
 	for(i = 0; i < cab.billetes.length; i++){

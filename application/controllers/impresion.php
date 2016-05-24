@@ -920,9 +920,8 @@ class impresion extends CI_Controller {
 		$this->encabezadoDocumentoPDF('cc', $empresa[0], $cierre, $pdf);
 		$pdf->Line(10, 35, 200, 35);
 		$pdf->Text(12, 40, 'Primera Factura: '.$cierre->datos['primeraFactura']);
-		$pdf->Text(60, 40, 'Última Factura: '.$cierre->datos['ultimaFactura']);
-		$pdf->Text(106, 40, 'Base: '.$this->fn($cierre->base));
-		$pdf->Text(149, 40, 'BN Servicios: '.$this->fn($cierre->bnservicios));
+		$pdf->Text(90, 40, 'Última Factura: '.$cierre->datos['ultimaFactura']);
+		$pdf->Text(156, 40, 'Base: '.$this->fn($cierre->base));
 		$pdf->Line(10, 42, 200, 42);
 		
 		//DENOMINACIONES
@@ -1011,7 +1010,7 @@ class impresion extends CI_Controller {
 				$pdf->ln(5);
 				$pdf->SetX(10);
 			}
-			$pdf->SetXY(10, 102);
+			$pdf->SetXY(10, 55);
 			for($i = 0; $i<8; $i++){
 				$pdf->Cell(10,5,'',1,0,'C');
 				$pdf->Cell(55,5,'',1,0,'C');
@@ -1096,6 +1095,18 @@ class impresion extends CI_Controller {
 		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['mixto']),1,0,'C');
 		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['apartado']),1,0,'C');
 		
+		$pdf->SetFont('Arial','B',14);
+		$pdf->ln(6);
+		$pdf->Cell(190,5,'BN Servicios',0,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',11);
+		$pdf->Cell(47.5,5,'Contado',1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->bnservicios),1,0,'C');
+		$pdf->Cell(47.5,5,'Crédito',1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->bnserviciosc),1,0,'C');
+		
+		
+		
 		//Otros totales
 		$baseDeCaja = $cierre->base;
 		$totalRetirosParciales = $cierre->datos['totalRecibosParciales'];
@@ -1148,16 +1159,16 @@ class impresion extends CI_Controller {
 			$pdf->Cell(25,5,'',1,0,'C');
 			$pdf->ln(5);
 		}
-		$pdf->SetXY(10, 177);
+		$pdf->SetXY(10, 188);
 		$contador = 1;			
 		foreach($cierre->datos['vendedores']['vendidoVendedores'] as $vendedor){
 			if($contador <= 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
 				$pdf->Cell(25,5,$this->fn($vendedor[0]->total_vendido),0,0,'C');
-				$pdf->ln(5);
+				$pdf->ln(5); 
 			}
 			if($contador == 9){
-				$pdf->SetXY(105,177);
+				$pdf->SetXY(105,188);
 			}
 			if($contador > 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
@@ -1168,7 +1179,7 @@ class impresion extends CI_Controller {
 			$contador++;
 		}
 		$pdf->SetFont('Arial','B',11);
-		$pdf->SetXY(10,217);
+		$pdf->SetXY(10,228);
 		$pdf->Cell(190,5,'Total Vendedores: '.$this->fn($cierre->datos['vendedores']['totalVendido']),1,0,'R');
 		
 		//Valores finales
@@ -1183,7 +1194,7 @@ class impresion extends CI_Controller {
 		
 		//Realizado Por:
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(10,240);
+		$pdf->SetXY(10,251);
 		$pdf->Cell(95,5,'Realizado por: '.$cierre->usuario,0,0,'R');
 		//$pdf->ln(10);
 		//$pdf->SetX(80);

@@ -155,7 +155,7 @@
   cursor: pointer;
   font-size: 18px;
   font-family: Verdana, Geneva, sans-serif;
-  float: right;
+  float: right; 
 }
 
 .boton_envio_cobro:hover {
@@ -169,6 +169,18 @@
 }
 
 #cantidad_bn_servicios{
+	    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(51, 51, 51, 0.15);
+    font-family: Keffeesatz, Arial;
+    color: #4b4b4b;
+    font-size: 14px;
+    -webkit-border-radius: 5px;
+    padding-left: 2px;
+    width: 100px;
+    text-align: right;
+}
+
+#cantidad_bn_servicios_credito{
 	    background-color: rgba(255, 255, 255, 0.4);
     border: 1px solid rgba(51, 51, 51, 0.15);
     font-family: Keffeesatz, Arial;

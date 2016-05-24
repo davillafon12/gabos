@@ -1,1 +1,1 @@
-ALTER TABLE `TB_28_Productos_Notas_Credito` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Unitario`, ADD `Descuento` DOUBLE NOT NULL AFTER `Precio_Final`, ADD `Exento` BOOLEAN NOT NULL AFTER `Descuento`, ADD `No_Retencion` BOOLEAN NOT NULL AFTER `Exento`;
+ALTER TABLE `TB_28_Productos_Notas_Credito` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Unitario`, ADD `Descuento` DOUBLE NOT NULL AFTER `Precio_Final`, ADD `Exento` BOOLEAN NOT NULL AFTER `Descuento`, ADD `No_Retencion` BOOLEAN NOT NULL AFTER `Exento`; 

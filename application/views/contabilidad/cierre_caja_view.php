@@ -204,7 +204,7 @@ PARA:
 									<td class="alg-right"><p class="parrafo" id="total_dolares">$0,00</p></td>
 								</tr>
 							</table>
-						</td>
+						</td> 
 						<td>
 							<div class="contenedor-tipo-cambio">
 								<label class="parrafo">Tipo de Cambio ₡</label><input id="tipo_cambio_dolar" class="input-deno alg-right" value="<?php echo $tipo_cambio;?>" onblur="validarYFormatearCantidadEscritaTipoCambio(this.value)" onclick="this.select()" type="text"/><br>
@@ -213,8 +213,10 @@ PARA:
 								<label class="parrafo">Total Conteo: ₡</label><label class="parrafo" id="input_retiro_parcial">0,00</label>
 							</div>
 							<div class="contenedor-bn">
-								<label class="parrafo titulo-bn">BN Servicios:</label>
-								<input type="text" id="cantidad_bn_servicios" value="0" onblur="validarCantidadBN(this)" onclick="$(this).select()"/>
+								<label class="parrafo titulo-bn">BN Servicios Contado:</label>
+								<input type="text" id="cantidad_bn_servicios" value="0" tipo-pago="contado" onblur="validarCantidadBN(this)" onclick="$(this).select()"/><br>
+								<label class="parrafo titulo-bn">BN Servicios Crédito:&nbsp;&nbsp;</label>
+								<input type="text" id="cantidad_bn_servicios_credito" value="0" tipo-pago="tarjeta" onblur="validarCantidadBN(this)" onclick="$(this).select()"/>
 							</div>
 						</td>
 					</tr>

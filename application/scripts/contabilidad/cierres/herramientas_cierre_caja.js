@@ -34,6 +34,7 @@ $(function(){
 	actualizarMontoTotalRetiro();
 	
 	$("#cantidad_bn_servicios").numeric();
+	$("#cantidad_bn_servicios_credito").numeric();
 });
 
 function replaceAll(find, replace, str) {
@@ -233,7 +234,7 @@ function realizarCierreCaja(){
 															procesarCierre(cantidad);
 														}
 													}
-						});	
+						});	 
 	}
 }
 
@@ -242,7 +243,7 @@ function procesarCierre(cantidad){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/cierre/crearCierre',
 		type: "POST",		
-		data: {'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal, 'base':$("#base_caja").val(), 'bnservicios':$("#cantidad_bn_servicios").val()},				
+		data: {'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal, 'base':$("#base_caja").val(), 'bnservicios':$("#cantidad_bn_servicios").val(), 'bnserviciosCredito':$("#cantidad_bn_servicios_credito").val()},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
