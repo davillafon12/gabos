@@ -316,7 +316,7 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Abonos</p></td>
 								</tr>
 								<tr>
-									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['efectivo'],2,",",".");?></p></td>
+									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['efectivo']-$detalleNotasCredito['credito'],2,",",".");?></p></td>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['tarjeta'],2,",",".");?></p></td>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['deposito'],2,",",".");?></p></td>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['abonos'],2,",",".");?></p></td>
@@ -361,15 +361,23 @@ PARA:
 								<tr><td colspan="7"><p class="titulo-2">Otros Totales</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Facturas de Contado</p></td>
-									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
+									<td class="borde-abajo"><p class="parrafo">Faltante</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjetas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Créditos</p></td>
 								</tr>
 								<tr>
-									<td class=''><p class='parrafo'>₡<?php echo number_format($totalFacturasContado,2,",",".");?></p></td>
+									<?php
+										$totalFaltante = $totalRecibosParciales;
+										$totalFaltante -= $recibos['efectivo'];
+										$totalFaltante -= $recibos['abonos'];
+										$totalFaltante -= $detalleNotasCredito['contado'];
+										$totalFaltante -= $pagoMixto['efectivo'];
+										$totalFaltante -= $totalFacturasContado;
+									?>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalFacturasContado-$totalNotasCredito['total'],2,",",".");?></p></td>
 									<td class=''>
-										<input id="totalRetirosParciales" value="<?php echo $totalRecibosParciales; ?>" type="hidden"/>
-										<p class='parrafo' id="parrafoTotalRetirosParciales">₡<?php echo number_format($totalRecibosParciales-$recibos['efectivo'],2,",",".");?></p>
+										<input id="totalRetirosParciales" value="<?php echo $totalFaltante; ?>" type="hidden"/>
+										<p class='parrafo' id="parrafoTotalRetirosParciales">₡<?php echo number_format($totalFaltante,2,",",".");?></p>
 									</td> 
 									<td class=''><p class='parrafo'>₡<?php echo number_format($pagoDatafonos['totalDatafonos'],2,",",".");?></p></td>
 									<td class=''><p class='parrafo'>₡<?php echo number_format($totalCreditos['totalCredito'],2,",",".");?></p></td>
@@ -438,7 +446,7 @@ PARA:
 											<tr>
 													<td><label class="parrafo" style="font-size: 20px;">₡<?php echo number_format($valoresFinales['totalFacturas'],2,",",".");?> </label></td>
 													<td><label class="parrafo" style="font-size: 20px;">₡<?php echo number_format($valoresFinales['totalIVA'],2,",",".");?> </label></td>
-													<td><label class="parrafo" style="font-size: 20px;">₡<?php echo number_format($valoresFinales['totalRetencion'],2,",",".");?> </label></td>
+													<td><label class="parrafo" style="font-size: 20px;">₡<?php echo number_format($valoresFinales['totalRetencion']-$totalNotasCredito['retencion'],2,",",".");?> </label></td>
 											</tr>
 										</table>
 									</td>
