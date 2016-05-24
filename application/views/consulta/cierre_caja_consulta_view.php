@@ -303,6 +303,10 @@ PARA:
 									<td class="alg-right borde-arriba"><p class="parrafo">₡0</p></td>
 									<td class="alg-right borde-arriba"><p class="parrafo">₡0</p></td>
 								</tr>
+								<tr>
+									<td class="alg-right borde-arriba" colspan="3"><p class="parrafo">Total Con BN Servicios (Tarjetas):</p></td>	
+									<td class="alg-right borde-arriba"><p class="parrafo">₡0</p></td>
+								</tr>
 							</table>
 						</td>						
 					</tr>

@@ -250,7 +250,7 @@ function setEncabezadoFactura(cab){
 	$("#ultima_factura").html("Última Factura: : "+cab.datos.ultimaFactura);
 	$("#input_bn_servicios").val(parseFloat(cab.cierre.bnservicios).format(2, 3, '.', ','));
 	$("#input_bn_servicios_credito").val(parseFloat(cab.cierre.bnserviciosc).format(2, 3, '.', ','));
-	
+	cab.datos.bnserviciosc = parseFloat(cab.cierre.bnserviciosc);
 	
 	for(i = 0; i < cab.billetes.length; i++){
 		$("#cant_"+cab.billetes[i].denominacion).val(cab.billetes[i].cantidad);
@@ -390,6 +390,10 @@ function cargarDatafonos(datos){
 									+"<td class='alg-right borde-arriba'><p class='parrafo'>₡"+parseFloat(gen.totalComision).format(2, 3, '.', ',')+"</p></td>"
 									+"<td class='alg-right borde-arriba'><p class='parrafo'>₡"+parseFloat(gen.totalRetencion).format(2, 3, '.', ',')+"</p></td>"
 									+"<td class='alg-right borde-arriba'><p class='parrafo'>₡"+parseFloat(gen.totalDatafonos).format(2, 3, '.', ',')+"</p></td>"
+							+"	</tr>";
+	filas = filas + "<tr>"
+									+"<td class='alg-right borde-arriba' colspan='3'><p class='parrafo'>Total Con BN Servicios (Tarjetas):</p></td>	"
+									+"<td class='alg-right borde-arriba'><p class='parrafo'>₡"+(datos.bnserviciosc+parseFloat(gen.totalDatafonos)).format(2, 3, '.', ',')+"</p></td>"
 							+"	</tr>";
 	$("#contenido_datafonos").html(filas);
 }

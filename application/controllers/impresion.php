@@ -1041,10 +1041,14 @@ class impresion extends CI_Controller {
 		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalComision']),1,0,'R');
 		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalRetencion']),1,0,'R');
 		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'R');
+		$pdf->ln(5);
+		$pdf->SetX(102);
+		$pdf->Cell(74,5,'Total Con BN Servicios (Tarjetas):',1,0,'R');
+		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc),1,0,'R');
 				
 		//Pagos Mixtos y Recibos por dinero
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(10, 102);	
+		$pdf->SetXY(10, 112);	
 		$pdf->Cell(95,5,'Pagos Mixtos',0,0,'C');
 		$pdf->Cell(95,5,'Recibos Por Dinero',0,0,'C');
 		$pdf->ln(5);
@@ -1159,7 +1163,7 @@ class impresion extends CI_Controller {
 			$pdf->Cell(25,5,'',1,0,'C');
 			$pdf->ln(5);
 		}
-		$pdf->SetXY(10, 188);
+		$pdf->SetXY(10, 198);
 		$contador = 1;			
 		foreach($cierre->datos['vendedores']['vendidoVendedores'] as $vendedor){
 			if($contador <= 8){
@@ -1168,7 +1172,7 @@ class impresion extends CI_Controller {
 				$pdf->ln(5); 
 			}
 			if($contador == 9){
-				$pdf->SetXY(105,188);
+				$pdf->SetXY(105,198);
 			}
 			if($contador > 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
@@ -1179,7 +1183,7 @@ class impresion extends CI_Controller {
 			$contador++;
 		}
 		$pdf->SetFont('Arial','B',11);
-		$pdf->SetXY(10,228);
+		$pdf->SetXY(10,238);
 		$pdf->Cell(190,5,'Total Vendedores: '.$this->fn($cierre->datos['vendedores']['totalVendido']),1,0,'R');
 		
 		//Valores finales
@@ -1194,7 +1198,7 @@ class impresion extends CI_Controller {
 		
 		//Realizado Por:
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(10,251);
+		$pdf->SetXY(10,261);
 		$pdf->Cell(95,5,'Realizado por: '.$cierre->usuario,0,0,'R');
 		//$pdf->ln(10);
 		//$pdf->SetX(80);
