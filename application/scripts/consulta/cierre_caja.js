@@ -427,15 +427,15 @@ function cargarTotales(datos){
 	totalEfectivo -= datos.recibos.efectivo;
 	totalEfectivo -= datos.recibos.abonos;
 	totalEfectivo -= bnservicios;
-	totalEfectivo -= datos.detalleNotasCredito.contado;
-	totalEfectivo -= datos.pagoMixto.efectivo;
+	//totalEfectivo -= datos.detalleNotasCredito.contado;
+	//totalEfectivo -= datos.pagoMixto.efectivo;
 	totalEfectivo -= datos.totalFacturasContado;
-	$("#totales_factura_contado").html("₡"+parseFloat(datos.totalFacturasContado-datos.totalNotasCredito.total).format(2, 3, '.', ','));
+	$("#totales_factura_contado").html("₡"+parseFloat((datos.totalFacturasContado+datos.pagoMixto.efectivo)-datos.detalleNotasCredito.contado).format(2, 3, '.', ','));
 	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
-	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos).format(2, 3, '.', ','));
-	$("#totales_creditos").html("₡"+parseFloat(datos.totalCreditos.totalCredito).format(2, 3, '.', ','));
-	$("#totales_encomienda").html("₡"+parseFloat(datos.totalFacturasDeposito).format(2, 3, '.', ','));
-	$("#totales_apartados").html("₡"+parseFloat(datos.totalCreditos.totalApartado).format(2, 3, '.', ','));
+	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos+datos.bnserviciosc+datos.pagoMixto.tarjeta-datos.detalleNotasCredito.tarjeta).format(2, 3, '.', ','));
+	$("#totales_creditos").html("₡"+parseFloat(datos.totalCreditos.totalCredito-datos.detalleNotasCredito.credito).format(2, 3, '.', ','));
+	$("#totales_encomienda").html("₡"+parseFloat(datos.totalFacturasDeposito-datos.detalleNotasCredito.deposito).format(2, 3, '.', ','));
+	$("#totales_apartados").html("₡"+parseFloat(datos.totalCreditos.totalApartado-datos.detalleNotasCredito.apartado).format(2, 3, '.', ','));
 	$("#totales_notas_credito").html("₡"+parseFloat(datos.totalNotasCredito.total).format(2, 3, '.', ','));
 	$("#totales_notas_debito").html("₡"+parseFloat(datos.totalNotasDebito.total).format(2, 3, '.', ','));
 	

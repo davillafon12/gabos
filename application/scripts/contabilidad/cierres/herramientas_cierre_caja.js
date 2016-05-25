@@ -35,6 +35,10 @@ $(function(){
 	
 	$("#cantidad_bn_servicios").numeric();
 	$("#cantidad_bn_servicios_credito").numeric();
+	$("#cantidad_bn_servicios_credito").on("blur",function(){
+		actualizarTotalDatafonos($(this).val());
+	});
+	
 });
 
 function replaceAll(find, replace, str) {
@@ -191,6 +195,11 @@ function validarYFormatearCantidadEscritaTipoCambio(cantidad){
 		cantidadValida = false;
 		notyMsg('¡La cantidad ingresada no es válida!', 'error');
 	}
+}
+
+function actualizarTotalDatafonos(monto){
+	var total = $("#totalDatafonos").val();
+	$("#totalDatafonosVista").html("₡"+parseFloat(total+monto).format(2, 3, '.', ','));
 }
 
 function validarYFormatearCantidadEscrita(cantidad){
