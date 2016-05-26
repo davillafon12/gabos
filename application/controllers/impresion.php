@@ -1064,7 +1064,7 @@ class impresion extends CI_Controller {
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',10);
 		$pdf->Cell(40,5,$cierre->datos['pagoMixto']['cantidadFacturas'],1,0,'C');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['efectivo']),1,0,'R');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
 		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['tarjeta']),1,0,'R');
 		$pdf->Cell(10,5,'',0,0,'C');
 		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
@@ -1076,7 +1076,7 @@ class impresion extends CI_Controller {
 		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['total']),1,0,'R');
 		$pdf->Cell(10,5,'',0,0,'C');
 		$pdf->Cell(65,5,'Total:',1,0,'R');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['recibos']['total']),1,0,'R');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['recibos']['total']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
 		
 		$pdf->SetFont('Arial','B',14);
 		$pdf->ln(6);
@@ -1106,7 +1106,7 @@ class impresion extends CI_Controller {
 		$pdf->SetFont('Arial','',11);
 		$pdf->Cell(47.5,5,'Contado',1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($cierre->bnservicios),1,0,'C');
-		$pdf->Cell(47.5,5,'Crédito',1,0,'C');
+		$pdf->Cell(47.5,5,'Tarjeta',1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($cierre->bnserviciosc),1,0,'C');
 		
 		
@@ -1119,7 +1119,7 @@ class impresion extends CI_Controller {
 		//$efectivoTotal = $totalRetirosParciales - $cierre->datos['recibos']['efectivo'] - $cierre->bnservicios - $cierre->datos['recibos']['abonos'];
 		
 		$efectivoTotal = $totalRetirosParciales;
-		$efectivoTotal -= $cierre->datos['recibos']['efectivo'];
+		$efectivoTotal -= ($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']);
 		$efectivoTotal -= $cierre->bnservicios;
 		$efectivoTotal -= $cierre->datos['recibos']['abonos'];
 		//$efectivoTotal -= $cierre->datos['detalleNotasCredito']['contado'];
@@ -1132,13 +1132,13 @@ class impresion extends CI_Controller {
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',11);
 		$pdf->Cell(47.5,5,'Facturas de Contado',1,0,'C');
-		$pdf->Cell(47.5,5,'Faltante',1,0,'C');
+		$pdf->Cell(47.5,5,'Faltante / Sobrante',1,0,'C');
 		$pdf->Cell(47.5,5,'Tarjetas',1,0,'C');
 		$pdf->Cell(47.5,5,'Créditos',1,0,'C');
 		$pdf->ln(5);
 		$pdf->Cell(47.5,5,$this->fn(($cierre->datos['totalFacturasContado']+$cierre->datos['pagoMixto']['efectivo'])-$cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($efectivoTotal),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc+$cierre->datos['pagoMixto']['tarjeta']-$cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc-$cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalCredito']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'C');
 		
 		

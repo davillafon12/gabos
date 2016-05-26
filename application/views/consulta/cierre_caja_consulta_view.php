@@ -267,7 +267,7 @@ PARA:
 								<label class="parrafo">Tipo de Cambio ₡</label><input id="tipo_cambio_dolar" class="input-deno alg-right" type="text" disabled /><br>
 								<label class="contact">Total ₡</label><input class="input_uno alg-right" name="input_retiro_parcial" id="input_retiro_parcial" type="text" style="  width: 150px;" disabled /><br>
 								<label class="contact">BN Servicios Contado ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios" type="text" style="  width: 150px;" disabled /><br>
-								<label class="contact">BN Servicios Crédito ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios_credito" type="text" style="  width: 150px;" disabled />
+								<label class="contact">BN Servicios Tarjeta ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios_credito" type="text" style="  width: 150px;" disabled />
 							</div>							
 						</td>
 					</tr>
@@ -386,7 +386,7 @@ PARA:
 								<tr><td colspan="7"><p class="titulo-2">Otros Totales</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Facturas de Contado</p></td>
-									<td class="borde-abajo"><p class="parrafo">Faltante</p></td>
+									<td class="borde-abajo"><p class="parrafo">Faltante / Sobrante</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjetas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Créditos</p></td>
 									
