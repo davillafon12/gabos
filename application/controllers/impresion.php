@@ -1064,7 +1064,7 @@ class impresion extends CI_Controller {
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',10);
 		$pdf->Cell(40,5,$cierre->datos['pagoMixto']['cantidadFacturas'],1,0,'C');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
+		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['efectivo']),1,0,'R');
 		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['tarjeta']),1,0,'R');
 		$pdf->Cell(10,5,'',0,0,'C');
 		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
