@@ -1119,7 +1119,8 @@ class impresion extends CI_Controller {
 		//$efectivoTotal = $totalRetirosParciales - $cierre->datos['recibos']['efectivo'] - $cierre->bnservicios - $cierre->datos['recibos']['abonos'];
 		
 		$efectivoTotal = $totalRetirosParciales;
-		$efectivoTotal -= ($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']);
+		//$efectivoTotal -= ($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']);
+		$efectivoTotal -= $cierre->datos['recibos']['efectivo'];
 		$efectivoTotal -= $cierre->bnservicios;
 		$efectivoTotal -= $cierre->datos['recibos']['abonos'];
 		//$efectivoTotal -= $cierre->datos['detalleNotasCredito']['contado'];
