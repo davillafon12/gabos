@@ -427,7 +427,7 @@ function cargarTotales(datos){
 	//totalEfectivo = (totalRetiros + totalRetiros) - baseCaja;
 	//console.log(datos);
 	var totalEfectivo = totalRetiros; 
-	totalEfectivo -= datos.recibos.efectivoBK;
+	totalEfectivo -= datos.recibos.efectivo;
 	totalEfectivo -= datos.recibos.abonos;
 	totalEfectivo -= bnservicios;
 	totalEfectivo += datos.detalleNotasCredito.contado;
