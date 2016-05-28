@@ -1750,7 +1750,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function paginasADibujar($productos){
-		$aux = $productos / 33; // 33 es el maximo de productos por pagina
+		$aux = $productos / 30; // 33 es el maximo de productos por pagina
 		$auxInteger = intval($aux);
 		if($auxInteger<$aux){
 			return $auxInteger++;
