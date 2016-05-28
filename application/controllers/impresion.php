@@ -1175,6 +1175,12 @@ class impresion extends CI_Controller {
 		$pdf->SetXY(10, 198);
 		$contador = 1;			
 		foreach($cierre->datos['vendedores']['vendidoVendedores'] as $vendedor){
+			
+			if(trim($vendedor[0]->usuario) == ""){
+				continue;
+			}
+				
+			
 			if($contador <= 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
 				$pdf->Cell(25,5,$this->fn($vendedor[0]->total_vendido),0,0,'C');
