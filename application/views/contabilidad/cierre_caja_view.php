@@ -372,7 +372,7 @@ PARA:
 										//$totalFaltante -= ($recibos['efectivo']-$detalleNotasCredito['credito']);
 										$totalFaltante -= $recibos['efectivo'];
 										$totalFaltante -= $recibos['abonos'];
-										//$totalFaltante -= $detalleNotasCredito['contado'];
+										$totalFaltante += $detalleNotasCredito['contado'];
 										//$totalFaltante -= $pagoMixto['efectivo'];
 										$totalFaltante -= $totalFacturasContado;
 									?>

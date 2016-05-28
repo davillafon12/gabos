@@ -273,7 +273,9 @@ function setEncabezadoFactura(cab){
 	cargarRetiros(cab.datos);
 	cargarDatafonos(cab.datos);
 	cargarMixto(cab.datos.pagoMixto);
+	cab.datos.recibos.efectivoBK = cab.datos.recibos.efectivo;
 	cab.datos.recibos.efectivo = cab.datos.recibos.efectivo - cab.datos.detalleNotasCredito.credito;
+	cab.datos.recibos.efectivoBK = cab.datos.recibos.efectivo; 
 	cab.datos.recibos.detalleNotasCredito = cab.datos.detalleNotasCredito.credito;
 	cargarRecibosDinero(cab.datos.recibos);
 	cargarTotales(cab);
@@ -425,10 +427,10 @@ function cargarTotales(datos){
 	//totalEfectivo = (totalRetiros + totalRetiros) - baseCaja;
 	//console.log(datos);
 	var totalEfectivo = totalRetiros; 
-	totalEfectivo -= datos.recibos.efectivo;
+	totalEfectivo -= datos.recibos.efectivoBK;
 	totalEfectivo -= datos.recibos.abonos;
 	totalEfectivo -= bnservicios;
-	//totalEfectivo -= datos.detalleNotasCredito.contado;
+	totalEfectivo += datos.detalleNotasCredito.contado;
 	//totalEfectivo -= datos.pagoMixto.efectivo;
 	totalEfectivo -= datos.totalFacturasContado;
 	$("#totales_factura_contado").html("₡"+parseFloat((datos.totalFacturasContado+datos.pagoMixto.efectivo)-datos.detalleNotasCredito.contado).format(2, 3, '.', ','));
