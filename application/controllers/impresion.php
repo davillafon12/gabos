@@ -1324,9 +1324,14 @@ class impresion extends CI_Controller {
 				//$pdf->Line(10, 37, 200, 37); //Borde de arriba
 				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
 				$pdf->Line(100, 55, 200, 55); //Borde arriba vendedor
+				$pdf->Line(145, 37, 145, 44); //Divisor descripcion y estado
 				//Info de la factura
 				$pdf->SetFont('Arial','B',12);
 				$pdf->Text(102, 42, 'Descripción');
+				$pdf->Text(150, 42, 'Estado:');
+				$pdf->SetFont('Arial','',11);
+				$encabezado->estado = trim($encabezado->estado) == "cobrada" ? "Facturada" : $encabezado->estado;
+				$pdf->Text(170, 42, $encabezado->estado);
 				$pdf->SetFont('Arial','',11);
 				$pdf->Text(102, 49, 'Tipo: '.$encabezado->tipo);
 				$pdf->Text(102, 54, 'Moneda: '.$encabezado->moneda);

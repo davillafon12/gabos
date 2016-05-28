@@ -44,6 +44,7 @@ function traerDocumento(t,d,n,s,i){
 					seleccionarTipoDocumento(d, data);				
 				}
 			}catch(e){
+				console.log(e);
 				alert("No se pudo imprimir");
 			}
 		},
@@ -130,6 +131,8 @@ function imprimirFactura(data){
 	qz.append(" Vendedor: "+factura.vendedor.substring(0, 29)+"\r\n");
 	qz.append(" Pago con: "+factura.recibido_vuelto+"\r\n"); 
 	qz.append(" Vuelto: "+factura.entregado_vuelto+"\r\n");
+	factura.estado = factura.estado == "cobrada" ? "facturada" : factura.estado;
+	qz.append(" Estado: "+factura.entregado_vuelto+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Articulo      Cant. Desc.      Precio  \r\n");
 	qz.append("----------------------------------------\r\n");

@@ -383,7 +383,8 @@ Class factura extends CI_Model
 				CONCAT_WS(' ', Usuario_Nombre, Usuario_Apellidos) AS vendedor,
 				Factura_Observaciones AS observaciones,
 				Factura_Entregado_Vuelto AS entregado_vuelto,
-				Factura_Recibido_Vuelto AS recibido_vuelto				
+				Factura_Recibido_Vuelto AS recibido_vuelto,
+				Factura_Estado AS estado				
 			FROM TB_07_Factura
 			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = TB_07_Factura.Factura_Vendedor_Codigo
 			WHERE TB_07_Factura.TB_02_Sucursal_Codigo = $sucursal
