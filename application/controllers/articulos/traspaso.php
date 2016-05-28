@@ -80,33 +80,37 @@ class traspaso extends CI_Controller {
 			if($articulos != '' && $sucursal != '' && $sucursalRecibe != ''){
 				if($this->empresa->getEmpresa($sucursal)){
 					if($this->empresa->getEmpresa($sucursalRecibe)){
-						$articulos = json_decode($articulos);
-						if(sizeof($articulos)>0){
-							if($this->verificarExistenciaDeArticulos($articulos, $sucursal)){
-								//Cargamos informacion adicional
-								include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-								date_default_timezone_set("America/Costa_Rica");
-								$fechaHoraActual = date("Y-m-d  H:i:s", now());
-								$traspaso = $this->articulo->crearTraspasoInventario($sucursal, $sucursalRecibe, $fechaHoraActual, $data['Usuario_Codigo']);
-								
-								$this->traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursal, $traspaso);
-															
-					 			//Guardamos la transaccion
-					 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario creó el traspaso # $traspaso",$data['Sucursal_Codigo'],'crear_traspaso');
-								
-																											
-								$retorno['status'] = 'success';
-								unset($retorno['error']);
-								$retorno['traspaso'] = $traspaso;
-								//Para efecto de impresion
-								$retorno['sucursal']= $data['Sucursal_Codigo'];
-								$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
-								$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+						if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
+							$articulos = json_decode($articulos);
+							if(sizeof($articulos)>0){
+								if($this->verificarExistenciaDeArticulos($articulos, $sucursal)){
+									//Cargamos informacion adicional
+									include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+									date_default_timezone_set("America/Costa_Rica");
+									$fechaHoraActual = date("Y-m-d  H:i:s", now());
+									$traspaso = $this->articulo->crearTraspasoInventario($sucursal, $sucursalRecibe, $fechaHoraActual, $data['Usuario_Codigo']);
+									
+									$this->traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursal, $traspaso, $clienteLiga);
+																
+						 			//Guardamos la transaccion
+						 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario creó el traspaso # $traspaso",$data['Sucursal_Codigo'],'crear_traspaso');
+									
+																												
+									$retorno['status'] = 'success';
+									unset($retorno['error']);
+									$retorno['traspaso'] = $traspaso;
+									//Para efecto de impresion
+									$retorno['sucursal']= $data['Sucursal_Codigo'];
+									$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+									$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+								}else{
+									$retorno['error'] = 'Alguno de los artículos no existe o ya no tiene unidades suficientes en existencia.';
+								}
 							}else{
-								$retorno['error'] = 'Alguno de los artículos no existe o ya no tiene unidades suficientes en existencia.';
+								$retorno['error'] = 'No hay artículos para realizar el traspaso.';
 							}
 						}else{
-							$retorno['error'] = 'No hay artículos para realizar el traspaso.';
+							$retorno['error'] = 'Sucursal que recibe no cuenta con una liga de cliente.';
 						}
 					}else{
 							$retorno['error'] = 'La sucursal que recibe no existe.';
@@ -140,7 +144,7 @@ class traspaso extends CI_Controller {
 	
 	
 	
-	private function registrarArticulo($articulo, $sucursalRecibe, $sucursalEntrega, $datosSesion){
+	private function registrarArticulo($articulo, $sucursalRecibe, $sucursalEntrega, $datosSesion, $clienteLiga){
 			$familiaCodigo = 0; //Usamos cero por ser familia base
 			//Si articulo no existe en la sucursal que recibe debemos registrarlo
 			//PERO hay que verificar la existencia de la familia (Para este caso usamos familia = 0 FAMILIA BASE)
@@ -160,7 +164,7 @@ class traspaso extends CI_Controller {
 			$exento = $articuloDeSucursalEntrega[0]->Articulo_Exento;
 			$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
 			//Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
-			$precioUnidadReal = $articulo->precio_total / $articulo->cantidad; //El precio unidad que viene no cuenta con el descuento, tons el precio por unidad lo sacamos de esta manera
+			$precioUnidadReal = $this->articulo->getPrecioProducto($articulo->codigo, $this->cliente->getNumeroPrecio($clienteLiga->Cliente), $sucursalEntrega);  
 			$costo = $precioUnidadReal - ($precioUnidadReal / (1 + $porcentajeIVA));
 			$precio1 = $this->articulo->getPrecioProducto($articulo->codigo, 1, $sucursalEntrega);
 			$precio2 = $this->articulo->getPrecioProducto($articulo->codigo, 2, $sucursalEntrega);
@@ -186,17 +190,18 @@ class traspaso extends CI_Controller {
 																	$precio5);
 	}
 	
-	private function traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $traspaso){
+	private function traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $traspaso, $clienteLiga){
 			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 			foreach($articulos as $art){
 					//Primero verificamos que exista en la sucursal que recibe, si no lo creamos
 					if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
-							$this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data);
+							$this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data, $clienteLiga);
+					}else{
+						//Actualizamos el inventario
+						$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
+						
 					}
 					
-					
-					//Actualizamos el inventario
-					$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
 					
 					//Indiferentemente de si registro o actualizo el articulo
 					//debemos restar dicha cantidad del inventario de la sucursal que entrega
