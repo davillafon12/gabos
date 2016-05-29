@@ -726,6 +726,9 @@ Class factura extends CI_Model
 	}
 	
 	function eliminarArticulosFactura($consecutivo, $sucursal){
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+			$sucursal = $this->cod_garotas;
+		}
 		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
 		$this->db->delete('TB_08_Articulos_Factura'); 
