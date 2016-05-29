@@ -28,9 +28,9 @@ class CI_Model {
 	
 	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
 	con los docs de garotas*/
-	public $cod_desampa = 1;
-	public $cod_garotas = 0;
-	public $trueque = false;
+	public $cod_desampa = 7;
+	public $cod_garotas = 2;
+	public $trueque = true;
 	public $isDesampa = false; 
 
 	/**
