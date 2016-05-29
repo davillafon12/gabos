@@ -132,7 +132,7 @@ function imprimirFactura(data){
 	qz.append(" Pago con: "+factura.recibido_vuelto+"\r\n"); 
 	qz.append(" Vuelto: "+factura.entregado_vuelto+"\r\n");
 	factura.estado = factura.estado == "cobrada" ? "facturada" : factura.estado;
-	qz.append(" Estado: "+factura.entregado_vuelto+"\r\n");
+	qz.append(" Estado: "+factura.estado+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Articulo      Cant. Desc.      Precio  \r\n");
 	qz.append("----------------------------------------\r\n");
