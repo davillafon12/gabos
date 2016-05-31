@@ -376,7 +376,7 @@ PARA:
 										//$totalFaltante -= $pagoMixto['efectivo'];
 										$totalFaltante -= $totalFacturasContado;
 									?>
-									<td class=''><p class='parrafo'>₡<?php echo number_format(($totalFacturasContado+$pagoMixto['efectivo'])-$detalleNotasCredito['contado'],2,",",".");?></p></td>
+									<td class=''><p class='parrafo'>₡<?php echo number_format($totalFacturasContado-$detalleNotasCredito['contado'],2,",",".");?></p></td>
 									<td class=''>
 										<input id="totalRetirosParciales" value="<?php echo $totalFaltante; ?>" type="hidden"/>
 										<p class='parrafo' id="parrafoTotalRetirosParciales">₡<?php echo number_format($totalFaltante,2,",",".");?></p>

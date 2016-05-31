@@ -1137,7 +1137,7 @@ class impresion extends CI_Controller {
 		$pdf->Cell(47.5,5,'Tarjetas',1,0,'C');
 		$pdf->Cell(47.5,5,'Créditos',1,0,'C');
 		$pdf->ln(5);
-		$pdf->Cell(47.5,5,$this->fn(($cierre->datos['totalFacturasContado']+$cierre->datos['pagoMixto']['efectivo'])-$cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalFacturasContado']-$cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($efectivoTotal),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc-$cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalCredito']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'C');
