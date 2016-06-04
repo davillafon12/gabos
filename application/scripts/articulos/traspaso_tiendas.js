@@ -107,10 +107,12 @@ function cargarArticulo(event){
 			    		return false;
 			    }
 			    
+/*
 			    if(CodigoYaFueIngresado(contenido)){
 			    		//notyMsg('¡Artículo ya fue ingresado!', 'error');
 			    		return false;
 			    }
+*/
 			    ajaxArticulo(contenido, sucursal, sucursalRecibe, fila);
         	}
         	return false;
