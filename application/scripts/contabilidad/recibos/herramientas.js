@@ -2,6 +2,10 @@ var facturasMarcadas = [];
 var facturasSaldar = [];
 var facturasMarcadasEliminar = [];
 
+$(window).ready(function(){
+	numTransaccion('tarjeta');
+});
+
 function marcarFactura(id_credito){
 	if(facturasMarcadas.indexOf(id_credito) > -1){
 		//Eliminar item
@@ -144,7 +148,7 @@ function numTransaccion(tipo)
 	else if (tipo.indexOf('deposit') != -1)
 	{
 		$("#num_transaccion_field").css('display', 'none');
-		$("#datafono_field").css('display', 'none');
+		$("#datafono_field").css('display', 'block');
 		$("#num_documento_field").css('display', 'block');
 	}	
 }
