@@ -199,7 +199,9 @@ function validarYFormatearCantidadEscritaTipoCambio(cantidad){
 
 function actualizarTotalDatafonos(monto){
 	var total = $("#totalDatafonos").val();
-	$("#totalDatafonosVista").html("₡"+parseFloat(total+monto).format(2, 3, '.', ','));
+	total = total.replace(/,/g,'.');
+	total = parseFloat(total)+parseFloat(monto);
+	$("#totalDatafonosVista").html("₡"+total.format(2, 3, '.', ','));
 }
 
 function validarYFormatearCantidadEscrita(cantidad){
