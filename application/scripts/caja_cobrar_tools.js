@@ -108,7 +108,7 @@ function moverAceptarBoton(e, value){
 		//total_pagar_vuelto = total_pagar_vuelto.format(2, 3, '.', ',');
 		//$("#cuadro_vuelto_total").html(total_pagar_vuelto);
 		
-		totalAPagar = totalAPagar.replace(',',''); //Limpiamos el formato
+		totalAPagar = totalAPagar.replace(/,/g,''); //Limpiamos el formato
 		totalAPagarFloat = parseFloat(totalAPagar);
 		valorFinal = cantidadFloat-totalAPagarFloat;
 		//if(valorFinal<0){$("#vueltoDar").html('Cantidad menor');}

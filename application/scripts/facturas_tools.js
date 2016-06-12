@@ -881,7 +881,7 @@ function getPrecioTotalRow(num_row){
 	precio_total = document.getElementById("costo_total_articulo_"+num_row).innerHTML;
 	
 	//Quitamos el formato de moneda para que se lea bien
-	precio_total = precio_total.replace(',','');
+	precio_total = precio_total.replace(/,/g,'');
 	
 	//alert("entro");
 	if(precio_total.trim()!='')
