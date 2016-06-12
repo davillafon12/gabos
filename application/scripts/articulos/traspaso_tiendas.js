@@ -151,7 +151,7 @@ function cargarInfoArticulo(articulo, fila){
 		agregarTooltip("#descripcion_articulo_"+fila);
 		$("#cantidad_articulo_"+fila).val(1);
 		$("#bodega_articulo_"+fila).html(articulo.inventario);
-		
+		actualizarCantidadArticulos();
 }
 
 
@@ -185,6 +185,7 @@ function validarCantidad(event){
 		if(event.which == 13){
 				moverseASiguienteFila(fila);
 		}
+		actualizarCantidadArticulos();
 }
 
 
@@ -404,4 +405,16 @@ function CodigoYaFueIngresado(codigo){
 				}				
 		}
 		return false;
+}
+
+function actualizarCantidadArticulos(){
+	var cantidadTotal = 0;
+	$.each($(".cantidad_articulo"), function(index,content){
+		var cantidad = $(content).val();
+		if($.isNumeric(cantidad)){
+			cantidad = parseInt(cantidad);
+			cantidadTotal += cantidad;
+		}
+	});
+	$("#cant_total_articulos").html(cantidadTotal);
 }
