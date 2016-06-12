@@ -280,7 +280,9 @@ class cierre extends CI_Controller {
 		$retencion = 0;
 		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($notas as $nota){
+				
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $sucursal)){
+					
 					
 					foreach($notaCreditoBody as $art){
 /*

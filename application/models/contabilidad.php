@@ -233,6 +233,12 @@ Class contabilidad extends CI_Model
 	}
 	
 	function agregarProductosNotaCredito($consecutivo, $sucursal, $productos, $cliente, $facturaAcreditar){
+		
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
+		
+		
 		$datos = array();
 		
 		// Para valorar el precio real unitario debemos obtener el 
@@ -328,7 +334,9 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal){
-		
+		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
+				$sucursal = $this->cod_garotas;
+		}
 		$this->db->select("
 		Codigo AS codigo, 
 		Descripcion AS descripcion, 
@@ -343,6 +351,8 @@ Class contabilidad extends CI_Model
 		$this->db->where("Nota_Credito_Consecutivo",$consecutivo);
 		$this->db->where("Sucursal",$sucursal);
 		$query = $this->db->get();
+		
+		
 		if($query->num_rows()==0)
 		{
 			return false;
@@ -969,11 +979,13 @@ Class contabilidad extends CI_Model
 		$apartado = 0;
 		$totalNotas = 0;
 		
+				
 		if($query->num_rows()!=0){
 			$this->load->model("contabilidad", "", true);
 			foreach($query->result() as $nota){
 			
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $nota->Sucursal)){
+					
 					$costo_total = 0;
 					$iva = 0;
 					$costo_sin_iva = 0;
