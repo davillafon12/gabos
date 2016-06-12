@@ -118,7 +118,7 @@ PARA:
 			</tr>
 			<tr>
 				<td>
-					<label for="carnet"  class="labelMedium">Carnet:</label> &nbsp; &nbsp;
+					<label for="carnet"  class="labelMedium">Fecha de Nacimiento:</label> 
 					<input id="carnet" class="input_Small" autocomplete="off" name="carnet"   tabindex="6" >
 				</td>
 

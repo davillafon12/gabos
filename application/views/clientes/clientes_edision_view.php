@@ -122,7 +122,7 @@ PARA:
 			</tr>
 			<tr>
 				<td>
-					<label for="carnet"  class="labelMedium">Carnet:</label> &nbsp; &nbsp;
+					<label for="carnet"  class="labelMedium">Fecha de Nacimiento:</label> 
 					<input id="carnet" value="<?php echo $Cliente_Carnet_Numero;?>" class="input_Small" autocomplete="off" name="carnet"   tabindex="6" >
 				</td>
 
@@ -183,6 +183,14 @@ PARA:
 			<legend>Observaciones</legend>
 			<textarea id="observaciones" autocomplete="off" class="observaciones" placeholder="" tabindex="17"name="observaciones" cols="25" rows="7" maxlength="300" ><?php echo $Cliente_Observaciones;?></textarea> 
 			<p class="advertencia_longitud">Máximo 300 caracteres</p> 
+			</fieldset>
+			
+			
+			<fieldset class="foto_recuadro">	
+			<legend>Foto</legend>
+			
+			<img src="<?php echo $Cliente_Imagen_URL; ?>" height="150">
+			
 			</fieldset>
 
 			<div class="divButton">			
