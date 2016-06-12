@@ -712,7 +712,7 @@ class impresion extends CI_Controller {
 		$cantidadProductos = sizeOf($fbody);
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
 		$this->cantidadPaginas = $paginasADibujar + 1;
-		
+		$cantidadTotalArticulos = 0;
 		while($paginasADibujar>=$this->numPagina){
 			//Agregamos pag		
 			$pdf->AddPage();			
@@ -726,7 +726,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadTotalArticulos = $this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
+			$cantidadTotalArticulos += $this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('f', $fhead[0], $empresa[0], $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
@@ -741,7 +741,7 @@ class impresion extends CI_Controller {
 		
 		$cantidadProductos = sizeOf($fbody);
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
-		
+		$cantidadTotalArticulos = 0;
 		while($paginasADibujar>=$this->numPagina){
 			//Agregamos pag		
 			$pdf->AddPage();			
@@ -755,7 +755,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadTotalArticulos = $this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
+			$cantidadTotalArticulos += $this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('p', $fhead[0], $empresa[0], $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
@@ -770,7 +770,7 @@ class impresion extends CI_Controller {
 		
 		$cantidadProductos = sizeOf($fbody);
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
-		
+		$cantidadTotalArticulos = 0;
 		while($paginasADibujar>=$this->numPagina){
 			//Agregamos pag		
 			$pdf->AddPage();			
@@ -784,7 +784,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadTotalArticulos = $this->printArticulosTraspaso($fbody, $inicio, $final-1, $pdf);
+			$cantidadTotalArticulos += $this->printArticulosTraspaso($fbody, $inicio, $final-1, $pdf);
 			if($cantidadTotalArticulos != 0){
 					//Cantidad total de articulos
 					$pdf->SetXY(74, 240);
@@ -802,7 +802,7 @@ class impresion extends CI_Controller {
 		
 		$cantidadProductos = sizeOf($productos);
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
-		
+		$cantidadTotalArticulos = 0;
 		while($paginasADibujar>=$this->numPagina){
 			//Agregamos pag		
 			$pdf->AddPage();			
@@ -816,7 +816,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadTotalArticulos = $this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf);
+			$cantidadTotalArticulos += $this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('nc', $head, $empresa, $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
@@ -831,7 +831,7 @@ class impresion extends CI_Controller {
 		
 		$cantidadProductos = sizeOf($productos);
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
-		
+		$cantidadTotalArticulos = 0;
 		while($paginasADibujar>=$this->numPagina){
 			//Agregamos pag		
 			$pdf->AddPage();			
@@ -845,7 +845,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadTotalArticulos = $this->printProductsNotaDebito($productos, $inicio, $final-1, $pdf);
+			$cantidadTotalArticulos += $this->printProductsNotaDebito($productos, $inicio, $final-1, $pdf);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('nd', $head, $empresa, $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
@@ -1230,7 +1230,7 @@ class impresion extends CI_Controller {
 		$cantidadProductos = sizeOf($body);
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
 		$this->cantidadPaginas = $paginasADibujar + 1;
-		
+		$cantidadTotalArticulos = 0;
 		while($paginasADibujar>=$this->numPagina){
 			//Agregamos pag		
 			$pdf->AddPage();			
@@ -1244,7 +1244,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadTotalArticulos = $this->printProducts($body, $inicio, $final-1, $pdf, $head);
+			$cantidadTotalArticulos += $this->printProducts($body, $inicio, $final-1, $pdf, $head);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('con', $head, $empresa[0], $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
@@ -1260,7 +1260,7 @@ class impresion extends CI_Controller {
 		$cantidadProductos = sizeOf($body);
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
 		$this->cantidadPaginas = $paginasADibujar + 1;
-		
+		$cantidadTotalArticulos = 0;
 		while($paginasADibujar>=$this->numPagina){
 			//Agregamos pag		
 			$pdf->AddPage();			
@@ -1274,7 +1274,7 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadArticulos = $this->printArticulosTraspaso($body, $inicio, $final-1, $pdf);
+			$cantidadArticulos += $this->printArticulosTraspaso($body, $inicio, $final-1, $pdf);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('ti', $head, $empresa[0], $pdf, $cantidadArticulos);
 			$this->numPagina++;
