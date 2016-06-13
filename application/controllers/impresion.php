@@ -1329,9 +1329,9 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadArticulos += $this->printArticulosTraspaso($body, $inicio, $final-1, $pdf);
+			$cantidadTotalArticulos += $this->printArticulosTraspaso($body, $inicio, $final-1, $pdf);
 			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('ti', $head, $empresa[0], $pdf, $cantidadArticulos);
+			$this->pieDocumentoPDF('ti', $head, $empresa[0], $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
 		}
 		//Imprimimos documento
