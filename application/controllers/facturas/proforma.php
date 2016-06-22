@@ -125,6 +125,7 @@ class proforma extends CI_Controller {
 	function agregarItemsProforma($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
 		
 		foreach($items_factura as $item){
+			
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico					
 					$this->proforma_m->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, '00.png');

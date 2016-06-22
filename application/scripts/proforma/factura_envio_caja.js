@@ -112,7 +112,7 @@ function parseRowToJSON(numRow){
 	}
 	
 	exento = document.getElementById("producto_exento_"+numRow).value;
-	retencion = $("#producto_exento_"+numRow).val();
+	retencion = $("#producto_retencion_"+numRow).val();
 	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento, re:retencion};
 	
 	return JSONRow;
