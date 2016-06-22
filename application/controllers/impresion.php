@@ -1329,9 +1329,9 @@ class impresion extends CI_Controller {
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadTotalArticulos += $this->printArticulosTraspaso($body, $inicio, $final-1, $pdf);
+			$cantidadArticulos += $this->printArticulosTraspaso($body, $inicio, $final-1, $pdf);
 			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('ti', $head, $empresa[0], $pdf, $cantidadTotalArticulos);
+			$this->pieDocumentoPDF('ti', $head, $empresa[0], $pdf, $cantidadArticulos);
 			$this->numPagina++;
 		}
 		//Imprimimos documento
@@ -1840,7 +1840,7 @@ class impresion extends CI_Controller {
 		$pdf->Line(10, 74, 200, 74);		
 		//$pdf->Line(10, 67, 200, 67); //Borde abajo productos
 		//$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
-		$pdf->Line(30, 67, 30, 225); //Divisor de codigo y descripcion
+		$pdf->Line(40, 67, 40, 225); //Divisor de codigo y descripcion
 		$pdf->Line(110, 67, 110, 225); //Divisor de descripcion y cantidad
 		$pdf->Line(125, 67, 125, 225); //Divisor de cantidad y exento
 		$pdf->Line(131, 67, 131, 225); //Divisor de exento y descuento
@@ -1876,7 +1876,7 @@ class impresion extends CI_Controller {
 			}
 			
 			$pdf->Text(11, $pl, $productos[$cc]->codigo);
-			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
+			$pdf->Text(41, $pl, substr($productos[$cc]->descripcion,0,38));
 			$pdf->cell(15,5,$productos[$cc]->cantidad,0,0,'C');
 			$pdf->cell(6,5,$this->fe($productos[$cc]->exento),0,0,'C');
 			$pdf->cell(14,5,$this->fn($productos[$cc]->descuento),0,0,'C');
