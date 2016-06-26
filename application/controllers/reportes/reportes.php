@@ -4,12 +4,15 @@ class reportes extends CI_Controller {
 	
 	/*----------------------------PARAMETROS--------------------------------*/
 	/*----------------------------------------------------------------------*/
-	//Private $ruta = "http://localhost:8085/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
+	//Private $ruta = "http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
+	
 	Private $ruta = "jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
-	//Private $IpInterna = "http://192.168.1.6:8085/"; 
+	Private $IpInterna = "http://192.168.10.28:8085/"; 
+	Private $IpExterna = "http://192.168.10.28:8085/"; 
 	//Private $IpExterna = "http://201.200.125.10:8085/"; 
-	Private $IpInterna = "http://localhost:8085/"; 
-	Private $IpExterna = "http://localhost:8085/"; 
+	Private $glCodigoSucGarotas = "2"; 
+	//Private $IpInterna = "http://localhost:8080/";	 
+	//Private $IpExterna = "http://localhost:8080/";
 	Private $usuario = "j_username=avanzado"; 
 	Private $password = "j_password=avanzado"; 	
 	/*----------------------------------------------------------------------*/
@@ -74,9 +77,20 @@ class reportes extends CI_Controller {
 		$fechaFinal = $this->input->post('fecha_final');
 		$Sucural = $this->input->post('sucursal');
 		$Reporte =$this->input->post('tipo_reporte');	
-        $EstadoFactura = $this->input->post('paEstadoFactura');	
+        $EstadoFactura = $this->fnConstruirEstadoFactura($this->input->post('paEstadoFactura'));	        
 		$EsSucursal = $this->input->post('paEsSucursal');
 		$mFecha = $this->input->post('mFecha');
+		if ($Sucural = 2){
+			$Desamparados = "false";
+			$GarotasBonitas = "true";	
+		}
+		else{
+			if ($Sucural = 7){
+				$Desamparados = "true";
+				$GarotasBonitas = "false";			
+			}
+		}
+		
 		if($mFecha!=1 && $Reporte == 'ListaUsuario'){ // si se cumple no se toma en cuenta las fechas y se asgina null
 			$fechaInicial = 'null';
 			$fechaFinal = 'null'; 
@@ -85,35 +99,37 @@ class reportes extends CI_Controller {
 		$direccion = "/reports/Gabo/Usuarios/";
 		$txtRutaFinal = "";
 		$ip = ""; 
-		if($data['Sucursal_Codigo'] == 0){
+		if($data['Sucursal_Codigo'] == $this->glCodigoSucGarotas){
 			$ip = $this->IpInterna; 
 		}
 		else {
 			$ip = $this->IpExterna; 
 		}
-		
 		if($Reporte != null){
 			if($Reporte == 'ListaUsuario'){
 				$parametro1 = "paSucursal=".$Sucural; 
-				$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial); 
-				$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal); 
+				$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial, 0); 
+				$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal, 1); 
 				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3;
 			}
 			if($Reporte == 'ListaDefacturasPorUsuario'){
 				$parametro1 = "paSucursal=".$Sucural; 
-				$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial); 
-				$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal); 
+				$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial, 0); 
+				$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal, 1); 
 				$parametro4 = "paEstadoFactura=".$EstadoFactura; 		
 				if($EsSucursal != 1){
 					$EsSucursal = 0; 
 				}
 				$parametro5 = "paEsSucursal=".$EsSucursal;
-				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5;
+				$parametro6 = "paSuDesamparados=".$Desamparados;
+				$parametro7 = "paSuGarotasBonitas=".$GarotasBonitas;
+				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$Reporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6.'&'.$parametro7;
 			}
 			$this->llamarReporte($txtRutaFinal);
 		}
+	}
+
 	
-	}	
 	
 	
 	/*----------------------------------------------------------------------*/
@@ -123,8 +139,9 @@ class reportes extends CI_Controller {
 		$reportes = array(
 						'null' =>'Seleccione',
 						'VentaXClienteFacturas' =>'Venta por Clientes Facturación',
-						'VentaXClienteFacturasResumido' => 'Venta Resumida por Clientes Facturación',
+						'VentaXClienteFacturaResumido' => 'Venta Resumida por Clientes Facturación',
 						'VentaXClienteProforma' => 'Venta por Clientes Proforma',
+						'VentaXClienteProformaResumido' => 'Venta Resumida por Clientes Proforma',
 						'ClienteEstado' => 'Mostrar Clientes por Estado',
 						'ClientesXDescuento' => 'Clientes x Descuentos'
 		);
@@ -187,7 +204,8 @@ class reportes extends CI_Controller {
 		$direccion = "/reports/Gabo/Clientes/";
 		$txtRutaFinal = "";
 		$ip = ""; 
-		if($data['Sucursal_Codigo'] == 0){
+		if($data['Sucursal_Codigo'] == $this->glCodigoSucGarotas){
+			
 			$ip = $this->IpInterna; 
 		}
 		else {
@@ -195,9 +213,9 @@ class reportes extends CI_Controller {
 		}
 		if($Reporte != null){
 			$parametro1 = "paSucursal=".$Sucural; 
-			$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial); 
-			$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal); 
-			if($Reporte == 'VentaXClienteProforma'){
+			$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial, 0); 
+			$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal, 1); 
+			if($Reporte == 'VentaXClienteProforma' || $Reporte =='VentaXClienteProformaResumido'){
 				$parametro4 = "paEstadoProforma=".$EstadoFactura; 				
 			}
 			else{
@@ -370,7 +388,7 @@ class reportes extends CI_Controller {
 		$direccion = "/reports/Gabo/Articulos/";
 		$txtRutaFinal = "";
 		$ip = ""; 
-		if($data['Sucursal_Codigo'] == 0){
+		if($data['Sucursal_Codigo'] == $this->glCodigoSucGarotas){
 			$ip = $this->IpInterna; 
 		}
 		else {
@@ -408,7 +426,12 @@ class reportes extends CI_Controller {
 		$reportes = array(
 						'null' =>'Seleccione',
 						'RentabilidadXCliente' => 'Rentabilidad por Clientes',
-						'VentasXMes' => 'Ventas por Mes'						
+						'VentasXMes' => 'Ventas por Mes', 					
+						'RecibosXDinero' => 'Recibos por Dinero', 
+						'NotaCredito' => 'Notas Crédito',
+						'Cartelera' => 'Cartera',
+						'CarteleraTotalizacion' => 'Cartera Resumida',
+						'ArticulosExentos' => 'Artículos Exentos',
 		);
 		return $reportes;
 	}
@@ -422,6 +445,7 @@ class reportes extends CI_Controller {
 				$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
 				$data['Empresas'] = $empresas_actuales;
 				$data['EstadoFacturas'] = $this->comboEstadosFactura();
+				$data['TipoPagoFactura'] = $this->comboTipoPagoFactura(); 
 				$data['Reportes'] = $this->reportesFacturas();
 				//$data['Rangos'] = $this->comboRangos();
 				//$data['Precios'] = $this->comboPrecios();
@@ -435,18 +459,34 @@ class reportes extends CI_Controller {
 			
 		 function facturasReporte(){
 			 include '/../get_session_data.php'; //Esto es para traer la informacion de la session
-			
 			//parametros Obtenidos desde Interfaz 
-			 $fechaInicial = $this->input->post('fecha_inicial');
-			 $fechaFinal = $this->input->post('fecha_final');
-			 $Sucural = $this->input->post('sucursal');
-			 $paReporte =$this->input->post('tipo_reporte');	
-			 $EstadoFactura = $this->input->post('paEstadoFactura');	
+			$fechaInicial = $this->input->post('fecha_inicial');
+			$fechaFinal = $this->input->post('fecha_final');
+			$Sucural = $this->input->post('sucursal');
+			$paReporte =$this->input->post('tipo_reporte');	
+			$EstadoFactura = $this->fnConstruirEstadoFactura($this->input->post('paEstadoFactura'));	
+			$TipoPagoFactura = $this->fnConstruirTipoPagoFactura($this->input->post('paTipoPagoFactura'));
+			$Desamparados = $this->obtenerCheck($this->input->post('check_Desamparados'));
+			$GarotasBonitas = $this->obtenerCheck($this->input->post('check_GarotasBonitas'));
+			$mNombre = $this->input->post('mNombre'); 
+			$mCedula = $this->input->post('mCedula'); 
+			$mPendiente = $this->obtenerCheck($this->input->post('mPendiente'));
+			$paNombre = $this->input->post('paNombre'); 
+			$paCedula = $this->input->post('paCedula'); 
+			if($mNombre != 1){ $paNombre = 'null'; }
+			if($mCedula != 1){ $paCedula = 'null'; }
+			if($mPendiente != 1){ $mPendiente = 'null'; }
 			//Parametros quemados en codigo 		
 			$parametro1 = "paSucursal=".$Sucural; 
-			$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial); 
-			$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal); 
-			$parametro4 = "paEstadoFactura=".$EstadoFactura; 			
+			$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial, 0); 
+			$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal, 1); 
+			$parametro4 = "paEstadoFactura=".$EstadoFactura; 
+			$parametro5 = "paTipoPago=".$TipoPagoFactura; 
+			$parametro6 = "paSuDesamparados=".$Desamparados;
+			$parametro7 = "paSuGarotasBonitas=".$GarotasBonitas;
+			$parametro8 = "paNombre=".$paNombre;
+			$parametro9 = "paCedula=".$paCedula;
+			$parametro10 = "paPendientes=".$mPendiente;
 			$direccion = "/reports/Gabo/Facturas/";
 			$txtRutaFinal = "";
 			$ip = ""; 
@@ -456,37 +496,95 @@ class reportes extends CI_Controller {
 			else {
 				$ip = $this->IpExterna; 
 			}
-			$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4;
+			if ($paReporte == 'RentabilidadXCliente' || $paReporte == 'VentasXMes'){
+				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6.'&'.$parametro7;	
+			}
+			if ($paReporte == 'RecibosXDinero'){
+				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10;	
+			}
+			if ($paReporte == 'NotaCredito' || $paReporte == 'Cartelera'|| $paReporte == 'CarteleraTotalizacion'){
+				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro8.'&'.$parametro9;	
+			}			
+			if ($paReporte == 'ArticulosExentos') {
+				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3;
+			}	
 			$this->llamarReporte($txtRutaFinal);
-			// aqui va la estructura del query 
-	
 		 }		
+		 
+		 
+		 
+		 function fnConstruirEstadoFactura($Parametro){
+		 $resultado = ""; 
+		 if ($Parametro == 'todos')
+		 {
+			 $resultado = "'cobrada', 'anulada'";
+		 }
+		 else 
+		 {
+			 $resultado = "'".$Parametro."'";
+		 }
+		 return $resultado;
+	 }
+	 
+	 function fnConstruirTipoPagoFactura($Parametro){
+		 $resultado = ""; 
+		 if ($Parametro == 'todos')
+		 {
+			 $resultado = "'contado', 'tarjeta', 'mixto', 'deposito', 'cheque', 'apartado', 'credito'";
+		 }
+		 else 
+		 {
+			 $resultado = "'".$Parametro."'";
+		 }
+		 return $resultado;
+	 }
 	
 	/*----------------------------------------------------------------------*/
 	/*-------------FUNCIONES GENERICAS PARA CONVERSIONES O UTILIDADES-------*/
 	/*----------------------------------------------------------------------*/
-	function convertirFecha($fecha){
+	// Si se recibe en la variable $final = 0 es fecha Inicial si $final = 1 es la fecha final
+	function convertirFecha($fecha, $final){
 		//$fecha formato "DD-MM-YYYY"; 
 		if($fecha !='null'){
 			$newDate = date("Y-m-d", strtotime($fecha));
-			$newDate = $newDate." 00:00:00";
+			if($final == 1){
+				$newDate = $newDate." 23:59:59";
+			}
+			else{
+				$newDate = $newDate." 00:00:00";
+			}
 			return $newDate;
 		}
 		return $fecha;
 	}
 	
 	function llamarReporte($rutafinal){
-			echo 'Prueba: '.$rutafinal; 
-		//	header('Location:'.$rutafinal.'');	
+		//	echo 'Prueba: '.$rutafinal; 
+			header('Location:'.$rutafinal.'');	
 	}
 	
 	function comboEstadosFactura(){
 		$estadoFactura = array(
 						'cobrada' => 'COBRADAS',
 						'anulada' => 'ANULADAS',						
-						'pendiente' => 'PENDIENTES'
+						'pendiente' => 'PENDIENTES', 
+						'todos' => 'TODOS'
 		);
 		return $estadoFactura;
+	}
+	
+	function comboTipoPagoFactura(){
+		$tipoPagoFactura = array(
+						'contado' => 'CONTADO',
+						'tarjeta' => 'TARJETAS',
+						'mixto' => 'PAGO MIXTO',
+						'deposito' => 'DEPOSITO',
+						'cheque' => 'CHEQUE',
+						'apartado' => 'APARTADO',
+						'credito' => 'CREDITO', 
+						'todos' => 'TODOS'
+		); 
+		return $tipoPagoFactura; 
 	}
 	
 	function estadosClientes(){
@@ -506,6 +604,15 @@ class reportes extends CI_Controller {
 						'between' => 'RANGOS'
 		);
 		return $rangos;
+	}
+	
+	function obtenerCheck($valor){
+		if ($valor == 1){
+			return 'true';
+		}
+		else{
+			return 'false';
+		}
 	}
 
 }

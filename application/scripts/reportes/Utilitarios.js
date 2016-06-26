@@ -4,21 +4,32 @@
 var Utilitarios = (function (window, undefined) {
 	/*-----------------------------------------VARIABLES-----------------------------------------------------------------------------------*/
 	/*-------------------------------------------------------------------------------------------------------------------------------------*/
+	//USUARIOS
 	var _Reporte_ListaUsuario = "ListaUsuario"; 
 	var _Reporte_ListaDefacturasPorUsuario = "ListaDefacturasPorUsuario"; 
 	
+	//CLIENTES
 	var _Reporte_VentaXClienteFacturas = "VentaXClienteFacturas"; 
-	var _Reporte_VentaXClienteFacturasResumen = "VentaXClienteFacturasResumido"; 
+	var _Reporte_VentaXClienteFacturasResumen = "VentaXClienteFacturaResumido"; 
 	var _Reporte_VentaXClienteProforma = "VentaXClienteProforma"; 
+	var _Reporte_VentaXClienteProformaResumen = "VentaXClienteProformaResumido"; 
 	var _Reporte_ClienteEstado = "ClienteEstado"; 
 	var _Reporte_ClientesXDescuento = "ClientesXDescuento"; 
 
+	//FACTURAS
 	var _Reporte_RentabilidadXCliente = "RentabilidadXCliente"; 
 	var _Reporte_VentasXMes = "VentasXMes";
+	var _Reporte_RecibosXDinero = "RecibosXDinero";
+	var _Reporte_NotaCredito = "NotaCredito";
+	var _Reporte_Cartera = "Cartelera";
+	var _Reporte_CarteleraTotalizacion = "CarteleraTotalizacion";
+	var _Reporte_ArticulosExentos = "ArticulosExentos";
+	
 	// ----------RANGOS ------------
 	var _menorIgual = "menorIgual"; 
 	var _mayorIgual = "mayorIgual"; 
 	var _between = "between"; 
+	var _garotas = 2; 
 	
 	/*-----------------------------------------FUNCIONES ----------------------------------------------------------------------------------*/
 	/*-------------------------------------------------------------------------------------------------------------------------------------*/
@@ -216,13 +227,20 @@ var Utilitarios = (function (window, undefined) {
 		paReporte_VentaXClienteFacturas: _Reporte_VentaXClienteFacturas,
 		paReporte_VentaXClienteFacturasResumen: _Reporte_VentaXClienteFacturasResumen,
 		paReporte_VentaXClienteProforma:_Reporte_VentaXClienteProforma,
+		paReporte_VentaXClienteProformaResumen:_Reporte_VentaXClienteProformaResumen,
 		paReporte_ClienteEstado:_Reporte_ClienteEstado,
 		paReporte_ClientesXDescuento: _Reporte_ClientesXDescuento,
 		paReporte_RentabilidadXCliente: _Reporte_RentabilidadXCliente,
 		paReporte_VentasXMes: _Reporte_VentasXMes,
+		paReporte_RecibosXDinero: _Reporte_RecibosXDinero,
+		paReporte_NotaCredito: _Reporte_NotaCredito,
+		paReporte_Cartera: _Reporte_Cartera,
+		paReporte_CarteleraTotalizacion: _Reporte_CarteleraTotalizacion,
+		paReporte_ArticulosExentos: _Reporte_ArticulosExentos,
 		paMenorIgual:_menorIgual,
 		paMayorIgual:_mayorIgual,
 		paBetween:_between,
+		fnGarotas: _garotas,		
         fnInicializarCalendario: function (selector, conBoton, fechaParaMostrar, fechaMaxima) {
             return _InicializarCalendario(selector, conBoton, fechaParaMostrar, fechaMaxima); 
         },       
@@ -246,7 +264,7 @@ var Utilitarios = (function (window, undefined) {
 		}, 
 		lfComboRangos: function(idSelector, classInicial, classFinal) {
 			return _ComboRangos(idSelector, classInicial, classFinal);			
-		}
+		} 
     };//fin del return
 })();//fin de variable Utilitarios
 

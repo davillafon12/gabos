@@ -16,7 +16,7 @@
 	<queryString>
 		<![CDATA[{call PA_VentaXClienteFacturasResumido($P{paSucursal},$P{paFechaI},$P{paFechaF},$P{paEstadoFactura},$P{paEsSucursal},$P{paNombre},$P{paCedula},$P{paRango},$P{paMontoI},$P{paMontoF})}]]>
 	</queryString>
-	<field name="cedula" class="java.lang.Long"/>
+	<field name="cedula" class="java.lang.String"/>
 	<field name="nombre" class="java.lang.String"/>
 	<field name="montoTotal" class="java.lang.Double"/>
 	<field name="montoIVA" class="java.lang.Double"/>

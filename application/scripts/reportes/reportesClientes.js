@@ -1,5 +1,4 @@
 $(document).ready(function (){
-	//Utilitarios.fnInicializarCalendario("#fecha_inicial", true, Utilitarios.fnObtenerFechaAnterior(1));
 	Utilitarios.fnInicializarCalendario("#fecha_inicial", true, new Date());
 	Utilitarios.fnInicializarCalendario("#fecha_final", true, new Date());
 	$("#submit").attr("disabled", true);
@@ -19,7 +18,7 @@ function eventoTipoReporte(){
 		if($("#tipo_reporte").val() == 'null'){	
 			$("#submit").attr("disabled", true); 
 			ocultarTodo();
-		}
+		}										   
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturas){
 			$(".rFechas").show();
 			$(".uFacturas").show();
@@ -31,19 +30,8 @@ function eventoTipoReporte(){
 			$(".mSucursal").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
-		}
-		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProforma){
-			$(".rFechas").show();
-			$(".uFacturas").show();
-			$(".mFiltro").show();
-			$(".mNombre").show();
-			$(".mCedula").show();
-			$(".mRango").show();
-			$(".mEstado").hide();
-			$(".mSucursal").show();
-			$("#mFecha").attr("checked", false);
-			$("#submit").attr("disabled", false);
-		}
+			limpiarFormulario();
+		}										   
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturasResumen){
 			$(".rFechas").show();
 			$(".uFacturas").show();
@@ -55,7 +43,34 @@ function eventoTipoReporte(){
 			$(".mSucursal").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
+			limpiarFormulario();
+		}										 
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProforma){
+			$(".rFechas").show();
+			$(".uFacturas").show();
+			$(".mFiltro").show();
+			$(".mNombre").show();
+			$(".mCedula").show();
+			$(".mRango").show();
+			$(".mEstado").hide();
+			$(".mSucursal").show();
+			$("#mFecha").attr("checked", false);
+			$("#submit").attr("disabled", false);
+			limpiarFormulario();
 		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProformaResumen){
+			$(".rFechas").show();
+			$(".uFacturas").show();
+			$(".mFiltro").show();
+			$(".mNombre").show();
+			$(".mCedula").show();
+			$(".mRango").show();
+			$(".mEstado").hide();
+			$(".mSucursal").show();
+			$("#mFecha").attr("checked", false);
+			$("#submit").attr("disabled", false);
+			limpiarFormulario();
+		}		
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_ClienteEstado){
 			$("#submit").attr("disabled", false); 
 			ocultarTodo();
@@ -68,8 +83,7 @@ function eventoTipoReporte(){
 			$(".mSucursal").show();
 			$(".mArticulo").show();
 			$(".mFamilia").show();
-			$(".mFiltro").show();
-						
+			$(".mFiltro").show();						
 		}
 	}); 
 }
@@ -92,7 +106,35 @@ function ocultarTodo(){
 	$(".mFiltro").hide();
 	$(".mFamilia").hide();
 	$(".mFiltro").hide();
+	$(".mArticulo").hide();
 	$("#mFecha").attr("checked", false);
+	$("#mNombre").attr("checked", false);
+	$("#mCedula").attr("checked", false);
+	$("#mRango").attr("checked", false);
+	$("#paFamilia").attr("checked", false);
+	$("#paArticulo").attr("checked", false);
+	$("#paEsSucursal").attr("checked", false);
+}
+
+// Funcion que se encarga de limpiar todos los campos y dejarlos limpios 
+function limpiarFormulario(){
+	$("#mNombre").attr("checked", false);
+	$("#mCedula").attr("checked", false);
+	$("#mRango").attr("checked", false);
+	$(".fNombre").hide();
+	$(".fCedula").hide();
+	$(".fRango").hide();
+	$("#paNombre").val("");
+	$("#paCedula").val("");
+	$("#rangoM").val("null");
+	$("#paMontoI").val("");
+	$("#paMontoF").val("");
+	$(".fRango1").hide();
+	$(".fRango2").hide();
+	$("#paFamilia").attr("checked", false);
+	$("#paArticulo").attr("checked", false);
+	$("#mCedula").attr("checked", false);
+	$("#paEsSucursal").attr("checked", false);
 }
 
 function eventoRangos(){

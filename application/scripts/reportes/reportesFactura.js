@@ -5,11 +5,17 @@ $(document).ready(function (){
 	$("#submit").attr("disabled", true);
 	eventoTipoReporte();	
 	//Utilitarios.lfEventoCheckbox($("#mFecha"), $(".rFechas"));
-	
+	$(".sucDesamparados").hide();
+	$("#sucursal").change(function(){
+		fnVerificarEmpresa();
+	});
+	Utilitarios.lfEventoCheckbox($("#mNombre"), $(".fNombre")); 
+	Utilitarios.lfEventoCheckbox($("#mCedula"), $(".fCedula")); 
 });
 
 function eventoTipoReporte(){	
 	$("#tipo_reporte").change(function(){
+		fnVerificarEmpresa();
 		if($("#tipo_reporte").val() == 'null'){	
 			$("#submit").attr("disabled", true); 
 			ocultarTodo();
@@ -18,13 +24,55 @@ function eventoTipoReporte(){
 			$("#submit").attr("disabled", false);
 			$(".rFechas").show();
 			$(".uFacturas").show();
+			$(".mNombre").hide();
+			$(".mCedula").hide();
 		}
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentasXMes){
 			$("#submit").attr("disabled", false);
 			$(".rFechas").show();
 			$(".uFacturas").show();
+			$(".mNombre").hide();
+			$(".mCedula").hide();
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_RecibosXDinero){
+			$("#submit").attr("disabled", false);
+			$(".rFechas").show();
+			$(".uFacturas").hide();
+			$(".mNombre").show();
+			$(".mCedula").show();
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_NotaCredito){
+			$("#submit").attr("disabled", false);
+			$(".rFechas").show();
+			$(".uFacturas").hide();
+			$(".mNombre").show();
+			$(".mCedula").hide();
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_Cartera || $("#tipo_reporte").val() == Utilitarios.paReporte_CarteleraTotalizacion){
+			$("#submit").attr("disabled", false);
+			$(".rFechas").show();
+			$(".uFacturas").hide();
+			$(".mNombre").show();
+			$(".mCedula").hide();
+		}
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_ArticulosExentos){
+			$("#submit").attr("disabled", false);
+			$(".rFechas").show();
+			$(".uFacturas").hide();
+			$(".mNombre").hide();
+			$(".mCedula").hide();
 		}
 	}); 
+}
+
+function fnVerificarEmpresa(){
+	if ((($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_RentabilidadXCliente))
+		||(($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_VentasXMes)) ){
+		$(".sucDesamparados").show();
+	}
+	else{
+		$(".sucDesamparados").hide();
+	}
 }
 
 function ocultarTodo(){
@@ -32,6 +80,9 @@ function ocultarTodo(){
 	$(".uFacturas").hide();
 	$(".oculto").hide();
 	$(".fFechas").hide();
+	$(".mNombre").hide();
+	$(".sucDesamparados").hide();
+	$(".mCedula").hide();
 	$("#mFecha").attr("checked", false);
 }
 

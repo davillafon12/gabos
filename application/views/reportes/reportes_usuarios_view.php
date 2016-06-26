@@ -79,7 +79,7 @@ PARA:
 								<label for="sucursal"  class="labelMedium">Empresa:</label>							
 							</td>
 							<td>
-								<select name="sucursal" class="styleSelect" tabindex="8">
+								<select id="sucursal" name="sucursal" class="styleSelect" tabindex="8">
 								<?php 					
 									foreach($Empresas as $Nombre_Empresa => $codigo_empresa)
 									{
@@ -117,7 +117,7 @@ PARA:
 								<label for="paEstadoFactura"  class="labelMedium">Estado Factura:</label>							
 							</td>
 							<td>
-								<select name="paEstadoFactura" class="styleSelect" tabindex="8">
+								<select id="paEstadoFactura" name="paEstadoFactura" class="styleSelect" tabindex="8">
 								<?php 					
 									foreach($EstadoFacturas as $Codigo_Factura => $Nombre_Factura)
 									{
@@ -131,7 +131,7 @@ PARA:
 								<label for="paEsSucursal"  class="labelMedium">Sucursal:</label>							
 							</td>
 							<td>
-								<input type="checkbox" name="paEsSucursal" value="1"> Es Sucursal<br>
+								<input type="checkbox" id="paEsSucursal" name="paEsSucursal" value="1"> Es Sucursal<br>
 							</td>
 						</tr>	
 					</table>

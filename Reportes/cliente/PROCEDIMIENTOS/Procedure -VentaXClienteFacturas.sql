@@ -19,9 +19,9 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturas
  )
  BEGIN
 	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
-								 'and fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
-								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
-								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
+								 ' and fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
+								 ' and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
+								 ' and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
 								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
 	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula, 
 											CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,

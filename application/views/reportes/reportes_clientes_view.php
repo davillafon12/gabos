@@ -147,7 +147,7 @@ PARA:
 								<label for="paEsSucursal"  class="labelMedium">Sucursal:</label>							
 							</td>
 							<td>
-								<input type="checkbox" name="paEsSucursal" value="1"> Es Sucursal<br>
+								<input type="checkbox" id="paEsSucursal" name="paEsSucursal" value="1"> Es Sucursal<br>
 							</td>
 						</tr>
 						<tr class="mNombre">

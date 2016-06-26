@@ -22,6 +22,7 @@ function eventoTipoReporte(){
 			$(".rFechas").hide();
 			$(".uFacturas").hide();
 			$(".fFechas").show();
+			$("#mFecha").attr("checked", false);
 		}
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_ListaDefacturasPorUsuario){
 			$(".fFechas").hide();
@@ -29,6 +30,8 @@ function eventoTipoReporte(){
 			$(".uFacturas").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
+			$("#paEsSucursal").attr("checked", false);
+			$("#paEstadoFactura").val("cobrada");
 		}
 	}); 
 }

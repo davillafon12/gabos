@@ -70,7 +70,7 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturasResumido
   end If;   -- FIN paRango <> 'null'
   SET @QUERY = CONCAT (@QUERY, 'group by cli.Cliente_Cedula'); 
   -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  -- select @QUERY as 'Resultado';  
+  --select @QUERY as 'Resultado';  
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement

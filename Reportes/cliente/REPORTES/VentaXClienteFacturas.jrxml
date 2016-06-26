@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentaXClienteFacturasGlobal" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfee2ae5-d550-4526-9aa5-709ed40c5284">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="102"/>
 	<parameter name="paFechaI" class="java.lang.String"/>
 	<parameter name="paFechaF" class="java.lang.String"/>
 	<parameter name="paSucursal" class="java.lang.String"/>
@@ -16,7 +16,7 @@
 	<queryString language="plsql">
 		<![CDATA[{call PA_VentaXClienteFacturas($P{paSucursal},$P{paFechaI},$P{paFechaF},$P{paEstadoFactura},$P{paEsSucursal},$P{paNombre},$P{paCedula},$P{paRango},$P{paMontoI},$P{paMontoF})}]]>
 	</queryString>
-	<field name="cedula" class="java.lang.Long"/>
+	<field name="cedula" class="java.lang.String"/>
 	<field name="nombre" class="java.lang.String"/>
 	<field name="fecha" class="java.sql.Timestamp"/>
 	<field name="consecutivo" class="java.lang.Integer"/>
@@ -109,14 +109,14 @@
 				<reportElement x="0" y="20" width="752" height="1" uuid="ff382721-d554-489a-90bd-3098c8800a1e"/>
 			</line>
 			<staticText>
-				<reportElement x="0" y="0" width="50" height="20" uuid="7ae36a5d-2125-4c08-919f-0799aeecf147"/>
+				<reportElement x="0" y="0" width="66" height="20" uuid="7ae36a5d-2125-4c08-919f-0799aeecf147"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cédula]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="50" y="0" width="277" height="20" uuid="56bfafba-c7d2-47a8-81fd-8ea864a5016b"/>
+				<reportElement x="66" y="0" width="245" height="20" uuid="56bfafba-c7d2-47a8-81fd-8ea864a5016b"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -130,7 +130,7 @@
 				<text><![CDATA[Factura]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="327" y="0" width="50" height="20" uuid="45ab3a4e-a9cd-45b7-8daf-250ebdf724cf"/>
+				<reportElement x="311" y="0" width="66" height="20" uuid="45ab3a4e-a9cd-45b7-8daf-250ebdf724cf"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -169,11 +169,11 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="50" height="20" uuid="914e7afb-5ed0-4129-b857-c27fe0ea9170"/>
+				<reportElement x="0" y="0" width="66" height="20" uuid="914e7afb-5ed0-4129-b857-c27fe0ea9170"/>
 				<textFieldExpression><![CDATA[$F{cedula}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="50" y="0" width="277" height="20" uuid="06c7a412-e062-45ce-a287-93b1814e0e61"/>
+				<reportElement x="66" y="0" width="245" height="20" uuid="06c7a412-e062-45ce-a287-93b1814e0e61"/>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -201,7 +201,7 @@
 				<textFieldExpression><![CDATA[$F{montoTotal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="327" y="0" width="50" height="20" uuid="546ffafd-5e8e-42de-8ab7-05b66ef6416f"/>
+				<reportElement x="311" y="0" width="66" height="20" uuid="546ffafd-5e8e-42de-8ab7-05b66ef6416f"/>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{fecha})]]></textFieldExpression>
 			</textField>
 		</band>

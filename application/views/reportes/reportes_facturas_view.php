@@ -78,7 +78,7 @@ PARA:
 								<label for="sucursal"  class="labelMedium">Empresa:</label>							
 							</td>
 							<td>
-								<select name="sucursal" class="styleSelect" tabindex="8">
+								<select id="sucursal" name="sucursal" class="styleSelect" tabindex="8">
 								<?php 					
 									foreach($Empresas as $Nombre_Empresa => $codigo_empresa)
 									{
@@ -87,6 +87,20 @@ PARA:
 									}
 								?>
 								</select> 
+							</td>
+						</tr>
+						<tr class="sucDesamparados">
+							<td>
+								<label for="lafecha_inicial"  class="labelMedium">Desamparados:</label>							
+							</td>
+							<td>
+								<input type="checkbox"name="check_Desamparados" value="1">
+							</td>
+							<td>
+								<label for="lafecha_inicial"  class="labelMedium">GarotasBonitas:</label>							
+							</td>
+							<td>
+								<input type="checkbox"name="check_GarotasBonitas" value="1">
 							</td>
 						</tr>
 						<tr class="rFechas">
@@ -118,7 +132,51 @@ PARA:
 								?>
 								</select> 
 							</td>
+							<td>
+								<label for="paTipoPagoFactura"  class="labelMedium">Tipo Factura:</label>							
+							</td>
+							<td>
+								<select name="paTipoPagoFactura" class="styleSelect" tabindex="8">
+								<?php 					
+									foreach($TipoPagoFactura as $Codigo_TipoFac => $Nombre_TipoFac)
+									{
+										echo "<option value='".$Codigo_TipoFac."'";
+										echo">".$Nombre_TipoFac."</option>";
+									}
+								?>
+								</select> 
+							</td>
+						</tr>
+						<tr class="mNombre">
+							<td rowspan= "3">
+								<label for="mNombre"  class="labelMedium">Filtrar Por:</label>							
+							</td>
+							<td>
+								<input type="checkbox" id="mNombre" name="mNombre" value="1">Nombre<br>
+							</td>
+							<td class="fNombre">
+								<label for="fNombre">Nombre:</label>							
+							</td>
+							<td class="fNombre">
+								<input type="text" id="paNombre" class="input_Small" name="paNombre" value=""><br>
+							</td>
 						</tr>	
+						<tr class="mNombre">
+							<td>
+								<input type="checkbox" id="mCedula" name="mCedula" value="1">Cédula<br>
+							</td>
+							<td class="fCedula">
+								<label for="fCedula"  class="input_Small">Cédula</label>							
+							</td>
+							<td class="fCedula">
+								<input type="text" id="paCedula" class="input_Small" autocomplete="off" name="paCedula">
+							</td>
+						</tr>
+						<tr class="mCedula"><!-- Sirve como pendiente-->
+							<td colspan="3">
+								<input type="checkbox" id="mPendiente" name="mPendiente" value="1">Recibos unicamente Pendientes<br>
+							</td>
+						</tr>
 					</table>
 					</fieldset>
 					<div class="divButton">		

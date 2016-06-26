@@ -1,7 +1,7 @@
 USE garotas_bonitas_main_db; 
 DELIMITER ;;
 
-CREATE DEFINER = 'consulta'@'localhost' PROCEDURE PA_ConsultaUsuarios
+CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_ConsultaUsuarios
 (
 	IN paSucursal VARCHAR(10),
 	IN paFechaI VARCHAR(30), 
