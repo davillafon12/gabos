@@ -75,13 +75,16 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_RentabilidadXCliente
 								FROM  tb_07_factura fac 
 									  inner join tb_46_relacion_desampa des on fac.Factura_Consecutivo  = des.Consecutivo and
 									  des.Documento = \'factura\'', @wherePrincipal, ')');
-	IF paSuDesamparados = 'true' AND paSuGarotasBonitas = 'false' then 
+	IF paSuDesamparados = 'true' AND paSuGarotasBonitas = 'false' and (paSucursal = '2' or paSucursal = '7') then 
 		SET @QUERY = CONCAT(@QUERY, @QUERYDESAMPA, @wherePrincipal);
 	END IF;
-	IF paSuDesamparados = 'false' AND paSuGarotasBonitas = 'true' then 
+	IF paSuDesamparados = 'false' AND paSuGarotasBonitas = 'true' and (paSucursal = '2' or paSucursal = '7') then 
 		SET @QUERY = CONCAT(@QUERY, @wherePrincipal, @WHEREDESAMPA);
 	END IF;
-	IF paSuDesamparados = 'true' AND paSuGarotasBonitas = 'true' then 
+	IF paSuDesamparados = 'true' AND paSuGarotasBonitas = 'true' and (paSucursal = '2' or paSucursal = '7') then 
+		SET @QUERY = CONCAT(@QUERY, @wherePrincipal);
+	END IF;
+	IF paSuDesamparados = 'false' AND paSuGarotasBonitas = 'false' and paSucursal <> '2' and paSucursal <> '7' then 
 		SET @QUERY = CONCAT(@QUERY, @wherePrincipal);
 	END IF;
   -- select @QUERY as 'Resultado';  
