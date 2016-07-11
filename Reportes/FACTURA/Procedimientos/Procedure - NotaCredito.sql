@@ -43,12 +43,12 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_NotaCredito
 		SET @wherePrincipal = CONCAT (@wherePrincipal, ' AND UNIX_TIMESTAMP(noCre.Fecha_Creacion) BETWEEN UNIX_TIMESTAMP(', '\'',paFechaI, '\'', ') AND UNIX_TIMESTAMP(', '\'',paFechaF, '\')');      
 	END IF;
 	SET @QUERY = CONCAT(@QUERY, @wherePrincipal);
-  -- select @QUERY as 'Resultado';  
+   select @QUERY as 'Resultado';  
   -- preparamos el objete Statement a partir de nuestra variable
-   PREPARE smpt FROM @Query;
+  -- PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
-   EXECUTE smpt;
+  -- EXECUTE smpt;
   -- liberamos la memoria 
-   DEALLOCATE PREPARE smpt;
+  -- DEALLOCATE PREPARE smpt;
  END
 ;;

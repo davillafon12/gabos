@@ -363,7 +363,10 @@ function validarCantidadBN(element){
 	
 	//Recalculamos el total de efectivo
 	var efectivo = parseFloat($("#totalRetirosParciales").val());
-	efectivo -= cantidad;
-	$("#parrafoTotalRetirosParciales").html("₡"+efectivo.format(2, 3, '.', ','));
-	
+	// Se debe de recalcular el Faltante Sobrante unicamente cuando el valor este en BN Servicios Contado 
+	// Cuando es BN Servicio Tarjeta no toca Efectivo 
+	if ($(element).attr("id") == "cantidad_bn_servicios"){
+		efectivo -= cantidad;
+		$("#parrafoTotalRetirosParciales").html("₡"+efectivo.format(2, 3, '.', ','));
+	}
 }

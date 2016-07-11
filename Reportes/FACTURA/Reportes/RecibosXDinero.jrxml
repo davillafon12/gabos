@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RecibosXDinero" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfee2ae5-d550-4526-9aa5-709ed40c5284">
-	<property name="ireport.zoom" value="1.2100000000000106"/>
-	<property name="ireport.x" value="44"/>
+	<property name="ireport.zoom" value="1.7715610000000173"/>
+	<property name="ireport.x" value="501"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="paFechaI" class="java.lang.String"/>
 	<parameter name="paFechaF" class="java.lang.String"/>
@@ -99,63 +99,63 @@
 	<columnHeader>
 		<band height="15" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="62" height="15" uuid="70bb35b8-8f6e-4d7f-b2ae-a9dc833258f7"/>
+				<reportElement x="0" y="0" width="45" height="15" uuid="70bb35b8-8f6e-4d7f-b2ae-a9dc833258f7"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Consecutivo]]></text>
+				<text><![CDATA[Número]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="124" y="0" width="52" height="15" uuid="a8723b4c-2360-44fa-a551-e87d5d1b6271"/>
+				<reportElement x="100" y="0" width="52" height="15" uuid="a8723b4c-2360-44fa-a551-e87d5d1b6271"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="251" y="0" width="220" height="15" uuid="7f6063a7-e750-4b9e-8470-f2205b225c59"/>
+				<reportElement x="224" y="0" width="217" height="15" uuid="7f6063a7-e750-4b9e-8470-f2205b225c59"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="541" y="0" width="70" height="15" uuid="a3511512-5c41-456a-9c8a-04ed41c4ed16"/>
+				<reportElement x="511" y="0" width="80" height="15" uuid="a3511512-5c41-456a-9c8a-04ed41c4ed16"/>
 				<textElement textAlignment="Right">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Saldo Inicial]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="611" y="0" width="70" height="15" uuid="4b5a296c-3683-4320-a82e-d4fc74f11ae1"/>
+				<reportElement x="591" y="0" width="80" height="15" uuid="4b5a296c-3683-4320-a82e-d4fc74f11ae1"/>
 				<textElement textAlignment="Right">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Abono]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="681" y="0" width="70" height="15" uuid="649b9b70-83d3-49bd-8569-4f64277a5454"/>
+				<reportElement x="671" y="0" width="80" height="15" uuid="649b9b70-83d3-49bd-8569-4f64277a5454"/>
 				<textElement textAlignment="Right">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Saldo Actual]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="62" y="0" width="62" height="15" uuid="e54a95ad-7b09-4f62-8387-c2994cb4bcb6"/>
+				<reportElement x="45" y="0" width="55" height="15" uuid="e54a95ad-7b09-4f62-8387-c2994cb4bcb6"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tipo Pago]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="176" y="0" width="75" height="15" uuid="df2ac26d-e9e6-495e-9380-cc18e7ba7a68"/>
+				<reportElement x="152" y="0" width="72" height="15" uuid="df2ac26d-e9e6-495e-9380-cc18e7ba7a68"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cédula]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="471" y="0" width="70" height="15" uuid="12d69d5d-e3e1-48cc-b3f6-83c833056421"/>
+				<reportElement x="441" y="0" width="70" height="15" uuid="12d69d5d-e3e1-48cc-b3f6-83c833056421"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -166,63 +166,63 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="62" height="20" uuid="08880b1e-f36c-49b9-ba7e-014db2f3e1fe"/>
+				<reportElement x="0" y="0" width="45" height="20" uuid="08880b1e-f36c-49b9-ba7e-014db2f3e1fe"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Consecutivo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="124" y="0" width="52" height="20" uuid="132c9fd3-2fd0-4583-8ec5-dbf9262ded97"/>
+				<reportElement x="100" y="0" width="52" height="20" uuid="132c9fd3-2fd0-4583-8ec5-dbf9262ded97"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{Recibo_Fecha})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="176" y="0" width="75" height="20" uuid="090b1208-6c27-4ff3-9dbe-09bb60bc788a"/>
+				<reportElement x="152" y="0" width="72" height="20" uuid="090b1208-6c27-4ff3-9dbe-09bb60bc788a"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{identificacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="251" y="0" width="220" height="20" uuid="0c57bffb-728d-46f8-9177-f3a680864697"/>
+				<reportElement x="224" y="0" width="217" height="20" uuid="0c57bffb-728d-46f8-9177-f3a680864697"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="611" y="0" width="70" height="20" uuid="e2cb2989-be27-46f5-a961-ebe9c8e5c7eb"/>
+				<reportElement x="591" y="0" width="80" height="20" uuid="e2cb2989-be27-46f5-a961-ebe9c8e5c7eb"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Recibo_Cantidad}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="681" y="0" width="70" height="20" uuid="f9bbb6c1-fd26-4ca6-bf2d-4e22b79dbe08"/>
+				<reportElement x="671" y="0" width="80" height="20" uuid="f9bbb6c1-fd26-4ca6-bf2d-4e22b79dbe08"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Credito_Saldo_Actual}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="62" y="0" width="62" height="20" uuid="e14cd24f-b014-47b9-af18-569e60f829dc"/>
+				<reportElement x="45" y="0" width="55" height="20" uuid="e14cd24f-b014-47b9-af18-569e60f829dc"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Tipo_Pago}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="541" y="0" width="70" height="20" uuid="9f077dd6-e105-4742-9ad5-ceda07404721"/>
+				<reportElement x="511" y="0" width="80" height="20" uuid="9f077dd6-e105-4742-9ad5-ceda07404721"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Credito_Saldo_Inicial}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="471" y="0" width="70" height="20" uuid="500c6874-eaae-4d82-b6a3-2bb2f1c935fc"/>
+				<reportElement x="441" y="0" width="70" height="20" uuid="500c6874-eaae-4d82-b6a3-2bb2f1c935fc"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -251,30 +251,30 @@
 	<summary>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="441" y="0" width="100" height="19" uuid="54c3f570-ccff-46f7-8fc0-588210b449aa"/>
+				<reportElement x="404" y="0" width="100" height="19" uuid="54c3f570-ccff-46f7-8fc0-588210b449aa"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Totales Informe]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="541" y="0" width="70" height="20" uuid="76bff319-5094-449d-9eed-1236829b19a5"/>
+				<reportElement x="511" y="0" width="80" height="20" uuid="76bff319-5094-449d-9eed-1236829b19a5"/>
 				<textElement textAlignment="Right">
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{Credito_Saldo_Inicial_1}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="681" y="0" width="70" height="20" uuid="636be6b7-f6b8-45af-9764-0a6c6f177270"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="671" y="0" width="80" height="20" uuid="636be6b7-f6b8-45af-9764-0a6c6f177270"/>
 				<textElement textAlignment="Right">
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{Credito_Saldo_Actual_1}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="611" y="0" width="70" height="20" uuid="1d2aadf8-cf16-429f-88ef-ae7f2fa5dc2b"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="591" y="0" width="80" height="20" uuid="1d2aadf8-cf16-429f-88ef-ae7f2fa5dc2b"/>
 				<textElement textAlignment="Right">
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{Recibo_Cantidad_1}]]></textFieldExpression>
 			</textField>
