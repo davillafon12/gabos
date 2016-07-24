@@ -259,8 +259,10 @@ class reportes extends CI_Controller {
 	Reportes de Articulos*/
 	function reportesArticulos(){
 		$reportes = array(
-						'InventarioArticulos' =>'Inventario Artículos',
-						'prueba' => 'prueba'
+						'null' =>'Seleccione',
+						'InventarioArticulos' =>'Inventario artículos',
+						'CantArtVentaCliente' => 'Cantidad artículos Vendidos', 
+						'ProcedenciaArticulo' => 'Procedencia artículo'
 		);
 		return $reportes;
 	}
@@ -318,6 +320,18 @@ class reportes extends CI_Controller {
 		$paCantidadDefI = $this->input->post('CantidadDefI');
 		$paCantidadDefF = $this->input->post('CantidadDefF');
 		$paExento = $this->input->post('paExento');
+		
+		$Desamparados = $this->obtenerCheck($this->input->post('check_Desamparados'));
+		$GarotasBonitas = $this->obtenerCheck($this->input->post('check_GarotasBonitas'));
+		$fechaInicial = $this->input->post('fecha_inicial');
+		$fechaFinal = $this->input->post('fecha_final');
+		$paCedula = $this->input->post('paCedula'); 
+		$paCodigo = $this->input->post('Codigo'); 
+		if(empty($paCedula)){
+			$paCedula = "false";
+		}
+		
+		
 		//Switch para Rango Codigos
 		if($paSucursal == ''){ $paSucursal = 'null';}	
 		if($paExento != 1){ $paExento = 0;}		
@@ -394,7 +408,7 @@ class reportes extends CI_Controller {
 		else {
 			$ip = $this->IpExterna; 
 		}
-		if($paReporte != 'null'){
+		if($paReporte != 'null' && $paReporte == "InventarioArticulos"){
 			 $parametro1 = "paSucursal=".$paSucursal; 
 			 $parametro2 = "paFamilia=".$paFamilia; 		
 			 $parametro3 = "paRangoC=".$paRangoC; 		
@@ -413,8 +427,26 @@ class reportes extends CI_Controller {
 			 $parametro16 = "paExento=".$paExento;		 
 			 $txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6;			
 			 $txtRutaFinal = $txtRutaFinal.'&'.$parametro7.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10.'&'.$parametro11.'&'.$parametro12.'&'.$parametro13.'&'.$parametro14.'&'.$parametro15.'&'.$parametro16;
-			 $this->llamarReporte($txtRutaFinal);
 		}	
+		if($paReporte != 'null' && $paReporte == "CantArtVentaCliente"){ 
+			$parametro1 = "paSucursal=".$paSucursal; 
+			$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial, 0); 
+			$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal, 1); 	
+			$parametro4 = "paCodigoI=".$paCodigo; 
+			$parametro5 = "paCedula=".$paCedula; 
+			$parametro6 = "paSuDesamparados=".$Desamparados;
+			$parametro7 = "paSuGarotasBonitas=".$GarotasBonitas;
+			$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4.'&'.$parametro5.'&'.$parametro6.'&'.$parametro7;			
+		}
+		if($paReporte != 'null' && $paReporte == "ProcedenciaArticulo"){ 
+			$parametro1 = "paSucursal=".$paSucursal; 
+			$parametro2 = "paFechaI=".$this->convertirFecha($fechaInicial, 0); 
+			$parametro3 = "paFechaF=".$this->convertirFecha($fechaFinal, 1); 	
+			$parametro4 = "paCodigoI=".$paCodigo; 
+			$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro4;			
+		}
+		
+		$this->llamarReporte($txtRutaFinal);
 	}	
 	
 	
@@ -435,7 +467,7 @@ class reportes extends CI_Controller {
 		);
 		return $reportes;
 	}
-	function facturas(){
+		function facturas(){
 			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 			$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 			if($permisos['consulta_administradores'])

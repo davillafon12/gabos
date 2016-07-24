@@ -66,7 +66,7 @@ PARA:
 								<label for="tipo_reporte_Seleccionado" class="labelMedium">Tipo Reporte:</label>							
 							</td>
 							<td>
-								<select name="tipo_reporte" class="styleSelect" tabindex="8">
+								<select id="tipo_reporte" name="tipo_reporte" class="styleSelect" tabindex="8">
 								<?php 					
 									foreach($Reportes as $codigo_reporte => $nombre_reporte )
 									{
@@ -80,7 +80,7 @@ PARA:
 								<label for="sucursal"  class="labelMedium">Empresa:</label>							
 							</td>
 							<td colspan=3>
-								<select name="sucursal" class="styleSelect" tabindex="8">
+								<select id="sucursal"  name="sucursal" class="styleSelect" tabindex="8">
 								<?php 					
 									foreach($Empresas as $Nombre_Empresa => $codigo_empresa)
 									{
@@ -91,7 +91,21 @@ PARA:
 								</select> 
 							</td>
 						</tr>
-						<tr>
+						<tr class="sucDesamparados">
+							<td>
+								<label for="lafecha_inicial"  class="labelMedium">Desamparados:</label>							
+							</td>
+							<td>
+								<input type="checkbox"name="check_Desamparados" value="1">
+							</td>
+							<td>
+								<label for="lafecha_inicial"  class="labelMedium">GarotasBonitas:</label>							
+							</td>
+							<td>
+								<input type="checkbox"name="check_GarotasBonitas" value="1">
+							</td>
+						</tr>
+						<tr class="rArticulos">
 							<td>
 								<label for="familia"  class="labelMedium">Familia:</label>							
 							</td>
@@ -110,7 +124,7 @@ PARA:
 							<td colspan=4>
 							</td>
 						</tr>	
-						<tr>
+						<tr class="rArticulos">
 							<td>
 								<label for="rango_codigo"  class="labelMedium">Rango Código:</label>						
 							</td>
@@ -138,7 +152,7 @@ PARA:
 								<input id="CodigoF" class="input_Small" autocomplete="off" name="CodigoF"><br>
 							</td>
 						</tr>
-						<tr>
+						<tr class="rArticulos">
 							<td colspan=2>
 								<label for="precio"  class="labelMedium">Número de Precio:</label>							
 							</td>
@@ -184,7 +198,7 @@ PARA:
 								<input id="PrecioF" class="input_Small" autocomplete="off" name="PrecioF"><br>
 							</td>
 						</tr>	
-						<tr>
+						<tr class="rArticulos">
 							<td>
 								<label for="rango_articulos"  class="labelMedium">Rango Artículos:</label>						
 							</td>
@@ -212,7 +226,7 @@ PARA:
 								<input id="CantidadF" class="input_Small" autocomplete="off" name="CantidadF"><br>
 							</td>
 						</tr>	
-						<tr>
+						<tr class="rArticulos">
 							<td>
 								<label for="rango_articulosDef"  class="labelMedium">Rango Artículos Def:</label>						
 							</td>
@@ -240,7 +254,7 @@ PARA:
 								<input id="CantidadDefF" class="input_Small" autocomplete="off" name="CantidadDefF"><br>
 							</td>
 						</tr>	
-						<tr>
+						<tr class="rArticulos">
 							<td>
 								<label for="paExento"  class="labelMedium">Exento:</label>						
 							</td>
@@ -248,6 +262,34 @@ PARA:
 								<input id="paExento" type="Checkbox" name="paExento" value="1">Exento<br>
 							</td>
 						</tr>
+						<tr class="rFechas">
+							<td>
+								<label for="lafecha_inicial"  class="labelMedium">Fecha Inicial:</label>							
+							</td>
+							<td>
+								<input id="fecha_inicial" class="input_calendar" autocomplete="off" name="fecha_inicial">
+							</td>
+							<td>
+								<label for="lafecha_final"  class="labelMedium">Fecha Final:</label>							
+							</td>
+							<td>
+								<input id="fecha_final" class="input_calendar" autocomplete="off" name="fecha_final"><br>						
+							</td>
+						</tr>
+						<tr class="rCodigoCedula">
+							<td class="rCodigo">
+								<label for="Codigo"  class="labelMedium">Código:</label>						
+							</td>
+							<td class="rCodigo" colspan="2"> 
+								<input id="Codigo" class="input_Small" autocomplete="off" name="Codigo"><br>
+							</td>
+							<td class="rCedula">
+								<label for="paCedula"  class="labelMedium">Cédula:</label>						
+							</td>
+							<td class="rCedula" colspan="2">
+								<input type="text" id="paCedula" class="input_Small" autocomplete="off" name="paCedula">
+							</td>
+						</tr>	
 					</table>
 					</fieldset>
 					<div class="divButton">		
@@ -256,8 +298,7 @@ PARA:
 					</div>			
 				<?php
 					echo form_close();
-				?>
-				
+				?>				
 			</div>		
 		</div>
 		<!--Incluir footer-->
