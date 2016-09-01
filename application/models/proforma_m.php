@@ -36,9 +36,9 @@ Class proforma_m extends CI_Model
 	function crearProforma($cedula, $nombre, $currency, $observaciones, $sucursal, $vendedor){
 		$c_array = $this->getConfgArray();
 		$sucursalVendedor =  $sucursal;
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-				$this->isDesampa = true;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				$this->truequeAplicado = true;
 		}
 		if($consecutivo = $this->getConsecutivo($sucursal)){
 			//return $consecutivo;
@@ -64,12 +64,14 @@ Class proforma_m extends CI_Model
 													'Proforma_Cliente_No_Retencion'=>$clienteArray['retencion']													
 	                    );			
 	        $this->db->insert('TB_10_Proforma',$dataProforma); 
-		      if($this->trueque && $this->isDesampa){ //Si viene de desampa se guarda la factura
-						$datos = array("Consecutivo" => $consecutivo,
-														"Documento" => 'proforma');
-						$this->db->insert("TB_46_Relacion_Desampa", $datos);
-						$this->isDesampa = false;
-					}
+		    
+			if($this->truequeHabilitado && $this->truequeAplicado){ //Si se aplico el trueque, se debe guardar el documento
+				$datos = array("Consecutivo" => $consecutivo,
+								"Documento" => 'proforma',
+								"Sucursal" => $sucursalVendedor);
+				$this->db->insert("tb_46_relacion_trueque", $datos);
+				$this->truequeAplicado = false;
+			}
 			return $this->existe_Proforma($consecutivo, $sucursal);
 		}else{
 			return false;
@@ -77,8 +79,8 @@ Class proforma_m extends CI_Model
 	}
 	
 	function existe_Proforma($consecutivo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> select('Proforma_Consecutivo');
 		$this -> db -> from('TB_10_Proforma');
@@ -101,8 +103,8 @@ Class proforma_m extends CI_Model
 	
 	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
 		$sucursalVendedor =  $sucursal;
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$dataItem = array(
               'Articulo_Proforma_Codigo'=>mysql_real_escape_string($codigo),
@@ -206,8 +208,8 @@ Class proforma_m extends CI_Model
 	}
 	
 	function updateCostosTotales($data, $consecutivo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this->db->where('Proforma_Consecutivo', $consecutivo);
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
@@ -215,8 +217,8 @@ Class proforma_m extends CI_Model
 	}
 	
 	function getProformasPendientes($sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> select('*');
 		$this -> db -> from('TB_10_Proforma');
@@ -235,16 +237,17 @@ Class proforma_m extends CI_Model
 	}
 	
 	function getProformasHeaders($consecutivo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-				$proformas_desampa = $this->getProformasDesampa();
-				if(!empty($proformas_desampa)){
-						$this->db->where_in("Proforma_Consecutivo", $proformas_desampa);
+		
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+				$facturas_trueque = $this->getProformasTrueque($sucursal);
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				if(!empty($facturas_trueque)){
+						$this->db->where_in("Proforma_Consecutivo", $facturas_trueque);
 				}
-		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$proformas_desampa = $this->getProformasDesampa();
-				if(!empty($proformas_desampa)){
-						$this->db->where_not_in("Proforma_Consecutivo", $proformas_desampa);
+		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+				$facturas_trueque = $this->getProformasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				if(!empty($facturas_trueque)){
+						$this->db->where_not_in("Proforma_Consecutivo", $facturas_trueque);
 				}
 		}
 		$this -> db -> select('*');
@@ -265,8 +268,8 @@ Class proforma_m extends CI_Model
 	}
 	
 	function getProformasHeadersImpresion($consecutivo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		/*$this -> db -> select('Proforma_Consecutivo as consecutivo, 
 								Proforma_Monto_Total as total,
@@ -318,8 +321,8 @@ Class proforma_m extends CI_Model
 	}
 	
 	function getCliente($consecutivo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> select('TB_03_Cliente_Cliente_Cedula');
 		$this -> db -> from('TB_10_Proforma');
@@ -343,8 +346,8 @@ Class proforma_m extends CI_Model
 	}
 	
 	function getVendedor($consecutivo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> select('Proforma_Vendedor_Codigo');
 		$this -> db -> from('TB_10_Proforma');
@@ -369,8 +372,8 @@ Class proforma_m extends CI_Model
 	
 	function getArticulosProforma($consecutivo, $sucursal){
 		//echo "entro";
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> select('*');
 		$this -> db -> from('TB_04_Articulos_Proforma');
@@ -389,8 +392,8 @@ Class proforma_m extends CI_Model
 	}
 	
 	function getArticulosProformaImpresion($consecutivo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> select('
 				Articulo_Proforma_Codigo AS codigo, 
@@ -416,8 +419,8 @@ Class proforma_m extends CI_Model
 	
 	function actualizar($consecutivo, $sucursal, $data)
 	{ 
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this->db->where('Proforma_Consecutivo', mysql_real_escape_string($consecutivo));
 		$this->db->where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
@@ -425,16 +428,16 @@ Class proforma_m extends CI_Model
 	}
 	
 	function getProformasFiltradas($cliente, $desde, $hasta, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-				$proformas_desampa = $this->getProformasDesampa();
-				if(!empty($proformas_desampa)){
-						$this->db->where_in("Proforma_Consecutivo", $proformas_desampa);
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+				$facturas_trueque = $this->getProformasTrueque($sucursal);
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				if(!empty($facturas_trueque)){
+						$this->db->where_in("Proforma_Consecutivo", $facturas_trueque);
 				}
-		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$proformas_desampa = $this->getProformasDesampa();
-				if(!empty($proformas_desampa)){
-						$this->db->where_not_in("Proforma_Consecutivo", $proformas_desampa);
+		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+				$facturas_trueque = $this->getProformasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				if(!empty($facturas_trueque)){
+						$this->db->where_not_in("Proforma_Consecutivo", $facturas_trueque);
 				}
 		}
 		$this->db->select("Proforma_Consecutivo as consecutivo,
@@ -488,11 +491,28 @@ Class proforma_m extends CI_Model
 		return $fecha;
 	}
 	
-	function getProformasDesampa(){
-			
+	function getProformasTrueque($sucursal){
 			$this->db->select("Consecutivo");
-			$this->db->from("tb_46_relacion_desampa");
+			$this->db->from("tb_46_relacion_trueque");
 			$this->db->where("Documento", "proforma");
+			$this->db->where("Sucursal", $sucursal);
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+					return array();
+			}else{
+					$facturas = array();
+					foreach($query->result() as $f){
+							array_push($facturas, $f->Consecutivo);
+					}
+					return $facturas;
+			}
+	}
+	
+	function getProformasTruequeResponde($sucursales){
+			$this->db->select("Consecutivo");
+			$this->db->from("tb_46_relacion_trueque");
+			$this->db->where("Documento", "proforma");
+			$this->db->where_in("Sucursal", $sucursales);
 			$query = $this->db->get();
 			if($query->num_rows()==0){
 					return array();

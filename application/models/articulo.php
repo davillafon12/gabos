@@ -625,9 +625,9 @@ Class articulo extends CI_Model
 	}
 	
 	function actualizarInventarioSUMADefectuoso($codigo_producto, $cantidad, $sucursal){	
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-		}	
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
 		if($codigo_producto!='00'){// Si no es generico sigue
 			//La cantidad que ingresa por parametro es la cantidad a restar al inventario
 			//Traemos la cantidad actual
@@ -662,8 +662,8 @@ Class articulo extends CI_Model
 	}
 	
 	function actualizarInventarioRESTADefectuoso($codigo_producto, $cantidad, $sucursal){	
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
 		}	
 		if($codigo_producto!='00'){// Si no es generico sigue
 			//La cantidad que ingresa por parametro es la cantidad a restar al inventario
@@ -733,9 +733,6 @@ Class articulo extends CI_Model
 	}
 	
 	function getArticuloDescripcion($codigo, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				//$sucursal = $this->cod_garotas;
-		}
 		$this -> db -> select('Articulo_Descripcion');
 		$this -> db -> from('TB_06_Articulo');
 		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));		

@@ -520,10 +520,12 @@ Class cliente extends CI_Model
 	
 	
 	function getFacturasConSaldo($cliente, $sucursal){
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$this->db->where('Credito_Vendedor_Sucursal', $sucursal);
-				$sucursal = $this->cod_garotas;
+		
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+			$this->db->where('Credito_Vendedor_Sucursal', $sucursal);
+			$sucursal = $this->sucursales_trueque[$sucursal];
 		}
+		
 		$this->db->join("tb_07_factura","Credito_Factura_Consecutivo = Factura_Consecutivo");
 		$this->db->where('Credito_Cliente_Cedula', $cliente);
 		$this->db->where('Credito_Sucursal_Codigo', $sucursal);
@@ -540,16 +542,17 @@ Class cliente extends CI_Model
 	
 	function getFacturasDeClienteEnSucursal($cliente, $sucursal){
 		$this->load->model("factura", "", true);
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-				$facturas_desampa = $this->factura->getFacturasDesampa();
-				if(!empty($facturas_desampa)){
-						$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+		
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				if(!empty($facturas_trueque)){
+						$this->db->where_in("Factura_Consecutivo", $facturas_trueque);
 				}
-		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$facturas_desampa = $this->factura->getFacturasDesampa();
-				if(!empty($facturas_desampa)){
-						$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				if(!empty($facturas_trueque)){
+						$this->db->where_not_in("Factura_Consecutivo", $facturas_trueque);
 				}
 		}
 		//Solo cargamos facturas cobradas
@@ -589,16 +592,16 @@ Class cliente extends CI_Model
 	
 	function getFacturaDeClienteCobrada($consecutivo, $sucursal, $cliente){
 		$this->load->model("factura", "", true);
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-				$facturas_desampa = $this->factura->getFacturasDesampa();
-				if(!empty($facturas_desampa)){
-						$this->db->where_in("Factura_Consecutivo", $facturas_desampa);
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				if(!empty($facturas_trueque)){
+						$this->db->where_in("Factura_Consecutivo", $facturas_trueque);
 				}
-		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$facturas_desampa = $this->factura->getFacturasDesampa();
-				if(!empty($facturas_desampa)){
-						$this->db->where_not_in("Factura_Consecutivo", $facturas_desampa);
+		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				if(!empty($facturas_trueque)){
+						$this->db->where_not_in("Factura_Consecutivo", $facturas_trueque);
 				}
 		}
 		//Solo cargamos facturas cobradas

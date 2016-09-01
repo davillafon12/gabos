@@ -28,10 +28,28 @@ class CI_Model {
 	
 	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
 	con los docs de garotas*/
-	public $cod_desampa = 7;
-	public $cod_garotas = 2;
-	public $trueque = true;
-	public $isDesampa = false; 
+	public $truequeHabilitado = true;
+	public $truequeAplicado = false; 
+	public $sucursales_trueque = array(7=>2);
+	
+	public function esUsadaComoSucursaldeRespaldo($sucursal){
+		foreach($this->sucursales_trueque as $key => $content){
+			if($content == $sucursal){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public function getSucursalesTruequeFromSucursalResponde($sucursalResponde){
+		$sucursales = array();
+		foreach($this->sucursales_trueque as $key => $content){
+			if($content == $sucursalResponde){
+				array_push($sucursales, $key);
+			}
+		}
+		return $sucursales;
+	}
 
 	/**
 	 * Constructor

@@ -466,16 +466,17 @@ function existe_Nombre_Usuario($nombre){
 			GROUP BY Factura_Vendedor_Codigo;
 		*/
 		$this->load->model("factura", "", true);
-		if($this->trueque && $sucursal == $this->cod_desampa){ //Si es desampa poner que es garotas
-				$sucursal = $this->cod_garotas;
-				$facturas_desampa = $this->factura->getFacturasDesampa();
-				if(!empty($facturas_desampa)){
-						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+		
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				if(!empty($facturas_trueque)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
 				}
-		}elseif($this->trueque && $sucursal == $this->cod_garotas){
-				$facturas_desampa = $this->factura->getFacturasDesampa();
-				if(!empty($facturas_desampa)){
-						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_desampa);
+		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				if(!empty($facturas_trueque)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
 				}
 		}
 		$this->db->select('Factura_Vendedor_Codigo');
