@@ -7,7 +7,7 @@ function pagar(){
 												if(v){
 													cedula = $("#cedula").val();
 													saldoEscrito = $("#saldo_a_pagar_input").val();
-													saldoEscrito = saldoEscrito.replace('.','');
+													saldoEscrito = saldoEscrito.replace(/\./g,'');
 													saldoEscrito = saldoEscrito.replace(',','.');
 													enviarCobro(cedula, saldoEscrito);
 												}
@@ -22,9 +22,9 @@ function validarEnvio(){
 	nombre = $("#nombre").val();
 	cantidadFacturasCobrar = facturasSaldar.length;
 	saldoEscrito = $("#saldo_a_pagar_input").val();
-	saldoEscrito = saldoEscrito.replace('.','');
+	saldoEscrito = saldoEscrito.replace(/\./g,'');
 	saldoEscrito = saldoEscrito.replace(',','.');
-	
+
 	if(!isNumber(cedula)){
 		notyMsg('¡Cédula no válida!', 'error');
 		return false;
