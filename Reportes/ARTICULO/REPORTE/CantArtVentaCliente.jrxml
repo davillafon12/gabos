@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CantArtVentaCliente" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfee2ae5-d550-4526-9aa5-709ed40c5284">
+	<property name="ireport.zoom" value="1.2100000000000128"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="paFechaI" class="java.lang.String"/>
+	<parameter name="paFechaF" class="java.lang.String"/>
+	<parameter name="paSucursal" class="java.lang.String"/>
+	<parameter name="paCedula" class="java.lang.String"/>
+	<parameter name="paCodigoI" class="java.lang.String"/>
+	<parameter name="paSuDesamparados" class="java.lang.String"/>
+	<parameter name="paSuGarotasBonitas" class="java.lang.String"/>
+	<queryString language="plsql">
+		<![CDATA[{call PA_CantArtVentaCliente($P{paSucursal},$P{paFechaI},$P{paFechaF},$P{paCodigoI},$P{paCedula},$P{paSuDesamparados},$P{paSuGarotasBonitas})}]]>
+	</queryString>
+	<field name="Articulo_Factura_Codigo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Articulo_Factura_Descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sum(af.Articulo_Factura_Cantidad)" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="48" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="569" height="48" uuid="f325b1e8-1f05-4eb0-b37d-9922cdbed6de"/>
+				<imageExpression><![CDATA["C:\\Images\\Garotas.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="88" height="20" uuid="5e7a7bf4-eeeb-489f-8666-483ba47cdd35"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad Vendida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="466" y="0" width="39" height="20" uuid="912bdc81-7cc7-414b-8561-721c74a297ae"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="88" y="0" width="378" height="20" uuid="e18fa575-a4e8-4e3a-853c-4eab03fb5049"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Consulta de referencia vendida total ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="505" y="0" width="65" height="20" uuid="b9cf58e3-7240-41bb-8c68-a1a5d2d5b7ba"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="371" y="20" width="60" height="20" uuid="99487671-49c7-4918-9a0c-f799419cbf1c"/>
+				<textFieldExpression><![CDATA[(($P{paFechaI} != null && $P{paFechaI}.length() > 10) ? $P{paFechaI}.substring(8,10)+"/"+$P{paFechaI}.substring(5,7)+"/"+$P{paFechaI}.substring(0,4) : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="510" y="20" width="60" height="20" uuid="394e397d-2521-470c-a243-7be1094d6fec"/>
+				<textFieldExpression><![CDATA[(($P{paFechaF} != null && $P{paFechaF}.length() > 10) ? $P{paFechaF}.substring(8,10)+"/"+$P{paFechaF}.substring(5,7)+"/"+$P{paFechaF}.substring(0,4) : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="305" y="20" width="66" height="20" uuid="c35331b5-83a9-4b39-9ef0-6b698498a52c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Desde:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="448" y="20" width="63" height="20" uuid="3685c979-5fe8-4674-adf0-d0bb6e1e5c4a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hasta:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="80" height="15" uuid="55f4e174-b25c-4836-ac92-4475412bcfdd"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="1" width="387" height="15" uuid="d774044f-142a-45bf-a12a-cee759b82bbf"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="469" y="1" width="100" height="15" uuid="edb6b26b-2ef0-457d-9946-649989bf7556"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="80" height="20" uuid="5e4c4f64-a062-4ca7-b1ca-c23d1dd1aa0f"/>
+				<textFieldExpression><![CDATA[$F{Articulo_Factura_Codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="387" height="20" uuid="1ee45535-8f4a-49e8-9617-59cd17d6d4bf"/>
+				<textFieldExpression><![CDATA[$F{Articulo_Factura_Descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="100" height="20" uuid="ec06b910-d77b-4ec3-81ba-67602c712e76"/>
+				<textFieldExpression><![CDATA[$F{sum(af.Articulo_Factura_Cantidad)}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="448" y="0" width="80" height="12" uuid="6a77497a-7a81-4df9-a3e1-ef4cdc89f4bb"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="528" y="0" width="40" height="12" uuid="78f70263-b62b-4a85-8b97-2a4ff6049baa"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -4,6 +4,12 @@
 var Utilitarios = (function (window, undefined) {
 	/*-----------------------------------------VARIABLES-----------------------------------------------------------------------------------*/
 	/*-------------------------------------------------------------------------------------------------------------------------------------*/
+	
+	//ARTÍCULOS
+	var _Reporte_InventarioArticulos = "InventarioArticulos";
+	var _Reporte_CantArtVentaCliente = "CantArtVentaCliente";
+	var _Reporte_ProcedenciaArticulo = "ProcedenciaArticulo";
+	
 	//USUARIOS
 	var _Reporte_ListaUsuario = "ListaUsuario"; 
 	var _Reporte_ListaDefacturasPorUsuario = "ListaDefacturasPorUsuario"; 
@@ -222,6 +228,9 @@ var Utilitarios = (function (window, undefined) {
 	
 	
     return {   
+    	paReporte_InventarioArticulos: _Reporte_InventarioArticulos,
+		paReporte_CantArtVentaCliente: _Reporte_CantArtVentaCliente,
+		paReporte_ProcedenciaArticulo: _Reporte_ProcedenciaArticulo,
 		paReporte_ListaUsuario: _Reporte_ListaUsuario, 
 		paReporte_ListaDefacturasPorUsuario: _Reporte_ListaDefacturasPorUsuario, 
 		paReporte_VentaXClienteFacturas: _Reporte_VentaXClienteFacturas,
