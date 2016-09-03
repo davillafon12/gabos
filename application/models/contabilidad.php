@@ -1255,7 +1255,7 @@ Class contabilidad extends CI_Model
 						$this->db->where_in("Consecutivo", $facturas_trueque);
 				}
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
-				$facturas_trueque = $this->factura->getNotasDebitoTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				$facturas_trueque = $this->getNotasDebitoTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
 				if(!empty($facturas_trueque)){
 						$this->db->where_not_in("Consecutivo", $facturas_trueque);
 				}
