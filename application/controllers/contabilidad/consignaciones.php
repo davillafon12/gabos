@@ -258,6 +258,7 @@ class consignaciones extends CI_Controller {
 			//Traemos los precios y demas informacion del articulo
 			$articuloDeSucursalEntrega = $this->articulo->existe_Articulo($articulo->codigo,$sucursalEntrega);
 			$codigoBarras = $articuloDeSucursalEntrega[0]->Articulo_Codigo_Barras;
+			$cantidadBuena = 0; // AQUI SE PONE CERO; YA QUE SOLO SE REGISTRA, EL METODO QUE LLAMA A ESTA FUNCION SE ENCARGA DE AGREGAR LAS CANTIDADES
 			$cantidadDefectuosa = 0;
 			$descuento = $articuloDeSucursalEntrega[0]->Articulo_Descuento;
 			$retencion = $articuloDeSucursalEntrega[0]->Articulo_No_Retencion;
@@ -274,7 +275,7 @@ class consignaciones extends CI_Controller {
 			$this->articulo->registrar(	$articulo->codigo, 
 																	$articulo->descripcion, 
 																	$codigoBarras, 
-																	$articulo->cantidad, 
+																	$cantidadBuena, 
 																	$cantidadDefectuosa, 
 																	$descuento, 
 																	$imagen, 
