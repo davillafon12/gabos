@@ -973,6 +973,7 @@ Class contabilidad extends CI_Model
 		$this->db->from('TB_27_Notas_Credito');
 		$this->db->join('tb_07_factura', 'tb_07_factura.Factura_Consecutivo = tb_27_notas_credito.Factura_Aplicar');
 		$this->db->where('TB_27_Notas_Credito.Sucursal', $sucursal);
+		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('TB_27_Notas_Credito.Fecha_Creacion >', $inicio);
 		$this->db->where('TB_27_Notas_Credito.Fecha_Creacion <', $final);
 		$query = $this->db->get();	
