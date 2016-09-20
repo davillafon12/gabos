@@ -104,6 +104,20 @@ PARA:
 						<td>
 							<input id="fecha_hasta" class="input_uno" style="width: 100px;" autocomplete="off" type="text"/>
 						</td>
+					</tr>
+					<tr>
+						<td colspan="4" style="text-align: center;">
+							<p class="contact">Estado</p>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4" style="text-align: center;">
+							<input type="checkbox" name="estado" value="pendiente"><div class="tipos_de_pago">Pendiente</div>
+							<input type="checkbox" name="estado" value="descontada"><div class="tipos_de_pago">Descontada</div>
+							<input type="checkbox" name="estado" value="facturada"><div class="tipos_de_pago">Facturada</div>
+							<input type="checkbox" name="estado" value="pagada"><div class="tipos_de_pago">Pagada</div>
+							<input type="checkbox" name="estado" value="anulada"><div class="tipos_de_pago">Anulada</div>
+						</td>
 					</tr>					
 				</table>
 				<div class="contenedor-facturas">
@@ -124,7 +138,7 @@ PARA:
 				<hr>
 				<label class='contact'>Consecutivo:</label>
 				<input id="consecutivo" class="input_uno" autocomplete="off" type="text" style="width: 100px;"/>
-				<input type="button" class="boton-carga" onclick="cargarFactura()" value="Cargar Proforma"/>
+				<input type="button" class="boton-carga" onclick="cargarFactura()" value="Cargar"/>
 				<p class="contact" style="display:inline;"><label for="impresion">Impresión:</label></p> 					
 				<select id="tipo_impresion" onChange="cambiarTipoImpresion(this.value)" class="impresion" name="impresion" >					
 					<option value="c">A4</option>
@@ -132,7 +146,8 @@ PARA:
 				<input type="button" class="boton_busqueda" onclick="imprimir()" value="Imprimir"/>
 				<input type="button" class="boton_busqueda" onclick="descontarArticulos()" value="Descontar Artículos" style="    background: #F5913B;"/>
 				<input type="button" class="boton_busqueda" onclick="convertirEnFactura()" value="Convertir En Factura" style="    background: #8e44ad;"/>
-
+				<input type="button" class="boton_busqueda" onclick="anularProforma()" value="Anular" style="    background: #ec1717;"/>
+				<input type="button" class="boton_busqueda" onclick="marcarComoPagada()" value="Pagar" style="    background: #0ae6f5;"/>
 				<table id="tabla_productos" class="tabla_productos">
 					<thead>
 						<tr><th class="th_codigo">Código</th>

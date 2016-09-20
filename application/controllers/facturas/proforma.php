@@ -209,7 +209,8 @@ class proforma extends CI_Controller {
 				$consecutivo = trim($_POST['consecutivo']);
 				$sucursal = $data['Sucursal_Codigo'];
 				if($proformaHeaders = $this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
-						$proformaHeaders = $proformaHeaders[0];
+					$proformaHeaders = $proformaHeaders[0];
+					if($proformaHeaders->Proforma_Estado == "pendiente" || $proformaHeaders->Proforma_Estado == "pagada" || $proformaHeaders->Proforma_Estado == "descontada" ){
 						if($articulos = $this->proforma_m->getArticulosProforma($consecutivo, $sucursal)){
 								if($this->valorarSiHayExistenciaDeProductos($articulos, $sucursal)){
 									if($consecutivoFactura = $this->factura->crearfactura($proformaHeaders->TB_03_Cliente_Cliente_Cedula, $proformaHeaders->Proforma_Nombre_Cliente, $proformaHeaders->Proforma_Moneda, $proformaHeaders->Proforma_Observaciones, $proformaHeaders->TB_02_Sucursal_Codigo, $proformaHeaders->Proforma_Vendedor_Codigo, false)){
@@ -219,6 +220,7 @@ class proforma extends CI_Controller {
 										foreach($articulos as $art){
 												$this->articulo->actualizarInventarioRESTA($art->Articulo_Proforma_Codigo, $art->Articulo_Proforma_Cantidad, $sucursal);
 										}
+										$this->proforma_m->marcarComoProformaFacturada($consecutivo, $sucursal);
 										unset($retorno['error']);
 										$retorno['status'] = 'success';
 										$retorno['consecutivo'] = $consecutivoFactura;
@@ -229,6 +231,9 @@ class proforma extends CI_Controller {
 						}else{
 								$retorno['error'] = 'La proforma no posee artículos.';
 						}
+					}else{
+						$retorno['error'] = 'La proforma ya fue facturada o anulada.';
+					}
 				}else{
 						$retorno['error'] = 'La proforma no existe.';
 				}
@@ -255,6 +260,56 @@ class proforma extends CI_Controller {
 	function actualizarCostosFactura($consecutivo, $sucursal){
 		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
 		$this->factura->updateCostosTotales($costosArray, $consecutivo, $sucursal);
+	}
+	
+	function anularProforma(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = 'No se pudo realizar la conversión.';
+		if(isset($_POST['consecutivo']) && trim($_POST['consecutivo']) != ""){
+				include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				$consecutivo = trim($_POST['consecutivo']);
+				$sucursal = $data['Sucursal_Codigo'];
+				if($proformaHeaders = $this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
+					$proformaHeaders = $proformaHeaders[0];
+					if($proformaHeaders->Proforma_Estado == "pendiente"){
+						$this->proforma_m->marcarComoProformaAnulada($consecutivo, $sucursal);
+						unset($retorno['error']);
+						$retorno['status'] = 'success';
+					}else{
+						$retorno['error'] = 'La proforma ya fue facturada, descontada, pagada o anulada.';
+					}
+				}else{
+						$retorno['error'] = 'La proforma no existe.';
+				}
+		}else{
+				$retorno['error'] = 'URL con formato indebido.';
+		}	
+		echo json_encode($retorno);
+	}
+	
+	function marcarComoPagada(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = 'No se pudo realizar la conversión.';
+		if(isset($_POST['consecutivo']) && trim($_POST['consecutivo']) != ""){
+				include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				$consecutivo = trim($_POST['consecutivo']);
+				$sucursal = $data['Sucursal_Codigo'];
+				if($proformaHeaders = $this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
+					$proformaHeaders = $proformaHeaders[0];
+					if($proformaHeaders->Proforma_Estado != "anulada"){
+						$this->proforma_m->marcarComoProformaPagada($consecutivo, $sucursal);
+						unset($retorno['error']);
+						$retorno['status'] = 'success';
+					}else{
+						$retorno['error'] = 'La proforma está anulada.';
+					}
+				}else{
+						$retorno['error'] = 'La proforma no existe.';
+				}
+		}else{
+				$retorno['error'] = 'URL con formato indebido.';
+		}	
+		echo json_encode($retorno);
 	}
 	
  

@@ -4451,3 +4451,9 @@ CREATE TABLE IF NOT EXISTS `TB_53_Articulos_Traspaso_Inventario` (
 ENGINE = InnoDB;
 
 ALTER TABLE `tb_53_articulos_traspaso_inventario` CHANGE `Id` `Id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `TB_28_Productos_Notas_Credito` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Unitario`, ADD `Descuento` DOUBLE NOT NULL AFTER `Precio_Final`, ADD `Exento` BOOLEAN NOT NULL AFTER `Descuento`, ADD `No_Retencion` BOOLEAN NOT NULL AFTER `Exento`; 
+
+RENAME TABLE tb_46_relacion_desampa TO tb_46_relacion_trueque;
+ALTER TABLE tb_46_relacion_trueque ADD Sucursal INT NOT NULL AFTER Documento;
+UPDATE tb_46_relacion_trueque SET Sucursal=7

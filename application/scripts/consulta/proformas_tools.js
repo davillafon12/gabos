@@ -46,7 +46,7 @@ function llamarFacturas(){
 		$.ajax({
 			url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/getProformasFiltradas',
 			type: "POST",	
-			data: {'cliente':$("#cedula").val(),'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val()},				
+			data: {'cliente':$("#cedula").val(),'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val(), 'estado':estadosSeleccionados()},				
 			success: function(data, textStatus, jqXHR)
 			{
 				try{
@@ -503,6 +503,90 @@ function convertirEnFactura(){
 																		notyMsg(dataR[0].error, "error");
 																}else{
 																		notyMsg("La proforma se creó con éxito. <br>Número de factura: "+dataR[0].consecutivo, "success");
+																}
+															}
+															catch(e){
+																	notyMsg("Error al mostrar resultado.", "error");
+															}			
+														},
+														error: function (jqXHR, textStatus, errorThrown)
+														{}
+													});				
+										}
+									}
+	});
+}
+
+function anularProforma(){
+	consecutivo = $("#consecutivo").val();
+	if(consecutivo.trim()===''){
+		notyMsg('Debe ingresar un consecutivo válido', 'error');
+		return false;
+	}else if(consecutivo!=consecutivoActual){
+		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
+		return false;
+	}
+	
+	
+	$.prompt("¡Esto anulará la proforma cargada!", {
+			title: "¿Esta seguro que desea anular la proforma?",
+			buttons: { "Si, estoy seguro": true, "Cancelar": false },
+			submit:function(e,v,m,f){
+										if(v){
+													$.ajax({
+														url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/anularProforma",
+														type: "POST",
+														data: {'consecutivo':consecutivo},		
+														success: function(data, textStatus, jqXHR)
+														{			
+															try{
+																dataR = $.parseJSON('[' + data.trim() + ']');
+																if(dataR[0].status==="error"){
+																		notyMsg(dataR[0].error, "error");
+																}else{
+																		notyMsg("La proforma se anuló con éxito.", "success");
+																}
+															}
+															catch(e){
+																	notyMsg("Error al mostrar resultado.", "error");
+															}			
+														},
+														error: function (jqXHR, textStatus, errorThrown)
+														{}
+													});				
+										}
+									}
+	});
+}
+
+function marcarComoPagada(){
+	consecutivo = $("#consecutivo").val();
+	if(consecutivo.trim()===''){
+		notyMsg('Debe ingresar un consecutivo válido', 'error');
+		return false;
+	}else if(consecutivo!=consecutivoActual){
+		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
+		return false;
+	}
+	
+	
+	$.prompt("¡Esto marcará la proforma cargada como pagada!", {
+			title: "¿Esta seguro que desea marcar como pagada la proforma cargada?",
+			buttons: { "Si, estoy seguro": true, "Cancelar": false },
+			submit:function(e,v,m,f){
+										if(v){
+													$.ajax({
+														url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/marcarComoPagada",
+														type: "POST",
+														data: {'consecutivo':consecutivo},		
+														success: function(data, textStatus, jqXHR)
+														{			
+															try{
+																dataR = $.parseJSON('[' + data.trim() + ']');
+																if(dataR[0].status==="error"){
+																		notyMsg(dataR[0].error, "error");
+																}else{
+																		notyMsg("La proforma se marcó como pagada con éxito.", "success");
 																}
 															}
 															catch(e){

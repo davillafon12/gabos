@@ -427,7 +427,7 @@ Class proforma_m extends CI_Model
 		$this->db->update('TB_10_Proforma' ,$data);		
 	}
 	
-	function getProformasFiltradas($cliente, $desde, $hasta, $sucursal){
+	function getProformasFiltradas($cliente, $desde, $hasta, $sucursal, $estado){
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
 				$facturas_trueque = $this->getProformasTrueque($sucursal);
 				$sucursal = $this->sucursales_trueque[$sucursal];
@@ -449,6 +449,7 @@ Class proforma_m extends CI_Model
 		$this->setFiltradoCliente($cliente);
 		$this->setFiltradoFechaDesde($desde);
 		$this->setFiltradoFechaHasta($hasta);
+		$this->setFiltradoEstado($estado);
 		$query = $this -> db -> get();
 		if($query -> num_rows() != 0)
 		{
@@ -477,6 +478,12 @@ Class proforma_m extends CI_Model
 		if(trim($fecha)!=''){
 			$fecha = $this->convertirFecha($fecha, " 23:59:59");
 			$this->db->where('Proforma_Fecha_Hora <=', $fecha);
+		}
+	}
+	
+	function setFiltradoEstado($estados){
+		if(sizeOf($estados)>0){
+			$this->db->where_in('Proforma_Estado', $estados);
 		}
 	}
 	
@@ -543,8 +550,34 @@ Class proforma_m extends CI_Model
 					"Sucursal" => $sucursal
 			);
 			$this->db->insert("TB_47_Descuento_Proforma", $datos);
+			
+			$datos = array("Proforma_Estado" => "descontada");
+			$this->db->where('Proforma_Consecutivo', $proforma);
+			$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+			$this->db->update("tb_10_proforma", $datos);
+	}
+
+	
+	function marcarComoProformaFacturada($proforma, $sucursal){
+		$datos = array("Proforma_Estado" => "facturada");
+		$this->db->where('Proforma_Consecutivo', $proforma);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->update("tb_10_proforma", $datos);
 	}
 	
+	function marcarComoProformaAnulada($proforma, $sucursal){
+		$datos = array("Proforma_Estado" => "anulada");
+		$this->db->where('Proforma_Consecutivo', $proforma);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->update("tb_10_proforma", $datos);
+	}
+	
+	function marcarComoProformaPagada($proforma, $sucursal){
+		$datos = array("Proforma_Estado" => "pagada");
+		$this->db->where('Proforma_Consecutivo', $proforma);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->update("tb_10_proforma", $datos);
+	}
 	
 }
 

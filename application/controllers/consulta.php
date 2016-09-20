@@ -434,10 +434,10 @@ class consulta extends CI_Controller {
 			$cliente = $_POST['cliente'];
 			$desde = $_POST['desde'];
 			$hasta = $_POST['hasta'];
-			
+			$estado = $this->convertirArray($_POST['estado']);
 			if($this->verificarFecha($desde)&&$this->verificarFecha($hasta)){				
 				include 'get_session_data.php';
-				if($facturas = $this->proforma_m->getProformasFiltradas($cliente, $desde, $hasta, $data['Sucursal_Codigo'])){
+				if($facturas = $this->proforma_m->getProformasFiltradas($cliente, $desde, $hasta, $data['Sucursal_Codigo'], $estado)){
 					unset($retorno['error']);
 					$retorno['status'] = 'success';
 					$retorno['facturas'] = $facturas;
