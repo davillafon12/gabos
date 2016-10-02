@@ -338,9 +338,11 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal){
+/*
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
+*/
 		$this->db->select("
 		Codigo AS codigo, 
 		Descripcion AS descripcion, 
