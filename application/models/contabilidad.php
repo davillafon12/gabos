@@ -805,6 +805,7 @@ Class contabilidad extends CI_Model
 			WHERE (TB_07_Factura.Factura_Tipo_Pago = 'tarjeta'
 			OR TB_07_Factura.Factura_Tipo_Pago = 'mixto')
 			AND TB_07_Factura.TB_02_Sucursal_Codigo = $sucursal
+			AND TB_18_Tarjeta.TB_07_Factura_TB_02_Sucursal_Codigo = $sucursal
 			AND TB_18_Tarjeta.TB_22_Banco_Banco_Codigo = $banco
 			AND TB_07_Factura.Factura_Fecha_Hora > '$inicio'
 			AND TB_07_Factura.Factura_Fecha_Hora < '$final'
