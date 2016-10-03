@@ -232,7 +232,7 @@ function isCantidadValida(valor){
 	valor = valor.replace(',','.');	
 	return isNumber(valor);
 }
-
+ 
 
 function realizarCierreCaja(){
 	cantidad = $("#input_retiro_parcial").html().replace("₡", "").trim();

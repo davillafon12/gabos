@@ -197,7 +197,8 @@ class consulta extends CI_Controller {
 									
 									$cantidadArt = $art->bueno + $art->defectuoso;
 									//Calculamos el precio total de los articulos
-									$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+									//$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+									$precio_total_articulo = $art->precio*$cantidadArt;
 									$precio_total_articulo_sin_descuento = $art->precio*$cantidadArt;
 									$precio_articulo_final = $art->precio_final;
 									$precio_articulo_final = $precio_articulo_final * $cantidadArt;
@@ -738,21 +739,18 @@ class consulta extends CI_Controller {
 		$iva = 0;
 		$costo_sin_iva = 0;
 		$retencion = 0;
-		
 		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($notas as $nota){
 				
-				$notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($nota->Consecutivo, $sucursal);
-				$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
-				
-
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $sucursal)){
+					
 					foreach($notaCreditoBody as $art){
-			
+						$cliente = $this->cliente->getClientes_Cedula($nota->Cliente);
 						
 						$cantidadArt = $art->bueno + $art->defectuoso;
 						//Calculamos el precio total de los articulos
-						$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+						//$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+						$precio_total_articulo = $art->precio*$cantidadArt;
 						$precio_total_articulo_sin_descuento = $art->precio*$cantidadArt;
 						$precio_articulo_final = $art->precio_final;
 						$precio_articulo_final = $precio_articulo_final * $cantidadArt;
@@ -760,15 +758,14 @@ class consulta extends CI_Controller {
 						//Calculamos los impuestos
 						
 						$isExento = $art->exento;
-						
 						if($isExento=='0'){
-							$costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
+							$costo_sin_iva += $precio_total_articulo/(1+(floatval($nota->Por_IVA)/100));
 							
 							
-							$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100)));
-							$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($notaCreditoHead[0]->iva)/100))); 
+							$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($nota->Por_IVA)/100)));
+							$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($nota->Por_IVA)/100))); 
 							
-							$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
+							$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($nota->Por_IVA)/100));
 							$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
 							
 							if(!$art->no_retencion){
@@ -780,7 +777,7 @@ class consulta extends CI_Controller {
 							//$retencion = 0;
 						}
 						$costo_total += $precio_total_articulo;
-			
+
 					
 					
 					}

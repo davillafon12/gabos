@@ -523,7 +523,8 @@ class impresion extends CI_Controller {
 									
 									$cantidadArt = $art->bueno + $art->defectuoso;
 									//Calculamos el precio total de los articulos
-									$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+									//$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+									$precio_total_articulo = $art->precio*$cantidadArt;
 									$precio_total_articulo_sin_descuento = $art->precio*$cantidadArt;
 									$precio_articulo_final = $art->precio_final;
 									$precio_articulo_final = $precio_articulo_final * $cantidadArt;
@@ -2196,20 +2197,16 @@ class impresion extends CI_Controller {
 		$retencion = 0;
 		if($notas = $this->contabilidad->getNotaCreditoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($notas as $nota){
+				
 				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($nota->Consecutivo, $sucursal)){
 					
 					foreach($notaCreditoBody as $art){
-/*
-						$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
-						$total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100));
-						$subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100)));
-					
-*/
-					
+						$cliente = $this->cliente->getClientes_Cedula($nota->Cliente);
 						
 						$cantidadArt = $art->bueno + $art->defectuoso;
 						//Calculamos el precio total de los articulos
-						$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+						//$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+						$precio_total_articulo = $art->precio*$cantidadArt;
 						$precio_total_articulo_sin_descuento = $art->precio*$cantidadArt;
 						$precio_articulo_final = $art->precio_final;
 						$precio_articulo_final = $precio_articulo_final * $cantidadArt;
@@ -2217,7 +2214,6 @@ class impresion extends CI_Controller {
 						//Calculamos los impuestos
 						
 						$isExento = $art->exento;
-						
 						if($isExento=='0'){
 							$costo_sin_iva += $precio_total_articulo/(1+(floatval($nota->Por_IVA)/100));
 							
@@ -2241,6 +2237,13 @@ class impresion extends CI_Controller {
 					
 					
 					}
+					
+					
+					if($cliente[0]->Aplica_Retencion == "1")
+						$retencion = 0;
+					
+					
+					
 					$iva = $costo_total-$costo_sin_iva;
 					$costo_total += $retencion;
 				}
