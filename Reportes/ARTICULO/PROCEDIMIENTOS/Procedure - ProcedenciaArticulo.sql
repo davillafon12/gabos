@@ -1,4 +1,4 @@
-USE garotas_bonitas_main_db; 
+USE gabo_trueque; 
 DELIMITER ;;
 CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_ProcedenciaArticulo
 (

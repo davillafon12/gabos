@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListaGeneral" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfee2ae5-d550-4526-9aa5-709ed40c5284">
 	<property name="ireport.zoom" value="2.593742460100016"/>
-	<property name="ireport.x" value="1072"/>
-	<property name="ireport.y" value="160"/>
+	<property name="ireport.x" value="746"/>
+	<property name="ireport.y" value="124"/>
 	<parameter name="paFechaI" class="java.lang.String"/>
 	<parameter name="paFechaF" class="java.lang.String"/>
 	<parameter name="paSucursal" class="java.lang.String"/>
 	<parameter name="paCedula" class="java.lang.String"/>
 	<parameter name="paNombre" class="java.lang.String"/>
+	<parameter name="paSuDesamparados" class="java.lang.String"/>
+	<parameter name="paSuGarotasBonitas" class="java.lang.String"/>
 	<queryString language="plsql">
-		<![CDATA[{call PA_NotaCredito($P{paFechaI},$P{paFechaF},$P{paSucursal},$P{paCedula},$P{paNombre})}]]>
+		<![CDATA[{call PA_NotaCredito($P{paFechaI},$P{paFechaF},$P{paSucursal},$P{paCedula},$P{paNombre},$P{paSuDesamparados},$P{paSuGarotasBonitas})}]]>
 	</queryString>
-	<field name="Cliente_Cedula" class="java.lang.String"/>
+	<field name="Cliente_Cedula" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="Nombre" class="java.lang.String"/>
-	<field name="Fecha_Creacion" class="java.sql.Timestamp"/>
-	<field name="Factura_Aplicar" class="java.lang.String"/>
-	<field name="Consecutivo" class="java.lang.String"/>
-	<field name="Tipo_Pago" class="java.lang.String"/>
-	<field name="Factura_Acreditar" class="java.lang.String"/>
+	<field name="Fecha_Creacion" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Factura_Aplicar" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Consecutivo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Tipo_Pago" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Factura_Acreditar" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="MontoDefectuoso" class="java.lang.Double"/>
 	<field name="MontoBueno" class="java.lang.Double"/>
-	<field name="Total" class="java.lang.Double"/>
-	<field name="Retencion" class="java.lang.Double"/>
+	<field name="Retencion" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Total" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<variable name="Total_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{Total}]]></variableExpression>
 	</variable>

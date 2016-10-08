@@ -1,4 +1,4 @@
-USE garotas_bonitas_main_db; 
+USE gabo_trueque; 
 DELIMITER ;;
 
 CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_ConsultaArticulos
@@ -30,6 +30,7 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_ConsultaArticulos
 																where   pre2.Precio_Numero = '); 
 	SET @EXENTO 		= CONCAT(' AND art.Articulo_Exento =  '); 
 	SET @QUERY 			= CONCAT( 'SELECT  art.Articulo_Codigo Codigo, 
+											art.TB_05_Familia_Familia_Codigo as familia,
 											art.Articulo_Descripcion descripcion,
 											art.Articulo_Cantidad_Inventario CantInventario, 
 											art.Articulo_Cantidad_Defectuoso CantDefectuoso, 
@@ -120,10 +121,10 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_ConsultaArticulos
   SET @QUERY = CONCAT (@QUERY, @AGRUPACION);   
   -- select @QUERY as 'Resultado'; 
   -- preparamos el objete Statement a partir de nuestra variable
-  PREPARE smpt FROM @Query;
+   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
-  EXECUTE smpt;
+   EXECUTE smpt;
   -- liberamos la memoria
-  DEALLOCATE PREPARE smpt;
+   DEALLOCATE PREPARE smpt;
  END
 ;;

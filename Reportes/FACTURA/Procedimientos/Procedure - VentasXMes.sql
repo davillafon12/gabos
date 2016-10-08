@@ -1,4 +1,4 @@
-USE garotas_bonitas_main_db; 
+USE gabo_trueque; 
 DELIMITER ;;
 CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXMes
 (
@@ -25,13 +25,13 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXMes
 									  fac.Factura_Monto_Total - fac.Factura_Retencion AS total,
 									  fac.Factura_Monto_Total as TotalGlobal
 									FROM  tb_07_factura fac ');	
-	SET @QUERYDESAMPA =  CONCAT( ' inner join tb_46_relacion_desampa des on fac.Factura_Consecutivo  = des.Consecutivo and ' , 
+	SET @QUERYDESAMPA =  CONCAT( ' inner join tb_46_relacion_trueque des on fac.Factura_Consecutivo  = des.Consecutivo and ' , 
 									' des.Documento = \'factura\'');
 	SET @WHEREDESAMPA = CONCAT(' AND fac.Factura_Consecutivo NOT IN (
 								  SELECT
 								  fac.Factura_Consecutivo AS Factura_Consecutivo
 								FROM  tb_07_factura fac 
-									  inner join tb_46_relacion_desampa des on fac.Factura_Consecutivo  = des.Consecutivo and
+									  inner join tb_46_relacion_trueque des on fac.Factura_Consecutivo  = des.Consecutivo and
 									  des.Documento = \'factura\'', @wherePrincipal, ')');
 	IF paSuDesamparados = 'true' AND paSuGarotasBonitas = 'false' and (paSucursal = '2' or paSucursal = '7') then 
 		SET @QUERY = CONCAT(@QUERY, @QUERYDESAMPA, @wherePrincipal);

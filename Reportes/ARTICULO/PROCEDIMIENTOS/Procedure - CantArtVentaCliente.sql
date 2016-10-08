@@ -1,4 +1,4 @@
-USE garotas_bonitas_main_db; 
+USE gabo_trueque; 
 DELIMITER ;;
 CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_CantArtVentaCliente
 (
@@ -25,13 +25,13 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_CantArtVentaCliente
 													  f.Factura_Vendedor_Codigo = af.TB_07_Factura_Factura_Vendedor_Codigo and 
 													  f.Factura_Vendedor_Sucursal = af.TB_07_Factura_Factura_Vendedor_Sucursal and 
 													  f.TB_03_Cliente_Cliente_Cedula = af.TB_07_Factura_TB_03_Cliente_Cliente_Cedula');	
-	SET @QUERYDESAMPA =  CONCAT( ' inner join tb_46_relacion_desampa des on f.Factura_Consecutivo  = des.Consecutivo and ' , 
+	SET @QUERYDESAMPA =  CONCAT( ' inner join tb_46_relacion_trueque des on f.Factura_Consecutivo  = des.Consecutivo and ' , 
 									' des.Documento = \'factura\'');
 	SET @WHEREDESAMPA = CONCAT(' AND f.Factura_Consecutivo NOT IN (
 								  SELECT
 								  f.Factura_Consecutivo AS Factura_Consecutivo
 								FROM  tb_07_factura f 
-									  inner join tb_46_relacion_desampa des on f.Factura_Consecutivo  = des.Consecutivo and
+									  inner join tb_46_relacion_trueque des on f.Factura_Consecutivo  = des.Consecutivo and
 									  des.Documento = \'factura\'', @wherePrincipal, ')');
 	IF paCedula <> 'false' then 
 		SET @wherePrincipal = CONCAT(@wherePrincipal, ' and f.TB_03_Cliente_Cliente_Cedula = ', '\'', paCedula, '\'');

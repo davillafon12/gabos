@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InventarioArticulos" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfee2ae5-d550-4526-9aa5-709ed40c5284">
-	<property name="ireport.zoom" value="1.8627639691774773"/>
-	<property name="ireport.x" value="76"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.6300000000000257"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="187"/>
 	<parameter name="paSucursal" class="java.lang.String"/>
 	<parameter name="paFamilia" class="java.lang.String"/>
 	<parameter name="paRangoC" class="java.lang.String"/>
@@ -107,7 +107,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="80" y="0" width="273" height="20" uuid="f05758ae-9380-4c92-9262-c0d83df57f75"/>
+				<reportElement x="127" y="0" width="226" height="20" uuid="f05758ae-9380-4c92-9262-c0d83df57f75"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -148,6 +148,13 @@
 				</textElement>
 				<text><![CDATA[Defectuoso]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="47" height="20" uuid="5d228150-15cc-4c8d-a425-36a44ec003fa"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Familia]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -160,7 +167,7 @@
 				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="0" width="273" height="13" uuid="9e857cd5-2b67-416a-a050-c932aeab5bd3"/>
+				<reportElement x="127" y="0" width="226" height="13" uuid="9e857cd5-2b67-416a-a050-c932aeab5bd3"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -200,6 +207,10 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CantDefectuoso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="47" height="13" uuid="e90c16df-538c-4a84-8ce3-2e6c07ab1f24"/>
+				<textFieldExpression><![CDATA[$F{FamCodigo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -1,6 +1,6 @@
 -- NOTA: ESTA VENTA TRAE TODOS LOS MONTOS DE LOS CLIENTES	
 	
-USE garotas_bonitas_main_db; 
+USE gabo_trueque; 
 DELIMITER ;;
 
 CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturasResumido
