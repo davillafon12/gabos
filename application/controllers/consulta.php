@@ -199,7 +199,7 @@ class consulta extends CI_Controller {
 									//Calculamos el precio total de los articulos
 									//$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
 									$precio_total_articulo = $art->precio*$cantidadArt;
-									$precio_total_articulo_sin_descuento = $art->precio*$cantidadArt;
+									$precio_total_articulo_sin_descuento = ($art->precio/(1-($art->descuento/100)))*$cantidadArt;
 									$precio_articulo_final = $art->precio_final;
 									$precio_articulo_final = $precio_articulo_final * $cantidadArt;
 									
