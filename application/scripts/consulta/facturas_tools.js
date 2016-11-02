@@ -355,10 +355,10 @@ function setProductosFactura(productos){
 		fila += "<td style='text-align: right;'><label class='contact' id='costo_total_articulo_"+(i+1)+"'></label></td>";
 		
 		fila += "</tr>";
-		
-		agregarTooltip("#descripcion_articulo_"+(i+1));	
 
 		$("#contenidoArticulos").append(fila);
+		
+		agregarTooltip("#descripcion_articulo_"+(i+1));	
 	}
 	$("#cantidad_total_articulos").html(cantidadTotalDeArticulos);
 	setCostos(cantidad);
