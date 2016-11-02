@@ -172,6 +172,7 @@ class recibos extends CI_Controller {
 				}elseif($saldoALiquidar>0){ //Si el saldo de esta factura es mayor al ingresado pero mayor a cero
 					//Puedo saldar parte de la misma
 					$saldoActual -= $saldoALiquidar;
+					$saldoActual = $saldoActual < 1 ? 0 : $saldoActual;
 					$this->contabilidad->saldarFactura($codigoCredito, $saldoActual);
 					
 					//Agregar recibo
