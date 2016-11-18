@@ -801,7 +801,11 @@ class caja extends CI_Controller {
 							$facturaHEAD['ivapor']=$row->Proforma_Porcentaje_IVA;
 							$facturaHEAD['retencion']=$row->Proforma_Retencion;
 							$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;	
-							
+							$facturaHEAD['estado']=$row->Proforma_Estado;
+							//Cargamos la variable que ocupamos de cliente
+							$facturaHEAD['cliente_sucursal'] = $row->Proforma_Cliente_Sucursal;
+							$facturaHEAD['cliente_exento'] = $row->Proforma_Cliente_Exento;
+							$facturaHEAD['cliente_retencion'] = $row->Proforma_Cliente_No_Retencion;
 							$facturaHEAD['sucursal']= $data['Sucursal_Codigo'];
 							$facturaHEAD['servidor_impresion']= $this->configuracion->getServidorImpresion();
 							$facturaHEAD['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");										
@@ -898,12 +902,13 @@ class caja extends CI_Controller {
 					$articulo['descuento']=$row->Articulo_Proforma_Descuento;
 					$articulo['exento']=$row->Articulo_Proforma_Exento;
 					$articulo['precio']=$row->Articulo_Proforma_Precio_Unitario;
-					
+					$articulo['retencion']=$row->Articulo_Proforma_No_Retencion;
+					$articulo['precioFinal']=$row->Articulo_Proforma_Precio_Final;
 					//Procesamos la imagen
 					$articulo['imagen'] = $row->Articulo_Proforma_Imagen;				
 					$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$articulo['imagen'].'.jpg';
 					//return $ruta_a_preguntar;
-					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00';}					
+					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00.jpg';}					
 					if($inventario = $this->articulo->inventarioActual($articulo['codigo'], $data['Sucursal_Codigo'])){
 						$articulo['bodega']=$inventario;
 					}else{

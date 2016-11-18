@@ -222,6 +222,17 @@ function cargarEncabezado(consecutivo){
 					sucursal = facturaHEAD[0].sucursal;
 					servidorImpresion = facturaHEAD[0].servidor_impresion;
 					token = facturaHEAD[0].token;
+					
+					$(".boton-estado-proforma").prop('disabled', false);
+					$(".boton-estado-proforma").css("opacity","1");
+					$(".boton-estado-proforma").css("filter","alpha(opacity=100");
+					$(".boton-estado-proforma").css("cursor","pointer");
+					if(facturaHEAD[0].estado == 'sin_proces'){
+						$(".boton-estado-proforma").prop('disabled', true);
+						$(".boton-estado-proforma").css("opacity","0.5");
+						$(".boton-estado-proforma").css("filter","alpha(opacity=50");
+						$(".boton-estado-proforma").css("cursor","not-allowed");					
+					}
 				}
 			}
 			catch(e){

@@ -312,6 +312,34 @@ class proforma extends CI_Controller {
 		echo json_encode($retorno);
 	}
 	
+	function fijarProforma(){
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		$this->load->helper(array('form'));
+		$conf_array = $this->configuracion->getConfiguracionArray();
+		$data['c_array'] = $conf_array;
+		$this->load->view('facturas/fijar_proforma', $data);	
+	}
+	
+	function getFacturasSinProcesar(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		if(isset($_POST['cliente'])){
+			$cliente = $_POST['cliente'];
+			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			if($facturas = $this->proforma_m->getProformasSinProcesar($cliente, $data['Sucursal_Codigo'])){
+				unset($retorno['error']);
+				$retorno['status'] = 'success';
+				$retorno['facturas'] = $facturas;
+			}else{
+				//No hay facturas
+				$retorno['error'] = '3';
+			}	
+		}else{
+			//URL MALA
+			$retorno['error'] = '2';
+		}
+		echo json_encode($retorno);
+	}
  
 }// FIN DE LA CLASE
 

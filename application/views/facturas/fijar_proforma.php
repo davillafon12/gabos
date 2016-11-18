@@ -39,13 +39,73 @@ PARA:
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_proformas.css'); ?>">
 		<!--CARGA DEL SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/proformas_tools.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/proforma_fijar_tools.js'); ?>"></script>
 		<!--JQUERY IMPROMPTU-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
+		
 		<!--CSS ESTILO DEL MODAL-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<script>
 			var decimales = '<?php echo $this->configuracion->getDecimales();?>';
+		</script>
+		
+		<style>
+			.cant_total_articulos_div {
+			    margin-left: 10px;
+			}
+			.cant_total_articulos_p {
+			    color: #000;
+			    font-weight: bold;
+			    font-size: 14px;
+			    font-family: Arial, Helvetica;
+			    margin-top: 0px;
+			    margin-bottom: 0px;
+			    display: inline;
+			}
+			.imagen_arrow {
+			    display: none;
+			}
+			.imagen_arrow {
+			    position: absolute;
+			    cursor: pointer;
+			    margin-top: -2px;
+			    margin-left: -10px;
+			    z-index: 0;
+			}
+			.input_codigo_articulo {
+			    width: 100%;
+			    box-sizing: border-box;
+			    -webkit-box-sizing: border-box;
+			    -moz-box-sizing: border-box;
+			    z-index: 2;
+			}
+			.articulo_specs {
+			    color: #000;
+			    font-weight: bold;
+			    font-size: 14px;
+			    font-family: Arial, Helvetica;
+			}
+			.cantidad_articulo {
+			    width: 100%;
+			    box-sizing: border-box;
+			    -webkit-box-sizing: border-box;
+			    -moz-box-sizing: border-box;
+			    text-align: center;
+			    color: #000;
+			    font-weight: bold;
+			    font-size: 14px;
+			    font-family: Arial, Helvetica;
+			}
+		</style>
+		
+		<script>
+			
+			<?php
+			echo "var sucursal=$Sucursal_Codigo;
+				  var tipoImpresion='t';";
+		?>
+			var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
+			var aplicarRetencionHacienda = <?php echo $this->configuracion->getAplicarRetencion();?>
 		</script>
 	</head>
 	<body>
@@ -63,7 +123,7 @@ PARA:
 			<p class="titulo_wrapper">Consulta de Proformas</p>
 			<hr class="division_wrapper">
 			<p class="contenido_wrapper">
-			<div class="contenedor">
+			<div class="contenedor" style="width: 98%; margin: 0 auto;">
 				<table class="tabla-filtrado">
 					<tr><td><p class="contact">Filtros</p></td></tr>
 					<tr>
@@ -73,9 +133,6 @@ PARA:
 						<td>
 							
 						</td>
-						<td>
-							<p class="contact">Fechas</p>
-						</td>
 					</tr>
 					<tr>
 						<td>
@@ -83,12 +140,6 @@ PARA:
 						</td>
 						<td>
 							<input id="cedula" class="input_uno" placeholder="Inserte el numero de cédula" autocomplete="off" type="text" onkeyup="buscarCedula(event);" />
-						</td>
-						<td>
-							<p class="contact">Desde:</p>
-						</td>
-						<td>
-							<input id="fecha_desde" class="input_uno" style="width: 100px;" autocomplete="off" type="text"/>
 						</td>
 					</tr>
 					<tr>
@@ -98,30 +149,14 @@ PARA:
 						<td>
 							<input id="nombre" class="input_uno ui-autocomplete-input" placeholder="Inserte el nombre del cliente" autocomplete="off" type="text" />
 						</td>
-						<td>
-							<p class="contact">Hasta:</p>
-						</td>
-						<td>
-							<input id="fecha_hasta" class="input_uno" style="width: 100px;" autocomplete="off" type="text"/>
-						</td>
 					</tr>
 					<tr>
-						<td colspan="4" style="text-align: center;">
-							<p class="contact">Estado</p>
-						</td>
+						
 					</tr>
 					<tr>
-						<td colspan="4" style="text-align: center;">
-							<input type="checkbox" name="estado" value="sin_proces"><div class="tipos_de_pago">Sin Procesar</div>
-							<input type="checkbox" name="estado" value="pendiente"><div class="tipos_de_pago">Pendiente</div>
-							<input type="checkbox" name="estado" value="descontada"><div class="tipos_de_pago">Descontada</div>
-							<input type="checkbox" name="estado" value="facturada"><div class="tipos_de_pago">Facturada</div>
-							<input type="checkbox" name="estado" value="pagada"><div class="tipos_de_pago">Pagada</div>
-							<input type="checkbox" name="estado" value="anulada"><div class="tipos_de_pago">Anulada</div>
-						</td>
-					</tr>					
+											</tr>					
 				</table>
-				<div class="contenedor-facturas">
+				<div class="contenedor-facturas" style="top: -190px; margin-bottom: -200px;">
 					<table class="tabla-facturas">
 						<thead>
 							<tr class="header">
@@ -140,83 +175,90 @@ PARA:
 				<label class='contact'>Consecutivo:</label>
 				<input id="consecutivo" class="input_uno" autocomplete="off" type="text" style="width: 100px;"/>
 				<input type="button" class="boton-carga" onclick="cargarFactura()" value="Cargar"/>
-				<p class="contact" style="display:inline;"><label for="impresion">Impresión:</label></p> 					
-				<select id="tipo_impresion" onChange="cambiarTipoImpresion(this.value)" class="impresion" name="impresion" >					
-					<option value="c">A4</option>
+				<input type="button" class="boton_busqueda" onclick="procesarProforma()" id="boton_procesar" value="Procesar" style="    background:rgba(142, 68, 173, 0.54); float:right;     margin-left: 10px;     cursor: not-allowed;" disabled/>
+				<select id="tipo_moneda" class="moneda" name="moneda" style="display:none" disabled>
+					<option value="colones" selected="">Colones - ₡</option>
+					<option value="dolares">Dolares - &#036;</option>
 				</select>
-				<input type="button" class="boton_busqueda" onclick="imprimir()" value="Imprimir"/>
-				<input type="button" class="boton_busqueda boton-estado-proforma" onclick="descontarArticulos()" value="Descontar Artículos" style="    background: #F5913B;"/>
-				<input type="button" class="boton_busqueda boton-estado-proforma" onclick="convertirEnFactura()" value="Convertir En Factura" style="    background: #8e44ad;"/>
-				<input type="button" class="boton_busqueda boton-estado-proforma" onclick="anularProforma()" value="Anular" style="    background: #ec1717;"/>
-				<input type="button" class="boton_busqueda boton-estado-proforma" onclick="marcarComoPagada()" value="Pagar" style="    background: #0ae6f5;"/>
-				<table id="tabla_productos" class="tabla_productos">
+				<input id="cantidad_decimales" type="hidden" value="<?php echo $c_array['cantidad_decimales'];?>">
+				<input id="iva_porcentaje" type="hidden" value="<?php echo $c_array['iva'];?>">
+				<input id="tipo_cambio_venta" type="hidden" value="<?php echo $c_array['dolar_venta'];?>">
+				<table id="tabla_productos" class="tabla_productos" >
 					<thead>
-						<tr><th class="th_codigo">Código</th>
+						<th class="th_codigo">Código</th>
 						<th class="th_descripcion">Descripción</th>
 						<th class="th_cantidad">Cantidad</th>
-						<th class="th_exento">E</th>
+						<th class="th_bodega">Inventario</th>
 						<th class="th_descuento">Descuento</th>
 						<th class="th_costo_unidad">Precio por unidad</th>
 						<th class="th_costo_total">Precio total</th>	
-					</tr></thead>
+					</thead>
 					<tbody id="contenidoArticulos" class="contenidoArticulos">
+					
 					
 					</tbody>				
 				</table>
-				<div class="observaciones_div">
-					<p class="contact"><label for="observaciones">Observaciones:</label></p>
-					<textarea id="observaciones" autocomplete="off" class="observaciones" placeholder="" name="observaciones" cols="25" rows="5" maxlength="150" disabled=""></textarea> 
-					<p class="advertencia_longitud">Máximo 150 caracteres</p>				
-				</div>
-				<div class="tabla_costos">
-					<table>
-						<tbody><tr>
-						<td>
-							<p class="contact"><label for="ganancia"><!--Ganancia:--></label></p> 
-						</td>
-						<td>
-							<div id="tipo_moneda_display" class="tipo_moneda_display" style="display:none;"><!--₡--></div>
-							<input id="ganancia" class="input_dos" autocomplete="off" name="ganancia" type="hidden" min="0" disabled=""> 					
-						</td>
-						</tr>
-						<tr>
-						<td>
-							<p class="contact"><label for="costo">Monto:</label></p> 
-						</td>
-						<td>
-							<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
-							<input id="costo" class="input_dos" autocomplete="off" name="costo" type="text" disabled=""> 					
-						</td>
-						</tr>
-						<tr>
-						<td>
-							<p class="contact"><label for="iva">IVA:</label></p> 
-						</td>
-						<td>
-							<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
-							<input id="iva" class="input_dos" autocomplete="off" name="iva" type="text" disabled=""> 
-						</td>
-						</tr>
-						<tr>
-						<td>
-							<p class="contact"><label for="retencion">Retención:</label></p> 
-						</td>
-						<td>
-							<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
-							<input id="retencion" class="input_dos" autocomplete="off" name="retencion" type="text" disabled=""> 
-						</td>
-						</tr>
-						<tr>
-						<td>
-							<p class="contact"><label for="costo_total">Monto Total:</label></p> 
-						</td>
-						<td>
-							<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
-							<input id="costo_total" class="input_dos" autocomplete="off" name="costo_total" type="text" disabled=""> 
-						</td>
-						</tr>
-					</tbody></table>
-				</div>
+			
+			<div class="cant_total_articulos_div">
+				<p class="cant_total_articulos_p">Cantidad Total de Articulos:</p>
+				<p class="cant_total_articulos_p" id="cant_total_articulos">0</p>
+			</div>
+			
+			
+			<div class="observaciones_div">
+				<p class="contact"><label for="observaciones">Observaciones:</label></p>
+				<textarea id="observaciones" autocomplete="off" class="observaciones" placeholder="" name="observaciones" cols="25" rows="5" maxlength="150" disabled></textarea> 
+    			<p class="advertencia_longitud">Máximo 150 caracteres</p>				
+			</div>
+			<div class="tabla_costos">
+				<table>
+					<tr>
+					<td>
+						<p class="contact"><label for="ganancia"><!--Ganancia:--></label></p> 
+					</td>
+					<td>
+						<div id="tipo_moneda_display" class="tipo_moneda_display" style="display:none;"><!--₡--></div>
+						<input id="ganancia" class="input_dos" autocomplete="off" name="ganancia" type="hidden" min="0" disabled> 					
+					</td>
+					</tr>
+					<tr>
+					<td>
+						<p class="contact"><label for="costo">Monto:</label></p> 
+					</td>
+					<td>
+						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
+						<input id="costo" class="input_dos" autocomplete="off" name="costo" type="text" disabled> 					
+					</td>
+					</tr>
+					<tr>
+					<td>
+						<p class="contact"><label for="iva">IVA:</label></p> 
+					</td>
+					<td>
+						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
+						<input id="iva" class="input_dos" autocomplete="off" name="iva" type="text" disabled> 
+					</td>
+					</tr>
+					<tr>
+					<td>
+						<p class="contact"><label for="retencion">Retención:</label></p> 
+					</td>
+					<td>
+						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
+						<input id="retencion" class="input_dos" autocomplete="off" name="retencion" type="text" disabled> 
+					</td>
+					</tr>
+					<tr>
+					<td>
+						<p class="contact"><label for="costo_total">Monto Total:</label></p> 
+					</td>
+					<td>
+						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
+						<input id="costo_total" class="input_dos" autocomplete="off" name="costo_total" type="text" disabled> 
+					</td>
+					</tr>
+				</table>
+			</div>
 			</div><!--CONTENEDOR-->
         </div>		
 

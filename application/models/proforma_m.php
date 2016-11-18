@@ -49,7 +49,7 @@ Class proforma_m extends CI_Model
 			$dataProforma = array(
 	                        'Proforma_Consecutivo'=>mysql_real_escape_string($consecutivo),
 	                        'Proforma_Observaciones'=>mysql_real_escape_string($observaciones), 
-													'Proforma_Estado'=>'pendiente',
+													'Proforma_Estado'=>'sin_procesar',
 													'Proforma_Moneda'=>mysql_real_escape_string($currency),
 													'Proforma_Porcentaje_IVA'=>$c_array['iva'],
 													'Proforma_Tipo_Cambio'=>$c_array['dolar_venta'],
@@ -450,6 +450,38 @@ Class proforma_m extends CI_Model
 		$this->setFiltradoFechaDesde($desde);
 		$this->setFiltradoFechaHasta($hasta);
 		$this->setFiltradoEstado($estado);
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    return $query->result();			
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function getProformasSinProcesar($cliente, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+				$facturas_trueque = $this->getProformasTrueque($sucursal);
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				if(!empty($facturas_trueque)){
+						$this->db->where_in("Proforma_Consecutivo", $facturas_trueque);
+				}
+		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+				$facturas_trueque = $this->getProformasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				if(!empty($facturas_trueque)){
+						$this->db->where_not_in("Proforma_Consecutivo", $facturas_trueque);
+				}
+		}
+		$this->db->select("Proforma_Consecutivo as consecutivo,
+		                   Proforma_Monto_Total as total,
+						   Proforma_Nombre_Cliente as cliente,
+						   date_format(Proforma_Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha", false);
+		$this->db->from('tb_10_proforma');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('Proforma_Estado', "sin_proces");
+		$this->setFiltradoCliente($cliente);
 		$query = $this -> db -> get();
 		if($query -> num_rows() != 0)
 		{
