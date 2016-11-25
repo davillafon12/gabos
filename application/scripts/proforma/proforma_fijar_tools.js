@@ -14,6 +14,8 @@ var infoClientePostAutorizacion = false;
 var cedulaPostAuto = false;
 var clienteEsExento = false;
 var cliente_cedula = 0;
+var fromCheck = true;
+var seCambioFactura = false;
 
 $(function() {
 	 $.datepicker.regional['es'] = {
@@ -220,11 +222,19 @@ function cargarProductos(consecutivo){
 					$("#boton_procesar").css("background","rgba(142, 68, 173, 0.54)");
 					$("#boton_procesar").css("cursor","not-allowed");
 					$("#boton_procesar").prop('disabled', true);
+					
+					$("#boton_editar").css("background","rgba(236, 176, 27, 0.54)");
+					$("#boton_editar").css("cursor","not-allowed");
+					$("#boton_editar").prop('disabled', true);
 				}else if(facturaBODY[0].status==="success"){
 					setProductosFactura(facturaBODY[0].productos);
 					$("#boton_procesar").css("background","rgb(142, 68, 173)");
 					$("#boton_procesar").css("cursor","pointer");
 					$("#boton_procesar").prop('disabled', false);
+					
+					$("#boton_editar").css("background","rgb(236, 176, 27)");
+					$("#boton_editar").css("cursor","pointer");
+					$("#boton_editar").prop('disabled', false);
 				}
 /*
 			}
@@ -1068,5 +1078,531 @@ function setArticulo(articulo, num_fila){
 }
 
 
+function mostrarErroresCargarArticulo(error, num_fila){
+	switch(error){
+		case '1':
+			resetRowFields(num_fila, true);
+			notyConTipo('¡No se pudo cargar el artículo, contacte al administrador!','error');
+		break;
+		case '2':
+			resetRowFields(num_fila, true);
+			notyConTipo('¡URL indebida, contacte al administrador!','error');
+		break;
+		case '4':
+			resetRowFields(num_fila, false);
+			notyConTipo('¡No existe cliente o cédula inválida!','error');
+		break;
+		case '5':
+			//No existe articulo
+			resetRowFields(num_fila, false);			
+		break;
+		case '6':
+			resetRowFields(num_fila, false);
+			notyConTipo('¡No hay más unidades en inventario!','warning');
+		break;
+	}
+}
+
+function changeDiscount(row_num){
+	if (typeof seCambioFactura !== 'undefined') {
+	    if(!seCambioFactura){return false;}
+	}
+	//alert(row_num);
+	$('#pop_up_administrador').bPopup({
+		modalClose: false
+	});
+	document.getElementById("pop_usuario").select();
+	numeroPopUp='2';
+	rowIDpopup=row_num;
+}
 
 
+function closePopUp_Admin(){
+	$('#pop_up_administrador').bPopup().close();
+	if(isCallByDescuento){
+		$("#cedula").val('');
+		$("#nombre").val('');
+		isCallByDescuento = false; //Proviene de facturasCall.js
+	}
+	if(isCajaLoaded&&seCambioFactura){
+		$("#cedula").val('');
+		$("#nombre").val('');
+	}
+	
+}
+
+function clickAceptar_Admin(event){
+	if(checkAdminLog()){
+		isCallByDescuento = false; // Eliminados el flag para que no borre los campos
+		isCajaLoaded = false; //Para que no nos quite los campos de nombre y cedula
+		closePopUp_Admin();
+		isCajaLoaded = true; //Lo volvemos a poner
+		if(numeroPopUp=='1'){ //Si es articulo
+			$('#pop_up_articulo').bPopup({
+				modalClose: false
+			});		
+		}
+		else if(numeroPopUp=='2'){ //Si es descuento
+			$('#pop_up_descuento').bPopup({
+				modalClose: false
+			});	
+		}
+		else if(numeroPopUp=='4'){ //Si es descuento
+			event.stopPropagation();
+			event.preventDefault();
+			makeFacturaEditable();
+		}else if(numeroPopUp=='5'){ //Si es cliente con descuento
+			autorizadoClienteDescuento(); 
+			return false;
+		}
+		//document.getElementById("pop_descripcion").select();
+		//rowIDpopup = rowID;
+	}
+	else{
+		n = noty({
+					   layout: 'topRight',
+					   text: 'Información incorrecta!!!',
+					   type: 'error',
+					   timeout: 4000
+					});		
+		fromCheck=false;
+		document.getElementById("pop_usuario").select();
+	}
+}
+
+function validateNpass(currentID, nextID, e){
+	//alert("Entro");
+	if(fromCheck){}
+	else{fromCheck=true; return false;}
+	
+	if(e!=null){
+		if (e.keyCode == 13) 
+		{
+		    //Si viene del aceptar del modal del administrador validar si va para articulo o descuento
+			if(nextID=='administrador'){
+				if(numeroPopUp=='1'){nextID='pop_descripcion';}
+				else if(numeroPopUp=='2'){nextID='pop_descuento_cambio';}
+				else if(numeroPopUp=='3'){anularPost(); return false;}//Pop proveniente de caja
+				else if(numeroPopUp=='4'){makeFacturaEditable(); return false;}//Pop proveniente de caja
+				else if(numeroPopUp=='5'){autorizadoClienteDescuento(); return false;}
+			}
+			console.log(nextID);
+			//if(currentID.trim=='pop_descripcion'){return false;}
+			if(nextID=='boton_aceptar_popup'||nextID=='boton_aceptar_popup_admin'||nextID=='boton_aceptar_popup_desc'||nextID=='boton_aceptar_popup_cantidad'){document.getElementById(nextID).focus();}
+			else if(nextID!=''){document.getElementById(nextID).select();}//Nos pasamos luego validamos			
+			validatePopUp(currentID);			
+		}
+	}
+}
+
+function validatePopUp(currentID){
+	switch(currentID) {
+				case 'pop_descripcion':
+					//Limpiamos de caracteres de escape
+					pop_descripcion = document.getElementById(currentID).value;
+					pop_descripcion = pop_descripcion.replace("&","");
+					pop_descripcion = pop_descripcion.replace(";","");
+					pop_descripcion = pop_descripcion.replace("/","");
+					document.getElementById(currentID).value = pop_descripcion;
+					break;
+				case 'pop_cantidad':
+					pop_cantidad = document.getElementById(currentID).value;
+					pop_inventario = document.getElementById('pop_inventario').value;
+					if(isNumber(pop_cantidad))
+					{
+						pop_cantidad=parseInt(pop_cantidad);
+						if(pop_cantidad<1){pop_cantidad=1;}
+						else if(pop_cantidad>pop_inventario){pop_cantidad=pop_inventario;}						
+					}
+					else
+					{pop_cantidad=1;}
+					document.getElementById(currentID).value = pop_cantidad;
+					break;	
+				case 'pop_descuento':
+					pop_descuento = document.getElementById(currentID).value;
+					if(isNumber(pop_descuento))
+					{
+						pop_descuento=parseInt(pop_descuento);
+						if(pop_descuento<1){pop_descuento=0;}
+						else if(pop_descuento>100){pop_descuento=100;}						
+					}
+					else
+					{pop_descuento=0;}
+					document.getElementById(currentID).value = pop_descuento;
+					break;	
+				case 'pop_costo_unidad':
+					pop_costo_unidad = document.getElementById(currentID).value;
+					decimales = document.getElementById("cantidad_decimales").value;
+		            decimales_int = parseInt(decimales);
+					if(isNumber(pop_costo_unidad))
+					{
+						//pop_costo_unidad=parseInt(pop_descuento);
+						if(pop_costo_unidad<0){pop_costo_unidad=0.0;}						
+						//pop_costo_unidad = pop_costo_unidad.toFixed(decimales_int);
+					}
+					else
+					{pop_costo_unidad=0.0;}	
+					pop_costo_unidad = parseFloat(pop_costo_unidad);
+					document.getElementById(currentID).value = pop_costo_unidad.toFixed(decimales_int);
+					break;					
+				case 'boton_aceptar_popup':
+					setArticuloFromPopup();
+					closePopUp();
+					doTabAfterPopup();
+					break;
+				case 'pop_descuento_cambio':
+					pop_descuento_cambio = document.getElementById(currentID).value;
+					if(isNumber(pop_descuento_cambio))
+					{
+						pop_descuento_cambio=parseInt(pop_descuento_cambio);
+						if(pop_descuento_cambio<1){pop_descuento_cambio=0;}
+						else if(pop_descuento_cambio>100){pop_descuento_cambio=100;}						
+					}
+					else
+					{pop_descuento_cambio=0;}
+					document.getElementById(currentID).value = pop_descuento_cambio;
+					break;
+				case 'pop_cantidad_agregar':
+					pop_cantidad_agregar = document.getElementById(currentID).value;
+					pop_inventario = document.getElementById('bodega_articulo_'+numRowArticuloRepetido).innerHTML;
+					cantidad_actual = document.getElementById('cantidad_articulo_'+numRowArticuloRepetido).value;
+					cantidad_actual = parseInt(cantidad_actual);
+					pop_inventario = parseInt(pop_inventario);
+					pop_inventario -= cantidad_actual;
+					if(isNumber(pop_cantidad_agregar))
+					{
+						pop_cantidad_agregar=parseInt(pop_cantidad_agregar);
+						if(pop_cantidad_agregar<1){pop_cantidad_agregar=1;}
+						else if(pop_cantidad_agregar>pop_inventario){pop_cantidad_agregar=pop_inventario;}						
+					}
+					else
+					{pop_cantidad_agregar=1;}
+					document.getElementById(currentID).value = pop_cantidad_agregar;
+					break;	
+			}
+}
+
+function checkAdminLog(){
+	usuario_check = document.getElementById("pop_usuario").value;
+	contra_usuario = CryptoJS.MD5(document.getElementById("pop_password").value); //Lo encriptamos de una vez
+	document.getElementById("pop_password").value=''; //Lo limpiamos para que no quede evidencia del pass
+	document.getElementById("pop_usuario").value=''; //Limpiamos 
+	
+	url = '/facturas/nueva/checkUSR?user='+usuario_check+'&pass='+contra_usuario+'&tipo='+numeroPopUp;
+    
+	contra_usuario=''; //Limpiamos
+	
+	flag = getandmakeCall(url);
+		
+	if(flag.trim()=='-1'){return false;}
+	else if(flag.trim()=='200'){return true;}
+}
+
+function getandmakeCall(URL){
+	/*xmlhttp = getXMLHTTP();	
+	xmlhttp.onreadystatechange=function() 
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+		{				
+			return xmlhttp.responseText;
+		}
+	}	
+	xmlhttp.open('GET',URL,true);
+	xmlhttp.send();*/
+	AJAX = getXMLHTTP();
+	if (AJAX) {
+		AJAX.open("GET", location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL, false);                             
+		AJAX.send(null);
+		return AJAX.responseText;                                         
+	} else {
+		return false;
+	}
+}
+
+function getXMLHTTP(){
+	if (window.XMLHttpRequest) 
+	{
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	} 
+	else 
+	{  // code for IE6, IE5
+		xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+	}
+	return xmlhttp;
+}
+
+function clickAceptar_Des(){
+	isFromAgregarCantidad=false;
+	validatePopUp('pop_descuento_cambio');
+	setDescuento();
+	
+	closePopUp_Des();
+	//doTabAfterPopup();
+}
+
+function setDescuento(){
+	descuento = document.getElementById("pop_descuento_cambio").value;	
+	document.getElementById("descuento_articulo_"+rowIDpopup).innerHTML=descuento;
+	
+	//Cambiamos el costo del articulo
+	/*costo_unidad = document.getElementById("costo_unidad_articulo_ORIGINAL_"+rowIDpopup).value;
+	descuento = parseInt(descuento);
+	costo_unidad = parseFloat(costo_unidad);	
+	costo_unidad -= costo_unidad*(descuento/100);
+	
+	tipo_moneda = document.getElementById("tipo_moneda").value;
+	factor_tipo_moneda_float = 1.00; //Cualquier cosa entre 1 es igual
+	if(tipo_moneda.indexOf('colone') != -1)
+	{//No pasa nada, el factor de tipo de moneda sigue igual
+	}
+	else if(tipo_moneda.indexOf('dolare') != -1)
+	{
+		tipo_cambio_venta = document.getElementById("tipo_cambio_venta").value;
+		factor_tipo_moneda_float = parseFloat(tipo_cambio_venta);
+		//alert(tipo_cambio_venta);
+	}
+	
+	decimales = document.getElementById("cantidad_decimales").value;
+	decimales_int = parseInt(decimales);
+	
+	costo_unidad = costo_unidad/factor_tipo_moneda_float;
+	
+	document.getElementById("costo_unidad_articulo_"+rowIDpopup).innerHTML=costo_unidad.toFixed(decimales_int);	
+	*/
+	actualizaCostoTotalArticulo("cantidad_articulo_"+rowIDpopup);	
+	tabRowORAdd("codigo_articulo_"+rowIDpopup, true);
+}
+
+function closePopUp_Des(){
+	$('#pop_up_descuento').bPopup().close(); 
+}
+
+function openGenericProductDialog(rowID){ //Funcion para abrir el pop up
+	$('#pop_up_administrador').bPopup({
+		modalClose: false
+	});
+	document.getElementById("pop_usuario").select();
+	rowIDpopup = rowID;
+	numeroPopUp='1';
+}
+
+function clickAceptar(){
+	validatePopUp('pop_descripcion');
+	validatePopUp('pop_cantidad');
+	validatePopUp('pop_inventario');
+	validatePopUp('pop_descuento');
+	validatePopUp('pop_costo_unidad');
+	setArticuloFromPopup();
+	closePopUp();
+	doTabAfterPopup();
+}
+
+function setArticuloFromPopup(){
+	//alert(rowIDpopup);
+	pop_descripcion = document.getElementById('pop_descripcion').value;
+	pop_cantidad = document.getElementById('pop_cantidad').value;
+	pop_inventario = document.getElementById('pop_inventario').value;
+	pop_descuento = document.getElementById('pop_descuento').value;
+	pop_costo_unidad = document.getElementById('pop_costo_unidad').value;
+	
+	/*
+	ESTRUCTURA DEL ARRAY
+	0 => flag de existencia
+	1 => codigo
+	2 => descripcion
+	3 => inventario/bodega
+	4 => descuento
+	5 => Familia donde esta contenida el articulo
+	6 => costo del producto para este cliente
+	7 => costo del producto para cliente final
+	8 => nombre de la imagen del producto
+	9 => si esta o no exento
+	*/
+	articuloJSON = {"codigo":"00","descripcion":pop_descripcion,"inventario":pop_inventario,"descuento":pop_descuento,"familia":"0","precio_cliente":pop_costo_unidad,"precio_no_afiliado":pop_costo_unidad,"imagen":"Default.png","exento":"0","retencion":"0"};
+	//datosArticulo = "1,00,"+pop_descripcion+","+pop_inventario+","+pop_descuento+",0,"+pop_costo_unidad+","+pop_costo_unidad+",00,0";
+	num_row = rowIDpopup.replace("codigo_articulo_","");
+	//setDatosArticulo(datosArticulo.split(','), rowIDpopup, num_row,pop_cantidad);
+	setArticulo(articuloJSON, num_row);
+}
+
+function closePopUp(){
+	$('#pop_up_articulo').bPopup().close();
+}
+
+function doTabAfterPopup(){
+	tabRowORAdd(rowIDpopup, true);
+}
+
+function actualizarFactura(){
+	if(validarFactura()){
+			if(seCambioFactura){
+					actualizarYCobrar = false;
+					cambiarFactura('/facturas/proforma/cambiarProforma');
+			}else{
+					notyError('¡La edición de la factura debe estar habilitada!');
+			}																																																																																																																														
+	}	
+}
+
+function validarFactura(){
+	consecutivo = document.getElementById("consecutivo").value;
+	if(consecutivo.trim()===''){
+		n = noty({
+					   layout: 'topRight',
+					   text: '¡Consecutivo no válido!',
+					   type: 'error',
+					   timeout: 4000
+					});
+		return false;
+	}
+	
+	productosCantidad = document.getElementById("tabla_productos").rows.length-1;
+	//Verifica si hay productos por cantidad de filas de la tabla
+	if(productosCantidad<1){
+		n = noty({
+					   layout: 'topRight',
+					   text: '¡No hay articulos en la proforma!',
+					   type: 'error',
+					   timeout: 4000
+					});
+		return false;
+	}
+	//Verifica si hay productos ingresados
+	createJSON();
+	tamJSONArray = invoiceItemsJSON.length;
+	if(tamJSONArray<1){
+		n = noty({
+					   layout: 'topRight',
+					   text: '¡No hay articulos en la proforma!',
+					   type: 'error',
+					   timeout: 4000
+					});
+		return false;
+	}
+	return true;
+}
+
+function createJSON(){
+	invoiceItemsJSON=[]; //Limpiamos el array
+	lengthArray = getTamanoIndexArray();
+	for (i = 0; i < lengthArray; i++) {
+		index = array_pos_rows[i]; //Obtenemos el index
+		j_ob = parseRowToJSON(index);
+		if(j_ob){invoiceItemsJSON.push(j_ob);}//Se verifica que sea un item real de la factura
+	}
+}
+
+function getTamanoIndexArray(){
+	return array_pos_rows.length;
+}
+
+function parseRowToJSON(numRow){
+	codigo = document.getElementById("codigo_articulo_"+numRow).value;
+	descripcion = document.getElementById("descripcion_articulo_"+numRow).innerHTML;
+	
+	if(descripcion.trim()===''){ //Si solo esta el codigo pero no hay descripcion, osea articulo no cargado
+		return false;
+	}
+	else{
+		cantidad = document.getElementById("cantidad_articulo_"+numRow).value;
+		descuento = document.getElementById("descuento_articulo_"+numRow).innerHTML;
+	}
+	
+	precio_unitario = ''; //Por defecto es vacio
+	
+	if(codigo.trim()==='00'){ //Si es generico traer los demas datos necesarios
+		precio_unitario = document.getElementById("costo_unidad_articulo_ORIGINAL_"+numRow).value;
+	}
+	else{
+		descripcion = ''; //Si no es generico limpiamos descripcion para que el post no sea tan pesado
+	}
+	
+	exento = document.getElementById("producto_exento_"+numRow).value;
+	retencion = $("#producto_retencion_"+numRow).val();
+	
+	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento, re:retencion};
+	
+	return JSONRow;
+	
+}
+
+function cambiarFactura(URL){
+	createJSON();
+	consecutivo = document.getElementById("consecutivo").value;
+	$.ajax({
+		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
+		type: "POST",		
+		async: false,
+		data: {'consecutivo':consecutivo,'items':JSON.stringify(invoiceItemsJSON),'observaciones':$("#observaciones").val()},				
+		success: function(data, textStatus, jqXHR)
+		{
+				try{
+						facturaHEAD = $.parseJSON('[' + data.trim() + ']');
+						if(facturaHEAD[0].status==="error"){
+								displayErrors(facturaHEAD[0].error);
+								return false;
+						}else if(facturaHEAD[0].status==="success"){
+								if(actualizarYCobrar){ //Si se actualiza al cobrar tons que lo haga, puede ser que se actualice pero no se cobre
+										//enviarCobro('/facturas/caja/cobrarFactura');
+								}else{
+										n = noty({
+										   layout: 'topRight',
+										   text: 'Se ha actualizado la proforma con éxito',
+										   type: 'success',
+										   timeout: 4000
+										});
+										actualizarYCobrar = true;
+								}
+						}
+				}
+				catch(e){
+					notyError('¡No se pudo actualizar la proforma, contacte al administrador!');
+				}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{}
+	});
+}
+
+function notyError(Mensaje){
+	n = noty({
+					   layout: 'topRight',
+					   text: Mensaje,
+					   type: 'error',
+					   timeout: 4000
+					});
+}
+
+function procesarProforma(URL){
+	consecutivo = document.getElementById("consecutivo").value;
+	if(validarFactura()){
+		if(seCambioFactura){
+				cambiarFactura('/facturas/proforma/cambiarProforma');
+		}	
+		$.ajax({
+			url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/procesarProforma",
+			type: "POST",		
+			async: false,
+			data: {'consecutivo':consecutivo},				
+			success: function(data, textStatus, jqXHR)
+			{
+					try{
+							facturaHEAD = $.parseJSON('[' + data.trim() + ']');
+							if(facturaHEAD[0].status==="error"){
+									notyError(facturaHEAD[0].error);
+									return false;
+							}else if(facturaHEAD[0].status==="success"){
+								window.location.reload();
+							}
+					}
+					catch(e){
+						notyError('¡No se pudo procesar la proforma, contacte al administrador!');
+					}
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{}
+		});																																																																																																																													
+	}
+	
+}

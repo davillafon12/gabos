@@ -340,6 +340,76 @@ class proforma extends CI_Controller {
 		}
 		echo json_encode($retorno);
 	}
+	
+	function cambiarProforma(){
+			$retorno['status'] = 'error';
+			$retorno['error'] = 'cf_1';
+			if(isset($_POST['items'])&&isset($_POST['consecutivo'])){
+		  //Obtener las dos partes del post
+			$items_factura = $_POST['items'];
+			$consecutivo = $_POST['consecutivo'];
+			//Decodificar el JSON del post		
+			$items_factura = json_decode($items_factura, true);
+			//Obtenemos la primera posicion del info_factura para obtener el array final
+			$observaciones = $_POST["observaciones"];			
+			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			
+			if(sizeOf($items_factura)>0){
+					//ce:cedula_field, no:nombre_field, cu:tipo_moneda, ob:observaciones
+					//CAMBIAMOS EL ENCABEZADO
+					$datosHead = array(
+										'Proforma_Observaciones'=>$observaciones
+									);
+														
+					//ELIMINAMOS LOS PRODUCTOS
+					$this->proforma_m->eliminarProductosDeProforma($consecutivo, $data['Sucursal_Codigo']);
+					
+					$this->proforma_m->actualizarHeadProforma($datosHead, $consecutivo, $data['Sucursal_Codigo']);
+								
+					//LOS VOLVEMOS A AGREGAR LOS NUEVOS
+					$cliente = $this->proforma_m->getCliente($consecutivo, $data['Sucursal_Codigo']);
+					
+					$vendedor = $this->proforma_m->getVendedor($consecutivo, $data['Sucursal_Codigo']);
+					
+					
+					$this->agregarItemsProforma($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
+					
+					$this->actualizarCostosProforma($consecutivo, $data['Sucursal_Codigo']);				
+					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la proforma consecutivo:$consecutivo", $data['Sucursal_Codigo'],'proforma_edicion');
+					
+					unset($retorno['error']);
+					$retorno['status'] = 'success';
+			}else{
+					$retorno['error'] = 'cf_3'; //No hay productos
+			}
+		}else{
+			$retorno['error'] = 'cf_2'; //URL con mal formato
+		} 
+		echo json_encode($retorno);
+	}
+	
+	function procesarProforma(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = 'No se pudo procesar la proforma';
+		if(isset($_POST['consecutivo'])){
+			$consecutivo = $_POST['consecutivo'];
+			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
+				$this->proforma_m->marcarComoProformaPendiente($consecutivo, $data['Sucursal_Codigo']);
+				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." procesó la proforma consecutivo:$consecutivo", $data['Sucursal_Codigo'],'proforma_procesar');
+				
+				unset($retorno['error']);
+				$retorno['status'] = 'success';
+			}else{
+				//No hay facturas
+				$retorno['error'] = 'No existe proforma';
+			}	
+		}else{
+			//URL MALA
+			$retorno['error'] = 'Mal formato de URL';
+		}
+		echo json_encode($retorno);
+	}
  
 }// FIN DE LA CLASE
 

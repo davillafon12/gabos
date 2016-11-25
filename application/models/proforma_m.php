@@ -611,6 +611,84 @@ Class proforma_m extends CI_Model
 		$this->db->update("tb_10_proforma", $datos);
 	}
 	
+	function eliminarProductosDeProforma($consecutivo, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
+		$this->db->where("TB_10_Proforma_TB_02_Sucursal_Codigo", $sucursal);
+		$this->db->where("TB_10_Proforma_Proforma_Consecutivo", $consecutivo);
+		$this->db->delete("tb_04_articulos_proforma");
+	}
+	
+	function actualizarHeadProforma($datos, $consecutivo, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
+		$this->db->where('Proforma_Consecutivo', $consecutivo);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->update("tb_10_proforma", $datos);
+	}
+	
+	function marcarComoProformaPendiente($proforma, $sucursal){
+		$datos = array("Proforma_Estado" => "pendiente");
+		$this->db->where('Proforma_Consecutivo', $proforma);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->update("tb_10_proforma", $datos);
+	}
+	
+/*
+	function getCliente($consecutivo, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
+		$this -> db -> select('TB_03_Cliente_Cliente_Cedula');
+		$this -> db -> from('tb_10_proforma');
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Proforma_Consecutivo', $consecutivo);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		   $result = $query->result();
+			foreach($result as $row)
+			{	
+				return $row->TB_03_Cliente_Cliente_Cedula;
+			}
+		}
+		else
+		{
+		   return false;
+		}
+	}
+*/
+	
+/*
+	function getVendedor($consecutivo, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
+		$this -> db -> select('Proforma_Vendedor_Codigo');
+		$this -> db -> from('tb_10_proforma');
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Proforma_Consecutivo', $consecutivo);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		   $result = $query->result();
+			foreach($result as $row)
+			{	
+				return $row->Proforma_Vendedor_Codigo;
+			}
+		}
+		else
+		{
+		   return false;
+		}
+	}
+*/
 }
 
 
