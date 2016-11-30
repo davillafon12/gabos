@@ -98,7 +98,7 @@ function validarFechas(){
 		hasta = hasta[2]+"-"+hasta[1]+"-"+hasta[0];
 		hasta = new Date(hasta);
 		
-		if(desde>=hasta){
+		if(desde>hasta){
 			notyMsg('La fecha -desde- debe ser menor a la fecha -hasta-', 'error');
 			return false;
 		}
