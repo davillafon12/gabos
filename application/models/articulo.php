@@ -900,6 +900,72 @@ Class articulo extends CI_Model
 		}
 	}
 	
+	function getCambiosCodigoRangoFechas($sucursal, $inicio, $final){
+		$this->db->select("tb_35_cambio_codigo.Id as consecutivo, tb_35_cambio_codigo.Fecha as fecha, tb_01_usuario.Usuario_Nombre as nombre, tb_01_usuario.Usuario_Apellidos as apellidos");
+		$this->db->from('tb_35_cambio_codigo');	
+		$this->db->join("tb_01_usuario", "tb_01_usuario.Usuario_Codigo = tb_35_cambio_codigo.Usuario");
+		
+		$this->setFiltradoFechaDesde($inicio, "Fecha");
+		$this->setFiltradoFechaHasta($final, "Fecha");
+		$this->db->where('Sucursal', $sucursal);
+		$this->db->order_by('Fecha', 'asc'); 
+			
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
+	function setFiltradoFechaDesde($fecha, $campo){
+		if(trim($fecha)!=''){
+			$fecha = $this->convertirFecha($fecha, " 00:00:00");
+			$this->db->where("$campo >=", $fecha);
+		}
+	}
+	
+	function setFiltradoFechaHasta($fecha, $campo){
+		if(trim($fecha)!=''){
+			$fecha = $this->convertirFecha($fecha, " 23:59:59");
+			$this->db->where("$campo <=", $fecha);
+		}
+	}
+	
+	function getCambioCodigoHeader($consecutivo, $sucursal){
+		$this->db->from("tb_35_cambio_codigo");
+		$this->db->where("Id", $consecutivo);
+		$this->db->where("Sucursal", $sucursal);
+		
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result()[0];
+		}
+	}
+	
+	function getCambioCodigoArticulos($consecutivo){
+		$this->db->from("tb_36_articulos_cambio_codigo");
+		$this->db->where("Cambio_Codigo", $consecutivo);
+		
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result();
+		}
+	}
+	
 	
 	
 	

@@ -121,6 +121,7 @@
 						<li class='last'><a href='".$Ruta_Base."reportes/reportes/articulos'>Articulos</a></li>
 					</ul>
 				</li>
+				<li><a href='".$Ruta_Base."consulta/cambiosCodigo'>Cambios de Código</a></li>	
 				<li class='last'><a href='".$Ruta_Base."consulta/recibos'>Recibos de Dinero</a></li>
 			</ul>
 		</li>

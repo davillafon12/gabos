@@ -11,6 +11,7 @@ class consulta extends CI_Controller {
 		$this->load->model('proforma_m','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('cliente','',TRUE);
+		$this->load->model('articulo','',TRUE);
 		include 'get_session_data.php';
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -866,6 +867,80 @@ class consulta extends CI_Controller {
 			$totalIVA -= $totalIVANotaCredito;
 			
 			return array("totalFacturas"=>$totalFacturas,"totalIVA"=>$totalIVA,"totalRetencion"=>$totalRetencion);
+	}
+	
+	function cambiosCodigo(){
+		include 'get_session_data.php';
+		$empresas_actuales = $this->empresa->get_empresas_ids_array();
+		$data['Familia_Empresas'] = $empresas_actuales;
+		$this->load->view('consulta/cambios_codigo_consulta_view', $data);
+	}
+	
+	function getCambiosCodigoFiltrados(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		
+		if(isset($_POST['desde'])&&isset($_POST['hasta'])&&isset($_POST['sucursal'])){
+			$desde = $_POST['desde'];
+			$hasta = $_POST['hasta'];
+			$sucursal = $_POST['sucursal'];
+			
+			if($this->verificarFecha($desde)&&$this->verificarFecha($hasta)){		
+				if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){		
+					include 'get_session_data.php';				
+					if($cambios = $this->articulo->getCambiosCodigoRangoFechas($sucursal, $desde, $hasta)){
+						unset($retorno['error']);
+						$retorno['status'] = 'success';
+						$retorno['cambios'] = $cambios;		
+					}else{
+						$retorno['error'] = '3';
+					}	
+				}else{
+					$retorno['error'] = '5';
+				}			
+			}else{
+				//Fechas con mal formato
+				$retorno['error'] = '4';
+			}
+		}else{
+			//URL MALA
+			$retorno['error'] = '2';
+		}
+		echo json_encode($retorno);
+	}
+	
+	function getCambioCodigo(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1';
+		if(isset($_POST['cambio']) && isset($_POST['sucursal'])){
+			$consecutivo = $_POST['cambio'];
+			$sucursal = $_POST['sucursal'];
+			if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){		
+				include 'get_session_data.php';				
+				if($head = $this->articulo->getCambioCodigoHeader($consecutivo, $sucursal)){
+					if($body = $this->articulo->getCambioCodigoArticulos($consecutivo)){
+						$retorno['cambioHead'] = $head;
+						$retorno['cambioBody'] = $body;
+						unset($retorno['error']);
+						$retorno['status'] = 'success';
+						//Para efecto de impresion
+						$retorno['sucursal']= $sucursal;
+						$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+						$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");		
+					}else{
+						$retorno['error'] = '5';
+					}
+				}else{
+					$retorno['error'] = '4';
+				}
+			}else{
+				$retorno['error'] = '3';
+			}	
+		}else{
+			//URL MALA
+			$retorno['error'] = '2';
+		}
+		echo json_encode($retorno);
 	}
 
 } 
