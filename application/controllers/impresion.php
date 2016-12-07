@@ -1543,9 +1543,9 @@ class impresion extends CI_Controller {
 				//Info del traspaso
 				$pdf->SetFont('Arial','',11);
 				$pdf->Text(12, 42, 'Suc. Salida:');		
-				$pdf->Text(42, 42, $encabezado->salida." - ".$encabezado->nombre_salida);	
+				$pdf->Text(42, 42, $encabezado->salida." - ".substr($encabezado->nombre_salida,0,34));	
 				$pdf->Text(12, 49, 'Suc. Entrada:');	
-				$pdf->Text(42, 49, $encabezado->entrada." - ".$encabezado->nombre_entrada);
+				$pdf->Text(42, 49, $encabezado->entrada." - ".substr($encabezado->nombre_entrada,0,34));
 				//Caja redondeada 1
 				$pdf->RoundedRect(10, 37, 190, 14, 2, '1234', 'D');
 				//Divisores				
@@ -1588,8 +1588,8 @@ class impresion extends CI_Controller {
 				$pdf->Text(12, 41.5, 'Sucursal que entrega');
 				$pdf->Text(12, 52.5, 'Sucursal que recibe');
 				$pdf->SetFont('Arial','',10);
-				$pdf->Text(12, 47, $encabezado->sucursal_entrega);
-				$pdf->Text(12, 58, $encabezado->sucursal_recibe);
+				$pdf->Text(12, 47, substr($encabezado->sucursal_entrega,0,39));
+				$pdf->Text(12, 58, substr($encabezado->sucursal_recibe,0,39));
 				$pdf->SetXY(11, 50);
 				//$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
 				//Caja redondeada 1
@@ -1625,8 +1625,8 @@ class impresion extends CI_Controller {
 				$pdf->Text(12, 41.5, 'Sucursal que entrega');
 				$pdf->Text(12, 52.5, 'Sucursal que recibe');
 				$pdf->SetFont('Arial','',10);
-				$pdf->Text(12, 47, $encabezado->sucursal_entrega);
-				$pdf->Text(12, 58, $encabezado->sucursal_recibe);
+				$pdf->Text(12, 47, substr($encabezado->sucursal_entrega,0,39));
+				$pdf->Text(12, 58, substr($encabezado->sucursal_recibe,0,39));
 				$pdf->SetXY(11, 50);
 				//$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
 				//Caja redondeada 1
@@ -1859,7 +1859,7 @@ class impresion extends CI_Controller {
 		$pdf->Text(149, 72, 'P/Unitario');
 		$pdf->Text(179, 72, 'P/Total');
 		//Agregamos Productos
-		$pdf->SetFont('Arial','',8);
+		$pdf->SetFont('Arial','',9);
 		
 		$pdf->SetXY(110, 75.3);		
 		$sl = 5; //Salto de linea
@@ -1877,7 +1877,7 @@ class impresion extends CI_Controller {
 			}
 			
 			$pdf->Text(11, $pl, $productos[$cc]->codigo);
-			$pdf->Text(41, $pl, substr($productos[$cc]->descripcion,0,38));
+			$pdf->Text(41, $pl, substr($productos[$cc]->descripcion,0,33));
 			$pdf->cell(15,5,$productos[$cc]->cantidad,0,0,'C');
 			$pdf->cell(6,5,$this->fe($productos[$cc]->exento),0,0,'C');
 			$pdf->cell(14,5,$this->fn($productos[$cc]->descuento),0,0,'C');
@@ -1913,7 +1913,7 @@ class impresion extends CI_Controller {
 		$pdf->Text(151, 72, 'P/Unitario');
 		$pdf->Text(179, 72, 'P/Total');
 		//Agregamos Productos
-		$pdf->SetFont('Arial','',8);
+		$pdf->SetFont('Arial','',9);
 		
 		$pdf->SetXY(110, 75.3);		
 		$sl = 5; //Salto de linea
@@ -1961,7 +1961,7 @@ class impresion extends CI_Controller {
 		$pdf->Text(151, 72, 'P/Unitario');
 		$pdf->Text(179, 72, 'P/Total');
 		//Agregamos Productos
-		$pdf->SetFont('Arial','',8);
+		$pdf->SetFont('Arial','',9);
 		
 		$pdf->SetXY(125, 75.3);		
 		$sl = 5; //Salto de linea
@@ -2001,7 +2001,7 @@ class impresion extends CI_Controller {
 		$pdf->Text(58, 72, 'Descripción');
 		$pdf->Text(179, 72, 'Cantidad');
 		//Agregamos Productos
-		$pdf->SetFont('Arial','',8);
+		$pdf->SetFont('Arial','',9);
 		
 		$pdf->SetXY(125, 75.3);		
 		$sl = 5; //Salto de linea
