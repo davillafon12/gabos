@@ -4457,3 +4457,5 @@ ALTER TABLE `TB_28_Productos_Notas_Credito` ADD `Precio_Final` DOUBLE NOT NULL A
 RENAME TABLE tb_46_relacion_desampa TO tb_46_relacion_trueque;
 ALTER TABLE tb_46_relacion_trueque ADD Sucursal INT NOT NULL AFTER Documento;
 UPDATE tb_46_relacion_trueque SET Sucursal=7
+
+ALTER TABLE `tb_47_descuento_proforma` CHANGE `Id` `Id` INT(11) NOT NULL AUTO_INCREMENT;

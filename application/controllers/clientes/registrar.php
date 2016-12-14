@@ -89,7 +89,7 @@ class registrar extends CI_Controller {
 			
 	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
-	if($this->cliente->registrar($nombre, $apellidos , $cedula, $tipo_Cedula, $carnet, $celular, $telefono, $pais, $direccion, $observaciones, $this->direccion_url_imagen, $email, $estado_Cliente, $this->calidad_Cliente, $tipo_pago_cliente, $this->isSucursal, $exento, $aplicaRetencion))
+	if($this->cliente->registrar($nombre, $apellidos , $cedula, $tipo_Cedula, $carnet, $celular, $telefono, $pais, $direccion, $observaciones, $this->direccion_url_imagen, $email, $estado_Cliente, $this->calidad_Cliente, $tipo_pago_cliente, $this->isSucursal, $exento, $aplicaRetencion, $data['Usuario_Codigo'],$data['Sucursal_Codigo']))
 	{ //Si se ingreso bien a la BD
 		//Titulo de la pagina
 		$data['Titulo_Pagina'] = "Transacción Exitosa";
