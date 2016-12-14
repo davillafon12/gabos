@@ -219,3 +219,41 @@ function setProductosCambio(cambios){
 		$("#contenidoArticulos").append(fila);
 	}
 }
+
+// Para el tamaño del windows open
+var anchoImpresion = 1024;
+var alturaImpresion = 768;
+var tipoImpresion = 'c';
+
+function cambiarTipoImpresion(tipo){
+	tipoImpresion = tipo;
+	switch(tipo){
+		case 't':
+			anchoImpresion = 290;
+			alturaImpresion = 400;
+		break;
+		case 'c':
+			anchoImpresion = 1024;
+			alturaImpresion = 768;
+		break;
+	}
+}
+
+function imprimir(){
+	consecutivo = $("#consecutivo").val();
+	if(consecutivo.trim()===''){
+		notyMsg('Debe ingresar un consecutivo válido', 'error');
+		return false;
+	}else if(consecutivo!=consecutivoActual){
+		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
+		return false;
+	}
+	
+	if(tipoImpresion==='t'){
+		//Impresion termica
+		window.open(servidorImpresion+'/index.html?t='+token+'&d=cdc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Cambios de Código','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+	}else if(tipoImpresion==='c'){
+		//Impresion carta
+		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+token+'&d=cdc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Cambios de Código','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+	}
+}

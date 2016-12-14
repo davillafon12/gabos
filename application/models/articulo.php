@@ -951,6 +951,23 @@ Class articulo extends CI_Model
 		}
 	}
 	
+	function getCambioDeCodigoHeaderParaImpresion($sucursal, $consecutivo){
+		$this->db->select("tb_35_cambio_codigo.Id as consecutivo, date_format(tb_35_cambio_codigo.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha, tb_01_usuario.Usuario_Nombre as nombre, tb_01_usuario.Usuario_Apellidos as apellidos",false);
+		$this->db->from('tb_35_cambio_codigo');	
+		$this->db->join("tb_01_usuario", "tb_01_usuario.Usuario_Codigo = tb_35_cambio_codigo.Usuario");
+		$this->db->where("tb_35_cambio_codigo.Id", $consecutivo);
+		$this->db->where("tb_35_cambio_codigo.Sucursal", $sucursal);
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{			
+			return false;
+		}
+		else
+		{			
+			return $query->result()[0];
+		}
+	}
+	
 	function getCambioCodigoArticulos($consecutivo){
 		$this->db->from("tb_36_articulos_cambio_codigo");
 		$this->db->where("Cambio_Codigo", $consecutivo);

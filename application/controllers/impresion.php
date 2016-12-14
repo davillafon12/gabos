@@ -381,6 +381,7 @@ class impresion extends CI_Controller {
 			nb = nota debito
 			t = traspaso
 			cc = cierre caja
+			cdc = cambio de codigo
 		*/
 		switch($_GET['d']){
 			case 'f':				
@@ -750,6 +751,19 @@ class impresion extends CI_Controller {
 									if($articulos = $this->articulo->getArticulosDeTraspasoParaImpresion($traspaso->consecutivo)){
 											$this->traspasoInventarioPDF($empresa, $traspaso, $articulos);
 									}
+								}
+						}
+				}
+			break;
+			case 'cdc':
+				if(isset($_GET['n'])&&isset($_GET['s'])){
+						$sucursal = $_GET['s'];
+						$consecutivo = $_GET['n'];
+						if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+								if($head = $this->articulo->getCambioDeCodigoHeaderParaImpresion($sucursal, $consecutivo)){
+										if($body = $this->articulo->getCambioCodigoArticulos($consecutivo)){
+											$this->cambioCodigoPDF($empresa, $head, $body);
+										}
 								}
 						}
 				}
@@ -1339,6 +1353,34 @@ class impresion extends CI_Controller {
 		$pdf->Output();
 	}
 	
+	private function cambioCodigoPDF($empresa, $head, $articulos){
+		require('/../libraries/fpdf/fpdf.php');
+		$pdf = new FPDF('P','mm','A4');
+		
+		$cantidadProductos = sizeOf($articulos);
+		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		$this->cantidadPaginas = $paginasADibujar + 1;
+		$cantidadTotalArticulos = 0;
+		while($paginasADibujar>=$this->numPagina){
+			//Agregamos pag		
+			$pdf->AddPage();			
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('cdc', $empresa[0], $head, $pdf);
+			//Agregamos Productos
+			$inicio = $this->numPagina*39;
+			if((($this->numPagina+1)*39)<$cantidadProductos){
+				$final = ($this->numPagina+1)*39;
+			}else{
+				$final = $cantidadProductos;
+			}
+			$cantidadTotalArticulos += $this->printProductsCambioCodigo($articulos, $inicio, $final-1, $pdf);
+
+			$this->numPagina++;
+		}
+		//Imprimimos documento
+		$pdf->Output();
+	}
+	
 	private function encabezadoDocumentoPDF($tipo, $empresa, $encabezado, &$pdf){
 		//var_dump($empresa);
 		$pdf->SetFont('Arial','B',14);
@@ -1643,6 +1685,24 @@ class impresion extends CI_Controller {
 				$pdf->SetFont('Arial','',10);
 				$pdf->Text(102, 58, $encabezado->usuario);
 				
+			break;
+			case 'cdc':
+				//Cuadro de numero de factura y hora/fecha
+				$pdf->Rect(120, 10, 80, 20, 'D');
+				$pdf->SetFont('Arial','B',16);
+				$pdf->Text(122, 17, 'Cambio de Código #'.$encabezado->consecutivo);			
+				$pdf->SetFont('Arial','',12);
+				$pdf->Text(122, 22, 'Fecha y Hora: ');				
+				$pdf->Text(122, 27, $encabezado->fecha);
+				
+				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+				//Info de la factura
+				$pdf->SetFont('Arial','B',12);
+				$pdf->Text(12, 48, 'Usuario que realizó el cambio:');
+				$pdf->SetFont('Arial','',11);
+				$pdf->Text(12, 52.5, $encabezado->nombre." ".$encabezado->apellidos);
+				
+								
 			break;
 		}
 	}
@@ -2024,7 +2084,51 @@ class impresion extends CI_Controller {
 		return $cantidadTotalArticulos;
 	}
 	
-	
+	private function printProductsCambioCodigo($productos, $inicio, $fin, &$pdf){
+		//Agregamos el apartado de productos
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Text(90, 65, 'Productos');
+		//Caja redondeada 1
+		$pdf->RoundedRect(10, 67, 190, 210, 5, '12', 'D');
+		//Divisores verticales de productos
+		$pdf->Line(10, 74, 200, 74);		
+		$pdf->Line(30, 67, 30, 277); //Divisor de codigo y descripcion
+		$pdf->Line(95, 67, 95, 277); //Divisor de descripcion y cantidad
+		$pdf->Line(100, 67, 100, 277); //Divisor de descuento y precio unitario
+		$pdf->Line(120, 67, 120, 277); //Divisor de precio unitario y precio total	
+		$pdf->Line(185, 67, 185, 277); //Divisor de precio unitario y precio total	
+		//Encabezado de productos
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(14, 72, 'Código');
+		$pdf->Text(53, 72, 'Descripción');
+		$pdf->Text(128, 72, '');
+		$pdf->Text(104, 72, 'Código');
+		$pdf->Text(142, 72, 'Descripción');
+		$pdf->Text(187, 72, 'Cant.');
+		//Agregamos Productos
+		$pdf->SetFont('Arial','',9);
+		
+		$pdf->SetXY(125, 75.3);		
+		$sl = 5; //Salto de linea
+		$pl = 79; //Primera linea
+		
+		$cantidadTotalArticulos = 0;
+		for($cc = $inicio; $cc<=$fin; $cc++){
+			
+			$pdf->Text(11, $pl, $productos[$cc]->Articulo_Cambio);
+			$pdf->Text(31, $pl, substr($productos[$cc]->Descripcion_Cambio,0,33));
+			$pdf->Text(102, $pl, $productos[$cc]->Articulo_Abonado);
+			$pdf->Text(97, $pl, ">");
+			$pdf->Text(122, $pl, substr($productos[$cc]->Descripcion_Abonado,0,33));
+			$pdf->Text(187, $pl, $productos[$cc]->Cantidad);
+				
+			$pdf->ln($sl);
+			$pdf->SetX(125);
+			$pl += $sl;
+			$cantidadTotalArticulos += $productos[$cc]->Cantidad;
+		}
+		return $cantidadTotalArticulos;
+	}
 	
 	
 	
