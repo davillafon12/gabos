@@ -127,7 +127,10 @@ function procesarSolicitud(){
 						title: "¿Esta seguro que desea agregar esta factura como compras?",
 						buttons: { "Si, estoy seguro": true, "Cancelar": false },
 						submit:function(e,v,m,f){
-													if(v){													
+													if(v){	
+														$('#envio_compras').bPopup({
+															modalClose: false
+														});														
 														agregarFacturaASucursal();
 													}
 												}
@@ -142,7 +145,7 @@ function agregarFacturaASucursal(){
 	sucursalAgregar = $("#sucursal").val();
 	
 	if(!isNumber(factura) || factura < 0){
-		notyMsg('Número de factura no válido', 'error');
+		notyMsg('Número de factura no válido', 'error'); 
 		return false;
 	}
 	
@@ -166,6 +169,7 @@ function agregarFacturaASucursal(){
 					manejarErrores(informacion[0].error);
 				}else if(informacion[0].status==="success"){
 					resetFields();
+					$('#envio_compras').bPopup().close();
 					$("#numero_factura").val('');
 					window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+informacion[0].token+'&d=t&n='+informacion[0].traspaso+'&s='+informacion[0].sucursal+'&i=c','Impresion de Traspaso','width=768,height=1024,resizable=no,toolbar=no,location=no,menubar=no');
 					notyMsg('¡Se han agregado los artículos como compras con éxito!', 'success');					

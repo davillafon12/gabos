@@ -32,6 +32,8 @@ PARA:
 		<script src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>" type="text/javascript"></script>
 		<!--SCRIPT DE NUMERIC-->		
 		<script src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
+		<!--CARGA DEL POPUP MODAL-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
 		<!--SCRIPT DE Impromptu-->		
 		<script src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>" type="text/javascript"></script>
 		<!--CSS ESTILO DEL Impromptu-->
@@ -56,7 +58,7 @@ PARA:
 		<div class="main_wrapper">
 			<p class="titulo_wrapper">Agregar Compras a Sucursales</p>
 			<hr class="division_wrapper">
-			
+			 
 			<div class="contenedor" >
 				<table>
 					<tr>
@@ -108,6 +110,10 @@ PARA:
 			</div><!-- contenedor -->			
 		</div><!-- main_wrapper -->
 		<!--Incluir footer-->
+		<div class="envio_compras" id="envio_compras" style="display: none; text-align: center;">
+			<img class="envio_img" src="<?php echo base_url('application/images/enviandoFactura.gif'); ?>">
+			<p class="envio_p">Traspasando compras... <br>Por favor, espere.</p>
+		</div>
 		<?php include '/../Footer/Default_Footer.php';?>
 	</body>
 </html>

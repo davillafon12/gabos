@@ -95,7 +95,7 @@
 	border-bottom: 1px solid black;
 }
 
-.titulo_header_tabla {
+.titulo_header_tabla { 
 	text-align: center;
 	font-size: 14px;
 }
@@ -142,3 +142,8 @@
 	margin-top: -30px;
 	float: right;
 }
+.envio_p {
+    font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif;
+    font-size: 26px;
+    color: #C1C1C1;
+} 

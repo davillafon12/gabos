@@ -158,7 +158,7 @@
     float: left;
     font-family: Keffeesatz, Arial;
     color: #4b4b4b;
-    font-size: 14px;
+    font-size: 14px; 
     margin-top: 4px;
 }
 
@@ -213,3 +213,9 @@
     margin: 0 auto;
     text-align: right;
 }
+
+.envio_p {
+    font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif;
+    font-size: 26px;
+    color: #C1C1C1;
+} 

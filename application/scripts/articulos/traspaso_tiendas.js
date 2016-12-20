@@ -246,7 +246,10 @@ function realizarTraspaso(){
 				title: "¿Esta seguro que desea realizar el traspaso?",
 				buttons: { "Si, estoy seguro": true, "Cancelar": false },
 				submit:function(e,v,m,f){
-										if(v){													
+										if(v){			
+												$('#envio_consignacion').bPopup({
+													modalClose: false
+												});		 								
 												var parametros = {
 																sucursalRecibe :  $("#sucursal_recibe").val().trim(),
 																sucursalEntrega:  $("#sucursal_entrega").val().trim(),
@@ -266,6 +269,7 @@ function resultadoTraspaso(data){
 	if(data.status == 'success'){
 		resetAllFields();
 		notyMsg("Trasapaso realizado con éxito", "success");
+		$('#envio_consignacion').bPopup().close();	
 		//Impresion carta
 		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+data.token+'&d=ti&n='+data.traspaso+'&s='+data.sucursal+'&i=c','Impresión de Traspaso de Inventario','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 
