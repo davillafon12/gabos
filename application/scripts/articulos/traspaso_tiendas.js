@@ -266,10 +266,11 @@ function realizarTraspaso(){
 }
 
 function resultadoTraspaso(data){
+	$('#envio_consignacion').bPopup().close();	
 	if(data.status == 'success'){
 		resetAllFields();
 		notyMsg("Trasapaso realizado con éxito", "success");
-		$('#envio_consignacion').bPopup().close();	
+		
 		//Impresion carta
 		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+data.token+'&d=ti&n='+data.traspaso+'&s='+data.sucursal+'&i=c','Impresión de Traspaso de Inventario','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 

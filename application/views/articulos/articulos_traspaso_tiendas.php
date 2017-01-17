@@ -145,7 +145,7 @@ PARA:
 		</div>	
 		<div class="envio_consignacion" id="envio_consignacion" style="display: none; text-align: center;">
 			<img class="envio_img" src="<?php echo base_url('application/images/enviandoFactura.gif'); ?>">
-			<p class="envio_p">Creando consignación... <br>Por favor, espere.</p>
+			<p class="envio_p">Creando traspaso... <br>Por favor, espere.</p>
 		</div>
 		<!--Incluir footer-->
 		<?php include '/../Footer/Default_Footer.php';?>

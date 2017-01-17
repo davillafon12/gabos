@@ -209,7 +209,10 @@ function realizarConsignacion(){
 							title: "¿Esta seguro que desea realizar la consignación?",
 							buttons: { "Si, estoy seguro": true, "Cancelar": false },
 							submit:function(e,v,m,f){
-													if(v){													
+													if(v){			
+														$('#envio_consignacion').bPopup({
+															modalClose: false
+														});											
 															var parametros = {
 																									sucursalRecibe :  $("#sucursal_recibe").val().trim(),
 																									sucursalEntrega:  $("#sucursal_entrega").val().trim(),
@@ -231,6 +234,7 @@ function realizarConsignacion(){
 }
 
 function resultadoConsignacion(data){
+	$('#envio_consignacion').bPopup().close();	
 		if(data.status === "success"){
 				resetAllFields();
 				notyMsg('¡Se creó la consignación con éxito!', 'success');
