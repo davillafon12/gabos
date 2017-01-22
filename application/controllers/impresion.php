@@ -221,6 +221,7 @@ class impresion extends CI_Controller {
 								$this->retorno['notaHead'] = $notaCreditoHead;
 								$this->retorno['notaBody'] = $notaCreditoBody;
 								
+/*
 								$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
 								
 								$costo_total = 0;
@@ -272,6 +273,86 @@ class impresion extends CI_Controller {
 								
 								$iva = $costo_total-$costo_sin_iva;
 								$costo_total += $retencion;
+*/
+								
+								$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+								
+							
+															
+/*
+								$total = 0;
+								$subtotal = 0;
+								$total_iva = 0;
+								
+								foreach($notaCreditoBody as $art){
+									$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
+									$total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($notaCreditoHead[0]->iva/100));
+									$subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($notaCreditoHead[0]->iva/100)));
+								}
+								
+								$notaCreditoHead[0]->total = $total;
+								$notaCreditoHead[0]->subtotal = $subtotal;
+								$notaCreditoHead[0]->total_iva = $total_iva;
+*/
+								
+								$costo_total = 0;
+								$iva = 0;
+								$costo_sin_iva = 0;
+								$retencion = 0;
+								foreach($notaCreditoBody as $art){
+			/*
+									$total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
+									$total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100));
+									$subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100)));
+								
+			*/
+								
+									
+									$cantidadArt = $art->bueno + $art->defectuoso;
+									//Calculamos el precio total de los articulos
+									//$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+									$precio_total_articulo = $art->precio*$cantidadArt;
+									$precio_total_articulo_sin_descuento = ($art->precio/(1-($art->descuento/100)))*$cantidadArt;
+									$precio_articulo_final = $art->precio_final;
+									$precio_articulo_final = $precio_articulo_final * $cantidadArt;
+									
+									//Calculamos los impuestos
+									
+									$isExento = $art->exento;
+									
+									if($isExento=='0'){
+										$costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
+										
+										
+										$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100)));
+										$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($notaCreditoHead[0]->iva)/100))); 
+										
+										$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
+										$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+										
+										if(!$art->no_retencion){
+												$retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+										}
+									}
+									else if($isExento=='1'){
+										$costo_sin_iva += $precio_total_articulo;
+										//$retencion = 0;
+									}
+									$costo_total += $precio_total_articulo;
+			
+								
+								
+								}
+								
+								
+								if($cliente[0]->Aplica_Retencion == "1")
+									$retencion = 0;
+								
+								
+								
+								$iva = $costo_total-$costo_sin_iva;
+								$costo_total += $retencion;
+								
 								
 								
 								$notaCreditoHead[0]->total = $costo_total;
