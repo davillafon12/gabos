@@ -30,6 +30,7 @@
 class CI_Controller {
 
 	private static $instance;
+	public $javascriptCacheVersion = 2;
 
 	/**
 	 * Constructor

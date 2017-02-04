@@ -394,7 +394,7 @@ function setArticulo(articulo, num_fila){
 	//Funciones Finales
 	actualizaCostoTotalArticulo("cantidad_articulo_"+num_fila);
 	updateProductsTotal();
-	actualizarCantidadProductoInventario('', articulo.codigo, num_fila);
+	//actualizarCantidadProductoInventario('', articulo.codigo, num_fila);
 	$("#cantidad_articulo_anterior_"+num_fila).val(1);
 }
 
@@ -533,7 +533,7 @@ function setDatosArticulo(articuloARRAY, id_input, num_row, cantidadArticulos){
 		actualizaCostoTotalArticulo("cantidad_articulo_"+num_row);
 		updateProductsTotal();
 		codigo = document.getElementById('codigo_articulo_'+num_row).value;
-		actualizarCantidadProductoInventario('', codigo, num_row);
+		//actualizarCantidadProductoInventario('', codigo, num_row);
 		cantidadNuevaHide = document.getElementById("cantidad_articulo_"+num_row).value;
 		//alert(cantidadNuevaHide);
 		document.getElementById("cantidad_articulo_anterior_"+num_row).value=cantidadNuevaHide;
@@ -556,7 +556,7 @@ function resetRowFields(id_row, flag_cod){
 		//alert('resetRowFields');
 		if(codigo==='00'){}
 		else{
-			actualizarCantidadProductoInventario('0', codigo, id_row);
+			//actualizarCantidadProductoInventario('0', codigo, id_row);
 		}
 	}
 
@@ -745,7 +745,7 @@ function actualizaCostosTotales(decimales_int){
 				if(isExento==='0'){ //SI NO ES exento entonces saca el precio sin IVA
 					costo_unitario_articulo_sin_IVA = precio_unitario_articulo/(1+porcentaje_iva);	
 					costoUnitarioSinIvaSinDescuento = precioUnitarioSinDescuento - (precioUnitarioSinDescuento/(1+porcentaje_iva));	
-					console.log("Re: "+noRetencion);	
+				
 					if(noRetencion==='0'){//Sacamos el valor de los impuestos por RETENCION
 							//Si aplica la retencion sacamos la base imponible del producto final
 							precio_cliente_final_articulo_sin_iva = precio_cliente_final_articulo/(1+porcentaje_iva);
@@ -782,8 +782,7 @@ function actualizaCostosTotales(decimales_int){
 		//Si es dolares, pasamos la retencion de colones a dolares
 		costo_retencion = costo_retencion/factor_tipo_moneda_float;
 	}
-	console.log("Retencion: "+costo_retencion);
-	
+		
 	//Formateo e impresion a UI
 	//precio_unidad_FACTOR_float = precio_unidad_FACTOR_float.format(2, 3, '.', ',');
 	
@@ -1029,7 +1028,7 @@ function cambiarCantidad(id, e, value){
 		codigo_id = 'codigo_articulo_'+row;
 		//alert(codigo);
 		codigo = document.getElementById(codigo_id).value;
-		actualizarCantidadProductoInventario('', codigo, row);	
+		//actualizarCantidadProductoInventario('', codigo, row);	
 		cantidad_actual = document.getElementById("cantidad_articulo_"+row).value;
 		document.getElementById("cantidad_articulo_anterior_"+row).value=cantidad_actual;
 	}

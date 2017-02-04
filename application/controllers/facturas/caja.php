@@ -34,6 +34,7 @@ class caja extends CI_Controller {
 		date_default_timezone_set("America/Costa_Rica");
 		$fecha = date("y/m/d : H:i:s", now());
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('facturas/view_caja_factura', $data);	
 	}
 	
@@ -637,44 +638,84 @@ class caja extends CI_Controller {
 						
 			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 			
-			if(sizeOf($items_factura)>0){
-					//ce:cedula_field, no:nombre_field, cu:tipo_moneda, ob:observaciones
-					//CAMBIAMOS EL ENCABEZADO
-					$datosHead = array(
-										'TB_03_Cliente_Cliente_Cedula'=>$info_factura['ce'],
-										'Factura_Nombre_Cliente'=>$info_factura['no'],
-										'Factura_Moneda'=>$info_factura['cu'],
-										'Factura_Observaciones'=>$info_factura['ob']
-									);
-					//Borramos la factura temporal
-					$this->articulo->eliminarFacturaTemporal($_POST['token']);
+			if($factura = $this->factura-> existe_Factura($consecutivo, $data['Sucursal_Codigo'])){
+				if($articulosFacturaActual = $this->factura->getItemsFactura($consecutivo, $data['Sucursal_Codigo']))
+				if(sizeOf($items_factura)>0){
+					$resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $articulosFacturaActual, $data['Sucursal_Codigo']);
+					if($resultadoExistencias["status"]){
+						//ce:cedula_field, no:nombre_field, cu:tipo_moneda, ob:observaciones
+						//CAMBIAMOS EL ENCABEZADO
+						$datosHead = array(
+											'TB_03_Cliente_Cliente_Cedula'=>$info_factura['ce'],
+											'Factura_Nombre_Cliente'=>$info_factura['no'],
+											'Factura_Moneda'=>$info_factura['cu'],
+											'Factura_Observaciones'=>$info_factura['ob']
+										);
+						//Borramos la factura temporal
+						$this->articulo->eliminarFacturaTemporal($_POST['token']);
+						$this->devolverProductosdeFactura($consecutivo, $data['Sucursal_Codigo']);
+						//ELIMINAMOS LOS PRODUCTOS
+						$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
+						
+						$this->factura->actualizarFacturaHead($datosHead, $consecutivo, $data['Sucursal_Codigo']);
 									
-					//ELIMINAMOS LOS PRODUCTOS
-					$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
+						//LOS VOLVEMOS A AGREGAR LOS NUEVOS
+						$cliente = $this->factura->getCliente($consecutivo, $data['Sucursal_Codigo']);
+						
+						$vendedor = $this->factura->getVendedor($consecutivo, $data['Sucursal_Codigo']);
+						
+						
+						$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
+						
+						$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
 					
-					$this->factura->actualizarFacturaHead($datosHead, $consecutivo, $data['Sucursal_Codigo']);
-								
-					//LOS VOLVEMOS A AGREGAR LOS NUEVOS
-					$cliente = $this->factura->getCliente($consecutivo, $data['Sucursal_Codigo']);
-					
-					$vendedor = $this->factura->getVendedor($consecutivo, $data['Sucursal_Codigo']);
-					
-					
-					$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
-					
-					$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-				
-					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_edicion');
-					
-					unset($retorno['error']);
-					$retorno['status'] = 'success';
-			}else{
+						$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_edicion');
+						
+						unset($retorno['error']);
+						$retorno['status'] = 'success';
+					}else{
+						$retorno['error'] = 'cf_9'; //No hay suficiente inventario
+					}
+				}else{
 					$retorno['error'] = 'cf_3'; //No hay productos
+				}
+			}else{
+				$retorno['error'] = 'cf_4'; //No existe factura
 			}
 		}else{
 			$retorno['error'] = 'cf_2'; //URL con mal formato
 		} 
 		echo json_encode($retorno);
+	}
+	
+	function checkExistenciaDeProductos($items_factura, $articulosActuales, $sucursal){
+		$r["status"] = true;
+		$r["articulos"] = array();
+		foreach($items_factura as $item){
+		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
+			if($item['co']=='00'){ //Si es generico					
+					continue;
+			}else{ //Si es normal					
+				if($articulo = $this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
+					$articulo = $articulo[0];
+					if(($articulo->Articulo_Cantidad_Inventario + $this->getCantidadArticuloActual($item['co'], $articulosActuales)) < $item['ca']){
+						$r["status"] = false;
+						array_push($r["articulos"], array("codigo"=>$item['co'],"inventario"=>$articulo->Articulo_Cantidad_Inventario));
+					}
+				}
+			}
+			
+		}
+		return $r;
+	}
+	
+	function getCantidadArticuloActual($codigo, $articulos){
+		foreach($articulos as $art){
+			if($art->Articulo_Factura_Codigo == $codigo){
+				return $art->Articulo_Factura_Cantidad;
+			}
+		}
+		return 0;
 	}
 	
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
@@ -690,6 +731,7 @@ class caja extends CI_Controller {
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
 					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
+					$this->articulo->actualizarInventarioRESTA($item['co'], $item['ca'], $sucursal);
 				}
 			}
 			

@@ -48,31 +48,31 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>"></script>
 		
 		<!--CARGA DEL TOOLTIP-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tooltips.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tooltips.js?v='.$javascript_cache_version); ?>"></script>
 		<!--SCRIPT DE LLAMADAS AJAX-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_calls.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_calls.js?v='.$javascript_cache_version); ?>"></script>
 		<!--SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tools.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tools.js?v='.$javascript_cache_version); ?>"></script>
 		<!--SCRIPT DE CAMBIO MONEDA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_currency.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_currency.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DE LAS HERRAMIENTAS DEL POPUP MODAL-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_popup.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_popup.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DE LAS HERRAMIENTAS DE INVENTARIO-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_inventario.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_inventario.js?v='.$javascript_cache_version); ?>"></script>
 		<!--BUSQUEDA POR NOMBRE-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_searchName.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_searchName.js?v='.$javascript_cache_version); ?>"></script>
 		<!--LIBRERIA ENCRYPTACION-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js?v='.$javascript_cache_version); ?>"></script>
 		<!--HERRAMIENTAS PARA ENVIO A CAJA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_envio_caja.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_envio_caja.js?v='.$javascript_cache_version); ?>"></script>
 		<!--HERRAMIENTAS PARA Facturas pendiente-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_pendientes.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_pendientes.js?v='.$javascript_cache_version); ?>"></script>
 		<!--HERRAMIENTAS PARA COBRO FACTURA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/caja_cobrar_tools.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/caja_cobrar_tools.js?v='.$javascript_cache_version); ?>"></script>
 		<!--JQUERY IMPROMPTU-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DE PROFORMAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_cargar_proforma.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_cargar_proforma.js?v='.$javascript_cache_version); ?>"></script>
 	
 		<script><?php
 			echo "var sucursal=$Sucursal_Codigo;
@@ -278,6 +278,7 @@ PARA:
 			<div class="cant_total_articulos_div">
 				<p class="cant_total_articulos_p">Cantidad Total de Articulos:</p>
 				<p class="cant_total_articulos_p" id="cant_total_articulos">0</p>
+				<span style="    color: red; font-size: 9px; float: right; margin-top: 2px; margin-right: 10px;">* EL INVENTARIO MOSTRADO AQUI NO TOMA EN CUENTA LAS UNIDADES QUE ESTAN FACTURADAS EN ESTA Y OTRAS FACTURAS PENDIENTES</span>
 			</div>
 			
 			

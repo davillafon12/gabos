@@ -30,6 +30,7 @@ class nueva extends CI_Controller {
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('facturas/view_nueva_factura', $data);	
 	}
 	
@@ -269,20 +270,50 @@ class nueva extends CI_Controller {
 					//Borramos la factura temporal
 					$this->articulo->eliminarFacturaTemporal($_POST['token']);
 					
-					if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
-						$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
-						$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-						$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
-						//$this->
-						echo '7'; //El ingreso fue correcto											
+					$resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $data['Sucursal_Codigo']);
+					if($resultadoExistencias["status"]){						
+						if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
+							$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
+							$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
+							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
+							//$this->
+							echo '7'; //El ingreso fue correcto											
+						}else{
+							echo 'Hubo un error al crear encabezado de la factura'; //Error al crear la factura
+						}	
 					}else{
-						echo '11'; //Error al crear la factura
-					}	
+						$articulos = "";
+						foreach($resultadoExistencias["articulos"] as $arti){
+							$articulos .= "-> Código: {$arti["codigo"]} Cantidad Disponible:  {$arti["inventario"]}<br>";
+						}
+						echo 'Los siguientes artículos no tienen suficiente inventario: <br>'.$articulos; // No hay suficiente existencia
+					}
 			}else{
-					echo '99'; //No vienen productos
+					echo 'Problema cargando información de los artículos'; //No vienen productos
 			}		
 		}
-		else{echo '10';} //Numero de error mal post		
+		else{echo 'URL mal formado, por favor reportar al administrador';} //Numero de error mal post		
+	}
+	
+	function checkExistenciaDeProductos($items_factura, $sucursal){
+		$r["status"] = true;
+		$r["articulos"] = array();
+		foreach($items_factura as $item){
+		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
+			if($item['co']=='00'){ //Si es generico					
+					continue;
+			}else{ //Si es normal					
+				if($articulo = $this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
+					$articulo = $articulo[0];
+					if($articulo->Articulo_Cantidad_Inventario < $item['ca']){
+						$r["status"] = false;
+						array_push($r["articulos"], array("codigo"=>$item['co'],"inventario"=>$articulo->Articulo_Cantidad_Inventario));
+					}
+				}
+			}
+			
+		}
+		return $r;
 	}
 	
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
@@ -299,6 +330,7 @@ class nueva extends CI_Controller {
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
 					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
+					$this->articulo->actualizarInventarioRESTA($item['co'], $item['ca'], $sucursal);
 				}
 			}
 			

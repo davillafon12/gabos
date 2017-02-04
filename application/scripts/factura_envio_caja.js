@@ -145,9 +145,9 @@ function sendInvoice(URL){
 			}else{
 				n = noty({
 					   layout: 'topRight',
-					   text: '¡Hubo un error en el envio de la factura. #'+data.trim(),
+					   text: '¡Hubo un error en el envio de la factura. <br>'+data.trim(),
 					   type: 'error',
-					   timeout: 4000
+					   timeout: 10000
 					});
 				$('#envio_factura').bPopup().close(); 
 			}			

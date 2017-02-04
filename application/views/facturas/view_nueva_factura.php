@@ -48,22 +48,22 @@ PARA:
 				
 				
 				<!--CARGA DEL TOOLTIP-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tooltips.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tooltips.js?v='.$javascript_cache_version); ?>"></script>
 				<!--SCRIPT DE LLAMADAS AJAX-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_calls.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_calls.js?v='.$javascript_cache_version); ?>"></script>
 				<!--SCRIPT DE HERRAMIENTAS-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tools.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_tools.js?v='.$javascript_cache_version); ?>"></script>
 				<!--SCRIPT DE CAMBIO MONEDA-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_currency.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_currency.js?v='.$javascript_cache_version); ?>"></script>
 				<!--CARGA DE LAS HERRAMIENTAS DEL POPUP MODAL-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_popup.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_popup.js?v='.$javascript_cache_version); ?>"></script>
 				<!--CARGA DE LAS HERRAMIENTAS DE INVENTARIO-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_inventario.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_inventario.js?v='.$javascript_cache_version); ?>"></script>
 				<!--BUSQUEDA POR NOMBRE-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_searchName.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_searchName.js?v='.$javascript_cache_version); ?>"></script>
 				
 				<!--HERRAMIENTAS PARA ENVIO A CAJA-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_envio_caja.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_envio_caja.js?v='.$javascript_cache_version); ?>"></script>
 				<script>
 					var token_factura_temporal = '<?php echo $token_factura_temp;?>';
 					var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
@@ -72,7 +72,7 @@ PARA:
 				</script>
 				
 				<!--CARGA DEL RELOJ Y EXPIRACION DE LA SESION-->
-				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_reloj.js'); ?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('application/scripts/facturas_reloj.js?v='.$javascript_cache_version); ?>"></script>
 				<!--SCRIPT DE -->
 				
 		
