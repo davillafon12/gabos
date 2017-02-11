@@ -278,7 +278,7 @@ PARA:
 			<div class="cant_total_articulos_div">
 				<p class="cant_total_articulos_p">Cantidad Total de Articulos:</p>
 				<p class="cant_total_articulos_p" id="cant_total_articulos">0</p>
-				<span style="    color: red; font-size: 9px; float: right; margin-top: 2px; margin-right: 10px;">* EL INVENTARIO MOSTRADO AQUI NO TOMA EN CUENTA LAS UNIDADES QUE ESTAN FACTURADAS EN ESTA Y OTRAS FACTURAS PENDIENTES</span>
+				<span style="    color: red; font-size: 9px; float: right; margin-top: 2px; margin-right: 10px;">* EL INVENTARIO MOSTRADO AQUI NO TOMA EN CUENTA LAS UNIDADES DE OTRAS FACTURAS PENDIENTES</span>
 			</div>
 			
 			

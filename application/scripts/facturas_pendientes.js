@@ -187,13 +187,13 @@ function setProductosFactura(productos){
 		cell7 = row.insertCell(6);
 		
 		bodegaINT = productos[i].bodega;
-/*
+
 		if(!isProforma){
 			bodegaINT = parseInt(productos[i].cantidad)+parseInt(productos[i].bodega);
 		}else{
 			bodegaINT = productos[i].bodega;
 		}
-*/
+
 		
 		cell1.innerHTML = "<img class='imagen_arrow' title='Agregar Fila' src='/../application/scripts/Images/agregar_row.gif' width='14' height='7' onClick='agregarByCM("+(i+1)+")'/>"
 				+"<input tabindex='"+(i+1)+"' id='codigo_articulo_"+(i+1)+"' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);' value='"+productos[i].codigo+"' disabled>"
