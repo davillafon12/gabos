@@ -92,6 +92,7 @@ class consignaciones extends CI_Controller {
 	function consignarArticulos(){
 			$retorno['status'] = 'error';
 			$retorno['error'] = 'No se pudo procesar la solicitud.';
+		
 			if(isset($_POST["sucursalRecibe"]) && isset($_POST["sucursalEntrega"]) &&
 				 isset($_POST["articulos"]) && isset($_POST["costo"]) &&
 				 isset($_POST["iva"]) && isset($_POST["retencion"]) &&

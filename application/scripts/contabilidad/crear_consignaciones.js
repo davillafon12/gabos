@@ -223,7 +223,7 @@ function realizarConsignacion(){
 																									total          :  $("#costo_total").val(),
 																									porcentaje_iva :	_PORCENTAJE_IVA																					
 																							};
-															doAjax("/contabilidad/consignaciones/consignarArticulos", "POST", false, parametros, "JSON", resultadoConsignacion, function(){
+															doAjax("/contabilidad/consignaciones/consignarArticulos", "POST", true, parametros, "JSON", resultadoConsignacion, function(){
 																	notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
 															});
 													}
