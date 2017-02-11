@@ -279,6 +279,7 @@ function validarSucursales(){
 }
 
 function cargarArrayArticulos(){
+		_ARRAY_ARTICULOS = [];
 		var cantidadFilas = $("#tabla_productos tr").length - 1;
 		for(var i=1; i <= cantidadFilas; i++){
 				var codigo = $("#articulo_"+i).val().trim();

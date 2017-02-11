@@ -46,7 +46,7 @@ PARA:
 		<!--JQUERY IMPROMPTU-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
 		<!--HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/crear_consignaciones.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/crear_consignaciones.js?v='.$javascript_cache_version); ?>"></script>
 	
 		<script>
 			var _PORCENTAJE_IVA = <?php echo $porcentaje_iva; ?>;

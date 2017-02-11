@@ -16,12 +16,13 @@ class consignaciones extends CI_Controller {
 
 	function index()
 	{
+		
 			redirect('home', 'location');			
 	}
 	
 	function crear(){
 			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-				
+			$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 			$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
 			if(!$permisos['crear_consignaciones'])
