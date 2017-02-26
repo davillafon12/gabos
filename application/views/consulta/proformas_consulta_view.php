@@ -39,7 +39,7 @@ PARA:
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_proformas.css'); ?>">
 		<!--CARGA DEL SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/proformas_tools.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/proformas_tools.js?v='.$javascript_cache_version); ?>"></script>
 		<!--JQUERY IMPROMPTU-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
 		<!--CSS ESTILO DEL MODAL-->
@@ -143,6 +143,7 @@ PARA:
 				<p class="contact" style="display:inline;"><label for="impresion">Impresión:</label></p> 					
 				<select id="tipo_impresion" onChange="cambiarTipoImpresion(this.value)" class="impresion" name="impresion" >					
 					<option value="c">A4</option>
+					<option value="t">PV</option>
 				</select>
 				<input type="button" class="boton_busqueda" onclick="imprimir()" value="Imprimir"/>
 				<input type="button" class="boton_busqueda boton-estado-proforma" onclick="descontarArticulos()" value="Descontar Artículos" style="    background: #F5913B;"/>

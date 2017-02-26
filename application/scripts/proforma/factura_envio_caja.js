@@ -156,10 +156,19 @@ function sendInvoice(URL){
 					$('#envio_factura').bPopup().close();
 				}else if(facturaHEAD[0].status==="success"){
 					$('#envio_factura').bPopup().close();	
-					window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i=c','Impresion de Proforma','width=768,height=1024,resizable=no,toolbar=no,location=no,menubar=no');
+					
+					if(tipoImpresion==='t'){
+						//Impresion termica
+						window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+					}else if(tipoImpresion==='c'){
+						//Impresion carta
+						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+					}
+					
 					window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/home';
 				}
 			}catch(e){
+				console.log(e);
 				n = noty({
 						   layout: 'topRight',
 						   text: '¡La respuesta tiene un formato indebido, contacte al administrador!',
@@ -173,4 +182,23 @@ function sendInvoice(URL){
 	 
 		}
 	});
+}
+
+// Para el tamaño del windows open
+var anchoImpresion = 290;
+var alturaImpresion = 400;
+var tipoImpresion = "c";
+
+function cambiarTipoImpresion(tipo){
+	tipoImpresion = tipo;
+	switch(tipo){
+		case 't':
+			anchoImpresion = 290;
+			alturaImpresion = 400;
+		break;
+		case 'c':
+			anchoImpresion = 1024;
+			alturaImpresion = 768;
+		break;
+	}
 }

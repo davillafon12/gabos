@@ -79,6 +79,7 @@ class impresion extends CI_Controller {
 			r = recibo
 			nc = nota credito
 			nb = nota debito
+			p = proforma
 		*/
 		
 		switch($_GET['d']){
@@ -439,6 +440,49 @@ class impresion extends CI_Controller {
 						}else{
 							$this->retorno['error'] = 'No se pudo cargar el encabezado del retiro parcial';
 						}
+					}else{
+						$this->retorno['error'] = 'Sucursal no existe';
+					}
+				}else{
+					$this->retorno['error'] = 'Variables de consecutivo y sucursal inválidas';
+				}
+			break;
+			case 'p':
+				if(isset($_GET['n'])&&isset($_GET['s'])){
+					$sucursal = $_GET['s'];
+					$consecutivo = $_GET['n'];
+					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+						if($proformaHead = $this->proforma_m->getProformasHeadersImpresion($consecutivo, $sucursal)){
+							//Costos totales
+							$subtotal = $proformaHead[0]->subtotal;
+							$totalIVA = $proformaHead[0]->total_iva;
+							$total = $proformaHead[0]->total;
+							//Valoramos si es en dolares
+							if($proformaHead[0]->moneda=='dolares'){
+								$proformaHead[0]->subtotal = $subtotal/$proformaHead[0]->cambio;
+								$proformaHead[0]->total_iva = $totalIVA/$proformaHead[0]->cambio;
+								$proformaHead[0]->total = $total/$proformaHead[0]->cambio;
+							}	
+							if($proformaBody = $facturaPRODUCTS = $this->proforma_m->getArticulosProformaImpresion($consecutivo, $sucursal)){
+								//Valoramos si es en dolares
+								if($proformaHead[0]->moneda=='dolares'){
+									for($i = 0; $i<sizeOf($proformaBody); $i++){
+										$proformaBody[$i]->precio = ($proformaBody[$i]->precio)/$proformaHead[0]->cambio;
+									}
+								}
+								
+								$this->retorno['status'] = 'success';
+								unset($this->retorno['error']);
+								
+								$this->retorno['empresa'] = $empresa;
+								$this->retorno['fHead'] = $proformaHead;
+								$this->retorno['fBody'] = $proformaBody;
+							}else{
+								$this->retorno['error'] = 'No se pudo cargar los productos del retiro parcial';
+							}
+						}else{
+							$this->retorno['error'] = 'No se pudo cargar el encabezado de la proforma';
+						}				
 					}else{
 						$this->retorno['error'] = 'Sucursal no existe';
 					}

@@ -43,22 +43,22 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>"></script>
 		
 		<!--CARGA DEL TOOLTIP-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_tooltips.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_tooltips.js?v='.$javascript_cache_version); ?>"></script>
 		<!--SCRIPT DE LLAMADAS AJAX-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_calls.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_calls.js?v='.$javascript_cache_version); ?>"></script>
 		<!--SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_tools.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_tools.js?v='.$javascript_cache_version); ?>"></script>
 		<!--SCRIPT DE CAMBIO MONEDA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_currency.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_currency.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DE LAS HERRAMIENTAS DEL POPUP MODAL-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_popup.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_popup.js?v='.$javascript_cache_version); ?>"></script>
 		
 		<!--BUSQUEDA POR NOMBRE-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_searchName.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_searchName.js?v='.$javascript_cache_version); ?>"></script>
 		<!--LIBRERIA ENCRYPTACION-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js'); ?>"></script>
 		<!--HERRAMIENTAS PARA ENVIO A CAJA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/factura_envio_caja.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/factura_envio_caja.js?v='.$javascript_cache_version); ?>"></script>
 		
 		<script>
 			var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
@@ -138,10 +138,14 @@ PARA:
 					<script>setUpLiveSearch();</script>
 				</td>
 				<td>
-					
+					<p class="contact" style="display:inline;"><label for="impresion">Impresión:</label></p> 					
+				
 				</td>
 				<td>
-					
+					<select id="tipo_impresion" onChange="cambiarTipoImpresion(this.value)" class="moneda" name="impresion" >					
+					<option value="c">A4</option>
+					<option value="t">PV</option>
+				</select>
 				</td>
 				<!--
 				<td>

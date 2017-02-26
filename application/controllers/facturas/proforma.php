@@ -30,6 +30,7 @@ class proforma extends CI_Controller {
 		//echo date("y/m/d : H:i:s", now());
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('facturas/view_proforma', $data);	
 	}
 	
@@ -106,6 +107,8 @@ class proforma extends CI_Controller {
 				//Para efecto de impresion
 				$retorno['consecutivo']= $consecutivo;
 				$retorno['sucursal']= $data['Sucursal_Codigo'];
+				//Para efecto de impresion
+				$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
 				$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 	
 				$retorno['status'] = 'success';

@@ -58,6 +58,9 @@ function seleccionarTipoDocumento(d, data){
 		case 'f':
 			imprimirFactura(data);			
 		break;
+		case 'p':
+			imprimirProforma(data);			
+		break;
 		case 'r':
 			//Sacamos cuantos recibos se hicieron
 			cant_recibos = data.recibos.length;
@@ -132,6 +135,88 @@ function imprimirFactura(data){
 	qz.append(" Pago con: "+factura.recibido_vuelto+"\r\n"); 
 	qz.append(" Vuelto: "+factura.entregado_vuelto+"\r\n");
 	factura.estado = factura.estado == "cobrada" ? "facturada" : factura.estado;
+	qz.append(" Estado: "+factura.estado+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append(" Articulo      Cant. Desc.      Precio  \r\n");
+	qz.append("----------------------------------------\r\n");
+	
+	var cantidadTotalArticulos = 0;
+	
+	//PROCESADO DE PRODUCTOS
+	for(i = 0; productos.length>i; i++){
+		cantidad = productos[i].cantidad;
+		descuento = productos[i].descuento;
+		
+		cant = parseInt(cantidad);
+		des = parseInt(descuento);
+		cantidadTotalArticulos += cant;
+		precio = parseFloat(productos[i].precio);
+		precio = cantidad * ( precio - ( precio * ( descuento / 100 ) ) );
+		
+		qz.append(formatearCodigo(productos[i].codigo)+formatearCantidad(cantidad)+formatearDescuento(descuento)+acomodarPrecio(formatearNumero(precio))+"\r\n");
+		qz.append(" ->"+productos[i].descripcion.substring(0, 36)+"\r\n");
+	}
+	qz.append("----------------------------------------\r\n");
+	qz.append("Cant. Articulos: "+cantidadTotalArticulos+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append(enviarDerecha("Subtotal:"+formatearMontoTotal(formatearNumero(factura.subtotal)))+"\r\n");
+	qz.append(enviarDerecha("IVA:"+formatearMontoTotal(formatearNumero(factura.total_iva)))+"\r\n");
+	qz.append(enviarDerecha("Retencion:"+formatearMontoTotal(formatearNumero(factura.retencion)))+"\r\n");
+	qz.append(enviarDerecha("Total:"+formatearMontoTotal(formatearNumero(factura.total)))+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append("Comentarios:\r\n");
+	qz.append(factura.observaciones+"\r\n")
+	//Centramos 
+	qz.append("\x1B\x61\x01");
+	qz.append("Recibido conforme: ___________\r\n");
+	qz.append(" \r\n");
+	qz.append("Los precios incluyen impuestos de venta\r\n");
+	qz.append("Gracias por su visita\r\n");
+	qz.append(" \r\n");
+	qz.append(empresa.leyenda+"\r\n");
+	//Damos espacio al final
+	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
+	qz.append("\x1B\x69"); //Cortar
+	qz.print();
+}
+
+function imprimirProforma(data){
+	empresa = data.empresa[0];
+	factura = data.fHead[0];
+	productos = data.fBody;
+	
+	//qz = document.getElementById("qz");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.appendHex("x1Bx70x00x64x64"); //Abrir Gabeta
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	//Seleccionamos el tipo de letra
+	qz.append("\x1B\x21\x10");
+	//Centramos
+	qz.append("\x1B\x61\x01");
+	qz.append(" "+empresa.nombre+" \r\n");
+	//Seleccionamos tipo de letra
+	qz.append("\x1B\x21\x01");
+	qz.append(" Ced. Jur.: "+empresa.cedula+" \r\n");
+	qz.append(" Tel.: "+empresa.telefono+" \r\n");
+	//qz.append(" Direccion: "+empresa.Sucursal_Direccion+" \r\n");
+	qz.append(" Email: "+empresa.email+" \r\n");
+	qz.append(" \r\n");
+	qz.append("\x1B\x40"); //Reset todo
+	qz.append("\x1B\x74\x16"); //Code page WPC1252
+	qz.append("----------------------------------------\r\n");			
+	qz.append(" Proforma: "+factura.consecutivo+"\r\n"); 
+	qz.append(" Fecha: "+factura.fecha+"\r\n"); 
+	qz.append("----------------------------------------\r\n");
+	qz.append(" Cliente: "+factura.cliente_ced+"\r\n");
+	qz.append(" Nombre: \r\n");
+	//Se tira en otro reglo para que queda todo el nombre, si es mayor a 40 lo corta
+	qz.append(factura.cliente_nom.substring(0, 40)+"\r\n");
+	qz.append("----------------------------------------\r\n");
+	qz.append(" Moneda: "+factura.moneda+"\r\n"); 
+	qz.append(" Vendedor: "+factura.vendedor.substring(0, 29)+"\r\n");
+	qz.append(" Pago con: "+factura.recibido_vuelto+"\r\n"); 
+	qz.append(" Vuelto: "+factura.entregado_vuelto+"\r\n");
+	factura.estado = factura.estado == "sin_proces" ? "sin procesar" : factura.estado;
 	qz.append(" Estado: "+factura.estado+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Articulo      Cant. Desc.      Precio  \r\n");
