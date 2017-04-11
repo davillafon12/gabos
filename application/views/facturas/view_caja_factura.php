@@ -316,7 +316,7 @@ PARA:
 						<input id="iva" class="input_dos" autocomplete="off" name="iva" type="text" disabled> 
 					</td>
 					</tr>
-					<tr>
+					<tr  style="display:none;">
 					<td>
 						<p class="contact"><label for="retencion">Retención:</label></p> 
 					</td>

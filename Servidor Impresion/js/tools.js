@@ -25,7 +25,7 @@ function imprimir(){
 	t = parse('t');	
 	servidor = parse('server'); 
 	protocolo = parse('protocol');
-	puerto = 8888;
+	puerto = 80;
 	traerDocumento(t,d,n,s,i);	
 }
 
@@ -161,7 +161,7 @@ function imprimirFactura(data){
 	qz.append("----------------------------------------\r\n");
 	qz.append(enviarDerecha("Subtotal:"+formatearMontoTotal(formatearNumero(factura.subtotal)))+"\r\n");
 	qz.append(enviarDerecha("IVA:"+formatearMontoTotal(formatearNumero(factura.total_iva)))+"\r\n");
-	qz.append(enviarDerecha("Retencion:"+formatearMontoTotal(formatearNumero(factura.retencion)))+"\r\n");
+	//qz.append(enviarDerecha("Retencion:"+formatearMontoTotal(formatearNumero(factura.retencion)))+"\r\n");
 	qz.append(enviarDerecha("Total:"+formatearMontoTotal(formatearNumero(factura.total)))+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	qz.append("Comentarios:\r\n");
