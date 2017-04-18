@@ -304,6 +304,8 @@ function setEncabezadoFactura(facturaHEAD){
 	costo = parseFloat(facturaHEAD[0].costo);
 	retencion = parseFloat(facturaHEAD[0].retencion);
 	
+	iva += retencion;
+	
 	if(tipo_moneda==='colones'){
 		$(".tipo_moneda_display").html("₡");
 	}else if(tipo_moneda==='dolares'){

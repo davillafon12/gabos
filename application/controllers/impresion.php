@@ -1870,7 +1870,7 @@ class impresion extends CI_Controller {
 				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
 				$pdf->SetXY(131, 232);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
+				$pdf->Cell(28,7,$this->fn($totalIVA+$retencion),1,0,'R');
 /*
 				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Retención:',1,0,'R');

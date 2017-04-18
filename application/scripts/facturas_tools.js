@@ -824,7 +824,7 @@ function actualizaCostosTotales(decimales_int){
 	//Como el toFixed devuelve un string debemos convertirlos de nuevo a float para formatear
 	costo_cliente_final = parseFloat(costo_cliente_final);
 	costo_sin_IVA_factura = parseFloat(costo_sin_IVA_factura);
-	IVA_Factura = parseFloat(IVA_Factura);
+	IVA_Factura = parseFloat(IVA_Factura) + parseFloat(costo_retencion);
 	costo_total_factura = parseFloat(costo_total_factura);
 	costo_retencion = parseFloat(costo_retencion);
 	

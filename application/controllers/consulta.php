@@ -28,6 +28,7 @@ class consulta extends CI_Controller {
 	
 	function facturas(){
 		include 'get_session_data.php';
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('consulta/facturas_consulta_view', $data);
 	}
 	
