@@ -32,16 +32,16 @@ PARA:
 		<!--CSS ESTILO DEL MODAL-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<!--AJAX DE LA TABLA-->
-		<?php include '/../../scripts/cargar_tabla_edicion_clientes.php';?>
+		<?php //include '/../../scripts/cargar_tabla_edicion_clientes.php';?>
 		<?php include '/../../scripts/ajax_desactivar_clientes.php';?>
 		<!--CARGA DEL JQUERY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script> 
 		<!--CARGA DE HERRAMIENTAS VARIAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/editar_clientes_tools.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/editar_clientes_tools.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DE MODAL-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
-		<!--CARGA DEL DATATABLES-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.dataTables.js'); ?>"></script>
+		<!-- DATA TABES SCRIPT -->
+        <script src="<?php echo base_url('/application/scripts/datatables/dataTablesNew.js');?>" type="text/javascript"></script>
 	</head>
 	<body >
 		<!--Incluir imagen de cabezera-->
@@ -60,15 +60,31 @@ PARA:
 		    
 			<div id="contenido">
 				<center><br><br>
-					<img src="<?php echo base_url('application/images/cargando.gif'); ?>" /><br>
-					Cargando clientes. . .<br>
-					Espere por favor. . .<br><br><br>
+					<table id='tabla_editar' class='tablaPrincipal'>
+						<thead> 
+							<th ></th>
+	                        <th class='Sorted_enabled'>
+	                            Nombre
+	                        </th>
+	                        <th class='Sorted_enabled'>
+	                            Apellidos
+	                        </th>
+							<th class='Sorted_enabled'>
+	                            Cédula
+	                        </th>
+	                        <th class='Sorted_enabled'>
+	                            Estado Cliente
+	                        </th>
+							<th >
+	                            Opciones
+	                        </th>
+	                    </thead> 
+						<tbody>
+						</tbody>
+					</table>
 				</center>
 			</div>
 
-			<script type="text/javascript">
-			   getTable();			   
-			</script>
 			
         </div>
 				<!--<div id="timeout_show"></div>-->

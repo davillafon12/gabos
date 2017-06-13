@@ -21,6 +21,7 @@ class editar extends CI_Controller {
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	if($permisos['editar_cliente'])
 	{	
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 	    $this->load->view('clientes/clientes_editar_view', $data);	
 	}
 	else{
@@ -531,7 +532,68 @@ class editar extends CI_Controller {
     }
 
 
-
+	function obtenerClientesTabla(){
+		include '/../get_session_data.php';
+		//Un array que contiene el nombre de las columnas que se pueden ordenar
+		$columnas = array(
+								'0' => 'Cliente_Nombre',
+								'1' => 'Cliente_Nombre',
+								'2' => 'Cliente_Apellidos',
+								'3' => 'Cliente_Cedula',
+								'4' => 'Cliente_Estado'
+								);
+		$query = $this->cliente->obtenerClientesParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']));
+		
+		$ruta_imagen = base_url('application/images/Icons');
+		$clientesAMostrar = array();
+		foreach($query->result() as $cli){
+			$estado = "";
+			$opciones = "";
+			if($cli->estado=="activo")
+			{
+				$estado = "<div class='estado_Ac'>ACTIVADO</div><br>"; 
+			}elseif($cli->estado=="semiactivo"){
+				$estado = "<div class='estado_Se'>SEMIACTIVO</div><br>"; 
+			}else
+			{
+				$estado = "<div class='estado_De'>DESACTIVADO</div><br>"; 
+			}                        
+            if($cli->cedula!="0"&&$cli->cedula!="1"&&$cli->cedula!="2"){
+                $opciones =
+                "</td>
+				<td >
+					<div class='tab_opciones'>
+						<a href='".base_url('')."clientes/editar/edicion?id=".$cli->cedula."' ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>
+						<a href='javascript:;' onclick='goDesactivar(".$cli->cedula.")'><img src=".$ruta_imagen."/eliminar.png width='17' height='17' title='Desactivar'></a>
+						<a href='javascript:;' onclick='goActivar(".$cli->cedula.")'><img src=".$ruta_imagen."/activar.png width='21' height='21' title='Activar'></a>
+					</div>
+				</td>";
+			}else{
+				$opciones = "</td><td></td>"; 	
+			}
+			
+			
+			$auxArray = array(
+				$cli->cedula!=0&&$cli->cedula!=1 ? "<input class='checkbox'  type='checkbox' name='checkbox' value='".$cli->cedula."'>" : "",
+				$cli->nombre,
+				$cli->apellidos,
+				$cli->cedula,
+				$estado,
+				$opciones
+			);
+			array_push($clientesAMostrar, $auxArray);
+		}
+		
+		$filtrados = $this->cliente->obtenerClientesFiltradosParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']));
+		
+		$retorno = array(
+					'draw' => $_POST['draw'],
+					'recordsTotal' => $this->cliente->getTotalClientes(),
+					'recordsFiltered' => $filtrados -> num_rows(),
+					'data' => $clientesAMostrar
+				);
+		echo json_encode($retorno);
+	}
  
  
  

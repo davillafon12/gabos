@@ -655,6 +655,44 @@ Class cliente extends CI_Model
 			$this->db->where("TB_03_Cliente_Cliente_Cedula", $cliente);
 			$this->db->delete("tb_16_authclientes");
 	}
+	
+	function obtenerClientesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad){
+		
+		return $this->db->query("
+			SELECT 	Cliente_Cedula AS cedula,
+					Cliente_Nombre AS nombre,
+					Cliente_Apellidos AS apellidos,
+					Cliente_Estado AS estado
+			FROM tb_03_cliente
+			WHERE (Cliente_Cedula LIKE '%$busqueda%' OR
+				   Cliente_Nombre LIKE '%$busqueda%' OR
+				   Cliente_Apellidos LIKE '%$busqueda%' OR
+				   Cliente_Estado LIKE '%$busqueda%')
+			ORDER BY $columnaOrden $tipoOrden
+			LIMIT $inicio,$cantidad		
+		");		
+	}
+	
+	function obtenerClientesFiltradosParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad){
+		
+		return $this->db->query("
+			SELECT 	Cliente_Cedula AS cedula,
+					Cliente_Nombre AS nombre,
+					Cliente_Apellidos AS apellidos,
+					Cliente_Estado AS estado
+			FROM tb_03_cliente
+			WHERE (Cliente_Cedula LIKE '%$busqueda%' OR
+				   Cliente_Nombre LIKE '%$busqueda%' OR
+				   Cliente_Apellidos LIKE '%$busqueda%' OR
+				   Cliente_Estado LIKE '%$busqueda%')	
+		");		
+	}
+	
+	function getTotalClientes(){
+		$this->db->from('tb_03_cliente');
+		$query = $this -> db -> get();
+		return $query -> num_rows();
+	}
 }
 
 
