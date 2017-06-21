@@ -143,7 +143,7 @@ function setArticuloFromPopup(){
 	8 => nombre de la imagen del producto
 	9 => si esta o no exento
 	*/
-	datosArticulo = "1,00,"+pop_descripcion+","+pop_inventario+","+pop_descuento+",0,"+pop_costo_unidad+","+pop_costo_unidad+",00,0";
+	datosArticulo = "1,00,"+pop_descripcion+","+pop_inventario+","+pop_descuento+",0,"+pop_costo_unidad+","+pop_costo_unidad+",00,0,0";
 	//alert(datosArticulo);
 	num_row = rowIDpopup.replace("codigo_articulo_","");
 	setDatosArticulo(datosArticulo.split(','), rowIDpopup, num_row,pop_cantidad);

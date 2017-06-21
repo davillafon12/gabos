@@ -426,6 +426,7 @@ function setArticulo(articulo, num_fila){
 	//Seteamos si no se le aplica retencion
 	$("#producto_retencion_"+num_fila).val(articulo.retencion);
 	
+	
 	//Funciones Finales
 	actualizaCostoTotalArticulo("cantidad_articulo_"+num_fila);
 	updateProductsTotal();
@@ -562,6 +563,8 @@ function setDatosArticulo(articuloARRAY, id_input, num_row, cantidadArticulos){
 		
 		//alert(articuloARRAY[9]);
 		document.getElementById("producto_exento_"+num_row).value=articuloARRAY[9];
+		document.getElementById("producto_retencion_"+num_row).value=articuloARRAY[10];
+		
 		
 		//actualizamos info
 		//alert("1. => "+cantidadArticulos);
