@@ -83,6 +83,7 @@ class traspaso extends CI_Controller {
 						if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
 							$articulos = json_decode($articulos);
 							if(sizeof($articulos)>0){
+								
 								if($this->verificarExistenciaDeArticulos($articulos, $sucursal)){
 									//Cargamos informacion adicional
 									include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
@@ -163,9 +164,14 @@ class traspaso extends CI_Controller {
 			$retencion = $articuloDeSucursalEntrega[0]->Articulo_No_Retencion;
 			$exento = $articuloDeSucursalEntrega[0]->Articulo_Exento;
 			$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
+			
 			//Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
-			$precioUnidadReal = $this->articulo->getPrecioProducto($articulo->codigo, $this->cliente->getNumeroPrecio($clienteLiga->Cliente), $sucursalEntrega);  
-			$costo = $precioUnidadReal - ($precioUnidadReal / (1 + $porcentajeIVA));
+			$numeroPrecioCliente = $this->cliente->getNumeroPrecio($clienteLiga->Cliente);
+			$precioUnidadReal = $this->articulo->getPrecioProducto($articulo->codigo, $numeroPrecioCliente, $sucursalEntrega);
+			$descuentoProductoReal = $this->articulo->getDescuento($articulo->codigo, $sucursalEntrega, $clienteLiga->Cliente, $familiaCodigo, $descuento); 
+			$costo = $precioUnidadReal - ($precioUnidadReal * ($descuentoProductoReal / 100));
+			$costo -= $costo / (1 + $porcentajeIVA);
+			
 			$precio1 = $this->articulo->getPrecioProducto($articulo->codigo, 1, $sucursalEntrega);
 			$precio2 = $this->articulo->getPrecioProducto($articulo->codigo, 2, $sucursalEntrega);
 			$precio3 = $this->articulo->getPrecioProducto($articulo->codigo, 3, $sucursalEntrega);
