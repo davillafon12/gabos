@@ -14,3 +14,4 @@ application/.DS_Store
 application/models/.DS_Store
 
 .DS_Store
+/nbproject/private/

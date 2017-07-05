@@ -89,6 +89,7 @@
 				<li><a href='#' class='dir'>Consignaciones</a>
 					<ul>
 						<li class='first'><a href='".$Ruta_Base."contabilidad/consignaciones/crear'>Crear</a></li>
+                                                <li><a href='".$Ruta_Base."contabilidad/consignaciones/editar'>Editar</a></li>
 						<li class='last'><a href=".$Ruta_Base."contabilidad/consignaciones/facturar>Facturar</a></li>
 					</ul>
 				</li>	
