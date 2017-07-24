@@ -62,7 +62,7 @@ function validatePopUp(currentID){
 					pop_descuento = document.getElementById(currentID).value;
 					if(isNumber(pop_descuento))
 					{
-						pop_descuento=parseInt(pop_descuento);
+						pop_descuento=parseFloat(pop_descuento);
 						if(pop_descuento<1){pop_descuento=0;}
 						else if(pop_descuento>100){pop_descuento=100;}						
 					}
@@ -94,7 +94,7 @@ function validatePopUp(currentID){
 					pop_descuento_cambio = document.getElementById(currentID).value;
 					if(isNumber(pop_descuento_cambio))
 					{
-						pop_descuento_cambio=parseInt(pop_descuento_cambio);
+						pop_descuento_cambio=parseFloat(pop_descuento_cambio);
 						if(pop_descuento_cambio<1){pop_descuento_cambio=0;}
 						else if(pop_descuento_cambio>100){pop_descuento_cambio=100;}						
 					}

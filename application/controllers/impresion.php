@@ -2067,7 +2067,7 @@ class impresion extends CI_Controller {
 			$pdf->Text(41, $pl, substr($productos[$cc]->descripcion,0,33));
 			$pdf->cell(15,5,$productos[$cc]->cantidad,0,0,'C');
 			$pdf->cell(6,5,$this->fe($productos[$cc]->exento),0,0,'C');
-			$pdf->cell(14,5,$this->fn($productos[$cc]->descuento),0,0,'C');
+			$pdf->cell(14,5,$productos[$cc]->descuento);
 			$pdf->cell(27.5,5,$this->fn($precio),0,0,'R');
 			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
 			$pdf->ln($sl);

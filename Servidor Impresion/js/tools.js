@@ -148,7 +148,7 @@ function imprimirFactura(data){
 		descuento = productos[i].descuento;
 		
 		cant = parseInt(cantidad);
-		des = parseInt(descuento);
+		//des = parseInt(descuento);
 		cantidadTotalArticulos += cant;
 		precio = parseFloat(productos[i].precio);
 		precio = cantidad * ( precio - ( precio * ( descuento / 100 ) ) );

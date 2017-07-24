@@ -339,8 +339,9 @@ function setProductosFactura(productos){
 		cantidadTotalDeArticulos += parseInt(productos[i].cantidad);
 		if(productos[i].exento==='1'){fila += "<td><label class='contact'>E</label>";}else{fila += "<td><label class='contact'></label>";};
 		fila += "<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'></td>";
-		
-		fila += "<td style='text-align: center;'><label class='contact' id='descuento_articulo_"+(i+1)+"'>"+parseFloat(productos[i].descuento).format(decimales, 3, '.', ',')+"</label></td>";
+		console.log(decimales);
+		console.log(parseFloat(productos[i].descuento).format(decimales, 3, '.', ','));
+		fila += "<td style='text-align: center;'><label class='contact' id='descuento_articulo_"+(i+1)+"'>"+parseFloat(productos[i].descuento)+"</label></td>";
 		
 		//Traemos decimales
 		decimales = parseInt(decimales); //Esta variable se inicializa en la vista!!		
