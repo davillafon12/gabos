@@ -845,6 +845,7 @@ Class contabilidad extends CI_Model
 		$this->db->join('tb_24_credito', 'tb_24_credito.Credito_Id = tb_32_tarjeta_recibos.Credito');
 		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
 		$this->db->where('tb_32_tarjeta_recibos.Banco', $banco);
+		$this->db->where('tb_26_recibos_dinero.Tipo_Pago', 'tarjeta');
 		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha >', $inicio);
 		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha <', $final);
 		$this->db->where('tb_24_credito.Credito_Vendedor_Sucursal', $sucursalVendedor);
