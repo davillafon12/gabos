@@ -1240,6 +1240,10 @@ class impresion extends CI_Controller {
 		$pdf->SetX(102);
 		$pdf->Cell(74,5,'Total Con BN Servicios (Tarjetas):',1,0,'R');
 		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc),1,0,'R');
+		$pdf->ln(5);
+		$pdf->SetX(102);
+		$pdf->Cell(74,5,'Total Con BCR Tucan (Tarjetas):',1,0,'R');
+		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc+$cierre->bcrserviciosc),1,0,'R');
 				
 		//Pagos Mixtos y Recibos por dinero
 		$pdf->SetFont('Arial','B',14);
@@ -1304,6 +1308,16 @@ class impresion extends CI_Controller {
 		$pdf->Cell(47.5,5,'Tarjeta',1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($cierre->bnserviciosc),1,0,'C');
 		
+		$pdf->SetFont('Arial','B',14);
+		$pdf->ln(6);
+		$pdf->Cell(190,5,'BCR Servicios',0,0,'C');
+		$pdf->ln(5);
+		$pdf->SetFont('Arial','',11);
+		$pdf->Cell(47.5,5,'Contado',1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->bcrservicios),1,0,'C');
+		$pdf->Cell(47.5,5,'Tucan Tarjeta',1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->bcrserviciosc),1,0,'C');
+		
 		
 		
 		//Otros totales
@@ -1316,7 +1330,7 @@ class impresion extends CI_Controller {
 		$efectivoTotal = $totalRetirosParciales;
 		$efectivoTotal -= ($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']);
 		//$efectivoTotal -= $cierre->datos['recibos']['efectivo'];
-		$efectivoTotal -= $cierre->bnservicios;
+		$efectivoTotal -= $cierre->bnservicios-$cierre->bcrservicios;
 		$efectivoTotal -= $cierre->datos['recibos']['abonos'];
 		$efectivoTotal += $cierre->datos['detalleNotasCredito']['contado'];
 		//$efectivoTotal -= $cierre->datos['pagoMixto']['efectivo'];
@@ -1334,7 +1348,7 @@ class impresion extends CI_Controller {
 		$pdf->ln(5);
 		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalFacturasContado']-$cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($efectivoTotal),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc-$cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc+$cierre->bcrserviciosc-$cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalCredito']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'C');
 		
 		
@@ -1367,7 +1381,7 @@ class impresion extends CI_Controller {
 			$pdf->Cell(25,5,'',1,0,'C');
 			$pdf->ln(5);
 		}
-		$pdf->SetXY(10, 198);
+		$pdf->SetXY(10, 209);
 		$contador = 1;			
 		foreach($cierre->datos['vendedores']['vendidoVendedores'] as $vendedor){
 			
@@ -1393,7 +1407,7 @@ class impresion extends CI_Controller {
 			$contador++;
 		}
 		$pdf->SetFont('Arial','B',11);
-		$pdf->SetXY(10,238);
+		$pdf->SetXY(10,249);
 		$pdf->Cell(190,5,'Total Vendedores: '.$this->fn($cierre->datos['vendedores']['totalVendido']),1,0,'R');
 		
 		//Valores finales
@@ -1408,7 +1422,7 @@ class impresion extends CI_Controller {
 		
 		//Realizado Por:
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(10,261);
+		$pdf->SetXY(10,273);
 		$pdf->Cell(95,5,'Realizado por: '.$cierre->usuario,0,0,'R');
 		//$pdf->ln(10);
 		//$pdf->SetX(80);

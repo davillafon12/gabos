@@ -462,6 +462,7 @@ class consulta extends CI_Controller {
 	
 	function cierreCaja(){
 			include 'get_session_data.php';
+			$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 			$this->load->view('consulta/cierre_caja_consulta_view', $data);
 	}
 	

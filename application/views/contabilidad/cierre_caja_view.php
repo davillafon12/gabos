@@ -37,9 +37,9 @@ PARA:
 		<!--CSS ESTILO DEL Impromptu-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<!--CSS ESTILO ESPECIFICO DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_cierre_caja.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_cierre_caja.css?v='.$javascript_cache_version); ?>">
 		<!--SCRIPT DE HERRAMIENTAS-->		
-		<script src="<?php echo base_url('application/scripts/contabilidad/cierres/herramientas_cierre_caja.js'); ?>" type="text/javascript"></script>
+		<script src="<?php echo base_url('application/scripts/contabilidad/cierres/herramientas_cierre_caja.js?v='.$javascript_cache_version); ?>" type="text/javascript"></script>
 		<script>
 			 var fechaReal = '<?php echo $fechaRealActual?>';
 		</script>
@@ -205,7 +205,7 @@ PARA:
 								</tr>
 							</table>
 						</td> 
-						<td>
+						<td style="    padding-top: 60px; padding-bottom: 40px;">
 							<div class="contenedor-tipo-cambio">
 								<label class="parrafo">Tipo de Cambio ₡</label><input id="tipo_cambio_dolar" class="input-deno alg-right" value="<?php echo $tipo_cambio;?>" onblur="validarYFormatearCantidadEscritaTipoCambio(this.value)" onclick="this.select()" type="text"/><br>
 							</div>
@@ -216,7 +216,11 @@ PARA:
 								<label class="parrafo titulo-bn">BN Servicios Contado:</label>
 								<input type="text" id="cantidad_bn_servicios" value="0" tipo-pago="contado" onblur="validarCantidadBN(this)" onclick="$(this).select()"/><br>
 								<label class="parrafo titulo-bn">BN Servicios Tarjeta:&nbsp;&nbsp;</label>
-								<input type="text" id="cantidad_bn_servicios_credito" value="0" tipo-pago="tarjeta" onblur="validarCantidadBN(this)" onclick="$(this).select()"/>
+								<input type="text" id="cantidad_bn_servicios_credito" value="0" tipo-pago="tarjeta" onblur="validarCantidadBN(this)" onclick="$(this).select()"/><br>
+								<label class="parrafo titulo-bn">BCR Servicios Contado:</label>
+								<input type="text" id="cantidad_bcr_servicios" value="0" tipo-pago="contado" onblur="validarCantidadBN(this)" onclick="$(this).select()"/><br>
+								<label class="parrafo titulo-bn">BCR Tucan Tarjetas:&nbsp;&nbsp;</label>
+								<input type="text" id="cantidad_bcr_servicios_credito" value="0" tipo-pago="tarjeta" onblur="validarCantidadBN(this)" onclick="$(this).select()"/>
 							</div>
 						</td>
 					</tr>

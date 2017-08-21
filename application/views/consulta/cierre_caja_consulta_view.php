@@ -41,7 +41,7 @@ PARA:
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_cierre_caja.css'); ?>">
 		<!--CARGA DEL SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/cierre_caja.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/cierre_caja.js?v='.$javascript_cache_version); ?>"></script>
 		<script>
 			var decimales = '<?php echo $this->configuracion->getDecimales();?>';
 		</script>
@@ -267,7 +267,9 @@ PARA:
 								<label class="parrafo">Tipo de Cambio ₡</label><input id="tipo_cambio_dolar" class="input-deno alg-right" type="text" disabled /><br>
 								<label class="contact">Total ₡</label><input class="input_uno alg-right" name="input_retiro_parcial" id="input_retiro_parcial" type="text" style="  width: 150px;" disabled /><br>
 								<label class="contact">BN Servicios Contado ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios" type="text" style="  width: 150px;" disabled /><br>
-								<label class="contact">BN Servicios Tarjeta ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios_credito" type="text" style="  width: 150px;" disabled />
+								<label class="contact">BN Servicios Tarjeta ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bn_servicios_credito" type="text" style="  width: 150px;" disabled /><br>
+								<label class="contact">BCR Servicios Contado ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bcr_servicios" type="text" style="  width: 150px;" disabled /><br>
+								<label class="contact">BCR Tucan Tarjetas ₡</label><input class="input_uno alg-right" name="input_bn_servicios" id="input_bcr_servicios_credito" type="text" style="  width: 150px;" disabled />
 							</div>							
 						</td>
 					</tr>

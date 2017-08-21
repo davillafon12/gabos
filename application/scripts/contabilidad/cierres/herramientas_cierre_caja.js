@@ -33,10 +33,10 @@ $(function(){
 	//Actualizar monto efectivo
 	actualizarMontoTotalRetiro();
 	
-	$("#cantidad_bn_servicios").numeric();
-	$("#cantidad_bn_servicios_credito").numeric();
-	$("#cantidad_bn_servicios_credito").on("blur",function(){
-		actualizarTotalDatafonos($(this).val());
+	$("#cantidad_bn_servicios, #cantidad_bcr_servicios, #cantidad_bn_servicios_credito, #cantidad_bcr_servicios_credito").numeric();
+	$("#cantidad_bn_servicios_credito, #cantidad_bcr_servicios_credito").on("blur",function(){
+		var cantidad = parseFloat($("#cantidad_bn_servicios_credito").val()) + parseFloat($("#cantidad_bcr_servicios_credito").val());
+		actualizarTotalDatafonos(cantidad);
 	});
 	
 });
@@ -254,7 +254,7 @@ function procesarCierre(cantidad){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/contabilidad/cierre/crearCierre',
 		type: "POST",		
-		data: {'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal, 'base':$("#base_caja").val(), 'bnservicios':$("#cantidad_bn_servicios").val(), 'bnserviciosCredito':$("#cantidad_bn_servicios_credito").val()},				
+		data: {'cantidadEfectivo':cantidad, 'tipo_cambio':tipo_cambio, 'colones':getJSONColones(), 'dolares':getJSONDolares(), 'fechaCierre':fechaReal, 'base':$("#base_caja").val(), 'bnservicios':$("#cantidad_bn_servicios").val(), 'bnserviciosCredito':$("#cantidad_bn_servicios_credito").val(), 'bcrservicios':$("#cantidad_bcr_servicios").val(), 'bcrserviciosCredito':$("#cantidad_bcr_servicios_credito").val()},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
@@ -365,7 +365,8 @@ function validarCantidadBN(element){
 	var efectivo = parseFloat($("#totalRetirosParciales").val());
 	// Se debe de recalcular el Faltante Sobrante unicamente cuando el valor este en BN Servicios Contado 
 	// Cuando es BN Servicio Tarjeta no toca Efectivo 
-	if ($(element).attr("id") == "cantidad_bn_servicios"){
+	if ($(element).attr("id") == "cantidad_bn_servicios" || $(element).attr("id") == "cantidad_bcr_servicios"){
+		cantidad = parseFloat($("#cantidad_bn_servicios").val()) + parseFloat($("#cantidad_bcr_servicios").val());
 		efectivo -= cantidad;
 		$("#parrafoTotalRetirosParciales").html("₡"+efectivo.format(2, 3, '.', ','));
 	}

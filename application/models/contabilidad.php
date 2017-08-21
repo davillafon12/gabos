@@ -1651,7 +1651,7 @@ Class contabilidad extends CI_Model
 	}
 	
 	
-	function crearCierreCaja($tipo_cambio, $conteo, $base, $fecha, $sucursal, $usuario, $bnServicios, $bnServiciosCredito){
+	function crearCierreCaja($tipo_cambio, $conteo, $base, $fecha, $sucursal, $usuario, $bnServicios, $bnServiciosCredito, $bcrServicios, $bcrServiciosCredito){
 		$datos = array(
 										'Fecha'=>$fecha,
 										'Base'=>$base,
@@ -1660,7 +1660,9 @@ Class contabilidad extends CI_Model
 										'Sucursal'=>$sucursal,
 										'Usuario'=>$usuario,
 										'BNServicios'=>$bnServicios,
-										'BNServicios_Credito'=>$bnServiciosCredito
+										'BNServicios_Credito'=>$bnServiciosCredito,
+										'BCRServicios'=>$bcrServicios,
+										'BCRServicios_Credito'=>$bcrServiciosCredito
 										);
 		$this->db->insert('tb_37_cierre_caja', $datos);
 		return $this->db->insert_id(); 
@@ -1687,7 +1689,9 @@ Class contabilidad extends CI_Model
 												tb_37_cierre_caja.Total_Conteo as conteo,
 												CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario,
 												tb_37_cierre_caja.BNServicios as bnservicios,
-												tb_37_cierre_caja.BNServicios_Credito as bnserviciosc
+												tb_37_cierre_caja.BNServicios_Credito as bnserviciosc,
+												tb_37_cierre_caja.BCRServicios as bcrservicios,
+												tb_37_cierre_caja.BCRServicios_Credito as bcrserviciosc
 												", false);
 			$this->db->from("tb_37_cierre_caja");
 			$this->db->join("tb_01_usuario","tb_01_usuario.Usuario_Codigo = tb_37_cierre_caja.Usuario");

@@ -4459,3 +4459,6 @@ ALTER TABLE tb_46_relacion_trueque ADD Sucursal INT NOT NULL AFTER Documento;
 UPDATE tb_46_relacion_trueque SET Sucursal=7
 
 ALTER TABLE `tb_47_descuento_proforma` CHANGE `Id` `Id` INT(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `tb_03_cliente` ADD `Sucursal_Ingreso` INT NOT NULL AFTER `Aplica_Retencion`, ADD `Usuario_Ingreso` INT NOT NULL AFTER `Sucursal_Ingreso`;

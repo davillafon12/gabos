@@ -250,7 +250,10 @@ function setEncabezadoFactura(cab){
 	$("#ultima_factura").html("Última Factura: : "+cab.datos.ultimaFactura);
 	$("#input_bn_servicios").val(parseFloat(cab.cierre.bnservicios).format(2, 3, '.', ','));
 	$("#input_bn_servicios_credito").val(parseFloat(cab.cierre.bnserviciosc).format(2, 3, '.', ','));
+	$("#input_bcr_servicios").val(parseFloat(cab.cierre.bcrservicios).format(2, 3, '.', ','));
+	$("#input_bcr_servicios_credito").val(parseFloat(cab.cierre.bcrserviciosc).format(2, 3, '.', ','));
 	cab.datos.bnserviciosc = parseFloat(cab.cierre.bnserviciosc);
+	cab.datos.bcrserviciosc = parseFloat(cab.cierre.bcrserviciosc);
 	
 	for(i = 0; i < cab.billetes.length; i++){
 		$("#cant_"+cab.billetes[i].denominacion).val(cab.billetes[i].cantidad);
@@ -397,7 +400,7 @@ function cargarDatafonos(datos){
 							+"	</tr>";
 	filas = filas + "<tr>"
 									+"<td class='alg-right borde-arriba' colspan='3'><p class='parrafo'>Total Con BN Servicios (Tarjetas):</p></td>	"
-									+"<td class='alg-right borde-arriba'><p class='parrafo'>₡"+(datos.bnserviciosc+parseFloat(gen.totalDatafonos)).format(2, 3, '.', ',')+"</p></td>"
+									+"<td class='alg-right borde-arriba'><p class='parrafo'>₡"+(datos.bnserviciosc+datos.bcrserviciosc+parseFloat(gen.totalDatafonos)).format(2, 3, '.', ',')+"</p></td>"
 							+"	</tr>";
 	$("#contenido_datafonos").html(filas);
 }
@@ -422,6 +425,7 @@ function cargarTotales(datos){
 	baseCaja = parseFloat(datos.cierre.base);
 	totalRetiroFinal = parseFloat(datos.cierre.conteo)
 	bnservicios = parseFloat(datos.cierre.bnservicios);
+	bcrservicios = parseFloat(datos.cierre.bcrservicios);
 	datos = datos.datos;
 	totalRetiros = parseFloat(datos.totalRecibosParciales);
 	//totalEfectivo = (totalRetiros + totalRetiros) - baseCaja;
@@ -429,7 +433,7 @@ function cargarTotales(datos){
 	var totalEfectivo = totalRetiros; 
 	totalEfectivo -= datos.recibos.efectivo;
 	totalEfectivo -= datos.recibos.abonos;
-	totalEfectivo -= bnservicios;
+	totalEfectivo -= bnservicios - bcrservicios;
 	totalEfectivo += datos.detalleNotasCredito.contado;
 	//totalEfectivo -= datos.pagoMixto.efectivo;
 	totalEfectivo -= datos.totalFacturasContado;
@@ -438,7 +442,7 @@ function cargarTotales(datos){
 	
 	$("#totales_factura_contado").html("₡"+parseFloat((datos.totalFacturasContado+datos.pagoMixto.efectivo)-datos.detalleNotasCredito.contado).format(2, 3, '.', ','));
 	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
-	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos+datos.bnserviciosc-datos.detalleNotasCredito.tarjeta).format(2, 3, '.', ','));
+	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos+datos.bnserviciosc+datos.bcrserviciosc-datos.detalleNotasCredito.tarjeta).format(2, 3, '.', ','));
 	$("#totales_creditos").html("₡"+parseFloat(datos.totalCreditos.totalCredito-datos.detalleNotasCredito.credito).format(2, 3, '.', ','));
 	$("#totales_encomienda").html("₡"+parseFloat(datos.totalFacturasDeposito-datos.detalleNotasCredito.deposito).format(2, 3, '.', ','));
 	$("#totales_apartados").html("₡"+parseFloat(datos.totalCreditos.totalApartado-datos.detalleNotasCredito.apartado).format(2, 3, '.', ','));
