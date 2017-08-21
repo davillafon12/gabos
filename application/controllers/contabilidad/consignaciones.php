@@ -442,67 +442,6 @@ class consignaciones extends CI_Controller {
 		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
 		$this->factura->updateCostosTotales($costosArray, $consecutivo, $sucursal);
 	}
-        
-        
-        
-        function editar(){
-            include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-            $data['javascript_cache_version'] = $this->javascriptCacheVersion;
-            $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-
-            if(!$permisos['editar_consignaciones'])
-            {
-                redirect('accesoDenegado', 'location');						
-            }
-            $conf_array = $this->configuracion->getConfiguracionArray();
-            $data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
-            $data['porcentaje_iva'] = $conf_array['iva'];
-            $data['cantidad_decimales'] = $conf_array['cantidad_decimales'];
-            $data['aplicar_retencion'] = $conf_array['aplicar_retencion'];
-            $this->load->view("contabilidad/consignaciones_editar_view", $data);
-	}
-        
-        function getConsignacionesFiltrados(){
-            $retorno["error"] = "No se pudo procesar su solicitud";
-            $retorno["status"] = "error";
-            
-            $consigna = trim($_POST["consigna"]) == "-1" ? "" : trim($_POST["consigna"]);
-            $recibe = trim($_POST["recibe"]) == "-1" ? "" : trim($_POST["recibe"]);
-            $desde = trim($_POST["desde"]);
-            $hasta = trim($_POST["hasta"]);
-            
-            if($consignaciones = $this->contabilidad->getConsignacionesFiltradas($consigna, $recibe, $desde, $hasta)){
-                unset($retorno["error"]);
-                $retorno["status"] = "success";
-                $retorno["consignaciones"] = $consignaciones;
-            }else{
-                $retorno["error"] = "No hay consignaciones con los filtros seleccionados";
-                $retorno["status"] = "error";
-            }
-            
-            echo json_encode($retorno);
-        }
-        
-        function getConsignacion(){
-            $retorno["status"] = "error";
-            $retorno["error"] = "No se pudo procesar su solicitud";
-            
-            $consignacion = trim($_POST["consignacion"]);
-            
-            if($consignacion = $this->contabilidad->getConsignacionParaImpresion($consignacion)){
-                if($articulos = $this->contabilidad->getArticulosDeConsignacionParaImpresion($consignacion->consecutivo)){
-                    unset($retorno["error"]);
-                    $consignacion->articulos = $articulos;
-                    $retorno["consignacion"] = $consignacion;
-                }else{
-                   $retorno["error"] = "No hay artículos para esta consignación"; 
-                }
-            }else{
-                $retorno["error"] = "Número de consignación no existe";
-            }
-            
-            echo json_encode($retorno);
-        }
 }
 
 

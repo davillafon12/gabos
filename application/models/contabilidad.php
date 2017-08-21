@@ -1902,33 +1902,6 @@ Class contabilidad extends CI_Model
 		$this->db->where("Id", $id);
 		$this->db->update("tb_51_lista_consignacion", array("Cantidad"=>$nuevaCantidad));
 	}
-        
-        function getConsignacionesFiltradas($consigna, $recibe, $desde, $hasta){
-            $this->db->select(" distinct(c2.Id) as consecutivo,
-                                date_format(c2.Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha,
-                                (select s.Sucursal_Nombre from tb_02_sucursal s, tb_49_consignacion c where s.Codigo = c.Sucursal_Entrega and c.Id = c2.Id) as entrega,
-                                (select s.Sucursal_Nombre from tb_02_sucursal s, tb_49_consignacion c where s.Codigo = c.Sucursal_Recibe and c.Id = c2.Id) as recibe", false);
-            $this->db->from("tb_49_consignacion c2, tb_02_sucursal s");
-            if($consigna != ""){
-                $this->db->where('c2.Sucursal_Entrega', $consigna);
-            }
-            if($recibe != ""){
-                $this->db->where('c2.Sucursal_Recibe', $recibe);
-            }
-            if($desde != ""){
-                $this->setFiltradoFechaDesde($desde, "c2.Fecha_Hora");
-            }
-            if($hasta != ""){
-                $this->setFiltradoFechaHasta($hasta, "c2.Fecha_Hora");
-            }
-            $query = $this->db->get();
-            if($query->num_rows()==0){
-                    return false;
-            }else{
-                    return $query->result();
-            }
-        }
-        
 	
 }
 
