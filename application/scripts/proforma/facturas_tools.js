@@ -196,14 +196,7 @@ function obtenerIndex(where, row_num){
 function buscarCedula (e) 
 {
 	var cedula = document.getElementById('cedula').value;
-	if(!isNumber(cedula))
-	{ 
-		document.getElementById('nombre').value="";
-		//document.getElementById('nombre').disabled=true;
-		disableArticulosInputs();
-	}
-	else
-	{getNombreCliente(cedula);}
+	getNombreCliente(cedula);
 	
 	var nombre = document.getElementById('nombre').value;
 	

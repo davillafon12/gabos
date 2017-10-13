@@ -26,6 +26,7 @@ class notas extends CI_Controller {
 
 		if($permisos['entrar_notas'])
 		{
+			$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 			$this->load->view('contabilidad/notas_credito_view', $data);			
 		}
 		else{
@@ -189,7 +190,7 @@ class notas extends CI_Controller {
 				$facturaAplicar = $_POST['facturaAplicar'];
 				$facturaAcreditar = $_POST['facturaSeleccion'];
 				//Verificamos que exista cliente
-				if(is_numeric($cedula)&&$this->cliente->existe_Cliente($cedula)){
+				if($this->cliente->existe_Cliente($cedula)){
 					include '/../get_session_data.php';	
 					//Verificamos que existan las facturas
 					if(is_numeric($facturaAplicar)&&$this->factura->existe_Factura($facturaAplicar, $data['Sucursal_Codigo'])

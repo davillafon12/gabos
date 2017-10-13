@@ -6,10 +6,7 @@ function validarFacturaAplicar(consecutivo){
 	if(consecutivo.trim()===''){existeFacturaAplicar = false; return false;}
 	//Si la cedula no es numerica, salir
 	cedula = $("#cedula").val();
-	if(!isNumber(cedula)){
-		manejarErrores('8');
-		return false;
-	}
+	
 	//Si no hay factura seleccionada, salir	
 	if(!facturaSeleccionada){
 		manejarErrores('9');

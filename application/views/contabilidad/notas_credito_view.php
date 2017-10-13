@@ -39,19 +39,19 @@ PARA:
 		<!--CSS ESTILO DEL JQUERYUI-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
 		<!--CSS ESTILO ESPECIFICO DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_notas_credito.css'); ?>">	
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_notas_credito.css?v='.$javascript_cache_version); ?>">	
 		<!--CARGA DE HERRAMIENTAS DE ESTILO-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/estilo_notas.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/estilo_notas.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DE FACTURAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_facturas.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_facturas.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DE PRODUCTOS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_productos.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_productos.js?v='.$javascript_cache_version); ?>"></script>
 		<!--GESTOR DE FACTURA A APLICAR-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/gestor_factura_aplicar.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/gestor_factura_aplicar.js?v='.$javascript_cache_version); ?>"></script>
 		<!--SELECCION Y MARCA DE ARTICULOS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/marca_seleccion_articulos.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/marca_seleccion_articulos.js?v='.$javascript_cache_version); ?>"></script>
 		<!--ENVIO DE NOTA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/envio_nota_credito.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/envio_nota_credito.js?v='.$javascript_cache_version); ?>"></script>
 		<!--NUMERIC-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>"></script>
 	</head>
