@@ -443,44 +443,51 @@ class consignaciones extends CI_Controller {
 	}
         
         public function reversarConsignacion(){
+            include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
             $retorno['status'] = 'error';
             $retorno['error'] = 'No se pudo procesar la solicitud.';
-            if(isset($_GET["sucursalRecibe"]) && isset($_GET["sucursalEntrega"]) && isset($_GET["consignacion"])){
-                    try{
-                        $sucursalEntrega = trim($_GET["sucursalEntrega"]);
-                        $sucursalRecibe = trim($_GET["sucursalRecibe"]);
-                        $consignacion = trim($_GET["consignacion"]);
-                        if($this->empresa->getEmpresa($sucursalEntrega)){
-                            if($this->empresa->getEmpresa($sucursalRecibe)){
-                                if($consignacion = $this->contabilidad->getConsignacion($consignacion)){
-                                    if($articulos = $this->contabilidad->getArticulosDeConsignacion($consignacion->Id)){
-                                        //if($consignacion->Estado == "creada"){
-                                            $this->contabilidad->anularConsignacion($consignacion->Id);
-                                            $this->devolverProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacion);
-                                            unset($retorno['error']);
-                                            $retorno['status'] = "success";
-                                            $retorno['msg'] = "Se pudo reversar la consignacion con exito";
-//                                        }else{
-//                                            $retorno['error'] = "No se puede reversar una consignacion ya reversada";
-//                                        }
+            $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+
+            if(isset($permisos['reversar_consignaciones']) && $permisos['reversar_consignaciones']){
+                if(isset($_GET["sucursalRecibe"]) && isset($_GET["sucursalEntrega"]) && isset($_GET["consignacion"])){
+                        try{
+                            $sucursalEntrega = trim($_GET["sucursalEntrega"]);
+                            $sucursalRecibe = trim($_GET["sucursalRecibe"]);
+                            $consignacion = trim($_GET["consignacion"]);
+                            if($this->empresa->getEmpresa($sucursalEntrega)){
+                                if($this->empresa->getEmpresa($sucursalRecibe)){
+                                    if($consignacion = $this->contabilidad->getConsignacion($consignacion)){
+                                        if($articulos = $this->contabilidad->getArticulosDeConsignacion($consignacion->Id)){
+                                            if($consignacion->Estado == "creada"){
+                                                $this->contabilidad->anularConsignacion($consignacion->Id);
+                                                $this->devolverProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacion);
+                                                unset($retorno['error']);
+                                                $retorno['status'] = "success";
+                                                $retorno['msg'] = "Se pudo reversar la consignacion con exito";
+                                            }else{
+                                                $retorno['error'] = "No se puede reversar una consignacion ya reversada";
+                                            }
+                                        }else{
+                                            $retorno['error'] = "No se pudo cargar los articulos de dicha consignacion";
+                                        }
                                     }else{
-                                        $retorno['error'] = "No se pudo cargar los articulos de dicha consignacion";
+                                        $retorno['error'] = "Consignación no existe";
                                     }
                                 }else{
-                                    $retorno['error'] = "Consignación no existe";
+                                    $retorno['error'] = "Compañia que recibe no existe";
                                 }
                             }else{
-                                $retorno['error'] = "Compañia que recibe no existe";
+                                $retorno['error'] = "Compañia que entrega no existe";
                             }
-                        }else{
-                            $retorno['error'] = "Compañia que entrega no existe";
+                        }catch(Exception $e){
+                            $retorno['error'] = 'Error desconocido... Exception Thrown...';
+                            var_dump($e);
                         }
-                    }catch(Exception $e){
-                        $retorno['error'] = 'Error desconocido... Exception Thrown...';
-                        var_dump($e);
-                    }
+                }else{
+                    $retorno['error'] = "Por favor ingresar sucursalEntrega, sucursalRecibe, consignacion como parametros GET";
+                }
             }else{
-                $retorno['error'] = "Por favor ingresar sucursalEntrega, sucursalRecibe, consignacion como parametros GET";
+               $retorno['error'] = "Usted no tiene permisos para reversar una consignacion"; 
             }
             echo "<pre>";
             print_r($retorno);

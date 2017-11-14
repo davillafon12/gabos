@@ -316,7 +316,7 @@ class editar extends CI_Controller {
 				$this->user->actualizar($codigo_usuario, $data_update);
 				
 				//Edicion de permisos
-				include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
 				$permisosArray = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 				if(isset($permisosArray['editar_permisos'])&&$permisosArray['editar_permisos']){
 						//Eliminar todos los permisos

@@ -46,6 +46,7 @@
 						'registrar_empresa' => 'Registrar Empresa',
 						'registrar_familia' => 'Registrar Familia',
 						'registrar_usuarios' => 'Registrar Usuario',
+                                                'reversar_consignaciones' => 'Reversar Consignaciones',
 						'traspaso_individual_articulo' => 'Traspaso Individual Articulo',
 						'traspaso_articulos_masivo' => 'Traspaso Masivo Articulos',
 						'ver_autorizacion' => 'Ver Autorizaciones',
