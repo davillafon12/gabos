@@ -1752,6 +1752,7 @@ Class contabilidad extends CI_Model
 										"Retencion" => $retencion,
 										"Costo" => $costo,
 										"Total" => $total,
+                                                                                "Estado" => "creada",
 										"Sucursal_Recibe_Exenta" => $sucursal_recibe_exenta,
 										"Sucursal_Recibe_No_retencion" => $sucursal_recibe_no_retencion,
 										"Usuario" => $usuario,
@@ -1762,6 +1763,13 @@ Class contabilidad extends CI_Model
 			$this->db->insert("tb_49_consignacion", $datos);
 			return $this->db->insert_id();
 	}
+        
+        function anularConsignacion($consignacion){
+            $datos = array(
+                "Estado" => "anulada");
+            $this->db->where("Id", $consignacion);
+            $this->db->update("tb_49_consignacion", $datos);
+        }
 	
 	function registrarArticuloConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $consignacion, $precio_final){
 			$datos = array(
@@ -1802,6 +1810,17 @@ Class contabilidad extends CI_Model
 				return $query->result()[0];
 			}
 	}
+        
+        function getConsignacion($codigo){
+			$this->db->from("tb_49_consignacion");
+			$this->db->where("Id", $codigo);
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+				return false;
+			}else{
+				return $query->result()[0];
+			}
+	}
 	
 	function getArticulosDeConsignacionParaImpresion($consignacion){
 			$this->db->select("
@@ -1813,6 +1832,17 @@ Class contabilidad extends CI_Model
 				Precio_Total as precio_total,
 				Exento as exento
 			");
+			$this->db->from("tb_50_articulos_consignacion");
+			$this->db->where("Consignacion", $consignacion);
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+				return false;
+			}else{
+				return $query->result();
+			}
+	}
+        
+        function getArticulosDeConsignacion($consignacion){
 			$this->db->from("tb_50_articulos_consignacion");
 			$this->db->where("Consignacion", $consignacion);
 			$query = $this->db->get();

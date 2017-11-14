@@ -1433,7 +1433,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function consignacionPDF($empresa, $head, $body){
-		require('/../libraries/fpdf/fpdf.php');
+		require(FCPATH.'application/libraries/fpdf/fpdf.php');
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($body);

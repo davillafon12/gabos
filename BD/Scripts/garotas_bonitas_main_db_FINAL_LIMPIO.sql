@@ -4462,3 +4462,7 @@ ALTER TABLE `tb_47_descuento_proforma` CHANGE `Id` `Id` INT(11) NOT NULL AUTO_IN
 
 
 ALTER TABLE `tb_03_cliente` ADD `Sucursal_Ingreso` INT NOT NULL AFTER `Aplica_Retencion`, ADD `Usuario_Ingreso` INT NOT NULL AFTER `Sucursal_Ingreso`;
+
+
+
+ALTER TABLE `tb_37_cierre_caja` ADD `BCRServicios` DOUBLE NOT NULL , ADD `BCRServicios_Credito` DOUBLE NOT NULL ;

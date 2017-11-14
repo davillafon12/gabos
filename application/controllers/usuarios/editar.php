@@ -14,7 +14,7 @@ class editar extends CI_Controller {
 
  function index()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	if($permisos['editar_usuarios'])
@@ -181,7 +181,7 @@ class editar extends CI_Controller {
 		$id_request=$_GET['id'];
 		
 		$ruta_imagen_usuario = base_url('application/images/User_Photos/thumb');
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		

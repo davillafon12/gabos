@@ -25,7 +25,7 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include '/../Header/log_out_from_browser_Script.php';?>
+		<?php include FCPATH.'application/views/Header/log_out_from_browser_Script.php';?>
 		<!--SCRIPT DE AJAX JQUERY-->
 
 		<script src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>" type="text/javascript"></script>
@@ -37,13 +37,13 @@ PARA:
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
-		<?php include '/../Header/Header_Picture.php';?>
+		<?php include FCPATH.'application/views/Header/Header_Picture.php';?>
 		
 		<!--Incluir menu principal-->
-		<?php include '/../Header/selector_menu.php';?>
+		<?php include FCPATH.'application/views/Header/selector_menu.php';?>
 
 		<!--Incluir informacion log in-->
-		<?php include '/../Header/Log_In_Information.php';?>
+		<?php include FCPATH.'application/views/Header/Log_In_Information.php';?>
 		
 	
 		
@@ -231,7 +231,7 @@ PARA:
 							<table id="tablaPermisos">
 								<?php
 									if(isset($permisosUserLogin['editar_permisos'])&&$permisosUserLogin['editar_permisos']){
-											include ('/../../controllers/usuarios/permisos.php');
+											include (FCPATH.'application/controllers/usuarios/permisos.php');
 											$fila = 0;
 											echo "<tr>";
 											foreach($permisos as $valor => $contenido){
@@ -273,6 +273,6 @@ PARA:
 		</div>		
 
 		<!--Incluir footer-->
-		<?php include '/../Footer/Default_Footer.php';?>
+		<?php include FCPATH.'application/views/Footer/Default_Footer.php';?>
 	</body>
 </html>
