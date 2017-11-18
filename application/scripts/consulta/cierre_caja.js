@@ -433,7 +433,8 @@ function cargarTotales(datos){
 	var totalEfectivo = totalRetiros; 
 	totalEfectivo -= datos.recibos.efectivo;
 	totalEfectivo -= datos.recibos.abonos;
-	totalEfectivo -= bnservicios - bcrservicios;
+	totalEfectivo -= bnservicios;
+        totalEfectivo -= bcrservicios;
 	totalEfectivo += datos.detalleNotasCredito.contado;
 	//totalEfectivo -= datos.pagoMixto.efectivo;
 	totalEfectivo -= datos.totalFacturasContado;
