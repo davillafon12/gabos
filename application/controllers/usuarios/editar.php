@@ -14,7 +14,7 @@ class editar extends CI_Controller {
 
  function index()
  {
-	include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	if($permisos['editar_usuarios'])
@@ -27,7 +27,7 @@ class editar extends CI_Controller {
  }
 
  function mostrar_todos_los_datos(){
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -136,7 +136,7 @@ class editar extends CI_Controller {
 
  function desactivar()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	date_default_timezone_set("America/Costa_Rica");
 	$fecha_desactivacion = date("y/m/d : H:i:s", now());
 	$fecha_recontratacion = NULL; 
@@ -156,7 +156,7 @@ class editar extends CI_Controller {
  
  function activar()
  {
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		date_default_timezone_set("America/Costa_Rica");
 		$fecha_desactivacion = NULL; 
 		$fecha_recontratacion = date("y/m/d : H:i:s", now());
@@ -181,7 +181,7 @@ class editar extends CI_Controller {
 		$id_request=$_GET['id'];
 		
 		$ruta_imagen_usuario = base_url('application/images/User_Photos/thumb');
-		include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -343,7 +343,7 @@ class editar extends CI_Controller {
 	//$id_request=$_GET['id'];
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	$ruta_imagen_usuario = base_url('application/images/User_Photos/thumb');
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	if($result = $this->user->getUsuario_Codigo($data['Usuario_Codigo']))
 	{
 	    $this->load->helper(array('form'));
@@ -391,13 +391,13 @@ class editar extends CI_Controller {
 	$cedula_usuario = $this->input->post('cedula_usuario');
 
 	$data_update['Usuario_Password'] =MD5($usuario_password);  
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el usuario codigo: ".mysql_real_escape_string($cedula_usuario),$data['Sucursal_Codigo'],'edicion');
 	$this->user->actualizar(mysql_real_escape_string($cedula_usuario), $data_update);
 	
 	redirect('home', 'location');*/
 	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$nombre_usuario = $this->input->post('nombre_usuario');
 	$apellidos_usuario = $this->input->post('apellidos_usuario');

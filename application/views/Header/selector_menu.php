@@ -1,6 +1,6 @@
 <?php 
 			if($Usuario_Rango=='vendedor'){
-				include FCPATH.'application/views/Menu_Principal_Vendedor.php';
+				include PATH_MENU_PRINCIPAL_VENDEDOR;
 				echo 	"<style>
 							ul.dropdown li.last_last {
 								padding-right: 59px;								
@@ -11,7 +11,7 @@
 							}
 						</style>";
 			}elseif($Usuario_Rango=='cajero'){
-				include FCPATH.'application/views/Header/Menu_Principal_Cajero.php';
+				include PATH_MENU_PRINCIPAL_CAJERO;
 				echo 	"<style>
 							ul.dropdown li.last_last {
 								padding-right: 59px;								
@@ -19,6 +19,6 @@
 						</style>";
 			}
 			else{
-				include FCPATH.'application/views/Header/Menu_Principal.php';
+				include PATH_MENU_PRINCIPAL;
 			}
 ?>

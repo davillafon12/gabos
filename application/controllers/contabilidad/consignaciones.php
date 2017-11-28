@@ -20,7 +20,7 @@ class consignaciones extends CI_Controller {
 	}
 	
 	function crear(){
-			include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 			$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -126,7 +126,7 @@ class consignaciones extends CI_Controller {
 							 								if($this->verificarExistenciaDeArticulos($articulos, $sucursalEntrega)){
 							 										if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
 							 												//Cargamos informacion adicional
-							 												include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
+							 												include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 							 												date_default_timezone_set("America/Costa_Rica");
 							 												$fechaHoraActual = date("Y-m-d  H:i:s", now());
 							 												$sucursal_recibe_exenta = $clienteLiga->informacion['exento'];
@@ -203,7 +203,7 @@ class consignaciones extends CI_Controller {
 	}
 	
 	private function consignarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacion){
-			include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			foreach($articulos as $art){
 					//Primero verificamos que exista en la sucursal que recibe, si no lo creamos
 					if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
@@ -293,7 +293,7 @@ class consignaciones extends CI_Controller {
 	}
 	
 	public function facturar(){
-		include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 				
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -443,7 +443,7 @@ class consignaciones extends CI_Controller {
 	}
         
         public function reversarConsignacion(){
-            include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
+            include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
             $retorno['status'] = 'error';
             $retorno['error'] = 'No se pudo procesar la solicitud.';
             $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -504,7 +504,7 @@ class consignaciones extends CI_Controller {
          * @param type $consignacion
          */
         private function devolverProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacion){
-			include FCPATH.'application/controllers/get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			foreach($articulos as $art){
                             $art->codigo = $art->Codigo;
                             $art->precio_total = $art->Precio_Unidad;

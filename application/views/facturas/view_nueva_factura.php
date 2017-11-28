@@ -28,7 +28,7 @@ PARA:
 				<!--CSS ESTILO DEL MAIN WRAPPER-->
 				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 				<!--CSS ESTILO DE LA FACTURA-->
-				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Facturas/factura_nueva_style.css'); ?>">
+				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/facturas/factura_nueva_style.css'); ?>">
 				<!--CSS ESTILO DEL JQUERYUI-->
 				<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
 		
@@ -79,13 +79,13 @@ PARA:
 	</head>
 	<body onload="setMainValues()" oncopy="return false" oncut="return false" onpaste="return false">
 		<!--Incluir imagen de cabezera-->
-		<?php include '/../Header/Header_Picture.php';?>
+		<?php include PATH_HEADER_PICTURE;?>
 		
 		<!--Incluir menu principal-->
-		<?php include '/../Header/selector_menu.php';?>
+		<?php include PATH_HEADER_SELECTOR_MENU;?>
 
 		<!--Incluir informacion log in-->
-		<?php include '/../Header/Log_In_Information_Factura.php';?>
+		<?php include PATH_HEADER_LOG_IN_INFO;?>
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
@@ -389,6 +389,6 @@ PARA:
         </div>		
 
 		<!--Incluir footer-->
-		<?php include '/../Footer/Default_Footer.php';?>
+		<?php include PATH_FOOTER;?>
 	</body>
 </html>

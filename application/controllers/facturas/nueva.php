@@ -10,7 +10,7 @@ class nueva extends CI_Controller {
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('configuracion','',TRUE);
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -22,7 +22,7 @@ class nueva extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$this->load->helper(array('form'));
 		//echo $this->factura->getConsecutivo($data['Sucursal_Codigo']);
 		date_default_timezone_set("America/Costa_Rica");
@@ -54,7 +54,7 @@ class nueva extends CI_Controller {
 	{
 		$id_request=$_GET['codigo'];
 		$cedula=$_GET['cedula'];
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		//Eliminamos los caracteres no permitidos como: & ; /
 		$id_request_clean = str_replace("&","",$id_request);
 		$id_request_clean = str_replace(";","",$id_request_clean);
@@ -69,7 +69,7 @@ class nueva extends CI_Controller {
 			$codigo_articulo = $_POST['codigo'];
 			$cedula = $_POST['cedula'];
 			if($this->cliente->existe_Cliente($cedula)){
-				include '/../get_session_data.php';				
+				include PATH_USER_DATA;				
 				if($this->articulo->existe_Articulo($codigo_articulo,$data['Sucursal_Codigo'])){
 					if($articulo = $this->articulo->getArticuloArray($codigo_articulo, $cedula, $data['Sucursal_Codigo'])){
 						if($articulo['inventario'] > 0){
@@ -96,7 +96,7 @@ class nueva extends CI_Controller {
 	
 	function crearFacturaTemporal()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		date_default_timezone_set("America/Costa_Rica");
 	    $Current_datetime = date("y/m/d : H:i:s", now());
 		//Token es una combinacion del nombre del usuario codigo sucursal y hora
@@ -127,7 +127,7 @@ class nueva extends CI_Controller {
 		$codigo_articulo=$_GET['codigo'];
 		$operacion=$_GET['operacion'];
 		$tokenFactura=$_GET['token'];
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$operacionARRAY = explode(',',$operacion);
 		
 		//echo $operacionARRAY[0]."<br>";
@@ -229,7 +229,7 @@ class nueva extends CI_Controller {
 		$usuario=$_GET['user'];
 		$contrasena=$_GET['pass'];
 		$tipo=$_GET['tipo'];
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$repuesta = '-1';
 		
@@ -265,7 +265,7 @@ class nueva extends CI_Controller {
 			
 			//Verificamos que vengan productos
 			if(sizeOf($items_factura)>0){			
-					include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+					include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 					
 					//Borramos la factura temporal
 					$this->articulo->eliminarFacturaTemporal($_POST['token']);
@@ -346,7 +346,7 @@ class nueva extends CI_Controller {
 	function devolverProductos(){
 		if(isset($_POST['token'])){
 			if($articulos = $this->articulo->getProductosFacturaTemporal($_POST['token'])){
-				include '/../get_session_data.php';
+				include PATH_USER_DATA;
 				//Devolvemos a inventario las cantidades de la factura temporal
 				foreach($articulos as $articulo){
 					$this->articulo->actualizarInventarioSUMA($articulo->Codigo_Articulo, $articulo->Cantidad, $data['Sucursal_Codigo']);

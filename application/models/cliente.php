@@ -176,7 +176,7 @@ Class cliente extends CI_Model
 		{return false;}
 		else
 		{
-			include FCPATH.'application/controllers/get_session_data.php'; //Traemos la info para obtener la sucursal
+			include PATH_USER_DATA; //Traemos la info para obtener la sucursal
 			$result = $query->result();
 			foreach($result as $row)
 			{						

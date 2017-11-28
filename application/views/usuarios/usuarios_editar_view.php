@@ -25,7 +25,7 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include FCPATH.'application/views/Header/log_out_from_browser_Script.php';?>
+		<?php include PATH_LOG_OUT_HEADER;?>
 		
 		<!--CSS ESTILO DE LA TABLA-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/usuarios/style_editar.css'); ?>">
@@ -34,7 +34,7 @@ PARA:
 		<!--AJAX DE LA TABLA-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/usuarios/edicion_tools.js'); ?>"></script> 
 		<?php //include '/../../scripts/cargar_tabla_edicion_usuarios.php';?>
-		<?php include FCPATH.'application/scripts/ajax_desactivar_usuarios.php';?>
+		<?php include PATH_DESACTIVAR_USUARIOS_SCRIPT;?>
 		<!--CARGA DEL JQUERY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script> 
 		<!--CARGA DE HERRAMIENTAS VARIAS-->
@@ -46,13 +46,13 @@ PARA:
 	</head>
 	<body >
 		<!--Incluir imagen de cabezera-->
-		<?php include FCPATH.'application/views/Header/Header_Picture.php';?>
+		<?php include PATH_HEADER_PICTURE;?>
 		
 		<!--Incluir menu principal-->
-		<?php include FCPATH.'application/views/Header/selector_menu.php';?>
+		<?php include PATH_HEADER_SELECTOR_MENU;?>
 
 		<!--Incluir informacion log in-->
-		<?php include FCPATH.'application/views/Header/Log_In_Information.php';?>
+		<?php include PATH_HEADER_LOG_IN_INFO;?>
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
@@ -76,6 +76,6 @@ PARA:
        		
 
 		<!--Incluir footer-->
-		<?php include FCPATH.'application/views/Footer/Default_Footer.php';?>
+		<?php include PATH_FOOTER;?>
 	</body>
 </html>

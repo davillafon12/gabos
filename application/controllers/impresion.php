@@ -901,7 +901,7 @@ class impresion extends CI_Controller {
 	
 	
 	private function facturaPDF($empresa, $fhead, $fbody){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($fbody);
@@ -931,7 +931,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function proformaPDF($empresa, $fhead, $fbody){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($fbody);
@@ -960,7 +960,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function traspasoPDF($empresa, $fhead, $fbody){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($fbody);
@@ -992,7 +992,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function notaCreditoPDF($empresa, $head, $productos){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($productos);
@@ -1021,7 +1021,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function notaDebitoPDF($empresa, $head, $productos){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($productos);
@@ -1050,7 +1050,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function recibosPDF($recibos, $empresa){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		foreach($recibos as $recibo){
 			//Agregamos una pagina
@@ -1108,7 +1108,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function cierreCajaPDF($empresa, $cierre, $billetes, $monedas, $dolares){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		$pdf->SetAutoPageBreak(false, 0);
 		$pdf->AddPage();
@@ -1433,7 +1433,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function consignacionPDF($empresa, $head, $body){
-		require(FCPATH.'application/libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($body);
@@ -1463,7 +1463,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function traspasoInventarioPDF($empresa, $head, $body){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($body);
@@ -1493,7 +1493,7 @@ class impresion extends CI_Controller {
 	}
 	
 	private function cambioCodigoPDF($empresa, $head, $articulos){
-		require('/../libraries/fpdf/fpdf.php');
+		require(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($articulos);
