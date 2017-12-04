@@ -47,6 +47,7 @@ define('PATH_HEADER_SELECTOR_MENU','/../Header/selector_menu.php');
 define('PATH_HEADER_LOG_IN_INFO','/../Header/Log_In_Information.php');
 define('PATH_FOOTER','/../Footer/Default_Footer.php');
 define('PATH_USER_DATA','/../get_session_data.php');
+define('PATH_USER_DATA_DOUBLE','/../controllers/get_session_data.php');
 define('PATH_FPDF_LIBRARY', '/../libraries/fpdf/fpdf.php');
 define('PATH_MENU_PRINCIPAL_VENDEDOR', '/../Header/Menu_Principal_Vendedor.php');
 define('PATH_MENU_PRINCIPAL_CAJERO', '/../Header/Menu_Principal_Cajero.php');
@@ -64,6 +65,7 @@ define('PATH_DESACTIVAR_USUARIOS_SCRIPT', '/../../scripts/ajax_desactivar_usuari
 //define('PATH_HEADER_LOG_IN_INFO',FCPATH.'application/views/Header/Log_In_Information.php');
 //define('PATH_FOOTER',FCPATH.'application/views/Footer/Default_Footer.php');
 //define('PATH_USER_DATA',FCPATH.'application/controllers/get_session_data.php');
+//define('PATH_USER_DATA_DOUBLE',FCPATH.'application/controllers/get_session_data.php');
 //define('PATH_FPDF_LIBRARY', FCPATH.'application/libraries/fpdf/fpdf.php');
 //define('PATH_MENU_PRINCIPAL_VENDEDOR', FCPATH.'application/views/Menu_Principal_Vendedor.php');
 //define('PATH_MENU_PRINCIPAL_CAJERO', FCPATH.'application/views/Header/Menu_Principal_Cajero.php');
