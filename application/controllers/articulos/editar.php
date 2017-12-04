@@ -10,7 +10,7 @@ class editar extends CI_Controller {
 	$this->load->model('familia','',TRUE);
 	$this->load->model('user','',TRUE);
 	$this->load->model('bodega_m','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -22,7 +22,7 @@ class editar extends CI_Controller {
 
  function index()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	$this->load->helper(array('form'));
 	$this->load->view('articulos/articulos_editar_view', $data);
  }
@@ -30,7 +30,7 @@ class editar extends CI_Controller {
  function getMainTable()
  {	
 	$ruta_imagen = base_url('application/images/Icons');
-	include '/../get_session_data.php';
+	include PATH_USER_DATA;
 	if($result = $this->articulo->get_Articulos($data['Sucursal_Codigo']))
 	{	
 	    echo "<table id='tabla_editar' class='tablaPrincipal'>";
@@ -133,7 +133,7 @@ class editar extends CI_Controller {
  }//FIN DE GETTABLE
  
 	function obtenerArticulosTabla(){
-		include '/../get_session_data.php';
+		include PATH_USER_DATA;
 		//Un array que contiene el nombre de las columnas que se pueden ordenar
 		$columnas = array(
 								'0' => 'Articulo_Codigo',
@@ -177,7 +177,7 @@ class editar extends CI_Controller {
 	}
 	
 	function obtenerArticulosTablaManejo(){
-		include '/../get_session_data.php';
+		include PATH_USER_DATA;
 		//Un array que contiene el nombre de las columnas que se pueden ordenar
 		$columnas = array(
 								'0' => 'Articulo_Codigo',
@@ -223,7 +223,7 @@ class editar extends CI_Controller {
 	
 	
 	function obtenerArticulosBodegaTablaManejo(){
-		include '/../get_session_data.php';
+		include PATH_USER_DATA;
 		//Un array que contiene el nombre de las columnas que se pueden ordenar
 		$columnas = array(
 								'0' => 'Codigo',
@@ -258,7 +258,7 @@ class editar extends CI_Controller {
  
  function edicion()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion	
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion	
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);	
 	if(!$permisos['editar_codigo'])
 	{	
@@ -406,7 +406,7 @@ class editar extends CI_Controller {
 										$this->articulo->actualizar($_POST['articulo_codigo'], $_POST['sucursal'], $info['dataBD']);
 										$this->articulo->actualizarPrecios($_POST['articulo_codigo'], $_POST['sucursal'], $info['precios']);
 										
-										include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+										include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 										$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el artículo código: ".$_POST['articulo_codigo'],$data['Sucursal_Codigo'],'edicion');
 								
 										redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=s&suc='.$_POST['sucursal'], 'location');
@@ -460,7 +460,7 @@ class editar extends CI_Controller {
 	
 	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
 	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".mysql_real_escape_string($id_empresa),$data['Sucursal_Codigo'],'edicion');
 	
 	redirect('empresas/editar', 'location');
@@ -535,7 +535,7 @@ class editar extends CI_Controller {
 				if(is_numeric($descuento)){
 					if($descuento<=100&&$descuento>=0){
 						
-						include '/../get_session_data.php';
+						include PATH_USER_DATA;
 						$sucursal = $data['Sucursal_Codigo'];
 						
 						//Si viene sucursal usamos la que viene, sino deja la del log del usuario
@@ -577,7 +577,7 @@ class editar extends CI_Controller {
 				if(is_numeric($estado)){
 					if($estado == '1' || $estado == '0'){
 						
-						include '/../get_session_data.php';
+						include PATH_USER_DATA;
 						$sucursal = $data['Sucursal_Codigo'];
 						
 						//Si viene sucursal usamos la que viene, sino deja la del log del usuario
@@ -612,7 +612,7 @@ class editar extends CI_Controller {
  
 	function manejoArticulos()
 	{	
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);	
 		if(!$permisos['manejo_articulos'])
 		{	
@@ -658,7 +658,7 @@ class editar extends CI_Controller {
 					}
 					//Los borramos de temporal
 					$this->articulo->borrarArticulosTemporalesDeSucursal($sucursal);
-					include '/../get_session_data.php';
+					include PATH_USER_DATA;
 					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario retornó los artículos temporales de la sucursal $sucursal",$data['Sucursal_Codigo'],'devolucion');
 					unset($retorno['error']);
 					$retorno['status'] = 'success';

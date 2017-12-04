@@ -35,7 +35,7 @@ function agregarFila(index){
 	if(!isNumber(cedula))
 	{
 		cell1.innerHTML = "<img class='imagen_arrow' title='Agregar Fila' src='/../application/scripts/Images/agregar_row.gif' width='14' height='7' onClick='agregarByCM("+siguienteFila+")'/>"
-		                  +"<input tabindex='"+tabindex+"' id='codigo_articulo_"+siguienteFila+"' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);' disabled>"
+		                  +"<input tabindex='"+tabindex+"' id='codigo_articulo_"+siguienteFila+"' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);'>"
 						  +"<input id='codigo_articulo_anterior_"+siguienteFila+"' type='hidden' >";
 	}
 	else
@@ -45,7 +45,7 @@ function agregarFila(index){
 						+" <input id='codigo_articulo_anterior_"+siguienteFila+"' type='hidden' >";
 	}					
 	
-	cell3.innerHTML = "<input id='cantidad_articulo_"+siguienteFila+"' class='cantidad_articulo' autocomplete='off' name='cantidad_articulo' type='number' min='1' onchange='cambiarCantidad(this.id, event, this.value);' onkeyup='cambiarCantidad(this.id, event, this.value);' disabled>"
+	cell3.innerHTML = "<input id='cantidad_articulo_"+siguienteFila+"' class='cantidad_articulo' autocomplete='off' name='cantidad_articulo' type='number' min='1' onchange='cambiarCantidad(this.id, event, this.value);' onkeyup='cambiarCantidad(this.id, event, this.value);'>"
 					 +"<input id='cantidad_articulo_anterior_"+siguienteFila+"' type='hidden' value='-1'>";
 	cell2.innerHTML = "<div class='articulo_specs' id='descripcion_articulo_"+siguienteFila+"'></div>"
 					 +"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+siguienteFila+"'></div>";

@@ -11,7 +11,7 @@ class proforma extends CI_Controller {
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('configuracion','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -23,7 +23,7 @@ class proforma extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$this->load->helper(array('form'));
 		//echo $this->factura->getConsecutivo($data['Sucursal_Codigo']);
 		//date_default_timezone_set("America/Costa_Rica");
@@ -45,7 +45,7 @@ class proforma extends CI_Controller {
 	{
 		$id_request=$_GET['codigo'];
 		$cedula=$_GET['cedula'];
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		//Eliminamos los caracteres no permitidos como: & ; /
 		$id_request_clean = str_replace("&","",$id_request);
 		$id_request_clean = str_replace(";","",$id_request_clean);
@@ -97,7 +97,7 @@ class proforma extends CI_Controller {
 			//Obtenemos la primera posicion del info_factura para obtener el array final
 			$info_factura = $info_factura[0];
 
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 			if($consecutivo = $this->proforma_m->crearProforma($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'])){
 				$this->agregarItemsProforma($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
@@ -156,7 +156,7 @@ class proforma extends CI_Controller {
 			$retorno['status'] = 'error';
 			$retorno['error'] = 'No se pudo realizar el descuento de artículos.';
 			if(isset($_POST['consecutivo']) && trim($_POST['consecutivo']) != ""){
-					include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+					include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 					$consecutivo = trim($_POST['consecutivo']);
 					$sucursal = $data['Sucursal_Codigo'];
 					if($this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
@@ -208,7 +208,7 @@ class proforma extends CI_Controller {
 		$retorno['status'] = 'error';
 		$retorno['error'] = 'No se pudo realizar la conversión.';
 		if(isset($_POST['consecutivo']) && trim($_POST['consecutivo']) != ""){
-				include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 				$consecutivo = trim($_POST['consecutivo']);
 				$sucursal = $data['Sucursal_Codigo'];
 				if($proformaHeaders = $this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
@@ -269,7 +269,7 @@ class proforma extends CI_Controller {
 		$retorno['status'] = 'error';
 		$retorno['error'] = 'No se pudo realizar la conversión.';
 		if(isset($_POST['consecutivo']) && trim($_POST['consecutivo']) != ""){
-				include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 				$consecutivo = trim($_POST['consecutivo']);
 				$sucursal = $data['Sucursal_Codigo'];
 				if($proformaHeaders = $this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
@@ -294,7 +294,7 @@ class proforma extends CI_Controller {
 		$retorno['status'] = 'error';
 		$retorno['error'] = 'No se pudo realizar la conversión.';
 		if(isset($_POST['consecutivo']) && trim($_POST['consecutivo']) != ""){
-				include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+				include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 				$consecutivo = trim($_POST['consecutivo']);
 				$sucursal = $data['Sucursal_Codigo'];
 				if($proformaHeaders = $this->proforma_m->getProformasHeaders($consecutivo, $sucursal)){
@@ -316,7 +316,7 @@ class proforma extends CI_Controller {
 	}
 	
 	function fijarProforma(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
@@ -328,7 +328,7 @@ class proforma extends CI_Controller {
 		$retorno['error'] = '1';
 		if(isset($_POST['cliente'])){
 			$cliente = $_POST['cliente'];
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			if($facturas = $this->proforma_m->getProformasSinProcesar($cliente, $data['Sucursal_Codigo'])){
 				unset($retorno['error']);
 				$retorno['status'] = 'success';
@@ -355,7 +355,7 @@ class proforma extends CI_Controller {
 			$items_factura = json_decode($items_factura, true);
 			//Obtenemos la primera posicion del info_factura para obtener el array final
 			$observaciones = $_POST["observaciones"];			
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 			if(sizeOf($items_factura)>0){
 					//ce:cedula_field, no:nombre_field, cu:tipo_moneda, ob:observaciones
@@ -396,7 +396,7 @@ class proforma extends CI_Controller {
 		$retorno['error'] = 'No se pudo procesar la proforma';
 		if(isset($_POST['consecutivo'])){
 			$consecutivo = $_POST['consecutivo'];
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
 				$this->proforma_m->marcarComoProformaPendiente($consecutivo, $data['Sucursal_Codigo']);
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." procesó la proforma consecutivo:$consecutivo", $data['Sucursal_Codigo'],'proforma_procesar');
