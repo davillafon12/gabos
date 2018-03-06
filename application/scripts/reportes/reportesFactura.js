@@ -67,7 +67,8 @@ function eventoTipoReporte(){
 
 function fnVerificarEmpresa(){
 	if ((($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_RentabilidadXCliente))
-		||(($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_VentasXMes)) ){
+		||(($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_VentasXMes))
+		||(($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_NotaCredito)) ){
 		$(".sucDesamparados").show();
 	}
 	else{

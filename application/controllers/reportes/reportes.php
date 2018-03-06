@@ -535,7 +535,7 @@ class reportes extends CI_Controller {
 				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro8.'&'.$parametro9.'&'.$parametro10;	
 			}
 			if ($paReporte == 'NotaCredito' || $paReporte == 'Cartelera'|| $paReporte == 'CarteleraTotalizacion'){
-				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro8.'&'.$parametro9;	
+				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3.'&'.$parametro6.'&'.$parametro7.'&'.$parametro8.'&'.$parametro9;	
 			}			
 			if ($paReporte == 'ArticulosExentos') {
 				$txtRutaFinal = $ip.''.$this->ruta.''.$direccion.$paReporte.'&'.$this->usuario.'&'.$this->password.'&'.$parametro1.'&'.$parametro2.'&'.$parametro3;
