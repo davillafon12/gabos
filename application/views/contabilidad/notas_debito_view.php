@@ -15,17 +15,17 @@ PARA:
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="shortcut icon" href="<?php echo base_url('application/images/header_icon.png'); ?>">
 		<!--CSS ESTILO BASICO E IMAGEN HEADER DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Estilo_Basico.css'); ?>">		
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Estilo_Basico.css?v='.$javascript_cache_version); ?>">		
 		<!--CSS ESTILO DEL MENU-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Menu/Default_Style.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Menu/Default_Style.css?v='.$javascript_cache_version); ?>">
 		<!--CSS ESTILO DE LA INFO DE LOG IN-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Log_Out_Info_Style.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Log_Out_Info_Style.css?v='.$javascript_cache_version); ?>">
 		<!--CSS ESTILO DEL FOOTER-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Footer/Default_Style.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Footer/Default_Style.css?v='.$javascript_cache_version); ?>">
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css?v='.$javascript_cache_version); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include '/../Header/log_out_from_browser_Script.php';?>
+		<?php include PATH_LOG_OUT_HEADER;?>
 		<!--SCRIPT DE JQUERY-->		
 		<script src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>" type="text/javascript"></script>
 		<!--SCRIPT DE NOTY-->		
@@ -39,21 +39,21 @@ PARA:
 		<!--CSS ESTILO DEL JQUERYUI-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
 		<!--CSS ESTILO ESPECIFICO DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_notas_debito.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_notas_debito.css?v='.$javascript_cache_version); ?>">
 		<!--CARGA DE LAS HERRAMIENTAS DE CARGA DE PRODUCTO-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_productos_debito.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/carga_productos_debito.js?v='.$javascript_cache_version); ?>"></script>
 		<!--SCRIPT ENVIO DE NOTA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/envioNotaDebito.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/notas/envioNotaDebito.js?v='.$javascript_cache_version); ?>"></script>
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
-		<?php include '/../Header/Header_Picture.php';?>
+		<?php include PATH_HEADER_PICTURE;?>
 		
 		<!--Incluir menu principal-->
-		<?php include '/../Header/selector_menu.php';?>
+		<?php include PATH_HEADER_SELECTOR_MENU;?>
 
 		<!--Incluir informacion log in-->
-		<?php include '/../Header/Log_In_Information.php';?>		
+		<?php include PATH_HEADER_LOG_IN_INFO;?>		
 	
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
@@ -130,6 +130,6 @@ PARA:
 			</div><!-- contenedor -->			
 		</div><!-- main_wrapper -->
 		<!--Incluir footer-->
-		<?php include '/../Footer/Default_Footer.php';?>
+		<?php include PATH_FOOTER;?>
 	</body>
 </html>

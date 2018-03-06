@@ -126,7 +126,7 @@ function pasarSiguienteFila(fila, isCantidadField){
 	cantidadIndices = array_pos_rows.length;  //Obtenemos ultimo indice	
 	ultimoID = array_pos_rows[cantidadIndices-1]; //Obtenemos la fila que esta de ultimo lugar	
 	if(ultimoID==fila){ //Si la fila que estamos evaluendo es la ultima tons agrega fila
-		//agregarFila(-1);
+		agregarFila(-1);
 	}	
 	
 	filaInt = parseInt(fila);
@@ -193,4 +193,35 @@ function articuloYaIngresado(value, id){
 		}
 	}
 	return false;
+}
+
+function agregarFila(index){
+	// Find a <table> element with id="myTable":
+	var table = document.getElementById("tabla_productos");
+	//alert(cantidadFilas(table));
+	var siguienteFila = cantidadFilas(table)+1;
+	var tabindex = siguienteFila+1;
+	// Create an empty <tr> element and add it to the last position of the table:
+	var row = table.insertRow(index);
+
+	// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+	var cell1 = row.insertCell(0);
+	var cell2 = row.insertCell(1);
+	var cell3 = row.insertCell(2);
+	var cell4 = row.insertCell(3);
+
+	cell1.innerHTML = "<input id='articulo_"+siguienteFila+"' tabindex='"+tabindex+"'  class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);'>";
+	cell2.innerHTML = "<div class='articulo_specs' id='descripcion_articulo_"+siguienteFila+"'></div>"
+                            +"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+siguienteFila+"'></div>";
+        cell3.innerHTML = "<input id='cantidad_articulo_"+siguienteFila+"' class='cantidad_articulo' autocomplete='off' type='number' min='1' onchange='validarMaxMinCantidad(this.id)' onkeyup='validarEventoCantidad(this.id, event)' >	";
+	cell4.innerHTML = "<div class='articulo_specs' id='bodega_articulo_"+siguienteFila+"'></div>";
+
+	//Agrega la nueva fila al array de indices
+	if(index==-1){array_pos_rows.push(siguienteFila);}
+	else {array_pos_rows.splice(index-1, 0, siguienteFila);}
+	
+}
+
+function cantidadFilas(tabla){
+	return tabla.getElementsByTagName("tr").length-1;
 }

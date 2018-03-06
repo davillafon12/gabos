@@ -20,7 +20,7 @@ class notas extends CI_Controller {
 	}
 	
 	function notasCredito(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -44,7 +44,7 @@ class notas extends CI_Controller {
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
 			}else{*/
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
-					include '/../get_session_data.php';					
+					include PATH_USER_DATA;					
 					if($facturas = $this->cliente->getFacturasDeClienteEnSucursal($cedula, $data['Sucursal_Codigo'])){
 						$facturasDevolver = array();
 						foreach($facturas as $factura){
@@ -81,7 +81,7 @@ class notas extends CI_Controller {
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['factura'])){
 			$factura = $_POST['factura']; 
-			include '/../get_session_data.php';
+			include PATH_USER_DATA;
 			
 			if($productosFactura = $this->factura->getArticulosFactura($factura, $data['Sucursal_Codigo'])){
 				$productosDevolver = array();
@@ -114,7 +114,7 @@ class notas extends CI_Controller {
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
 			}else{*/
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
-					include '/../get_session_data.php';					
+					include PATH_USER_DATA;					
 					if($facturas = $this->cliente->getFacturasDeClienteEnSucursalFiltradasCodigo($cedula, $data['Sucursal_Codigo'], $codigo)){
 						$facturasDevolver = array();
 						foreach($facturas as $factura){
@@ -151,7 +151,7 @@ class notas extends CI_Controller {
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
 			}else{*/
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
-					include '/../get_session_data.php';					
+					include PATH_USER_DATA;					
 					if($factura = $this->cliente->getFacturaDeClienteCobrada($consecutivo, $data['Sucursal_Codigo'], $cedula)){
 						$retorno['status'] = 'success';
 					}else{
@@ -191,7 +191,7 @@ class notas extends CI_Controller {
 				$facturaAcreditar = $_POST['facturaSeleccion'];
 				//Verificamos que exista cliente
 				if($this->cliente->existe_Cliente($cedula)){
-					include '/../get_session_data.php';	
+					include PATH_USER_DATA;	
 					//Verificamos que existan las facturas
 					if(is_numeric($facturaAplicar)&&$this->factura->existe_Factura($facturaAplicar, $data['Sucursal_Codigo'])
 						&&is_numeric($facturaAcreditar)&&$this->factura->existe_Factura($facturaAcreditar, $data['Sucursal_Codigo'])){
@@ -263,13 +263,14 @@ class notas extends CI_Controller {
 	}
 	
 	function notasDebito(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if($permisos['entrar_notas_d'])
 		{
 			$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+                        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 			$this->load->view('contabilidad/notas_debito_view', $data);			
 		}
 		else{
@@ -285,7 +286,7 @@ class notas extends CI_Controller {
 			{
 				$productos = json_decode($_POST['productos']);
 				//var_dump($productos);
-				include '/../get_session_data.php';
+				include PATH_USER_DATA;
 				
 				$consecutivo = $this->getNextConsecutivoNotaDebito($data['Sucursal_Codigo']);
 				date_default_timezone_set("America/Costa_Rica");
@@ -297,14 +298,14 @@ class notas extends CI_Controller {
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo la nota debito: $consecutivo",$data['Sucursal_Codigo'],'nota');
 				
 				foreach($productos as $producto){
-					if($this->articulo->existe_Articulo($producto->co,$data['Sucursal_Codigo'])){
+					if($this->articulo->existe_Articulo(trim($producto->co),$data['Sucursal_Codigo'])){
 						if(is_numeric($producto->ca)&&$producto->ca>0){
 							//Sacamos el producto de inventario, la funcion esta valida que la cantidad no sea mayor al inventario actual
-							if($this->articulo->actualizarInventarioRESTA($producto->co, $producto->ca, $data['Sucursal_Codigo'])=='3'){
-								$descripcion = $this->articulo->getArticuloDescripcion($producto->co, $data['Sucursal_Codigo']);
-								$costo = $this->articulo->getPrecioProducto($producto->co, 0, $data['Sucursal_Codigo']);
+							if($this->articulo->actualizarInventarioRESTA(trim($producto->co), $producto->ca, $data['Sucursal_Codigo'])=='3'){
+								$descripcion = $this->articulo->getArticuloDescripcion(trim($producto->co), $data['Sucursal_Codigo']);
+								$costo = $this->articulo->getPrecioProducto(trim($producto->co), 0, $data['Sucursal_Codigo']);
 							
-								$this->contabilidad->agregarArticuloNotaDebito($producto->co, $descripcion, $producto->ca, $costo, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo']);
+								$this->contabilidad->agregarArticuloNotaDebito(trim($producto->co), $descripcion, $producto->ca, $costo, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo']);
 							}
 						}
 						//Si la cantidad no es numerica o mayor a 0
