@@ -22,22 +22,30 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_NotaCredito
 											noCre.Factura_Acreditar, 
 											(SELECT  Sum(lpNoCre.Cantidad_Defectuoso * lpNoCre.Precio_Unitario) as MontoDefectuoso
 															  FROM    tb_28_productos_notas_credito lpNoCre 
-															  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo) as MontoDefectuoso, 
+															  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo and lpNoCre.Sucursal = noCre.Sucursal) as MontoDefectuoso, 
 											(SELECT  Sum(lpNoCre.Cantidad_Bueno * lpNoCre.Precio_Unitario) as MontoDefectuoso
 													  FROM    tb_28_productos_notas_credito lpNoCre 
-													  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo) as MontoBueno, 
-											(SELECT Sum((lpNoCre.Precio_Final - (lpNoCre.Precio_Final / 1.13))-(lpNoCre.Precio_Unitario - (lpNoCre.Precio_Unitario / 1.13)))as Total
+													  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo and lpNoCre.Sucursal = noCre.Sucursal) as MontoBueno, 
+											(SELECT ifnull(Sum((lpNoCre.Precio_Final - (lpNoCre.Precio_Final / 1.13))-(lpNoCre.Precio_Unitario - (lpNoCre.Precio_Unitario / 1.13))), 0) as Total
 													  FROM    tb_28_productos_notas_credito lpNoCre 
-													  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo) as Retencion,		  
+														INNER JOIN tb_27_notas_credito cre ON lpNoCre.nota_credito_consecutivo = cre.consecutivo AND lpNoCre.sucursal = cre.sucursal 
+														INNER JOIN tb_03_cliente cli on cre.Cliente = cli.Cliente_Cedula 
+													  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo and lpNoCre.Sucursal = noCre.Sucursal  and lpNoCre.No_Retencion = 0 and cli.Aplica_Retencion = 1) as Retencion,		  
 											(SELECT  (Sum(lpNoCre.Cantidad_Bueno * lpNoCre.Precio_Unitario) + Sum(lpNoCre.Cantidad_Defectuoso * lpNoCre.Precio_Unitario))
-														+ ((lpNoCre.Precio_Final - (lpNoCre.Precio_Final / 1.13))-(lpNoCre.Precio_Unitario - (lpNoCre.Precio_Unitario / 1.13)))as Total
+														+ ((lpNoCre.Precio_Final - (lpNoCre.Precio_Final / 1.13))-(lpNoCre.Precio_Unitario - (lpNoCre.Precio_Unitario / 1.13)))
+														- (SELECT ifnull(Sum((lpNoCre.Precio_Final - (lpNoCre.Precio_Final / 1.13))-(lpNoCre.Precio_Unitario - (lpNoCre.Precio_Unitario / 1.13))), 0) as Total
+															  FROM    tb_28_productos_notas_credito lpNoCre 
+																INNER JOIN tb_27_notas_credito cre ON lpNoCre.nota_credito_consecutivo = cre.consecutivo AND lpNoCre.sucursal = cre.sucursal 
+																INNER JOIN tb_03_cliente cli on cre.Cliente = cli.Cliente_Cedula 
+															  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo and lpNoCre.Sucursal = noCre.Sucursal  and lpNoCre.No_Retencion = 0 and cli.Aplica_Retencion = 1) as Total												  												  														  
 													  FROM    tb_28_productos_notas_credito lpNoCre 
-													  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo) as Total
+													  WHERE   lpNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo and lpNoCre.Sucursal = noCre.Sucursal) as Total
 									FROM    tb_03_cliente cli 
 											inner join tb_27_notas_credito noCre  
 											  on cli.Cliente_Cedula = noCre.Cliente
 											inner join tb_28_productos_notas_credito pNoCre 
-											  on pNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo');	
+											  on pNoCre.Nota_Credito_Consecutivo = noCre.Consecutivo 
+											  and pNoCre.Sucursal = noCre.Sucursal');	
 
 	SET @QUERYDESAMPA =  CONCAT( ' inner join tb_46_relacion_trueque des on noCre.Consecutivo = des.Consecutivo and   ' , 
 									' des.Documento = \'nota_credito\'');
