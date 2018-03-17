@@ -51,6 +51,8 @@ Class factura extends CI_Model
 			//return $consecutivo;
 			$this->load->model('cliente','',TRUE);
 			$clienteArray = $this->cliente->getNombreCliente($cedula);
+                        date_default_timezone_set("America/Costa_Rica");
+			$Current_datetime = date("y/m/d : H:i:s", now());
 			$dataFactura = array(
 	                        'Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
 	                        'Factura_Observaciones'=>mysql_real_escape_string($observaciones), 
@@ -62,6 +64,7 @@ Class factura extends CI_Model
 													'TB_02_Sucursal_Codigo'=>$sucursal,
 													'Factura_Vendedor_Codigo'=>$vendedor,	
 													'Factura_Vendedor_Sucursal'=>$sucursalVendedor,	
+                                                                                                        'Factura_Fecha_Hora'=>$Current_datetime,
 													'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
 													'Factura_Cliente_Exento'=>$clienteArray['exento'],
 													'Factura_Cliente_No_Retencion'=>$clienteArray['retencion'],

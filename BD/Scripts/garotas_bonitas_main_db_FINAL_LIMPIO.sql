@@ -4466,3 +4466,8 @@ ALTER TABLE `tb_03_cliente` ADD `Sucursal_Ingreso` INT NOT NULL AFTER `Aplica_Re
 
 
 ALTER TABLE `tb_37_cierre_caja` ADD `BCRServicios` DOUBLE NOT NULL , ADD `BCRServicios_Credito` DOUBLE NOT NULL ;
+
+
+ALTER TABLE  `tb_49_consignacion` ADD  `Estado` VARCHAR( 10 ) NOT NULL AFTER  `Total`;
+
+update tb_49_consignacion set Estado = 'creada';

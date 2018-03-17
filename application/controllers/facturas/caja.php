@@ -13,7 +13,7 @@ class caja extends CI_Controller {
 		$this->load->model('banco','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -25,7 +25,7 @@ class caja extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
@@ -39,7 +39,7 @@ class caja extends CI_Controller {
 	}
 	
 	function getFacturasPendientes(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$request="";
 		if($facturas = $this->factura->getFacturasPendientes($data['Sucursal_Codigo'])){
 			//echo "<table id='facturas_pendientes' class='facturas_pendientes'>";
@@ -79,7 +79,7 @@ class caja extends CI_Controller {
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include '/../get_session_data.php'; 
+			include PATH_USER_DATA; 
 			//header('Content-Type: application/json');			
 			if($facturaHEADS = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){
 				//var_dump($consecutivo);
@@ -140,7 +140,7 @@ class caja extends CI_Controller {
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include '/../get_session_data.php'; 		
+			include PATH_USER_DATA; 		
 			if($facturaHEADS = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){
 				foreach($facturaHEADS as $row){			
 					$facturaHEAD['status']='success';				
@@ -187,7 +187,7 @@ class caja extends CI_Controller {
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include '/../get_session_data.php'; 
+			include PATH_USER_DATA; 
 			//header('Content-Type: application/json');			
 			if($facturaPRODUCTS = $this->factura->getArticulosFactura($consecutivo, $data['Sucursal_Codigo'])){
 				
@@ -258,7 +258,7 @@ class caja extends CI_Controller {
 			$vuelto = $_POST['vuelto'];
 			
 			
-			include '/../get_session_data.php';	
+			include PATH_USER_DATA;	
 			if(isset($tipoPago['tipo'])){
 				if($tipoPago['tipo']=='credito'){ //Si es pago a credito
 				
@@ -463,7 +463,7 @@ class caja extends CI_Controller {
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){
 			$consecutivo = $_POST['consecutivo'];
-			include '/../get_session_data.php';	
+			include PATH_USER_DATA;	
 			
 			if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){							
 				$facturaBODY['status']='success';
@@ -517,7 +517,7 @@ class caja extends CI_Controller {
 		//file_put_contents('application/logs/devolverInventario.txt', "--Entro\n", FILE_APPEND);
 		if(isset($_POST['consecutivo'])&&isset($_POST['items'])){
 			$consecutivo = $_POST['consecutivo'];
-			include '/../get_session_data.php';	
+			include PATH_USER_DATA;	
 			
 			$items = $_POST['items']; //Obtenemos el array
 			$items = json_decode($items, true);
@@ -636,7 +636,7 @@ class caja extends CI_Controller {
 			//Obtenemos la primera posicion del info_factura para obtener el array final
 			$info_factura = $info_factura[0];
 						
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 			if($factura = $this->factura-> existe_Factura($consecutivo, $data['Sucursal_Codigo'])){
 				if($articulosFacturaActual = $this->factura->getItemsFactura($consecutivo, $data['Sucursal_Codigo']))
@@ -756,7 +756,7 @@ class caja extends CI_Controller {
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include '/../get_session_data.php'; 
+			include PATH_USER_DATA; 
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
 				if($facturaHEADS = $this->proforma_m->getProformasHeaders($consecutivo, $data['Sucursal_Codigo'])){
 					
@@ -825,7 +825,7 @@ class caja extends CI_Controller {
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include '/../get_session_data.php'; 
+			include PATH_USER_DATA; 
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
 				if($facturaHEADS = $this->proforma_m->getProformasHeaders($consecutivo, $data['Sucursal_Codigo'])){
 					
@@ -876,7 +876,7 @@ class caja extends CI_Controller {
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include '/../get_session_data.php'; 
+			include PATH_USER_DATA; 
 			//header('Content-Type: application/json');			
 			if($facturaPRODUCTS = $this->proforma_m->getArticulosProforma($consecutivo, $data['Sucursal_Codigo'])){
 				//var_dump($consecutivo);
@@ -929,7 +929,7 @@ class caja extends CI_Controller {
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include '/../get_session_data.php'; 
+			include PATH_USER_DATA; 
 			//header('Content-Type: application/json');			
 			if($facturaPRODUCTS = $this->proforma_m->getArticulosProforma($consecutivo, $data['Sucursal_Codigo'])){
 				//var_dump($consecutivo);
@@ -984,7 +984,7 @@ class caja extends CI_Controller {
 			
 			
 			$consecutivo = $_POST['consecutivo'];
-			include '/../get_session_data.php';	
+			include PATH_USER_DATA;	
 			
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){							
 				$articulos = $this->JSONArray($consecutivo, $data['Sucursal_Codigo']);
