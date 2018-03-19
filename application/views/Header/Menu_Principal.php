@@ -89,6 +89,7 @@
 				<li><a href='#' class='dir'>Consignaciones</a>
 					<ul>
 						<li class='first'><a href='".$Ruta_Base."contabilidad/consignaciones/crear'>Crear</a></li>
+                                                <li><a href='".$Ruta_Base."contabilidad/consignaciones/editar'>Editar</a></li>
 						<li class='last'><a href=".$Ruta_Base."contabilidad/consignaciones/facturar>Facturar</a></li>
 					</ul>
 				</li>	
@@ -100,7 +101,8 @@
 			<a href='#' class='dir'>Consultas</a>	
 			<ul>
 				<li class='first_Level_2'><a href='".$Ruta_Base."consulta/facturas'>Facturas</a></li>	
-				<li><a href='".$Ruta_Base."consulta/proformas'>Proformas</a></li>			
+				<li><a href='".$Ruta_Base."consulta/proformas'>Proformas</a></li>
+                                <li><a href='".$Ruta_Base."consulta/consignaciones'>Consignaciones</a></li>
 				<li><a href='#' class='dir'>Notas</a>
 					<ul>
 						<li class='first'><a href='".$Ruta_Base."consulta/notasCredito'>Crédito</a></li>

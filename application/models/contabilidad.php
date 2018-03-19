@@ -1962,7 +1962,7 @@ Class contabilidad extends CI_Model
 		$this->db->update("tb_51_lista_consignacion", array("Cantidad"=>$nuevaCantidad));
 	}
         
-        function getConsignacionesFiltradas($consigna, $recibe, $desde, $hasta){
+        function getConsignacionesFiltradas($consigna, $recibe, $desde, $hasta, $tipo = "creada"){
             $this->db->select(" distinct(c2.Id) as consecutivo,
                                 date_format(c2.Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha,
                                 (select s.Sucursal_Nombre from tb_02_sucursal s, tb_49_consignacion c where s.Codigo = c.Sucursal_Entrega and c.Id = c2.Id) as entrega,
@@ -1980,7 +1980,9 @@ Class contabilidad extends CI_Model
             if($hasta != ""){
                 $this->setFiltradoFechaHasta($hasta, "c2.Fecha_Hora");
             }
-            $this->db->where("c2.Estado", "creada");
+            if($tipo != ""){
+                $this->db->where("c2.Estado", $tipo);
+            }
             $query = $this->db->get();
             if($query->num_rows()==0){
                     return false;

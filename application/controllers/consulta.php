@@ -946,6 +946,38 @@ class consulta extends CI_Controller {
 		echo json_encode($retorno);
 	}
 
+        function consignaciones(){
+		include 'get_session_data.php';
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
+                $conf_array = $this->configuracion->getConfiguracionArray();
+                $data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+                $data['porcentaje_iva'] = $conf_array['iva'];
+                $data['cantidad_decimales'] = $conf_array['cantidad_decimales'];
+                $data['aplicar_retencion'] = $conf_array['aplicar_retencion'];
+		$this->load->view('consulta/consignaciones_consulta_view', $data);
+	}
+        
+        function getConsignacionesFiltrados(){
+            $retorno["error"] = "No se pudo procesar su solicitud";
+            $retorno["status"] = "error";
+            
+            $consigna = trim($_POST["consigna"]) == "-1" ? "" : trim($_POST["consigna"]);
+            $recibe = trim($_POST["recibe"]) == "-1" ? "" : trim($_POST["recibe"]);
+            $desde = trim($_POST["desde"]);
+            $hasta = trim($_POST["hasta"]);
+            $tipo = trim($_POST["tipo"]);
+            
+            if($consignaciones = $this->contabilidad->getConsignacionesFiltradas($consigna, $recibe, $desde, $hasta, $tipo)){
+                unset($retorno["error"]);
+                $retorno["status"] = "success";
+                $retorno["consignaciones"] = $consignaciones;
+            }else{
+                $retorno["error"] = "No hay consignaciones con los filtros seleccionados";
+                $retorno["status"] = "error";
+            }
+            
+            echo json_encode($retorno);
+        }
 } 
 
 ?>
