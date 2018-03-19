@@ -148,7 +148,7 @@ class consignaciones extends CI_Controller {
 							 									 												$sucursal_recibe_cliente
 							 									 											);
 							 									 			//Realizamos la consignacion de los articulos							
-							 									 			$this->consignarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacionId);								
+							 									 			$this->consignarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacionId, false);								
 							 									 			//Guardamos la transaccion
 							 									 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario creó la consignación # $consignacionId",$data['Sucursal_Codigo'],'crear_consignacion');
 																			
@@ -202,47 +202,53 @@ class consignaciones extends CI_Controller {
 			return true;
 	}
 	
-	private function consignarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacion){
-			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-			foreach($articulos as $art){
-					//Primero verificamos que exista en la sucursal que recibe, si no lo creamos
-					if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
-							$this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data);
-					}
-					
-					
-					//Si el articulo existe, solo debemos actualizar la info del mismo.
-					$conf_array = $this->configuracion->getConfiguracionArray();
-					$porcentajeIVA = $conf_array['iva'];
-					//Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
-					$precioUnidadReal = $art->precio_total / $art->cantidad; //El precio unidad que viene no cuenta con el descuento, tons el precio por unidad lo sacamos de esta manera
-					$precios["p0"] = $precioUnidadReal - ($precioUnidadReal / (1 + $porcentajeIVA));
-					$precios["p1"] = $this->articulo->getPrecioProducto($art->codigo, 1, $sucursalEntrega);
-					$precios["p2"] = $this->articulo->getPrecioProducto($art->codigo, 2, $sucursalEntrega);
-					$precios["p3"] = $this->articulo->getPrecioProducto($art->codigo, 3, $sucursalEntrega);
-					$precios["p4"] = $this->articulo->getPrecioProducto($art->codigo, 4, $sucursalEntrega);
-					$precios["p5"] = $this->articulo->getPrecioProducto($art->codigo, 5, $sucursalEntrega);
-					//Actualizamos el inventario
-					$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
-					//Sobreescribimos los precios
-					$this->articulo->actualizarPrecios($art->codigo, $sucursalRecibe, $precios);
-					
-					//Indiferentemente de si registro o actualizo el articulo
-					//debemos restar dicha cantidad del inventario de la sucursal que entrega
-					$this->articulo->actualizarInventarioRESTA($art->codigo, $art->cantidad, $sucursalEntrega);
-					//Agregamos dicho articulo a la consignacion
-					$articuloDeSucursalEntrega = $this->articulo->existe_Articulo($art->codigo,$sucursalEntrega);
-					$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
-					$this->contabilidad->registrarArticuloConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $consignacion, $art->precio_final);
-			
-					// Agregamos el articulo a la lista de consignaciones
-					if($larticulo = $this->contabilidad->getArticuloEnListaConsignacion($art->codigo, $sucursalEntrega, $sucursalRecibe, $art->precio_unidad, $art->descuento, $art->exento, $art->retencion, $art->precio_final)){
-							$nuevaCantidad = $larticulo->Cantidad + $art->cantidad;
-							$this->contabilidad->actualizarArticuloEnListaConsignacion($art->codigo, $nuevaCantidad, $art->precio_unidad, $sucursalEntrega, $sucursalRecibe);
-					}else{
-							$this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $art->precio_final);
-					}
-			}
+	private function consignarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacion, $aplicarConsignacion){
+            include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+            foreach($articulos as $art){
+                //Primero verificamos que exista en la sucursal que recibe, si no lo creamos
+                if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
+                                $this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data);
+                }
+
+
+                //Si el articulo existe, solo debemos actualizar la info del mismo.
+                $conf_array = $this->configuracion->getConfiguracionArray();
+                $porcentajeIVA = $conf_array['iva'];
+                //Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
+                $precioUnidadReal = $art->precio_total / $art->cantidad; //El precio unidad que viene no cuenta con el descuento, tons el precio por unidad lo sacamos de esta manera
+                $precios["p0"] = $precioUnidadReal - ($precioUnidadReal / (1 + $porcentajeIVA));
+                $precios["p1"] = $this->articulo->getPrecioProducto($art->codigo, 1, $sucursalEntrega);
+                $precios["p2"] = $this->articulo->getPrecioProducto($art->codigo, 2, $sucursalEntrega);
+                $precios["p3"] = $this->articulo->getPrecioProducto($art->codigo, 3, $sucursalEntrega);
+                $precios["p4"] = $this->articulo->getPrecioProducto($art->codigo, 4, $sucursalEntrega);
+                $precios["p5"] = $this->articulo->getPrecioProducto($art->codigo, 5, $sucursalEntrega);
+                
+                if($aplicarConsignacion){
+                    //Actualizamos el inventario
+                    $this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
+                    //Sobreescribimos los precios
+                    $this->articulo->actualizarPrecios($art->codigo, $sucursalRecibe, $precios);
+
+                    //Indiferentemente de si registro o actualizo el articulo
+                    //debemos restar dicha cantidad del inventario de la sucursal que entrega
+                    $this->articulo->actualizarInventarioRESTA($art->codigo, $art->cantidad, $sucursalEntrega);
+                }
+                
+                //Agregamos dicho articulo a la consignacion
+                $articuloDeSucursalEntrega = $this->articulo->existe_Articulo($art->codigo,$sucursalEntrega);
+                $imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
+                $this->contabilidad->registrarArticuloConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $consignacion, $art->precio_final);
+
+                if($aplicarConsignacion){
+                    // Agregamos el articulo a la lista de consignaciones
+                    if($larticulo = $this->contabilidad->getArticuloEnListaConsignacion($art->codigo, $sucursalEntrega, $sucursalRecibe, $art->precio_unidad, $art->descuento, $art->exento, $art->retencion, $art->precio_final)){
+                        $nuevaCantidad = $larticulo->Cantidad + $art->cantidad;
+                        $this->contabilidad->actualizarArticuloEnListaConsignacion($art->codigo, $nuevaCantidad, $art->precio_unidad, $sucursalEntrega, $sucursalRecibe);
+                    }else{
+                        $this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $art->precio_final);
+                    }
+                }
+            }
 	}
 	
 	private function registrarArticulo($articulo, $sucursalRecibe, $sucursalEntrega, $datosSesion){
@@ -548,6 +554,244 @@ class consignaciones extends CI_Controller {
 					}
 			}
 	}
+        
+        
+        function editar(){
+            include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+            $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+            $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+
+            if(!$permisos['editar_consignaciones'])
+            {
+                redirect('accesoDenegado', 'location');						
+            }
+            $conf_array = $this->configuracion->getConfiguracionArray();
+            $data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+            $data['porcentaje_iva'] = $conf_array['iva'];
+            $data['cantidad_decimales'] = $conf_array['cantidad_decimales'];
+            $data['aplicar_retencion'] = $conf_array['aplicar_retencion'];
+            $this->load->view("contabilidad/consignaciones_editar_view", $data);
+	}
+        
+        function getConsignacionesFiltrados(){
+            $retorno["error"] = "No se pudo procesar su solicitud";
+            $retorno["status"] = "error";
+            
+            $consigna = trim($_POST["consigna"]) == "-1" ? "" : trim($_POST["consigna"]);
+            $recibe = trim($_POST["recibe"]) == "-1" ? "" : trim($_POST["recibe"]);
+            $desde = trim($_POST["desde"]);
+            $hasta = trim($_POST["hasta"]);
+            
+            if($consignaciones = $this->contabilidad->getConsignacionesFiltradas($consigna, $recibe, $desde, $hasta)){
+                unset($retorno["error"]);
+                $retorno["status"] = "success";
+                $retorno["consignaciones"] = $consignaciones;
+            }else{
+                $retorno["error"] = "No hay consignaciones con los filtros seleccionados";
+                $retorno["status"] = "error";
+            }
+            
+            echo json_encode($retorno);
+        }
+        
+        function getConsignacion(){
+            $retorno["status"] = "error";
+            $retorno["error"] = "No se pudo procesar su solicitud";
+            
+            $consignacion = trim($_POST["consignacion"]);
+            
+            if($consignacion = $this->contabilidad->getConsignacionParaImpresion($consignacion)){
+                if($articulos = $this->contabilidad->getArticulosDeConsignacionParaEditar($consignacion->consecutivo, $consignacion->sucursal_entrega)){
+                    unset($retorno["error"]);
+                    $retorno["status"] = "success";
+                    $consignacion->articulos = $articulos;
+                    $retorno["consignacion"] = $consignacion;
+                }else{
+                   $retorno["error"] = "No hay artículos para esta consignación"; 
+                }
+            }else{
+                $retorno["error"] = "Número de consignación no existe";
+            }
+            
+            echo json_encode($retorno);
+        }
+
+        function aplicarConsignacion(){
+            $retorno['status'] = 'error';
+            $retorno['error'] = 'No se pudo procesar la solicitud.';
+
+            if(isset($_POST["consignacion"]) && isset($_POST["sucursalRecibe"]) && isset($_POST["sucursalEntrega"]) &&
+                isset($_POST["articulos"]) && isset($_POST["costo"]) &&
+                isset($_POST["iva"]) && isset($_POST["retencion"]) &&
+                isset($_POST["total"]) && isset($_POST["porcentaje_iva"])){
+                try{
+                    $sucursalEntrega = trim($_POST["sucursalEntrega"]);
+                    $sucursalRecibe = trim($_POST["sucursalRecibe"]);
+                    $articulos = json_decode($_POST["articulos"]);
+                    $costo = trim($_POST["costo"]);
+                    $iva = trim($_POST["iva"]);
+                    $retencion = trim($_POST["retencion"]);
+                    $total = trim($_POST["total"]);
+                    $porcentaje_iva = trim($_POST["porcentaje_iva"]);
+                    $consignacionId = trim($_POST["consignacion"]);
+              
+                    if($this->empresa->getEmpresa($sucursalEntrega)){
+                        if($this->empresa->getEmpresa($sucursalRecibe)){
+                            if(sizeOf($articulos) > 0){
+                                //Quitamos la division de centenares
+                                $costo = str_replace(".","",$costo);
+                                $iva = str_replace(".","",$iva);
+                                $retencion = str_replace(".","",$retencion);
+                                $total = str_replace(".","",$total);
+
+                                //Cambiamos el divisor de decimales
+                                $costo = str_replace(",",".",$costo);
+                                $iva = str_replace(",",".",$iva);
+                                $retencion = str_replace(",",".",$retencion);
+                                $total = str_replace(",",".",$total);
+
+                                if(is_numeric($costo) && is_numeric($iva) && is_numeric($retencion) && is_numeric($total) && is_numeric($porcentaje_iva) && is_numeric($consignacionId)){
+                                    if($consignacionMetadata = $this->contabilidad->getConsignacion($consignacionId)){
+                                        if($this->verificarExistenciaDeArticulos($articulos, $sucursalEntrega)){
+                                            if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
+                                                //Cargamos informacion adicional
+                                                include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+                                                
+                                                $this->contabilidad->eliminarArticulosDeConsignacion($consignacionId);
+                                                
+                                                $this->contabilidad->aplicarConsignacion(
+                                                                            $costo, 
+                                                                            $total,
+                                                                            $consignacionId
+                                                                    );
+                                                //Realizamos la consignacion de los articulos							
+                                                $this->consignarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacionId, true);								
+                                                //Guardamos la transaccion
+                                                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario aplicó la consignación # $consignacionId",$data['Sucursal_Codigo'],'crear_consignacion');
+
+
+                                                $retorno['status'] = 'success';
+                                                unset($retorno['error']);
+                                                $retorno['consignacion'] = $consignacionId;
+                                                //Para efecto de impresion
+                                                $retorno['sucursal']= $data['Sucursal_Codigo'];
+                                                $retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+                                                $retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+                                            }else{
+                                                            $retorno['error'] = 'La empresa que recibe consignación no tiene liga con algún cliente.';
+                                            }
+                                        }else{
+                                                        $retorno['error'] = 'Alguno de los artículos no existe o ya no tiene unidades suficientes en existencia.';
+                                        }
+                                    }else{
+                                        $retorno['error'] = 'Consignación a editar no existe.';
+                                    }
+                                }else{
+                                                $retorno['error'] = 'Alguno de los montos no tiene formato numerico.';
+                                }
+                            }else{
+                                            $retorno['error'] = 'No se ingresaron artículos a consignar.';
+                            }
+                        }else{
+                                        $retorno['error'] = 'Sucursal que recibe consignación no existe.';
+                        }
+                    }else{
+                                    $retorno['error'] = 'Sucursal que consigna no existe.';
+                    }
+                }catch(Exception $e){
+                                $retorno['error'] = 'Error desconocido... Exception Thrown...';
+                }
+            }else{
+                $retorno['error'] = 'URL con formato indebido.';
+            }
+            echo json_encode($retorno);
+        }
+        
+        function guardarConsignacion(){
+             $retorno['status'] = 'error';
+            $retorno['error'] = 'No se pudo procesar la solicitud.';
+
+            if(isset($_POST["consignacion"]) && isset($_POST["sucursalRecibe"]) && isset($_POST["sucursalEntrega"]) &&
+                isset($_POST["articulos"]) && isset($_POST["costo"]) &&
+                isset($_POST["iva"]) && isset($_POST["retencion"]) &&
+                isset($_POST["total"]) && isset($_POST["porcentaje_iva"])){
+                try{
+                    $sucursalEntrega = trim($_POST["sucursalEntrega"]);
+                    $sucursalRecibe = trim($_POST["sucursalRecibe"]);
+                    $articulos = json_decode($_POST["articulos"]);
+                    $costo = trim($_POST["costo"]);
+                    $iva = trim($_POST["iva"]);
+                    $retencion = trim($_POST["retencion"]);
+                    $total = trim($_POST["total"]);
+                    $porcentaje_iva = trim($_POST["porcentaje_iva"]);
+                    $consignacionId = trim($_POST["consignacion"]);
+              
+                    if($this->empresa->getEmpresa($sucursalEntrega)){
+                        if($this->empresa->getEmpresa($sucursalRecibe)){
+                            if(sizeOf($articulos) > 0){
+                                //Quitamos la division de centenares
+                                $costo = str_replace(".","",$costo);
+                                $iva = str_replace(".","",$iva);
+                                $retencion = str_replace(".","",$retencion);
+                                $total = str_replace(".","",$total);
+
+                                //Cambiamos el divisor de decimales
+                                $costo = str_replace(",",".",$costo);
+                                $iva = str_replace(",",".",$iva);
+                                $retencion = str_replace(",",".",$retencion);
+                                $total = str_replace(",",".",$total);
+
+                                if(is_numeric($costo) && is_numeric($iva) && is_numeric($retencion) && is_numeric($total) && is_numeric($porcentaje_iva) && is_numeric($consignacionId)){
+                                    if($consignacionMetadata = $this->contabilidad->getConsignacion($consignacionId)){
+                                        if($this->verificarExistenciaDeArticulos($articulos, $sucursalEntrega)){
+                                            if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
+                                                //Cargamos informacion adicional
+                                                include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+                                                
+                                                $this->contabilidad->eliminarArticulosDeConsignacion($consignacionId);
+                                                
+                                                $this->contabilidad->guardarConsignacion(
+                                                                            $costo, 
+                                                                            $total,
+                                                                            $consignacionId
+                                                                    );
+                                                //Realizamos la consignacion de los articulos							
+                                                $this->consignarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacionId, false);								
+                                                //Guardamos la transaccion
+                                                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario guardó la consignación # $consignacionId",$data['Sucursal_Codigo'],'crear_consignacion');
+
+
+                                                $retorno['status'] = 'success';
+                                                unset($retorno['error']);
+                                            }else{
+                                                            $retorno['error'] = 'La empresa que recibe consignación no tiene liga con algún cliente.';
+                                            }
+                                        }else{
+                                                        $retorno['error'] = 'Alguno de los artículos no existe o ya no tiene unidades suficientes en existencia.';
+                                        }
+                                    }else{
+                                        $retorno['error'] = 'Consignación a editar no existe.';
+                                    }
+                                }else{
+                                                $retorno['error'] = 'Alguno de los montos no tiene formato numerico.';
+                                }
+                            }else{
+                                            $retorno['error'] = 'No se ingresaron artículos a consignar.';
+                            }
+                        }else{
+                                        $retorno['error'] = 'Sucursal que recibe consignación no existe.';
+                        }
+                    }else{
+                                    $retorno['error'] = 'Sucursal que consigna no existe.';
+                    }
+                }catch(Exception $e){
+                                $retorno['error'] = 'Error desconocido... Exception Thrown...';
+                }
+            }else{
+                $retorno['error'] = 'URL con formato indebido.';
+            }
+            echo json_encode($retorno);
+        }
 }
 
 

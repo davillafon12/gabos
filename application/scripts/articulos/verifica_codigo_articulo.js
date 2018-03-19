@@ -42,13 +42,13 @@ function callPage(url, div){
 				//div.innerHTML=ajax.responseText;
 				if(ajax.responseText.indexOf('tr') != -1)
 				{						
-					div.innerHTML = \"<div class='status_2'><img src=".$ruta_base_imagenes_script."/error.gif /><p class='text_status'>¡No esta disponible!</p></div>\";							
+					div.innerHTML = "<div class='status_2'><img src="+ruta_base_imagenes_script+"/error.gif /><p class='text_status'>¡No esta disponible!</p></div>";							
 					boton.disabled=true;
 
 				}
 				else
 				{
-					div.innerHTML = \"<div class='status_2'><img src=".$ruta_base_imagenes_script."/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>\";
+					div.innerHTML = "<div class='status_2'><img src="+ruta_base_imagenes_script+"/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>";
 					boton.disabled=false;
 				}
 			}
@@ -62,5 +62,4 @@ function llamarCodigoBarras(){
 	codigo_barras = document.getElementById('cod_Barras');
 	codigo =  input.value;
 	codigo_barras.innerHTML='<center><img alt=\"12345\" src=\"../application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/></center>';
-}/application/libraries/barcode.php?codetype=Code25&size=40&text='+codigo+'\"/></center>';
-}*/
+}
