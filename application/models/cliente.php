@@ -41,7 +41,7 @@ Class cliente extends CI_Model
 	}	
 
 
-	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $carnet_cliente, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento, $aplicaRetencion, $usuarioID, $sucursalID)
+	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $fecha_nacimiento, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento, $aplicaRetencion, $usuarioID, $sucursalID, $codptel, $codpcel, $codpfax, $fax, $prov, $canton, $distr, $barrio)
 	{
 		
 		if($this->existe_Cliente($cedula)){
@@ -55,7 +55,7 @@ Class cliente extends CI_Model
 	                        'Cliente_Apellidos'=>mysql_real_escape_string($apellidos), 
 							'Cliente_Cedula'=>mysql_real_escape_string($cedula),
 							'Cliente_Tipo_Cedula'=>mysql_real_escape_string($tipo_cedula),
-							'Cliente_Carnet_Numero'=>$carnet_cliente,
+							'Fecha_Nacimiento'=>$fecha_nacimiento,
 							'Cliente_Celular'=>mysql_real_escape_string($celular),	
 							'Cliente_Telefono'=>mysql_real_escape_string($telefono),	
 							'Cliente_Fecha_Ingreso'=>mysql_real_escape_string($Current_datetime),	
@@ -71,7 +71,16 @@ Class cliente extends CI_Model
 							'Cliente_EsExento' => mysql_real_escape_string($exento),
 							'Aplica_Retencion' => $aplicaRetencion,
 							'Sucursal_Ingreso' => $sucursalID,
-							'Usuario_Ingreso' => $usuarioID
+							'Usuario_Ingreso' => $usuarioID,
+                                                        'Codigo_Pais_Telefono' => mysql_real_escape_string($codptel),
+                                                        'Codigo_Pais_Celular' => mysql_real_escape_string($codpcel),
+                                                        'Codigo_Pais_Fax' => mysql_real_escape_string($codpfax),
+                                                        'Numero_Fax' => mysql_real_escape_string($fax),
+                                                        'Provincia' => mysql_real_escape_string($prov),
+                                                        'Canton' => mysql_real_escape_string($canton),
+                                                        'Distrito' => mysql_real_escape_string($distr),
+                                                        'Barrio' => mysql_real_escape_string($barrio)
+                            
 	                    );
 			try{
 	        $this->db->insert('TB_03_Cliente',$data); }
@@ -179,13 +188,16 @@ Class cliente extends CI_Model
 			include PATH_USER_DATA_DOUBLE; //Traemos la info para obtener la sucursal
 			$result = $query->result();
 			foreach($result as $row)
-			{						
-				return array('nombre'=>$row->Cliente_Nombre." ".$row->Cliente_Apellidos,
+			{	
+                            $actualizar = ($row->Provincia < 1 || $row->Canton < 1 || $row->Distrito < 1 || $row->Barrio < 1);
+                            $actualizar = !filter_var($row->Cliente_Correo_Electronico, FILTER_VALIDATE_EMAIL) || $actualizar;
+                            return array('nombre'=>$row->Cliente_Nombre." ".$row->Cliente_Apellidos,
 							 'estado'=>$row->Cliente_Estado,
 							 'descuento'=>$this->getClienteDescuento(mysql_real_escape_string($id), $data['Sucursal_Codigo']),
 							 'exento' => $row->Cliente_EsExento,
 							 'sucursal' => $row->Cliente_EsSucursal,
-							 'retencion' => $row->Aplica_Retencion
+							 'retencion' => $row->Aplica_Retencion,
+                                                         'actualizar' => $actualizar
 							);
 			}
 		}	

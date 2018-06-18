@@ -31,14 +31,22 @@ http://www.freshdesignweb.com/beautiful-registration-form-with-html5-and-css3.ht
 
 .form label { color: #000; font-weight:bold;font-size: 14px;font-family:Arial, Helvetica; }
 
-.form input, textarea { background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(51, 51, 51, 0.15); padding: 7px; font-family: Keffeesatz, Arial; color: #4b4b4b; font-size: 14px; -webkit-border-radius: 5px; margin-bottom: 15px; margin-top: -10px; }
-.form input:focus, textarea:focus { border: 1px solid #ff5400; background-color: rgba(255, 255, 255, 1); }
+.form input, textarea, select { 
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(51, 51, 51, 0.15);
+    font-family: Keffeesatz, Arial;
+    color: #4b4b4b;
+    font-size: 14px;
+    -webkit-border-radius: 5px;
+    height: 22px;
+}
+.form input:focus, textarea:focus, select:focus { border: 1px solid #ff5400; background-color: rgba(255, 255, 255, 1); }
 
 .form input.buttom{ 
 	background: #4b8df9; 
 	display: inline-block; 
 	padding: 5px 10px 6px; 
-	*margin-top: 60px;  
+	margin-top: 60px;  
 	color: #fbf7f7; 
 	text-decoration: none; 
 	font-weight: bold; 
@@ -81,7 +89,7 @@ input[type=number]::-webkit-outer-spin-button {
 	font-family:Arial, Helvetica;
 	font-size: 12px;
 	position: relative;
-	top: -25px;
+	top: -5px;
 }
 
 .status_2{
@@ -172,7 +180,7 @@ box-shadow: 3px 3px 5px 0px #888888;
 .recuadro2{
 	position: relative;
 	margin-bottom: -90px;
-	top: -183px;
+	top: -156px;
 	margin-left: 10px;
 	width: 200px;
 	height: 210px;
@@ -265,8 +273,8 @@ box-shadow: 3px 3px 5px 0px #888888;
 .divButton{
 	width: 200px;
 	position: relative;
-	top: -115px;
-	margin-bottom: -120px;
+	top: -145px;
+        margin-bottom: -140px;
 	left: 940px;
 }
 
@@ -415,4 +423,48 @@ box-shadow: 3px 3px 5px 0px #888888;
 
 .estado-div select{
 	margin-left: 22px;
+}
+
+#tipo_Cedula, #estado_cliente_input, .input-dom{
+    width: 100%;
+    height: 26px;
+}
+
+.registrar_cliente_form-form table{
+    width: 100%;
+}
+
+.registrar_cliente_form-form table td{
+    padding-right: 20px;
+}
+
+.input_form{
+    width: 98%;
+}
+
+.status_cedula{
+    float: right;     
+    margin-bottom: -18px;
+}
+
+.check_cliente{
+    position: relative;
+    top: 4px;
+    margin-right: 40px;
+}
+
+.input_form_small{
+    width: 20%;
+}
+
+.input_form.small{
+    width: 68%;
+}
+
+.input-dom{
+        min-width: 150px;
+}
+
+.codigo-area{
+    text-align: right;
 }

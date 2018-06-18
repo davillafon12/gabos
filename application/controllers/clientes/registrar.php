@@ -16,125 +16,150 @@ class registrar extends CI_Controller {
 	    parent::__construct(); 
 		$this->load->model('user','',TRUE);
 		$this->load->model('cliente','',TRUE);
-		$this->load->model('configuracion','',TRUE);	
+		$this->load->model('configuracion','',TRUE);
+                $this->load->model('ubicacion','',TRUE);
 		/*$conf_array = $this->XMLParser->getConfigArray();
 		$this->monto_minimo_defecto = $conf_array['monto_minimo_compra'];
 		$this->monto_maximo_defecto = $conf_array['monto_minimo_venta'];*/
 	 }
 
-	 function index()
-	 {
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	function index(){
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
 		if($permisos['registrar_cliente'])
 		{
-		$this->load->helper(array('form'));
-		$this->load->view('clientes/clientes_registrar_view', $data);	
+                    $provincias = $this->ubicacion->getProvincias();
+                    $this->load->helper(array('form'));
+                    $data["provincias"] = $provincias;
+                    $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+                    $this->load->view('clientes/clientes_registrar_view', $data);	
 		}
 		else{
-		   redirect('accesoDenegado', 'location');
+                    redirect('accesoDenegado', 'location');
 		}
-
-
 	}
-	 function es_Cedula_Utilizada()
-	 {
-		$id_request=$_GET['id'];
-		//$id_request=1;
-		//include '/../../models/empresa.php';
-		$ruta_base_imagenes_script = base_url('application/images/scripts');
-
-		if($this->cliente->existe_Cliente($id_request))
-		{
-			echo "true"; //echo "<img src=".$ruta_base_imagenes_script."/error.gif />";
-		}
-		else
-		{
-			echo "false"; //echo "<img src=".$ruta_base_imagenes_script."/tick.gif />";
-		}
-	 }
-	function registrarClientes(){
-
-	$tipo_Cedula = $this->input->post('tipo_Cedula');
-	$cedula = $this->input->post('cedula');
-	$estado_Cliente = $this->input->post('estado_Cliente');
-	$nombre = $this->input->post('nombre');
-	$apellidos = $this->input->post('apellidos');
-	$carnet = $this->input->post('carnet');
-	$celular = $this->input->post('celular');
-	$telefono = $this->input->post('telefono');
-	$pais = $this->input->post('pais');
-	$direccion = $this->input->post('direccion');
-	$email = $this->input->post('email');
-	//$descuento = $this->input->post('descuento');
-	//$credito = $this->input->post('credito');
-	//$esTipoSucursalArray = $this->input->post('credito');
-	$observaciones = $this->input->post('observaciones');
-	$tipo_pago_cliente = $this->input->post('tipo_pago_cliente');
-	
-	//Si es sucursal
-	$this->isSucursal = isset($_POST['issucursal']) && $_POST['issucursal']  ? "1" : "0";
-	
-	//Si es exento
-	$exento = 0;
-	$exento = isset($_POST['esexento']) && $_POST['esexento']  ? "1" : "0";
-	
-	//Aplica Retencion
-	$aplicaRetencion = 0;
-	$aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
-
-	$this->do_upload($cedula); // metodo encargado de cargar la imagen con la cedula del usuario
-			
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-	$ruta_base_imagenes_script = base_url('application/images/scripts');
-	if($this->cliente->registrar($nombre, $apellidos , $cedula, $tipo_Cedula, $carnet, $celular, $telefono, $pais, $direccion, $observaciones, $this->direccion_url_imagen, $email, $estado_Cliente, $this->calidad_Cliente, $tipo_pago_cliente, $this->isSucursal, $exento, $aplicaRetencion, $data['Usuario_Codigo'],$data['Sucursal_Codigo']))
-	{ //Si se ingreso bien a la BD
-		//Titulo de la pagina
-		$data['Titulo_Pagina'] = "Transacción Exitosa";
-	
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el cliente ".mysql_real_escape_string($nombre)." codigo: ".mysql_real_escape_string($cedula),$data['Sucursal_Codigo'],'registro');
-	    $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso del cliente ".$nombre." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
-		                         <div class='Informacion'>
-					             <form action=".base_url('clientes/registrar').">
-				                 				
-								 <p class='titles'>Datos del cliente:</p><br><hr>
-								 <img src=".base_url('application/images/Client_Photo/thumb/'.$this->direccion_url_imagen)." alt=\"Smiley face\" height=\"100\" width=\"100\"><br>
-								 <p class='titles'>-Nombre:</p> <p class='content'>".$nombre." ".$apellidos.".</p><br>
-								 <p class='titles'>-Cédula:</p> <p class='content'>".$cedula.".</p><br>
-								 <p class='titles'>-Tipo Cédula:</p> <p class='content'>".$tipo_Cedula.".</p><br>
-								 <p class='titles'>-Carnet:</p> <p class='content'>".$carnet.".</p><br>
-								 <p class='titles'>-Celular:</p> <p class='content'>".$celular.".</p><br>
-								 <p class='titles'>-Telefono:</p> <p class='content'>".$telefono.".</p><br>
-								 <p class='titles'>-País:</p> <p class='content'>".$pais.".</p><br>
-								 <p class='titles'>-Dirección:</p> <p class='content'>".$direccion.".</p><br>
-								 <p class='titles'>-Email:</p> <p class='content'>".$email.".</p><br>
-								 <p class='titles'>-Tipo Pago:</p> <p class='content'>".$tipo_pago_cliente.".</p><br>
-								 <p class='titles'>-Estado:</p> <p class='content'>".$estado_Cliente.".</p><br>								
-								 <p class='titles'>-Observaciones:</h3> </p><br><p class='content_ob'>
-								 ".$observaciones.".</p>
-								 <input class='buttom' tabindex='4' value='Registrar otro cliente' type='submit'>
-								 <a href='".base_url('home')."' class='boton_volver' style='  top: 15px;  left: 80px;  padding: 4px 10px 4px;'>Volver</a>
-				                 </form>
-								 </div>";
-		$this->load->view('clientes/view_informacion_guardado', $data);
-		
+        
+	function es_Cedula_Utilizada(){
+            $id_request=$_GET['id'];
+            $ruta_base_imagenes_script = base_url('application/images/scripts');
+            if($this->cliente->existe_Cliente($id_request)){
+                echo "true"; //echo "<img src=".$ruta_base_imagenes_script."/error.gif />";
+            }else{
+                echo "false"; //echo "<img src=".$ruta_base_imagenes_script."/tick.gif />";
+            }
 	}
-	else
-	{ //Hubo un error  no se ingreso a la BD
-		$data['Titulo_Pagina'] = "Transacción Fallida";
-		$data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>Hubo un error al ingresar el cliente ".$nombre."! <img src=".$ruta_base_imagenes_script."/error.gif /></p></div><br>
-		                         <div class='Informacion'>								 
-					             <form action=".base_url('clientes/registrar').">
-									 <input class='buttom' tabindex='2' value='Registrar otro cliente' type='submit' >
-				                 </form>
-								 </div>";
-		$this->load->view('clientes/view_informacion_guardado', $data);
-	}
-	}
+         
+    function registrarClientes(){
+        $tipo_Cedula = $this->input->post('tipo_Cedula');
+        $cedula = $this->input->post('cedula');
+        $estado_Cliente = $this->input->post('estado_Cliente');
+        $nombre = $this->input->post('nombre');
+        $apellidos = $this->input->post('apellidos');
+        $fecha_nacimiento = $this->input->post('fecha_nacimiento');
+        $celular = $this->input->post('celular');
+        $telefono = $this->input->post('telefono');
+        $pais = $this->input->post('pais');
+        $direccion = $this->input->post('direccion');
+        $email = $this->input->post('email');
+        $observaciones = $this->input->post('observaciones');
+        $tipo_pago_cliente = $this->input->post('tipo_pago_cliente');
+        
+        $codptel = $this->input->post('codigo_telefono');
+        $codpcel = $this->input->post('codigo_celular');
+        $codpfax = $this->input->post('codigo_fax');
+        $fax = $this->input->post('fax');
+        $prov = $this->input->post('provincia');
+        $canton = $this->input->post('canton');
+        $distr = $this->input->post('distrito');
+        $barrio = $this->input->post('barrio');
 
-	function do_upload($cedula)
+        //Si es sucursal
+        $this->isSucursal = isset($_POST['issucursal']) && $_POST['issucursal']  ? "1" : "0";
+
+        //Si es exento
+        $exento = 0;
+        $exento = isset($_POST['esexento']) && $_POST['esexento']  ? "1" : "0";
+
+        //Aplica Retencion
+        $aplicaRetencion = 0;
+        $aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
+
+        $this->do_upload($cedula); // metodo encargado de cargar la imagen con la cedula del usuario
+
+        include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+        $ruta_base_imagenes_script = base_url('application/images/scripts');
+        if($this->cliente->registrar(   $nombre, 
+                                        $apellidos , 
+                                        $cedula, 
+                                        $tipo_Cedula, 
+                                        $fecha_nacimiento, 
+                                        $celular, 
+                                        $telefono, 
+                                        $pais, 
+                                        $direccion, 
+                                        $observaciones, 
+                                        $this->direccion_url_imagen, 
+                                        $email, 
+                                        $estado_Cliente, 
+                                        $this->calidad_Cliente, 
+                                        $tipo_pago_cliente, 
+                                        $this->isSucursal, 
+                                        $exento, 
+                                        $aplicaRetencion, 
+                                        $data['Usuario_Codigo'],
+                                        $data['Sucursal_Codigo'],
+                                        $codptel, 
+                                        $codpcel, 
+                                        $codpfax,   
+                                        $fax, 
+                                        $prov, 
+                                        $canton, 
+                                        $distr, 
+                                        $barrio)){ //Si se ingreso bien a la BD
+                //Titulo de la pagina
+                $data['Titulo_Pagina'] = "Transacción Exitosa";
+
+                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el cliente ".mysql_real_escape_string($nombre)." codigo: ".mysql_real_escape_string($cedula),$data['Sucursal_Codigo'],'registro');
+            $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso del cliente ".$nombre." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
+                                         <div class='Informacion'>
+                                                     <form action=".base_url('clientes/registrar').">
+
+                                                                 <p class='titles'>Datos del cliente:</p><br><hr>
+                                                                 <img src=".base_url('application/images/Client_Photo/thumb/'.$this->direccion_url_imagen)." alt=\"Smiley face\" height=\"100\" width=\"100\"><br>
+                                                                 <p class='titles'>-Nombre:</p> <p class='content'>".$nombre." ".$apellidos.".</p><br>
+                                                                 <p class='titles'>-Cédula:</p> <p class='content'>".$cedula.".</p><br>
+                                                                 <p class='titles'>-Tipo Cédula:</p> <p class='content'>".$tipo_Cedula.".</p><br>
+                                                                 <p class='titles'>-Fecha de Nacimiento:</p> <p class='content'>".$fecha_nacimiento.".</p><br>
+                                                                 <p class='titles'>-Celular:</p> <p class='content'>".$celular.".</p><br>
+                                                                 <p class='titles'>-Telefono:</p> <p class='content'>".$telefono.".</p><br>
+                                                                 <p class='titles'>-País:</p> <p class='content'>".$pais.".</p><br>
+                                                                 <p class='titles'>-Dirección:</p> <p class='content'>".$direccion.".</p><br>
+                                                                 <p class='titles'>-Email:</p> <p class='content'>".$email.".</p><br>
+                                                                 <p class='titles'>-Tipo Pago:</p> <p class='content'>".$tipo_pago_cliente.".</p><br>
+                                                                 <p class='titles'>-Estado:</p> <p class='content'>".$estado_Cliente.".</p><br>								
+                                                                 <p class='titles'>-Observaciones:</h3> </p><br><p class='content_ob'>
+                                                                 ".$observaciones.".</p>
+                                                                 <input class='buttom' tabindex='4' value='Registrar otro cliente' type='submit'>
+                                                                 <a href='".base_url('home')."' class='boton_volver' style='  top: 15px;  left: 80px;  padding: 4px 10px 4px;'>Volver</a>
+                                                 </form>
+                                                                 </div>";
+                $this->load->view('clientes/view_informacion_guardado', $data);
+
+        }else{ //Hubo un error  no se ingreso a la BD
+                $data['Titulo_Pagina'] = "Transacción Fallida";
+                $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>Hubo un error al ingresar el cliente ".$nombre."! <img src=".$ruta_base_imagenes_script."/error.gif /></p></div><br>
+                                         <div class='Informacion'>								 
+                                                     <form action=".base_url('clientes/registrar').">
+                                                                         <input class='buttom' tabindex='2' value='Registrar otro cliente' type='submit' >
+                                                 </form>
+                                                                 </div>";
+                $this->load->view('clientes/view_informacion_guardado', $data);
+        }
+    }
+
+    function do_upload($cedula)
     {
 
        //especificamos a donde se va almacenar nuestra imagen
@@ -197,7 +222,7 @@ class registrar extends CI_Controller {
     }
 
     function registro_masivo(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		$data["contenedor"] = "";
 		if($permisos['registrar_usuarios_masivo'])
@@ -219,7 +244,7 @@ class registrar extends CI_Controller {
 
 			 if($tamano_archivo<=$limite){
 				if(move_uploaded_file($_FILES['file']["tmp_name"], "application/upload/".$nombre_archivo)){
-					include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+					include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 					$data["contenedor"] = $this->leer_excel();
 					$this->load->helper(array('form'));
 					$this->load->view('clientes/registro_masivo_clientes', $data);	
@@ -322,8 +347,54 @@ class registrar extends CI_Controller {
 	return $contenedor;
     }// fin metodo leer_excel 
 
-
-
+    public function getCantones(){
+        $r["status"] = 0;
+        $r["error"] = "No se pudo procesar solicitud";
+        $provincia = $this->input->post('provincia');
+        
+        if(is_numeric($provincia)){
+            $cantones = $this->ubicacion->getCantones($provincia);
+            unset($r["error"]);
+            $r["status"] = 1;
+            $r["data"] = $cantones;
+        }else{
+            $r["error"] = "Pronvicia no es válida";
+        }
+        echo json_encode($r);
+    }
+    
+    public function getDistritos(){
+        $r["status"] = 0;
+        $r["error"] = "No se pudo procesar solicitud";
+        $canton = $this->input->post('canton');
+        $provincia = $this->input->post('provincia');
+        if(is_numeric($canton) && is_numeric($provincia)){
+            $distritos = $this->ubicacion->getDistritos($provincia, $canton);
+            unset($r["error"]);
+            $r["status"] = 1;
+            $r["data"] = $distritos;
+        }else{
+            $r["error"] = "Cantón no es válido";
+        }
+        echo json_encode($r);
+    }
+    
+    public function getBarrios(){
+        $r["status"] = 0;
+        $r["error"] = "No se pudo procesar solicitud";
+        $canton = $this->input->post('canton');
+        $provincia = $this->input->post('provincia');
+        $distrito = $this->input->post('distrito');
+        if(is_numeric($canton) && is_numeric($provincia) && is_numeric($distrito)){
+            $barrios = $this->ubicacion->getBarrios($provincia, $canton, $distrito);
+            unset($r["error"]);
+            $r["status"] = 1;
+            $r["data"] = $barrios;
+        }else{
+            $r["error"] = "Provincia, Cantón o Distrito no es válido";
+        }
+        echo json_encode($r);
+    }
 }
 
 ?>

@@ -76,6 +76,13 @@ function getNombreCliente(str){
 					$("#nombre").val('No existe cliente!!!');
 					disableArticulosInputs();
 				}else if(result[0].status==="success"){	
+                                    
+                                    if(result[0].actualizar){
+                                        notyConTipo('¡Este cliente debe actualizar datos para poder facturar! <BR>Por favor actualizar datos del cliente.', 'error');
+                                        return false;
+                                    }
+                                    
+                                    
 					if(str.trim() === "2"){
 						$('#pop_up_administrador').bPopup({
 							modalClose: false
