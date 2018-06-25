@@ -73,7 +73,9 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DE PROFORMAS-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/factura_cargar_proforma.js?v='.$javascript_cache_version); ?>"></script>
-	
+                
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/api-alert.css?v='.$javascript_cache_version); ?>">
+                    
 		<script><?php
 			echo "var sucursal=$Sucursal_Codigo;
 				  var tipoImpresion='t';";
@@ -90,7 +92,12 @@ PARA:
 		
 	</head>
 	<body onload="setMainValues()" oncopy="return false" oncut="return false" onpaste="return false" style="min-width:1280px;">
-		
+            <div class="api-hacienda-alert  <?php echo $api_fe_isup ? "success" : "error"; ?>">
+                <?php 
+                    echo $api_fe_isup ? "¡Conexión con API en línea!<br>" : "¡Conexión con API fuera de línea, alertar al encargado!<br>"; 
+                    echo $api_session_ready ? "Sesión Lista" : "Problemas con sesión!"
+                ?>
+            </div>
 	
 		<script>
 			//Anulamos los eventos de salida

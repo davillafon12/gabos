@@ -56,6 +56,8 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 //define('PATH_DESACTIVAR_USUARIOS_SCRIPT', '/../../scripts/ajax_desactivar_usuarios.php');
 //define('PATH_DESACTIVAR_CLIENTES_SCRIPT', '/../../scripts/ajax_desactivar_clientes.php');
 //define('PATH_BUSCAR_CLIENTE_ID_SCRIPT', '/../../scripts/ajax_verify_cliente_id.php');
+//define('PATH_API_HACIENDA', '/../libraries/API_HACIENDA/API_FE.php');
+//define('PATH_REST_CLIENT', '/../libraries/API_Hacienda/RestClient.php');
 
 /**
  * ---------------------------    LINUX PATHS  ----------------------------------
@@ -76,6 +78,13 @@ define('PATH_PERMISOS', FCPATH.'application/controllers/usuarios/permisos.php');
 define('PATH_DESACTIVAR_USUARIOS_SCRIPT', FCPATH.'application/scripts/ajax_desactivar_usuarios.php');
 define('PATH_DESACTIVAR_CLIENTES_SCRIPT', FCPATH.'application/scripts/ajax_desactivar_clientes.php');
 define('PATH_BUSCAR_CLIENTE_ID_SCRIPT', FCPATH.'application/scripts/ajax_verify_cliente_id.php');
+define('PATH_API_HACIENDA', FCPATH.'application/libraries/API_Hacienda/API_FE.php');
+define('PATH_REST_CLIENT', FCPATH.'application/libraries/API_Hacienda/RestClient.php');
+
+
+
+
+define('URL_API_CRLIBE', 'http://192.168.0.24');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
