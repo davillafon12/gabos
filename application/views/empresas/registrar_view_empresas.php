@@ -25,30 +25,30 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include '/../Header/log_out_from_browser_Script.php';?>
+		<?php include PATH_LOG_OUT_HEADER;?>
 		
 		<!--CSS ESTILO DEL FORMULARIO-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/empresas/style_registrar.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/empresas/style_registrar.css?v='.$javascript_cache_version); ?>">
 		
-		<?php include '/../../scripts/ajax_verify_empresa_id.php';?>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/empresas/verifyId.js?v='.$javascript_cache_version); ?>"></script>
 		<!--CARGA DEL JQUERY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script>
 		<!--CARGA DEL JQUERYUI-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.js'); ?>"></script>
 		<!--CSS ESTILO DEL JQUERYUI-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/empresas/buscarCliente.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/empresas/buscarCliente.js?v='.$javascript_cache_version); ?>"></script>
 		
 	</head>
 	<body >
 		<!--Incluir imagen de cabezera-->
-		<?php include '/../Header/Header_Picture.php';?>
+		<?php include PATH_HEADER_PICTURE;?>
 		
 		<!--Incluir menu principal-->
-		<?php include '/../Header/selector_menu.php';?>
+		<?php include PATH_HEADER_SELECTOR_MENU;?>
 
 		<!--Incluir informacion log in-->
-		<?php include '/../Header/Log_In_Information.php';?>
+		<?php include PATH_HEADER_LOG_IN_INFO;?>
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
@@ -114,7 +114,32 @@ PARA:
 						<input id="cliente_asociado" autocomplete="off" name="cliente_asociado" placeholder="Seleccione Cliente"  tabindex="6" type="text"/> 
 						<input type="hidden" name="cliente_liga_id" id="cliente_liga_id"/>
 					</td>
-				</tr>				
+				</tr>
+                                <tr>
+					<td>
+						<p class="contact"><label for="direccion">Usuario Tributación:</label></p> 
+						<input id="user_tributa" autocomplete="off" name="user_tributa" placeholder="Usuario generado en el ATV para la facturación electrónica"  tabindex="6" type="text" > 
+					</td>
+					<td>
+						<p class="contact"><label for="cliente_asociado">Contraseña Tributación:</label></p> 
+						<input id="pass_tributa" autocomplete="off" name="pass_tributa" placeholder="Contraseña generada en el ATV para la facturación electrónica"  tabindex="6" type="password"/> 
+					</td>
+				</tr>
+                                <tr>
+					<td>
+						<p class="contact"><label for="direccion">Ambiente Tributación:</label></p> 
+                                                <select name='ambiente_tributa'>
+                                                    <option value='api-stag' selected>Pruebas</option>
+                                                    <option value='api-prod' >Producción</option>
+                                                </select>
+                                                 <p class="advertencia_longitud"></p> 
+					</td>
+                                        <td>
+						<p class="contact"><label for="cliente_asociado">PIN del certificado de Tributación:</label></p> 
+						<input id="pin_tributa" autocomplete="off" name="pin_tributa" placeholder="PIN generado en el ATV para el certificado de facturación electrónica"  tabindex="6" type="password"/> 
+                                                <p class="advertencia_longitud" style='    color: red;'>El certificado debe subirse en la parte de edición de empresa</p> 
+					</td>
+				</tr>
 				<tr>
 					<td>
 						<p class="contact"><label for="leyenda">Leyenda de la D.G.T.D.:</label></p> 
@@ -139,6 +164,6 @@ PARA:
         </div>		
 
 		<!--Incluir footer-->
-		<?php include '/../Footer/Default_Footer.php';?>
+		<?php include PATH_FOOTER;?>
 	</body>
 </html>

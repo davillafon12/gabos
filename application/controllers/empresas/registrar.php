@@ -8,8 +8,8 @@ class registrar extends CI_Controller {
 	$this->load->model('user','',TRUE);
 	$this->load->model('empresa','',TRUE);
 	$this->load->model('cliente','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-		
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+	
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
 	if(!$permisos['registrar_empresa'])
@@ -20,7 +20,7 @@ class registrar extends CI_Controller {
 
  function index()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	/*$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -32,6 +32,7 @@ class registrar extends CI_Controller {
 	else{
 	   redirect('accesoDenegado', 'location');
 	}*/
+        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 	$this->load->helper(array('form'));
 	$this->load->view('empresas/registrar_view_empresas', $data);
  }
@@ -66,15 +67,34 @@ class registrar extends CI_Controller {
 	$administrador_empresa = $this->input->post('administrador');
 	$leyenda_tributacion = $this->input->post('leyenda');
 	$cliente_liga = trim($this->input->post("cliente_liga_id"));
+        
+        $user_tributa = trim($this->input->post("user_tributa"));
+        $pass_tributa = trim($this->input->post("pass_tributa"));
+        $ambiente_tributa = trim($this->input->post("ambiente_tributa"));
+        $pin_tributa = trim($this->input->post("pin_tributa"));
 	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$id_empresa= $this->empresa->getCantidadEmpresas();
 	//echo $id_empresa;
 	$nombre = $this->user->get_name($data['Usuario_Codigo']);
 	//echo $nombre;
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
-	if($this->empresa->registrar($id_empresa, $nombre_empresa, $telefono_empresa, $observaciones_empresa, $direccion_empresa, $nombre, $administrador_empresa, $leyenda_tributacion, $cedula_empresa, $fax_empresa, $email_empresa))
+	if($this->empresa->registrar(   $id_empresa, 
+                                        $nombre_empresa, 
+                                        $telefono_empresa, 
+                                        $observaciones_empresa, 
+                                        $direccion_empresa, 
+                                        $nombre, 
+                                        $administrador_empresa, 
+                                        $leyenda_tributacion, 
+                                        $cedula_empresa, 
+                                        $fax_empresa, 
+                                        $email_empresa, 
+                                        $user_tributa,
+                                        $pass_tributa,
+                                        $ambiente_tributa,
+                                        $pin_tributa))
 	{ //Si se ingreso bien a la BD
 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la empresa ".mysql_real_escape_string($nombre_empresa)." codigo: ".$id_empresa,$data['Sucursal_Codigo'],'registro');
 			

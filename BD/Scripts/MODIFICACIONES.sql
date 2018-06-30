@@ -6639,3 +6639,13 @@ INSERT INTO `tb_54_ubicaciones` (`ProvinciaID`, `ProvinciaNombre`, `CantonID`, `
 (7, 'Limón', 6, 'Guácimo', 5, 'DUACARÍ', 6, 'Limbo'),
 (7, 'Limón', 6, 'Guácimo', 5, 'DUACARÍ', 7, 'San Cristóbal'),
 (7, 'Limón', 6, 'Guácimo', 5, 'DUACARÍ', 8, 'Zancudo.');
+
+
+
+
+
+ALTER TABLE  `tb_02_sucursal` ADD  `Usuario_Tributa` VARCHAR( 100 ) NOT NULL AFTER  `Sucursal_leyenda_tributacion` ,
+ADD  `Pass_Tributa` VARCHAR( 100 ) NOT NULL AFTER  `Usuario_Tributa` ,
+ADD  `Ambiente_Tributa` VARCHAR( 10 ) NOT NULL AFTER  `Pass_Tributa` ,
+ADD  `Token_Certificado_Tributa` VARCHAR( 40 ) NOT NULL AFTER  `Ambiente_Tributa` ,
+ADD  `Pass_Certificado_Tributa` VARCHAR( 4 ) NOT NULL AFTER  `Token_Certificado_Tributa`

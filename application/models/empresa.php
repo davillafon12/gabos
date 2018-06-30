@@ -19,7 +19,7 @@ Class empresa extends CI_Model
 		}
 	}	
 		
-	function registrar($id_empresa, $nombre_empresa, $telefono_empresa, $observaciones_empresa, $direccion_empresa, $creador_empresa, $Empresa_Administrador, $leyenda_tributacion, $cedula, $fax, $email)
+	function registrar($id_empresa, $nombre_empresa, $telefono_empresa, $observaciones_empresa, $direccion_empresa, $creador_empresa, $Empresa_Administrador, $leyenda_tributacion, $cedula, $fax, $email, $userT, $passT, $ambiT, $pinT)
 	{
 		//echo $creador_empresa;
 		date_default_timezone_set("America/Costa_Rica");
@@ -37,7 +37,11 @@ Class empresa extends CI_Model
 						'Sucursal_Creador'=>mysql_real_escape_string($creador_empresa),
 						'Sucursal_Administrador'=>mysql_real_escape_string($Empresa_Administrador),
 						'Sucursal_Estado'=> 1,
-						'Sucursal_leyenda_tributacion'=> mysql_real_escape_string($leyenda_tributacion)
+						'Sucursal_leyenda_tributacion'=> mysql_real_escape_string($leyenda_tributacion),
+						'Usuario_Tributa'=> mysql_real_escape_string($userT),
+						'Pass_Tributa'=> mysql_real_escape_string($passT),
+						'Ambiente_Tributa'=> mysql_real_escape_string($ambiT),
+						'Pass_Certificado_Tributa'=> mysql_real_escape_string($pinT)
                     );
 		try{
         $this->db->insert('tb_02_sucursal',$data); }
@@ -145,12 +149,9 @@ Class empresa extends CI_Model
 		}
 	}
 	
-	function actualizar($id, $data)
-	{
-		    
-			$this->db->where('codigo', mysql_real_escape_string($id));
-			$this->db->update('TB_02_sucursal' ,$data);
-		
+	function actualizar($id, $data){
+            $this->db->where('codigo', mysql_real_escape_string($id));
+            $this->db->update('TB_02_sucursal' ,$data);
 	}
 	
 	function get_empresas_ids_array()

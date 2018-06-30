@@ -127,4 +127,42 @@ class API_FE{
         }
     }
     
+    public function uploadCertificate($user, $sessionKey, $certPath, $name){
+        $params = array(
+            'w' => "fileUploader", 
+            "r" => "subir_certif",
+            "sessionKey" => $sessionKey,
+            "fileToUpload" => "@".realpath($certPath),
+            "iam" => $user
+        );
+      
+        //Initialise the cURL var
+        $ch = curl_init();
+
+        //Get the response from cURL
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        //Set the Url
+        curl_setopt($ch, CURLOPT_URL, URL_API_CRLIBE."/api.php");
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+
+        // Execute the request
+        $response = (Array)json_decode(curl_exec($ch));
+        
+        if(is_array($response)){
+            if(isset($response["resp"])){
+                $response = (array) $response["resp"];
+                if(isset($response["downloadCode"]) && isset($response["name"])){
+                    return $response["downloadCode"];
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 }

@@ -7,7 +7,7 @@ class editar extends CI_Controller {
     parent::__construct(); 
 	$this->load->model('user','',TRUE);
 	$this->load->model('empresa','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -19,7 +19,7 @@ class editar extends CI_Controller {
 
  function index()
  {
-	/*include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	/*include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -30,7 +30,8 @@ class editar extends CI_Controller {
 	else{
 	   redirect('accesoDenegado', 'location');
 	}	*/
-	 include '/../get_session_data.php';
+	 include PATH_USER_DATA;
+         $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 	 $this->load->view('empresas/editar_view_empresas', $data);	
  }
  
@@ -142,7 +143,7 @@ class editar extends CI_Controller {
  
  function desactivar()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -169,7 +170,7 @@ class editar extends CI_Controller {
  
  function activar()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -200,8 +201,8 @@ class editar extends CI_Controller {
 	$id_request=$_GET['id'];
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	$nombre_empresa = $this->empresa->getNombreEmpresa($id_request);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-	
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+	$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
 	if(!$permisos['editar_empresa'])
@@ -225,6 +226,13 @@ class editar extends CI_Controller {
 				$data['Empresa_Administrador']=$row-> Sucursal_Administrador;
 				$data['Empresa_Tributacion']=$row-> Sucursal_leyenda_tributacion;
 				$data['Empresa_Observaciones'] = $row -> Sucursal_Observaciones;
+                                
+                                $data['User_Tributa'] = $row -> Usuario_Tributa;
+                                $data['Pass_Tributa'] = $row -> Pass_Tributa;
+                                $data['Pin_Tributa'] = $row -> Pass_Certificado_Tributa;
+                                $data['Ambiente_Tributa'] = $row -> Ambiente_Tributa;
+                                $data['Token_Tributa'] = $row -> Token_Certificado_Tributa;
+                                
 				
 				$ligaCliente = $this->empresa->getClienteLigaByEmpresa($id_request);
 				
@@ -263,6 +271,11 @@ class editar extends CI_Controller {
 	$administrador_empresa = $this->input->post('administrador');
 	$observaciones_empresa = $this->input->post('observaciones');
 	$leyenda_tributacion = $this->input->post('leyenda');
+        
+        $user_tributa = trim($this->input->post("user_tributa"));
+        $pass_tributa = trim($this->input->post("pass_tributa"));
+        $ambiente_tributa = trim($this->input->post("ambiente_tributa"));
+        $pin_tributa = trim($this->input->post("pin_tributa"));
 	
 	$liga_cliente_nombre = trim($this->input->post("cliente_asociado"));
 	$liga_cliente = $liga_cliente_nombre != "" ? trim($this->input->post('cliente_liga_id')) : "";
@@ -277,6 +290,11 @@ class editar extends CI_Controller {
 	$data_update['Sucursal_Administrador'] = mysql_real_escape_string($administrador_empresa);
 	$data_update['Sucursal_Observaciones'] = mysql_real_escape_string($observaciones_empresa);
 	$data_update['Sucursal_leyenda_tributacion'] = mysql_real_escape_string($leyenda_tributacion);
+        
+        $data_update['Usuario_Tributa'] = mysql_real_escape_string($user_tributa);
+        $data_update['Pass_Tributa'] = mysql_real_escape_string($pass_tributa);
+        $data_update['Ambiente_Tributa'] = mysql_real_escape_string($ambiente_tributa);
+        $data_update['Pass_Certificado_Tributa'] = mysql_real_escape_string($pin_tributa);
 	
 	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
 	
@@ -284,16 +302,69 @@ class editar extends CI_Controller {
 	$this->empresa->actualizarLigaEmpresaCliente($id_empresa, $liga_cliente);
 	
 	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".mysql_real_escape_string($id_empresa),$data['Sucursal_Codigo'],'edicion');
 	
 	redirect('empresas/editar', 'location');
  }
  
  
- 
+    public function cargarCertificado(){
+        $id_empresa = $this->input->post('codigo');
+        if($empresa = $this->empresa->getEmpresa($id_empresa)){
+            $empresa = $empresa[0];
+            if(isset($_FILES["certificado_hacienda_file"])){
+                $cert_file = $_FILES["certificado_hacienda_file"];
+                if(is_array($cert_file)){
+                    if($cert_file["type"] == "application/x-pkcs12"){
+                        $oldLocation = $cert_file["tmp_name"];
+                        $newLocation = "/tmp/".$cert_file["name"];
+                        if(move_uploaded_file($oldLocation,$newLocation)){
+                            require_once PATH_API_HACIENDA;
+                            include PATH_USER_DATA;
+                            $api_resp = API_FE::setUpLogin($data);
+                            if($api_resp["isUp"]){
+                                if($api_resp["sessionKey"]){
+                                    $apiFe = new API_FE();
+                                    if($tokenCert = $apiFe->uploadCertificate($data["Usuario_Nombre_Usuario"], $api_resp["sessionKey"], $newLocation, $cert_file["name"])){
+                                        $params = array("Token_Certificado_Tributa" => $tokenCert);
+                                        $this->empresa->actualizar($id_empresa, $params);
+                                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario subió el certificado con token : ".mysql_real_escape_string($tokenCert),$data['Sucursal_Codigo'],'edicion');
+                                        redirect('empresas/editar/edicion?id='.$id_empresa, 'location');
+                                    }else{
+                                        // No se pudo subir el certificado por medio del API de crLibre
+                                        exit("Hubo un error al procesar el certificado - ERR: 8");
+                                    }
+                                }else{
+                                    // No se pudo loguear al usuario para hacer varas en el API de crLibre
+                                    exit("Hubo un error al procesar el certificado - ERR: 7");
+                                }
+                            }else{
+                                // El API de crLibre no esta funcionando
+                                exit("Hubo un error al procesar el certificado - ERR: 6");
+                            }
+                        }else{
+                            // No se pudo mover el archivo
+                            exit("Hubo un error al procesar el certificado - ERR: 5");
+                        }
+                    }else{
+                        // No tiene el formato adecuado de .p12
+                        exit("Debe seleccionar un certificado a subir - ERR: 4");
+                    }
+                }else{
+                    // No es un array
+                    exit("Debe seleccionar un certificado a subir - ERR: 3");
+                }
+            }else{
+                // No viene el archivo
+                exit("Debe seleccionar un certificado a subir - ERR: 2");
+            }
+        }else{
+            exit("Empresa ingresada no existe - ERR: 1");
+        }
+    }
 	
- }// FIN DE LA CLASE
+}// FIN DE LA CLASE
 
 
 ?>
