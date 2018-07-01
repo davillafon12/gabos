@@ -7,7 +7,7 @@ class otros extends CI_Controller {
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('familia','',TRUE);	
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['otros_cliente'])
@@ -21,7 +21,7 @@ class otros extends CI_Controller {
 
 	 function index()
 	 {
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		/*$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -49,7 +49,7 @@ class otros extends CI_Controller {
 						$cliente['nombre'] = $row-> Cliente_Nombre;
 						$cliente['apellidos'] = $row-> Cliente_Apellidos;						
 					}
-					include '/../get_session_data.php';
+					include PATH_USER_DATA;
 					
 					//Descuento propio del cliente
 					if($descuento_cliente = $this->cliente->getClienteDescuento($cedula, $data['Sucursal_Codigo'])){
@@ -117,7 +117,7 @@ class otros extends CI_Controller {
 		if(isset($_POST['cedula'])&&isset($_POST['descuento'])){
 			$cedula = $_POST['cedula']; 
 			$descuento = $_POST['descuento']; 
-			include '/../get_session_data.php';
+			include PATH_USER_DATA;
 			
 			if($this->cliente->existe_Cliente($cedula)){
 				if($this->cliente->existeClienteDescuento($cedula, $data['Sucursal_Codigo'])){
@@ -144,7 +144,7 @@ class otros extends CI_Controller {
 		if(isset($_POST['cedula'])&&isset($_POST['credito'])){
 			$cedula = $_POST['cedula']; 
 			$credito = $_POST['credito']; 
-			include '/../get_session_data.php';
+			include PATH_USER_DATA;
 			
 			if($this->cliente->existe_Cliente($cedula)){
 				if($this->cliente->existeClienteCredito($cedula, $data['Sucursal_Codigo'])){
@@ -183,7 +183,7 @@ class otros extends CI_Controller {
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['codigo'])){
 			$codigo = $_POST['codigo'];
-			include '/../get_session_data.php';
+			include PATH_USER_DATA;
 			if($articulo = $this->articulo->get_Articulo($codigo, $data['Sucursal_Codigo'])){
 				foreach($articulo as $row)
 				{$descripcion = $row->Articulo_Descripcion;}
@@ -205,7 +205,7 @@ class otros extends CI_Controller {
 			$codigo = $_POST['codigo'];
 			$cedula = $_POST['cedula'];
 			$descuento = $_POST['descuento'];
-			include '/../get_session_data.php';
+			include PATH_USER_DATA;
 			if($pro = $this->articulo->get_Articulo($codigo,$data['Sucursal_Codigo'])){
 				if($this->cliente->existe_Cliente($cedula)){
 					if($this->cliente->existeDescuentoConProducto($codigo, $cedula, $data['Sucursal_Codigo']))
@@ -265,7 +265,7 @@ class otros extends CI_Controller {
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['codigo'])){
 			$codigo = $_POST['codigo'];
-			include '/../get_session_data.php';
+			include PATH_USER_DATA;
 			if($familia = $this->familia->getNombreFamiliaSucursal($codigo, $data['Sucursal_Codigo'])){
 				$retorno['status'] = 'success';
 				$retorno['descripcion'] = $familia;				
@@ -285,7 +285,7 @@ class otros extends CI_Controller {
 			$codigo = $_POST['codigo'];
 			$cedula = $_POST['cedula'];
 			$descuento = $_POST['descuento'];
-			include '/../get_session_data.php';
+			include PATH_USER_DATA;
 			if($this->familia->getNombreFamiliaSucursal($codigo, $data['Sucursal_Codigo'])){
 				if($this->cliente->existe_Cliente($cedula)){
 					if($this->cliente->existeDescuentoConFamilia($codigo, $cedula, $data['Sucursal_Codigo']))
