@@ -1,13 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class registrar extends CI_Controller {
-
+    
  function __construct()
  {
     parent::__construct(); 
 	$this->load->model('user','',TRUE);
 	$this->load->model('empresa','',TRUE);
 	$this->load->model('cliente','',TRUE);
+        $this->load->model('ubicacion','',TRUE);
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -33,6 +34,8 @@ class registrar extends CI_Controller {
 	   redirect('accesoDenegado', 'location');
 	}*/
         $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+        $data['tiposIdentificacion'] = $this->tiposIdentificacion;
+        $data['provincias'] = $this->ubicacion->getProvincias();
 	$this->load->helper(array('form'));
 	$this->load->view('empresas/registrar_view_empresas', $data);
  }
@@ -58,9 +61,12 @@ class registrar extends CI_Controller {
  {
 	//$id_empresa = $this->input->post('codigo');
 	$cedula_empresa = $this->input->post('cedula_ju');
+        $tipo_identificacion = $this->input->post('tipo_identificacion');
 	$nombre_empresa = $this->input->post('name');
 	$telefono_empresa = $this->input->post('telefono');
 	$fax_empresa = $this->input->post('fax');
+        $cod_telefono_empresa = $this->input->post('cod_tel');
+	$cod_fax_empresa = $this->input->post('cod_fax');
 	$email_empresa = $this->input->post('email');
 	$observaciones_empresa = $this->input->post('observaciones');
 	$direccion_empresa = $this->input->post('direccion');
@@ -72,6 +78,11 @@ class registrar extends CI_Controller {
         $pass_tributa = trim($this->input->post("pass_tributa"));
         $ambiente_tributa = trim($this->input->post("ambiente_tributa"));
         $pin_tributa = trim($this->input->post("pin_tributa"));
+        
+        $provincia = trim($this->input->post("provincia"));
+        $canton = trim($this->input->post("canton"));
+        $distrito = trim($this->input->post("distrito"));
+        $barrio = trim($this->input->post("barrio"));
 	
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
@@ -94,7 +105,14 @@ class registrar extends CI_Controller {
                                         $user_tributa,
                                         $pass_tributa,
                                         $ambiente_tributa,
-                                        $pin_tributa))
+                                        $pin_tributa,
+                                        $tipo_identificacion,
+                                        $cod_telefono_empresa,
+                                        $cod_fax_empresa,
+                                        $provincia,
+                                        $canton,
+                                        $distrito,
+                                        $barrio))
 	{ //Si se ingreso bien a la BD
 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la empresa ".mysql_real_escape_string($nombre_empresa)." codigo: ".$id_empresa,$data['Sucursal_Codigo'],'registro');
 			

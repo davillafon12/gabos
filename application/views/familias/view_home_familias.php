@@ -25,15 +25,15 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include '/../Header/log_out_from_browser_Script.php';?>
+		<?php include PATH_LOG_OUT_HEADER;?>
 		
 		<!--CSS ESTILO DE LA TABLA-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/empresas/style_editar.css'); ?>">
 		<!--CSS ESTILO DEL MODAL-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<!--AJAX DE LA TABLA-->
-		<?php include '/../../scripts/cargar_tabla_familias.php';?>
-		<?php include '/../../scripts/ajax_familias.php';?>
+		<?php include PATH_TABLA_FAMILIAS;?>
+		<?php include PATH_AJAX_FAMILIAS;?>
 		<!--CARGA DEL JQUERY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script> 
 		<!--CARGA DE HERRAMIENTAS VARIAS-->
@@ -45,13 +45,13 @@ PARA:
 	</head>
 	<body >
 		<!--Incluir imagen de cabezera-->
-		<?php include '/../Header/Header_Picture.php';?>
+		<?php include PATH_HEADER_PICTURE;?>
 		
 		<!--Incluir menu principal-->
-		<?php include '/../Header/selector_menu.php';?>
+		<?php include PATH_HEADER_SELECTOR_MENU;?>
 
 		<!--Incluir informacion log in-->
-		<?php include '/../Header/Log_In_Information.php';?>
+		<?php include PATH_HEADER_LOG_IN_INFO;?>
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
@@ -75,6 +75,6 @@ PARA:
        		
 
 		<!--Incluir footer-->
-		<?php include '/../Footer/Default_Footer.php';?>
+		<?php include PATH_FOOTER;?>
 	</body>
 </html>

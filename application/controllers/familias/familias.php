@@ -8,7 +8,7 @@ class familias extends CI_Controller {
 		$this->load->model('user','',TRUE);
 		$this->load->model('familia','',TRUE);
 		$this->load->model('empresa','',TRUE);
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -20,14 +20,14 @@ class familias extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$this->load->view('familias/view_home_familias', $data);	
 	}
 	
 	function getMainTable()
 	 {	
-		include '/../get_session_data.php';
+		include PATH_USER_DATA;
 		$ruta_imagen = base_url('application/images/Icons');
 		
 		if($result = $this->familia->getFamiliasTodas())
@@ -165,7 +165,7 @@ class familias extends CI_Controller {
  
 	function desactivar()
 	 {
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['desactivar_familias'])
@@ -196,7 +196,7 @@ class familias extends CI_Controller {
  
 	function activar()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['activar_familias'])
@@ -226,7 +226,7 @@ class familias extends CI_Controller {
 	
 	function edicion()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$id_request = $_GET['id'];
 		$sucursal = $_GET['sucursal'];
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
@@ -288,7 +288,7 @@ class familias extends CI_Controller {
 
 		$this->familia->actualizar(mysql_real_escape_string($id_familia), $sucursal_familia, $data_update);
 
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la familia codigo: ".mysql_real_escape_string($id_familia),$data['Sucursal_Codigo'],'edicion');
 
 		redirect('familias/familias', 'location');

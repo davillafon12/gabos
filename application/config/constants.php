@@ -58,6 +58,10 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 //define('PATH_BUSCAR_CLIENTE_ID_SCRIPT', '/../../scripts/ajax_verify_cliente_id.php');
 //define('PATH_API_HACIENDA', '/../libraries/API_HACIENDA/API_FE.php');
 //define('PATH_REST_CLIENT', '/../libraries/API_Hacienda/RestClient.php');
+//define('PATH_API_LOGGER', '/../libraries/API_Hacienda/APILogger.php');
+//define('PATH_TABLA_FAMILIAS', '/../../scripts/cargar_tabla_familias.php');
+//define('PATH_AJAX_FAMILIAS', '/../../scripts/ajax_familias.php');
+//define('PATH_AJAX_VERIFY_FAMILIAS', '/../../scripts/ajax_verify_familia_id.php');
 
 /**
  * ---------------------------    LINUX PATHS  ----------------------------------
@@ -80,11 +84,17 @@ define('PATH_DESACTIVAR_CLIENTES_SCRIPT', FCPATH.'application/scripts/ajax_desac
 define('PATH_BUSCAR_CLIENTE_ID_SCRIPT', FCPATH.'application/scripts/ajax_verify_cliente_id.php');
 define('PATH_API_HACIENDA', FCPATH.'application/libraries/API_Hacienda/API_FE.php');
 define('PATH_REST_CLIENT', FCPATH.'application/libraries/API_Hacienda/RestClient.php');
-
+define('PATH_API_LOGGER', FCPATH.'application/libraries/API_Hacienda/APILogger.php');
+define('PATH_TABLA_FAMILIAS', FCPATH.'application/scripts/cargar_tabla_familias.php');
+define('PATH_AJAX_FAMILIAS', FCPATH.'application/scripts/ajax_familias.php');
+define('PATH_AJAX_VERIFY_FAMILIAS', FCPATH.'application/scripts/ajax_verify_familia_id.php');
 
 
 
 define('URL_API_CRLIBE', 'http://192.168.0.24');
+define('API_CRLIBRE_CURL_TIMEOUT', 5);
+define('CODIGO_PAIS', 506);
+define('FACTURA_ELECTRONICA', 'FE');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

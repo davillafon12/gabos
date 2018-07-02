@@ -22,7 +22,7 @@ class registrar extends CI_Controller {
 
 	 function index()
 	 {
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -95,7 +95,7 @@ class registrar extends CI_Controller {
 		$rango_usuario = $this->input->post('usuario_rango');
 		$this->do_upload($cedula_usuario."_".$sucursal); // metodo encargado de cargar la imagen con la cedula del usuario
 
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
 
 	    if($this->user->registrar($codigo, $nombre_usuario, $apellidos_usuario, $cedula_usuario, $tipo_cedula_usuario,  $celular_usuario, $telefono_usuario, $fecha_ingreso_usuario, $fecha_cesantia_usuario, $fecha_recontratacion_Usuario, $usuario_nombre_usuario, $observaciones, $usuario_password, $this->direccion_url_imagen, $email_usuario, $rango_usuario, $sucursal))
@@ -214,7 +214,7 @@ class registrar extends CI_Controller {
     }
 
     function registro_masivo(){
-    		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+    		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 			if($permisos['registrar_usuarios_masivo'])
 			{	

@@ -18,7 +18,7 @@ class ingresar extends CI_Controller {
 	}
 	
 	function individual(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -58,7 +58,7 @@ class ingresar extends CI_Controller {
 		$precio5_Articulo = $this->input->post('precio5');
 		
 
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
 		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo))
 		{ //Si se ingreso bien a la BD
@@ -203,7 +203,7 @@ class ingresar extends CI_Controller {
     }
 	
 	function masivo(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -219,7 +219,7 @@ class ingresar extends CI_Controller {
 	
 	function cargaMasiva(){
 		
-		include '/../get_session_data.php';
+		include PATH_USER_DATA;
 		if(isset($_FILES['archivo_excel'])){		
 				$resultado = $this->procesarExcel();
 				//print_r($resultado);

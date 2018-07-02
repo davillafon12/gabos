@@ -8,7 +8,7 @@ class registrar extends CI_Controller {
 	$this->load->model('user','',TRUE);
 	$this->load->model('empresa','',TRUE);
 	$this->load->model('familia','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -20,7 +20,7 @@ class registrar extends CI_Controller {
 
  function index()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	/*$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -64,7 +64,7 @@ class registrar extends CI_Controller {
 	$observaciones_familia = $this->input->post('observaciones');
 	$sucursal_familia = $this->input->post('sucursal');
 	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$id_familia = $this->familia->getCantidadFamilias($sucursal_familia);
 	

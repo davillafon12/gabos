@@ -6648,4 +6648,16 @@ ALTER TABLE  `tb_02_sucursal` ADD  `Usuario_Tributa` VARCHAR( 100 ) NOT NULL AFT
 ADD  `Pass_Tributa` VARCHAR( 100 ) NOT NULL AFTER  `Usuario_Tributa` ,
 ADD  `Ambiente_Tributa` VARCHAR( 10 ) NOT NULL AFTER  `Pass_Tributa` ,
 ADD  `Token_Certificado_Tributa` VARCHAR( 40 ) NOT NULL AFTER  `Ambiente_Tributa` ,
-ADD  `Pass_Certificado_Tributa` VARCHAR( 4 ) NOT NULL AFTER  `Token_Certificado_Tributa`
+ADD  `Pass_Certificado_Tributa` VARCHAR( 4 ) NOT NULL AFTER  `Token_Certificado_Tributa`;
+
+ALTER TABLE  `tb_02_sucursal` ADD  `Provincia` INT NOT NULL AFTER  `Pass_Certificado_Tributa` ,
+ADD  `Canton` INT NOT NULL AFTER  `Provincia` ,
+ADD  `Distrito` INT NOT NULL AFTER  `Canton` ,
+ADD  `Barrio` INT NOT NULL AFTER  `Distrito` ,
+ADD  `Tipo_Cedula` VARCHAR( 10 ) NOT NULL AFTER  `Barrio` ,
+ADD  `Codigo_Pais_Telefono` VARCHAR( 5 ) NOT NULL AFTER  `Tipo_Cedula` ,
+ADD  `Codigo_Pais_Fax` VARCHAR( 5 ) NOT NULL AFTER  `Codigo_Pais_Telefono` ;
+
+UPDATE tb_02_sucursal SET Tipo_Cedula =  '02';
+
+UPDATE tb_02_sucursal SET  `Codigo_Pais_Telefono` =  '506',`Codigo_Pais_Fax` =  '506';

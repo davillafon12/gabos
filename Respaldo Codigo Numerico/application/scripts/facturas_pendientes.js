@@ -101,6 +101,12 @@ function displayErrors(NumError){
 		case "24":
 			notyError('El cliente ya no tiene credito disponible para esta factura. \nERROR: '+NumError);
 			break;
+                case "50":
+			notyError('Error al crear la factura electrónica. \nERROR: '+NumError);
+			break;
+		case "51":
+			notyError('Error al crear la factura electrónica. \nERROR: '+NumError);
+			break;
 	}
 }
 

@@ -7,6 +7,7 @@ class editar extends CI_Controller {
     parent::__construct(); 
 	$this->load->model('user','',TRUE);
 	$this->load->model('empresa','',TRUE);
+        $this->load->model('ubicacion','',TRUE);
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -233,6 +234,23 @@ class editar extends CI_Controller {
                                 $data['Ambiente_Tributa'] = $row -> Ambiente_Tributa;
                                 $data['Token_Tributa'] = $row -> Token_Certificado_Tributa;
                                 
+                                $data['tipo_cedula'] = $row -> Tipo_Cedula;
+                                $data['cod_telefono'] = $row -> Codigo_Pais_Telefono;
+                                $data['cod_fax'] = $row -> Codigo_Pais_Fax;
+                                $data['Provincia'] = $row -> Provincia;
+                                $data['Canton'] = $row -> Canton;
+                                $data['Distrito'] = $row -> Distrito;
+                                $data['Barrio'] = $row -> Barrio;
+                                
+                                $data['tiposIdentificacion'] = $this->tiposIdentificacion;
+                                $provincias = $this->ubicacion->getProvincias();
+                                $data["provincias"] = $provincias;
+                                $cantones = $this->ubicacion->getCantones($row -> Provincia);
+                                $data["cantones"] = $cantones;
+                                $distritos = $this->ubicacion->getDistritos($row -> Provincia, $row -> Canton);
+                                $data["distritos"] = $distritos;
+                                $barrios = $this->ubicacion->getBarrios($row -> Provincia, $row -> Canton, $row->Distrito);
+                                $data["barrios"] = $barrios;
 				
 				$ligaCliente = $this->empresa->getClienteLigaByEmpresa($id_request);
 				
@@ -280,6 +298,13 @@ class editar extends CI_Controller {
 	$liga_cliente_nombre = trim($this->input->post("cliente_asociado"));
 	$liga_cliente = $liga_cliente_nombre != "" ? trim($this->input->post('cliente_liga_id')) : "";
 	
+        $tipo_identificacion = $this->input->post('tipo_identificacion');
+        $cod_telefono_empresa = $this->input->post('cod_tel');
+	$cod_fax_empresa = $this->input->post('cod_fax');
+        $provincia = trim($this->input->post("provincia"));
+        $canton = trim($this->input->post("canton"));
+        $distrito = trim($this->input->post("distrito"));
+        $barrio = trim($this->input->post("barrio"));
 		
 	$data_update['Sucursal_Cedula'] = mysql_real_escape_string($cedula_empresa);
 	$data_update['Sucursal_Nombre'] = mysql_real_escape_string($nombre_empresa);
@@ -295,6 +320,14 @@ class editar extends CI_Controller {
         $data_update['Pass_Tributa'] = mysql_real_escape_string($pass_tributa);
         $data_update['Ambiente_Tributa'] = mysql_real_escape_string($ambiente_tributa);
         $data_update['Pass_Certificado_Tributa'] = mysql_real_escape_string($pin_tributa);
+        
+        $data_update['Provincia'] = mysql_real_escape_string($provincia);
+        $data_update['Canton'] = mysql_real_escape_string($canton);
+        $data_update['Distrito'] = mysql_real_escape_string($distrito);
+        $data_update['Barrio'] = mysql_real_escape_string($barrio);
+        $data_update['Tipo_Cedula'] = mysql_real_escape_string($tipo_identificacion);
+        $data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($cod_telefono_empresa);
+        $data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($cod_fax_empresa);
 	
 	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
 	

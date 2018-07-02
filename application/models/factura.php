@@ -891,6 +891,15 @@ Class factura extends CI_Model
 					return $facturas;
 			}
 	}
+        
+        function formatearConsecutivo($consecutivo){
+            $consecutivo = $consecutivo."";
+            $len = strlen($consecutivo);
+            for($counter = $len; $counter < 10; $counter++){
+                $consecutivo = "0".$consecutivo;
+            }
+            return $consecutivo;
+        }
 	
 }
 

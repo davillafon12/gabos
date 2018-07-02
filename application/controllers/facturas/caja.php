@@ -248,117 +248,84 @@ class caja extends CI_Controller {
 		echo json_encode($facturaBODY);
 	}
 	
-	function cobrarFactura(){
-	
-		$facturaBODY['status']='error';
-		$facturaBODY['error']='17'; //No se logro procesar ls productos
-		if(isset($_POST['consecutivo'])&&isset($_POST['tipoPago'])){
-			$consecutivo = $_POST['consecutivo'];
-			$tipoPago = $_POST['tipoPago']; //Obtenemos el array
-			$tipoPago = json_decode($tipoPago, true);
-			$tipoPago = $tipoPago[0]; //Sacamos el array con los datos
-			
-			$recibidoParaVuelto = $_POST['entregado'];
-			$vuelto = $_POST['vuelto'];
-			
-			
-			include PATH_USER_DATA;	
-			if(isset($tipoPago['tipo'])){
-				if($tipoPago['tipo']=='credito'){ //Si es pago a credito
-				
-					//echo $this->creditoDisponible($consecutivo, $data['Sucursal_Codigo']);
-					if($this->creditoDisponible($consecutivo, $data['Sucursal_Codigo'])){
-						if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){							
-							$facturaBODY['status']='success';
-							
-							//Para efecto de impresion
-							$facturaBODY['sucursal']= $data['Sucursal_Codigo'];
-							$facturaBODY['servidor_impresion']= $this->configuracion->getServidorImpresion();
-							$facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
-							
-							date_default_timezone_set("America/Costa_Rica");
-							$Current_datetime = date("y/m/d : H:i:s", now());
-							$datos = array(         
-								'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
-								'Factura_Fecha_Hora'=>$Current_datetime, 
-								'Factura_Estado'=>'cobrada',
-								'Factura_Entregado_Vuelto' => $vuelto,
-								'Factura_Recibido_Vuelto' => $recibidoParaVuelto
-							);
-							
-							$this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
-							
-							//Agregamos tipo de pago
-							//Tarjeta, Deposito, Cheque, Mixto, Apartado
-							$this->guardarTipoPago($tipoPago, $consecutivo, $data['Sucursal_Codigo']);
-							
-							
-							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
-						
-						
-							//Valorar si factura es de cliente defectuoso
-							$facturaHeader = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])[0];
-							if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
-								$this->descontarArticulosDefectuosos($consecutivo, $data['Sucursal_Codigo']);
-							}
-						
-						}else{
-							$facturaBODY['status']='error';
-							$facturaBODY['error']='19'; //Error no existe esa factura
-						}
-					}else{
-						$facturaBODY['status']='error';
-						$facturaBODY['error']='24'; //Error no tiene credito disponible
-					}
-				}else{
-					if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){							
-						$facturaBODY['status']='success';
-						
-						//Para efecto de impresion
-						$facturaBODY['sucursal']= $data['Sucursal_Codigo'];
-						$facturaBODY['servidor_impresion']= $this->configuracion->getServidorImpresion();
-						$facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
-						
-						date_default_timezone_set("America/Costa_Rica");
-						$Current_datetime = date("y/m/d : H:i:s", now());
-						$datos = array(         
-							'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
-							'Factura_Fecha_Hora'=>$Current_datetime, 
-							'Factura_Estado'=>'cobrada',
-							'Factura_Entregado_Vuelto' => $vuelto,
-							'Factura_Recibido_Vuelto' => $recibidoParaVuelto
-						);
-						
-						$this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
-						
-						//Agregamos tipo de pago
-						//Tarjeta, Deposito, Cheque y Mixto
-						$this->guardarTipoPago($tipoPago, $consecutivo, $data['Sucursal_Codigo']);
-						
-						
-						$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
-					
-					
-						//Valorar si factura es de cliente defectuoso
-						$facturaHeader = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])[0];
-						if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
-							$this->descontarArticulosDefectuosos($consecutivo, $data['Sucursal_Codigo']);
-						}
-					}else{
-						$facturaBODY['status']='error';
-						$facturaBODY['error']='19'; //Error no existe esa factura
-					}
-				}
-			}else{
-				$facturaBODY['status']='error';
-				$facturaBODY['error']='18'; //Error de no leer encabezado del URL DE TIPO DE PAGO
-			}				
-		}else{
-			$facturaBODY['status']='error';
-			$facturaBODY['error']='16'; //Error de no leer encabezado del URL
-		}
-		echo json_encode($facturaBODY);
-	}
+    function cobrarFactura(){
+        $facturaBODY = $this->validarCobrarFactura();
+        
+        if($facturaBODY["status"] == "success"){
+            $consecutivo = $_POST['consecutivo'];
+            $tipoPago = $_POST['tipoPago']; //Obtenemos el array
+            $tipoPago = json_decode($tipoPago, true);
+            $tipoPago = $tipoPago[0]; //Sacamos el array con los datos
+            $recibidoParaVuelto = $_POST['entregado'];
+            $vuelto = $_POST['vuelto'];
+            include PATH_USER_DATA; 
+            
+            require_once PATH_API_HACIENDA;
+            $api = new API_FE();
+            // Generar Clave
+            $tipoDocumento = FACTURA_ELECTRONICA;
+            $codigoPais = CODIGO_PAIS;
+            $tipoCedula = $facturaBODY["cliente"]->Cliente_Tipo_Cedula == "juridica" ? "juridico" : "fisico";
+            $cedula = $facturaBODY["cliente"]->Cliente_Cedula;
+            $consecutivo = $this->factura->formatearConsecutivo($facturaBODY["factura"]->Factura_Consecutivo);
+            $situacion = $api->internetIsOnline() ? "normal" : "sininternet";
+            $codigoSeguridad = rand(10000000,99999999);
+        
+            if($claveRs = $api->createClave($tipoCedula, $cedula, $codigoPais, $consecutivo, $situacion, $codigoSeguridad, $tipoDocumento)){
+                date_default_timezone_set("America/Costa_Rica");
+                $fechaFacturaActual = now();
+                
+                $clave = $claveRs["clave"];
+                $consecutivoFinal = $claveRs["consecutivo"];
+                $fechaEmision = date("y-m-dTH:i:s", $fechaFacturaActual)."-06:00";
+                
+                  
+                $this->validarEmpresaYClienteCobrarFactura($facturaBODY);
+                
+                if($facturaBODY["status"] == "success"){
+                    die;
+                    //Para efecto de impresion
+                    $facturaBODY['sucursal']= $data['Sucursal_Codigo'];
+                    $facturaBODY['servidor_impresion']= $this->configuracion->getServidorImpresion();
+                    $facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+
+                    $Current_datetime = date("y/m/d : H:i:s", $fechaFacturaActual);
+                    $datos = array(         
+                            'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
+                            'Factura_Fecha_Hora'=>$Current_datetime, 
+                            'Factura_Estado'=>'cobrada',
+                            'Factura_Entregado_Vuelto' => $vuelto,
+                            'Factura_Recibido_Vuelto' => $recibidoParaVuelto
+                    );
+
+                    $this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
+
+                    //Agregamos tipo de pago
+                    //Tarjeta, Deposito, Cheque, Mixto, Apartado
+                    $this->guardarTipoPago($tipoPago, $consecutivo, $data['Sucursal_Codigo']);
+
+
+                    $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
+
+
+                    //Valorar si factura es de cliente defectuoso
+                    $facturaHeader = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])[0];
+                    if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
+                            $this->descontarArticulosDefectuosos($consecutivo, $data['Sucursal_Codigo']);
+                    }
+                }
+            }else{
+                // ERROR AL GENERAR LA CLAVE
+                $facturaBODY['status']='error';
+                $facturaBODY['error']='52';
+            }
+        }    
+        unset($facturaBODY["sessionKey"]);
+        unset($facturaBODY["factura"]);
+        unset($facturaBODY["cliente"]);
+        unset($facturaBODY["empresa"]);
+        echo json_encode($facturaBODY);
+    }
 	
 	function creditoDisponible($consecutivo, $Sucursal){
 	
@@ -1138,6 +1105,107 @@ class caja extends CI_Controller {
 			echo "ERROR<br>URL incorrecta. . . <br>Contacte al administrador";
 		}
 	}
+        
+        
+    function validarCobrarFactura(){
+        $facturaBODY['status']='error';
+        $facturaBODY['error']='17'; //No se logro procesar la solicitud
+        if(isset($_POST['consecutivo']) && isset($_POST['tipoPago'])){
+            $consecutivo = $_POST['consecutivo'];
+            $tipoPago = $_POST['tipoPago']; //Obtenemos el array
+            $tipoPago = json_decode($tipoPago, true);
+            $tipoPago = $tipoPago[0]; //Sacamos el array con los datos
+            $recibidoParaVuelto = $_POST['entregado'];
+            $vuelto = $_POST['vuelto'];
+
+            include PATH_USER_DATA;	
+            if(isset($tipoPago['tipo'])){
+                // Si no es pago de credito, siempre tendra credito disponible
+                // Si es pago a credito, lo marca como que no tiene para realizar la verificacion despues
+                $tieneDisponibleCredito = $tipoPago['tipo'] == 'credito' ? false : true;
+                //Realizamos la validacion si tiene o no credito
+                if($tieneDisponibleCredito === false){
+                    $tieneDisponibleCredito = $this->creditoDisponible($consecutivo, $data['Sucursal_Codigo']);
+                }
+                if($tieneDisponibleCredito){
+                    if($factura = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){	
+                        $factura = $factura[0];
+                        if($cliente = $this->cliente->getClientes_Cedula($factura->TB_03_Cliente_Cliente_Cedula)){
+                            require_once PATH_API_HACIENDA;
+                            $api_resp = API_FE::setUpLogin($data);
+                            if($api_resp["isUp"]){
+                                if($api_resp["sessionKey"]){
+                                    $facturaBODY['status']='success';
+                                    $facturaBODY['sessionKey']=$api_resp["sessionKey"];
+                                    $facturaBODY['factura']=$factura;
+                                    $facturaBODY['cliente']=$cliente[0];
+                                    unset($facturaBODY['error']);
+                                }else{
+                                    $facturaBODY['error']='51'; //Error no se genero el token de sesion para el API de crLibre
+                                }
+                            }else{
+                                $facturaBODY['error']='50'; //Error no hay conexion con API crLibre
+                            }
+                        }else{
+                            $facturaBODY['error']='25'; //No existe cliente
+                        }
+                    }else{
+                        $facturaBODY['error']='19'; //Error no existe esa factura
+                    }
+                }else{
+                    $facturaBODY['error']='24'; //Error no tiene credito disponible
+                }
+            }else{
+                $facturaBODY['error']='18'; //Error de no leer encabezado del URL DE TIPO DE PAGO
+            }				
+        }else{
+            $facturaBODY['error']='16'; //Error de no leer encabezado del URL
+        }
+        return $facturaBODY;
+    }
+    
+    function validarEmpresaYClienteCobrarFactura(&$facturaBODY){
+        $facturaBODY['status']='error';
+        if($empresaData = $this->empresa->getEmpresa($facturaBODY["factura"]->TB_02_Sucursal_Codigo)){
+            $empresaData = $empresaData[0];
+            if($empresaData->Sucursal_Estado == 1){ // Sucursal esta activa
+                if($empresaData->Provincia>0 && $empresaData->Canton>0 && $empresaData->Distrito>0 && $empresaData->Barrio>0){
+                    if(filter_var($empresaData->Sucursal_Email, FILTER_VALIDATE_EMAIL)){
+                        if( trim($empresaData->Usuario_Tributa) != "" && 
+                            trim($empresaData->Pass_Tributa) != "" && 
+                            trim($empresaData->Ambiente_Tributa) != "" && 
+                            trim($empresaData->Token_Certificado_Tributa) != "" && 
+                            trim($empresaData->Pass_Certificado_Tributa) != ""){
+                            $facturaBODY["empresa"] = $empresaData;  
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            var_dump($facturaBODY["cliente"]);
+                        }else{
+                            // Empresa no tiene los valores minimos para crear FE
+                            $facturaBODY['error']='30';
+                        }
+                    }else{
+                        // Empresa debe tener un correo electrónico válido
+                        $facturaBODY['error']='29';
+                    }
+                }else{
+                    // Empresa debe actualizar domicilio
+                    $facturaBODY['error']='28';
+                }
+            }else{
+                // Empresa esta deshabilitada
+                $facturaBODY['error']='27';
+            }
+        }else{
+            // No existe empresa
+            $facturaBODY['error']='26';
+        }
+    }
 	
 	
 }// FIN DE LA CLASE

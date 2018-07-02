@@ -99,6 +99,33 @@ function displayErrors(NumError){
 		case "24":
 			notyError('El cliente ya no tiene credito disponible para esta factura. \nERROR: '+NumError);
 			break;
+                case "25":
+			notyError('El cliente no existe. \nERROR: '+NumError);
+			break;
+                case "26":
+			notyError('La sucursal no existe. \nERROR: '+NumError);
+			break;
+                case "27":
+			notyError('La sucursal esta deshabilitada. \nERROR: '+NumError);
+			break;
+                case "28":
+			notyError('Debe actualizar el domicilio de la sucursal para poder cobrar. \nERROR: '+NumError);
+			break;
+                case "29":
+			notyError('Debe actualizar el domicilio de la sucursal para poder cobrar. \nERROR: '+NumError);
+			break;
+                case "30":
+			notyError('La sucursal no cuenta con los datos necesarios para realizar Factura Electrónica. \nERROR: '+NumError);
+			break;
+                case "50":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "51":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "51":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
 		case "cf_1":
 			notyError('No se pudo actualizar la factura editada. \nERROR: '+NumError);
 			break;
