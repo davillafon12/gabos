@@ -277,41 +277,119 @@ class caja extends CI_Controller {
                 
                 $clave = $claveRs["clave"];
                 $consecutivoFinal = $claveRs["consecutivo"];
-                $fechaEmision = date("y-m-dTH:i:s", $fechaFacturaActual)."-06:00";
+                $fechaEmision = date(DATE_ATOM, $fechaFacturaActual);
                 
                   
                 $this->validarEmpresaYClienteCobrarFactura($facturaBODY);
                 
                 if($facturaBODY["status"] == "success"){
-                    die;
-                    //Para efecto de impresion
-                    $facturaBODY['sucursal']= $data['Sucursal_Codigo'];
-                    $facturaBODY['servidor_impresion']= $this->configuracion->getServidorImpresion();
-                    $facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+                    $condicionVenta = $this->getCondicionVenta($tipoPago);
+                    $plazoCredito = "0";
+                    if(isset($tipoPago['canDias'])){
+                        $plazoCredito = $tipoPago['canDias'];
+                    }
+                    $medioPago = $this->getMedioPago($tipoPago);
+                    $codigoMoneda = $facturaBODY["factura"]->Factura_Moneda == "colones" ? "CRC" : "USD";
+                    $tipoCambio = $facturaBODY["factura"]->Factura_tipo_cambio;
+                    $otros = $facturaBODY["factura"]->Factura_Observaciones;
+                    $costos = $this->factura->getCostosTotalesFactura($facturaBODY["factura"]->Factura_Consecutivo, $facturaBODY["factura"]->TB_02_Sucursal_Codigo);
+                    
+                    $xmlRes = $api->crearXMLFactura($clave, 
+                                                    $consecutivoFinal, 
+                                                    $fechaEmision, 
+                            
+                                                    $facturaBODY['empresa']->Sucursal_Nombre, 
+                                                    $facturaBODY['empresa']->Tipo_Cedula, 
+                                                    $facturaBODY['empresa']->Sucursal_Cedula, 
+                                                    $facturaBODY['empresa']->Sucursal_Nombre, 
+                                                    $facturaBODY['empresa']->Provincia, 
+                                                    $facturaBODY['empresa']->Canton, 
+                                                    $facturaBODY['empresa']->Distrito, 
+                                                    $facturaBODY['empresa']->Barrio, 
+                                                    $facturaBODY['empresa']->Sucursal_Direccion, 
+                                                    $facturaBODY['empresa']->Codigo_Pais_Telefono, 
+                                                    $facturaBODY['empresa']->Sucursal_Telefono, 
+                                                    $facturaBODY['empresa']->Codigo_Pais_Fax, 
+                                                    $facturaBODY['empresa']->Sucursal_Fax, 
+                                                    $facturaBODY['empresa']->Sucursal_Email, 
+                            
+                                                    $facturaBODY['cliente']->Cliente_Nombre." ".$facturaBODY['cliente']->Cliente_Apellidos, 
+                                                    $this->cliente->getTipoIdentificacionDocumentoElectronico($facturaBODY['cliente']->Cliente_Tipo_Cedula), 
+                                                    $facturaBODY['cliente']->Cliente_Cedula, 
+                                                    $facturaBODY['cliente']->Provincia, 
+                                                    $facturaBODY['cliente']->Canton, 
+                                                    $facturaBODY['cliente']->Distrito, 
+                                                    $facturaBODY['cliente']->Barrio, 
+                                                    $facturaBODY['cliente']->Codigo_Pais_Telefono, 
+                                                    $facturaBODY['cliente']->Cliente_Telefono, 
+                                                    $facturaBODY['cliente']->Codigo_Pais_Fax, 
+                                                    $facturaBODY['cliente']->Numero_Fax, 
+                                                    $facturaBODY['cliente']->Cliente_Correo_Electronico,
+                            
+                                                    $condicionVenta, 
+                                                    $plazoCredito, 
+                                                    $medioPago, 
+                                                    $codigoMoneda, 
+                                                    $tipoCambio, 
+                            
+                                                    $costos['total_serv_gravados'], 
+                                                    $costos['total_serv_exentos'], 
+                                                    $costos['total_merc_gravada'], 
+                                                    $costos['total_merc_exenta'], 
+                                                    $costos['total_gravados'], 
+                                                    $costos['total_exentos'], 
+                                                    $costos['total_ventas'], 
+                                                    $costos['total_descuentos'], 
+                                                    $costos['total_ventas_neta'], 
+                                                    $costos['total_impuestos'], 
+                                                    $costos['total_comprobante'],
+                            
+                                                    trim($otros) == "" ? "-" : trim($otros), 
+                                                    $facturaBODY['articulos']);
+                    
+                    if($xmlRes){
+                        $xmlSinFirmar = $xmlRes["xml"];
+                        if($xmlFirmado = $api->firmarDocumento($facturaBODY['empresa']->Token_Certificado_Tributa, $xmlSinFirmar, $facturaBODY['empresa']->Pass_Certificado_Tributa, $tipoDocumento)){
+                            var_dump($xmlFirmado);
+                            die;
+                            //Para efecto de impresion
+                            $facturaBODY['sucursal']= $data['Sucursal_Codigo'];
+                            $facturaBODY['servidor_impresion']= $this->configuracion->getServidorImpresion();
+                            $facturaBODY['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 
-                    $Current_datetime = date("y/m/d : H:i:s", $fechaFacturaActual);
-                    $datos = array(         
-                            'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
-                            'Factura_Fecha_Hora'=>$Current_datetime, 
-                            'Factura_Estado'=>'cobrada',
-                            'Factura_Entregado_Vuelto' => $vuelto,
-                            'Factura_Recibido_Vuelto' => $recibidoParaVuelto
-                    );
+                            $Current_datetime = date("y/m/d : H:i:s", $fechaFacturaActual);
+                            $datos = array(         
+                                    'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
+                                    'Factura_Fecha_Hora'=>$Current_datetime, 
+                                    'Factura_Estado'=>'cobrada',
+                                    'Factura_Entregado_Vuelto' => $vuelto,
+                                    'Factura_Recibido_Vuelto' => $recibidoParaVuelto
+                            );
 
-                    $this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
+                            $this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
 
-                    //Agregamos tipo de pago
-                    //Tarjeta, Deposito, Cheque, Mixto, Apartado
-                    $this->guardarTipoPago($tipoPago, $consecutivo, $data['Sucursal_Codigo']);
-
-
-                    $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
+                            //Agregamos tipo de pago
+                            //Tarjeta, Deposito, Cheque, Mixto, Apartado
+                            $this->guardarTipoPago($tipoPago, $consecutivo, $data['Sucursal_Codigo']);
 
 
-                    //Valorar si factura es de cliente defectuoso
-                    $facturaHeader = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])[0];
-                    if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
-                            $this->descontarArticulosDefectuosos($consecutivo, $data['Sucursal_Codigo']);
+                            $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'cobro');
+
+
+                            //Valorar si factura es de cliente defectuoso
+                            $facturaHeader = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])[0];
+                            if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
+                                    $this->descontarArticulosDefectuosos($consecutivo, $data['Sucursal_Codigo']);
+                            }
+                        }else{
+                            // ERROR AL FIRMAR EL XML DE FE
+                            $facturaBODY['status']='error';
+                            $facturaBODY['error']='54';
+                        }
+                    }else{
+                        // ERROR AL GENERAR EL XML DE FE
+                        $facturaBODY['status']='error';
+                        $facturaBODY['error']='53';
                     }
                 }
             }else{
@@ -324,6 +402,7 @@ class caja extends CI_Controller {
         unset($facturaBODY["factura"]);
         unset($facturaBODY["cliente"]);
         unset($facturaBODY["empresa"]);
+        unset($facturaBODY["articulos"]);
         echo json_encode($facturaBODY);
     }
 	
@@ -1176,15 +1255,14 @@ class caja extends CI_Controller {
                             trim($empresaData->Ambiente_Tributa) != "" && 
                             trim($empresaData->Token_Certificado_Tributa) != "" && 
                             trim($empresaData->Pass_Certificado_Tributa) != ""){
-                            $facturaBODY["empresa"] = $empresaData;  
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            var_dump($facturaBODY["cliente"]);
+                            $facturaBODY["empresa"] = $empresaData; 
+                            if($articulosFactura = $this->factura->getArticulosFactura($facturaBODY["factura"]->Factura_Consecutivo, $facturaBODY["factura"]->TB_02_Sucursal_Codigo)){
+                                $facturaBODY['articulos'] = $this->getArticulosObjectForFE($articulosFactura);
+                                $facturaBODY['status']='success';
+                            }else{
+                                // Factura no tiene articulos
+                                $facturaBODY['error']='15';
+                            }
                         }else{
                             // Empresa no tiene los valores minimos para crear FE
                             $facturaBODY['error']='30';
@@ -1207,6 +1285,90 @@ class caja extends CI_Controller {
         }
     }
 	
+    function getCondicionVenta($tipoPago){
+        /*
+        Condiciones de la venta: 
+        - 01 Contado
+        - 02 Crédito 
+        - 03 Consignación
+        - 04 Apartado 
+        - 05 Arrendamiento con opción de compra 
+        - 06 Arrendamiento en función financiera 
+        - 99 Otros
+         */
+        switch ($tipoPago['tipo']) {
+            case 'contado':
+            case 'tarjeta':
+            case 'deposito':
+            case 'cheque':
+            case 'mixto':
+                return "01";
+            case 'credito':
+                return "02";
+            case 'apartado':
+                return "04";
+        }
+    }
+
+    function getMedioPago($tipoPago){
+        /*
+            Corresponde al medio de pago empleado: 
+            - 01 Efectivo
+            - 02 Tarjeta
+            - 03 Cheque
+            - 04 Transferencia - depósito bancario 
+            - 05 - Recaudado por terceros
+            - 99 Otros
+         */
+        switch ($tipoPago['tipo']) {
+            case 'contado':
+                return "01";
+            case 'tarjeta':
+                return "02";
+            case 'deposito':
+                return "04";
+            case 'cheque':
+                return "03";
+            case 'mixto':
+                return "99";
+            case 'credito':
+                return "99";
+            case 'apartado':
+                return "99";
+        }
+    }
+    
+    function getArticulosObjectForFE($articulos){
+        $confArray = $this->configuracion->getConfiguracionArray();
+        $finalList = array();
+        $index = 1;
+        foreach($articulos as $a){
+            $art = array();
+            array_push($art, $a->Articulo_Factura_Cantidad);
+            array_push($art, "U");
+            array_push($art, $a->Articulo_Factura_Descripcion);
+            array_push($art, number_format($a->Articulo_Factura_Precio_Unitario, HACIENDA_DECIMALES, ".", ""));
+            $precioTotal = $a->Articulo_Factura_Cantidad*$a->Articulo_Factura_Precio_Unitario;
+            $precioTotal -=  $precioTotal*($a->Articulo_Factura_Descuento/100);
+            $precioTotalSinIVA = $precioTotal/(1+(floatval($confArray['iva'])/100));
+            $totalIVA = $precioTotal - ($precioTotal/(1+(floatval($confArray['iva'])/100)));
+            array_push($art, number_format($precioTotalSinIVA + $totalIVA, HACIENDA_DECIMALES, ".", ""));
+            $totalIVA = $a->Articulo_Factura_Exento ? 0 : $totalIVA;
+            array_push($art, number_format($precioTotalSinIVA - $totalIVA, HACIENDA_DECIMALES, ".", ""));
+            
+            $totalIvaFinal = 0;
+            if($a->Articulo_Factura_No_Retencion == "0"){
+                $precioArticuloFinal = ($a->Articulo_Factura_Precio_Final*$a->Articulo_Factura_Cantidad);
+                $totalIvaFinal = $precioArticuloFinal - ($precioArticuloFinal/(1+(floatval($confArray['iva'])/100)));
+                $totalIvaFinal = $totalIvaFinal - $totalIVA;
+            }
+            
+            array_push($art, number_format($precioTotalSinIVA + $totalIVA + $totalIvaFinal, HACIENDA_DECIMALES, ".", ""));
+            $finalList[$index] = $art;
+            $index++;
+        }
+        return $finalList;
+    }
 	
 }// FIN DE LA CLASE
 

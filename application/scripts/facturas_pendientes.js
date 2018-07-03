@@ -123,7 +123,13 @@ function displayErrors(NumError){
                 case "51":
 			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
 			break;
-                case "51":
+                case "52":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "53":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "54":
 			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
 			break;
 		case "cf_1":

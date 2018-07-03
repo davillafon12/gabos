@@ -705,6 +705,19 @@ Class cliente extends CI_Model
 		$query = $this -> db -> get();
 		return $query -> num_rows();
 	}
+        
+        function getTipoIdentificacionDocumentoElectronico($tipo){
+            switch($tipo){
+                case 'nacional':
+                    return "01";
+                case 'residencia':
+                    return "03";
+                case 'juridica':
+                    return "02";
+                case 'pasaporte':
+                    return "04";
+            }
+        }
 }
 
 

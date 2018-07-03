@@ -16,6 +16,7 @@ class API_FE{
     }
     
     public function internetIsOnline(){
+        $bm = round(microtime(true) * 1000);
         $localClient = new RestClient([
             'base_url' => "https://www.google.com/",
             'curl_options' => [CURLOPT_CONNECTTIMEOUT => API_CRLIBRE_CURL_TIMEOUT]
@@ -23,7 +24,8 @@ class API_FE{
         $result = $localClient->get("/", []);
         $this->logger->info("internetIsOnline", "Checking internet status");
         if($result->info->http_code == 200){
-            $this->logger->info("internetIsOnline", "Internet status is OK");
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->info("internetIsOnline", $ms."ms | Internet status is OK");
             return true;
         }else{
             $this->logger->error("internetIsOnline", "Internet status is OFFLINE");
@@ -55,25 +57,30 @@ class API_FE{
     }
      
     public function isUp(){
+        $bm = round(microtime(true) * 1000);
         $params = ['w' => "ejemplo", "r" => "hola"];
         $this->logger->info("isUp", "Checking if API is online with params: ".json_encode($params));
         $result = $this->gateway->get("api.php", $params);
         if($result->info->http_code == 200){
             $result = (Array) json_decode($result->response);
             if(trim(@$result["resp"]) == "hola :)"){
-                $this->logger->info("isUp", "API returns succesfully ".json_encode($result));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("isUp", $ms."ms | API returns succesfully ".json_encode($result));
                 return true;
             }else{
-                $this->logger->error("isUp", "2 - API returns ".json_encode($result));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("isUp", $ms."ms | 2 - API returns ".json_encode($result));
                 return false;
             }
         }else{
-            $this->logger->error("isUp", "1 - API fails ".json_encode($result));
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("isUp", $ms."ms | 1 - API fails ".json_encode($result));
             return false;
         }
     }
     
     public function logUser($user, $passw){
+        $bm = round(microtime(true) * 1000);
         $params = array(
             'w' => "users", 
             "r" => "users_log_me_in",
@@ -87,23 +94,28 @@ class API_FE{
             if(isset($result["resp"])){
                 $result["resp"] = (array) $result["resp"];
                 if(isset($result["resp"]["sessionKey"]) && isset($result["resp"]["userName"])){
-                    $this->logger->info("logUser", "API returns ".json_encode($result));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("logUser", $ms."ms | API returns ".json_encode($result));
                     return $result["resp"]["sessionKey"];
                 }else{
-                    $this->logger->error("logUser", "3 - API returns ".json_encode($result));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("logUser", $ms."ms | 3 - API returns ".json_encode($result));
                     return false;
                 }
             }else{
-                $this->logger->error("logUser", "2 - API returns ".json_encode($result));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("logUser", $ms."ms | 2 - API returns ".json_encode($result));
                 return false;
             }
         }else{
-            $this->logger->error("logUser", "1 - API returns ".json_encode($result));
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("logUser", $ms."ms | 1 - API returns ".json_encode($result));
             return false;
         }
     }
     
     public function registerUser($nombreCompleto, $usuario, $email, $about, $country, $pwd){
+        $bm = round(microtime(true) * 1000);
         $params = array(
             'w' => "users", 
             "r" => "users_register",
@@ -121,23 +133,28 @@ class API_FE{
             if(isset($result["resp"])){
                 $result["resp"] = (array) $result["resp"];
                 if(isset($result["resp"]["sessionKey"]) && isset($result["resp"]["userName"])){
-                    $this->logger->info("registerUser", "API returns ".json_encode($result));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("registerUser", $ms."ms | API returns ".json_encode($result));
                     return $result["resp"]["sessionKey"];
                 }else{
-                    $this->logger->error("registerUser", "3 - API returns ".json_encode($result));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("registerUser", $ms."ms | 3 - API returns ".json_encode($result));
                     return false;
                 }
             }else{
-                $this->logger->error("registerUser", "2 - API returns ".json_encode($result));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("registerUser", $ms."ms | 2 - API returns ".json_encode($result));
                 return false;
             }
         }else{
-            $this->logger->error("registerUser", "1 - API returns ".json_encode($result));
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("registerUser", $ms."ms | 1 - API returns ".json_encode($result));
             return false;
         }
     }
     
     public function logOutUser($sessionKey, $user){
+        $bm = round(microtime(true) * 1000);
         $params = array(
             'w' => "users", 
             "r" => "users_log_me_out",
@@ -150,23 +167,28 @@ class API_FE{
             $result = (Array) json_decode($result->response);
             if(isset($result["resp"])){
                 if(trim(@$result["resp"]) == "good bye"){
-                    $this->logger->info("logOutUser", "API returns ".json_encode($result));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("logOutUser", $ms."ms | API returns ".json_encode($result));
                     return true;
                 }else{
-                    $this->logger->error("logOutUser", "3 - API returns ".json_encode($result));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("logOutUser", $ms."ms | 3 - API returns ".json_encode($result));
                     return false;
                 }
             }else{
-                $this->logger->error("logOutUser", "2 - API returns ".json_encode($result));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("logOutUser", $ms."ms | 2 - API returns ".json_encode($result));
                 return false;
             }
         }else{
-            $this->logger->error("logOutUser", "1 - API returns ".json_encode($result));
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("logOutUser", $ms."ms | 1 - API returns ".json_encode($result));
             return false;
         }
     }
     
     public function uploadCertificate($user, $sessionKey, $certPath, $name){
+        $bm = round(microtime(true) * 1000);
         $params = array(
             'w' => "fileUploader", 
             "r" => "subir_certif",
@@ -193,23 +215,28 @@ class API_FE{
             if(isset($response["resp"])){
                 $response = (array) $response["resp"];
                 if(isset($response["downloadCode"]) && isset($response["name"])){
-                    $this->logger->info("uploadCertificate", "API returns ".json_encode($response));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("uploadCertificate", $ms."ms | API returns ".json_encode($response));
                     return $response["downloadCode"];
                 }else{
-                    $this->logger->error("uploadCertificate", "3 - API returns ".json_encode($response));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("uploadCertificate", $ms."ms | 3 - API returns ".json_encode($response));
                     return false;
                 }
             }else{
-                $this->logger->error("uploadCertificate", "2 - API returns ".json_encode($response));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("uploadCertificate", $ms."ms | 2 - API returns ".json_encode($response));
                 return false;
             }
         }else{
-            $this->logger->error("uploadCertificate", "1 - API returns ".json_encode($response));
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("uploadCertificate", $ms."ms | 1 - API returns ".json_encode($response));
             return false;
         }
     }
     
     public function createClave($tipoCedula, $cedula, $codigoPais, $consecutivo, $situacion, $codigoSeguridad, $tipoDocumento){
+        $bm = round(microtime(true) * 1000);
         $params = array(
             'w' => "clave", 
             "r" => "clave",
@@ -226,14 +253,17 @@ class API_FE{
         if($result->info->http_code == 200){
             $result = (Array) json_decode($result->response);
             if(isset($result["resp"])){
-                $this->logger->info("createClave", "API returns ".json_encode($result));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("createClave", $ms."ms | API returns ".json_encode($result));
                 return (Array) $result["resp"];
             }else{
-                $this->logger->error("createClave", "2 - API returns ".json_encode($result));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("createClave", $ms."ms | 2 - API returns ".json_encode($result));
                 return false;
             }
         }else{
-            $this->logger->error("createClave", "1 - API returns ".json_encode($result));
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("createClave", $ms."ms | 1 - API returns ".json_encode($result));
             return false;
         }
     }
@@ -249,6 +279,7 @@ class API_FE{
                                     $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
                                     $otros,
                                     $productos){
+        $bm = round(microtime(true) * 1000);
         $params = array(
             'w' => "genXML", 
             "r" => "gen_xml_fe",
@@ -298,7 +329,7 @@ class API_FE{
             "total_impuestos" => $total_impuestos, 
             "total_comprobante" => $total_comprobante,
             "otros" => $otros,
-            "detalles" => $productos
+            "detalles" => json_encode($productos)
         );
         $this->logger->info("crearXMLFactura", "Creating factura XML into API with params: ".json_encode($params));
         $result = $this->gateway->post("api.php", $params);
@@ -307,18 +338,60 @@ class API_FE{
             if(isset($result["resp"])){
                 $result["resp"] = (Array) $result["resp"];
                 if(isset($result["resp"]["clave"]) && isset($result["resp"]["xml"])){
-                    $this->logger->info("crearXMLFactura", "API returns ".json_encode($result));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("crearXMLFactura", $ms."ms | API returns ".json_encode($result));
                     return $result["resp"];
                 }else{
-                    $this->logger->error("crearXMLFactura", "3 - API returns ".json_encode($result));
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("crearXMLFactura", $ms."ms | 3 - API returns ".json_encode($result));
                     return false;
                 }
             }else{
-                $this->logger->error("crearXMLFactura", "2 - API returns ".json_encode($result));
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("crearXMLFactura", $ms."ms | 2 - API returns ".json_encode($result));
                 return false;
             }
         }else{
-            $this->logger->error("crearXMLFactura", "1 - API returns ".json_encode($result));
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("crearXMLFactura", $ms."ms | 1 - API returns ".json_encode($result));
+            return false;
+        }
+    }
+    
+    
+    public function firmarDocumento($tokenCertificado, $xml, $pinCertificado, $tipoDocumento){
+        $bm = round(microtime(true) * 1000);
+        $params = array(
+            'w' => "signXML", 
+            "r" => "signFE", 
+            "p12Url" => $tokenCertificado,
+            "inXml" => $xml,
+            "pinP12" => $pinCertificado,
+            "tipodoc" => $tipoDocumento
+        );
+        $this->logger->info("firmarDocumento", "Signing XML into API with params: ".json_encode($params));
+        $result = $this->gateway->post("api.php", $params);
+        if($result->info->http_code == 200){
+            $result = (Array) json_decode($result->response);
+            if(isset($result["resp"])){
+                $result["resp"] = (Array) $result["resp"];
+                if(isset($result["resp"]["xmlFirmado"])){
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("firmarDocumento", $ms."ms | API returns ".json_encode($result));
+                    return (Array) $result["resp"]["xmlFirmado"];
+                }else{
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("firmarDocumento", $ms."ms | 3 - API returns ".json_encode($result));
+                    return false;
+                }
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("firmarDocumento", $ms."ms | 2 - API returns ".json_encode($result));
+                return false;
+            }
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("firmarDocumento", $ms."ms | 1 - API returns ".json_encode($result));
             return false;
         }
     }

@@ -160,6 +160,9 @@ Class factura extends CI_Model
 		$iva = 0;
 		$costo_sin_iva = 0;
 		$retencion = 0;
+                $totalGravados = 0;
+                $totalExentos = 0;
+                $descuento = 0;
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		//Traemos el array de configuracion para obtener el porcentaje
@@ -176,6 +179,7 @@ Class factura extends CI_Model
 				//Calculamos el precio total de los articulos
 				$precio_total_articulo = (($articulo->Articulo_Factura_Precio_Unitario)-(($articulo->Articulo_Factura_Precio_Unitario)*(($articulo->Articulo_Factura_Descuento)/100)))*$articulo->Articulo_Factura_Cantidad;
 				$precio_total_articulo_sin_descuento = $articulo->Articulo_Factura_Precio_Unitario*$articulo->Articulo_Factura_Cantidad;
+                                $descuento = $precio_total_articulo_sin_descuento - $precio_total_articulo;
 				$precio_articulo_final = $articulo->Articulo_Factura_Precio_Final;
 				$precio_articulo_final = $precio_articulo_final * $articulo->Articulo_Factura_Cantidad;
 				
@@ -193,12 +197,17 @@ Class factura extends CI_Model
 					$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($c_array['iva'])/100));
 					$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
 					
+                                        
+                                        
 					if(!$articulo->Articulo_Factura_No_Retencion){
-							$retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
-					}
-				}
-				else if($isExento=='1'){
+                                            $retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+                                            $totalGravados += $costo_sin_iva + $iva_precio_final;
+                                        }else{
+                                            $totalGravados += $precio_total_articulo;
+                                        }
+				}else if($isExento=='1'){
 					$costo_sin_iva += $precio_total_articulo;
+                                        $totalExentos += $precio_total_articulo;
 					//$retencion = 0;
 				}
 				$costo_total += $precio_total_articulo;
@@ -223,8 +232,24 @@ Class factura extends CI_Model
 		}
 		
 		$costo_total += $retencion;
-		
-		return array('Factura_Monto_Total'=>$costo_total, 'Factura_Monto_IVA'=>$iva, 'Factura_Monto_Sin_IVA'=>$costo_sin_iva, 'Factura_Retencion'=>$retencion);
+                
+		return array(
+                        'Factura_Monto_Total'=>$costo_total, 
+                        'Factura_Monto_IVA'=>$iva, 
+                        'Factura_Monto_Sin_IVA'=>$costo_sin_iva, 
+                        'Factura_Retencion'=>$retencion,
+                        'total_serv_gravados'=>  number_format(0, HACIENDA_DECIMALES, ".", ""),
+                        'total_serv_exentos'=> number_format(0, HACIENDA_DECIMALES, ".", ""),
+                        'total_impuestos'=> number_format($iva, HACIENDA_DECIMALES, ".", ""),
+                        'total_gravados'=> number_format($totalGravados, HACIENDA_DECIMALES, ".", ""),
+                        'total_exentos'=> number_format($totalExentos, HACIENDA_DECIMALES, ".", ""),
+                        'total_merc_gravada'=> number_format($totalGravados, HACIENDA_DECIMALES, ".", ""),
+                        'total_merc_exenta'=> number_format($totalExentos, HACIENDA_DECIMALES, ".", ""),
+                        'total_ventas'=> number_format($costo_total, HACIENDA_DECIMALES, ".", ""),
+                        'total_descuentos'=> number_format($descuento, HACIENDA_DECIMALES, ".", ""),
+                        'total_ventas_neta'=> number_format($costo_total-$descuento, HACIENDA_DECIMALES, ".", ""),
+                        'total_comprobante'=> number_format($costo_total, HACIENDA_DECIMALES, ".", "")
+                        );
 	}
 	
 	function getItemsFactura($consecutivo, $sucursal){
