@@ -13,6 +13,7 @@ class caja extends CI_Controller {
 		$this->load->model('banco','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
+                $this->load->model('DocumentoElectronico','',TRUE);
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -350,7 +351,48 @@ class caja extends CI_Controller {
                     if($xmlRes){
                         $xmlSinFirmar = $xmlRes["xml"];
                         if($xmlFirmado = $api->firmarDocumento($facturaBODY['empresa']->Token_Certificado_Tributa, $xmlSinFirmar, $facturaBODY['empresa']->Pass_Certificado_Tributa, $tipoDocumento)){
-                            var_dump($xmlFirmado);
+                        
+                            $this->DocumentoElectronico->guardarFacturaElectronica( $tipoDocumento, 
+                                                                                    $codigoPais, 
+                                                                                    $cedula, 
+                                                                                    $consecutivo, 
+                                                                                    $facturaBODY["factura"]->TB_02_Sucursal_Codigo, 
+                                                                                    $situacion, 
+                                                                                    $codigoSeguridad, 
+                                                                                    $clave, 
+                                                                                    $consecutivoFinal, 
+                                                                                    $fechaEmision, 
+                                                                                    $medioPago, 
+                                                                                    $xmlSinFirmar, 
+                                                                                    $xmlFirmado, 
+                                                                                    json_encode($costos), 
+                                                                                    "pendiente");
+                            
+                            // Si hay conexion por lo tanto enviar FE a Hacienda de una
+                            if($situacion == "normal"){
+                                //Generamos el token primero
+                                $tokenData = $api->solicitarToken($facturaBODY['empresa']->Ambiente_Tributa, $facturaBODY['empresa']->Usuario_Tributa, $facturaBODY['empresa']->Pass_Tributa);
+                            
+                                $resEnvio = $api->enviarDocumento($facturaBODY['empresa']->Ambiente_Tributa, $clave, $fechaEmision, $facturaBODY['empresa']->Tipo_Cedula, $facturaBODY['empresa']->Sucursal_Cedula, $this->cliente->getTipoIdentificacionDocumentoElectronico($facturaBODY['cliente']->Cliente_Tipo_Cedula), $facturaBODY['cliente']->Cliente_Cedula, $tokenData["access_token"], $xmlFirmado);
+                                
+                                if($resEnvio){
+                                    $resCheck = $api->revisarEstadoAceptacion($facturaBODY['empresa']->Ambiente_Tributa, $clave, $tokenData["access_token"]);
+                                    if($resCheck["status"]){
+                                        if(trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando"){
+                                            $counter = 0;
+                                            do {
+                                                sleep(2);
+                                                $counter++;
+                                                $resCheck = $api->revisarEstadoAceptacion($facturaBODY['empresa']->Ambiente_Tributa, $clave, $tokenData["access_token"]);
+                                                echo "Entro ciclo $counter";
+                                            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+                                        }
+                                    }else{
+                                        
+                                    }
+                                    var_dump($resCheck);
+                                }
+                            }
                             die;
                             //Para efecto de impresion
                             $facturaBODY['sucursal']= $data['Sucursal_Codigo'];
@@ -1344,17 +1386,17 @@ class caja extends CI_Controller {
         $index = 1;
         foreach($articulos as $a){
             $art = array();
-            array_push($art, $a->Articulo_Factura_Cantidad);
-            array_push($art, "U");
-            array_push($art, $a->Articulo_Factura_Descripcion);
-            array_push($art, number_format($a->Articulo_Factura_Precio_Unitario, HACIENDA_DECIMALES, ".", ""));
+            $art["cantidad"] = $a->Articulo_Factura_Cantidad;
+            $art["unidadMedida"] = "Unid";
+            $art["detalle"] = $a->Articulo_Factura_Descripcion;
+            $art["precioUnitario"] = number_format($a->Articulo_Factura_Precio_Unitario, HACIENDA_DECIMALES, ".", "");
             $precioTotal = $a->Articulo_Factura_Cantidad*$a->Articulo_Factura_Precio_Unitario;
             $precioTotal -=  $precioTotal*($a->Articulo_Factura_Descuento/100);
             $precioTotalSinIVA = $precioTotal/(1+(floatval($confArray['iva'])/100));
             $totalIVA = $precioTotal - ($precioTotal/(1+(floatval($confArray['iva'])/100)));
-            array_push($art, number_format($precioTotalSinIVA + $totalIVA, HACIENDA_DECIMALES, ".", ""));
+            $art["montoTotal"] = number_format($precioTotalSinIVA + $totalIVA, HACIENDA_DECIMALES, ".", "");
             $totalIVA = $a->Articulo_Factura_Exento ? 0 : $totalIVA;
-            array_push($art, number_format($precioTotalSinIVA - $totalIVA, HACIENDA_DECIMALES, ".", ""));
+            $art["subtotal"] = number_format($precioTotalSinIVA - $totalIVA, HACIENDA_DECIMALES, ".", "");
             
             $totalIvaFinal = 0;
             if($a->Articulo_Factura_No_Retencion == "0"){
@@ -1363,7 +1405,7 @@ class caja extends CI_Controller {
                 $totalIvaFinal = $totalIvaFinal - $totalIVA;
             }
             
-            array_push($art, number_format($precioTotalSinIVA + $totalIVA + $totalIvaFinal, HACIENDA_DECIMALES, ".", ""));
+            $art["montoTotalLinea"] = number_format($precioTotalSinIVA + $totalIVA + $totalIvaFinal, HACIENDA_DECIMALES, ".", "");
             $finalList[$index] = $art;
             $index++;
         }

@@ -6661,3 +6661,28 @@ ADD  `Codigo_Pais_Fax` VARCHAR( 5 ) NOT NULL AFTER  `Codigo_Pais_Telefono` ;
 UPDATE tb_02_sucursal SET Tipo_Cedula =  '02';
 
 UPDATE tb_02_sucursal SET  `Codigo_Pais_Telefono` =  '506',`Codigo_Pais_Fax` =  '506';
+
+CREATE TABLE IF NOT EXISTS `tb_55_documento_electronico` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Tipo` varchar(10) NOT NULL,
+  `Codigo_Pais` varchar(10) NOT NULL,
+  `Cedula_Receptor` varchar(50) NOT NULL,
+  `Consecutivo_Factura` varchar(15) NOT NULL,
+  `Situacion` varchar(5) NOT NULL,
+  `Codigo_Seguridad` varchar(10) NOT NULL,
+  `Clave` varchar(100) NOT NULL,
+  `Consecutivo_Hacienda` varchar(20) NOT NULL,
+  `Fecha_Emision` varchar(20) NOT NULL,
+  `Medio_Pago` varchar(10) NOT NULL,
+  `XML_Sin_Firmar` text NOT NULL,
+  `XML_Firmado` text NOT NULL,
+  `Costos` varchar(200) NOT NULL,
+  `Estado_Hacienda` varchar(50) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+ALTER TABLE  `tb_55_documento_electronico` ADD  `Sucursal_Factura` INT NOT NULL AFTER  `Consecutivo_Factura`;
+
+ALTER TABLE  `tb_55_documento_electronico` CHANGE  `Situacion`  `Situacion` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+ALTER TABLE  `tb_55_documento_electronico` CHANGE  `Fecha_Emision`  `Fecha_Emision` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;

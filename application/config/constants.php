@@ -96,6 +96,10 @@ define('API_CRLIBRE_CURL_TIMEOUT', 5);
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
 define('HACIENDA_DECIMALES', 5);
+define('HACIENDA_TOKEN_API_STAG', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect/token");
+define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect/token");
+define('HACIENDA_RECEPCION_API_STAG', "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/");
+define('HACIENDA_RECEPCION_API_PROD', "https://api.comprobanteselectronicos.go.cr/recepcion/v1/");
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

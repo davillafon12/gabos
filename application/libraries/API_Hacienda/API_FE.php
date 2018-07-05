@@ -291,26 +291,26 @@ class API_FE{
             "emisor_num_identif" => $emisor_num_identif, 
             "nombre_comercial" => $nombre_comercial, 
             "emisor_provincia" => $emisor_provincia, 
-            "emisor_canton" => $emisor_canton, 
-            "emisor_distrito" => $emisor_distrito, 
-            "emisor_barrio" => $emisor_barrio, 
+            "emisor_canton" => str_pad($emisor_canton,2,"0", STR_PAD_LEFT), 
+            "emisor_distrito" => str_pad($emisor_distrito,2,"0", STR_PAD_LEFT), 
+            "emisor_barrio" => str_pad($emisor_barrio,2,"0", STR_PAD_LEFT), 
             "emisor_otras_senas" => $emisor_otras_senas, 
             "emisor_cod_pais_tel" => $emisor_cod_pais_tel, 
-            "emisor_tel" => $emisor_tel, 
+            "emisor_tel" => str_replace("-", "", $emisor_tel), 
             "emisor_cod_pais_fax" => $emisor_cod_pais_fax, 
-            "emisor_fax" => $emisor_fax, 
+            "emisor_fax" => str_replace("-", "", $emisor_fax), 
             "emisor_email" => $emisor_email,
             "receptor_nombre" => $receptor_nombre, 
             "receptor_tipo_identif" => $receptor_tipo_identif, 
             "receptor_num_identif" => $receptor_num_identif, 
             "receptor_provincia" => $receptor_provincia, 
-            "receptor_canton" => $receptor_canton, 
-            "receptor_distrito" => $receptor_distrito, 
-            "receptor_barrio" => $receptor_barrio, 
+            "receptor_canton" => str_pad($receptor_canton,2,"0", STR_PAD_LEFT), 
+            "receptor_distrito" => str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), 
+            "receptor_barrio" => str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), 
             "receptor_cod_pais_tel" => $receptor_cod_pais_tel, 
-            "receptor_tel" => $receptor_tel, 
+            "receptor_tel" => str_replace("-", "", $receptor_tel), 
             "receptor_cod_pais_fax" => $receptor_cod_pais_fax, 
-            "receptor_fax" => $receptor_fax, 
+            "receptor_fax" => str_replace("-", "", $receptor_fax), 
             "receptor_email" => $receptor_email,
             "condicion_venta" => $condicion_venta,
             "plazo_credito" => $plazo_credito,
@@ -378,7 +378,7 @@ class API_FE{
                 if(isset($result["resp"]["xmlFirmado"])){
                     $ms = (round(microtime(true) * 1000)) - $bm;
                     $this->logger->info("firmarDocumento", $ms."ms | API returns ".json_encode($result));
-                    return (Array) $result["resp"]["xmlFirmado"];
+                    return $result["resp"]["xmlFirmado"];
                 }else{
                     $ms = (round(microtime(true) * 1000)) - $bm;
                     $this->logger->error("firmarDocumento", $ms."ms | 3 - API returns ".json_encode($result));
@@ -394,5 +394,120 @@ class API_FE{
             $this->logger->error("firmarDocumento", $ms."ms | 1 - API returns ".json_encode($result));
             return false;
         }
+    }
+    
+    public function solicitarToken($ambienteHacienda, $usuario, $password){
+        $bm = round(microtime(true) * 1000);
+        $url = $ambienteHacienda == "api-stag" ? HACIENDA_TOKEN_API_STAG : HACIENDA_TOKEN_API_PROD;
+        $localClient = new RestClient([
+            'base_url' => $url,
+            'curl_options' => [CURLOPT_CONNECTTIMEOUT => API_CRLIBRE_CURL_TIMEOUT]
+        ]);
+        $params = array(
+            "grant_type" => "password",
+            "username" => $usuario,
+            "password" => $password,
+            "client_id" => $ambienteHacienda
+        );
+        $result = $localClient->post("/", $params);
+        $this->logger->info("solicitarToken", "Request token into Hacienda API with params: ".json_encode($params));
+        if($result->info->http_code == 200){
+            $result = (Array) json_decode($result->response);
+            if(isset($result["access_token"]) && isset($result["refresh_token"])){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("solicitarToken", $ms."ms | API returns ".json_encode($result));
+                return $result;
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("solicitarToken", $ms."ms | 2 - API returns ".json_encode($result));
+                return false;
+            }
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("solicitarToken", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | ".json_encode($result));
+            return false;
+        }
+    }
+    
+    public function enviarDocumento($ambienteHacienda, $clave, $fecha, $emisorTipoIdentificacion, $emisorIdentificacion, $receptorTipoIdentificacion, $receptorIdentificacion, $token, $xml){
+        $bm = round(microtime(true) * 1000);
+        $url = $ambienteHacienda == "api-stag" ? HACIENDA_RECEPCION_API_STAG : HACIENDA_RECEPCION_API_PROD;
+       
+        $params = array(
+            "clave" => $clave,
+            "fecha" => $fecha,
+            "emisor" => array(
+                            "tipoIdentificacion"=> $emisorTipoIdentificacion,
+                            "numeroIdentificacion"=> $emisorIdentificacion),
+            "comprobanteXml" => $xml
+        );
+        
+        if($receptorTipoIdentificacion != null){
+            $params["receptor"] = array(
+                "tipoIdentificacion"=> $receptorTipoIdentificacion,
+                "numeroIdentificacion"=> $receptorIdentificacion
+            );
+        }
+        $this->logger->info("enviarDocumento", "Sending document to Hacienda API with params: ".json_encode($params));
+        
+        //Initialise the cURL var
+        $ch = curl_init();
+
+        //Get the response from cURL
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        //Set the Url
+        curl_setopt($ch, CURLOPT_URL, $url."recepcion");
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, API_CRLIBRE_CURL_TIMEOUT);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        $headr = array();
+        $headr[] = "Authorization: Bearer $token";
+        $headr[] = 'Content-Type: application/json';
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER,$headr);
+        curl_setopt($ch, CURLOPT_POST,           1 );
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params) ); 
+
+        // Execute the request
+        $response = curl_exec($ch);
+        
+        if(strpos($response, 'HTTP/1.1 202 Accepted') !== false){
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->info("enviarDocumento", $ms."ms | API returns ".$response);
+            return true;
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("enviarDocumento", $ms."ms | API returns ".$response);
+            return false;
+        }
+    }
+    
+    public function revisarEstadoAceptacion($ambienteHacienda, $clave, $token){
+        $bm = round(microtime(true) * 1000);
+        $url = $ambienteHacienda == "api-stag" ? HACIENDA_RECEPCION_API_STAG : HACIENDA_RECEPCION_API_PROD;
+        $localClient = new RestClient([
+            'base_url' => $url,
+            'curl_options' => [CURLOPT_CONNECTTIMEOUT => API_CRLIBRE_CURL_TIMEOUT, CURLOPT_HTTPHEADER => array("Authorization: Bearer $token")]
+        ]);
+        $this->logger->info("revisarEstadoAceptacion", "Revisando estado into Hacienda API with params: $clave");
+        $result = $localClient->get("recepcion/$clave", array());
+        $respuesta["status"] = false;
+        if($result->info->http_code == 200){
+            $result = (Array) json_decode($result->response);
+            if(isset($result["clave"]) && isset($result["ind-estado"])){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("revisarEstadoAceptacion", $ms."ms | API returns ".json_encode($result));
+                $respuesta["status"] = true;
+                $respuesta["data"] = $result;
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("revisarEstadoAceptacion", $ms."ms | 2 - API returns ".json_encode($result));
+            }
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("revisarEstadoAceptacion", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | ".json_encode($result));
+        }
+        return $respuesta;
     }
 }

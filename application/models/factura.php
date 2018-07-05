@@ -925,7 +925,7 @@ Class factura extends CI_Model
             }
             return $consecutivo;
         }
-	
+        	
 }
 
 
