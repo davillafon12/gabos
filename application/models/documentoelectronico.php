@@ -35,4 +35,12 @@ Class DocumentoElectronico extends CI_Model {
             );
             $this->db->insert("tb_55_documento_electronico", $data);
         }
+    
+    public function actualizarEstadoHacienda($clave, $estado){
+        $data = array(
+                "Estado_Hacienda"=>$estado
+            );
+        $this->db->where("Clave", $clave);
+        $this->db->update("tb_55_documento_electronico", $data);
+    }
 }

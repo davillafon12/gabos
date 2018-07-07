@@ -332,9 +332,9 @@ class API_FE{
             "detalles" => json_encode($productos)
         );
         $this->logger->info("crearXMLFactura", "Creating factura XML into API with params: ".json_encode($params));
-        $result = $this->gateway->post("api.php", $params);
-        if($result->info->http_code == 200){
-            $result = (Array) json_decode($result->response);
+        $resultOr = $this->gateway->post("api.php", $params);
+        if($resultOr->info->http_code == 200){
+            $result = (Array) json_decode($resultOr->response);
             if(isset($result["resp"])){
                 $result["resp"] = (Array) $result["resp"];
                 if(isset($result["resp"]["clave"]) && isset($result["resp"]["xml"])){
@@ -348,12 +348,12 @@ class API_FE{
                 }
             }else{
                 $ms = (round(microtime(true) * 1000)) - $bm;
-                $this->logger->error("crearXMLFactura", $ms."ms | 2 - API returns ".json_encode($result));
+                $this->logger->error("crearXMLFactura", $ms."ms | 2 - API returns ".json_encode($resultOr));
                 return false;
             }
         }else{
             $ms = (round(microtime(true) * 1000)) - $bm;
-            $this->logger->error("crearXMLFactura", $ms."ms | 1 - API returns ".json_encode($result));
+            $this->logger->error("crearXMLFactura", $ms."ms | 1 - API returns ".json_encode($resultOr));
             return false;
         }
     }

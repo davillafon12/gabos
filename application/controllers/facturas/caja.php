@@ -293,7 +293,6 @@ class caja extends CI_Controller {
                     $codigoMoneda = $facturaBODY["factura"]->Factura_Moneda == "colones" ? "CRC" : "USD";
                     $tipoCambio = $facturaBODY["factura"]->Factura_tipo_cambio;
                     $otros = $facturaBODY["factura"]->Factura_Observaciones;
-                    $costos = $this->factura->getCostosTotalesFactura($facturaBODY["factura"]->Factura_Consecutivo, $facturaBODY["factura"]->TB_02_Sucursal_Codigo);
                     
                     $xmlRes = $api->crearXMLFactura($clave, 
                                                     $consecutivoFinal, 
@@ -333,17 +332,17 @@ class caja extends CI_Controller {
                                                     $codigoMoneda, 
                                                     $tipoCambio, 
                             
-                                                    $costos['total_serv_gravados'], 
-                                                    $costos['total_serv_exentos'], 
-                                                    $costos['total_merc_gravada'], 
-                                                    $costos['total_merc_exenta'], 
-                                                    $costos['total_gravados'], 
-                                                    $costos['total_exentos'], 
-                                                    $costos['total_ventas'], 
-                                                    $costos['total_descuentos'], 
-                                                    $costos['total_ventas_neta'], 
-                                                    $costos['total_impuestos'], 
-                                                    $costos['total_comprobante'],
+                                                    $facturaBODY['costos']['total_serv_gravados'], 
+                                                    $facturaBODY['costos']['total_serv_exentos'], 
+                                                    $facturaBODY['costos']['total_merc_gravada'], 
+                                                    $facturaBODY['costos']['total_merc_exenta'], 
+                                                    $facturaBODY['costos']['total_gravados'], 
+                                                    $facturaBODY['costos']['total_exentos'], 
+                                                    $facturaBODY['costos']['total_ventas'], 
+                                                    $facturaBODY['costos']['total_descuentos'], 
+                                                    $facturaBODY['costos']['total_ventas_neta'], 
+                                                    $facturaBODY['costos']['total_impuestos'], 
+                                                    $facturaBODY['costos']['total_comprobante'],
                             
                                                     trim($otros) == "" ? "-" : trim($otros), 
                                                     $facturaBODY['articulos']);
@@ -365,7 +364,7 @@ class caja extends CI_Controller {
                                                                                     $medioPago, 
                                                                                     $xmlSinFirmar, 
                                                                                     $xmlFirmado, 
-                                                                                    json_encode($costos), 
+                                                                                    json_encode($facturaBODY['costos']), 
                                                                                     "pendiente");
                             
                             // Si hay conexion por lo tanto enviar FE a Hacienda de una
@@ -376,21 +375,17 @@ class caja extends CI_Controller {
                                 $resEnvio = $api->enviarDocumento($facturaBODY['empresa']->Ambiente_Tributa, $clave, $fechaEmision, $facturaBODY['empresa']->Tipo_Cedula, $facturaBODY['empresa']->Sucursal_Cedula, $this->cliente->getTipoIdentificacionDocumentoElectronico($facturaBODY['cliente']->Cliente_Tipo_Cedula), $facturaBODY['cliente']->Cliente_Cedula, $tokenData["access_token"], $xmlFirmado);
                                 
                                 if($resEnvio){
-                                    $resCheck = $api->revisarEstadoAceptacion($facturaBODY['empresa']->Ambiente_Tributa, $clave, $tokenData["access_token"]);
+                                    $resCheck = array();
+                                    $counter = 0;
+                                    do {
+                                        sleep(2);
+                                        $counter++;
+                                        $resCheck = $api->revisarEstadoAceptacion($facturaBODY['empresa']->Ambiente_Tributa, $clave, $tokenData["access_token"]);
+                                    } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
                                     if($resCheck["status"]){
-                                        if(trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando"){
-                                            $counter = 0;
-                                            do {
-                                                sleep(2);
-                                                $counter++;
-                                                $resCheck = $api->revisarEstadoAceptacion($facturaBODY['empresa']->Ambiente_Tributa, $clave, $tokenData["access_token"]);
-                                                echo "Entro ciclo $counter";
-                                            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
-                                        }
-                                    }else{
-                                        
+                                        $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+                                        $this->DocumentoElectronico->actualizarEstadoHacienda($clave, $estado);
                                     }
-                                    var_dump($resCheck);
                                 }
                             }
                             die;
@@ -1299,7 +1294,44 @@ class caja extends CI_Controller {
                             trim($empresaData->Pass_Certificado_Tributa) != ""){
                             $facturaBODY["empresa"] = $empresaData; 
                             if($articulosFactura = $this->factura->getArticulosFactura($facturaBODY["factura"]->Factura_Consecutivo, $facturaBODY["factura"]->TB_02_Sucursal_Codigo)){
-                                $facturaBODY['articulos'] = $this->getArticulosObjectForFE($articulosFactura);
+                                $costos = array(
+                                    "total_serv_gravados" => 0,
+                                    "total_serv_exentos" => 0,
+                                    "total_merc_gravada" => 0,
+                                    "total_merc_exenta" => 0,
+                                    "total_gravados" => 0,
+                                    "total_exentos" => 0,
+                                    "total_ventas" => 0,
+                                    "total_descuentos" => 0,
+                                    "total_ventas_neta" => 0,
+                                    "total_impuestos" => 0,
+                                    "total_comprobante" => 0,
+                                );
+                                $artFinales = array();
+                                foreach($articulosFactura as $a){
+                                    $linea = $this->getDetalleLinea($a);
+                                    array_push($artFinales, $linea);
+                                    
+                                    if($a->Articulo_Factura_Exento == 0){
+                                        $costos["total_merc_gravada"] += $linea["montoTotal"];
+                                        $costos["total_gravados"] += $linea["montoTotal"];
+                                    }else{
+                                        $costos["total_merc_exenta"] += $linea["montoTotal"];
+                                        $costos["total_exentos"] += $linea["montoTotal"];
+                                    }
+                                    $costos["total_ventas"] += $linea["montoTotal"];
+                                    
+                                    if(isset($linea["montoDescuento"])){
+                                        $costos["total_descuentos"] += $linea["montoDescuento"];
+                                    }
+                                    
+                                    $impuesto = $linea["impuesto"][0]["monto"];
+                                    $costos["total_impuestos"] += $impuesto;
+                                }
+                                $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
+                                $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"];
+                                $facturaBODY['articulos'] = $artFinales;
+                                $facturaBODY['costos'] = $costos;
                                 $facturaBODY['status']='success';
                             }else{
                                 // Factura no tiene articulos
@@ -1380,37 +1412,7 @@ class caja extends CI_Controller {
         }
     }
     
-    function getArticulosObjectForFE($articulos){
-        $confArray = $this->configuracion->getConfiguracionArray();
-        $finalList = array();
-        $index = 1;
-        foreach($articulos as $a){
-            $art = array();
-            $art["cantidad"] = $a->Articulo_Factura_Cantidad;
-            $art["unidadMedida"] = "Unid";
-            $art["detalle"] = $a->Articulo_Factura_Descripcion;
-            $art["precioUnitario"] = number_format($a->Articulo_Factura_Precio_Unitario, HACIENDA_DECIMALES, ".", "");
-            $precioTotal = $a->Articulo_Factura_Cantidad*$a->Articulo_Factura_Precio_Unitario;
-            $precioTotal -=  $precioTotal*($a->Articulo_Factura_Descuento/100);
-            $precioTotalSinIVA = $precioTotal/(1+(floatval($confArray['iva'])/100));
-            $totalIVA = $precioTotal - ($precioTotal/(1+(floatval($confArray['iva'])/100)));
-            $art["montoTotal"] = number_format($precioTotalSinIVA + $totalIVA, HACIENDA_DECIMALES, ".", "");
-            $totalIVA = $a->Articulo_Factura_Exento ? 0 : $totalIVA;
-            $art["subtotal"] = number_format($precioTotalSinIVA - $totalIVA, HACIENDA_DECIMALES, ".", "");
-            
-            $totalIvaFinal = 0;
-            if($a->Articulo_Factura_No_Retencion == "0"){
-                $precioArticuloFinal = ($a->Articulo_Factura_Precio_Final*$a->Articulo_Factura_Cantidad);
-                $totalIvaFinal = $precioArticuloFinal - ($precioArticuloFinal/(1+(floatval($confArray['iva'])/100)));
-                $totalIvaFinal = $totalIvaFinal - $totalIVA;
-            }
-            
-            $art["montoTotalLinea"] = number_format($precioTotalSinIVA + $totalIVA + $totalIvaFinal, HACIENDA_DECIMALES, ".", "");
-            $finalList[$index] = $art;
-            $index++;
-        }
-        return $finalList;
-    }
+    
 	
 }// FIN DE LA CLASE
 

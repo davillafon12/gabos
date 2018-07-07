@@ -37,6 +37,14 @@ class CI_Controller {
             "03" => "DIMEX",
             "04" => "NITE"
         );
+        public $tipoDocumentosExoneracion = array(
+            "01" => "Compras Autorizadas",
+            "02" => "Ventas exentas a diplomáticos",
+            "03" => "Orden de compra (instituciones publicas y otros organismos)",
+            "04" => "Exenciones Direccion General de Hacienda",
+            "05" => "Zonas Francas",
+            "99" => "Otros"
+        );
 
 	/**
 	 * Constructor
@@ -64,6 +72,110 @@ class CI_Controller {
 	{
 		return self::$instance;
 	}
+        
+        public function fn($price, $decimales = HACIENDA_DECIMALES){
+            return number_format($price, $decimales, ".", "");
+        }
+        
+        public function fpad($price, $amount, $placeholder = "0", $typePad = STR_PAD_LEFT){
+            return str_pad($price,$amount,$placeholder, $typePad);
+        }
+        
+        public function removeIVA($price){
+            $this->load->model('configuracion','',TRUE);
+            $confArray = $this->configuracion->getConfiguracionArray();
+            return $this->fn($price/(1+(floatval($confArray['iva'])/100)), $confArray['cantidad_decimales']);
+        }
+        
+        public function getIVA(){
+            $this->load->model('configuracion','',TRUE);
+            $confArray = $this->configuracion->getConfiguracionArray();
+            return floatval($confArray['iva']);
+        }
+        
+        public function getDetalleLinea($a){
+            $linea = array();
+            
+            // CANTIDAD
+            $cantidad = floatval($a->Articulo_Factura_Cantidad);
+            $linea["cantidad"] = $this->fn($cantidad, 3);
+            
+            // UNIDAD DE MEDIDA
+            $linea["unidadMedida"] = "Unid";
+            
+            // DETALLE
+            $linea["detalleCompleto"] = $a->Articulo_Factura_Descripcion;
+            $linea["detalle"] = substr($a->Articulo_Factura_Descripcion,0,159);
+            
+            // PRECIO UNITARIO
+            $precioUnitarioSinIVA = $this->removeIVA(floatval($a->Articulo_Factura_Precio_Unitario));
+            $linea["precioUnitario"] = $this->fn($precioUnitarioSinIVA);
+            
+            // MONTO TOTAL
+            $precioTotalSinIVA = $cantidad*$precioUnitarioSinIVA;
+            $linea["montoTotal"] = $this->fn($precioTotalSinIVA);
+            
+            // DESCUENTO
+            $descuentoPrecioSinIva = 0;
+            if(floatval($a->Articulo_Factura_Descuento) > 0){
+                $descuentoPrecioSinIva = $precioTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100);
+                $linea["montoDescuento"] = $this->fn($descuentoPrecioSinIva);
+                $naturalezaDescuento = "Otorgado a cliente por empresa";
+                $linea["naturalezaDescuento"] = $naturalezaDescuento;
+            }else{
+                $linea["montoDescuento"] = $this->fn(0);
+                $linea["naturalezaDescuento"] = "Ninguna";
+            }
+            
+             // SUBTOTAL
+            $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
+            $linea["subtotal"] = $this->fn($subTotalSinIVA);
+            
+            // IMPUESTOS
+            $impuestos = array();
+            $iva = $this->getIVA();
+            $montoDeImpuesto = $subTotalSinIVA * ($iva / 100);
+            $montoDeImpuestoRetencion = 0;
+            if($a->Articulo_Factura_No_Retencion == "0"){
+                $precioFinalUnitarioSinIVA = $this->removeIVA(floatval($a->Articulo_Factura_Precio_Final));
+                $precioFinalTotalSinIVA = $cantidad*$precioFinalUnitarioSinIVA;
+                $descuentoPrecioFinalSinIva = 0;
+                if(floatval($a->Articulo_Factura_Descuento) > 0){
+                    $descuentoPrecioFinalSinIva = $precioFinalTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100);
+                }
+                $subTotalFinalSinIVA = $precioFinalTotalSinIVA - $descuentoPrecioFinalSinIva;
+                $montoDeImpuestoRetencion = ($subTotalFinalSinIVA * ($iva / 100)) - $montoDeImpuesto;
+            }
+            if($a->Articulo_Factura_Exento == 1){ // Es exento
+                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
+                $exoneracion = array(
+                    "tipoDocumento" => "01", // Compras Autorizadas
+                    "numeroDocumento" => "01",
+                    "nombreInstitucion" => "Cliente",
+                    "fechaEmision" => date(DATE_ATOM),
+                    "montoImpuesto" => "9999999999999.99999",
+                    "porcentajeCompra" => 100
+                );
+                $impuesto["exoneracion"] = $exoneracion;
+                $montoDeImpuesto = 0;
+            }
+            // Se debe cambiar el porcentaje de impuesto, ya que se debe tomar en cuenta la retencion
+            $factorIVAFinal = (($montoDeImpuesto + $montoDeImpuestoRetencion) * 100) / $subTotalSinIVA;
+            $montoFinalDeImpuesto = $subTotalSinIVA * ($factorIVAFinal / 100);
+            $impuesto = array(
+                "codigo" => "01", // "Impuesto General sobre las ventas"
+                "tarifa" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
+                "monto" => $this->fn($montoFinalDeImpuesto)
+            );
+            
+            array_push($impuestos, $impuesto);
+            $linea["impuesto"] = $impuestos;
+            
+            // MONTO TOTAL DE LA LINEA
+            $linea["montoTotalLinea"] = $this->fn($subTotalSinIVA + floatval($impuesto["monto"]));
+            
+            return $linea;
+        }
 }
 // END Controller class
 
