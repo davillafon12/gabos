@@ -237,18 +237,7 @@ Class factura extends CI_Model
                         'Factura_Monto_Total'=>$costo_total, 
                         'Factura_Monto_IVA'=>$iva, 
                         'Factura_Monto_Sin_IVA'=>$costo_sin_iva, 
-                        'Factura_Retencion'=>$retencion,
-                        'total_serv_gravados'=>  number_format(0, HACIENDA_DECIMALES, ".", ""),
-                        'total_serv_exentos'=> number_format(0, HACIENDA_DECIMALES, ".", ""),
-                        'total_impuestos'=> number_format($iva, HACIENDA_DECIMALES, ".", ""),
-                        'total_gravados'=> number_format($totalGravados, HACIENDA_DECIMALES, ".", ""),
-                        'total_exentos'=> number_format($totalExentos, HACIENDA_DECIMALES, ".", ""),
-                        'total_merc_gravada'=> number_format($totalGravados, HACIENDA_DECIMALES, ".", ""),
-                        'total_merc_exenta'=> number_format($totalExentos, HACIENDA_DECIMALES, ".", ""),
-                        'total_ventas'=> number_format($costo_total, HACIENDA_DECIMALES, ".", ""),
-                        'total_descuentos'=> number_format($descuento, HACIENDA_DECIMALES, ".", ""),
-                        'total_ventas_neta'=> number_format($costo_total-$descuento, HACIENDA_DECIMALES, ".", ""),
-                        'total_comprobante'=> number_format($costo_total, HACIENDA_DECIMALES, ".", "")
+                        'Factura_Retencion'=>$retencion
                         );
 	}
 	

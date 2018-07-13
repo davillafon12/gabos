@@ -91,7 +91,7 @@ define('PATH_AJAX_VERIFY_FAMILIAS', FCPATH.'application/scripts/ajax_verify_fami
 
 
 
-define('URL_API_CRLIBE', 'http://192.168.0.24');
+define('URL_API_CRLIBE', 'http://192.168.10.16');
 define('API_CRLIBRE_CURL_TIMEOUT', 5);
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
