@@ -13,7 +13,6 @@ class caja extends CI_Controller {
 		$this->load->model('banco','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
-                $this->load->model('DocumentoElectronico','',TRUE);
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);

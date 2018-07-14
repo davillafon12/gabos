@@ -101,3 +101,9 @@ ENGINE = InnoDB;
 ALTER TABLE  `tb_55_factura_electronica` CHANGE  `RespuestaHaciendaFecha`  `RespuestaHaciendaFecha` TIMESTAMP NULL DEFAULT NULL;
 
 ALTER TABLE  `tb_55_factura_electronica` CHANGE  `FechaRecibidoPorHacienda`  `FechaRecibidoPorHacienda` TIMESTAMP NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `XMLSinFirmar`  `XMLSinFirmar` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
