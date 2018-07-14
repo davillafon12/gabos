@@ -914,7 +914,442 @@ Class factura extends CI_Model
             }
             return $consecutivo;
         }
-        	
+        
+        
+        function crearFacturaElectronica($sucursal, $cliente, $factura, $costos, $articulos, $tipoPago){
+            $feedback["status"] = false;
+            require_once PATH_API_HACIENDA;
+            $api = new API_FE();
+            
+            $responseData = $this->guardarDatosBasicosFacturaElectronica($tipoPago, $sucursal, $cliente, $factura, $costos, $articulos, $api);
+            
+            if($resClave = $this->generarClaveYConsecutivoParaFacturaElectronica($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo, $api)){
+                if($resXML = $this->generarXMLFactura($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo, $api)){
+                    if($resXMLFirmado = $this->firmarXMLFactura($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo, $api)){
+                        $feedback["data"] = $responseData;
+                        $feedback["status"] = true;
+                        unset($feedback['error']);
+                    }else{
+                        // ERROR AL FIRMAR EL XML DE FE
+                        $feedback['error']='54';
+                    }
+                }else{
+                    // ERROR AL GENERAR EL XML DE FE
+                    $feedback['error']='53';
+                }
+            }else{
+                // ERROR AL GENERAR LA CLAVE
+                $feedback["error"] = '52';
+            }
+            return $feedback;
+        }
+        
+        function guardarDatosBasicosFacturaElectronica($tipoPago, $emisor, $receptor, $factura, $costos, $articulos, $api){
+            // Eliminamos informacion antigua de la misma factura
+            $this->db->where("Consecutivo", $factura->Factura_Consecutivo);
+            $this->db->where("Sucursal", $factura->TB_02_Sucursal_Codigo);
+            $this->db->delete("tb_56_articulos_factura_electronica");
+            
+            $this->db->where("Consecutivo", $factura->Factura_Consecutivo);
+            $this->db->where("Sucursal", $factura->TB_02_Sucursal_Codigo);
+            $this->db->delete("tb_55_factura_electronica");
+            
+            // Guardamos el encabezado de la factura
+            
+            date_default_timezone_set("America/Costa_Rica");
+            $fechaFacturaActual = now();
+            $situacion = $api->internetIsOnline() ? "normal" : "sininternet";
+            $fechaEmision = date(DATE_ATOM, $fechaFacturaActual);
+            $condicionVenta = $this->getCondicionVenta($tipoPago);
+            $plazoCredito = "0";
+            if(isset($tipoPago['canDias'])){
+                $plazoCredito = $tipoPago['canDias'];
+            }
+            $medioPago = $this->getMedioPago($tipoPago);
+            $codigoMoneda = $factura->Factura_Moneda == "colones" ? "CRC" : "USD";
+            $tipoCambio = $factura->Factura_tipo_cambio;
+            $otros = $factura->Factura_Observaciones;
+            
+            // Agregamos la info nueva
+            $data = array(
+                "Consecutivo" => $factura->Factura_Consecutivo,
+                "Sucursal" => $factura->TB_02_Sucursal_Codigo,
+                "FechaEmision" => $fechaEmision,
+                "EmisorNombre" => $emisor->Sucursal_Nombre,
+                "EmisorTipoIdentificacion" => $emisor->Tipo_Cedula,
+                "EmisorIdentificacion" => $emisor->Sucursal_Cedula,
+                "EmisorNombreComercial" => $emisor->Sucursal_Nombre,
+                "EmisorProvincia" => $emisor->Provincia,
+                "EmisorCanton" => str_pad($emisor->Canton,2,"0", STR_PAD_LEFT),
+                "EmisorDistrito" => str_pad($emisor->Distrito,2,"0", STR_PAD_LEFT),
+                "EmisorBarrio" => str_pad($emisor->Barrio,2,"0", STR_PAD_LEFT),
+                "EmisorOtrasSennas" => $emisor->Sucursal_Direccion,
+                "EmisorCodigoPaisTelefono" => $emisor->Codigo_Pais_Telefono,
+                "EmisorTelefono" => str_replace("-", "", $emisor->Sucursal_Telefono),
+                "EmisorCodigoPaisFax" => $emisor->Codigo_Pais_Fax,
+                "EmisorFax" => str_replace("-", "", $emisor->Sucursal_Fax),
+                "EmisorEmail" => $emisor->Sucursal_Email,
+                "CondicionVenta" => $condicionVenta,
+                "PlazoCredito" => $plazoCredito,
+                "MedioPago" => $medioPago,
+                "CodigoMoneda" => $codigoMoneda,
+                "TipoCambio" => $tipoCambio,
+                "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
+                "TotalServiciosExentos" => $this->fn($costos['total_serv_exentos']),
+                "TotalMercanciaGravada" => $this->fn($costos['total_merc_gravada']),
+                "TotalMercanciaExenta" => $this->fn($costos['total_merc_exenta']),
+                "TotalGravados" => $this->fn($costos['total_gravados']),
+                "TotalExentos" => $this->fn($costos['total_exentos']),
+                "TotalVentas" => $this->fn($costos['total_ventas']),
+                "TotalDescuentos" => $this->fn($costos['total_descuentos']),
+                "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
+                "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+                "TotalComprobante" => $this->fn($costos['total_comprobante']),
+                "Otros" => trim($otros) == "" ? "-" : trim($otros),
+                "TipoDocumento" => FACTURA_ELECTRONICA,
+                "CodigoPais" => CODIGO_PAIS,
+                "ConsecutivoFormateado" => $this->formatearConsecutivo($factura->Factura_Consecutivo),
+                "Situacion" => $situacion,
+                "CodigoSeguridad" => rand(10000000,99999999),
+                "RespuestaHaciendaEstado" => "sin_enviar",
+                "CorreoEnviadoReceptor" => 0
+            );
+            
+            if($receptor != NULL){
+                $data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
+                $data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
+                $data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
+                $data["ReceptorProvincia"] = $receptor->Provincia;
+                $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
+                $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
+                $data["ReceptorBarrio"] = str_pad($receptor->Barrio,2,"0", STR_PAD_LEFT);
+                $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
+                $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
+                $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
+                $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
+                $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+            }
+            
+            $this->db->insert("tb_55_factura_electronica", $data);
+            
+            foreach ($articulos as $art){
+                $data = array(
+                    "Cantidad" => $art["cantidad"],
+                    "UnidadMedida" => $art["unidadMedida"],
+                    "Detalle" => $art["detalle"],
+                    "PrecioUnitario" => $art["precioUnitario"],
+                    "MontoTotal" => $art["montoTotal"],
+                    "MontoDescuento" => $art["montoDescuento"],
+                    "NaturalezaDescuento" => $art["naturalezaDescuento"],
+                    "Subtotal" => $art["subtotal"],
+                    "ImpuestoObject" => json_encode($art["impuesto"]),
+                    "MontoTotalLinea" => $art["montoTotalLinea"],
+                    "Consecutivo" => $factura->Factura_Consecutivo,
+                    "Sucursal" => $factura->TB_02_Sucursal_Codigo
+                );
+                
+                $this->db->insert("tb_56_articulos_factura_electronica", $data);
+            }
+            
+            return array("situacion" => $situacion, "fecha" => $fechaFacturaActual);
+        }
+        
+        function getCondicionVenta($tipoPago){
+            /*
+            Condiciones de la venta: 
+            - 01 Contado
+            - 02 Crédito 
+            - 03 Consignación
+            - 04 Apartado 
+            - 05 Arrendamiento con opción de compra 
+            - 06 Arrendamiento en función financiera 
+            - 99 Otros
+             */
+            switch ($tipoPago['tipo']) {
+                case 'contado':
+                case 'tarjeta':
+                case 'deposito':
+                case 'cheque':
+                case 'mixto':
+                    return "01";
+                case 'credito':
+                    return "02";
+                case 'apartado':
+                    return "04";
+            }
+        }
+
+        function getMedioPago($tipoPago){
+            /*
+                Corresponde al medio de pago empleado: 
+                - 01 Efectivo
+                - 02 Tarjeta
+                - 03 Cheque
+                - 04 Transferencia - depósito bancario 
+                - 05 - Recaudado por terceros
+                - 99 Otros
+             */
+            switch ($tipoPago['tipo']) {
+                case 'contado':
+                    return "01";
+                case 'tarjeta':
+                    return "02";
+                case 'deposito':
+                    return "04";
+                case 'cheque':
+                    return "03";
+                case 'mixto':
+                    return "99";
+                case 'credito':
+                    return "99";
+                case 'apartado':
+                    return "99";
+            }
+        }
+        
+        function getTipoIdentificacionCliente($tipo){
+            switch($tipo){
+                case 'nacional':
+                    return "01";
+                case 'residencia':
+                    return "03";
+                case 'juridica':
+                    return "02";
+                case 'pasaporte':
+                    return "04";
+            }
+        }
+        
+        function generarClaveYConsecutivoParaFacturaElectronica($consecutivo, $sucursal, $api = NULL){
+            $this->db->select("EmisorTipoIdentificacion, EmisorIdentificacion, CodigoPais, ConsecutivoFormateado, Situacion, CodigoSeguridad, TipoDocumento");
+            $this->db->from("tb_55_factura_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                $row = $query->result()[0];
+                if($claveRs = $api->createClave(($row->EmisorTipoIdentificacion == "01" ? "fisico" : "juridico"), $row->EmisorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento)){
+                    $data = array(
+                        "Clave" => $claveRs["clave"],
+                        "ConsecutivoHacienda" => $claveRs["consecutivo"]
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+                    $this->db->update("tb_55_factura_electronica", $data);
+                    return $data;
+                }
+            }
+            return false;
+        }
+        
+        function generarXMLFactura($consecutivo, $sucursal, $api = NULL){
+            $this->db->from("tb_55_factura_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                $factura = $query->result()[0];
+                $this->db->from("tb_56_articulos_factura_electronica");
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $articulos = $query->result();
+                    $xmlRes = $api->crearXMLFactura($factura->Clave, 
+                                                    $factura->ConsecutivoHacienda, 
+                                                    $factura->FechaEmision, 
+
+                                                    $factura->EmisorNombre, 
+                                                    $factura->EmisorTipoIdentificacion, 
+                                                    $factura->EmisorIdentificacion, 
+                                                    $factura->EmisorNombreComercial, 
+                                                    $factura->EmisorProvincia, 
+                                                    $factura->EmisorCanton, 
+                                                    $factura->EmisorDistrito, 
+                                                    $factura->EmisorBarrio, 
+                                                    $factura->EmisorOtrasSennas, 
+                                                    $factura->EmisorCodigoPaisTelefono, 
+                                                    $factura->EmisorTelefono, 
+                                                    $factura->EmisorCodigoPaisFax, 
+                                                    $factura->EmisorFax, 
+                                                    $factura->EmisorEmail, 
+
+                                                    $factura->ReceptorNombre, 
+                                                    $factura->ReceptorTipoIdentificacion, 
+                                                    $factura->ReceptorIdentificacion, 
+                                                    $factura->ReceptorProvincia, 
+                                                    $factura->ReceptorCanton, 
+                                                    $factura->ReceptorDistrito, 
+                                                    $factura->ReceptorBarrio, 
+                                                    $factura->ReceptorCodigoPaisTelefono, 
+                                                    $factura->ReceptorTelefono, 
+                                                    $factura->ReceptorCodigoPaisFax, 
+                                                    $factura->ReceptorFax, 
+                                                    $factura->ReceptorEmail,
+
+                                                    $factura->CondicionVenta, 
+                                                    $factura->PlazoCredito, 
+                                                    $factura->MedioPago, 
+                                                    $factura->CodigoMoneda, 
+                                                    $factura->TipoCambio, 
+
+                                                    $factura->TotalServiciosGravados, 
+                                                    $factura->TotalServiciosExentos, 
+                                                    $factura->TotalMercanciaGravada, 
+                                                    $factura->TotalMercanciaExenta, 
+                                                    $factura->TotalGravados, 
+                                                    $factura->TotalExentos, 
+                                                    $factura->TotalVentas, 
+                                                    $factura->TotalDescuentos, 
+                                                    $factura->TotalVentasNeta, 
+                                                    $factura->TotalImpuestos, 
+                                                    $factura->TotalComprobante,
+
+                                                    $factura->Otros, 
+                                                    $this->prepararArticulosParaXML($articulos));
+                    if($xmlRes){
+                        $data = array(
+                            "XMLSinFirmar" => $xmlRes["xml"]
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_55_factura_electronica", $data);
+                        return $data;
+                    }
+                }
+            }
+            return false;
+        }
+        
+        function prepararArticulosParaXML($articulos){
+            $finalArray = array();
+            
+            foreach($articulos as $art){
+                $artt = array(
+                    "cantidad" => $art->Cantidad,
+                    "unidadMedida" => $art->UnidadMedida,
+                    "detalle" => $art->Detalle,
+                    "precioUnitario" => $art->PrecioUnitario,
+                    "montoTotal" => $art->MontoTotal,
+                    "montoDescuento" => $art->MontoDescuento,
+                    "naturalezaDescuento" => $art->NaturalezaDescuento,
+                    "subtotal" => $art->Subtotal,
+                    "impuesto" =>  json_decode($art->ImpuestoObject),
+                    "montoTotalLinea" => $art->MontoTotalLinea
+                );
+                array_push($finalArray, $artt);
+            }
+            
+            return $finalArray;
+        }
+        
+        function firmarXMLFactura($consecutivo, $sucursal, $api = NULL){
+            $this->db->from("tb_55_factura_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                $factura = $query->result()[0];
+                $this->db->from("tb_02_sucursal");
+                $this->db->where("Codigo", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $empresa = $query->result()[0];
+                    if($xmlFirmado = $api->firmarDocumento($empresa->Token_Certificado_Tributa, $factura->XMLSinFirmar, $empresa->Pass_Certificado_Tributa, $factura->TipoDocumento)){
+                        $data = array(
+                            "XMLFirmado" => $xmlFirmado
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_55_factura_electronica", $data);
+                        return $data;
+                    }
+                }
+            }
+            return false;
+        }
+        
+        function enviarFacturaElectronicaAHacienda($consecutivo, $sucursal, $api = NULL){
+            $this->db->from("tb_55_factura_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                $factura = $query->result()[0];
+                $this->db->from("tb_02_sucursal");
+                $this->db->where("Codigo", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $empresa = $query->result()[0];
+                    if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
+                        if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $factura->Clave, $factura->FechaEmision, $factura->EmisorTipoIdentificacion, $factura->EmisorIdentificacion, $factura->ReceptorTipoIdentificacion, $factura->ReceptorIdentificacion, $tokenData["access_token"], $factura->XMLFirmado)){
+                            $data = array(
+                                "RespuestaHaciendaEstado" => "procesando",
+                                "FechaRecibidoPorHacienda" => date("y/m/d : H:i:s")
+                            );
+                            $this->db->where("Consecutivo", $consecutivo);
+                            $this->db->where("Sucursal", $sucursal);
+                            $this->db->update("tb_55_factura_electronica", $data);
+                            
+                            // Obtener resultado de la factura
+                            $resCheck = array();
+                            $counter = 0;
+                            do {
+                                sleep(2);
+                                $counter++;
+                                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $factura->Clave, $tokenData["access_token"]);
+                            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+                            
+                            if($resCheck["status"]){
+                                $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+                                $xmlRespuesta = trim($resCheck["data"]["respuesta-xml"]);
+                                $data = array(
+                                    "RespuestaHaciendaEstado" => $estado,
+                                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
+                                    "RespuestaHaciendaXML" => $xmlRespuesta
+                                );
+                                $this->db->where("Consecutivo", $consecutivo);
+                                $this->db->where("Sucursal", $sucursal);
+                                $this->db->update("tb_55_factura_electronica", $data);
+                                return array("status" => true, "estado_hacienda" => $estado);
+                            }
+                        }else{
+                            $data = array(
+                                "RespuestaHaciendaEstado" => "fallo_envio"
+                            );
+                            $this->db->where("Consecutivo", $consecutivo);
+                            $this->db->where("Sucursal", $sucursal);
+                            $this->db->update("tb_55_factura_electronica", $data);
+                        }
+                    }else{
+                        $data = array(
+                            "RespuestaHaciendaEstado" => "fallo_token"
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_55_factura_electronica", $data);
+                    }
+                }
+            }
+            return false;
+        }
 }
 
 

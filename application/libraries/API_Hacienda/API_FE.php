@@ -253,9 +253,16 @@ class API_FE{
         if($result->info->http_code == 200){
             $result = (Array) json_decode($result->response);
             if(isset($result["resp"])){
-                $ms = (round(microtime(true) * 1000)) - $bm;
-                $this->logger->info("createClave", $ms."ms | API returns ".json_encode($result));
-                return (Array) $result["resp"];
+                $result["resp"] = (Array) $result["resp"];
+                if(isset($result["resp"]["clave"]) && isset($result["resp"]["consecutivo"])){
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("createClave", $ms."ms | API returns ".json_encode($result));
+                    return (Array) $result["resp"];
+                }else{
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("createClave", $ms."ms | 3 - API returns ".json_encode($result));
+                    return false;
+                }
             }else{
                 $ms = (round(microtime(true) * 1000)) - $bm;
                 $this->logger->error("createClave", $ms."ms | 2 - API returns ".json_encode($result));

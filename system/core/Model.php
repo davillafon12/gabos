@@ -75,6 +75,10 @@ class CI_Model {
 		$CI =& get_instance();
 		return $CI->$key;
 	}
+        
+        public function fn($price, $decimales = HACIENDA_DECIMALES){
+            return number_format($price, $decimales, ".", "");
+        }
 }
 // END Model Class
 
