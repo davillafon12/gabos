@@ -431,7 +431,7 @@ class API_FE{
             }
         }else{
             $ms = (round(microtime(true) * 1000)) - $bm;
-            $this->logger->error("solicitarToken", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | ".json_encode($result));
+            $this->logger->error("solicitarToken", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | HEADERS:".json_encode($result->headers)." RESPONSE:".json_encode($result->response)." INFO:".json_encode($result->info));
             return false;
         }
     }
@@ -513,7 +513,7 @@ class API_FE{
             }
         }else{
             $ms = (round(microtime(true) * 1000)) - $bm;
-            $this->logger->error("revisarEstadoAceptacion", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | ".json_encode($result));
+            $this->logger->error("revisarEstadoAceptacion", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | HEADERS:".json_encode($result->headers)." RESPONSE:".json_encode($result->response)." INFO:".json_encode($result->info));
         }
         return $respuesta;
     }

@@ -918,33 +918,35 @@ Class factura extends CI_Model
         
         function crearFacturaElectronica($sucursal, $cliente, $factura, $costos, $articulos, $tipoPago){
             $feedback["status"] = false;
-            require_once PATH_API_HACIENDA;
-            $api = new API_FE();
             
-            $responseData = $this->guardarDatosBasicosFacturaElectronica($tipoPago, $sucursal, $cliente, $factura, $costos, $articulos, $api);
+            $responseData = $this->guardarDatosBasicosFacturaElectronica($tipoPago, $sucursal, $cliente, $factura, $costos, $articulos);
             
-            if($resClave = $this->generarClaveYConsecutivoParaFacturaElectronica($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo, $api)){
-                if($resXML = $this->generarXMLFactura($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo, $api)){
-                    if($resXMLFirmado = $this->firmarXMLFactura($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo, $api)){
+            if($resClave = $this->generarClaveYConsecutivoParaFacturaElectronica($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo)){
+                if($resXML = $this->generarXMLFactura($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo)){
+                    if($resXMLFirmado = $this->firmarXMLFactura($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo)){
                         $feedback["data"] = $responseData;
                         $feedback["status"] = true;
                         unset($feedback['error']);
+                        log_message('error', "Se genero bien el XML firmado | Consecutivo: $factura->Factura_Consecutivo | Sucursal: $factura->TB_02_Sucursal_Codigo");
                     }else{
                         // ERROR AL FIRMAR EL XML DE FE
                         $feedback['error']='54';
+                        log_message('error', "Error al firmar el XML | Consecutivo: $factura->Factura_Consecutivo | Sucursal: $factura->TB_02_Sucursal_Codigo");
                     }
                 }else{
                     // ERROR AL GENERAR EL XML DE FE
                     $feedback['error']='53';
+                    log_message('error', "Error al generar el XML | Consecutivo: $factura->Factura_Consecutivo | Sucursal: $factura->TB_02_Sucursal_Codigo");
                 }
             }else{
                 // ERROR AL GENERAR LA CLAVE
                 $feedback["error"] = '52';
+                log_message('error', "Error al generar la clave | Consecutivo: $factura->Factura_Consecutivo | Sucursal: $factura->TB_02_Sucursal_Codigo");
             }
             return $feedback;
         }
         
-        function guardarDatosBasicosFacturaElectronica($tipoPago, $emisor, $receptor, $factura, $costos, $articulos, $api){
+        function guardarDatosBasicosFacturaElectronica($tipoPago, $emisor, $receptor, $factura, $costos, $articulos){
             // Eliminamos informacion antigua de la misma factura
             $this->db->where("Consecutivo", $factura->Factura_Consecutivo);
             $this->db->where("Sucursal", $factura->TB_02_Sucursal_Codigo);
@@ -955,7 +957,8 @@ Class factura extends CI_Model
             $this->db->delete("tb_55_factura_electronica");
             
             // Guardamos el encabezado de la factura
-            
+            require_once PATH_API_HACIENDA;
+            $api = new API_FE();
             date_default_timezone_set("America/Costa_Rica");
             $fechaFacturaActual = now();
             $situacion = $api->internetIsOnline() ? "normal" : "sininternet";
@@ -1315,6 +1318,7 @@ Class factura extends CI_Model
                                 sleep(2);
                                 $counter++;
                                 $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $factura->Clave, $tokenData["access_token"]);
+                                log_message('error', "Revisando estado de factura en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
                             } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
                             
                             if($resCheck["status"]){
@@ -1328,7 +1332,10 @@ Class factura extends CI_Model
                                 $this->db->where("Consecutivo", $consecutivo);
                                 $this->db->where("Sucursal", $sucursal);
                                 $this->db->update("tb_55_factura_electronica", $data);
+                                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
                                 return array("status" => true, "estado_hacienda" => $estado);
+                            }else{
+                                log_message('error', "Error al revisar el estado de la factura en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
                             }
                         }else{
                             $data = array(
@@ -1337,6 +1344,7 @@ Class factura extends CI_Model
                             $this->db->where("Consecutivo", $consecutivo);
                             $this->db->where("Sucursal", $sucursal);
                             $this->db->update("tb_55_factura_electronica", $data);
+                            log_message('error', "Error al enviar la factura a Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
                         }
                     }else{
                         $data = array(
@@ -1345,8 +1353,47 @@ Class factura extends CI_Model
                         $this->db->where("Consecutivo", $consecutivo);
                         $this->db->where("Sucursal", $sucursal);
                         $this->db->update("tb_55_factura_electronica", $data);
+                        log_message('error', "Error al generar el token para envio de factura | Consecutivo: $consecutivo | Sucursal: $sucursal");
                     }
+                }else{
+                    log_message('error', "No existe empresa para su envio | Consecutivo: $consecutivo | Sucursal: $sucursal");
                 }
+            }else{
+                log_message('error', "No existe factura para su envio | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
+            return false;
+        }
+        
+        public function regenerarFacturaElectronicaPorContingencia($consecutivo, $sucursal, $api = NULL){
+            $this->db->from("tb_55_factura_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                $newData = array("Situacion"=>"contingencia");
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $this->db->update("tb_55_factura_electronica", $newData);
+                
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                if($resClave = $this->generarClaveYConsecutivoParaFacturaElectronica($consecutivo, $sucursal, $api)){
+                    if($resXML = $this->generarXMLFactura($consecutivo, $sucursal, $api)){
+                        if($resXMLFirmado = $this->firmarXMLFactura($consecutivo, $sucursal, $api)){
+                            log_message('error', "Se regenero la factura para contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                        }else{
+                            log_message('error', "Error al firmar el xml para factura de contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                        }
+                    }else{
+                        log_message('error', "Error al generar el xml para factura de contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                    }
+                }else{
+                    log_message('error', "Error al generar la clave para factura de contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                }
+            }else{
+                log_message('error', "No existe factura para generar su contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
             }
             return false;
         }

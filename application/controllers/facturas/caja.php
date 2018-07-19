@@ -259,15 +259,41 @@ class caja extends CI_Controller {
             
             $resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
             
+            
             if($resFacturaElectronica["status"]){
+                $feStatus = array("status"=>false, "message" => "");
                 // Si hay conexion por lo tanto enviar FE a Hacienda de una
                 if($resFacturaElectronica["data"]["situacion"] == "normal"){
                     if($resEnvio = $this->factura->enviarFacturaElectronicaAHacienda($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo)){
                         if($resEnvio["estado_hacienda"] == "rechazado"){
+                            log_message('error', "Factura fue RECHAZADA por Hacienda, debemos generar su respectiva nota de credito | Consecutivo: {$responseCheck["factura"]->Factura_Consecutivo} | Sucursal: {$responseCheck["factura"]->TB_02_Sucursal_Codigo}");
                             // Realizar Nota Credito
+                            $feStatus["message"] = "Factura fue RECHAZADA por Hacienda, favor marcarla para su revisión";
+                        }else if($resEnvio["estado_hacienda"] == "aceptado"){
+                            $feStatus["message"] = "Factura fue ACEPTADA por Hacienda";
+                            $feStatus["status"] = true;
+                            log_message('error', "Factura fue ACEPTADA por Hacienda | Consecutivo: {$responseCheck["factura"]->Factura_Consecutivo} | Sucursal: {$responseCheck["factura"]->TB_02_Sucursal_Codigo}");
+                        }else{
+                            $feStatus["message"] = "Factura se envió a Hacienda pero no fue rechazada, ni aceptada";
+                            log_message('error', "Hacienda envio otro estado {$resEnvio["estado_hacienda"]} | Consecutivo: {$responseCheck["factura"]->Factura_Consecutivo} | Sucursal: {$responseCheck["factura"]->TB_02_Sucursal_Codigo}");
                         }
+                    }else{
+                        log_message('error', "No se pudo enviar la factura a Hacienda, debemos marcarla como contingencia | Consecutivo: {$responseCheck["factura"]->Factura_Consecutivo} | Sucursal: {$responseCheck["factura"]->TB_02_Sucursal_Codigo}");
+                        // Realizar documento de contingencia, porque al enviar a Hacienda algo fallo
+                        // Pasos a seguir
+                        //    1) Cambiar estado a contingencia
+                        //    2) Regenerar y actualizar clave
+                        //    3) Regenerar y actualizar XML
+                        //    5) Regenerar y actualizar XML Firmado
+                        $this->factura->regenerarFacturaElectronicaPorContingencia($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+                    
+                        $feStatus["message"] = "Factura no se pudo enviar a Hacienda por fallo no reconocido";
                     }
+                }else{
+                    $feStatus["message"] = "Factura no se pudo enviar a Hacienda por falta de internet";
                 }
+                
+                $_SESSION["flash_fe"] = $feStatus;
                 
                 //Para efecto de impresion
                 $responseCheck['sucursal']= $data['Sucursal_Codigo'];
