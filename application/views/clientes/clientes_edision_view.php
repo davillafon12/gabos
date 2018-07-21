@@ -148,13 +148,15 @@ PARA:
 
                     </tr>			
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                                 <label for="essucursal" class="label_form" >Sucursal:</label>  
                                 <input id="essucursal" tabindex="11" type="checkbox" name="issucursal" value="1" class="check_cliente" <?php if($isSucursal){echo "checked";}?> > 	
                                 <label for="esexento" class="label_form" >Exento:</label>  
                                 <input id="esexento" tabindex="11" type="checkbox" name="esexento" value="1"  class="check_cliente" <?php if($isExento){echo "checked";}?>> 	
                                 <label for="aplicaRetencion" class="label_form" >Sin Retención:</label>  
-                                <input id="aplicaRetencion" tabindex="11" type="checkbox" name="aplicaRetencion" value="1"   class="check_cliente" <?php if($aplicaRetencion){echo "checked";}?>> 
+                                <input id="aplicaRetencion" tabindex="11" type="checkbox" name="aplicaRetencion" value="1"   class="check_cliente" <?php if($aplicaRetencion){echo "checked";}?>>
+                                <label for="noReceptor" class="label_form" >No Receptor FE:</label>  
+                                <input id="noReceptor" tabindex="11" type="checkbox" name="noReceptor" value="1"   class="check_cliente" <?php if($noReceptor){echo "checked";}?>> 
                             </td>
                         <td>
                             <label class="label_form">Fecha Ingreso:</label> 

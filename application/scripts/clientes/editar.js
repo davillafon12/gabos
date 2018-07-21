@@ -155,29 +155,31 @@ function chequearFormulario(){
         return false;
     }
     
-    if(!isEmail($("#email").val().trim())){
-        notyConTipo("Email no es válido o es vacío", "error");
-        return false;
-    }
-    
-    if($("#selector_provincia").val() == 0){
-        notyConTipo("Debe seleccionar una provincia", "error");
-        return false;
-    }
-    
-    if($("#selector_canton").val() == 0){
-        notyConTipo("Debe seleccionar un cantón", "error");
-        return false;
-    }
-    
-    if($("#selector_distrito").val() == 0){
-        notyConTipo("Debe seleccionar un distrito", "error");
-        return false;
-    }
-    
-    if($("#selector_barrio").val() == 0){
-        notyConTipo("Debe seleccionar un barrio", "error");
-        return false;
+    if(!$("#noReceptor").is(":checked")){
+        if(!isEmail($("#email").val().trim())){
+            notyConTipo("Email no es válido o es vacío", "error");
+            return false;
+        }
+
+        if($("#selector_provincia").val() == 0){
+            notyConTipo("Debe seleccionar una provincia", "error");
+            return false;
+        }
+
+        if($("#selector_canton").val() == 0){
+            notyConTipo("Debe seleccionar un cantón", "error");
+            return false;
+        }
+
+        if($("#selector_distrito").val() == 0){
+            notyConTipo("Debe seleccionar un distrito", "error");
+            return false;
+        }
+
+        if($("#selector_barrio").val() == 0){
+            notyConTipo("Debe seleccionar un barrio", "error");
+            return false;
+        }
     }
     
     return true;

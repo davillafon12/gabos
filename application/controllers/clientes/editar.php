@@ -345,6 +345,7 @@ class editar extends CI_Controller {
                 $data['isSucursal'] = $row -> Cliente_EsSucursal;
                 $data['isExento'] = $row -> Cliente_EsExento;
                 $data['aplicaRetencion'] = $row -> Aplica_Retencion;
+                $data['noReceptor'] = $row -> NoReceptor;
                 
                 $provincias = $this->ubicacion->getProvincias();
                 $data["provincias"] = $provincias;

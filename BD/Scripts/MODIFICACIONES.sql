@@ -107,3 +107,9 @@ ALTER TABLE  `tb_55_factura_electronica` CHANGE  `XMLSinFirmar`  `XMLSinFirmar` 
 ALTER TABLE  `tb_55_factura_electronica` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
 ALTER TABLE  `tb_55_factura_electronica` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_03_cliente` ADD  `NoReceptor` BOOLEAN NOT NULL AFTER  `Aplica_Retencion`;
+
+UPDATE  `garotas_bonitas_main_db`.`tb_03_cliente` SET  `NoReceptor` =  '1' WHERE  `tb_03_cliente`.`Cliente_Cedula` =  '0';
+UPDATE  `garotas_bonitas_main_db`.`tb_03_cliente` SET  `NoReceptor` =  '1' WHERE  `tb_03_cliente`.`Cliente_Cedula` =  '1';
+UPDATE  `garotas_bonitas_main_db`.`tb_03_cliente` SET  `NoReceptor` =  '1' WHERE  `tb_03_cliente`.`Cliente_Cedula` =  '2';

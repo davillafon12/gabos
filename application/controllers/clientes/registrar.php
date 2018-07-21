@@ -85,6 +85,10 @@ class registrar extends CI_Controller {
         //Aplica Retencion
         $aplicaRetencion = 0;
         $aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
+        
+        //No receptor de factura electronica
+        $noReceptor = 0;
+        $noReceptor = isset($_POST['noReceptor']) && $_POST['noReceptor']  ? "1" : "0";
 
         $this->do_upload($cedula); // metodo encargado de cargar la imagen con la cedula del usuario
 
@@ -117,7 +121,8 @@ class registrar extends CI_Controller {
                                         $prov, 
                                         $canton, 
                                         $distr, 
-                                        $barrio)){ //Si se ingreso bien a la BD
+                                        $barrio,
+                                        $noReceptor)){ //Si se ingreso bien a la BD
                 //Titulo de la pagina
                 $data['Titulo_Pagina'] = "Transacción Exitosa";
 

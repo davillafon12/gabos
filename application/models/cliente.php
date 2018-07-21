@@ -41,7 +41,7 @@ Class cliente extends CI_Model
 	}	
 
 
-	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $fecha_nacimiento, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento, $aplicaRetencion, $usuarioID, $sucursalID, $codptel, $codpcel, $codpfax, $fax, $prov, $canton, $distr, $barrio)
+	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $fecha_nacimiento, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento, $aplicaRetencion, $usuarioID, $sucursalID, $codptel, $codpcel, $codpfax, $fax, $prov, $canton, $distr, $barrio, $noReceptor)
 	{
 		
 		if($this->existe_Cliente($cedula)){
@@ -79,7 +79,8 @@ Class cliente extends CI_Model
                                                         'Provincia' => mysql_real_escape_string($prov),
                                                         'Canton' => mysql_real_escape_string($canton),
                                                         'Distrito' => mysql_real_escape_string($distr),
-                                                        'Barrio' => mysql_real_escape_string($barrio)
+                                                        'Barrio' => mysql_real_escape_string($barrio),
+                                                        'NoReceptor' => $noReceptor
                             
 	                    );
 			try{
@@ -191,6 +192,7 @@ Class cliente extends CI_Model
 			{	
                             $actualizar = ($row->Provincia < 1 || $row->Canton < 1 || $row->Distrito < 1 || $row->Barrio < 1);
                             $actualizar = !filter_var($row->Cliente_Correo_Electronico, FILTER_VALIDATE_EMAIL) || $actualizar;
+                            $actualizar = $row->NoReceptor ? false : $actualizar;
                             return array('nombre'=>$row->Cliente_Nombre." ".$row->Cliente_Apellidos,
 							 'estado'=>$row->Cliente_Estado,
 							 'descuento'=>$this->getClienteDescuento(mysql_real_escape_string($id), $data['Sucursal_Codigo']),

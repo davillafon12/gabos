@@ -155,6 +155,8 @@ PARA:
                                         <input id="esexento" tabindex="11" type="checkbox" name="esexento" value="1"  class="check_cliente"> 	
                                         <label for="aplicaRetencion" class="label_form" >Sin Retención:</label>  
                                         <input id="aplicaRetencion" tabindex="11" type="checkbox" name="aplicaRetencion" value="1"   class="check_cliente"> 
+                                        <label for="noReceptor" class="label_form" >No Receptor FE:</label>  
+                                        <input id="noReceptor" tabindex="11" type="checkbox" name="noReceptor" value="1"   class="check_cliente"> 
                                     </td>
                             </tr>
 

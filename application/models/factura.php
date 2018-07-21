@@ -919,6 +919,10 @@ Class factura extends CI_Model
         function crearFacturaElectronica($sucursal, $cliente, $factura, $costos, $articulos, $tipoPago){
             $feedback["status"] = false;
             
+            if($cliente->NoReceptor){
+                $cliente = null;
+            }
+            
             $responseData = $this->guardarDatosBasicosFacturaElectronica($tipoPago, $sucursal, $cliente, $factura, $costos, $articulos);
             
             if($resClave = $this->generarClaveYConsecutivoParaFacturaElectronica($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo)){
