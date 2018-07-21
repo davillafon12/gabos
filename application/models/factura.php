@@ -1397,6 +1397,18 @@ Class factura extends CI_Model
             }
             return false;
         }
+        
+        public function getFacturaElectronica($consecutivo, $sucursal){
+            $this->db->from("tb_55_factura_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                return $query->result()[0];
+            }else{
+                return false;
+            }
+        }
 }
 
 

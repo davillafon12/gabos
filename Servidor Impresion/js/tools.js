@@ -111,7 +111,8 @@ function imprimirFactura(data){
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	qz.append("----------------------------------------\r\n");			
-	qz.append(" Factura: "+factura.consecutivo+"\r\n"); 
+	qz.append(" Consecutivo: "+factura.consecutivoH+"\r\n"); 
+        qz.append(" Clave: "+factura.clave+"\r\n"); 
 	qz.append(" Fecha: "+factura.fecha+"\r\n"); 
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Cliente: "+factura.cliente_ced+"\r\n");

@@ -90,6 +90,7 @@ class impresion extends CI_Controller {
 					
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)){
+                                                    if($fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal)){
 							//Valoramos si un credito para poner la fecha de vencimiento
 							if($facturaHead[0] -> tipo == 'credito'){
 								$diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0] -> cliente_ced);
@@ -142,12 +143,18 @@ class impresion extends CI_Controller {
 								$this->retorno['status'] = 'success';
 								unset($this->retorno['error']);
 								
+                                                                $facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
+                                                                $facturaHead[0]->clave = $fElectornica->Clave;
+                                                                
 								$this->retorno['empresa'] = $empresa;
 								$this->retorno['fHead'] = $facturaHead;
 								$this->retorno['fBody'] = $facturaBody;
 							}else{
 								$this->retorno['error'] = 'No se pudo cargar los artículos de la factura';
 							}
+                                                    }else{
+                                                        $this->retorno['error'] = 'No se pudo cargar encabezado de factura electrónica';
+                                                    }
 						}else{
 							$this->retorno['error'] = 'No se pudo cargar encabezado de factura';
 						}						
@@ -515,6 +522,7 @@ class impresion extends CI_Controller {
 					$consecutivo = $_GET['n'];
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)){
+                                                    if($fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal)){
 							//Valoramos si un credito para poner la fecha de vencimiento
 							if($facturaHead[0] -> tipo == 'credito'){
 								$diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0] -> cliente_ced);
@@ -543,11 +551,15 @@ class impresion extends CI_Controller {
 							}
 							
 							if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
-								
+								$facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
+                                                                $facturaHead[0]->clave = $fElectornica->Clave;
 								$this->facturaPDF($empresa, $facturaHead, $facturaBody);								
 							}else{
 								$this->retorno['error'] = '9';
 							}
+                                                    }else{
+                                                        $this->retorno['error'] = '50';
+                                                    }
 						}else{
 							$this->retorno['error'] = '8';
 						}						
@@ -1070,14 +1082,14 @@ class impresion extends CI_Controller {
 			$con_letra = $V->ValorEnLetras($recibo->monto,$recibo->moneda); 			
 			
 			$pdf->Text(12, 79, 'La suma de: ');
-			$pdf->Text(42, 79, $this->fn($recibo->monto)." - $con_letra");
+			$pdf->Text(42, 79, $this->fni($recibo->monto)." - $con_letra");
 			$pdf->Text(12, 86, 'Por concepto de abono a la factura: ');
 			$pdf->Text(12, 93, 'Consecutivo # ');
 			$pdf->Text(42, 93, $recibo->factura);
 			$pdf->Text(62, 93, 'Emitida el ');
 			$pdf->Text(84, 93, $recibo->fecha_expedicion);
 			$pdf->Text(132, 93, 'Por el monto de ');
-			$pdf->Text(164, 93, $this->fn($recibo->Saldo_inicial));
+			$pdf->Text(164, 93, $this->fni($recibo->Saldo_inicial));
 			
 			//Comentarios
 			$pdf->Text(12, 100, 'Comentarios: ');
@@ -1116,7 +1128,7 @@ class impresion extends CI_Controller {
 		$pdf->Line(10, 35, 200, 35);
 		$pdf->Text(12, 40, 'Primera Factura: '.$cierre->datos['primeraFactura']);
 		$pdf->Text(90, 40, 'Última Factura: '.$cierre->datos['ultimaFactura']);
-		$pdf->Text(156, 40, 'Base: '.$this->fn($cierre->base));
+		$pdf->Text(156, 40, 'Base: '.$this->fni($cierre->base));
 		$pdf->Line(10, 42, 200, 42);
 		
 		//DENOMINACIONES
@@ -1146,7 +1158,7 @@ class impresion extends CI_Controller {
 			$total = $billete->denominacion * $billete->cantidad;
 			$pdf->Cell(20,5,$billete->denominacion,1,0,'C');
 			$pdf->Cell(18,5,$billete->cantidad,1,0,'C');
-			$pdf->Cell(25.3,5,$this->fn($total),1,0,'R');
+			$pdf->Cell(25.3,5,$this->fni($total),1,0,'R');
 			$pdf->ln(5);
 		}
 		$pdf->SetXY(73.33, 60);
@@ -1154,7 +1166,7 @@ class impresion extends CI_Controller {
 			$total = $moneda->denominacion * $moneda->cantidad;
 			$pdf->Cell(20,5,$moneda->denominacion,1,0,'C');
 			$pdf->Cell(18,5,$moneda->cantidad,1,0,'C');
-			$pdf->Cell(25.3,5,$this->fn($total),1,0,'R');
+			$pdf->Cell(25.3,5,$this->fni($total),1,0,'R');
 			$pdf->ln(5);
 			$pdf->SetX(73.33);
 		}
@@ -1163,15 +1175,15 @@ class impresion extends CI_Controller {
 			$total = $dolar->denominacion * $dolar->cantidad;
 			$pdf->Cell(20,5,$dolar->denominacion,1,0,'C');
 			$pdf->Cell(18,5,$dolar->cantidad,1,0,'C');
-			$pdf->Cell(25.3,5,$this->fn($total),1,0,'R');
+			$pdf->Cell(25.3,5,$this->fni($total),1,0,'R');
 			$pdf->ln(5);
 			$pdf->SetX(136.66);
 		}
-		$pdf->Cell(63.33,5,'Tipo de Cambio: '.$this->fn($cierre->tipo),1,0,'R');
+		$pdf->Cell(63.33,5,'Tipo de Cambio: '.$this->fni($cierre->tipo),1,0,'R');
 		$pdf->ln(5);
 		$pdf->SetX(136.66);
 		$pdf->SetFont('Arial','B',11);
-		$pdf->Cell(63.33,5,'Total Conteo: '.$this->fn($cierre->conteo),1,0,'R');
+		$pdf->Cell(63.33,5,'Total Conteo: '.$this->fni($cierre->conteo),1,0,'R');
 */
 		
 		//Retiros parciales y datafonos
@@ -1201,7 +1213,7 @@ class impresion extends CI_Controller {
 			foreach($cierre->datos['retirosParciales'] as $retiroP){
 				$pdf->Cell(10,5,$retiroP->Id,0,0,'C');
 				$pdf->Cell(55,5,$retiroP->Fecha_Hora,0,0,'C');
-				$pdf->Cell(25,5,$this->fn($retiroP->Monto),0,0,'R');
+				$pdf->Cell(25,5,$this->fni($retiroP->Monto),0,0,'R');
 				$pdf->ln(5);
 				$pdf->SetX(10);
 			}
@@ -1215,7 +1227,7 @@ class impresion extends CI_Controller {
 			}
 		}
 		$pdf->Cell(65,5,'Total:',1,0,'R');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['totalRecibosParciales']),1,0,'R');
+		$pdf->Cell(25,5,$this->fni($cierre->datos['totalRecibosParciales']),1,0,'R');
 		
 		$pdf->SetXY(102, 55);
 		if(sizeOf($cierre->datos['pagoDatafonos']['datafonos'])==0){
@@ -1225,25 +1237,25 @@ class impresion extends CI_Controller {
 		}else{
 			foreach($cierre->datos['pagoDatafonos']['datafonos'] as $datafono){
 				$pdf->Cell(26,5,$datafono->Banco_Nombre,1,0,'C');
-				$pdf->Cell(24,5,$this->fn($datafono->Total_Comision),1,0,'R');
-				$pdf->Cell(24,5,$this->fn($datafono->Total_Retencion),1,0,'R');
-				$pdf->Cell(24,5,$this->fn($datafono->Total),1,0,'R');
+				$pdf->Cell(24,5,$this->fni($datafono->Total_Comision),1,0,'R');
+				$pdf->Cell(24,5,$this->fni($datafono->Total_Retencion),1,0,'R');
+				$pdf->Cell(24,5,$this->fni($datafono->Total),1,0,'R');
 				$pdf->ln(5);
 				$pdf->SetX(102);
 			}
 		}
 		$pdf->Cell(26,5,'Totales:',1,0,'C');
-		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalComision']),1,0,'R');
-		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalRetencion']),1,0,'R');
-		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'R');
+		$pdf->Cell(24,5,$this->fni($cierre->datos['pagoDatafonos']['totalComision']),1,0,'R');
+		$pdf->Cell(24,5,$this->fni($cierre->datos['pagoDatafonos']['totalRetencion']),1,0,'R');
+		$pdf->Cell(24,5,$this->fni($cierre->datos['pagoDatafonos']['totalDatafonos']),1,0,'R');
 		$pdf->ln(5);
 		$pdf->SetX(102);
 		$pdf->Cell(74,5,'Total Con BN Servicios (Tarjetas):',1,0,'R');
-		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc),1,0,'R');
+		$pdf->Cell(24,5,$this->fni($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc),1,0,'R');
 		$pdf->ln(5);
 		$pdf->SetX(102);
 		$pdf->Cell(74,5,'Total Con BCR Tucan (Tarjetas):',1,0,'R');
-		$pdf->Cell(24,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc+$cierre->bcrserviciosc),1,0,'R');
+		$pdf->Cell(24,5,$this->fni($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc+$cierre->bcrserviciosc),1,0,'R');
 				
 		//Pagos Mixtos y Recibos por dinero
 		$pdf->SetFont('Arial','B',14);
@@ -1263,19 +1275,19 @@ class impresion extends CI_Controller {
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',10);
 		$pdf->Cell(40,5,$cierre->datos['pagoMixto']['cantidadFacturas'],1,0,'C');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['efectivo']),1,0,'R');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['tarjeta']),1,0,'R');
+		$pdf->Cell(25,5,$this->fni($cierre->datos['pagoMixto']['efectivo']),1,0,'R');
+		$pdf->Cell(25,5,$this->fni($cierre->datos['pagoMixto']['tarjeta']),1,0,'R');
 		$pdf->Cell(10,5,'',0,0,'C');
-		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
-		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['tarjeta']),1,0,'R');
-		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['deposito']),1,0,'R');
-		$pdf->Cell(21,5,$this->fn($cierre->datos['recibos']['abonos']),1,0,'R');
+		$pdf->Cell(23,5,$this->fni($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
+		$pdf->Cell(23,5,$this->fni($cierre->datos['recibos']['tarjeta']),1,0,'R');
+		$pdf->Cell(23,5,$this->fni($cierre->datos['recibos']['deposito']),1,0,'R');
+		$pdf->Cell(21,5,$this->fni($cierre->datos['recibos']['abonos']),1,0,'R');
 		$pdf->ln(5);
 		$pdf->Cell(65,5,'Total:',1,0,'R');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['total']),1,0,'R');
+		$pdf->Cell(25,5,$this->fni($cierre->datos['pagoMixto']['total']),1,0,'R');
 		$pdf->Cell(10,5,'',0,0,'C');
 		$pdf->Cell(65,5,'Total:',1,0,'R');
-		$pdf->Cell(25,5,$this->fn($cierre->datos['recibos']['total']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
+		$pdf->Cell(25,5,$this->fni($cierre->datos['recibos']['total']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
 		
 		$pdf->SetFont('Arial','B',14);
 		$pdf->ln(6);
@@ -1290,13 +1302,13 @@ class impresion extends CI_Controller {
 		$pdf->Cell(27.1,5,'Mixto',1,0,'C');
 		$pdf->Cell(27.1,5,'Apartado',1,0,'C');
 		$pdf->ln(5);
-		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
-		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
-		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['cheque']),1,0,'C');
-		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['deposito']),1,0,'C');
-		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['credito']),1,0,'C');
-		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['mixto']),1,0,'C');
-		$pdf->Cell(27.1,5,$this->fn($cierre->datos['detalleNotasCredito']['apartado']),1,0,'C');
+		$pdf->Cell(27.1,5,$this->fni($cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
+		$pdf->Cell(27.1,5,$this->fni($cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
+		$pdf->Cell(27.1,5,$this->fni($cierre->datos['detalleNotasCredito']['cheque']),1,0,'C');
+		$pdf->Cell(27.1,5,$this->fni($cierre->datos['detalleNotasCredito']['deposito']),1,0,'C');
+		$pdf->Cell(27.1,5,$this->fni($cierre->datos['detalleNotasCredito']['credito']),1,0,'C');
+		$pdf->Cell(27.1,5,$this->fni($cierre->datos['detalleNotasCredito']['mixto']),1,0,'C');
+		$pdf->Cell(27.1,5,$this->fni($cierre->datos['detalleNotasCredito']['apartado']),1,0,'C');
 		
 		$pdf->SetFont('Arial','B',14);
 		$pdf->ln(6);
@@ -1304,9 +1316,9 @@ class impresion extends CI_Controller {
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',11);
 		$pdf->Cell(47.5,5,'Contado',1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->bnservicios),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->bnservicios),1,0,'C');
 		$pdf->Cell(47.5,5,'Tarjeta',1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->bnserviciosc),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->bnserviciosc),1,0,'C');
 		
 		$pdf->SetFont('Arial','B',14);
 		$pdf->ln(6);
@@ -1314,9 +1326,9 @@ class impresion extends CI_Controller {
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','',11);
 		$pdf->Cell(47.5,5,'Contado',1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->bcrservicios),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->bcrservicios),1,0,'C');
 		$pdf->Cell(47.5,5,'Tucan Tarjeta',1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->bcrserviciosc),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->bcrserviciosc),1,0,'C');
 		
 		
 		
@@ -1347,10 +1359,10 @@ class impresion extends CI_Controller {
 		$pdf->Cell(47.5,5,'Tarjetas',1,0,'C');
 		$pdf->Cell(47.5,5,'Créditos',1,0,'C');
 		$pdf->ln(5);
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalFacturasContado']-$cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($efectivoTotal),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc+$cierre->bcrserviciosc-$cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalCredito']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->datos['totalFacturasContado']-$cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($efectivoTotal),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc+$cierre->bcrserviciosc-$cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->datos['totalCreditos']['totalCredito']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'C');
 		
 		
 		$pdf->ln(5);
@@ -1359,10 +1371,10 @@ class impresion extends CI_Controller {
 		$pdf->Cell(47.5,5,'Notas Crédito',1,0,'C');
 		$pdf->Cell(47.5,5,'Notas Débito',1,0,'C');
 		$pdf->ln(5);
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalFacturasDeposito']-$cierre->datos['detalleNotasCredito']['deposito']),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalApartado']-$cierre->datos['detalleNotasCredito']['apartado']),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalNotasCredito']['total']),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalNotasDebito']['total']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->datos['totalFacturasDeposito']-$cierre->datos['detalleNotasCredito']['deposito']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->datos['totalCreditos']['totalApartado']-$cierre->datos['detalleNotasCredito']['apartado']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->datos['totalNotasCredito']['total']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fni($cierre->datos['totalNotasDebito']['total']),1,0,'C');
 		
 		//Vendedores
 		$pdf->SetFont('Arial','B',14);
@@ -1393,7 +1405,7 @@ class impresion extends CI_Controller {
 			
 			if($contador <= 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
-				$pdf->Cell(25,5,$this->fn($vendedor[0]->total_vendido),0,0,'C');
+				$pdf->Cell(25,5,$this->fni($vendedor[0]->total_vendido),0,0,'C');
 				$pdf->ln(5); 
 			}
 			if($contador == 9){
@@ -1401,7 +1413,7 @@ class impresion extends CI_Controller {
 			}
 			if($contador > 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
-				$pdf->Cell(25,5,$this->fn($vendedor[0]->total_vendido),0,0,'C');
+				$pdf->Cell(25,5,$this->fni($vendedor[0]->total_vendido),0,0,'C');
 				$pdf->ln(5);
 				$pdf->SetX(105);
 			}
@@ -1409,7 +1421,7 @@ class impresion extends CI_Controller {
 		}
 		$pdf->SetFont('Arial','B',11);
 		$pdf->SetXY(10,249);
-		$pdf->Cell(190,5,'Total Vendedores: '.$this->fn($cierre->datos['vendedores']['totalVendido']),1,0,'R');
+		$pdf->Cell(190,5,'Total Vendedores: '.$this->fni($cierre->datos['vendedores']['totalVendido']),1,0,'R');
 		
 		//Valores finales
 		$pdf->ln(6);
@@ -1417,9 +1429,9 @@ class impresion extends CI_Controller {
 		$pdf->Cell(64,5,'Total IVA ',1,0,'C');
 		$pdf->Cell(62,5,'Total Retención ',1,0,'C');
 		$pdf->ln(5);
-		$pdf->Cell(64,5,$this->fn($cierre->datos['valoresFinales']['totalFacturas']),1,0,'C');
-		$pdf->Cell(64,5,$this->fn($cierre->datos['valoresFinales']['totalIVA']),1,0,'C');
-		$pdf->Cell(62,5,$this->fn($cierre->datos['valoresFinales']['totalRetencion']-$cierre->datos['totalNotasCredito']['retencion']),1,0,'C');
+		$pdf->Cell(64,5,$this->fni($cierre->datos['valoresFinales']['totalFacturas']),1,0,'C');
+		$pdf->Cell(64,5,$this->fni($cierre->datos['valoresFinales']['totalIVA']),1,0,'C');
+		$pdf->Cell(62,5,$this->fni($cierre->datos['valoresFinales']['totalRetencion']-$cierre->datos['totalNotasCredito']['retencion']),1,0,'C');
 		
 		//Realizado Por:
 		$pdf->SetFont('Arial','B',14);
@@ -1536,15 +1548,19 @@ class impresion extends CI_Controller {
 		switch($tipo){
 			case 'f':
 				//Cuadro de numero de factura y hora/fecha
-				$pdf->Rect(120, 10, 80, 20, 'D');
-				$pdf->SetFont('Arial','B',16);
-				$pdf->Text(122, 17, 'Factura #'.$encabezado->consecutivo);			
-				$pdf->SetFont('Arial','',12);
-				$pdf->Text(122, 22, 'Fecha y Hora: ');				
-				$pdf->Text(122, 27, $encabezado->fecha);
-				$pdf->SetFont('Arial','',11);
-				$pdf->Text(172, 16, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
-				
+				$pdf->Rect(108, 10, 92, 20, 'D');
+                                $pdf->SetFont('Arial','B',11);
+				$pdf->Text(109, 15, 'Consecutivo');
+                                $pdf->Text(109, 21, 'Clave');
+                                $pdf->Text(109, 27, 'Fecha');
+                                $pdf->SetFont('Arial','',11);
+				$pdf->Text(134, 15, $encabezado->consecutivoH);
+                                $pdf->Text(122, 27, $encabezado->fecha);
+                                $pdf->Text(172, 27, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
+                                $pdf->SetFont('Arial','',8);
+				$pdf->Text(120, 20.8, $encabezado->clave);
+                                
+                                
 				//Info del cliente
 				$pdf->SetFont('Arial','B',12);
 				$pdf->Text(12, 42, 'Cliente');
@@ -1583,12 +1599,12 @@ class impresion extends CI_Controller {
 						$pdf->Text(140, 54, 'Vence: '.$encabezado->fechaVencimiento);
 					break;
 					case 'mixto':
-						$pdf->Text(140, 49, 'Pago Tarjeta: '.$this->fn($encabezado->cantidadTarjeta/$factor));
-						$pdf->Text(140, 54, 'Pago Contado: '.$this->fn($encabezado->cantidadContado/$factor));
+						$pdf->Text(140, 49, 'Pago Tarjeta: '.$this->fni($encabezado->cantidadTarjeta/$factor));
+						$pdf->Text(140, 54, 'Pago Contado: '.$this->fni($encabezado->cantidadContado/$factor));
 					break;
 					case 'apartado':
-						$pdf->Text(140, 49, 'Abono: '.$this->fn($encabezado->abono/$factor));
-						$pdf->Text(140, 54, 'Saldo: '.$this->fn(($encabezado->total - $encabezado->abono)/$factor));
+						$pdf->Text(140, 49, 'Abono: '.$this->fni($encabezado->abono/$factor));
+						$pdf->Text(140, 54, 'Saldo: '.$this->fni(($encabezado->total - $encabezado->abono)/$factor));
 					break;
 				}
 			break;
@@ -1882,18 +1898,18 @@ class impresion extends CI_Controller {
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 225);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($subtotal),1,0,'R');
 				$pdf->SetXY(131, 232);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($totalIVA+$retencion),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($totalIVA+$retencion),1,0,'R');
 /*
 				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($retencion),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($retencion),1,0,'R');
 */
 				$pdf->SetXY(131, 246);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($total),1,0,'R');
 			break;			
 			case 'nc':
 				
@@ -1901,16 +1917,16 @@ class impresion extends CI_Controller {
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 240);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->subtotal),1,0,'R');
 				$pdf->SetXY(131, 247);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->total_iva),1,0,'R');
 				$pdf->SetXY(131, 254);	
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->retencion),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->retencion),1,0,'R');
 				$pdf->SetXY(131, 261);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->total),1,0,'R');
 			break;
 			case 'nd':
 				//Parte de observaciones
@@ -1919,13 +1935,13 @@ class impresion extends CI_Controller {
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 225);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->subtotal),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->subtotal),1,0,'R');
 				$pdf->SetXY(131, 232);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->total_iva),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->total_iva),1,0,'R');
 				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->total),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->total),1,0,'R');
 			break;
 			case 'p':
 				//Parte de observaciones
@@ -1949,29 +1965,29 @@ class impresion extends CI_Controller {
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 225);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($subtotal),1,0,'R');
 				$pdf->SetXY(131, 232);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($totalIVA),1,0,'R');
 				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($retencion),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($retencion),1,0,'R');
 				$pdf->SetXY(131, 246);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($total),1,0,'R');
 			break;
 			case 'r':
 				//Costos totales
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(130, 95);	
 				$pdf->Cell(42,7,'Saldo Anterior:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->saldo_anterior),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->saldo_anterior),1,0,'R');
 				$pdf->SetXY(130, 102);	
 				$pdf->Cell(42,7,'Este Abono:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->monto),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->monto),1,0,'R');
 				$pdf->SetXY(130, 109);	
 				$pdf->Cell(42,7,'Saldo Actual:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($encabezado->saldo),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->saldo),1,0,'R');
 			break;
 			case 'con':
 				//Leyenda de tributacion
@@ -1986,21 +2002,21 @@ class impresion extends CI_Controller {
 				$pdf->SetFont('Arial','',11);
 				$pdf->SetXY(131, 240);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($subtotal),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($subtotal),1,0,'R');
 				$pdf->SetXY(131, 247);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($totalIVA),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($totalIVA),1,0,'R');
 				$pdf->SetXY(131, 254);	
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($retencion),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($retencion),1,0,'R');
 				$pdf->SetXY(131, 261);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
-				$pdf->Cell(28,7,$this->fn($total),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($total),1,0,'R');
 			break;	
 		}		
 	}
 	
-	private function fn($numero){		
+	private function fni($numero){		
 		return number_format($numero,$this->configuracion->getDecimales());
 	}
 	
@@ -2083,8 +2099,8 @@ class impresion extends CI_Controller {
 			$pdf->cell(15,5,$productos[$cc]->cantidad,0,0,'C');
 			$pdf->cell(6,5,$this->fe($productos[$cc]->exento),0,0,'C');
 			$pdf->cell(14,5,$productos[$cc]->descuento);
-			$pdf->cell(27.5,5,$this->fn($precio),0,0,'R');
-			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
+			$pdf->cell(27.5,5,$this->fni($precio),0,0,'R');
+			$pdf->cell(28,5,$this->fni($total),0,0,'R');			
 			$pdf->ln($sl);
 			$pdf->SetX(110);
 			$pl += $sl;
@@ -2133,8 +2149,8 @@ class impresion extends CI_Controller {
 			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
 			$pdf->cell(15,5,$productos[$cc]->bueno,0,0,'C');
 			$pdf->cell(20,5,$productos[$cc]->defectuoso,0,0,'C');
-			$pdf->cell(27.5,5,$this->fn($productos[$cc]->precio),0,0,'R');
-			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
+			$pdf->cell(27.5,5,$this->fni($productos[$cc]->precio),0,0,'R');
+			$pdf->cell(28,5,$this->fni($total),0,0,'R');			
 			$pdf->ln($sl);
 			$pdf->SetX(110);
 			$pl += $sl;
@@ -2177,8 +2193,8 @@ class impresion extends CI_Controller {
 			$pdf->Text(11, $pl, $productos[$cc]->codigo);
 			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
 			$pdf->cell(20,5,$productos[$cc]->cantidad,0,0,'C');
-			$pdf->cell(27.5,5,$this->fn($productos[$cc]->precio),0,0,'R');
-			$pdf->cell(28,5,$this->fn($total),0,0,'R');			
+			$pdf->cell(27.5,5,$this->fni($productos[$cc]->precio),0,0,'R');
+			$pdf->cell(28,5,$this->fni($total),0,0,'R');			
 			$pdf->ln($sl);
 			$pdf->SetX(125);
 			$pl += $sl;
