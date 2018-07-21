@@ -22,6 +22,7 @@ class impresion extends CI_Controller {
 		$this->load->model('banco','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
+                $this->load->model('impresion_m','',TRUE);
 		include 'get_session_data.php'; //Esto es para traer la informacion de la sesion
 		//Generamos el token de seguridad, el cual debe coincidir con el token de llegada
 		$this->tokenSeguridad = md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
@@ -69,8 +70,12 @@ class impresion extends CI_Controller {
 			}
 		}else{
 			$this->retorno['error'] = 'Variable de token no incluida';
-		}	
-		echo $_GET['callback'].'('.json_encode($this->retorno).')';
+		}
+                if(trim(@$_GET['callback']) == ""){
+                    echo json_encode($this->retorno);
+                }else{
+                    echo @$_GET['callback'].'('.json_encode($this->retorno).')';
+                }
 	}
 	
 	private function filtrarDocumentosTermica(){
@@ -523,37 +528,36 @@ class impresion extends CI_Controller {
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)){
                                                     if($fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal)){
-							//Valoramos si un credito para poner la fecha de vencimiento
-							if($facturaHead[0] -> tipo == 'credito'){
-								$diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0] -> cliente_ced);
-								$facturaHead[0] -> diasCredito = $diasCredito;
-								$date = strtotime("+$diasCredito days", strtotime($facturaHead[0] -> fecha) );
-								$facturaHead[0] -> fechaVencimiento = date('d-m-Y',$date);
-							}elseif($facturaHead[0] -> tipo == 'mixto'){
-								$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
-								$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
-								
-								//Valorar si fue en colones o dolares								
-								if($facturaHead[0] -> moneda == 'dolares'){
-									$cantidadPagaTarjeta = $cantidadPagaTarjeta/$facturaHead[0] -> cambio;
-									$cantidadPagaContado = $cantidadPagaContado/$facturaHead[0] -> cambio;
-								}						
-								
-								$facturaHead[0] -> cantidadTarjeta = $cantidadPagaTarjeta;
-								$facturaHead[0] -> cantidadContado = $cantidadPagaContado;
-							}elseif($facturaHead[0] -> tipo == 'apartado'){								
-								$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
-								//Valorar si fue en colones o dolares								
-								if($facturaHead[0] -> moneda == 'dolares'){
-									$abono = $abono/$facturaHead[0] -> cambio;
-								}
-								$facturaHead[0] -> abono = $abono;
-							}
-							
 							if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
+                                                                //Valoramos si un credito para poner la fecha de vencimiento
+                                                                if($facturaHead[0] -> tipo == 'credito'){
+                                                                        $diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0] -> cliente_ced);
+                                                                        $facturaHead[0] -> diasCredito = $diasCredito;
+                                                                        $date = strtotime("+$diasCredito days", strtotime($facturaHead[0] -> fecha) );
+                                                                        $facturaHead[0] -> fechaVencimiento = date('d-m-Y',$date);
+                                                                }elseif($facturaHead[0] -> tipo == 'mixto'){
+                                                                        $cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
+                                                                        $cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
+
+                                                                        //Valorar si fue en colones o dolares								
+                                                                        if($facturaHead[0] -> moneda == 'dolares'){
+                                                                                $cantidadPagaTarjeta = $cantidadPagaTarjeta/$facturaHead[0] -> cambio;
+                                                                                $cantidadPagaContado = $cantidadPagaContado/$facturaHead[0] -> cambio;
+                                                                        }						
+
+                                                                        $facturaHead[0] -> cantidadTarjeta = $cantidadPagaTarjeta;
+                                                                        $facturaHead[0] -> cantidadContado = $cantidadPagaContado;
+                                                                }elseif($facturaHead[0] -> tipo == 'apartado'){								
+                                                                        $abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
+                                                                        //Valorar si fue en colones o dolares								
+                                                                        if($facturaHead[0] -> moneda == 'dolares'){
+                                                                                $abono = $abono/$facturaHead[0] -> cambio;
+                                                                        }
+                                                                        $facturaHead[0] -> abono = $abono;
+                                                                }
 								$facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
                                                                 $facturaHead[0]->clave = $fElectornica->Clave;
-								$this->facturaPDF($empresa, $facturaHead, $facturaBody);								
+								$this->impresion_m->facturaPDF($empresa, $facturaHead, $facturaBody, false);								
 							}else{
 								$this->retorno['error'] = '9';
 							}
@@ -911,36 +915,6 @@ class impresion extends CI_Controller {
 		}	
 	}
 	
-	
-	private function facturaPDF($empresa, $fhead, $fbody){
-		require(PATH_FPDF_LIBRARY);
-		$pdf = new FPDF('P','mm','A4');
-		
-		$cantidadProductos = sizeOf($fbody);
-		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
-		$this->cantidadPaginas = $paginasADibujar + 1;
-		$cantidadTotalArticulos = 0;
-		while($paginasADibujar>=$this->numPagina){
-			//Agregamos pag		
-			$pdf->AddPage();			
-			//Agregamos el encabezado
-			$this->encabezadoDocumentoPDF('f', $empresa[0], $fhead[0], $pdf);
-			//Agregamos Productos
-			$inicio = $this->numPagina*30;
-			if((($this->numPagina+1)*30)<$cantidadProductos){
-				$final = ($this->numPagina+1)*30;
-			}else{
-				$final = $cantidadProductos;
-			}
-			
-			$cantidadTotalArticulos += $this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
-			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('f', $fhead[0], $empresa[0], $pdf, $cantidadTotalArticulos);
-			$this->numPagina++;
-		}
-		//Imprimimos documento
-		$pdf->Output();
-	}
 	
 	private function proformaPDF($empresa, $fhead, $fbody){
 		require(PATH_FPDF_LIBRARY);

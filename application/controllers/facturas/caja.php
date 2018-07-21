@@ -13,6 +13,7 @@ class caja extends CI_Controller {
 		$this->load->model('banco','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
+                $this->load->model('impresion_m','',TRUE);
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -295,6 +296,8 @@ class caja extends CI_Controller {
                 
                 $_SESSION["flash_fe"] = $feStatus;
                 
+                
+               
                 //Para efecto de impresion
                 $responseCheck['sucursal']= $data['Sucursal_Codigo'];
                 $responseCheck['servidor_impresion']= $this->configuracion->getServidorImpresion();
@@ -309,21 +312,23 @@ class caja extends CI_Controller {
                         'Factura_Recibido_Vuelto' => $recibidoParaVuelto
                 );
 
-                $this->factura->actualizarFacturaHead($datos, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+                $this->factura->actualizarFacturaHead($datos, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
 
                 //Agregamos tipo de pago
                 //Tarjeta, Deposito, Cheque, Mixto, Apartado
-                $this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+                $this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
 
 
-                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: {$responseCheck["factura"]->Factura_Consecutivo}",$data['Sucursal_Codigo'],'cobro');
+                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: {$responseCheck["factura"]->Factura_Consecutivo}",$responseCheck["factura"]->TB_02_Sucursal_Codigo,'cobro');
 
 
                 //Valorar si factura es de cliente defectuoso
-                $facturaHeader = $this->factura->getFacturasHeaders($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo'])[0];
+                $facturaHeader = $this->factura->getFacturasHeaders($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo)[0];
                 if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
-                        $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+                        $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
                 }
+                
+                $this->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
             }else{
                 $responseCheck["status"] = "error";
                 $responseCheck["error"] = $resFacturaElectronica["error"];
@@ -1256,6 +1261,54 @@ class caja extends CI_Controller {
         }else{
             // No existe empresa
             $facturaBODY['error']='26';
+        }
+    }
+    
+    function guardarPDFFactura($consecutivo, $sucursal){
+        if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+            if($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)){
+                if($fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal)){
+                    if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
+                            //Valoramos si un credito para poner la fecha de vencimiento
+                            if($facturaHead[0] -> tipo == 'credito'){
+                                    $diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0] -> cliente_ced);
+                                    $facturaHead[0] -> diasCredito = $diasCredito;
+                                    $date = strtotime("+$diasCredito days", strtotime($facturaHead[0] -> fecha) );
+                                    $facturaHead[0] -> fechaVencimiento = date('d-m-Y',$date);
+                            }elseif($facturaHead[0] -> tipo == 'mixto'){
+                                    $cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
+                                    $cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
+
+                                    //Valorar si fue en colones o dolares								
+                                    if($facturaHead[0] -> moneda == 'dolares'){
+                                            $cantidadPagaTarjeta = $cantidadPagaTarjeta/$facturaHead[0] -> cambio;
+                                            $cantidadPagaContado = $cantidadPagaContado/$facturaHead[0] -> cambio;
+                                    }						
+
+                                    $facturaHead[0] -> cantidadTarjeta = $cantidadPagaTarjeta;
+                                    $facturaHead[0] -> cantidadContado = $cantidadPagaContado;
+                            }elseif($facturaHead[0] -> tipo == 'apartado'){								
+                                    $abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
+                                    //Valorar si fue en colones o dolares								
+                                    if($facturaHead[0] -> moneda == 'dolares'){
+                                            $abono = $abono/$facturaHead[0] -> cambio;
+                                    }
+                                    $facturaHead[0] -> abono = $abono;
+                            }
+                            $facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
+                            $facturaHead[0]->clave = $fElectornica->Clave;
+                            $this->impresion_m->facturaPDF($empresa, $facturaHead, $facturaBody, true);								
+                    }else{
+                            //$this->retorno['error'] = '9';
+                    }
+                }else{
+                    //$this->retorno['error'] = '50';
+                }
+            }else{
+                    //$this->retorno['error'] = '8';
+            }						
+        }else{
+                //$this->retorno['error'] = '7';
         }
     }
 	
