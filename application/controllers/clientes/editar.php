@@ -12,16 +12,17 @@ class editar extends CI_Controller {
 	$this->load->model('cliente','',TRUE);
 	$this->load->model('empresa','',TRUE);
 	$this->load->model('familia','',TRUE);
+        $this->load->model('ubicacion','',TRUE);
  }
 
  function index()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	if($permisos['editar_cliente'])
 	{	
-		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
+            $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 	    $this->load->view('clientes/clientes_editar_view', $data);	
 	}
 	else{
@@ -30,7 +31,7 @@ class editar extends CI_Controller {
  }
 
  function mostrar_todos_los_datos(){
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -289,7 +290,7 @@ class editar extends CI_Controller {
  function desactivar()
  {
  	$newEstado = 'inactivo';
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	$cliente_a_desactivar=$_GET['array'];
 	$cliente_a_desactivar=explode(',', $cliente_a_desactivar);
 	$data_update['Cliente_Estado'] = $newEstado;
@@ -306,7 +307,7 @@ class editar extends CI_Controller {
  function activar()
  {
  	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	$newEstado = 'activo';
 	$cliente_a_activar=$_GET['array'];
 	$cliente_a_activar=explode(',', $cliente_a_activar);
@@ -321,98 +322,87 @@ class editar extends CI_Controller {
 	}
  }
 
- function edicion()
- {
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-	
-			$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-			
-			if(!$permisos['editar_cliente'])
-			{	
-			    redirect('accesoDenegado', 'location');	
-			}
-			
-			if(isset($_GET['id'])){
-					$id_request=trim($_GET['id']);
-					$ruta_base_imagenes_script = base_url('application/images/scripts');
-					$ruta_imagen_cliente = base_url('application/images/Client_Photo/thumb');
-					$nombre_cliente_edision = $this->cliente->getClientes_Cedula($id_request);
-					
-					if($result = $this->cliente->getClientes_Cedula($id_request))
-					{
-					    $this->load->helper(array('form'));
-					    foreach($result as $row)
-						{
-						    $data['Cliente_Tipo_Cedula'] = $row -> Cliente_Tipo_Cedula;
-								$data['Cliente_Cedula'] = $row -> Cliente_Cedula;
-								$data['Cliente_Estado'] = $row -> Cliente_Estado;
-								$data['Cliente_Imagen_URL'] = $ruta_imagen_cliente."/".$row -> Cliente_Imagen_URL;
-								$data['Cliente_Nombre'] = $row -> Cliente_Nombre;
-								$data['Cliente_Apellidos'] = $row -> Cliente_Apellidos;
-								$data['Cliente_Carnet_Numero'] = $row -> Cliente_Carnet_Numero;
-								$data['Cliente_Celular'] = $row -> Cliente_Celular;
-								$data['Cliente_Telefono'] = $row -> Cliente_Telefono;
-								$data['Cliente_Correo_Electronico'] = $row -> Cliente_Correo_Electronico;
-								$formato_Fecha = substr($row -> Cliente_Fecha_Ingreso, -20, 10);
-								$data['Cliente_Fecha_Ingreso'] = $formato_Fecha;
-								$data['Cliente_Pais'] = $row -> Cliente_Pais;
-								$data['Cliente_Direccion'] = $row -> Cliente_Direccion;
-								$data['isSucursal'] = $row -> Cliente_EsSucursal;
-								$data['isExento'] = $row -> Cliente_EsExento;
-								$data['aplicaRetencion'] = $row -> Aplica_Retencion;
-								$descuento = $this->cliente->getClienteDescuento($row -> Cliente_Cedula, $data['Sucursal_Codigo']);
-								$maxCredito = $this->cliente->getClienteMaximoCredito($row -> Cliente_Cedula, $data['Sucursal_Codigo']);
-								
-								$data['cliente_descuento'] = $descuento;
-								$data['maxCredito'] = $maxCredito;
-								
-								$data['Cliente_Observaciones'] = $row -> Cliente_Observaciones;
-								$data['Cliente_Numero_Pago'] = $row -> Cliente_Numero_Pago;
-						}
-						$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
-						$data['Familias'] = $familias_actuales;
-						$this->load->view('clientes/clientes_edision_view', $data);
-					}else{
-						redirect("clientes/editar","location");
-					}
-			}else{
-				redirect("clientes/editar","location");
-			}
- }
+ function edicion(){
+    include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+
+    $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+
+    if(!$permisos['editar_cliente']){	
+        redirect('accesoDenegado', 'location');	
+    }
+
+    if(isset($_GET['id'])){
+        $id_request=trim($_GET['id']);
+        $ruta_base_imagenes_script = base_url('application/images/scripts');
+        $ruta_imagen_cliente = base_url('application/images/Client_Photo/thumb');
+        $nombre_cliente_edision = $this->cliente->getClientes_Cedula($id_request);
+
+        if($result = $this->cliente->getClientes_Cedula($id_request)){
+            $this->load->helper(array('form'));
+            foreach($result as $row){
+                $data = array_merge($data,(Array)$row);
+                $data['Cliente_Imagen_URL'] = $ruta_imagen_cliente."/".$row -> Cliente_Imagen_URL;
+                $data['isSucursal'] = $row -> Cliente_EsSucursal;
+                $data['isExento'] = $row -> Cliente_EsExento;
+                $data['aplicaRetencion'] = $row -> Aplica_Retencion;
+                
+                $provincias = $this->ubicacion->getProvincias();
+                $data["provincias"] = $provincias;
+                $cantones = $this->ubicacion->getCantones($row -> Provincia);
+                $data["cantones"] = $cantones;
+                $distritos = $this->ubicacion->getDistritos($row -> Provincia, $row -> Canton);
+                $data["distritos"] = $distritos;
+                $barrios = $this->ubicacion->getBarrios($row -> Provincia, $row -> Canton, $row->Distrito);
+                $data["barrios"] = $barrios;
+                
+                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+            }
+            $this->load->view('clientes/clientes_edision_view', $data);
+        }else{
+            redirect("clientes/editar","location");
+        }
+    }else{
+        redirect("clientes/editar","location");
+    }
+}
  
 	 function actualizarCliente()
 	 {
 	 	date_default_timezone_set("America/Costa_Rica");
 		$Current_datetime = date("y/m/d : H:i:s", now());
 	 	
-	 	//$tipo_Cedula = $this->input->post('tipo_Cedula');
-		$cedula = $this->input->post('cedula_res'); //Traemos la cedula de respaldo por si se cambio la cedula
-		$estado_Cliente = $this->input->post('estado_Cliente');
-		$nombre = $this->input->post('nombre');
-		$apellidos = $this->input->post('apellidos');
-		$carnet = $this->input->post('carnet');
-		$celular = $this->input->post('celular');
-		$telefono = $this->input->post('telefono');
-		$pais = $this->input->post('pais');
-		$direccion = $this->input->post('direccion');
-		//$fecha_Ingreso = $this->input->post('fecha_Ingreso');
-		//$monto_minimo = $this->input->post('monto_minimo');
-		//$monto_maximo = $this->input->post('monto_maximo');
-		$email = $this->input->post('email');
-		//$descuento = $this->input->post('descuento');
-		$observaciones = $this->input->post('observaciones');
-		$tipo_pago_cliente = $this->input->post('tipo_pago_cliente');
-		
-		//Si es sucursal
-		$isSucursal = isset($_POST['issucursal']) && $_POST['issucursal']  ? "1" : "0";
-		
-		//Si es exento
-		$exento = 0;
-		$exento = isset($_POST['esexento']) && $_POST['esexento']  ? "1" : "0";
-		
-		//Aplica Retencion
-		$aplicaRetencion = 0;
-		$aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
+                $cedula = $this->input->post('cedula_res');
+                $estado_Cliente = $this->input->post('estado_Cliente');
+                $nombre = $this->input->post('nombre');
+                $apellidos = $this->input->post('apellidos');
+                $fecha_nacimiento = $this->input->post('fecha_nacimiento');
+                $celular = $this->input->post('celular');
+                $telefono = $this->input->post('telefono');
+                $pais = $this->input->post('pais');
+                $direccion = $this->input->post('direccion');
+                $email = $this->input->post('email');
+                $observaciones = $this->input->post('observaciones');
+                $tipo_pago_cliente = $this->input->post('tipo_pago_cliente');
+
+                $codptel = $this->input->post('codigo_telefono');
+                $codpcel = $this->input->post('codigo_celular');
+                $codpfax = $this->input->post('codigo_fax');
+                $fax = $this->input->post('fax');
+                $prov = $this->input->post('provincia');
+                $canton = $this->input->post('canton');
+                $distr = $this->input->post('distrito');
+                $barrio = $this->input->post('barrio');
+                
+                //Si es sucursal
+                $isSucursal = isset($_POST['issucursal']) && $_POST['issucursal']  ? "1" : "0";
+
+                //Si es exento
+                $exento = 0;
+                $exento = isset($_POST['esexento']) && $_POST['esexento']  ? "1" : "0";
+
+                //Aplica Retencion
+                $aplicaRetencion = 0;
+                $aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
 		
 
 		if($result = $this->cliente->obtener_Imagen_Cliente($cedula)){
@@ -436,27 +426,33 @@ class editar extends CI_Controller {
 
 		$data_update['Cliente_Nombre'] = mysql_real_escape_string($nombre);
 		$data_update['Cliente_Apellidos'] = mysql_real_escape_string($apellidos);
-		$data_update['Cliente_Carnet_Numero'] = mysql_real_escape_string($carnet);
+		$data_update['Fecha_Nacimiento'] = mysql_real_escape_string($fecha_nacimiento);
 		$data_update['Cliente_Celular'] = mysql_real_escape_string($celular);
 		$data_update['Cliente_Telefono'] = mysql_real_escape_string($telefono);
-		//$data_update['Cliente_Fecha_Ingreso'] = mysql_real_escape_string($fecha_Ingreso);
 		$data_update['Cliente_Pais'] = mysql_real_escape_string($pais);
 		$data_update['Cliente_Direccion'] = mysql_real_escape_string($direccion);
 		$data_update['Cliente_Observaciones'] = mysql_real_escape_string($observaciones);
 		$data_update['Cliente_Imagen_URL'] = mysql_real_escape_string($this->direccion_url_imagen);
 		$data_update['Cliente_Correo_Electronico'] = mysql_real_escape_string($email);
-		//$data_update['Cliente_Maximo_Monto_Venta'] = mysql_real_escape_string($monto_maximo);
-		//$data_update['Cliente_Minimo_Compra_Mensual'] = mysql_real_escape_string($monto_minimo);
 		$data_update['Cliente_Estado'] = mysql_real_escape_string($estado_Cliente);
-		//$data_update['Cliente_Descuento'] = mysql_real_escape_string($descuento);
 		$data_update['Cliente_Numero_Pago'] = mysql_real_escape_string($tipo_pago_cliente);
 		$data_update['Cliente_EsSucursal'] = $isSucursal; 
 		$data_update['Cliente_EsExento'] = $exento;
 		$data_update['Aplica_Retencion'] = $aplicaRetencion;
+                
+                $data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($codptel);
+                $data_update['Codigo_Pais_Celular'] = mysql_real_escape_string($codpcel);
+                $data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($codpfax);
+                $data_update['Numero_Fax'] = mysql_real_escape_string($fax);
+                $data_update['Provincia'] = mysql_real_escape_string($prov);
+                $data_update['Canton'] = mysql_real_escape_string($canton);
+                $data_update['Distrito'] = mysql_real_escape_string($distr);
+                $data_update['Barrio'] = mysql_real_escape_string($barrio);
+                
 		
 		$this->cliente->actualizar(mysql_real_escape_string($cedula), $data_update);
 		
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el cliente codigo: ".mysql_real_escape_string($tipo_Cedula),$data['Sucursal_Codigo'],'edicion');
 		
 		redirect('clientes/editar', 'location');
@@ -533,7 +529,7 @@ class editar extends CI_Controller {
 
 
 	function obtenerClientesTabla(){
-		include '/../get_session_data.php';
+		include PATH_USER_DATA;
 		//Un array que contiene el nombre de las columnas que se pueden ordenar
 		$columnas = array(
 								'0' => 'Cliente_Nombre',
