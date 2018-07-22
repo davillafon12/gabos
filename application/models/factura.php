@@ -1107,7 +1107,7 @@ Class factura extends CI_Model
                 case 'cheque':
                     return "03";
                 case 'mixto':
-                    return "99";
+                    return "01,02";
                 case 'credito':
                     return "99";
                 case 'apartado':
