@@ -13,7 +13,7 @@ class recibos extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -38,7 +38,7 @@ class recibos extends CI_Controller {
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
 			}else{*/
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
-					include '/../get_session_data.php';					
+					include PATH_USER_DATA;					
 					if($creditos = $this->cliente->getFacturasConSaldo($cedula, $data['Sucursal_Codigo'])){
 						$creditosArray = array();
 						foreach($creditos as $credito){
@@ -94,7 +94,7 @@ class recibos extends CI_Controller {
 						$facturas = json_decode($_POST['facturas'], true);
 						$comentarios = trim($_POST['comentarios']);
 						if($recibos = $this->procesarFacturas($cedula, $saldoAPagar, $facturas, $tipoPago, $comentarios)){
-							include '/../get_session_data.php';					
+							include PATH_USER_DATA;					
 							$retorno['status'] = 'success';
 							unset($retorno['error']);
 							$retorno['recibos'] = $recibos;
@@ -151,7 +151,7 @@ class recibos extends CI_Controller {
 				//DEBE DEVOLVER EL SALDO A MAX CREDITO DEL CLIENTE				
 				//-> No aplica ya que cuando se cobra una factura con credito se calcula los saldos
 				
-				include '/../get_session_data.php';	
+				include PATH_USER_DATA;	
 				
 				if($saldoActual <= $saldoALiquidar){ //Si el saldo de esta factura es menor o igual al saldo enviado
 					//Puedo saldar toda la factura

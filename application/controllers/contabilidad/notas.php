@@ -209,7 +209,7 @@ class notas extends CI_Controller {
 									$tipoPago = 'contado'; //Por defetco guarda este
 									$moneda = 'colones'; //Por defecto guarda este
 									
-									
+                                                                        
 									if($this->contabilidad->agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cedula, $data['Sucursal_Codigo'], $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $this->configuracion->getPorcentajeIVA(), $this->configuracion->getTipoCambioCompraDolar())){
 										$this->contabilidad->agregarProductosNotaCredito($consecutivo, $data['Sucursal_Codigo'], $productosAAcreditar, $cedula, $facturaAcreditar);
 										
@@ -220,7 +220,85 @@ class notas extends CI_Controller {
 										$retorno['sucursal']= $data['Sucursal_Codigo'];
 										$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
 										$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
-									}else{
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                if($facturaAcreditarHeader->Factura_Tipo_Pago === "credito"){
+                                                                                    if($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $data['Sucursal_Codigo'])){
+                                                                                        if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $data['Sucursal_Codigo'])){
+
+                                                                                            unset($retorno['error']);
+                                                                                            $retorno['status'] = 'success';
+                                                                                            $retorno['notaHead'] = $notaCreditoHead;
+                                                                                            $retorno['notaBody'] = $notaCreditoBody;
+
+                                                                                            $cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+
+                                                                                            $costo_total = 0;
+                                                                                            $iva = 0;
+                                                                                            $costo_sin_iva = 0;
+                                                                                            $retencion = 0;
+                                                                                            foreach($notaCreditoBody as $art){
+
+
+                                                                                                    $cantidadArt = $art->bueno + $art->defectuoso;
+                                                                                                    //Calculamos el precio total de los articulos
+                                                                                                    //$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+                                                                                                    $precio_total_articulo = $art->precio*$cantidadArt;
+                                                                                                    $precio_total_articulo_sin_descuento = ($art->precio/(1-($art->descuento/100)))*$cantidadArt;
+                                                                                                    $precio_articulo_final = $art->precio_final;
+                                                                                                    $precio_articulo_final = $precio_articulo_final * $cantidadArt;
+
+                                                                                                    //Calculamos los impuestos
+
+                                                                                                    $isExento = $art->exento;
+
+                                                                                                    if($isExento=='0'){
+                                                                                                            $costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
+
+
+                                                                                                            $iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100)));
+                                                                                                            $iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($notaCreditoHead[0]->iva)/100))); 
+
+                                                                                                            $precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
+                                                                                                            $iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+
+                                                                                                            if(!$art->no_retencion){
+                                                                                                                            $retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+                                                                                                            }
+                                                                                                    }
+                                                                                                    else if($isExento=='1'){
+                                                                                                            $costo_sin_iva += $precio_total_articulo;
+                                                                                                            //$retencion = 0;
+                                                                                                    }
+                                                                                                    $costo_total += $precio_total_articulo;
+
+
+
+                                                                                            }
+
+
+                                                                                            if($cliente[0]->Aplica_Retencion == "1")
+                                                                                                    $retencion = 0;
+
+
+
+                                                                                            $iva = $costo_total-$costo_sin_iva;
+                                                                                            $costo_total += $retencion;
+
+
+                                                                                            $notaCreditoHead[0]->total = $costo_total;
+                                                                                            $notaCreditoHead[0]->subtotal = $costo_sin_iva;
+                                                                                            $notaCreditoHead[0]->total_iva = $iva;
+                                                                                            $notaCreditoHead[0]->retencion = $retencion;
+                                                                                        
+                                                                                            $this->saldarDeudaFacturaCredito($costo_total, $cedula, $data['Sucursal_Codigo']);
+                                                                                           
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                        }else{
 										//No se pudo crear la nota
 										$retorno['error'] = '9';
 									}
@@ -331,6 +409,46 @@ class notas extends CI_Controller {
 	function getNextConsecutivoNotaDebito($sucursal){
 		return $this->contabilidad->getConsecutivoUltimaNotaDebito($sucursal)+1;
 	}
+        
+        function saldarDeudaFacturaCredito($saldoAPagar, $cliente, $sucursal){
+            $creditos = $this->cliente->getFacturasConSaldo($cliente, $sucursal);
+            $facturas = array();
+            foreach($creditos as $cre){
+                array_push($facturas, $cre->Credito_Id);
+            }
+            //Creamos un array que contendra las facturas que realmente existen
+            $facturasExistentes = array();
+            foreach($facturas as $factura){
+                    if($this->contabilidad->existeFacturaPorId($factura)){
+                            //Si existe la factura con credito la metemos al array
+                            array_push($facturasExistentes, $factura);
+                    }
+            }
+
+            $saldoALiquidar = $saldoAPagar;
+
+            //Ya que tenemos las facturas existentes, las traemos en orden de menor consecutivo a mayor
+            if($facturasASaldar = $this->contabilidad->getCreditosOrdenadosPorConsecutivoMenorAMayor($facturasExistentes)){
+           
+                foreach($facturasASaldar as $facturaASaldar){
+                    $codigoCredito = $facturaASaldar->Credito_Id;
+                    $saldoActual = $facturaASaldar->Credito_Saldo_Actual;
+                    if($saldoActual <= $saldoALiquidar){ //Si el saldo de esta factura es menor o igual al saldo enviado
+                     
+                            //Puedo saldar toda la factura
+                            $saldoALiquidar -= $saldoActual;
+                            $this->contabilidad->saldarFactura($codigoCredito, 0);
+                    }elseif($saldoALiquidar>0){ //Si el saldo de esta factura es mayor al ingresado pero mayor a cero
+                     
+                        
+                            //Puedo saldar parte de la misma
+                            $saldoActual -= $saldoALiquidar;
+                            $saldoActual = $saldoActual < 1 ? 0 : $saldoActual;
+                            $this->contabilidad->saldarFactura($codigoCredito, $saldoActual);
+                    }
+                }
+            }
+        }
 }
 
 ?>

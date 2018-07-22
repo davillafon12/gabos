@@ -1266,7 +1266,7 @@ class impresion extends CI_Controller {
 		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['efectivo']),1,0,'R');
 		$pdf->Cell(25,5,$this->fn($cierre->datos['pagoMixto']['tarjeta']),1,0,'R');
 		$pdf->Cell(10,5,'',0,0,'C');
-		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['efectivo']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'R');
+		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['efectivo']),1,0,'R');
 		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['tarjeta']),1,0,'R');
 		$pdf->Cell(23,5,$this->fn($cierre->datos['recibos']['deposito']),1,0,'R');
 		$pdf->Cell(21,5,$this->fn($cierre->datos['recibos']['abonos']),1,0,'R');
@@ -1350,7 +1350,7 @@ class impresion extends CI_Controller {
 		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalFacturasContado']-$cierre->datos['detalleNotasCredito']['contado']),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($efectivoTotal),1,0,'C');
 		$pdf->Cell(47.5,5,$this->fn($cierre->datos['pagoDatafonos']['totalDatafonos']+$cierre->bnserviciosc+$cierre->bcrserviciosc-$cierre->datos['detalleNotasCredito']['tarjeta']),1,0,'C');
-		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalCredito']-$cierre->datos['detalleNotasCredito']['credito']),1,0,'C');
+		$pdf->Cell(47.5,5,$this->fn($cierre->datos['totalCreditos']['totalCredito']),1,0,'C');
 		
 		
 		$pdf->ln(5);
@@ -1397,7 +1397,7 @@ class impresion extends CI_Controller {
 				$pdf->ln(5); 
 			}
 			if($contador == 9){
-				$pdf->SetXY(105,198);
+				$pdf->SetXY(105,209);
 			}
 			if($contador > 8){
 				$pdf->Cell(70,5,$vendedor[0]->usuario,0,0,'C');
@@ -1763,7 +1763,7 @@ class impresion extends CI_Controller {
 				$pdf->Text(122, 22, 'Fecha y Hora: ');				
 				$pdf->Text(122, 27, $encabezado->fecha);
 				$pdf->SetFont('Arial','',11);
-				$pdf->Text(172, 16, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
+				$pdf->Text(172, 27, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
 				
 				//Info del cliente
 				$pdf->SetFont('Arial','B',11);

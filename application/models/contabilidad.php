@@ -2009,6 +2009,20 @@ Class contabilidad extends CI_Model
             $this->db->where("Id", $consignacion);
             $this->db->update("tb_49_consignacion", $datos);
 	}
+        
+        
+        function reducirDeudaCreditoPorNotaCredito($consecutivo, $sucursal, $articulos, $factura){
+            $this->load->model("factura","",true);
+            var_dump($factura);
+            foreach($articulos as $art){
+                if($art->c === "00"){
+                    var_dump($art);
+                }else{
+                    $articuloCompleto = $this->factura->getArticuloFactura($consecutivo, $sucursal, $art->c);
+                    var_dump($articuloCompleto);
+                }
+            }
+        }
 }
 
 
