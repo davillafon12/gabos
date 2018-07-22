@@ -329,6 +329,18 @@ class caja extends CI_Controller {
                 }
                 
                 $this->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+                
+                if(!$responseCheck["cliente"]->NoReceptor){
+                    require_once PATH_API_CORREO;
+                    $apiCorreo = new Correo();
+                    $attachs = array(
+                        PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".xml",
+                        PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".pdf");
+                    if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
+                        $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
+                    }
+                }
+                
             }else{
                 $responseCheck["status"] = "error";
                 $responseCheck["error"] = $resFacturaElectronica["error"];

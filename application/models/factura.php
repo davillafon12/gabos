@@ -929,6 +929,7 @@ Class factura extends CI_Model
                 if($resXML = $this->generarXMLFactura($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo)){
                     if($resXMLFirmado = $this->firmarXMLFactura($factura->Factura_Consecutivo, $factura->TB_02_Sucursal_Codigo)){
                         $feedback["data"] = $responseData;
+                        $feedback["data"]["clave"] = $resClave["Clave"];
                         $feedback["status"] = true;
                         unset($feedback['error']);
                         log_message('error', "Se genero bien el XML firmado | Consecutivo: $factura->Factura_Consecutivo | Sucursal: $factura->TB_02_Sucursal_Codigo");
@@ -1419,55 +1420,13 @@ Class factura extends CI_Model
         }
         
         
-        public function generarPDF($sucursal, $consecutivo, $makeFile){
-            $retorno = array();
-            if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
-                if($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)){
-                    if($fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal)){
-                        //Valoramos si un credito para poner la fecha de vencimiento
-                        if($facturaHead[0] -> tipo == 'credito'){
-                                $diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0] -> cliente_ced);
-                                $facturaHead[0] -> diasCredito = $diasCredito;
-                                $date = strtotime("+$diasCredito days", strtotime($facturaHead[0] -> fecha) );
-                                $facturaHead[0] -> fechaVencimiento = date('d-m-Y',$date);
-                        }elseif($facturaHead[0] -> tipo == 'mixto'){
-                                $cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
-                                $cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
-
-                                //Valorar si fue en colones o dolares								
-                                if($facturaHead[0] -> moneda == 'dolares'){
-                                        $cantidadPagaTarjeta = $cantidadPagaTarjeta/$facturaHead[0] -> cambio;
-                                        $cantidadPagaContado = $cantidadPagaContado/$facturaHead[0] -> cambio;
-                                }						
-
-                                $facturaHead[0] -> cantidadTarjeta = $cantidadPagaTarjeta;
-                                $facturaHead[0] -> cantidadContado = $cantidadPagaContado;
-                        }elseif($facturaHead[0] -> tipo == 'apartado'){								
-                                $abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
-                                //Valorar si fue en colones o dolares								
-                                if($facturaHead[0] -> moneda == 'dolares'){
-                                        $abono = $abono/$facturaHead[0] -> cambio;
-                                }
-                                $facturaHead[0] -> abono = $abono;
-                        }
-
-                        if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
-                                $facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
-                                $facturaHead[0]->clave = $fElectornica->Clave;
-                                $this->facturaPDF($empresa, $facturaHead, $facturaBody, $makeFile);								
-                        }else{
-                                $retorno['error'] = '9';
-                        }
-                    }else{
-                        $retorno['error'] = '50';
-                    }
-                }else{
-                        $retorno['error'] = '8';
-                }						
-            }else{
-                    $retorno['error'] = '7';
-            }
-            return $retorno;
+        function marcarEnvioCorreoFacturaElectronica($sucursal, $consecutivo){
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $data = array(
+                "CorreoEnviadoReceptor" => 1
+            );
+            $this->db->update("tb_55_factura_electronica", $data);
         }
 }
 
