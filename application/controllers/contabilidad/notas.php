@@ -12,6 +12,7 @@ class notas extends CI_Controller {
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('configuracion','',TRUE);
 		$this->load->model('empresa','',TRUE);
+                $this->load->model('impresion_m','',TRUE);
 	}
 
 	function index()
@@ -220,6 +221,40 @@ class notas extends CI_Controller {
 										$retorno['sucursal']= $data['Sucursal_Codigo'];
 										$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
 										$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+                                                                                
+                                                                                
+                                                                                // Realizar nota credito electronica
+                                                                                $respuestaHacienda["type"] = "error";
+                                                                                if($notaCreditoHead = $this->contabilidad->getNotaCredito($consecutivo, $data['Sucursal_Codigo'])){
+                                                                                    if($facturaElectronicaHead = $this->factura->getFacturaElectronica($notaCreditoHead->Factura_Acreditar, $data['Sucursal_Codigo'])){
+                                                                                        $response = $this->contabilidad->generarNotaCreditoElectronica($consecutivo, $data['Sucursal_Codigo'], CORRIGE_FACTURA, "Devolucion de mercancia", $facturaElectronicaHead->Clave, FACTURA_ELECTRONICA_CODIGO, $facturaElectronicaHead->FechaEmision);
+                                                                                        if($response["status"]){
+                                                                                            $respuestaHacienda["type"] = "success";
+                                                                                            $respuestaHacienda["msg"] = $response["message"];
+                                                                                            
+                                                                                            $this->contabilidad->generarPDFNotaCredito($consecutivo, $data['Sucursal_Codigo']);
+                                                                                            
+                                                                                            if(!$response["cliente"]->NoReceptor){
+                                                                                                require_once PATH_API_CORREO;
+                                                                                                $apiCorreo = new Correo();
+                                                                                                $attachs = array(
+                                                                                                    PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".xml",
+                                                                                                    PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".pdf");
+                                                                                                if($apiCorreo->enviarCorreo($response["cliente"]->Cliente_Correo_Electronico, "Nota Crédito #".$consecutivo." | ".$response["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$response["empresa"]->Sucursal_Nombre, $attachs)){
+                                                                                                    $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($data['Sucursal_Codigo'], $consecutivo);
+                                                                                                }
+                                                                                            }
+                                                                                        }else{
+                                                                                            $respuestaHacienda["msg"] = $response["error_msg"]." | ERROR #".$response["error"];
+                                                                                        }
+                                                                                    }else{
+                                                                                        $respuestaHacienda["msg"] = "No existe factura electrónica para generar la nota crédito electrónica.";
+                                                                                    }
+                                                                                }else{
+                                                                                    $respuestaHacienda["msg"] = "No se pudo obtener la nota crédito para generar la nota crédito electrónica.";
+                                                                                }
+                                                                                
+                                                                                $retorno['hacienda'] = $respuestaHacienda;
 									}else{
 										//No se pudo crear la nota
 										$retorno['error'] = '9';

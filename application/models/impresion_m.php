@@ -209,14 +209,17 @@ Class impresion_m extends CI_Model{
 			break;
 			case 'nc':
 				//Cuadro de numero de factura y hora/fecha
-				$pdf->Rect(120, 10, 80, 20, 'D');
-				$pdf->SetFont('Arial','B',16);
-				$pdf->Text(122, 17, 'Nota Crédito #'.$encabezado->nota);			
-				$pdf->SetFont('Arial','',12);
-				$pdf->Text(122, 22, 'Fecha y Hora: ');				
-				$pdf->Text(122, 27, $encabezado->fecha);
-				
-				$pdf->Text(180, 27, 'Pag. # '.($this->numPagina+1));
+				$pdf->Rect(108, 10, 92, 20, 'D');
+                                $pdf->SetFont('Arial','B',11);
+				$pdf->Text(109, 15, 'Consecutivo');
+                                $pdf->Text(109, 21, 'Clave');
+                                $pdf->Text(109, 27, 'Fecha');
+                                $pdf->SetFont('Arial','',11);
+				$pdf->Text(134, 15, $encabezado->consecutivoH);
+                                $pdf->Text(122, 27, $encabezado->fecha);
+                                $pdf->Text(172, 27, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
+                                $pdf->SetFont('Arial','',8);
+				$pdf->Text(120, 20.8, $encabezado->clave);
 				
 				//Info del cliente
 				$pdf->SetFont('Arial','B',12);
@@ -613,6 +616,89 @@ Class impresion_m extends CI_Model{
 				$pdf->Cell(28,7,$this->fni($total),1,0,'R');
 			break;	
 		}		
+	}
+        
+        public function notaCreditoPDF($empresa, $head, $productos, $makeFile){
+		require(PATH_FPDF_LIBRARY);
+		$pdf = new FPDF('P','mm','A4');
+		
+		$cantidadProductos = sizeOf($productos);
+		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
+		$cantidadTotalArticulos = 0;
+		while($paginasADibujar>=$this->numPagina){
+			//Agregamos pag		
+			$pdf->AddPage();			
+			//Agregamos el encabezado
+			$this->encabezadoDocumentoPDF('nc', $empresa, $head, $pdf);
+			//Agregamos Productos
+			$inicio = $this->numPagina*30;
+			if((($this->numPagina+1)*30)<$cantidadProductos){
+				$final = ($this->numPagina+1)*30;
+			}else{
+				$final = $cantidadProductos;
+			}
+			
+			$cantidadTotalArticulos += $this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf);
+			//Definimos el pie de pagina
+			$this->pieDocumentoPDF('nc', $head, $empresa, $pdf, $cantidadTotalArticulos);
+			$this->numPagina++;
+		}
+		if($makeFile){
+                    $pdf->Output(PATH_DOCUMENTOS_ELECTRONICOS.$head->clave.".pdf",'F');
+                }else{
+                   //Imprimimos documento
+                    $pdf->Output(); 
+                }
+	}
+        
+        private function printProductsNotaCredito($productos, $inicio, $fin, &$pdf){
+		//Agregamos el apartado de productos
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Text(90, 65, 'Productos');
+		//Caja redondeada 1
+		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
+		//Divisores verticales de productos
+		$pdf->Line(10, 74, 200, 74);		
+		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
+		$pdf->Line(110, 67, 110, 240); //Divisor de descripcion y cantidad
+		$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
+		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
+		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total	
+		//Encabezado de productos
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(13, 72, 'Código');
+		$pdf->Text(58, 72, 'Descripción');
+		$pdf->Text(112, 72, 'Bueno');
+		$pdf->Text(126.5, 72, 'Defectuoso');
+		$pdf->Text(151, 72, 'P/Unitario');
+		$pdf->Text(179, 72, 'P/Total');
+		//Agregamos Productos
+		$pdf->SetFont('Arial','',9);
+		
+		$pdf->SetXY(110, 75.3);		
+		$sl = 5; //Salto de linea
+		$pl = 79; //Primera linea
+		
+		$cantidadTotalArticulos = 0;
+		for($cc = $inicio; $cc<=$fin; $cc++){
+			//Calculamos la cantidad
+			$cantidad = $productos[$cc]->bueno + $productos[$cc]->defectuoso;
+			
+			//Calculamos precio total con descuento
+			$total = $cantidad * $productos[$cc]->precio; 
+			
+			$pdf->Text(11, $pl, $productos[$cc]->codigo);
+			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
+			$pdf->cell(15,5,$productos[$cc]->bueno,0,0,'C');
+			$pdf->cell(20,5,$productos[$cc]->defectuoso,0,0,'C');
+			$pdf->cell(27.5,5,$this->fni($productos[$cc]->precio),0,0,'R');
+			$pdf->cell(28,5,$this->fni($total),0,0,'R');			
+			$pdf->ln($sl);
+			$pdf->SetX(110);
+			$pl += $sl;
+			$cantidadTotalArticulos += $cantidad;
+		}
+		return $cantidadTotalArticulos;
 	}
     
 }

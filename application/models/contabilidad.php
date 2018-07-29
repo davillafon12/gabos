@@ -336,6 +336,36 @@ Class contabilidad extends CI_Model
 			return $query->result();
 		}
 	}
+        
+        function getNotaCredito($consecutivo, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $this->db->from("TB_27_Notas_Credito");
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+                    return false;
+		}else{			
+                    return $query->result()[0];
+		}
+	}
+        
+        function getArticulosNotaCredito($consecutivo, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
+                $this->db->where("Nota_Credito_Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $this->db->from("tb_28_productos_notas_credito");
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+                    return false;
+		}else{			
+                    return $query->result();
+		}
+	}
 	
 	function getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal){
 /*
@@ -2009,6 +2039,655 @@ Class contabilidad extends CI_Model
             $this->db->where("Id", $consignacion);
             $this->db->update("tb_49_consignacion", $datos);
 	}
+        
+        function crearNotaCreditoElectronica($sucursal, $cliente, $nota, $costos, $articulos, $codigo, $razon, $numero, $tipoDoc, $fechaEmisionDoc){
+            $feedback["status"] = false;
+            
+            if($cliente->NoReceptor){
+                $cliente = null;
+            }
+            
+            $responseData = $this->guardarDatosBasicosNotaCreditoElectronica($sucursal, $cliente, $costos, $articulos, $nota, $codigo, $razon, $numero, $tipoDoc, $fechaEmisionDoc);
+        
+            if($resClave = $this->generarClaveYConsecutivoParaNotaCreditoElectronica($nota->Consecutivo, $nota->Sucursal)){
+                if($resXML = $this->generarXMLNotaCredito($nota->Consecutivo, $nota->Sucursal)){
+                    if($resXMLFirmado = $this->firmarXMLNotaCredito($nota->Consecutivo, $nota->Sucursal)){
+                        $feedback["data"] = $responseData;
+                        $feedback["data"]["clave"] = $resClave["Clave"];
+                        $feedback["status"] = true;
+                        unset($feedback['error']);
+                        log_message('error', "Se genero bien el XML firmado | NC | Consecutivo: $nota->Consecutivo | Sucursal: $nota->Sucursal");
+                    }else{
+                        // ERROR AL FIRMAR EL XML DE FE
+                        $feedback['error']='54';
+                        $feedback["error_msg"] = 'Error al firma el XML';
+                        log_message('error', "Error al firmar el XML | NC | Consecutivo: $nota->Consecutivo | Sucursal: $nota->Sucursal");
+                    }
+                }else{
+                    // ERROR AL GENERAR EL XML DE FE
+                    $feedback['error']='53';
+                    $feedback["error_msg"] = 'Error al generar el XML';
+                    log_message('error', "Error al generar el XML | NC | Consecutivo: $nota->Consecutivo | Sucursal: $nota->Sucursal");
+                }
+            }else{
+                // ERROR AL GENERAR LA CLAVE
+                $feedback["error"] = '52';
+                $feedback["error_msg"] = 'Error al generar la clave';
+                log_message('error', "Error al generar la clave | NC | Consecutivo: $nota->Consecutivo | Sucursal: $nota->Sucursal");
+            }
+            return $feedback;
+        }
+        
+        function guardarDatosBasicosNotaCreditoElectronica($emisor, $receptor, $costos, $articulos, $nota, $codigo, $razon, $numero, $tipoDoc, $fechaEmisionDoc){
+            // Eliminamos informacion antigua de la misma factura
+            $this->db->where("Consecutivo", $nota->Consecutivo);
+            $this->db->where("Sucursal", $nota->Sucursal);
+            $this->db->delete("tb_58_articulos_nota_credito_electronica");
+            
+            $this->db->where("Consecutivo", $nota->Consecutivo);
+            $this->db->where("Sucursal", $nota->Sucursal);
+            $this->db->delete("tb_57_nota_credito_electronica");
+            
+            $tipoPago['tipo'] = $nota->Tipo_Pago;
+            
+            // Guardamos el encabezado de la factura
+            require_once PATH_API_HACIENDA;
+            $api = new API_FE();
+            date_default_timezone_set("America/Costa_Rica");
+            $fechaFacturaActual = now();
+            $situacion = $api->internetIsOnline() ? "normal" : "sininternet";
+            $fechaEmision = date(DATE_ATOM, $fechaFacturaActual);
+            $condicionVenta = $this->getCondicionVenta($tipoPago);
+            $plazoCredito = "0";
+            $medioPago = $this->getMedioPago($tipoPago);
+            $codigoMoneda = $nota->Moneda == "colones" ? "CRC" : "USD";
+            $tipoCambio = $nota->Tipo_Cambio;
+            $otros = "";
+            
+            // Agregamos la info nueva
+            $data = array(
+                "Consecutivo" => $nota->Consecutivo,
+                "Sucursal" => $nota->Sucursal,
+                "FechaEmision" => $fechaEmision,
+                "EmisorNombre" => $emisor->Sucursal_Nombre,
+                "EmisorTipoIdentificacion" => $emisor->Tipo_Cedula,
+                "EmisorIdentificacion" => $emisor->Sucursal_Cedula,
+                "EmisorNombreComercial" => $emisor->Sucursal_Nombre,
+                "EmisorProvincia" => $emisor->Provincia,
+                "EmisorCanton" => str_pad($emisor->Canton,2,"0", STR_PAD_LEFT),
+                "EmisorDistrito" => str_pad($emisor->Distrito,2,"0", STR_PAD_LEFT),
+                "EmisorBarrio" => str_pad($emisor->Barrio,2,"0", STR_PAD_LEFT),
+                "EmisorOtrasSennas" => $emisor->Sucursal_Direccion,
+                "EmisorCodigoPaisTelefono" => $emisor->Codigo_Pais_Telefono,
+                "EmisorTelefono" => str_replace("-", "", $emisor->Sucursal_Telefono),
+                "EmisorCodigoPaisFax" => $emisor->Codigo_Pais_Fax,
+                "EmisorFax" => str_replace("-", "", $emisor->Sucursal_Fax),
+                "EmisorEmail" => $emisor->Sucursal_Email,
+                "CondicionVenta" => $condicionVenta,
+                "PlazoCredito" => $plazoCredito,
+                "MedioPago" => $medioPago,
+                "CodigoMoneda" => $codigoMoneda,
+                "TipoCambio" => $tipoCambio,
+                "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
+                "TotalServiciosExentos" => $this->fn($costos['total_serv_exentos']),
+                "TotalMercanciaGravada" => $this->fn($costos['total_merc_gravada']),
+                "TotalMercanciaExenta" => $this->fn($costos['total_merc_exenta']),
+                "TotalGravados" => $this->fn($costos['total_gravados']),
+                "TotalExentos" => $this->fn($costos['total_exentos']),
+                "TotalVentas" => $this->fn($costos['total_ventas']),
+                "TotalDescuentos" => $this->fn($costos['total_descuentos']),
+                "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
+                "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+                "TotalComprobante" => $this->fn($costos['total_comprobante']),
+                "Otros" => trim($otros) == "" ? "-" : trim($otros),
+                "TipoDocumento" => NOTA_CREDITO_ELECTRONICA,
+                "CodigoPais" => CODIGO_PAIS,
+                "ConsecutivoFormateado" => $this->formatearConsecutivo($nota->Consecutivo),
+                "Situacion" => $situacion,
+                "CodigoSeguridad" => rand(10000000,99999999),
+                "RespuestaHaciendaEstado" => "sin_enviar",
+                "CorreoEnviadoReceptor" => 0,
+                "DocumentoReferenciaNumero" => $numero,
+                "DocumentoReferenciaTipo" => $tipoDoc,
+                "DocumentoReferenciaFechaEmision" => $fechaEmisionDoc,
+                "DocumentoReferenciaCodigo" => $codigo,
+                "DocumentoReferenciaRazon" => $razon
+            );
+           
+            if($receptor != NULL){
+                $data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
+                $data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
+                $data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
+                $data["ReceptorProvincia"] = $receptor->Provincia;
+                $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
+                $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
+                $data["ReceptorBarrio"] = str_pad($receptor->Barrio,2,"0", STR_PAD_LEFT);
+                $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
+                $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
+                $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
+                $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
+                $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+            }
+            
+            $this->db->insert("tb_57_nota_credito_electronica", $data);
+            
+            foreach ($articulos as $art){
+                $data = array(
+                    "Cantidad" => $art["cantidad"],
+                    "UnidadMedida" => $art["unidadMedida"],
+                    "Detalle" => $art["detalle"],
+                    "PrecioUnitario" => $art["precioUnitario"],
+                    "MontoTotal" => $art["montoTotal"],
+                    "MontoDescuento" => $art["montoDescuento"],
+                    "NaturalezaDescuento" => $art["naturalezaDescuento"],
+                    "Subtotal" => $art["subtotal"],
+                    "ImpuestoObject" => json_encode($art["impuesto"]),
+                    "MontoTotalLinea" => $art["montoTotalLinea"],
+                    "Consecutivo" => $nota->Consecutivo,
+                    "Sucursal" => $nota->Sucursal
+                );
+                
+                $this->db->insert("tb_58_articulos_nota_credito_electronica", $data);
+            }
+            
+            return array("situacion" => $situacion, "fecha" => $fechaFacturaActual);
+        }
+        
+        function generarClaveYConsecutivoParaNotaCreditoElectronica($consecutivo, $sucursal, $api = NULL){
+            $this->db->select("EmisorTipoIdentificacion, EmisorIdentificacion, CodigoPais, ConsecutivoFormateado, Situacion, CodigoSeguridad, TipoDocumento");
+            $this->db->from("tb_57_nota_credito_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                $row = $query->result()[0];
+                if($claveRs = $api->createClave(($row->EmisorTipoIdentificacion == "01" ? "fisico" : "juridico"), $row->EmisorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento)){
+                    $data = array(
+                        "Clave" => $claveRs["clave"],
+                        "ConsecutivoHacienda" => $claveRs["consecutivo"]
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+                    $this->db->update("tb_57_nota_credito_electronica", $data);
+                    return $data;
+                }
+            }
+            return false;
+        }
+        
+        function generarXMLNotaCredito($consecutivo, $sucursal, $api = NULL){
+            $this->db->from("tb_57_nota_credito_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                $nota = $query->result()[0];
+                $this->db->from("tb_58_articulos_nota_credito_electronica");
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $articulos = $query->result();
+                    $xmlRes = $api->crearXMLNotaCredito($nota->Clave, 
+                                                    $nota->ConsecutivoHacienda, 
+                                                    $nota->FechaEmision, 
+
+                                                    $nota->EmisorNombre, 
+                                                    $nota->EmisorTipoIdentificacion, 
+                                                    $nota->EmisorIdentificacion, 
+                                                    $nota->EmisorNombreComercial, 
+                                                    $nota->EmisorProvincia, 
+                                                    $nota->EmisorCanton, 
+                                                    $nota->EmisorDistrito, 
+                                                    $nota->EmisorBarrio, 
+                                                    $nota->EmisorOtrasSennas, 
+                                                    $nota->EmisorCodigoPaisTelefono, 
+                                                    $nota->EmisorTelefono, 
+                                                    $nota->EmisorCodigoPaisFax, 
+                                                    $nota->EmisorFax, 
+                                                    $nota->EmisorEmail, 
+
+                                                    $nota->ReceptorNombre, 
+                                                    $nota->ReceptorTipoIdentificacion, 
+                                                    $nota->ReceptorIdentificacion, 
+                                                    $nota->ReceptorProvincia, 
+                                                    $nota->ReceptorCanton, 
+                                                    $nota->ReceptorDistrito, 
+                                                    $nota->ReceptorBarrio, 
+                                                    $nota->ReceptorCodigoPaisTelefono, 
+                                                    $nota->ReceptorTelefono, 
+                                                    $nota->ReceptorCodigoPaisFax, 
+                                                    $nota->ReceptorFax, 
+                                                    $nota->ReceptorEmail,
+
+                                                    $nota->CondicionVenta, 
+                                                    $nota->PlazoCredito, 
+                                                    $nota->MedioPago, 
+                                                    $nota->CodigoMoneda, 
+                                                    $nota->TipoCambio, 
+
+                                                    $nota->TotalServiciosGravados, 
+                                                    $nota->TotalServiciosExentos, 
+                                                    $nota->TotalMercanciaGravada, 
+                                                    $nota->TotalMercanciaExenta, 
+                                                    $nota->TotalGravados, 
+                                                    $nota->TotalExentos, 
+                                                    $nota->TotalVentas, 
+                                                    $nota->TotalDescuentos, 
+                                                    $nota->TotalVentasNeta, 
+                                                    $nota->TotalImpuestos, 
+                                                    $nota->TotalComprobante,
+
+                                                    $nota->Otros, 
+                                                    $this->prepararArticulosParaXML($articulos),
+                                                    $nota->DocumentoReferenciaTipo, 
+                                                    $nota->DocumentoReferenciaNumero, 
+                                                    $nota->DocumentoReferenciaRazon, 
+                                                    $nota->DocumentoReferenciaCodigo, 
+                                                    $nota->DocumentoReferenciaFechaEmision);
+                    if($xmlRes){
+                        $data = array(
+                            "XMLSinFirmar" => $xmlRes["xml"]
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_57_nota_credito_electronica", $data);
+                        return $data;
+                    }
+                }
+            }
+            return false;
+        }
+        
+        function firmarXMLNotaCredito($consecutivo, $sucursal, $api = NULL){
+            $this->db->from("tb_57_nota_credito_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                $nota = $query->result()[0];
+                $this->db->from("tb_02_sucursal");
+                $this->db->where("Codigo", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $empresa = $query->result()[0];
+                    if($xmlFirmado = $api->firmarDocumento($empresa->Token_Certificado_Tributa, $nota->XMLSinFirmar, $empresa->Pass_Certificado_Tributa, $nota->TipoDocumento)){
+                        $data = array(
+                            "XMLFirmado" => $xmlFirmado
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_57_nota_credito_electronica", $data);
+                        
+                        // Guardarmos el XML firmado en un archivo
+                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$nota->Clave.".xml",  base64_decode($xmlFirmado));
+                        
+                        return $data;
+                    }
+                }
+            }
+            return false;
+        }
+        
+        function generarNotaCreditoElectronica($consecutivo, $sucursal, $codigo, $razon, $numero, $tipoDoc, $fechaEmision){
+            $responseFetch = $this->getDatosParaNotaCreditoElectronica($consecutivo, $sucursal);
+            if($responseFetch["status"]){
+//                    $r["notaCreditoHead"] = $notaCreditoHead;
+//                    $r["facturaElectronica"] = $facturaElectronicaHead;
+//                    $r["costos"] = $costos;
+//                    $r["articulos"] = $artFinales;
+//                    $r["cliente"] = $cliente;
+//                    $r["empresa"] = $sucursal;
+                $responseCreacion = $this->crearNotaCreditoElectronica($responseFetch["empresa"], $responseFetch["cliente"], $responseFetch["notaCreditoHead"], $responseFetch["costos"], $responseFetch["articulos"], $codigo, $razon, $numero, $tipoDoc, $fechaEmision);
+
+                if($responseCreacion["status"]){
+                    if($responseCreacion["data"]["situacion"] == "normal"){
+                        if($resEnvio = $this->enviarNotaCreditoElectronicaAHacienda($consecutivo, $sucursal)){
+                            if($resEnvio["estado_hacienda"] == "rechazado"){
+                                log_message('error', "Nota credito fue RECHAZADA por Hacienda. | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                                $responseFetch["status"] = false;
+                                $responseFetch['error'] = 903;
+                                $responseFetch["error_msg"] = "Nota credito fue RECHAZADA por Hacienda, favor marcarla para su revisión";
+                            }else if($resEnvio["estado_hacienda"] == "aceptado"){
+                                $responseFetch["message"] = "Nota credito fue ACEPTADA por Hacienda";
+                                $responseFetch["status"] = true;
+                                $responseFetch["clave"] = $responseCreacion["data"]["clave"];
+                                log_message('error', "Nota credito fue ACEPTADA por Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                            }else{
+                                $responseFetch["status"] = false;
+                                $responseFetch['error'] = 903;
+                                $responseFetch["error_msg"] = "Nota credito se envió a Hacienda pero no fue rechazada, ni aceptada";
+                                log_message('error', "Hacienda envio otro estado {$resEnvio["estado_hacienda"]} | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                            }
+                        }else{
+                            log_message('error', "No se pudo enviar la nota credito a Hacienda, debemos marcarla como contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                            // Realizar documento de contingencia, porque al enviar a Hacienda algo fallo
+                            // Pasos a seguir
+                            //    1) Cambiar estado a contingencia
+                            //    2) Regenerar y actualizar clave
+                            //    3) Regenerar y actualizar XML
+                            //    5) Regenerar y actualizar XML Firmado
+                            //$this->factura->regenerarFacturaElectronicaPorContingencia($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+
+                            $responseFetch["status"] = false;
+                            $responseFetch['error'] = 902;
+                            $responseFetch["error_msg"] = "Nota credito no se pudo enviar a Hacienda por fallo no reconocido";
+                        }
+                    }else{
+                        $responseFetch["status"] = false;
+                        $responseFetch['error'] = 901;
+                        $responseFetch["error_msg"] = "Nota credito no se pudo enviar a Hacienda por falta de internet";
+                    }
+                }else{
+                    $responseFetch["status"] = false;
+                    $responseFetch['error'] = $responseCreacion["error"];
+                    $responseFetch["error_msg"] = $responseCreacion["error_msg"];
+                }
+            }
+            return $responseFetch;
+        }
+        
+        function getDatosParaNotaCreditoElectronica($consecutivo, $sucursal){
+            // Ocupamos:
+            // Cabeza de la factura electronica a la que se le aplica la NC
+            // Cabeza de la nota credito --- 
+            // Articulos de la nota credito ---
+            // Empresa
+            // Cliente
+            $r["status"] = false;
+            $r["error"] = 1;
+            $r["error_msg"] = "No se logro procesar la nota credito electronica";
+            
+            if($notaCreditoHead = $this->getNotaCredito($consecutivo, $sucursal)){
+                if($notaCreditoArticulos = $this->getArticulosNotaCredito($consecutivo, $sucursal)){
+                    if($cliente = $this->cliente->getClientes_Cedula($notaCreditoHead->Cliente)){
+                        $cliente = $cliente[0];
+                        if($empresaData = $this->empresa->getEmpresa($notaCreditoHead->Sucursal)){
+                            $empresaData = $empresaData[0];
+                            $costos = array(
+                                "total_serv_gravados" => 0,
+                                "total_serv_exentos" => 0,
+                                "total_merc_gravada" => 0,
+                                "total_merc_exenta" => 0,
+                                "total_gravados" => 0,
+                                "total_exentos" => 0,
+                                "total_ventas" => 0,
+                                "total_descuentos" => 0,
+                                "total_ventas_neta" => 0,
+                                "total_impuestos" => 0,
+                                "total_comprobante" => 0,
+                            );
+                            $artFinales = array();
+                            foreach($notaCreditoArticulos as $a){
+                                $linea = $this->getDetalleLineaNotaCredito($a);
+                                array_push($artFinales, $linea);
+
+                                if($a->Exento == 0){
+                                    $costos["total_merc_gravada"] += $linea["montoTotal"];
+                                    $costos["total_gravados"] += $linea["montoTotal"];
+                                }else{
+                                    $costos["total_merc_exenta"] += $linea["montoTotal"];
+                                    $costos["total_exentos"] += $linea["montoTotal"];
+                                }
+                                $costos["total_ventas"] += $linea["montoTotal"];
+
+                                if(isset($linea["montoDescuento"])){
+                                    $costos["total_descuentos"] += $linea["montoDescuento"];
+                                }
+
+                                $impuesto = $linea["impuesto"][0]["monto"];
+                                $costos["total_impuestos"] += $impuesto;
+                            }
+                            $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
+                            $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"];
+
+
+                            unset($r["error"]);
+                            unset($r["error_msg"]);
+                            $r["status"] = true;
+                            $r["notaCreditoHead"] = $notaCreditoHead;
+                            $r["costos"] = $costos;
+                            $r["articulos"] = $artFinales;
+                            $r["cliente"] = $cliente;
+                            $r["empresa"] = $empresaData;
+                        }else{
+                            $r["error"] = 6;
+                            $r["error_msg"] = "No existe empresa";
+                        }
+                    }else{
+                        $r["error"] = 5;
+                        $r["error_msg"] = "No existe cliente";
+                    }
+                }else{
+                    $r["error"] = 3;
+                    $r["error_msg"] = "La nota credito no tiene articulos";
+                }
+            }else{
+                $r["error"] = 2;
+                $r["error_msg"] = "No existe la nota credito ingresada";
+            }
+            return $r;
+        }
+        
+        function enviarNotaCreditoElectronicaAHacienda($consecutivo, $sucursal, $api = NULL){
+            $this->db->from("tb_57_nota_credito_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                if($api == NULL){
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                }
+                $nota = $query->result()[0];
+                $this->db->from("tb_02_sucursal");
+                $this->db->where("Codigo", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $empresa = $query->result()[0];
+                    if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
+                        if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $nota->Clave, $nota->FechaEmision, $nota->EmisorTipoIdentificacion, $nota->EmisorIdentificacion, $nota->ReceptorTipoIdentificacion, $nota->ReceptorIdentificacion, $tokenData["access_token"], $nota->XMLFirmado)){
+                            $data = array(
+                                "RespuestaHaciendaEstado" => "procesando",
+                                "FechaRecibidoPorHacienda" => date("y/m/d : H:i:s")
+                            );
+                            $this->db->where("Consecutivo", $consecutivo);
+                            $this->db->where("Sucursal", $sucursal);
+                            $this->db->update("tb_57_nota_credito_electronica", $data);
+                            
+                            // Obtener resultado de la factura
+                            $resCheck = array();
+                            $counter = 0;
+                            do {
+                                sleep(2);
+                                $counter++;
+                                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $nota->Clave, $tokenData["access_token"]);
+                                log_message('error', "Revisando estado de nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+                            
+                            if($resCheck["status"]){
+                                $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+                                $xmlRespuesta = trim($resCheck["data"]["respuesta-xml"]);
+                                $data = array(
+                                    "RespuestaHaciendaEstado" => $estado,
+                                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
+                                    "RespuestaHaciendaXML" => $xmlRespuesta
+                                );
+                                $this->db->where("Consecutivo", $consecutivo);
+                                $this->db->where("Sucursal", $sucursal);
+                                $this->db->update("tb_57_nota_credito_electronica", $data);
+                                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                                return array("status" => true, "estado_hacienda" => $estado);
+                            }else{
+                                log_message('error', "Error al revisar el estado de la nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                            }
+                        }else{
+                            $data = array(
+                                "RespuestaHaciendaEstado" => "fallo_envio"
+                            );
+                            $this->db->where("Consecutivo", $consecutivo);
+                            $this->db->where("Sucursal", $sucursal);
+                            $this->db->update("tb_57_nota_credito_electronica", $data);
+                            log_message('error', "Error al enviar la nota de credito a Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                        }
+                    }else{
+                        $data = array(
+                            "RespuestaHaciendaEstado" => "fallo_token"
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_57_nota_credito_electronica", $data);
+                        log_message('error', "Error al generar el token para envio de la nota credito | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                    }
+                }else{
+                    log_message('error', "No existe empresa para su envio | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                }
+            }else{
+                log_message('error', "No existe nota credito para su envio | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
+            return false;
+        }
+        
+        public function getNotaCreditoElectronica($consecutivo, $sucursal){
+            $this->db->from("tb_57_nota_credito_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                return $query->result()[0];
+            }else{
+                return false;
+            }
+        }
+        
+        public function generarPDFNotaCredito($consecutivo, $sucursal){
+            if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+                if($notaCreditoHead = $this->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
+                    if($notaCreditoBody = $this->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal)){
+                        if($notaElectronica = $this->getNotaCreditoElectronica($consecutivo, $sucursal)){
+                            $cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+
+
+
+    /*
+                            $total = 0;
+                            $subtotal = 0;
+                            $total_iva = 0;
+
+                            foreach($notaCreditoBody as $art){
+                                    $total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
+                                    $total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($notaCreditoHead[0]->iva/100));
+                                    $subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($notaCreditoHead[0]->iva/100)));
+                            }
+
+                            $notaCreditoHead[0]->total = $total;
+                            $notaCreditoHead[0]->subtotal = $subtotal;
+                            $notaCreditoHead[0]->total_iva = $total_iva;
+    */
+
+                            $costo_total = 0;
+                            $iva = 0;
+                            $costo_sin_iva = 0;
+                            $retencion = 0;
+                            foreach($notaCreditoBody as $art){
+    /*
+                                    $total = $total + ($art->precio * ($art->bueno + $art->defectuoso));
+                                    $total_iva = $total_iva + (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100));
+                                    $subtotal = $subtotal + (($art->precio * ($art->bueno + $art->defectuoso)) - (($art->precio * ($art->bueno + $art->defectuoso)) * ($nota->Por_IVA/100)));
+
+    */
+
+
+                                    $cantidadArt = $art->bueno + $art->defectuoso;
+                                    //Calculamos el precio total de los articulos
+                                    //$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+                                    $precio_total_articulo = $art->precio*$cantidadArt;
+                                    $precio_total_articulo_sin_descuento = ($art->precio/(1-($art->descuento/100)))*$cantidadArt;
+                                    $precio_articulo_final = $art->precio_final;
+                                    $precio_articulo_final = $precio_articulo_final * $cantidadArt;
+
+                                    //Calculamos los impuestos
+
+                                    $isExento = $art->exento;
+
+                                    if($isExento=='0'){
+                                            $costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
+
+
+                                            $iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100)));
+                                            $iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($notaCreditoHead[0]->iva)/100))); 
+
+                                            $precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
+                                            $iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+
+                                            if(!$art->no_retencion){
+                                                            $retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+                                            }
+                                    }
+                                    else if($isExento=='1'){
+                                            $costo_sin_iva += $precio_total_articulo;
+                                            //$retencion = 0;
+                                    }
+                                    $costo_total += $precio_total_articulo;
+
+
+
+                            }
+
+
+                            if($cliente[0]->Aplica_Retencion == "1")
+                                    $retencion = 0;
+
+
+
+                            $iva = $costo_total-$costo_sin_iva;
+                            $costo_total += $retencion;
+
+
+                            $notaCreditoHead[0]->total = $costo_total;
+                            $notaCreditoHead[0]->subtotal = $costo_sin_iva;
+                            $notaCreditoHead[0]->total_iva = $iva;
+                            $notaCreditoHead[0]->retencion = $retencion;
+                            $notaCreditoHead[0]->consecutivoH = $notaElectronica->ConsecutivoHacienda;
+                            $notaCreditoHead[0]->clave = $notaElectronica->Clave;
+
+
+                            $this->impresion_m->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $notaCreditoBody, true);
+                            
+                        }
+                    }else{
+                            //$this->retorno['error'] = '12';
+                    }
+                }else{
+                        //$this->retorno['error'] = '11';
+                }					
+            }else{
+                    //$this->retorno['error'] = '7';
+            }
+        }
+        
+        
+        function marcarEnvioCorreoNotaCreditoElectronica($sucursal, $consecutivo){
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $data = array(
+                "CorreoEnviadoReceptor" => 1
+            );
+            $this->db->update("tb_57_nota_credito_electronica", $data);
+        }
 }
 
 

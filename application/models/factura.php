@@ -906,16 +906,6 @@ Class factura extends CI_Model
 			}
 	}
         
-        function formatearConsecutivo($consecutivo){
-            $consecutivo = $consecutivo."";
-            $len = strlen($consecutivo);
-            for($counter = $len; $counter < 10; $counter++){
-                $consecutivo = "0".$consecutivo;
-            }
-            return $consecutivo;
-        }
-        
-        
         function crearFacturaElectronica($sucursal, $cliente, $factura, $costos, $articulos, $tipoPago){
             $feedback["status"] = false;
             
@@ -1062,72 +1052,6 @@ Class factura extends CI_Model
             return array("situacion" => $situacion, "fecha" => $fechaFacturaActual);
         }
         
-        function getCondicionVenta($tipoPago){
-            /*
-            Condiciones de la venta: 
-            - 01 Contado
-            - 02 Crédito 
-            - 03 Consignación
-            - 04 Apartado 
-            - 05 Arrendamiento con opción de compra 
-            - 06 Arrendamiento en función financiera 
-            - 99 Otros
-             */
-            switch ($tipoPago['tipo']) {
-                case 'contado':
-                case 'tarjeta':
-                case 'deposito':
-                case 'cheque':
-                case 'mixto':
-                    return "01";
-                case 'credito':
-                    return "02";
-                case 'apartado':
-                    return "04";
-            }
-        }
-
-        function getMedioPago($tipoPago){
-            /*
-                Corresponde al medio de pago empleado: 
-                - 01 Efectivo
-                - 02 Tarjeta
-                - 03 Cheque
-                - 04 Transferencia - depósito bancario 
-                - 05 - Recaudado por terceros
-                - 99 Otros
-             */
-            switch ($tipoPago['tipo']) {
-                case 'contado':
-                    return "01";
-                case 'tarjeta':
-                    return "02";
-                case 'deposito':
-                    return "04";
-                case 'cheque':
-                    return "03";
-                case 'mixto':
-                    return "01,02";
-                case 'credito':
-                    return "99";
-                case 'apartado':
-                    return "99";
-            }
-        }
-        
-        function getTipoIdentificacionCliente($tipo){
-            switch($tipo){
-                case 'nacional':
-                    return "01";
-                case 'residencia':
-                    return "03";
-                case 'juridica':
-                    return "02";
-                case 'pasaporte':
-                    return "04";
-            }
-        }
-        
         function generarClaveYConsecutivoParaFacturaElectronica($consecutivo, $sucursal, $api = NULL){
             $this->db->select("EmisorTipoIdentificacion, EmisorIdentificacion, CodigoPais, ConsecutivoFormateado, Situacion, CodigoSeguridad, TipoDocumento");
             $this->db->from("tb_55_factura_electronica");
@@ -1236,28 +1160,6 @@ Class factura extends CI_Model
                 }
             }
             return false;
-        }
-        
-        function prepararArticulosParaXML($articulos){
-            $finalArray = array();
-            
-            foreach($articulos as $art){
-                $artt = array(
-                    "cantidad" => $art->Cantidad,
-                    "unidadMedida" => $art->UnidadMedida,
-                    "detalle" => $art->Detalle,
-                    "precioUnitario" => $art->PrecioUnitario,
-                    "montoTotal" => $art->MontoTotal,
-                    "montoDescuento" => $art->MontoDescuento,
-                    "naturalezaDescuento" => $art->NaturalezaDescuento,
-                    "subtotal" => $art->Subtotal,
-                    "impuesto" =>  json_decode($art->ImpuestoObject),
-                    "montoTotalLinea" => $art->MontoTotalLinea
-                );
-                array_push($finalArray, $artt);
-            }
-            
-            return $finalArray;
         }
         
         function firmarXMLFactura($consecutivo, $sucursal, $api = NULL){

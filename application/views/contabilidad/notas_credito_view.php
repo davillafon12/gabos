@@ -25,7 +25,7 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include '/../Header/log_out_from_browser_Script.php';?>
+		<?php include PATH_LOG_OUT_HEADER;?>
 		<!--SCRIPT DE JQUERY-->		
 		<script src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>" type="text/javascript"></script>
 		<!--SCRIPT DE NOTY-->		
@@ -38,6 +38,8 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.js'); ?>"></script>
 		<!--CSS ESTILO DEL JQUERYUI-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
+                    <!--CARGA DEL POPUP MODAL-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
 		<!--CSS ESTILO ESPECIFICO DE LA PAGINA-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_notas_credito.css?v='.$javascript_cache_version); ?>">	
 		<!--CARGA DE HERRAMIENTAS DE ESTILO-->
@@ -57,13 +59,13 @@ PARA:
 	</head>
 	<body onload="cambiarEstiloBotones()">
 		<!--Incluir imagen de cabezera-->
-		<?php include '/../Header/Header_Picture.php';?>
+		<?php include PATH_HEADER_PICTURE;?>
 		
 		<!--Incluir menu principal-->
-		<?php include '/../Header/selector_menu.php';?>
+		<?php include PATH_HEADER_SELECTOR_MENU;?>
 
 		<!--Incluir informacion log in-->
-		<?php include '/../Header/Log_In_Information.php';?>		
+		<?php include PATH_HEADER_LOG_IN_INFO;?>		
 	
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
@@ -225,7 +227,11 @@ PARA:
 				</div>
 			</div><!-- contenedor -->			
 		</div><!-- main_wrapper -->
+                <div class="envio_nota" id="envio_nota" style="display: none; text-align: center;">
+			<img class="envio_img" src="<?php echo base_url('application/images/enviandoFactura.gif'); ?>">
+			<p class="envio_p">Creando nota de crédito... <br>Por favor, espere.</p>
+		</div>
 		<!--Incluir footer-->
-		<?php include '/../Footer/Default_Footer.php';?>
+		<?php include PATH_FOOTER;?>
 	</body>
 </html>

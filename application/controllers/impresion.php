@@ -629,6 +629,7 @@ class impresion extends CI_Controller {
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
 							if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal)){
+                                                            if($notaElectronica = $this->contabilidad->getNotaCreditoElectronica($consecutivo, $sucursal)){
 								
 								$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
 								
@@ -713,9 +714,12 @@ class impresion extends CI_Controller {
 								$notaCreditoHead[0]->subtotal = $costo_sin_iva;
 								$notaCreditoHead[0]->total_iva = $iva;
 								$notaCreditoHead[0]->retencion = $retencion;
+                                                                $notaCreditoHead[0]->consecutivoH = $notaElectronica->ConsecutivoHacienda;
+                                                                $notaCreditoHead[0]->clave = $notaElectronica->Clave;
 								
 								
-								$this->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $notaCreditoBody);
+								$this->impresion_m->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $notaCreditoBody, false);
+                                                            }
 							}else{
 								$this->retorno['error'] = '12';
 							}
@@ -977,34 +981,7 @@ class impresion extends CI_Controller {
 		$pdf->Output();
 	}
 	
-	private function notaCreditoPDF($empresa, $head, $productos){
-		require(PATH_FPDF_LIBRARY);
-		$pdf = new FPDF('P','mm','A4');
-		
-		$cantidadProductos = sizeOf($productos);
-		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
-		$cantidadTotalArticulos = 0;
-		while($paginasADibujar>=$this->numPagina){
-			//Agregamos pag		
-			$pdf->AddPage();			
-			//Agregamos el encabezado
-			$this->encabezadoDocumentoPDF('nc', $empresa, $head, $pdf);
-			//Agregamos Productos
-			$inicio = $this->numPagina*30;
-			if((($this->numPagina+1)*30)<$cantidadProductos){
-				$final = ($this->numPagina+1)*30;
-			}else{
-				$final = $cantidadProductos;
-			}
-			
-			$cantidadTotalArticulos += $this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf);
-			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('nc', $head, $empresa, $pdf, $cantidadTotalArticulos);
-			$this->numPagina++;
-		}
-		//Imprimimos documento
-		$pdf->Output();
-	}
+	
 	
 	private function notaDebitoPDF($empresa, $head, $productos){
 		require(PATH_FPDF_LIBRARY);
@@ -2083,55 +2060,7 @@ class impresion extends CI_Controller {
 		return $cantidadTotalArticulos;
 	}
 	
-	private function printProductsNotaCredito($productos, $inicio, $fin, &$pdf){
-		//Agregamos el apartado de productos
-		$pdf->SetFont('Arial','B',12);
-		$pdf->Text(90, 65, 'Productos');
-		//Caja redondeada 1
-		$pdf->RoundedRect(10, 67, 190, 173, 5, '12', 'D');
-		//Divisores verticales de productos
-		$pdf->Line(10, 74, 200, 74);		
-		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
-		$pdf->Line(110, 67, 110, 240); //Divisor de descripcion y cantidad
-		$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
-		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total	
-		//Encabezado de productos
-		$pdf->SetFont('Arial','',10);
-		$pdf->Text(13, 72, 'Código');
-		$pdf->Text(58, 72, 'Descripción');
-		$pdf->Text(112, 72, 'Bueno');
-		$pdf->Text(126.5, 72, 'Defectuoso');
-		$pdf->Text(151, 72, 'P/Unitario');
-		$pdf->Text(179, 72, 'P/Total');
-		//Agregamos Productos
-		$pdf->SetFont('Arial','',9);
-		
-		$pdf->SetXY(110, 75.3);		
-		$sl = 5; //Salto de linea
-		$pl = 79; //Primera linea
-		
-		$cantidadTotalArticulos = 0;
-		for($cc = $inicio; $cc<=$fin; $cc++){
-			//Calculamos la cantidad
-			$cantidad = $productos[$cc]->bueno + $productos[$cc]->defectuoso;
-			
-			//Calculamos precio total con descuento
-			$total = $cantidad * $productos[$cc]->precio; 
-			
-			$pdf->Text(11, $pl, $productos[$cc]->codigo);
-			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
-			$pdf->cell(15,5,$productos[$cc]->bueno,0,0,'C');
-			$pdf->cell(20,5,$productos[$cc]->defectuoso,0,0,'C');
-			$pdf->cell(27.5,5,$this->fni($productos[$cc]->precio),0,0,'R');
-			$pdf->cell(28,5,$this->fni($total),0,0,'R');			
-			$pdf->ln($sl);
-			$pdf->SetX(110);
-			$pl += $sl;
-			$cantidadTotalArticulos += $cantidad;
-		}
-		return $cantidadTotalArticulos;
-	}
+	
 	
 	private function printProductsNotaDebito($productos, $inicio, $fin, &$pdf){
 		//Agregamos el apartado de productos

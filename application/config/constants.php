@@ -100,11 +100,16 @@ define('URL_API_CRLIBE', 'http://192.168.0.24');
 define('API_CRLIBRE_CURL_TIMEOUT', 10);
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
+define('FACTURA_ELECTRONICA_CODIGO', '01');
+define('NOTA_CREDITO_ELECTRONICA', 'NC');
 define('HACIENDA_DECIMALES', 5);
 define('HACIENDA_TOKEN_API_STAG', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect/token");
 define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect/token");
 define('HACIENDA_RECEPCION_API_STAG', "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/");
 define('HACIENDA_RECEPCION_API_PROD', "https://api.comprobanteselectronicos.go.cr/recepcion/v1/");
+
+define('ANULAR_FACTURA', '01');
+define('CORRIGE_FACTURA', '03');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

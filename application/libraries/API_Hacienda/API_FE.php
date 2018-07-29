@@ -517,4 +517,101 @@ class API_FE{
         }
         return $respuesta;
     }
+    
+    
+    public function crearXMLNotaCredito($clave, $consecutivo, $fecha_emision,
+                                    $emisor_nombre, $emisor_tipo_indetif, $emisor_num_identif, $nombre_comercial, $emisor_provincia, $emisor_canton, $emisor_distrito, $emisor_barrio, $emisor_otras_senas, $emisor_cod_pais_tel, $emisor_tel, $emisor_cod_pais_fax, $emisor_fax, $emisor_email,
+                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, $receptor_canton, $receptor_distrito, $receptor_barrio, $receptor_cod_pais_tel, $receptor_tel, $receptor_cod_pais_fax, $receptor_fax, $receptor_email,
+                                    $condicion_venta,
+                                    $plazo_credito,
+                                    $medio_pago,
+                                    $cod_moneda,
+                                    $tipo_cambio,
+                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
+                                    $otros,
+                                    $productos,
+                                    $tipoDocumento, $numeroDocumento, $razonDocumento, $codigoDocumento, $fechaEmisionDocumento){
+        $bm = round(microtime(true) * 1000);
+        $params = array(
+            'w' => "genXML", 
+            "r" => "gen_xml_nc",
+            "clave" => $clave, 
+            "consecutivo" => $consecutivo, 
+            "fecha_emision" => $fecha_emision,
+            "emisor_nombre" => $emisor_nombre, 
+            "emisor_tipo_indetif" => $emisor_tipo_indetif, 
+            "emisor_num_identif" => $emisor_num_identif, 
+            "nombre_comercial" => $nombre_comercial, 
+            "emisor_provincia" => $emisor_provincia, 
+            "emisor_canton" => str_pad($emisor_canton,2,"0", STR_PAD_LEFT), 
+            "emisor_distrito" => str_pad($emisor_distrito,2,"0", STR_PAD_LEFT), 
+            "emisor_barrio" => str_pad($emisor_barrio,2,"0", STR_PAD_LEFT), 
+            "emisor_otras_senas" => $emisor_otras_senas, 
+            "emisor_cod_pais_tel" => $emisor_cod_pais_tel, 
+            "emisor_tel" => str_replace("-", "", $emisor_tel), 
+            "emisor_cod_pais_fax" => $emisor_cod_pais_fax, 
+            "emisor_fax" => str_replace("-", "", $emisor_fax), 
+            "emisor_email" => $emisor_email,
+            "receptor_nombre" => $receptor_nombre, 
+            "receptor_tipo_identif" => $receptor_tipo_identif, 
+            "receptor_num_identif" => $receptor_num_identif, 
+            "receptor_provincia" => $receptor_provincia, 
+            "receptor_canton" => str_pad($receptor_canton,2,"0", STR_PAD_LEFT), 
+            "receptor_distrito" => str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), 
+            "receptor_barrio" => str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), 
+            "receptor_cod_pais_tel" => $receptor_cod_pais_tel, 
+            "receptor_tel" => str_replace("-", "", $receptor_tel), 
+            "receptor_cod_pais_fax" => $receptor_cod_pais_fax, 
+            "receptor_fax" => str_replace("-", "", $receptor_fax), 
+            "receptor_email" => $receptor_email,
+            "condicion_venta" => $condicion_venta,
+            "plazo_credito" => $plazo_credito,
+            "medio_pago" => $medio_pago,
+            "cod_moneda" => $cod_moneda,
+            "tipo_cambio" => $tipo_cambio,
+            "total_serv_gravados" => $total_serv_gravados, 
+            "total_serv_exentos" => $total_serv_exentos, 
+            "total_merc_gravada" => $total_merc_gravada, 
+            "total_merc_exenta" => $total_merc_exenta, 
+            "total_gravados" => $total_gravados, 
+            "total_exentos" => $total_exentos, 
+            "total_ventas" => $total_ventas, 
+            "total_descuentos" => $total_descuentos, 
+            "total_ventas_neta" => $total_ventas_neta, 
+            "total_impuestos" => $total_impuestos, 
+            "total_comprobante" => $total_comprobante,
+            "otros" => $otros,
+            "detalles" => json_encode($productos),
+            "infoRefeTipoDoc" => $tipoDocumento,
+            "infoRefeNumero" => $numeroDocumento,
+            "infoRefeFechaEmision" => $fechaEmisionDocumento,
+            "infoRefeCodigo" => $codigoDocumento,
+            "infoRefeRazon" => $razonDocumento
+        );
+        $this->logger->info("crearXMLNotaCredito", "Creating nota credito XML into API with params: ".json_encode($params));
+        $resultOr = $this->gateway->post("api.php", $params);
+        if($resultOr->info->http_code == 200){
+            $result = (Array) json_decode($resultOr->response);
+            if(isset($result["resp"])){
+                $result["resp"] = (Array) $result["resp"];
+                if(isset($result["resp"]["clave"]) && isset($result["resp"]["xml"])){
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("crearXMLNotaCredito", $ms."ms | API returns ".json_encode($result));
+                    return $result["resp"];
+                }else{
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("crearXMLNotaCredito", $ms."ms | 3 - API returns ".json_encode($result));
+                    return false;
+                }
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("crearXMLNotaCredito", $ms."ms | 2 - API returns ".json_encode($resultOr));
+                return false;
+            }
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("crearXMLNotaCredito", $ms."ms | 1 - API returns ".json_encode($resultOr));
+            return false;
+        }
+    }
 }
