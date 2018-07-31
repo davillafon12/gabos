@@ -132,6 +132,9 @@ function displayErrors(NumError){
                 case "54":
 			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
 			break;
+                case "55":
+			notyError('La factura electrónica fue RECHAZADA por Hacienda, deberá generarla de nuevo. La factura ha sido ANULADA. \nERROR: '+NumError);
+			break;
 		case "cf_1":
 			notyError('No se pudo actualizar la factura editada. \nERROR: '+NumError);
 			break;

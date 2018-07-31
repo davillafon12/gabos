@@ -2688,6 +2688,104 @@ Class contabilidad extends CI_Model
             );
             $this->db->update("tb_57_nota_credito_electronica", $data);
         }
+        
+        function crearNotaCreditoMacro(&$retorno, $cedula, $facturaAcreditar, $facturaAplicar, $sucursal, $productosAAcreditar, $usuarioCodigo, $razon, $justificacion){
+            if($clienteObject = $this->cliente->getClientes_Cedula($cedula)){
+                $clienteObject = $clienteObject[0];
+                //Verificamos que existan las facturas
+                if(is_numeric($facturaAplicar)&&$this->factura->existe_Factura($facturaAplicar, $sucursal)
+                        &&is_numeric($facturaAcreditar)&&$this->factura->existe_Factura($facturaAcreditar, $sucursal)){
+                        if($this->existeProductosAcreditar($productosAAcreditar, $sucursal)){
+                                //Preguntamos si la factura a aplicar ya fue aplicada en otra nota
+                                $facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $sucursal)[0];
+                                if(!$this->facturaAplciarYaFueAplicada($facturaAplicar, $sucursal) ||
+                                        $facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
+                                        //Listo para realizar nota
+                                        //Obtenemos el consecutivo
+                                        if($consecutivo = $this->getConsecutivo($sucursal)){
+                                                date_default_timezone_set("America/Costa_Rica");
+                                                $fecha = date("y/m/d : H:i:s", now());
+
+                                                $tipoPago = 'contado'; //Por defetco guarda este
+                                                $moneda = 'colones'; //Por defecto guarda este
+
+
+                                                if($this->agregarNotaCreditoCabecera($consecutivo, $fecha, $clienteObject->Cliente_Nombre." ".$clienteObject->Cliente_Apellidos, $cedula, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $this->configuracion->getPorcentajeIVA(), $this->configuracion->getTipoCambioCompraDolar())){
+                                                        $this->agregarProductosNotaCredito($consecutivo, $sucursal, $productosAAcreditar, $cedula, $facturaAcreditar);
+
+                                                        $this->user->guardar_transaccion($usuarioCodigo, "El usuario realizo la nota credito: $consecutivo",$sucursal,'nota');
+                                                        $retorno['status'] = 'success';
+                                                        $retorno['nota'] = $consecutivo;
+                                                        unset($retorno['error']);
+                                                        $retorno['sucursal']= $sucursal;
+                                                        $retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+                                                        $retorno['token'] =  md5($usuarioCodigo.$sucursal."GAimpresionBO");
+
+
+                                                        // Realizar nota credito electronica
+                                                        $respuestaHacienda["type"] = "error";
+                                                        if($notaCreditoHead = $this->getNotaCredito($consecutivo, $sucursal)){
+                                                            if($facturaElectronicaHead = $this->factura->getFacturaElectronica($notaCreditoHead->Factura_Acreditar, $sucursal)){
+                                                                $response = $this->generarNotaCreditoElectronica($consecutivo, $sucursal, $razon, $justificacion, $facturaElectronicaHead->Clave, FACTURA_ELECTRONICA_CODIGO, $facturaElectronicaHead->FechaEmision);
+                                                                if($response["status"]){
+                                                                    $respuestaHacienda["type"] = "success";
+                                                                    $respuestaHacienda["msg"] = $response["message"];
+
+                                                                    $this->generarPDFNotaCredito($consecutivo, $sucursal);
+
+                                                                    if(!$response["cliente"]->NoReceptor){
+                                                                        require_once PATH_API_CORREO;
+                                                                        $apiCorreo = new Correo();
+                                                                        $attachs = array(
+                                                                            PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".xml",
+                                                                            PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".pdf");
+                                                                        if($apiCorreo->enviarCorreo($response["cliente"]->Cliente_Correo_Electronico, "Nota Crédito #".$consecutivo." | ".$response["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$response["empresa"]->Sucursal_Nombre, $attachs)){
+                                                                            $this->marcarEnvioCorreoNotaCreditoElectronica($sucursal, $consecutivo);
+                                                                        }
+                                                                    }
+                                                                }else{
+                                                                    $respuestaHacienda["msg"] = $response["error_msg"]." | ERROR #".$response["error"];
+                                                                }
+                                                            }else{
+                                                                $respuestaHacienda["msg"] = "No existe factura electrónica para generar la nota crédito electrónica.";
+                                                            }
+                                                        }else{
+                                                            $respuestaHacienda["msg"] = "No se pudo obtener la nota crédito para generar la nota crédito electrónica.";
+                                                        }
+
+                                                        $retorno['hacienda'] = $respuestaHacienda;
+                                                }else{
+                                                        //No se pudo crear la nota
+                                                        $retorno['error'] = '9';
+                                                }
+                                        }else{
+                                                //No se pudo obtener el nuevo consecutivo
+                                                $retorno['error'] = '8';
+                                        }
+                                }else{
+                                        //La factura a aplicar ya fue aplicada
+                                        $retorno['error'] = '7';
+                                }
+                        }else{
+                                //Algun producto ya no existe
+                                $retorno['error'] = '6';
+                        }
+                }else{
+                        //Alguna factura no es valida o no existe
+                        $retorno['error'] = '5';
+                }
+            }else{
+                    //Cliente no valido
+                    $retorno['error'] = '4'; 
+            }
+        }
+        
+        private function existeProductosAcreditar($productos, $sucursal){
+		foreach($productos as $producto){
+			if(!$this->articulo->existe_Articulo($producto->c,$sucursal) && trim($producto->c) != "00"){return false;}
+		}
+		return true;
+	}
 }
 
 

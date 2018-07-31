@@ -336,14 +336,16 @@ function enviarCobro(URL){
 				displayErrors(facturaHEAD[0].error);
 				$('#envio_factura').bPopup().close();
 			}else if(facturaHEAD[0].status==="success"){
-				$('#envio_factura').bPopup().close();	
-				if(tipoImpresion==='t'){
-					//Impresion termica
-					window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-				}else if(tipoImpresion==='c'){
-					//Impresion carta
-					window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-				}
+				$('#envio_factura').bPopup().close();
+                                if(facturaHEAD[0].impresion === 1){
+                                    if(tipoImpresion==='t'){
+                                            //Impresion termica
+                                            window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+                                    }else if(tipoImpresion==='c'){
+                                            //Impresion carta
+                                            window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+                                    }
+                                }
 				window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/caja';
 			}
 			}

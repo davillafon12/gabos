@@ -190,95 +190,9 @@ class notas extends CI_Controller {
 				$nombre = $_POST['nombre'];
 				$facturaAplicar = $_POST['facturaAplicar'];
 				$facturaAcreditar = $_POST['facturaSeleccion'];
+                                include PATH_USER_DATA;
 				//Verificamos que exista cliente
-				if($this->cliente->existe_Cliente($cedula)){
-					include PATH_USER_DATA;	
-					//Verificamos que existan las facturas
-					if(is_numeric($facturaAplicar)&&$this->factura->existe_Factura($facturaAplicar, $data['Sucursal_Codigo'])
-						&&is_numeric($facturaAcreditar)&&$this->factura->existe_Factura($facturaAcreditar, $data['Sucursal_Codigo'])){
-						if($this->existeProductosAcreditar($productosAAcreditar, $data['Sucursal_Codigo'])){
-							//Preguntamos si la factura a aplicar ya fue aplicada en otra nota
-							$facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $data['Sucursal_Codigo'])[0];
-							if(!$this->contabilidad->facturaAplciarYaFueAplicada($facturaAplicar, $data['Sucursal_Codigo']) ||
-								$facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
-								//Listo para realizar nota
-								//Obtenemos el consecutivo
-								if($consecutivo = $this->contabilidad->getConsecutivo($data['Sucursal_Codigo'])){
-									date_default_timezone_set("America/Costa_Rica");
-									$fecha = date("y/m/d : H:i:s", now());
-									
-									$tipoPago = 'contado'; //Por defetco guarda este
-									$moneda = 'colones'; //Por defecto guarda este
-									
-									
-									if($this->contabilidad->agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cedula, $data['Sucursal_Codigo'], $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $this->configuracion->getPorcentajeIVA(), $this->configuracion->getTipoCambioCompraDolar())){
-										$this->contabilidad->agregarProductosNotaCredito($consecutivo, $data['Sucursal_Codigo'], $productosAAcreditar, $cedula, $facturaAcreditar);
-										
-										$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo la nota credito: $consecutivo",$data['Sucursal_Codigo'],'nota');
-										$retorno['status'] = 'success';
-										$retorno['nota'] = $consecutivo;
-										unset($retorno['error']);
-										$retorno['sucursal']= $data['Sucursal_Codigo'];
-										$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
-										$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
-                                                                                
-                                                                                
-                                                                                // Realizar nota credito electronica
-                                                                                $respuestaHacienda["type"] = "error";
-                                                                                if($notaCreditoHead = $this->contabilidad->getNotaCredito($consecutivo, $data['Sucursal_Codigo'])){
-                                                                                    if($facturaElectronicaHead = $this->factura->getFacturaElectronica($notaCreditoHead->Factura_Acreditar, $data['Sucursal_Codigo'])){
-                                                                                        $response = $this->contabilidad->generarNotaCreditoElectronica($consecutivo, $data['Sucursal_Codigo'], CORRIGE_FACTURA, "Devolucion de mercancia", $facturaElectronicaHead->Clave, FACTURA_ELECTRONICA_CODIGO, $facturaElectronicaHead->FechaEmision);
-                                                                                        if($response["status"]){
-                                                                                            $respuestaHacienda["type"] = "success";
-                                                                                            $respuestaHacienda["msg"] = $response["message"];
-                                                                                            
-                                                                                            $this->contabilidad->generarPDFNotaCredito($consecutivo, $data['Sucursal_Codigo']);
-                                                                                            
-                                                                                            if(!$response["cliente"]->NoReceptor){
-                                                                                                require_once PATH_API_CORREO;
-                                                                                                $apiCorreo = new Correo();
-                                                                                                $attachs = array(
-                                                                                                    PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".xml",
-                                                                                                    PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".pdf");
-                                                                                                if($apiCorreo->enviarCorreo($response["cliente"]->Cliente_Correo_Electronico, "Nota Crédito #".$consecutivo." | ".$response["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$response["empresa"]->Sucursal_Nombre, $attachs)){
-                                                                                                    $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($data['Sucursal_Codigo'], $consecutivo);
-                                                                                                }
-                                                                                            }
-                                                                                        }else{
-                                                                                            $respuestaHacienda["msg"] = $response["error_msg"]." | ERROR #".$response["error"];
-                                                                                        }
-                                                                                    }else{
-                                                                                        $respuestaHacienda["msg"] = "No existe factura electrónica para generar la nota crédito electrónica.";
-                                                                                    }
-                                                                                }else{
-                                                                                    $respuestaHacienda["msg"] = "No se pudo obtener la nota crédito para generar la nota crédito electrónica.";
-                                                                                }
-                                                                                
-                                                                                $retorno['hacienda'] = $respuestaHacienda;
-									}else{
-										//No se pudo crear la nota
-										$retorno['error'] = '9';
-									}
-								}else{
-									//No se pudo obtener el nuevo consecutivo
-									$retorno['error'] = '8';
-								}
-							}else{
-								//La factura a aplicar ya fue aplicada
-								$retorno['error'] = '7';
-							}
-						}else{
-							//Algun producto ya no existe
-							$retorno['error'] = '6';
-						}
-					}else{
-						//Alguna factura no es valida o no existe
-						$retorno['error'] = '5';
-					}
-				}else{
-					//Cliente no valido
-					$retorno['error'] = '4'; 
-				}			
+				$this->contabilidad->crearNotaCreditoMacro($retorno, $cedula, $facturaAcreditar, $facturaAplicar, $data['Sucursal_Codigo'], $productosAAcreditar, $data['Usuario_Codigo'], CORRIGE_FACTURA, "Devolucion de mercancia");
 			}else{
 				//Campos Vacios
 				$retorno['error'] = '3';
@@ -290,12 +204,7 @@ class notas extends CI_Controller {
 		echo json_encode($retorno);
 	}
 	
-	private function existeProductosAcreditar($productos, $sucursal){
-		foreach($productos as $producto){
-			if(!$this->articulo->existe_Articulo($producto->c,$sucursal) && trim($producto->c) != "00"){return false;}
-		}
-		return true;
-	}
+	
 	
 	function notasDebito(){
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
