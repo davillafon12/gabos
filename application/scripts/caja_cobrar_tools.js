@@ -444,9 +444,16 @@ function anularFacturaAJAX(URL){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
-		data: {'consecutivo':consecutivoActual},		
+		data: {'consecutivo':consecutivoActual},
+                async : true,
+                beforeSend: function(jqXHR, settings) {
+                    $('#envio_anulacion').bPopup({
+                            modalClose: false
+                    });
+                },
 		success: function(data, textStatus, jqXHR)
 		{
+                    $('#envio_anulacion').bPopup().close();
 			try{
 				result = $.parseJSON('[' + data.trim() + ']');
 				if(result[0].status==="error"){

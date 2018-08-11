@@ -251,58 +251,27 @@ class caja extends CI_Controller {
 	}
 	
     function cobrarFactura(){
-        $responseCheck = $this->validarCobrarFactura();
+        $consecutivo = filter_input(INPUT_POST, "consecutivo");
+        $tipoPago = json_decode(filter_input(INPUT_POST, "tipoPago"), true)[0];
+        
+        $responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
         
         if($responseCheck["status"] == "success"){
-            $tipoPago = json_decode(filter_input(INPUT_POST, "tipoPago"), true)[0];
             $recibidoParaVuelto = filter_input(INPUT_POST, "entregado");
             $vuelto = filter_input(INPUT_POST, "vuelto");
             include PATH_USER_DATA; 
             
             $resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
             
-            $fueAnuladaPorRechazoDeHacienda = false;
+            
             if($resFacturaElectronica["status"]){
-                $feStatus = array("status"=>false, "message" => "");
-                // Si hay conexion por lo tanto enviar FE a Hacienda de una
-                if($resFacturaElectronica["data"]["situacion"] == "normal"){
-                    if($resEnvio = $this->factura->enviarFacturaElectronicaAHacienda($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo)){
-                        if($resEnvio["estado_hacienda"] == "rechazado"){
-                            log_message('error', "Factura fue RECHAZADA por Hacienda, debemos generar su respectiva nota de credito | Consecutivo: {$responseCheck["factura"]->Factura_Consecutivo} | Sucursal: {$responseCheck["factura"]->TB_02_Sucursal_Codigo}");
-                            // Realizar Nota Credito
-                            $feStatus["message"] = "La factura electrónica fue RECHAZADA por Hacienda, deberá generarla de nuevo. La factura ha sido ANULADA.";
-                            $fueAnuladaPorRechazoDeHacienda = true;
-                        }else if($resEnvio["estado_hacienda"] == "aceptado"){
-                            $feStatus["message"] = "Factura fue ACEPTADA por Hacienda";
-                            $feStatus["status"] = true;
-                            log_message('error', "Factura fue ACEPTADA por Hacienda | Consecutivo: {$responseCheck["factura"]->Factura_Consecutivo} | Sucursal: {$responseCheck["factura"]->TB_02_Sucursal_Codigo}");
-                        }else{
-                            $feStatus["message"] = "Factura se envió a Hacienda pero no fue rechazada, ni aceptada";
-                            log_message('error', "Hacienda envio otro estado {$resEnvio["estado_hacienda"]} | Consecutivo: {$responseCheck["factura"]->Factura_Consecutivo} | Sucursal: {$responseCheck["factura"]->TB_02_Sucursal_Codigo}");
-                        }
-                    }else{
-                        log_message('error', "No se pudo enviar la factura a Hacienda, debemos marcarla como contingencia | Consecutivo: {$responseCheck["factura"]->Factura_Consecutivo} | Sucursal: {$responseCheck["factura"]->TB_02_Sucursal_Codigo}");
-                        // Realizar documento de contingencia, porque al enviar a Hacienda algo fallo
-                        // Pasos a seguir
-                        //    1) Cambiar estado a contingencia
-                        //    2) Regenerar y actualizar clave
-                        //    3) Regenerar y actualizar XML
-                        //    5) Regenerar y actualizar XML Firmado
-                        $this->factura->regenerarFacturaElectronicaPorContingencia($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
-                    
-                        $feStatus["message"] = "Factura no se pudo enviar a Hacienda por fallo no reconocido";
-                    }
-                }else{
-                    $feStatus["message"] = "Factura no se pudo enviar a Hacienda por falta de internet";
-                }
+                $fueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                 
-                
-                $_SESSION["flash_fe"] = $feStatus;
                 $estadoFactura = 'cobrada';
                 $responseCheck['impresion'] = 1;
                 if($fueAnuladaPorRechazoDeHacienda){
-                    //$estadoFactura = 'anulada';
                     $responseCheck['impresion'] = 0;
+                    $estadoFactura = 'anulada';
                 }
                 
                 //Para efecto de impresion
@@ -390,142 +359,154 @@ class caja extends CI_Controller {
         }
         return $newArticulos;
     }
-	
-	function creditoDisponible($consecutivo, $Sucursal){
-	
-		if($facturaHead = $this->factura->getFacturasHeaders($consecutivo, $Sucursal)){
-			//return "aaaaa";
-			foreach($facturaHead as $row){				
-				$cedula = $row->TB_03_Cliente_Cliente_Cedula;
-				$totalFactura = $row->Factura_Monto_Total;
-			}
-			if($creditos = $this->factura->getCreditosClientePorSucursal($cedula, $Sucursal)){
-				$saldoTotaldeCliente = 0;
-				foreach($creditos as $credito){
-					//Sumamos todos los saldos del cliente
-					$saldoTotaldeCliente += $credito->Credito_Saldo_Actual;
-				}
-				//Sumamos todos los saldos con el total de la factura a cobrar
-				$saldoTotaldeCliente += $totalFactura; 
-				
-				//Traemos el maximo credito permitido de un cliente
-				if($maximoPermitidoDeCredito = $this->cliente->getClienteMaximoCredito($cedula, $Sucursal)){
 
-					//Si el maximo permitido de credito es mayor o igual a todos los aldos mas la factura a cobrar
-					if($maximoPermitidoDeCredito>=$saldoTotaldeCliente){return true;}
-					else{return false;}
-				}else{
-					return false;
-				}				
-			}else{
-				return false;
-			}
-		}else{
-			return false;
-		}
-	}
+    function descontarArticulosDefectuosos($consecutivo, $sucursal){
+            $articulos = $this->factura->getArticulosFactura($consecutivo, $sucursal);
+            foreach($articulos as $art){
+                    $this->articulo->actualizarInventarioRESTADefectuoso($art->Articulo_Factura_Codigo, $art->Articulo_Factura_Cantidad, $sucursal);
+            }
+    }
+
+    function guardarTipoPago($tipoPago, $consecutivo, $sucursal){
+            $cliente = $this->factura->getCliente($consecutivo, $sucursal);
+            $vendedor = $this->factura->getVendedor($consecutivo, $sucursal);
+
+            switch ($tipoPago['tipo']) {
+                    case 'tarjeta':
+                            $comision = $this->banco->getComision($tipoPago['banco']);
+                            $this->factura->guardarPagoTarjeta($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco']);
+                            break;
+                    case 'deposito':
+                            $this->factura->guardarPagoDeposito($consecutivo, $sucursal, $tipoPago['deposito'], $vendedor, $cliente, $tipoPago['banco']);
+                            break;
+                    case 'cheque':
+                            $this->factura->guardarPagoCheque($consecutivo, $sucursal, $tipoPago['cheque'], $vendedor, $cliente, $tipoPago['banco']);
+                            break;
+                    case 'mixto':
+                            $comision = $this->banco->getComision($tipoPago['banco']);
+                            $moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
+                            $cantidad = $tipoPago['cantidad'];
+                            $tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
+                            if($moneda=='dolares'){
+                                    $cantidad = $cantidad * $tipoCambio;
+                            }
+
+                            $this->factura->guardarPagoMixto($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco'], $cantidad );
+                            break;
+                    case 'credito':
+                            date_default_timezone_set("America/Costa_Rica");
+                            $Current_datetime = date("y/m/d : H:i:s", now());
+                            $facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
+                            foreach($facturaHead as $row){					
+                                    $totalFactura = $row->Factura_Monto_Total;
+                            }
+
+                            $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, $tipoPago['canDias'], $Current_datetime, $totalFactura);
+                            break;
+                    case 'apartado':
+                            //Guardamos como si fuera un credito y luego como apartado
+                            $abono = $tipoPago['abono'];
+                            if(!is_numeric($abono)){$abono=0;}
+                            date_default_timezone_set("America/Costa_Rica");
+                            $Current_datetime = date("y/m/d : H:i:s", now());
+                            $facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
+                            foreach($facturaHead as $row){					
+                                    $totalFactura = $row->Factura_Monto_Total;
+                            }	
+
+                            $totalFactura = $totalFactura - $abono;				
+                            $credito = $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, 10000, $Current_datetime, $totalFactura);
+
+                            $moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
+                            $tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
+                            if($moneda=='dolares'){
+                                    $abono = $abono * $tipoCambio;
+                            }
+                            $this->factura->guardarPagoAbono($credito, $abono);
+
+                            break;
+            }
+    }
 	
-	function descontarArticulosDefectuosos($consecutivo, $sucursal){
-		$articulos = $this->factura->getArticulosFactura($consecutivo, $sucursal);
-		foreach($articulos as $art){
-			$this->articulo->actualizarInventarioRESTADefectuoso($art->Articulo_Factura_Codigo, $art->Articulo_Factura_Cantidad, $sucursal);
-		}
-	}
-	
-	function guardarTipoPago($tipoPago, $consecutivo, $sucursal){
-		$cliente = $this->factura->getCliente($consecutivo, $sucursal);
-		$vendedor = $this->factura->getVendedor($consecutivo, $sucursal);
-		
-		switch ($tipoPago['tipo']) {
-			case 'tarjeta':
-				$comision = $this->banco->getComision($tipoPago['banco']);
-				$this->factura->guardarPagoTarjeta($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco']);
-				break;
-			case 'deposito':
-				$this->factura->guardarPagoDeposito($consecutivo, $sucursal, $tipoPago['deposito'], $vendedor, $cliente, $tipoPago['banco']);
-				break;
-			case 'cheque':
-				$this->factura->guardarPagoCheque($consecutivo, $sucursal, $tipoPago['cheque'], $vendedor, $cliente, $tipoPago['banco']);
-				break;
-			case 'mixto':
-				$comision = $this->banco->getComision($tipoPago['banco']);
-				$moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
-				$cantidad = $tipoPago['cantidad'];
-				$tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
-				if($moneda=='dolares'){
-					$cantidad = $cantidad * $tipoCambio;
-				}
-				
-				$this->factura->guardarPagoMixto($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco'], $cantidad );
-				break;
-			case 'credito':
-				date_default_timezone_set("America/Costa_Rica");
-				$Current_datetime = date("y/m/d : H:i:s", now());
-				$facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
-				foreach($facturaHead as $row){					
-					$totalFactura = $row->Factura_Monto_Total;
-				}
-			
-				$this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, $tipoPago['canDias'], $Current_datetime, $totalFactura);
-				break;
-			case 'apartado':
-				//Guardamos como si fuera un credito y luego como apartado
-				$abono = $tipoPago['abono'];
-				if(!is_numeric($abono)){$abono=0;}
-				date_default_timezone_set("America/Costa_Rica");
-				$Current_datetime = date("y/m/d : H:i:s", now());
-				$facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
-				foreach($facturaHead as $row){					
-					$totalFactura = $row->Factura_Monto_Total;
-				}	
-				
-				$totalFactura = $totalFactura - $abono;				
-				$credito = $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, 10000, $Current_datetime, $totalFactura);
-				
-				$moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
-				$tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
-				if($moneda=='dolares'){
-					$abono = $abono * $tipoCambio;
-				}
-				$this->factura->guardarPagoAbono($credito, $abono);
-				
-				break;
-		}
-	}
-	
-	function anularFactura(){
-		$facturaBODY['status']='error';
-		$facturaBODY['error']='17'; //No se logro procesar ls productos
-		if(isset($_POST['consecutivo'])){
-			$consecutivo = $_POST['consecutivo'];
-			include PATH_USER_DATA;	
-			
-			if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){							
-				$facturaBODY['status']='success';
-				
-				date_default_timezone_set("America/Costa_Rica");
-				$Current_datetime = date("y/m/d : H:i:s", now());
-				$datos = array(         
-					'Factura_Tipo_Pago'=>'contado',
-					'Factura_Fecha_Hora'=>$Current_datetime, 
-					'Factura_Estado'=>'anulada'
-				);
-				
-				$this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
-				$this->devolverProductosdeFactura($consecutivo, $data['Sucursal_Codigo']);
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario anulo la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'anular');
-				
-			}else{
-				$facturaBODY['status']='error';
-				$facturaBODY['error']='19'; //Error no existe esa factura
-			}
-			
-		}else{
-			$facturaBODY['status']='error';
-			$facturaBODY['error']='16'; //Error de no leer encabezado del URL
-		}
-		echo json_encode($facturaBODY);
-	}
+    function anularFactura(){
+        $facturaBODY['status']='error';
+        $facturaBODY['error']='17'; //No se logro procesar ls productos
+        if(isset($_POST['consecutivo'])){
+            $consecutivo = $_POST['consecutivo'];
+            include PATH_USER_DATA;	
+
+            if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){
+                $tipoPago = array("tipo"=>"contado");
+            	include PATH_USER_DATA; 						
+                // Primero validamos si existe una factura electronica asociada a esta factura
+                // SI lo hay seguimos adelante y si no la creamos
+                $fueAnuladaPorRechazoDeHacienda = false;
+                $existeFacturaElectronica = false;
+                $responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
+                if($this->factura->getFacturaElectronica($consecutivo, $data['Sucursal_Codigo']) === false){
+                    if($responseCheck["status"] == "success"){
+                        $resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
+                        if($resFacturaElectronica["status"]){
+                            $fueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+                            $existeFacturaElectronica = true;
+                            
+                            $Current_datetime = date("y/m/d : H:i:s", $resFacturaElectronica["data"]["fecha"]);
+                            $datos = array(         
+                                    'Factura_Fecha_Hora'=>$Current_datetime
+                            );
+
+                            $this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
+                        }else{
+                            $facturaBODY['status']='error';
+                            $facturaBODY['error']='72'; // No se logro realizar la factura electronica
+                        }
+                    }else{
+                        $facturaBODY['status']='error';
+                        $facturaBODY['error']='71'; // No se logro validar los campos para hacer la factura electronica
+                    }
+                }else{
+                    $existeFacturaElectronica = true;
+                }
+
+                if($responseCheck["status"] != "success"){
+                    $facturaBODY['status']='error';
+                    $facturaBODY['error']='71'; // No se logro validar los campos para hacer la factura electronica
+                }
+                
+                if($existeFacturaElectronica && $responseCheck["status"] == "success"){
+                    // Factura fue recibida por hacienda y no fue rechazada
+                    // Acordarse que si la factura fue rechazarse al enviarse, la factura se autoanula
+                    // entonces no hay necesidad de generar la nota credito
+                    // PEEEEROOOO si hacienda acepto la factura bien, debemos generar la Nota Credito 
+                    // para anular esta factura
+                    if($fueAnuladaPorRechazoDeHacienda === false){
+                        //Debemos generar su respectiva nota credito
+                        $productosAAcreditar = $this->convertirProductosDeFacturaANotaCredito($responseCheck["articulosOriginales"]);
+                        $retorno = array();
+                        $this->contabilidad->crearNotaCreditoMacro($retorno, $responseCheck["cliente"]->Cliente_Cedula, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo, $productosAAcreditar, $data['Usuario_Codigo'], ANULAR_FACTURA, "Anulación autorizada por medio de caja o consulta");
+                    }
+
+                    $facturaBODY['status']='success';
+                    $datos = array(         
+                            'Factura_Tipo_Pago'=>$tipoPago["tipo"],
+                            'Factura_Estado'=>'anulada'
+                    );
+
+                    $this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
+                    //$this->devolverProductosdeFactura($consecutivo, $data['Sucursal_Codigo']);
+                    $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario anulo la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'anular');
+
+                }
+            }else{
+                $facturaBODY['status']='error';
+                $facturaBODY['error']='19'; //Error no existe esa factura
+            }
+        }else{
+            $facturaBODY['status']='error';
+            $facturaBODY['error']='16'; //Error de no leer encabezado del URL
+        }
+        echo json_encode($facturaBODY);
+    }
 	
 	function devolverProductosdeFactura($consecutivo, $sucursal){
             if($productos = $this->factura->getArticulosFactura($consecutivo, $sucursal)){
@@ -1169,149 +1150,6 @@ class caja extends CI_Controller {
 			echo "ERROR<br>URL incorrecta. . . <br>Contacte al administrador";
 		}
 	}
-        
-        
-    function validarCobrarFactura(){
-        $facturaBODY['status']='error';
-        $facturaBODY['error']='17'; //No se logro procesar la solicitud
-        if(isset($_POST['consecutivo']) && isset($_POST['tipoPago'])){
-            $consecutivo = $_POST['consecutivo'];
-            $tipoPago = $_POST['tipoPago']; //Obtenemos el array
-            $tipoPago = json_decode($tipoPago, true);
-            $tipoPago = $tipoPago[0]; //Sacamos el array con los datos
-            $recibidoParaVuelto = $_POST['entregado'];
-            $vuelto = $_POST['vuelto'];
-
-            include PATH_USER_DATA;	
-            if(isset($tipoPago['tipo'])){
-                // Si no es pago de credito, siempre tendra credito disponible
-                // Si es pago a credito, lo marca como que no tiene para realizar la verificacion despues
-                $tieneDisponibleCredito = $tipoPago['tipo'] == 'credito' ? false : true;
-                //Realizamos la validacion si tiene o no credito
-                if($tieneDisponibleCredito === false){
-                    $tieneDisponibleCredito = $this->creditoDisponible($consecutivo, $data['Sucursal_Codigo']);
-                }
-                if($tieneDisponibleCredito){
-                    if($factura = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){	
-                        $factura = $factura[0];
-                        if($cliente = $this->cliente->getClientes_Cedula($factura->TB_03_Cliente_Cliente_Cedula)){
-                            $facturaBODY['factura']=$factura;
-                            $facturaBODY['cliente']=$cliente[0];
-                            $this->validarEmpresaYClienteCobrarFactura($facturaBODY);
-                            if($facturaBODY["status"] == 'success'){
-                                require_once PATH_API_HACIENDA;
-                                $api_resp = API_FE::setUpLogin($data);
-                                if($api_resp["isUp"]){
-                                    if($api_resp["sessionKey"]){
-                                        $facturaBODY['status']='success';
-                                        $facturaBODY['sessionKey']=$api_resp["sessionKey"];
-                                        unset($facturaBODY['error']);
-                                    }else{
-                                        $facturaBODY["status"] = "error";
-                                        $facturaBODY['error']='51'; //Error no se genero el token de sesion para el API de crLibre
-                                    }
-                                }else{
-                                    $facturaBODY["status"] = "error";
-                                    $facturaBODY['error']='50'; //Error no hay conexion con API crLibre
-                                }
-                            }
-                        }else{
-                            $facturaBODY['error']='25'; //No existe cliente
-                        }
-                    }else{
-                        $facturaBODY['error']='19'; //Error no existe esa factura
-                    }
-                }else{
-                    $facturaBODY['error']='24'; //Error no tiene credito disponible
-                }
-            }else{
-                $facturaBODY['error']='18'; //Error de no leer encabezado del URL DE TIPO DE PAGO
-            }				
-        }else{
-            $facturaBODY['error']='16'; //Error de no leer encabezado del URL
-        }
-        return $facturaBODY;
-    }
-    
-    function validarEmpresaYClienteCobrarFactura(&$facturaBODY){
-        $facturaBODY['status']='error';
-        if($empresaData = $this->empresa->getEmpresa($facturaBODY["factura"]->TB_02_Sucursal_Codigo)){
-            $empresaData = $empresaData[0];
-            if($empresaData->Sucursal_Estado == 1){ // Sucursal esta activa
-                if($empresaData->Provincia>0 && $empresaData->Canton>0 && $empresaData->Distrito>0 && $empresaData->Barrio>0){
-                    if(filter_var($empresaData->Sucursal_Email, FILTER_VALIDATE_EMAIL)){
-                        if( trim($empresaData->Usuario_Tributa) != "" && 
-                            trim($empresaData->Pass_Tributa) != "" && 
-                            trim($empresaData->Ambiente_Tributa) != "" && 
-                            trim($empresaData->Token_Certificado_Tributa) != "" && 
-                            trim($empresaData->Pass_Certificado_Tributa) != ""){
-                            $facturaBODY["empresa"] = $empresaData; 
-                            if($articulosFactura = $this->factura->getArticulosFactura($facturaBODY["factura"]->Factura_Consecutivo, $facturaBODY["factura"]->TB_02_Sucursal_Codigo)){
-                                $costos = array(
-                                    "total_serv_gravados" => 0,
-                                    "total_serv_exentos" => 0,
-                                    "total_merc_gravada" => 0,
-                                    "total_merc_exenta" => 0,
-                                    "total_gravados" => 0,
-                                    "total_exentos" => 0,
-                                    "total_ventas" => 0,
-                                    "total_descuentos" => 0,
-                                    "total_ventas_neta" => 0,
-                                    "total_impuestos" => 0,
-                                    "total_comprobante" => 0,
-                                );
-                                $artFinales = array();
-                                foreach($articulosFactura as $a){
-                                    $linea = $this->getDetalleLinea($a);
-                                    array_push($artFinales, $linea);
-                                    
-                                    if($a->Articulo_Factura_Exento == 0){
-                                        $costos["total_merc_gravada"] += $linea["montoTotal"];
-                                        $costos["total_gravados"] += $linea["montoTotal"];
-                                    }else{
-                                        $costos["total_merc_exenta"] += $linea["montoTotal"];
-                                        $costos["total_exentos"] += $linea["montoTotal"];
-                                    }
-                                    $costos["total_ventas"] += $linea["montoTotal"];
-                                    
-                                    if(isset($linea["montoDescuento"])){
-                                        $costos["total_descuentos"] += $linea["montoDescuento"];
-                                    }
-                                    
-                                    $impuesto = $linea["impuesto"][0]["monto"];
-                                    $costos["total_impuestos"] += $impuesto;
-                                }
-                                $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
-                                $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"];
-                                $facturaBODY['articulos'] = $artFinales;
-                                $facturaBODY['costos'] = $costos;
-                                $facturaBODY['status']='success';
-                                $facturaBODY['articulosOriginales'] = $articulosFactura;
-                            }else{
-                                // Factura no tiene articulos
-                                $facturaBODY['error']='15';
-                            }
-                        }else{
-                            // Empresa no tiene los valores minimos para crear FE
-                            $facturaBODY['error']='30';
-                        }
-                    }else{
-                        // Empresa debe tener un correo electrónico válido
-                        $facturaBODY['error']='29';
-                    }
-                }else{
-                    // Empresa debe actualizar domicilio
-                    $facturaBODY['error']='28';
-                }
-            }else{
-                // Empresa esta deshabilitada
-                $facturaBODY['error']='27';
-            }
-        }else{
-            // No existe empresa
-            $facturaBODY['error']='26';
-        }
-    }
     
     function guardarPDFFactura($consecutivo, $sucursal){
         if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
