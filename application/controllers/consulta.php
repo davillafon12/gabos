@@ -978,6 +978,135 @@ class consulta extends CI_Controller {
             
             echo json_encode($retorno);
         }
+        
+        
+        
+        function comprobantesElectronicos(){
+            include 'get_session_data.php';
+            $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+            $this->load->view('consulta/comprobantes_consulta_view', $data);
+	}
+        
+        function obtenerComprobantesTabla(){
+            include PATH_USER_DATA;
+            //Un array que contiene el nombre de las columnas que se pueden ordenar
+            $columnas = array(
+                            '0' => 'Clave',
+                            '1' => 'ConsecutivoHacienda',
+                            '2' => 'ReceptorIdentificacion',
+                            '3' => 'FechaEmision',
+                            '4' => 'RespuestaHaciendaEstado'
+                        );
+            
+            $query = $this->contabilidad->obtenerComprobantesParaTabla($columnas[$_POST['order'][0]['column']], 
+                    $_POST['order'][0]['dir'], 
+                    $_POST['search']['value'], 
+                    intval($_POST['start']), 
+                    intval($_POST['length']), 
+                    $data['Sucursal_Codigo'],
+                    $_POST['tipodocumento']);
+
+            $ruta_imagen = base_url('application/images/Icons');
+            $comprobantesAMostrar = array();
+            foreach($query->result() as $art){
+                    $auxArray = array(
+                            $art->clave,
+                            $art->consecutivo,
+                            $art->cliente_identificacion." - ".$art->cliente_nombre,
+                            date("h:i:s a d-m-Y", strtotime($art->fecha)),
+                            $this->getCorreoEnviadoComprobanteHTML($art->correo_enviado),
+                            $this->getEstadoComprobanteHTML($art->estado),
+                            "<div class='tab_opciones'>
+                                    <a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>
+                                    <a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>
+                                    <a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src=".$ruta_imagen."/Information_icon.png width='21' height='21' title='Ver Respuesta de Hacienda'></a>
+                                    ".(($art->estado == "aceptado" || $art->estado == "rechazado") ? "" : "<a href='#' onclick='reenviarXML(\"$art->clave\")'><img src=".$ruta_imagen."/upload.png width='21' height='21' title='Reenviar Documento a Hacienda'></a>")."
+                            </div>"
+                    );
+                    array_push($comprobantesAMostrar, $auxArray);
+            }
+
+            $filtrados = $this->contabilidad->obtenerComprobantesParaTablaFiltrados($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $data['Sucursal_Codigo'],
+                    $_POST['tipodocumento']);
+
+            $retorno = array(
+                            'draw' => $_POST['draw'],
+                            'recordsTotal' => $this->contabilidad->getTotalComprobantesEnSucursal($data['Sucursal_Codigo'], $_POST['tipodocumento']),
+                            'recordsFiltered' => $filtrados -> num_rows(),
+                            'data' => $comprobantesAMostrar
+                        );
+            echo json_encode($retorno);
+        }
+        
+        private function getCorreoEnviadoComprobanteHTML($estado){
+            if($estado == 1){
+                return "<div class='estado-label success'>Enviado</div>";
+            }
+            
+            return "<div class='estado-label error'>No enviado</div>";
+        }
+        
+        private function getEstadoComprobanteHTML($estado){
+            if($estado == "aceptado"){
+                return "<div class='estado-label success'>Aceptado</div>";
+            }
+            if($estado == "rechazado"){
+                return "<div class='estado-label error'>Rechazado</div>";
+            }
+            
+            return "<div class='estado-label warning'>".ucfirst($estado)."</div>";
+        }
+        
+        public function verXMLHacienda(){
+            $clave = @$_GET["clave"];
+            $tipo = @$_GET["tipo"];
+            if($clave != ""){
+                if($tipo == "FE"){
+                    if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
+                        $before = array('<','>');
+                        $after = array('&lt;','&gt;');
+                        $xml = str_replace($before,$after,base64_decode($factura->RespuestaHaciendaXML));
+                        echo "<pre>".$xml;
+                    }else{
+                        die("No existe factura electronica");
+                    }
+                }else if($tipo == "NC"){
+                    if($nota = $this->contabilidad->getNotaCreditoElectronicaByClave($clave)){
+                        $before = array('<','>');
+                        $after = array('&lt;','&gt;');
+                        $xml = str_replace($before,$after,base64_decode($nota->RespuestaHaciendaXML));
+                        echo "<pre>".$xml;
+                    }else{
+                        die("No existe nota credito electronica");
+                    }
+                }else{
+                    die("Tipo de documento no valido");
+                }
+            }else{
+                die("La clave no puede ser vacia");
+            }
+        }
+        
+        public function reenviarDocumento(){
+            $clave = @$_POST["clave"];
+            $retorno = array("status"=>0, "error"=>"No se pudo procesar la solicitud");
+            if($clave != ""){
+                if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
+                    $factura = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
+                    $resFacturaElectronica = array("data" => array("situacion"=>"normal"));
+                    $responseCheck = array("factura" => $factura);
+                    $result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+                    $retorno["status"] = 1;
+                    unset($retorno["error"]);
+                }else{
+                    $retorno["error"] = "No existe factura electronica";
+                }
+            }else{
+                $retorno["error"] = "La clave no puede ser vacia";
+            }
+            echo json_encode($retorno);
+        }
+        
 } 
 
 ?>

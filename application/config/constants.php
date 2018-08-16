@@ -107,6 +107,7 @@ define('HACIENDA_TOKEN_API_STAG', "https://idp.comprobanteselectronicos.go.cr/au
 define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect/token");
 define('HACIENDA_RECEPCION_API_STAG', "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/");
 define('HACIENDA_RECEPCION_API_PROD', "https://api.comprobanteselectronicos.go.cr/recepcion/v1/");
+define('PATH_DOCUMENTOS_ELECTRONICOS_WEB', 'application/third_party/');
 
 define('ANULAR_FACTURA', '01');
 define('CORRIGE_FACTURA', '03');

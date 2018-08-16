@@ -1562,6 +1562,19 @@ Class factura extends CI_Model
         $_SESSION["flash_fe"] = $feStatus;
         return false;
     }
+    
+    
+    function getFacturaElectronicaByClave($clave){
+        $this->db->from("tb_55_factura_electronica");
+        $this->db->where("Clave", $clave);
+        $query = $this->db->get();
+        
+        if($query->num_rows() == 0){
+            return false;
+        }else{
+            return $query->result()[0];
+        }
+    }
 }
 
 

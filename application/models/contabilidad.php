@@ -2786,6 +2786,69 @@ Class contabilidad extends CI_Model
 		}
 		return true;
 	}
+        
+        function obtenerComprobantesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
+            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+		return $this->db->query("
+			SELECT 	Clave AS clave,
+                                ConsecutivoHacienda AS consecutivo,
+				ReceptorIdentificacion AS cliente_identificacion,
+                                ReceptorNombre AS cliente_nombre,
+                                CorreoEnviadoReceptor as correo_enviado,
+                                FechaEmision as fecha,
+                                RespuestaHaciendaEstado as estado
+			FROM $tabla
+			WHERE (Clave LIKE '%$busqueda%' OR
+                                ConsecutivoHacienda LIKE '%$busqueda%' OR
+                                ReceptorIdentificacion LIKE '%$busqueda%' OR
+                                ReceptorNombre LIKE '%$busqueda%')
+			AND    Sucursal = $sucursal
+			ORDER BY $columnaOrden $tipoOrden
+			LIMIT $inicio,$cantidad		
+		");		
+	}
+        
+        function obtenerComprobantesParaTablaFiltrados($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
+            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+		return $this->db->query("
+			SELECT 	Clave AS clave,
+                                ConsecutivoHacienda AS consecutivo,
+				ReceptorIdentificacion AS cliente_identificacion,
+                                ReceptorNombre AS cliente_nombre,
+                                CorreoEnviadoReceptor as correo_enviado,
+                                FechaEmision as fecha,
+                                RespuestaHaciendaEstado as estado
+			FROM $tabla
+			WHERE (Clave LIKE '%$busqueda%' OR
+                                ConsecutivoHacienda LIKE '%$busqueda%' OR
+                                ReceptorIdentificacion LIKE '%$busqueda%' OR
+                                ReceptorNombre LIKE '%$busqueda%')
+			AND    Sucursal = $sucursal
+		");		
+	}
+        
+        function getTotalComprobantesEnSucursal($sucursal, $tipoDocumento){
+            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+		$this->db->from($tabla);
+		$this->db->where('Sucursal', $sucursal);
+		$query = $this -> db -> get();
+		return $query -> num_rows();
+	}
+        
+        function getNotaCreditoElectronicaByClave($clave){
+            $this->db->from("tb_57_nota_credito_electronica");
+            $this->db->where("Clave", $clave);
+            $query = $this->db->get();
+
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result()[0];
+            }
+        }
 }
 
 
