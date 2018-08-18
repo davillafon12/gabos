@@ -29,7 +29,7 @@ function setTable(){
                         $("#contenido").css( "display", 'block' );
                 },
 		"aLengthMenu": [[20, 50, 100, 500, 1000], [20, 50, 100, 500, 1000]],
-                "order": [ 3, 'asc' ]
+                "order": [ 3, 'desc' ]
 	});
 }
 
