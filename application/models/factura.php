@@ -1065,7 +1065,22 @@ Class factura extends CI_Model
                     $api = new API_FE();
                 }
                 $row = $query->result()[0];
-                if($claveRs = $api->createClave(($row->EmisorTipoIdentificacion == "01" ? "fisico" : "juridico"), $row->EmisorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento)){
+		$tipoIdentificacion = "fisico";
+		switch($row->EmisorTipoIdentificacion){
+			case "01":
+				$tipoIdentificacion = "fisico";
+			break;
+			case "02":
+				$tipoIdentificacion = "juridico";
+			break;
+			case "03":
+				$tipoIdentificacion = "dimex";
+			break;
+			case "04":
+				$tipoIdentificacion = "nite";
+			break;
+		}
+                if($claveRs = $api->createClave($tipoIdentificacion, $row->EmisorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento)){
                     $data = array(
                         "Clave" => $claveRs["clave"],
                         "ConsecutivoHacienda" => $claveRs["consecutivo"]
