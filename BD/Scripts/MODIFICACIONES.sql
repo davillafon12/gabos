@@ -16,7 +16,7 @@ UPDATE tb_02_sucursal SET Tipo_Cedula =  '02';
 
 UPDATE tb_02_sucursal SET  `Codigo_Pais_Telefono` =  '506',`Codigo_Pais_Fax` =  '506';
 
-CREATE TABLE IF NOT EXISTS `GAROTAS_BONITAS_MAIN_DB`.`tb_55_factura_electronica` (
+CREATE TABLE IF NOT EXISTS `tb_55_factura_electronica` (
   `Consecutivo` INT NOT NULL,
   `Sucursal` INT NOT NULL,
   `Clave` VARCHAR(100) NULL,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `GAROTAS_BONITAS_MAIN_DB`.`tb_55_factura_electronica`
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `GAROTAS_BONITAS_MAIN_DB`.`tb_56_articulos_factura_electronica` (
+CREATE TABLE IF NOT EXISTS `tb_56_articulos_factura_electronica` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Cantidad` VARCHAR(7) NULL,
   `UnidadMedida` VARCHAR(10) NULL,

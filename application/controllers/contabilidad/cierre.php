@@ -19,7 +19,7 @@ class cierre extends CI_Controller {
 	}
 	
 	function caja(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -391,7 +391,7 @@ class cierre extends CI_Controller {
 				if(is_numeric($cantidad)&&is_numeric($tipo_cambio)&&is_numeric($base)&&is_numeric($bnServicios)&&is_numeric($bnServiciosCredito)&&is_numeric($bcrServicios)&&is_numeric($bcrServiciosCredito)){
 					$colones = json_decode($_POST['colones']);
 					$dolares = json_decode($_POST['dolares']);
-					include '/../get_session_data.php';
+					include PATH_USER_DATA;
 					if(!$this->factura->getFacturasPendientes($data['Sucursal_Codigo'])){
 							
 							$cierre = $this->contabilidad->crearCierreCaja($tipo_cambio, $cantidad, $base, $_POST['fechaCierre'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $bnServicios, $bnServiciosCredito, $bcrServicios, $bcrServiciosCredito);
