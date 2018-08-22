@@ -15,7 +15,7 @@ class retiro extends CI_Controller {
 	}
 	
 	function parcial(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -40,7 +40,7 @@ class retiro extends CI_Controller {
 			if(is_numeric($cantidad)&&is_numeric($tipo_cambio)){
 				$colones = json_decode($_POST['colones']);
 				$dolares = json_decode($_POST['dolares']);
-				include '/../get_session_data.php';
+				include PATH_USER_DATA;
 				date_default_timezone_set("America/Costa_Rica");
 				$fecha = date("y/m/d : H:i:s", now());				
 				//echo $cantidad;
