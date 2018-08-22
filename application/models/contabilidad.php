@@ -2043,7 +2043,8 @@ Class contabilidad extends CI_Model
         function crearNotaCreditoElectronica($sucursal, $cliente, $nota, $costos, $articulos, $codigo, $razon, $numero, $tipoDoc, $fechaEmisionDoc){
             $feedback["status"] = false;
             
-            if($cliente->NoReceptor){
+            // No vamos a aceptar receptores de pasaporte para FE
+            if($cliente->NoReceptor || $cliente->Cliente_Tipo_Cedula == "pasaporte"){
                 $cliente = null;
             }
             

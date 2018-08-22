@@ -909,7 +909,8 @@ Class factura extends CI_Model
         function crearFacturaElectronica($sucursal, $cliente, $factura, $costos, $articulos, $tipoPago){
             $feedback["status"] = false;
             
-            if($cliente->NoReceptor){
+            // No vamos a aceptar receptores de pasaporte para FE
+            if($cliente->NoReceptor || $cliente->Cliente_Tipo_Cedula == "pasaporte"){
                 $cliente = null;
             }
             
