@@ -16,7 +16,7 @@ class traspaso extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 				
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -86,7 +86,7 @@ class traspaso extends CI_Controller {
 								
 								if($this->verificarExistenciaDeArticulos($articulos, $sucursal)){
 									//Cargamos informacion adicional
-									include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+									include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 									date_default_timezone_set("America/Costa_Rica");
 									$fechaHoraActual = date("Y-m-d  H:i:s", now());
 									$traspaso = $this->articulo->crearTraspasoInventario($sucursal, $sucursalRecibe, $fechaHoraActual, $data['Usuario_Codigo']);
@@ -197,7 +197,7 @@ class traspaso extends CI_Controller {
 	}
 	
 	private function traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $traspaso, $clienteLiga){
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			foreach($articulos as $art){
 					//Primero verificamos que exista en la sucursal que recibe, si no lo creamos
 					if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){

@@ -7,7 +7,7 @@ class registrar extends CI_Controller {
     parent::__construct(); 
 	$this->load->model('user','',TRUE);
 	$this->load->model('banco','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -19,7 +19,7 @@ class registrar extends CI_Controller {
 
  function index()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$this->load->helper(array('form'));
 	$this->load->view('bancos/registrar_view_banco', $data);
@@ -30,7 +30,7 @@ class registrar extends CI_Controller {
 	$nombre_banco = $this->input->post('name');
 	$comision_banco = $this->input->post('comision');
 	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	//$id_empresa= $this->empresa->getCantidadEmpresas();
 	

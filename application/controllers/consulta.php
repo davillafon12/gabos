@@ -81,6 +81,7 @@ class consulta extends CI_Controller {
 	
 	function recibos(){
 		include 'get_session_data.php';
+                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('consulta/recibos_consulta_view', $data);
 	}
 	
@@ -353,6 +354,7 @@ class consulta extends CI_Controller {
 	
 	function retiroParcial(){
 		include 'get_session_data.php';
+                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('consulta/retiros_parciales_consulta_view', $data);
 	}
 	

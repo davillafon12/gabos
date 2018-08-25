@@ -8,7 +8,7 @@ class editar extends CI_Controller {
 	$this->load->model('user','',TRUE);
 	$this->load->model('banco','',TRUE);
 	$this->load->model('user','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -21,7 +21,7 @@ class editar extends CI_Controller {
  function index()
  {
 	
-	 include '/../get_session_data.php';
+	 include PATH_USER_DATA;
 	 $this->load->view('bancos/bancos_edicion_view', $data);	
  }
  
@@ -91,7 +91,7 @@ class editar extends CI_Controller {
  
 	function eliminar()
 	 {
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -114,7 +114,7 @@ class editar extends CI_Controller {
 	 {
 		$id_request=$_GET['id'];
 		
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -153,7 +153,7 @@ class editar extends CI_Controller {
 		
 		$this->banco->actualizar(mysql_real_escape_string($id_banco), $data_update);
 		
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el banco codigo: ".mysql_real_escape_string($id_banco),$data['Sucursal_Codigo'],'edicion');
 		
 		redirect('bancos/editar', 'location');

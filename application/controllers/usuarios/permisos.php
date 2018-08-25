@@ -44,6 +44,7 @@
 						'registrar_articulos_masivo' => 'Registro Masivo Articulo',
 						'registrar_banco' => 'Registrar Banco',
 						'registrar_cliente' => 'Registrar Cliente',
+                                                'registrar_usuarios_masivo' => 'Registro Masivo Clientes',
 						'registrar_empresa' => 'Registrar Empresa',
 						'registrar_familia' => 'Registrar Familia',
 						'registrar_usuarios' => 'Registrar Usuario',

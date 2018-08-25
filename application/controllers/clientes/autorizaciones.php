@@ -10,7 +10,7 @@ class autorizaciones extends CI_Controller {
 
 	 function index()
 	 {
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['editar_autorizacion'])
 		{
@@ -23,7 +23,7 @@ class autorizaciones extends CI_Controller {
 	}
 	
 	function sendErrorActualizar($mensaje){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['editar_autorizacion'])
 		{
@@ -37,7 +37,7 @@ class autorizaciones extends CI_Controller {
 	}
 	
 	function success(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['editar_autorizacion'])
 		{
@@ -216,7 +216,7 @@ class autorizaciones extends CI_Controller {
 						$cliente['nombre'] = $row-> Cliente_Nombre;
 						$cliente['apellidos'] = $row-> Cliente_Apellidos;						
 					}
-					include '/../get_session_data.php';
+					include PATH_USER_DATA;
 					
 					$autorizado1 = $this->cliente->verificarSiYaTieneAutorizacion($cedula, 1); 
 					$autorizado2 = $this->cliente->verificarSiYaTieneAutorizacion($cedula, 2);
@@ -276,7 +276,7 @@ class autorizaciones extends CI_Controller {
 	
 	
 	function verAutorizaciones(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['ver_autorizacion'])
 		{

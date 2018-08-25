@@ -14,7 +14,7 @@ class cambio extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -73,7 +73,7 @@ class cambio extends CI_Controller {
 						if($this->articulosAAbonarExisten($articulos, $sucursal)){
 							if($this->articulosCantidadValida($articulos, $sucursal)){
 							
-								include '/../get_session_data.php';
+								include PATH_USER_DATA;
 								date_default_timezone_set("America/Costa_Rica");
 								$fecha = date("y/m/d : H:i:s", now());
 								$numeroCambio = $this->articulo->crearCambioCodigo($sucursal, $fecha, $data['Usuario_Codigo']);
@@ -187,7 +187,7 @@ class cambio extends CI_Controller {
 								$this->articulo->actualizarInventarioSUMA($abonar, $cantidad, $sucursal);
 								
 								$nombreSucursal = $this->empresa->getNombreEmpresa($sucursal);
-								include '/../get_session_data.php';
+								include PATH_USER_DATA;
 								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cambio $cantidad unidades de codigo $cambiar por $abonar en sucursal $sucursal - $nombreSucursal",$data['Sucursal_Codigo'],'cambio');
 							}else{
 								$retorno['error'] = '7'; //la cantidad no es valida

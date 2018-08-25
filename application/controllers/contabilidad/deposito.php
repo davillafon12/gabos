@@ -12,7 +12,7 @@ class deposito extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -33,7 +33,7 @@ class deposito extends CI_Controller {
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['recibo'])&&isset($_POST['deposito'])&&isset($_POST['banco'])){
 			if(trim($_POST['recibo'])!=''&&trim($_POST['deposito'])!=''&&trim($_POST['banco'])!=''){
-				include '/../get_session_data.php'; 
+				include PATH_USER_DATA; 
 				if($reciboResult = $this->contabilidad->existeReciboBySucursal($_POST['recibo'], $data['Sucursal_Codigo'])){
 					if($bancoResult = $this->banco->getBanco($_POST['banco'])){
 						foreach($reciboResult as $rec){

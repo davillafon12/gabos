@@ -37,9 +37,9 @@ PARA:
 		<!--CARGA DEL NUMERIC-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>"></script>
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_retiros_parciales.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_retiros_parciales.css?v='.$javascript_cache_version); ?>">
 		<!--CARGA DEL SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/retiros_parciales.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/retiros_parciales.js?v='.$javascript_cache_version); ?>"></script>
 		<script>
 			var decimales = '<?php echo $this->configuracion->getDecimales();?>';
 		</script>

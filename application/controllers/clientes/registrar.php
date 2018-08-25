@@ -230,12 +230,10 @@ class registrar extends CI_Controller {
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		$data["contenedor"] = "";
-		if($permisos['registrar_usuarios_masivo'])
-		{
-		$this->load->helper(array('form'));
-		$this->load->view('clientes/registro_masivo_clientes', $data);	
-		}
-		else{
+		if($permisos['registrar_usuarios_masivo']){
+                    $this->load->helper(array('form'));
+                    $this->load->view('clientes/registro_masivo_clientes', $data);	
+		}else{
 		   redirect('accesoDenegado', 'location');
 		}
     }

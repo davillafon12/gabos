@@ -17,7 +17,7 @@ class agregarComprasSucursal extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -70,7 +70,7 @@ class agregarComprasSucursal extends CI_Controller {
 							//Verifica que la factura a traspasar no haya sido traspasado antes a esa sucursal
 							if(!$this->contabilidad->facturaTraspasoHaSidoAplicada($factura, $this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal))
 							{
-								include '/../get_session_data.php';
+								include PATH_USER_DATA;
 								date_default_timezone_set("America/Costa_Rica");
 								$fecha = date("y/m/d : H:i:s", now());
 								
@@ -132,7 +132,7 @@ class agregarComprasSucursal extends CI_Controller {
 			//Revisamos que exista esa familia
 			if(!$this->familia->es_codigo_usado($familia, $sucursalEntrada)){
 				//Si no existe la creamos
-				include '/../get_session_data.php';
+				include PATH_USER_DATA;
 				$fa = $this->familia->es_codigo_usado($familia, $sucursalSalida)[0];
 				$this->familia->registrar($fa->Familia_Codigo, $fa->Familia_Nombre, $fa->Familia_Observaciones, $sucursalEntrada, $data['Usuario_Nombre']);
 			}
