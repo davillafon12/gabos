@@ -1091,17 +1091,35 @@ class consulta extends CI_Controller {
         
         public function reenviarDocumento(){
             $clave = @$_POST["clave"];
+            $tipo = @$_POST["tipo"];
             $retorno = array("status"=>0, "error"=>"No se pudo procesar la solicitud");
             if($clave != ""){
-                if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
-                    $factura = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
-                    $resFacturaElectronica = array("data" => array("situacion"=>"normal"));
-                    $responseCheck = array("factura" => $factura);
-                    $result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
-                    $retorno["status"] = 1;
-                    unset($retorno["error"]);
+                if($tipo != ""){
+                    switch($tipo){
+                        case "FE":
+                            if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
+                                $factura = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
+                                $resFacturaElectronica = array("data" => array("situacion"=>"normal"));
+                                $responseCheck = array("factura" => $factura);
+                                $result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+                                $retorno["status"] = 1;
+                                unset($retorno["error"]);
+                            }else{
+                                $retorno["error"] = "No existe factura electronica";
+                            }
+                        break;
+                        case "NC":
+                            if($nota = $this->contabilidad->getNotaCreditoElectronicaByClave($clave)){
+                                $this->contabilidad->enviarNotaCreditoElectronicaAHacienda($nota->Consecutivo, $nota->Sucursal);
+                                $retorno["status"] = 1;
+                                unset($retorno["error"]);
+                            }else{
+                                $retorno["error"] = "No existe factura electronica";
+                            }
+                        break;
+                    }
                 }else{
-                    $retorno["error"] = "No existe factura electronica";
+                    $retorno["error"] = "El tipo no puede ser vacio";
                 }
             }else{
                 $retorno["error"] = "La clave no puede ser vacia";

@@ -38,7 +38,7 @@ function reenviarXML(clave){
         url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/reenviarDocumento',
         type: "POST",
         dataType: "json",
-        data: {'clave':clave},	
+        data: {clave:clave, tipo:$("#tipo_documento").val()},	
         beforeSend: function(jqXHR, settings) {
             $('#envio_hacienda').bPopup({
                     modalClose: false
