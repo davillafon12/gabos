@@ -134,115 +134,195 @@ Class impresion_m extends CI_Model{
     
     private function encabezadoDocumentoPDF($tipo, $empresa, $encabezado, &$pdf){
 		//var_dump($empresa);
-		$pdf->SetFont('Arial','B',14);
-		$pdf->Cell(40,10,$empresa->nombre);
-		$pdf->Line(10, 17, 100, 17);
-		$pdf->ln(5);
-		$pdf->SetFont('Arial','',10);
-		$pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
-		$pdf->ln(4);
-		$pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
-		$pdf->ln(4);
-		$pdf->Cell(40,10,'Email: '.$empresa->email);
+		
 		switch($tipo){
 			case 'f':
-				//Cuadro de numero de factura y hora/fecha
-				$pdf->Rect(108, 10, 92, 20, 'D');
+                            $pdf->Line(10, 17, 200, 17);
+                            $pdf->Line(100, 17, 100, 35);
+                           // $pdf->Line(100, 35, 200, 35);
+                            $pdf->Line(10, 45, 200, 45);
+                            
+                                //var_dump($empresa);
                                 $pdf->SetFont('Arial','B',11);
-				$pdf->Text(109, 15, 'Consecutivo');
-                                $pdf->Text(109, 21, 'Clave');
-                                $pdf->Text(109, 27, 'Fecha');
+                                $pdf->Cell(40,20,$empresa->nombre);
+                                
+                                $pdf->ln(9);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,$empresa->administrador);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Cédula: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Dirección: '.$empresa->direccion);
+		
+                                $pdf->SetFont('Arial','B',12);
+                                $pdf->Text(11, 15, 'Factura Electrónica');
                                 $pdf->SetFont('Arial','',11);
-				$pdf->Text(134, 15, $encabezado->consecutivoH);
-                                $pdf->Text(122, 27, $encabezado->fecha);
-                                $pdf->Text(172, 27, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
-                                $pdf->SetFont('Arial','',8);
-				$pdf->Text(120, 20.8, $encabezado->clave);
+                                $pdf->Text(172, 15, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
                                 
-                                
-				//Info del cliente
-				$pdf->SetFont('Arial','B',12);
-				$pdf->Text(12, 42, 'Cliente');
-				$pdf->SetFont('Arial','',11);
-				$pdf->Text(12, 49, 'Identificación: '.$encabezado->cliente_ced);
-				$pdf->SetXY(11, 50);
+                                $pdf->SetFont('Arial','B',11);
+                                $pdf->Text(101, 21, 'Cliente');
+                                $pdf->SetFont('Arial','',10);
+				$pdf->Text(101, 25, 'Identificación: '.$encabezado->cliente_ced);
+				$pdf->SetXY(100, 25);
 				$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
-				//Caja redondeada 1
-				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
-				//Divisores				
-				//$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
-				$pdf->Line(100, 37, 100, 60); //Centro caja
-				//$pdf->Line(10, 60, 200, 60); //Borde de abajo
-				//$pdf->Line(200, 37, 200, 60); //Lado derecho caja
-				//$pdf->Line(10, 37, 200, 37); //Borde de arriba
-				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
-				$pdf->Line(100, 55, 200, 55); //Borde arriba vendedor
-				$pdf->Line(145, 37, 145, 44); //Divisor descripcion y estado
-				//Info de la factura
-				$pdf->SetFont('Arial','B',12);
-				$pdf->Text(102, 42, 'Descripción');
-				$pdf->Text(150, 42, 'Estado:');
-				$pdf->SetFont('Arial','',11);
-				$encabezado->estado = trim($encabezado->estado) == "cobrada" ? "Facturada" : $encabezado->estado;
-				$pdf->Text(170, 42, $encabezado->estado);
-				$pdf->SetFont('Arial','',11);
-				$pdf->Text(102, 49, 'Tipo: '.$encabezado->tipo);
-				$pdf->Text(102, 54, 'Moneda: '.$encabezado->moneda);
-				$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);
-				
-				$factor = $encabezado->moneda=='dolares' ? $encabezado->cambio : 1;
+                                
+                                // Descripcion general de la factura
+                             
+				$pdf->Text(11, 51, 'Consecutivo: '.$encabezado->consecutivoH);
+                              
+                                $pdf->Text(11, 56, 'Fecha: '.$encabezado->fecha);
+                                $pdf->Text(11, 61, 'Moneda: '.$encabezado->moneda);
+                                $encabezado->estado = trim($encabezado->estado) == "cobrada" ? "Facturada" : $encabezado->estado;
+                                $pdf->Text(90, 51, "Estado: ".$encabezado->estado);
+                                $pdf->Text(90, 56, 'Vendedor: '.$encabezado->vendedor);   
+                                $pdf->Text(150, 51, 'Tipo: '.$encabezado->tipo);
+                                $factor = $encabezado->moneda=='dolares' ? $encabezado->cambio : 1;
 				
 				switch($encabezado->tipo){
 					case 'credito':
-						$pdf->Text(140, 49, 'Días: '.$encabezado->diasCredito);
-						$pdf->Text(140, 54, 'Vence: '.$encabezado->fechaVencimiento);
+						$pdf->Text(150, 56, 'Días: '.$encabezado->diasCredito);
+						$pdf->Text(150, 61, 'Vence: '.$encabezado->fechaVencimiento);
 					break;
 					case 'mixto':
-						$pdf->Text(140, 49, 'Pago Tarjeta: '.$this->fni($encabezado->cantidadTarjeta/$factor));
-						$pdf->Text(140, 54, 'Pago Contado: '.$this->fni($encabezado->cantidadContado/$factor));
+						$pdf->Text(150, 56, 'Pago Tarjeta: '.$this->fni($encabezado->cantidadTarjeta/$factor));
+						$pdf->Text(150, 61, 'Pago Contado: '.$this->fni($encabezado->cantidadContado/$factor));
 					break;
 					case 'apartado':
-						$pdf->Text(140, 49, 'Abono: '.$this->fni($encabezado->abono/$factor));
-						$pdf->Text(140, 54, 'Saldo: '.$this->fni(($encabezado->total - $encabezado->abono)/$factor));
+						$pdf->Text(150, 56, 'Abono: '.$this->fni($encabezado->abono/$factor));
+						$pdf->Text(150, 61, 'Saldo: '.$this->fni(($encabezado->total - $encabezado->abono)/$factor));
 					break;
 				}
+                                
+				//Cuadro de numero de factura y hora/fecha
+				//$pdf->Rect(108, 10, 92, 20, 'D');
+                                
+                                  //$pdf->Text(109, 21, 'Clave');
+                                //$pdf->SetFont('Arial','',8);
+				//$pdf->Text(120, 20.8, $encabezado->clave);
+                            
+                                
+                                
+				//Info del cliente
+				//$pdf->SetFont('Arial','B',12);
+				//$pdf->Text(12, 42, 'Cliente');
+				
+				//Caja redondeada 1
+				//$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
+				//Divisores				
+				//$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
+				//$pdf->Line(100, 37, 100, 60); //Centro caja
+				//$pdf->Line(10, 60, 200, 60); //Borde de abajo
+				//$pdf->Line(200, 37, 200, 60); //Lado derecho caja
+				//$pdf->Line(10, 37, 200, 37); //Borde de arriba
+				//$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
+				//$pdf->Line(100, 55, 200, 55); //Borde arriba vendedor
+				//$pdf->Line(145, 37, 145, 44); //Divisor descripcion y estado
+				//Info de la factura
+				//$pdf->SetFont('Arial','B',12);
+				//$pdf->Text(102, 42, 'Descripción');
+				//$pdf->Text(150, 42, 'Estado:');
+				//$pdf->SetFont('Arial','',11);
+				//$encabezado->estado = trim($encabezado->estado) == "cobrada" ? "Facturada" : $encabezado->estado;
+				//$pdf->Text(170, 42, $encabezado->estado);
+				//$pdf->SetFont('Arial','',11);
+				//$pdf->Text(102, 49, 'Tipo: '.$encabezado->tipo);
+				//$pdf->Text(102, 54, 'Moneda: '.$encabezado->moneda);
+				//$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);
+				
+				
 			break;
 			case 'nc':
 				//Cuadro de numero de factura y hora/fecha
-				$pdf->Rect(108, 10, 92, 20, 'D');
+//				$pdf->Rect(108, 10, 92, 20, 'D');
+//                                $pdf->SetFont('Arial','B',11);
+//				$pdf->Text(109, 15, 'Consecutivo');
+//                                $pdf->Text(109, 21, 'Clave');
+//                                $pdf->Text(109, 27, 'Fecha');
+//                                $pdf->SetFont('Arial','',11);
+//				$pdf->Text(134, 15, $encabezado->consecutivoH);
+//                                $pdf->Text(122, 27, $encabezado->fecha);
+//                                $pdf->Text(172, 27, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
+//                                $pdf->SetFont('Arial','',8);
+//				$pdf->Text(120, 20.8, $encabezado->clave);
+//				
+//				//Info del cliente
+//				$pdf->SetFont('Arial','B',12);
+//				$pdf->Text(12, 42, 'Cliente');
+//				$pdf->SetFont('Arial','',11);
+//				$pdf->Text(12, 49, 'Identificación: '.$encabezado->cliente_cedula);
+//				$pdf->SetXY(11, 50);
+//				$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nombre);
+//				//Caja redondeada 1
+//				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
+//				//Divisores					
+//				$pdf->Line(100, 37, 100, 60); //Centro caja				
+//				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
+//				$pdf->Line(100, 51, 200, 51); //Borde arriba vendedor
+//				//Info de la factura
+//				$pdf->SetFont('Arial','B',12);
+//				$pdf->Text(102, 42, 'Descripción');
+                            
+                                $pdf->Line(10, 17, 200, 17);
+                            $pdf->Line(100, 17, 100, 35);
+                           // $pdf->Line(100, 35, 200, 35);
+                            $pdf->Line(10, 45, 200, 45);
+                            
+                                //var_dump($empresa);
                                 $pdf->SetFont('Arial','B',11);
-				$pdf->Text(109, 15, 'Consecutivo');
-                                $pdf->Text(109, 21, 'Clave');
-                                $pdf->Text(109, 27, 'Fecha');
+                                $pdf->Cell(40,20,$empresa->nombre);
+                                
+                                $pdf->ln(9);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,$empresa->administrador);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Cédula: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Dirección: '.$empresa->direccion);
+		
+                                $pdf->SetFont('Arial','B',12);
+                                $pdf->Text(11, 15, 'Nota Crédito Electrónica');
                                 $pdf->SetFont('Arial','',11);
-				$pdf->Text(134, 15, $encabezado->consecutivoH);
-                                $pdf->Text(122, 27, $encabezado->fecha);
-                                $pdf->Text(172, 27, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
-                                $pdf->SetFont('Arial','',8);
-				$pdf->Text(120, 20.8, $encabezado->clave);
-				
-				//Info del cliente
-				$pdf->SetFont('Arial','B',12);
-				$pdf->Text(12, 42, 'Cliente');
-				$pdf->SetFont('Arial','',11);
-				$pdf->Text(12, 49, 'Identificación: '.$encabezado->cliente_cedula);
-				$pdf->SetXY(11, 50);
+                                $pdf->Text(172, 15, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
+                                
+                                $pdf->SetFont('Arial','B',11);
+                                $pdf->Text(101, 21, 'Cliente');
+                                $pdf->SetFont('Arial','',10);
+				$pdf->Text(101, 25, 'Identificación: '.$encabezado->cliente_cedula);
+				$pdf->SetXY(100, 25);
 				$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nombre);
-				//Caja redondeada 1
-				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
-				//Divisores					
-				$pdf->Line(100, 37, 100, 60); //Centro caja				
-				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
-				$pdf->Line(100, 51, 200, 51); //Borde arriba vendedor
-				//Info de la factura
-				$pdf->SetFont('Arial','B',12);
-				$pdf->Text(102, 42, 'Descripción');
-				$pdf->Text(102, 57, 'Esta nota crédito se aplica a la factura #'.$encabezado->factura_aplicar);
-				$pdf->SetFont('Arial','',11);
-				$pdf->Text(102, 49, 'Moneda: '.$encabezado->moneda);
+                                
+                                // Descripcion general de la factura
+                             
+				$pdf->Text(11, 51, 'Consecutivo: '.$encabezado->consecutivoH);
+                              
+                                $pdf->Text(11, 56, 'Fecha: '.$encabezado->fecha);
+                                $pdf->Text(11, 61, 'Moneda: '.$encabezado->moneda);
+                            
+                            $pdf->SetFont('Arial','B',11);
+				$pdf->Text(100, 51, 'Esta nota crédito se aplica a la factura #'.$encabezado->factura_aplicar);
+//				$pdf->SetFont('Arial','',11);
+				
 				//$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);
 			break;
 			case 'nd':
+                                $pdf->SetFont('Arial','B',14);
+                                $pdf->Cell(40,10,$empresa->nombre);
+                                $pdf->Line(10, 17, 100, 17);
+                                $pdf->ln(5);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
 				//Cuadro de numero de factura y hora/fecha
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
@@ -262,6 +342,16 @@ Class impresion_m extends CI_Model{
 								
 			break;
 			case 'p':
+                                $pdf->SetFont('Arial','B',14);
+                                $pdf->Cell(40,10,$empresa->nombre);
+                                $pdf->Line(10, 17, 100, 17);
+                                $pdf->ln(5);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
 				//Cuadro de numero de factura y hora/fecha
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
@@ -299,6 +389,16 @@ Class impresion_m extends CI_Model{
 				$pdf->Text(102, 59, 'Vendedor: '.$encabezado->vendedor);				
 			break;
 			case 'r':
+                                $pdf->SetFont('Arial','B',14);
+                                $pdf->Cell(40,10,$empresa->nombre);
+                                $pdf->Line(10, 17, 100, 17);
+                                $pdf->ln(5);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
 				//Cuadro de numero de factura y hora/fecha
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
@@ -330,6 +430,16 @@ Class impresion_m extends CI_Model{
 				$pdf->Text(102, 54, 'Tipo de Pago: '.$encabezado->tipo_pago);
 			break;
 			case 't':
+                                $pdf->SetFont('Arial','B',14);
+                                $pdf->Cell(40,10,$empresa->nombre);
+                                $pdf->Line(10, 17, 100, 17);
+                                $pdf->ln(5);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
 				//Cuadro de numero de factura y hora/fecha
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
@@ -361,6 +471,16 @@ Class impresion_m extends CI_Model{
 				$pdf->Text(137, 49, $encabezado->usuario." - ".$encabezado->usuario_nombre);				
 			break;
 			case 'cc':
+                                $pdf->SetFont('Arial','B',14);
+                                $pdf->Cell(40,10,$empresa->nombre);
+                                $pdf->Line(10, 17, 100, 17);
+                                $pdf->ln(5);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
 				//Cuadro de numero de factura y hora/fecha
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
@@ -373,6 +493,16 @@ Class impresion_m extends CI_Model{
 								
 			break;
 			case 'con':
+                                $pdf->SetFont('Arial','B',14);
+                                $pdf->Cell(40,10,$empresa->nombre);
+                                $pdf->Line(10, 17, 100, 17);
+                                $pdf->ln(5);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
 				//Cuadro de numero de factura y hora/fecha
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
@@ -410,6 +540,16 @@ Class impresion_m extends CI_Model{
 				
 			break;
 			case 'ti':
+                                $pdf->SetFont('Arial','B',14);
+                                $pdf->Cell(40,10,$empresa->nombre);
+                                $pdf->Line(10, 17, 100, 17);
+                                $pdf->ln(5);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
 				//Cuadro de numero de factura y hora/fecha
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
@@ -445,6 +585,16 @@ Class impresion_m extends CI_Model{
 				
 			break;
 			case 'cdc':
+                                $pdf->SetFont('Arial','B',14);
+                                $pdf->Cell(40,10,$empresa->nombre);
+                                $pdf->Line(10, 17, 100, 17);
+                                $pdf->ln(5);
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(40,10,'Cédula Jurídica: '.$empresa->cedula);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Teléfono: '.$empresa->telefono);
+                                $pdf->ln(4);
+                                $pdf->Cell(40,10,'Email: '.$empresa->email);
 				//Cuadro de numero de factura y hora/fecha
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
@@ -483,7 +633,9 @@ Class impresion_m extends CI_Model{
 				$this->observaciones($encabezado->observaciones, $pdf);
 				//Leyenda de tributacion
 				$pdf->SetFont('Arial','',8);
-				$pdf->SetXY(10, 255);	
+				$pdf->SetXY(10, 267);
+                                $pdf->MultiCell(190,3,"Versión: 4.2",0,'C');
+                                $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 				//Costos totales
 				$subtotal = $encabezado->subtotal;
@@ -509,7 +661,7 @@ Class impresion_m extends CI_Model{
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
 				$pdf->Cell(28,7,$this->fni($retencion),1,0,'R');
 */
-				$pdf->SetXY(131, 246);	
+				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fni($total),1,0,'R');
 			break;			
@@ -522,13 +674,19 @@ Class impresion_m extends CI_Model{
 				$pdf->Cell(28,7,$this->fni($encabezado->subtotal),1,0,'R');
 				$pdf->SetXY(131, 247);	
 				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fni($encabezado->total_iva),1,0,'R');
+				$pdf->Cell(28,7,$this->fni($encabezado->total_iva+$encabezado->retencion),1,0,'R');
+				//$pdf->SetXY(131, 254);	
+				//$pdf->Cell(41,7,'Retención:',1,0,'R');
+				//$pdf->Cell(28,7,$this->fni($encabezado->retencion),1,0,'R');
 				$pdf->SetXY(131, 254);	
-				$pdf->Cell(41,7,'Retención:',1,0,'R');
-				$pdf->Cell(28,7,$this->fni($encabezado->retencion),1,0,'R');
-				$pdf->SetXY(131, 261);	
 				$pdf->Cell(41,7,'Total:',1,0,'R');
 				$pdf->Cell(28,7,$this->fni($encabezado->total),1,0,'R');
+                                
+                                $pdf->SetFont('Arial','',8);
+				$pdf->SetXY(10, 267);
+                                $pdf->MultiCell(190,3,"Versión: 4.2",0,'C');
+                                $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
+				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 			break;
 			case 'nd':
 				//Parte de observaciones

@@ -103,14 +103,16 @@ function imprimirFactura(data){
 	qz.append(" "+empresa.nombre+" \r\n");
 	//Seleccionamos tipo de letra
 	qz.append("\x1B\x21\x01");
-	qz.append(" Ced. Jur.: "+empresa.cedula+" \r\n");
+        qz.append(" "+empresa.administrador+" \r\n");
+	qz.append(" Cedula: "+empresa.cedula+" \r\n");
 	qz.append(" Tel.: "+empresa.telefono+" \r\n");
-	//qz.append(" Direccion: "+empresa.Sucursal_Direccion+" \r\n");
 	qz.append(" Email: "+empresa.email+" \r\n");
+        qz.append(" Direccion: "+empresa.direccion+" \r\n");
 	qz.append(" \r\n");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
-	qz.append("----------------------------------------\r\n");			
+	qz.append("----------------------------------------\r\n");
+        qz.append(" FACTURA ELECTRONICA\r\n");
 	qz.append(" Consecutivo: "+factura.consecutivoH+"\r\n"); 
         qz.append(" Clave: "+factura.clave+"\r\n"); 
 	qz.append(" Fecha: "+factura.fecha+"\r\n"); 
@@ -174,6 +176,7 @@ function imprimirFactura(data){
 	qz.append("Los precios incluyen impuestos de venta\r\n");
 	qz.append("Gracias por su visita\r\n");
 	qz.append(" \r\n");
+        qz.append(" Version 4.2\r\n");
 	qz.append(empresa.leyenda+"\r\n");
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
@@ -350,17 +353,18 @@ function imprimirNotaCredito(data){
 	qz.append(" "+empresa.nombre+" \r\n");
 	//Seleccionamos tipo de letra
 	qz.append("\x1B\x21\x01");
-	qz.append(" Ced. Jur.: "+empresa.cedula+" \r\n");
+        qz.append(" "+empresa.administrador+" \r\n");
+	qz.append(" Cedula: "+empresa.cedula+" \r\n");
 	qz.append(" Tel.: "+empresa.telefono+" \r\n");
-	//qz.append(" Direccion: "+empresa.Sucursal_Direccion+" \r\n");
 	qz.append(" Email: "+empresa.email+" \r\n");
+        qz.append(" Direccion: "+empresa.direccion+" \r\n");
 	qz.append(" \r\n");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	qz.append("----------------------------------------\r\n");
 	//Seleccionamos el tipo de letra
 	qz.append("\x1B\x21\x08");	
-	qz.append("Nota de Credito\r\n");
+	qz.append("NOTA CREDITO ELECTRONICA\r\n");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	qz.append("Numero: "+nota.nota+"\r\n");
@@ -401,10 +405,15 @@ function imprimirNotaCredito(data){
 	//Centramos 
 	qz.append("\x1B\x61\x01");
 	qz.append("Se aplica esta nota credito a\r\n");
-	qz.append("la factura #"+nota.factura_aplicar+"\r\n");
-	//Seleccionamos el tipo de letra
-	qz.append("\x1B\x21\x01");
+	qz.append("la factura #"+nota.factura_aplicar+"\r\n\r\n");
+
+	qz.append("Recibido conforme: ___________\r\n");
+	qz.append(" \r\n");
+	qz.append("Los precios incluyen impuestos de venta\r\n");
 	qz.append("Gracias por su visita\r\n");
+	qz.append(" \r\n");
+        qz.append(" Version 4.2\r\n");
+	qz.append(empresa.leyenda+"\r\n");
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
 	qz.append("\x1B\x69"); //Cortar

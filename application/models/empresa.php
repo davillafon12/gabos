@@ -121,7 +121,7 @@ Class empresa extends CI_Model
 	
 	function getEmpresaImpresion($id)
 	{
-		$this -> db -> select('Sucursal_Cedula AS cedula, Sucursal_Nombre AS nombre, Sucursal_Telefono AS telefono, Sucursal_Email AS email, Sucursal_leyenda_tributacion AS leyenda');
+		$this -> db -> select('Sucursal_Cedula AS cedula, Sucursal_Nombre AS nombre, Sucursal_Telefono AS telefono, Sucursal_Email AS email, Sucursal_leyenda_tributacion AS leyenda, Sucursal_Administrador as administrador, Sucursal_Direccion as direccion');
 		$this -> db -> from('TB_02_sucursal');		
 		$this -> db -> where('Codigo', mysql_real_escape_string($id));
 		$this -> db -> limit(1);
