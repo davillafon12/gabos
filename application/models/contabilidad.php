@@ -2727,11 +2727,26 @@ Class contabilidad extends CI_Model
 
                                                 $tipoPago = 'contado'; //Por defetco guarda este
                                                 $moneda = 'colones'; //Por defecto guarda este
-
+                                                
+                                                
 
                                                 if($this->agregarNotaCreditoCabecera($consecutivo, $fecha, $clienteObject->Cliente_Nombre." ".$clienteObject->Cliente_Apellidos, $cedula, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $this->configuracion->getPorcentajeIVA(), $this->configuracion->getTipoCambioCompraDolar(), $esAnulacion)){
                                                         $this->agregarProductosNotaCredito($consecutivo, $sucursal, $productosAAcreditar, $cedula, $facturaAcreditar);
 
+                                                        if($facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
+                                                            if($credito = $this->cliente->getCredito($facturaAcreditar, $sucursal, $cedula)){
+                                                                $costoNC = $this->getCostoTotalNotaCredito($consecutivo, $sucursal);
+                                                                
+                                                                if($costoNC > 0){
+                                                                    $nuevoSaldo = ($credito->Credito_Saldo_Actual - $costoNC) < 0 ? 0 : ($credito->Credito_Saldo_Actual - $costoNC);
+                                                                    $this->actualizarCredito(array("Credito_Saldo_Actual" => $nuevoSaldo), $credito->Credito_Id);
+                                                                    $this->user->guardar_transaccion($usuarioCodigo, "El usuario realizando la nota credito: $consecutivo abono $costoNC al credito {$credito->Credito_Id} queda con saldo $nuevoSaldo",$sucursal,'nota');
+                                                                }
+                                                            }   
+                                                        }
+                                                        
+                                                        
+                                                        
                                                         $this->user->guardar_transaccion($usuarioCodigo, "El usuario realizo la nota credito: $consecutivo",$sucursal,'nota');
                                                         $retorno['status'] = 'success';
                                                         $retorno['nota'] = $consecutivo;
@@ -2867,6 +2882,69 @@ Class contabilidad extends CI_Model
             }else{
                 return $query->result()[0];
             }
+        }
+        
+        function getCostoTotalNotaCredito($consecutivo, $sucursal){
+            if($notaCreditoHead = $this->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
+		if($notaCreditoBody = $this->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal)){
+                    $cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+                    $costo_total = 0;
+                    $iva = 0;
+                    $costo_sin_iva = 0;
+                    $retencion = 0;
+                    foreach($notaCreditoBody as $art){
+
+
+                            $cantidadArt = $art->bueno + $art->defectuoso;
+                            //Calculamos el precio total de los articulos
+                            //$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
+                            $precio_total_articulo = $art->precio*$cantidadArt;
+                            $precio_total_articulo_sin_descuento = ($art->precio/(1-($art->descuento/100)))*$cantidadArt;
+                            $precio_articulo_final = $art->precio_final;
+                            $precio_articulo_final = $precio_articulo_final * $cantidadArt;
+
+                            //Calculamos los impuestos
+
+                            $isExento = $art->exento;
+
+                            if($isExento=='0'){
+                                    $costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
+
+
+                                    $iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100)));
+                                    $iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($notaCreditoHead[0]->iva)/100))); 
+
+                                    $precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
+                                    $iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
+
+                                    if(!$art->no_retencion){
+                                                    $retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+                                    }
+                            }
+                            else if($isExento=='1'){
+                                    $costo_sin_iva += $precio_total_articulo;
+                                    //$retencion = 0;
+                            }
+                            $costo_total += $precio_total_articulo;
+
+
+
+                    }
+
+
+                    if($cliente[0]->Aplica_Retencion == "1")
+                            $retencion = 0;
+
+
+
+                    $iva = $costo_total-$costo_sin_iva;
+                    $costo_total += $retencion;
+
+
+                    return $costo_total;
+                }
+            }
+            return 0;
         }
 }
 

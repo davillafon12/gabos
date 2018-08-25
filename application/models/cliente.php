@@ -708,7 +708,18 @@ Class cliente extends CI_Model
 		return $query -> num_rows();
 	}
         
-        
+        function getCredito($factura, $sucursal, $cliente){
+            $this->db->where("Credito_Factura_Consecutivo", $factura);
+            $this->db->where("Credito_Sucursal_Codigo", $sucursal);
+            $this->db->where("Credito_Cliente_Cedula", $cliente);
+            $this->db->from('tb_24_credito');
+            $query = $this -> db -> get();
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result()[0];
+            }
+        }
 }
 
 
