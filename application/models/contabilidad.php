@@ -187,7 +187,7 @@ Class contabilidad extends CI_Model
 		}
 	}
 	
-	function agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cliente, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $por_iva, $tipo_cambio){
+	function agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cliente, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $por_iva, $tipo_cambio, $esAnulacion = false){
 		$sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
 				$sucursal = $this->sucursales_trueque[$sucursal];
@@ -203,6 +203,7 @@ Class contabilidad extends CI_Model
 						'Moneda' => $moneda,
 						'Por_IVA' => $por_iva,
 						'Tipo_Cambio' => $tipo_cambio,
+                                                'Es_Anulacion' => $esAnulacion,
 						'Sucursal' => $sucursal,
 						'Cliente' => $cliente
 						);
@@ -978,6 +979,7 @@ Class contabilidad extends CI_Model
 		}
 		$this->db->from('TB_27_Notas_Credito');
 		$this->db->where('Sucursal', $sucursal);
+                $this->db->where('Es_Anulacion', "0");
 		$this->db->where('Fecha_Creacion >', $inicio);
 		$this->db->where('Fecha_Creacion <', $final);
 		$query = $this->db->get();		
@@ -1010,6 +1012,7 @@ Class contabilidad extends CI_Model
 		$this->db->from('TB_27_Notas_Credito');
 		$this->db->join('tb_07_factura', 'tb_07_factura.Factura_Consecutivo = tb_27_notas_credito.Factura_Aplicar');
 		$this->db->where('TB_27_Notas_Credito.Sucursal', $sucursal);
+                $this->db->where('TB_27_Notas_Credito.Es_Anulacion', "0");
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('TB_27_Notas_Credito.Fecha_Creacion >', $inicio);
 		$this->db->where('TB_27_Notas_Credito.Fecha_Creacion <', $final);
@@ -2705,7 +2708,7 @@ Class contabilidad extends CI_Model
             $this->db->update("tb_57_nota_credito_electronica", $data);
         }
         
-        function crearNotaCreditoMacro(&$retorno, $cedula, $facturaAcreditar, $facturaAplicar, $sucursal, $productosAAcreditar, $usuarioCodigo, $razon, $justificacion){
+        function crearNotaCreditoMacro(&$retorno, $cedula, $facturaAcreditar, $facturaAplicar, $sucursal, $productosAAcreditar, $usuarioCodigo, $razon, $justificacion, $esAnulacion = false){
             if($clienteObject = $this->cliente->getClientes_Cedula($cedula)){
                 $clienteObject = $clienteObject[0];
                 //Verificamos que existan las facturas
@@ -2726,7 +2729,7 @@ Class contabilidad extends CI_Model
                                                 $moneda = 'colones'; //Por defecto guarda este
 
 
-                                                if($this->agregarNotaCreditoCabecera($consecutivo, $fecha, $clienteObject->Cliente_Nombre." ".$clienteObject->Cliente_Apellidos, $cedula, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $this->configuracion->getPorcentajeIVA(), $this->configuracion->getTipoCambioCompraDolar())){
+                                                if($this->agregarNotaCreditoCabecera($consecutivo, $fecha, $clienteObject->Cliente_Nombre." ".$clienteObject->Cliente_Apellidos, $cedula, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $this->configuracion->getPorcentajeIVA(), $this->configuracion->getTipoCambioCompraDolar(), $esAnulacion)){
                                                         $this->agregarProductosNotaCredito($consecutivo, $sucursal, $productosAAcreditar, $cedula, $facturaAcreditar);
 
                                                         $this->user->guardar_transaccion($usuarioCodigo, "El usuario realizo la nota credito: $consecutivo",$sucursal,'nota');

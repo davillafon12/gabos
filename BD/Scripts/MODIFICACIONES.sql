@@ -201,3 +201,4 @@ CREATE TABLE IF NOT EXISTS `tb_58_articulos_nota_credito_electronica` (
   PRIMARY KEY (`Id`))
 ENGINE = InnoDB;
 
+ALTER TABLE  `tb_27_notas_credito` ADD  `Es_Anulacion` BOOLEAN NOT NULL DEFAULT  '0' AFTER  `Tipo_Cambio`;
