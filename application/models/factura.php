@@ -1238,32 +1238,7 @@ Class factura extends CI_Model
                             $this->db->where("Sucursal", $sucursal);
                             $this->db->update("tb_55_factura_electronica", $data);
                             
-                            // Obtener resultado de la factura
-                            $resCheck = array();
-                            $counter = 0;
-                            do {
-                                sleep(2);
-                                $counter++;
-                                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $factura->Clave, $tokenData["access_token"]);
-                                log_message('error', "Revisando estado de factura en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
-                            
-                            if($resCheck["status"]){
-                                $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
-                                $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
-                                $data = array(
-                                    "RespuestaHaciendaEstado" => $estado,
-                                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
-                                    "RespuestaHaciendaXML" => $xmlRespuesta
-                                );
-                                $this->db->where("Consecutivo", $consecutivo);
-                                $this->db->where("Sucursal", $sucursal);
-                                $this->db->update("tb_55_factura_electronica", $data);
-                                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                                return array("status" => true, "estado_hacienda" => $estado);
-                            }else{
-                                log_message('error', "Error al revisar el estado de la factura en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            }
+                            return $this->getEstadoFacturaHacienda($api, $empresa, $factura, $tokenData, $consecutivo, $sucursal);
                         }else{
                             $data = array(
                                 "RespuestaHaciendaEstado" => "fallo_envio"
@@ -1287,6 +1262,36 @@ Class factura extends CI_Model
                 }
             }else{
                 log_message('error', "No existe factura para su envio | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
+            return false;
+        }
+        
+        public function getEstadoFacturaHacienda($api, $empresa, $factura, $tokenData, $consecutivo, $sucursal){
+            // Obtener resultado de la factura
+            $resCheck = array();
+            $counter = 0;
+            do {
+                sleep(2);
+                $counter++;
+                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $factura->Clave, $tokenData["access_token"]);
+                log_message('error', "Revisando estado de factura en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+
+            if($resCheck["status"]){
+                $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+                $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
+                $data = array(
+                    "RespuestaHaciendaEstado" => $estado,
+                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
+                    "RespuestaHaciendaXML" => $xmlRespuesta
+                );
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $this->db->update("tb_55_factura_electronica", $data);
+                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                return array("status" => true, "estado_hacienda" => $estado);
+            }else{
+                log_message('error', "Error al revisar el estado de la factura en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
             }
             return false;
         }
