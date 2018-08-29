@@ -1099,7 +1099,7 @@ Class contabilidad extends CI_Model
 					
 					
 					$totalNotas += $costo_total;
-					
+				
 					switch($nota->Tipo){
 						case 'contado':
 							$contado += $costo_total;

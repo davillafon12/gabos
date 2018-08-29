@@ -277,7 +277,7 @@ function setEncabezadoFactura(cab){
 	cargarDatafonos(cab.datos);
 	cargarMixto(cab.datos.pagoMixto);
 	cab.datos.recibos.efectivoBK = cab.datos.recibos.efectivo;
-	cab.datos.recibos.efectivo = cab.datos.recibos.efectivo - cab.datos.detalleNotasCredito.credito;
+	cab.datos.recibos.efectivo = cab.datos.recibos.efectivo;
 	cab.datos.recibos.efectivoBK = cab.datos.recibos.efectivo; 
 	cab.datos.recibos.detalleNotasCredito = cab.datos.detalleNotasCredito.credito;
 	cargarRecibosDinero(cab.datos.recibos);
@@ -418,7 +418,7 @@ function cargarRecibosDinero(recibos){
 	$("#recibo_deposito").html("₡"+parseFloat(recibos.deposito).format(2, 3, '.', ','));
 	var abonos = $.isNumeric(recibos.abonos) ? parseFloat(recibos.abonos).format(2, 3, '.', ',') : "0.00";
 	$("#recibo_abono").html("₡"+abonos);
-	$("#total_recibos_dinero").html("₡"+parseFloat(recibos.total-recibos.detalleNotasCredito).format(2, 3, '.', ','));
+	$("#total_recibos_dinero").html("₡"+parseFloat(recibos.total).format(2, 3, '.', ','));
 }
 
 function cargarTotales(datos){
