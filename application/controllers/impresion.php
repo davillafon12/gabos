@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-header('Access-Control-Allow-Origin: *');  
-header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
+//header('Access-Control-Allow-Origin: *');  
+//header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+//header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
 
 class impresion extends CI_Controller {
 
@@ -2488,7 +2488,12 @@ class impresion extends CI_Controller {
 	}
 	
 	
-	
+    public function termica(){
+        include 'get_session_data.php';
+        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+        
+        $this->load->view('impresion/impresion_termica_view', $data);
+    }
 	
 	
 	
@@ -2720,7 +2725,7 @@ function Parte($x)
        Case 3: $t = " Billones";break; 
     } 
     return($Rtn . $t); 
-} 
+}
 
 } 
 
