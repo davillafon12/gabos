@@ -1,37 +1,67 @@
 <?php 
 Class factura extends CI_Model
 {
-	
+        public $sucursalesData = array(
+            //14 => 30 
+        );
+    
 	function getConsecutivo($id_empresa) //Traer el siguiente consecutivo de una empresa en particular
 	{
-		return $this->getConsecutivoUltimaFactura($id_empresa)+1;
+            //return $this->getConsecutivoUltimaFactura($id_empresa)+1;
+            return $this->getConsecutivoUltimaFactura($id_empresa)+1;
 	}
 	
-	
-	function getConsecutivoUltimaFactura($sucursal)
-	{
-		$this -> db -> select('Factura_Consecutivo');
-		$this -> db -> from('TB_07_Factura');
-		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
-		$this -> db -> order_by("Factura_Consecutivo", "desc");
-		$this -> db -> limit(1);
-		$query = $this -> db -> get();
-		/*$query ="select Factura_Consecutivo from TB_07_Factura order by Factura_Consecutivo DESC limit 1";
-        $res = $this->db->query($query);*/
-	
-		if($query->num_rows()==0)
-		{
-			return false;
-		}
-		else
-		{
-			$consecutivo;
-			$result = $query->result();
-			foreach($result as $row)
-			{$consecutivo=$row->Factura_Consecutivo;}
-			return $consecutivo;
-		}
-	}
+        function getConsecutivoUltimaFactura($sucursal){
+            //select max(Consecutivo) as ConsecutivoActual from tb_55_factura_electronica where Sucursal = 14
+            $this -> db -> select('max(Factura_Consecutivo) as ConsecutivoActual');
+            $this -> db -> from('TB_07_Factura');
+            $this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+            
+            if(isset($this->sucursalesData[$sucursal])){
+                $this -> db -> where('Factura_Consecutivo <', $this->sucursalesData[$sucursal]);
+            }
+            
+            $query = $this -> db -> get();
+            if($query->num_rows() == 0){
+                return 0;
+            }else{
+                return $query->result()[0]->ConsecutivoActual;
+            }
+        }
+        
+        function existeFactura($consecutivo, $sucursal){
+            $this -> db -> from('TB_07_Factura');
+            $this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+            $this -> db -> where("Factura_Consecutivo", $consecutivo);
+            $query = $this -> db -> get();
+      
+            return $query->num_rows() > 0;
+        }
+        
+//	function getConsecutivoUltimaFactura($sucursal)
+//	{
+//		$this -> db -> select('Factura_Consecutivo');
+//		$this -> db -> from('TB_07_Factura');
+//		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+//		$this -> db -> order_by("Factura_Consecutivo", "desc");
+//		$this -> db -> limit(1);
+//		$query = $this -> db -> get();
+//		/*$query ="select Factura_Consecutivo from TB_07_Factura order by Factura_Consecutivo DESC limit 1";
+//        $res = $this->db->query($query);*/
+//	
+//		if($query->num_rows()==0)
+//		{
+//			return false;
+//		}
+//		else
+//		{
+//			$consecutivo;
+//			$result = $query->result();
+//			foreach($result as $row)
+//			{$consecutivo=$row->Factura_Consecutivo;}
+//			return $consecutivo;
+//		}
+//	}
 	
 	function crearfactura($cedula, $nombre, $currency, $observaciones, $sucursal, $vendedor, $isProforma){
 		$c_array = $this->getConfgArray();
@@ -47,45 +77,48 @@ Class factura extends CI_Model
 				$sucursal = $this->sucursales_trueque[$sucursal];
 				$this->truequeAplicado = true;
 		}
-		if($consecutivo = $this->getConsecutivo($sucursal)){
-			//return $consecutivo;
-			$this->load->model('cliente','',TRUE);
-			$clienteArray = $this->cliente->getNombreCliente($cedula);
-                        date_default_timezone_set("America/Costa_Rica");
-			$Current_datetime = date("y/m/d : H:i:s", now());
-			$dataFactura = array(
-	                        'Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
-	                        'Factura_Observaciones'=>mysql_real_escape_string($observaciones), 
-													'Factura_Estado'=>'pendiente',
-													'Factura_Moneda'=>mysql_real_escape_string($currency),
-													'Factura_porcentaje_iva'=>$c_array['iva'],
-													'Factura_tipo_cambio'=>$c_array['dolar_venta'],
-													'Factura_Nombre_Cliente'=>mysql_real_escape_string($nombre),
-													'TB_02_Sucursal_Codigo'=>$sucursal,
-													'Factura_Vendedor_Codigo'=>$vendedor,	
-													'Factura_Vendedor_Sucursal'=>$sucursalVendedor,	
-                                                                                                        'Factura_Fecha_Hora'=>$Current_datetime,
-													'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
-													'Factura_Cliente_Exento'=>$clienteArray['exento'],
-													'Factura_Cliente_No_Retencion'=>$clienteArray['retencion'],
-													'Factura_Cliente_Sucursal'=>$clienteArray['sucursal']												
+                
+                $consecutivo = $this->getConsecutivo($sucursal);
+                
+                // Preguntamos si el consecutivo ya existe, y si no vuelve a pedirlo
+                do{
+                    usleep(rand( 500000, 1500000 ));
+                    $consecutivo = $this->getConsecutivo($sucursal);
+                }while($this->existeFactura($consecutivo, $sucursal));
+                
+                //return $consecutivo;
+                $this->load->model('cliente','',TRUE);
+                $clienteArray = $this->cliente->getNombreCliente($cedula);
+                date_default_timezone_set("America/Costa_Rica");
+                $Current_datetime = date("y/m/d : H:i:s", now());
+                $dataFactura = array(
+                        'Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
+                        'Factura_Observaciones'=>mysql_real_escape_string($observaciones), 
+                        'Factura_Estado'=>'pendiente',
+                        'Factura_Moneda'=>mysql_real_escape_string($currency),
+                        'Factura_porcentaje_iva'=>$c_array['iva'],
+                        'Factura_tipo_cambio'=>$c_array['dolar_venta'],
+                        'Factura_Nombre_Cliente'=>mysql_real_escape_string($nombre),
+                        'TB_02_Sucursal_Codigo'=>$sucursal,
+                        'Factura_Vendedor_Codigo'=>$vendedor,	
+                        'Factura_Vendedor_Sucursal'=>$sucursalVendedor,	
+                        'Factura_Fecha_Hora'=>$Current_datetime,
+                        'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+                        'Factura_Cliente_Exento'=>$clienteArray['exento'],
+                        'Factura_Cliente_No_Retencion'=>$clienteArray['retencion'],
+                        'Factura_Cliente_Sucursal'=>$clienteArray['sucursal']												
 	                    );			
 	        $this->db->insert('TB_07_Factura',$dataFactura); 
 	        
-	    if($this->truequeHabilitado && $this->truequeAplicado){ //Si se aplico el trueque, se debe guardar el documento
-				$datos = array("Consecutivo" => $consecutivo,
-								"Documento" => 'factura',
-								"Sucursal" => $sucursalVendedor);
-				$this->db->insert("tb_46_relacion_trueque", $datos);
-				$this->truequeAplicado = false;
+                if($this->truequeHabilitado && $this->truequeAplicado){ //Si se aplico el trueque, se debe guardar el documento
+                    $datos = array("Consecutivo" => $consecutivo,
+                                                    "Documento" => 'factura',
+                                                    "Sucursal" => $sucursalVendedor);
+                    $this->db->insert("tb_46_relacion_trueque", $datos);
+                    $this->truequeAplicado = false;
 		}
 	     
-			return $this->existe_Factura($consecutivo, $sucursal);
-		}else{
-			return false;
-		}
-		
-		
+		return $this->existe_Factura($consecutivo, $sucursal);
 	}
 	
 	function getProformasHeaders($consecutivo, $sucursal){
