@@ -251,7 +251,7 @@ function imprimir(){
 	
 	if(tipoImpresion==='t'){
 		//Impresion termica
-		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'?t='+token+'&d=cdc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Cambios de Código','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion/termica?t='+token+'&d=cdc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Cambios de Código','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
 		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+token+'&d=cdc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Cambios de Código','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');

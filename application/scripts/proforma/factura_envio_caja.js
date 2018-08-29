@@ -159,7 +159,7 @@ function sendInvoice(URL){
 					
 					if(tipoImpresion==='t'){
 						//Impresion termica
-						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion/termica?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}else if(tipoImpresion==='c'){
 						//Impresion carta
 						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');

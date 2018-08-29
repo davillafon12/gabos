@@ -438,7 +438,7 @@ function imprimir(){
 	//window.open(location.protocol+'//'+document.domain+'/impresion?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i=c','Impresion de Proformas','width=1024,height=768,resizable=no,toolbar=no,location=no,menubar=no');
 	if(tipoImpresion==='t'){
 		//Impresion termica
-		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'?t='+token+'&d=p&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Proformas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion/termica?t='+token+'&d=p&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Proformas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
 		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+token+'&d=p&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');

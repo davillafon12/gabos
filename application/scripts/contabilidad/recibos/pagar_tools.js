@@ -76,7 +76,7 @@ function enviarCobro(cedula, saldo){
 					buscarCedula(null);
 					if(tipoImpresion==='t'){
 						//Impresion termica
-						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'?t='+informacion[0].token+'&d=r&n='+informacion[0].recibos.join()+'&s='+informacion[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Recibos','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion/termica?t='+informacion[0].token+'&d=r&n='+informacion[0].recibos.join()+'&s='+informacion[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Recibos','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}else if(tipoImpresion==='c'){
 						//Impresion carta
 						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+informacion[0].token+'&d=r&n='+informacion[0].recibos.join()+'&s='+informacion[0].sucursal+'&i='+tipoImpresion,'Impresion de Recibos de Dinero','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
