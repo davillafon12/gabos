@@ -8,7 +8,7 @@
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/impresion/deployJava.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/impresion/qz-websocket.js'); ?>"></script>
 		
-		<script src="<?php echo base_url('application/scripts/impresion/tools.js'); ?>"></script>
+		<script src="<?php echo base_url("application/scripts/impresion/tools.js?v=$javascript_cache_version"); ?>"></script>
 			<script type="text/javascript">
 
 

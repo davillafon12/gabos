@@ -31,7 +31,7 @@ function imprimir(){
 
 function traerDocumento(t,d,n,s,i){
 	$.ajax({
-		url : protocolo+'//'+servidor+":"+puerto+'/impresion',
+		url : '/impresion',
 		dataType : 'json',
 		data : "t="+t+"&d="+d+"&n="+n+"&s="+s+"&i="+i,
 		success: function(data, textStatus, jqXHR)
