@@ -404,6 +404,10 @@ class editar extends CI_Controller {
                 //Aplica Retencion
                 $aplicaRetencion = 0;
                 $aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
+                
+                //No receptor de factura electronica
+                $noReceptor = 0;
+                $noReceptor = isset($_POST['noReceptor']) && $_POST['noReceptor']  ? "1" : "0";
 		
 
 		if($result = $this->cliente->obtener_Imagen_Cliente($cedula)){
@@ -440,7 +444,7 @@ class editar extends CI_Controller {
 		$data_update['Cliente_EsSucursal'] = $isSucursal; 
 		$data_update['Cliente_EsExento'] = $exento;
 		$data_update['Aplica_Retencion'] = $aplicaRetencion;
-                
+                $data_update['NoReceptor'] = $noReceptor;
                 $data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($codptel);
                 $data_update['Codigo_Pais_Celular'] = mysql_real_escape_string($codpcel);
                 $data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($codpfax);
