@@ -22,6 +22,7 @@ class recibos extends CI_Controller {
 			$this->load->helper(array('form'));
 			$bancos = $this->banco->getBancos();
 			$data['bancos'] = $bancos;
+                        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 			$this->load->view('contabilidad/contabilidad_recibos_view', $data);				
 		}
 		else{

@@ -27,6 +27,7 @@ class otros extends CI_Controller {
 		
 		if($permisos['otros_cliente'])
 		{*/
+                        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 			$this->load->view('clientes/clientes_descuentos_credito_view', $data);	
 		/*}
 		else{

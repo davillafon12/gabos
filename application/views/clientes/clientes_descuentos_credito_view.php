@@ -38,7 +38,7 @@ PARA:
 		<!--CARGA DEL NOTY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>"></script>
 		<!--CARGA DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/clientes/descuento_tools.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url("application/scripts/clientes/descuento_tools.js?v=$javascript_cache_version"); ?>"></script>
 	</head>
 	<body >
 		<!--Incluir imagen de cabezera-->

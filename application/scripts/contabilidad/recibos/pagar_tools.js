@@ -25,11 +25,6 @@ function validarEnvio(){
 	saldoEscrito = saldoEscrito.replace(/\./g,'');
 	saldoEscrito = saldoEscrito.replace(',','.');
 
-	if(!isNumber(cedula)){
-		notyMsg('¡Cédula no válida!', 'error');
-		return false;
-	}
-	
 	if(nombre.trim()===''){
 		notyMsg('¡No ha digitado un nombre!', 'error');
 		return false;

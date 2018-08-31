@@ -2,18 +2,9 @@
 var cedula = '';
 var flagReload = false; //Bandera utilizada para ver si se recarga al cliente o no segun el resultado del ajax
 
-function buscarCedula (e) 
-{
-	cedula = $("#cedula").val();
-	if(!isNumber(cedula))
-	{ 
-		$("#nombre").val('');
-		resetFields();
-	}
-	else
-	{	
-		getNombreCliente(cedula);
-	}
+function buscarCedula (e) {
+    cedula = $("#cedula").val();
+    getNombreCliente(cedula);	
 }
 
 function isNumber(n) {
@@ -176,37 +167,35 @@ function updateDescuento(){
 		descuento = parseInt(descuento);
 		if(descuento>=0&&descuento<=100){
 			cedula = $("#cedula").val();
-			if(isNumber(cedula)){
-				$.ajax({
-						url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarDescuento',
-						type: "POST",		
-						async: false,
-						data: {'cedula':cedula, 'descuento':descuento},				
-						success: function(data, textStatus, jqXHR)
-						{
-							try{
-								informacion = $.parseJSON('[' + data.trim() + ']');
-								if(informacion[0].status==="error"){
-									manejarErrores(informacion[0].error);
-								}else if(informacion[0].status==="success"){
-									n = noty({
-									   layout: 'topRight',
-									   text: 'Se cambio el descuento con exito',
-									   type: 'success',
-									   timeout: 4000
-									});										
-								}
-							}catch(e){
-								//alert(e);
-								notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-							}
-						},
-						error: function (jqXHR, textStatus, errorThrown)
-						{}
-					});				
-			}else{
-				notyError("¡Ingrese una cédula válida!");
-			}
+			
+                        $.ajax({
+                            url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarDescuento',
+                            type: "POST",		
+                            async: false,
+                            data: {'cedula':cedula, 'descuento':descuento},				
+                            success: function(data, textStatus, jqXHR)
+                            {
+                                    try{
+                                            informacion = $.parseJSON('[' + data.trim() + ']');
+                                            if(informacion[0].status==="error"){
+                                                    manejarErrores(informacion[0].error);
+                                            }else if(informacion[0].status==="success"){
+                                                    n = noty({
+                                                       layout: 'topRight',
+                                                       text: 'Se cambio el descuento con exito',
+                                                       type: 'success',
+                                                       timeout: 4000
+                                                    });										
+                                            }
+                                    }catch(e){
+                                            //alert(e);
+                                            notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+                                    }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown)
+                            {}
+                        });				
+			
 		}else{
 			notyError("¡Ingrese un descuento válido!");
 		}
@@ -235,38 +224,35 @@ function updateCredito(){
 	if(isNumber(credito)){
 		credito = parseFloat(credito);
 		if(credito>=0){
-			cedula = $("#cedula").val();
-			if(isNumber(cedula)){
-				$.ajax({
-						url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarCredito',
-						type: "POST",		
-						async: false,
-						data: {'cedula':cedula, 'credito':credito},				
-						success: function(data, textStatus, jqXHR)
-						{
-							try{
-								informacion = $.parseJSON('[' + data.trim() + ']');
-								if(informacion[0].status==="error"){
-									manejarErrores(informacion[0].error);
-								}else if(informacion[0].status==="success"){
-									n = noty({
-									   layout: 'topRight',
-									   text: 'Se cambio el credito con exito',
-									   type: 'success',
-									   timeout: 4000
-									});	
-								}
-							}catch(e){
-								//alert(e);
-								notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-							}
-						},
-						error: function (jqXHR, textStatus, errorThrown)
-						{}
-					});				
-			}else{
-				notyError("¡Ingrese una cédula válida!");
-			}
+                    cedula = $("#cedula").val();
+			
+                    $.ajax({
+                        url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarCredito',
+                        type: "POST",		
+                        async: false,
+                        data: {'cedula':cedula, 'credito':credito},				
+                        success: function(data, textStatus, jqXHR)
+                        {
+                                try{
+                                        informacion = $.parseJSON('[' + data.trim() + ']');
+                                        if(informacion[0].status==="error"){
+                                                manejarErrores(informacion[0].error);
+                                        }else if(informacion[0].status==="success"){
+                                                n = noty({
+                                                   layout: 'topRight',
+                                                   text: 'Se cambio el credito con exito',
+                                                   type: 'success',
+                                                   timeout: 4000
+                                                });	
+                                        }
+                                }catch(e){
+                                        //alert(e);
+                                        notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+                                }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {}
+                    });
 		}else{
 			notyError("¡Ingrese un credito válido!");
 		}

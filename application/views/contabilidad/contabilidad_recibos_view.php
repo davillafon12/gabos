@@ -41,13 +41,13 @@ PARA:
 		<!--CSS ESTILO ESPECIFICO DE LA PAGINA-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_recibos.css'); ?>">	
 		<!--SCRIPT DE CARGA DE FACTURAS-->		
-		<script src="<?php echo base_url('application/scripts/contabilidad/recibos/carga_facturas_ajax.js'); ?>" type="text/javascript"></script>
+		<script src="<?php echo base_url("application/scripts/contabilidad/recibos/carga_facturas_ajax.js?v=$javascript_cache_version"); ?>" type="text/javascript"></script>
 		<!--SCRIPT DE HERRAMIENTAS-->		
-		<script src="<?php echo base_url('application/scripts/contabilidad/recibos/herramientas.js'); ?>" type="text/javascript"></script>
+		<script src="<?php echo base_url("application/scripts/contabilidad/recibos/herramientas.js?v=$javascript_cache_version"); ?>" type="text/javascript"></script>
 		<!--SCRIPT DE CALCULOS-->		
-		<script src="<?php echo base_url('application/scripts/contabilidad/recibos/calculos.js'); ?>" type="text/javascript"></script>
+		<script src="<?php echo base_url("application/scripts/contabilidad/recibos/calculos.js?v=$javascript_cache_version"); ?>" type="text/javascript"></script>
 		<!--SCRIPT DE PAGAR-->		
-		<script src="<?php echo base_url('application/scripts/contabilidad/recibos/pagar_tools.js'); ?>" type="text/javascript"></script>
+		<script src="<?php echo base_url("application/scripts/contabilidad/recibos/pagar_tools.js?v=$javascript_cache_version"); ?>" type="text/javascript"></script>
 	</head>
 	<body >
 		<!--Incluir imagen de cabezera-->
