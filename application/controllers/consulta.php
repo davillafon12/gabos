@@ -1022,7 +1022,7 @@ class consulta extends CI_Controller {
                                     <a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>
                                     <a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>
                                     <a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src=".$ruta_imagen."/Information_icon.png width='21' height='21' title='Ver Respuesta de Hacienda'></a>
-                                    ".(($art->estado == "aceptado" || $art->estado == "rechazado") ? "" : "<a href='#' onclick='reenviarXML(\"$art->clave\")'><img src=".$ruta_imagen."/upload.png width='21' height='21' title='Reenviar Documento a Hacienda'></a>")."
+                                    ".(($art->estado == "aceptado" || $art->estado == "rechazado" || $art->estado == "recibido" || $art->estado == "procesando") ? "" : "<a href='#' onclick='reenviarXML(\"$art->clave\")'><img src=".$ruta_imagen."/upload.png width='21' height='21' title='Reenviar Documento a Hacienda'></a>")."
                             </div>"
                     );
                     array_push($comprobantesAMostrar, $auxArray);

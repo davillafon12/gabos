@@ -2527,32 +2527,7 @@ Class contabilidad extends CI_Model
                             $this->db->where("Sucursal", $sucursal);
                             $this->db->update("tb_57_nota_credito_electronica", $data);
                             
-                            // Obtener resultado de la factura
-                            $resCheck = array();
-                            $counter = 0;
-                            do {
-                                sleep(2);
-                                $counter++;
-                                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $nota->Clave, $tokenData["access_token"]);
-                                log_message('error', "Revisando estado de nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
-                            
-                            if($resCheck["status"]){
-                                $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
-                                $xmlRespuesta = trim($resCheck["data"]["respuesta-xml"]);
-                                $data = array(
-                                    "RespuestaHaciendaEstado" => $estado,
-                                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
-                                    "RespuestaHaciendaXML" => $xmlRespuesta
-                                );
-                                $this->db->where("Consecutivo", $consecutivo);
-                                $this->db->where("Sucursal", $sucursal);
-                                $this->db->update("tb_57_nota_credito_electronica", $data);
-                                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                                return array("status" => true, "estado_hacienda" => $estado);
-                            }else{
-                                log_message('error', "Error al revisar el estado de la nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            }
+                            return $this->getEstadoNotaCreditoHacienda($api, $nota, $empresa, $tokenData, $consecutivo, $sucursal);
                         }else{
                             $data = array(
                                 "RespuestaHaciendaEstado" => "fallo_envio"
@@ -2945,6 +2920,47 @@ Class contabilidad extends CI_Model
                 }
             }
             return 0;
+        }
+        
+        
+        function getNotasCreditoRecibidasHacienda(){
+            $this->db->where_in("RespuestaHaciendaEstado", array("recibido", "procesando"));
+            $this->db->from("tb_57_nota_credito_electronica");
+            $query = $this->db->get();
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result();
+            }
+        }
+        
+        function getEstadoNotaCreditoHacienda($api, $nota, $empresa, $tokenData, $consecutivo, $sucursal){
+             // Obtener resultado de la factura
+            $resCheck = array();
+            $counter = 0;
+            do {
+                sleep(2);
+                $counter++;
+                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $nota->Clave, $tokenData["access_token"]);
+                log_message('error', "Revisando estado de nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+
+            if($resCheck["status"]){
+                $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+                $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
+                $data = array(
+                    "RespuestaHaciendaEstado" => $estado,
+                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
+                    "RespuestaHaciendaXML" => $xmlRespuesta
+                );
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $this->db->update("tb_57_nota_credito_electronica", $data);
+                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                return array("status" => true, "estado_hacienda" => $estado);
+            }else{
+                log_message('error', "Error al revisar el estado de la nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
         }
 }
 

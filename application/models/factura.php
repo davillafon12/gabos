@@ -1629,6 +1629,18 @@ Class factura extends CI_Model
             return $query->result()[0];
         }
     }
+    
+    
+    function getFacturasRecibidasHacienda(){
+        $this->db->where_in("RespuestaHaciendaEstado", array("recibido", "procesando"));
+        $this->db->from("tb_55_factura_electronica");
+        $query = $this->db->get();
+        if($query->num_rows() == 0){
+            return false;
+        }else{
+            return $query->result();
+        }
+    }
 }
 
 
