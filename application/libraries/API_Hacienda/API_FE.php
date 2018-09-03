@@ -500,6 +500,7 @@ class API_FE{
         $this->logger->info("revisarEstadoAceptacion", "Revisando estado into Hacienda API with params: $clave");
         $result = $localClient->get("recepcion/$clave", array());
         $respuesta["status"] = false;
+        $respuesta["data"] = array("ind-estado"=>"ERROR NO RESPUESTA");
         if($result->info->http_code == 200){
             $result = (Array) json_decode($result->response);
             if(isset($result["clave"]) && isset($result["ind-estado"])){
