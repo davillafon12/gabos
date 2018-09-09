@@ -367,7 +367,8 @@ function imprimirNotaCredito(data){
 	qz.append("NOTA CREDITO ELECTRONICA\r\n");
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
-	qz.append("Numero: "+nota.nota+"\r\n");
+	qz.append("Consecutivo: "+nota.consecutivoH+"\r\n"); 
+        qz.append("Clave: "+nota.clave+"\r\n"); 
 	qz.append("Fecha: "+nota.fecha+"\r\n");
 	qz.append("Moneda: "+nota.moneda+"\r\n");
 	qz.append("Tipo de Pago: "+nota.tipo_pago+"\r\n");
