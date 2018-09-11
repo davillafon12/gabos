@@ -308,6 +308,8 @@ class consignaciones extends CI_Controller {
 				redirect('accesoDenegado', 'location');						
 		}
 		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+                $data['meta_config'] = $this->factura->getConfgArray();
 		$this->load->view("contabilidad/facturar_consignaciones_view", $data);
 	}
 	
@@ -323,7 +325,22 @@ class consignaciones extends CI_Controller {
 					if($articulos = $this->contabilidad->getArticulosEnListaDeConsignacion($sucursalEntrega, $sucursalRecibe)){
 						$retorno['status'] = 'success';
 						unset($retorno['error']);
+                                                
+                                                foreach($articulos as $art){
+                                                    $a = $this->articulo->existe_Articulo($art->Codigo,$sucursalRecibe);
+                                                    if($a !== false){
+                                                        $a = $a[0];
+                                                        $art->Bodega = $a->Articulo_Cantidad_Inventario;
+                                                    }
+                                                }
+                                                
 						$retorno['articulos'] = $articulos;
+                                                $clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe);
+                                                $isExento = false;
+                                                if($clienteLiga){
+                                                    $isExento = $this->cliente->clienteEsExentoDeIVA($clienteLiga->Cliente);
+                                                }
+                                                $retorno['isExento'] = $isExento;
 					}else{
 						$retorno['error'] = 'No existen artículos consignados entre las sucursales ingresadas';
 					}
@@ -356,7 +373,7 @@ class consignaciones extends CI_Controller {
 							 				if(sizeOf($articulos) > 0){					
 			 										if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
 				 											if($this->hayProductosAProcesar($articulos, $debeDevolver)){
-					 												include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+					 												include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 					 												if($consecutivo = $this->factura->crearfactura($clienteLiga->Cliente, $clienteLiga->informacion['nombre'], 'colones', 'Factura Generada Por Consignación', $sucursalEntrega, $data['Usuario_Codigo'], false)){
 																		$this->registrarArticuloEnFactura($articulos, $debeDevolver, $sucursalEntrega, $data['Usuario_Codigo'], $clienteLiga->Cliente, $consecutivo);
 																		
