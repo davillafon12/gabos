@@ -436,7 +436,7 @@ class API_FE{
         }
     }
     
-    public function enviarDocumento($ambienteHacienda, $clave, $fecha, $emisorTipoIdentificacion, $emisorIdentificacion, $receptorTipoIdentificacion, $receptorIdentificacion, $token, $xml){
+    public function enviarDocumento($ambienteHacienda, $clave, $fecha, $emisorTipoIdentificacion, $emisorIdentificacion, $receptorTipoIdentificacion, $receptorIdentificacion, $token, $xml, $consecutivoReceptor = null){
         $bm = round(microtime(true) * 1000);
         $url = $ambienteHacienda == "api-stag" ? HACIENDA_RECEPCION_API_STAG : HACIENDA_RECEPCION_API_PROD;
        
@@ -455,6 +455,11 @@ class API_FE{
                 "numeroIdentificacion"=> $receptorIdentificacion
             );
         }
+        
+        if($consecutivoReceptor != null){
+            $params["consecutivoReceptor"] = $consecutivoReceptor;
+        }
+        
         $this->logger->info("enviarDocumento", "Sending document to Hacienda API with params: ".json_encode($params));
         
         //Initialise the cURL var

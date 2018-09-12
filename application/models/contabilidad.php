@@ -2976,7 +2976,7 @@ Class contabilidad extends CI_Model
             }
         }
         
-        function agregarInfoBasicaMensajeReceptor($sucursal, $consecutivo, $receptorTipoIdentificacion, $receptorIdentificacion, $receptorCodigoPais, $situacion, $codigoSeguridad, $tipoDocumento, $clave, $emisorNombre, $emisorIdentificacion, $fechaEmision, $totalImpuestos, $totalComprobante, $fechaEmisionComprobante){
+        function agregarInfoBasicaMensajeReceptor($sucursal, $consecutivo, $receptorTipoIdentificacion, $receptorIdentificacion, $receptorCodigoPais, $situacion, $codigoSeguridad, $tipoDocumento, $clave, $emisorNombre, $emisorIdentificacion, $emisorTipoIdentificacion, $fechaEmision, $totalImpuestos, $totalComprobante, $fechaEmisionComprobante){
             //array("fisico", "juridico", "dimex", "nite")
             $tipoIdentificacion = "";
             switch($receptorTipoIdentificacion){
@@ -3007,6 +3007,7 @@ Class contabilidad extends CI_Model
                 "TipoDocumento" => $tipoDocumento,
                 "Clave" => $clave,
                 "EmisorIdentificacion" => $emisorIdentificacion,
+                "EmisorTipoIdentificacion" => $emisorTipoIdentificacion,
                 "EmisorNombre" => $emisorNombre,
                 "FechaEmision" => $fechaEmision,
                 "TotalImpuestos" => $totalImpuestos,
@@ -3109,6 +3110,85 @@ Class contabilidad extends CI_Model
                         return true;
                     }
                 }
+            }
+            return false;
+        }
+        
+        function enviarMensajeReceptorHacienda($consecutivo, $sucursal){
+            $this->db->where("Sucursal", $sucursal);
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            if($query->num_rows() > 0){
+                $comprobante = $query->result()[0];
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+                $factura = $query->result()[0];
+                $this->db->from("tb_02_sucursal");
+                $this->db->where("Codigo", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $empresa = $query->result()[0];
+                    if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
+                        if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $comprobante->Clave, $comprobante->FechaEmision, $comprobante->EmisorTipoIdentificacion, $comprobante->EmisorIdentificacion, $comprobante->ReceptorTipoIdentificacion, $comprobante->ReceptorIdentificacion, $tokenData["access_token"], $comprobante->XMLFirmado, $comprobante->ConsecutivoHacienda)){
+                            $data = array(
+                                "RespuestaHaciendaEstado" => "procesando",
+                                "FechaRecibidoHacienda" => date("y/m/d : H:i:s")
+                            );
+                            $this->db->where("Consecutivo", $consecutivo);
+                            $this->db->where("Sucursal", $sucursal);
+                            $this->db->update("tb_59_mensaje_receptor", $data);
+                            
+                            return $this->getEstadoMensajeReceptorHacienda($api, $empresa, $comprobante, $tokenData, $consecutivo, $sucursal);
+                        }else{
+                            $data = array(
+                                "RespuestaHaciendaEstado" => "fallo_envio"
+                            );
+                            $this->db->where("Consecutivo", $consecutivo);
+                            $this->db->where("Sucursal", $sucursal);
+                            $this->db->update("tb_59_mensaje_receptor", $data);
+                            log_message('error', "Error al enviar el mensaje receptor a Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                        }
+                    }else{
+                        $data = array(
+                            "RespuestaHaciendaEstado" => "fallo_token"
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_59_mensaje_receptor", $data);
+                        log_message('error', "Error al generar el token para envio de mensaje receptor | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                    }
+                }
+            }
+            return false;
+        }
+        
+        public function getEstadoMensajeReceptorHacienda($api, $empresa, $comprobante, $tokenData, $consecutivo, $sucursal){
+            // Obtener resultado de la factura
+            $resCheck = array();
+            $counter = 0;
+            do {
+                sleep(2);
+                $counter++;
+                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $comprobante->Clave."-".$comprobante->ConsecutivoHacienda, $tokenData["access_token"]);
+                log_message('error', "Revisando estado de mensaje receptor en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+
+            if($resCheck["status"]){
+                $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+                $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
+                $data = array(
+                    "RespuestaHaciendaEstado" => $estado,
+                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
+                    "RespuestaHaciendaXML" => $xmlRespuesta
+                );
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $this->db->update("tb_59_mensaje_receptor", $data);
+                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                return array("status" => true, "estado_hacienda" => $estado);
+            }else{
+                log_message('error', "Error al revisar el estado del mensaje receptor en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
             }
             return false;
         }

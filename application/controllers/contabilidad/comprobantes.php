@@ -46,6 +46,7 @@ class comprobantes extends CI_Controller {
                                     $fechaEmision = (String)$xml->FechaEmision;
                                     $nombreEmisor = (String)$xml->Emisor->Nombre;
                                     $cedulaEmisor = (String)$xml->Emisor->Identificacion->Numero;
+                                    $tipoCedulaEmisor = (String)$xml->Emisor->Identificacion->Tipo;
                                     $totalImpuestos = (String)$xml->ResumenFactura->TotalImpuesto;
                                     $totalFactura = (String)$xml->ResumenFactura->TotalComprobante;
                                     $receptorNombre = (String)$xml->Receptor->Nombre;
@@ -54,6 +55,7 @@ class comprobantes extends CI_Controller {
                                     array_push($facturasFinal, array("clave"=>$clave, 
                                                                      "nombreEmisor"=>$nombreEmisor,
                                                                      "cedulaEmisor"=>$cedulaEmisor,
+                                                                     "tipoCedulaEmisor"=>$tipoCedulaEmisor,
                                                                      "fecha"=> date("d-m-Y H:i:s", strtotime($fechaEmision)),
                                                                      "fechaOriginal"=> $fechaEmision,
                                                                      "totalImpuestos"=>$totalImpuestos,
@@ -132,7 +134,8 @@ class comprobantes extends CI_Controller {
                                                                                     $c["tipoDocumento"], 
                                                                                     $c["clave"], 
                                                                                     $c["nombreEmisor"], 
-                                                                                    $c["cedulaEmisor"], 
+                                                                                    $c["cedulaEmisor"],
+                                                                                    $c["tipoCedulaEmisor"],
                                                                                     date(DATE_ATOM), 
                                                                                     $c["totalImpuestos"], 
                                                                                     $c["totalFactura"], 
@@ -141,7 +144,9 @@ class comprobantes extends CI_Controller {
                                 if($this->contabilidad->generarClaveYConsecutivoMensajeReceptor($consecutivoInicial, $empresa->Codigo)){
                                     if($this->contabilidad->generarXMLMensajeReceptor($consecutivoInicial, $empresa->Codigo)){
                                         if($this->contabilidad->firmarXMLMensajeReceptor($consecutivoInicial, $empresa->Codigo)){
-
+                                            if($this->contabilidad->enviarMensajeReceptorHacienda($consecutivoInicial, $empresa->Codigo)){
+                                                
+                                            }
                                         }
                                     }
                                 }
@@ -149,6 +154,9 @@ class comprobantes extends CI_Controller {
 
                                 $consecutivoInicial++; // Lo aumentamos para el siguiente comprobante
                             }
+                            
+                            unset($r["error"]);
+                            $r["status"] = true;
                         }else{
                             $r["error"] = "No hay conexión a internet, por favor inténtelo mas tarde";
                         }

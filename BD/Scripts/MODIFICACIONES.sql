@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `tb_59_mensaje_receptor` (
   `TipoDocumento` VARCHAR(4) NULL,
   `Clave` VARCHAR(100) NULL,
   `EmisorIdentificacion` VARCHAR(50) NULL,
+  `EmisorTipoIdentificacion` VARCHAR(20) NULL,
   `EmisorNombre` VARCHAR(200) NULL,
   `FechaEmision` VARCHAR(50) NULL,
   `TotalImpuestos` VARCHAR(20) NULL,
@@ -18,9 +19,9 @@ CREATE TABLE IF NOT EXISTS `tb_59_mensaje_receptor` (
   `FechaEmisionComprobante` VARCHAR(50) NULL,
   `XMLSinFirmar` TEXT NULL,
   `XMLFirmado` TEXT NULL,
-  `FechaRecibidoHacienda` DATE NULL,
+  `FechaRecibidoHacienda` TIMESTAMP NULL,
   `RespuestaHaciendaXML` TEXT NULL,
-  `RespuestaHaciendaFecha` DATE NULL,
+  `RespuestaHaciendaFecha` TIMESTAMP NULL,
   `RespuestaHaciendaEstado` VARCHAR(20) NULL,
   PRIMARY KEY (`Consecutivo`, `Sucursal`))
 ENGINE = InnoDB

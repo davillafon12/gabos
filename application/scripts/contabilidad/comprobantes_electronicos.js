@@ -59,6 +59,7 @@ function procesarFacturas(){
             success: function(data, textStatus, jqXHR){
                 if(data.status){
                     // Refrescamos en consulta de comprobantes
+                    window.location.replace(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/comprobantesElectronicos?d=mr');
                 }else{
                     $('#envio_hacienda').bPopup().close(); 
                     notyMsg(data.error, 'error');
