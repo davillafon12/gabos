@@ -6,6 +6,7 @@
 						'compras_sucursales' => 'Agregar Compras a Sucursales',
 						'anular_recibos' => 'Anular Recibos',
 						'anular_facturas' => 'Anular Facturas',
+                                                'aceptar_rechazar_comprobantes' => 'Anular o Aceptar Comprobantes',
 						'cambio_codigo_articulo' => 'Cambiar Código de Artículo',
 						'consultar_ventas' => 'Consultar Ventas',
 						'cierre_caja' => 'Crear Cierre de Caja',

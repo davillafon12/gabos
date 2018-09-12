@@ -45,6 +45,11 @@ class CI_Controller {
             "05" => "Zonas Francas",
             "99" => "Otros"
         );
+        public $tipoMensajesMensajeReceptor = array(
+            "CCE" => "Aceptar",
+            "CPCE" => "Parcial",
+            "RCE" => "Rechazar"
+        );
 
 	/**
 	 * Constructor

@@ -615,4 +615,47 @@ class API_FE{
             return false;
         }
     }
+    
+    
+    public function crearXMLMensajeReceptor($clave, $consecutivo, $fecha_emision, $emisor_num_identif, $receptor_num_identif, $mensaje, $detalleMensaje, $montoImpuestos, $montoTotal){
+        $bm = round(microtime(true) * 1000);
+        $params = array(
+            'w' => "genXML", 
+            "r" => "gen_xml_mr",
+            "clave" => $clave, 
+            "numero_consecutivo_receptor" => $consecutivo, 
+            "fecha_emision_doc" => $fecha_emision,
+            "numero_cedula_emisor" => $emisor_num_identif, 
+            "numero_cedula_receptor" => $receptor_num_identif, 
+            "mensaje" => $mensaje, 
+            "detalle_mensaje" => $detalleMensaje, 
+            "monto_total_impuesto" => $montoImpuestos, 
+            "total_factura" => $montoTotal
+        );
+        $this->logger->info("crearXMLMensajeReceptor", "Creating mensaje receptor XML into API with params: ".json_encode($params));
+        $resultOr = $this->gateway->post("api.php", $params);
+        if($resultOr->info->http_code == 200){
+            $result = (Array) json_decode($resultOr->response);
+            if(isset($result["resp"])){
+                $result["resp"] = (Array) $result["resp"];
+                if(isset($result["resp"]["clave"]) && isset($result["resp"]["xml"])){
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->info("crearXMLMensajeReceptor", $ms."ms | API returns ".json_encode($result));
+                    return $result["resp"];
+                }else{
+                    $ms = (round(microtime(true) * 1000)) - $bm;
+                    $this->logger->error("crearXMLMensajeReceptor", $ms."ms | 3 - API returns ".json_encode($result));
+                    return false;
+                }
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("crearXMLMensajeReceptor", $ms."ms | 2 - API returns ".json_encode($resultOr));
+                return false;
+            }
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("crearXMLMensajeReceptor", $ms."ms | 1 - API returns ".json_encode($resultOr));
+            return false;
+        }
+    }
 }
