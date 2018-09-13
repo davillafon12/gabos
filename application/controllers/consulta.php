@@ -1011,16 +1011,19 @@ class consulta extends CI_Controller {
             $ruta_imagen = base_url('application/images/Icons');
             $comprobantesAMostrar = array();
             foreach($query->result() as $art){
+                $htmlPdf = $_POST['tipodocumento'] == "MR" ? "" : "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                $htmlXML = $_POST['tipodocumento'] == "MR" ? "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave."-".$art->consecutivo.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>" 
+                                                            : "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
                     $auxArray = array(
                             $art->clave,
                             $art->consecutivo,
                             $art->cliente_identificacion." - ".$art->cliente_nombre,
                             date("h:i:s a d-m-Y", strtotime($art->fecha)),
-                            $this->getCorreoEnviadoComprobanteHTML($art->correo_enviado),
+                            $_POST['tipodocumento'] == "MR" ? "" : $this->getCorreoEnviadoComprobanteHTML($art->correo_enviado),
                             $this->getEstadoComprobanteHTML($art->estado),
                             "<div class='tab_opciones'>
-                                    <a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>
-                                    <a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>
+                                    $htmlPdf
+                                    $htmlXML
                                     <a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src=".$ruta_imagen."/Information_icon.png width='21' height='21' title='Ver Respuesta de Hacienda'></a>
                                     ".(($art->estado == "aceptado" || $art->estado == "rechazado" || $art->estado == "recibido" || $art->estado == "procesando") ? "" : "<a href='#' onclick='reenviarXML(\"$art->clave\")'><img src=".$ruta_imagen."/upload.png width='21' height='21' title='Reenviar Documento a Hacienda'></a>")."
                             </div>"
@@ -1081,6 +1084,15 @@ class consulta extends CI_Controller {
                     }else{
                         die("No existe nota credito electronica");
                     }
+                }else if($tipo == "MR"){
+                    if($nota = $this->contabilidad->getMensajeReceptorElectronicoByClave($clave)){
+                        $before = array('<','>');
+                        $after = array('&lt;','&gt;');
+                        $xml = str_replace($before,$after,base64_decode($nota->RespuestaHaciendaXML));
+                        echo "<pre>".$xml;
+                    }else{
+                        die("No existe mensaje receptor");
+                    }
                 }else{
                     die("Tipo de documento no valido");
                 }
@@ -1114,7 +1126,16 @@ class consulta extends CI_Controller {
                                 $retorno["status"] = 1;
                                 unset($retorno["error"]);
                             }else{
-                                $retorno["error"] = "No existe factura electronica";
+                                $retorno["error"] = "No existe nota credito electronica";
+                            }
+                        break;
+                        case "MR":
+                            if($mensaje = $this->contabilidad->getMensajeReceptorElectronicoByClave($clave)){
+                                $this->contabilidad->enviarMensajeReceptorHacienda($mensaje->Consecutivo, $mensaje->Sucursal);
+                                $retorno["status"] = 1;
+                                unset($retorno["error"]);
+                            }else{
+                                $retorno["error"] = "No existe mensaje receptor";
                             }
                         break;
                     }

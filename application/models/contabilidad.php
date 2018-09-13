@@ -2797,8 +2797,26 @@ Class contabilidad extends CI_Model
 	}
         
         function obtenerComprobantesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
-            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+            if($tipoDocumento == "MR"){
+                return $this->db->query("
+			SELECT 	Clave AS clave,
+                                ConsecutivoHacienda AS consecutivo,
+				EmisorIdentificacion AS cliente_identificacion,
+                                EmisorNombre AS cliente_nombre,
+                                FechaEmision as fecha,
+                                RespuestaHaciendaEstado as estado
+			FROM tb_59_mensaje_receptor
+			WHERE (Clave LIKE '%$busqueda%' OR
+                                ConsecutivoHacienda LIKE '%$busqueda%' OR
+                                EmisorIdentificacion LIKE '%$busqueda%' OR
+                                EmisorNombre LIKE '%$busqueda%')
+			AND    Sucursal = $sucursal
+			ORDER BY $columnaOrden $tipoOrden
+			LIMIT $inicio,$cantidad		
+		");
+            }else{
+                $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+                $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
 		return $this->db->query("
 			SELECT 	Clave AS clave,
                                 ConsecutivoHacienda AS consecutivo,
@@ -2815,32 +2833,51 @@ Class contabilidad extends CI_Model
 			AND    Sucursal = $sucursal
 			ORDER BY $columnaOrden $tipoOrden
 			LIMIT $inicio,$cantidad		
-		");		
+		");
+            }	
 	}
         
         function obtenerComprobantesParaTablaFiltrados($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
-            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
-		return $this->db->query("
+            if($tipoDocumento == "MR"){
+                return $this->db->query("
 			SELECT 	Clave AS clave,
                                 ConsecutivoHacienda AS consecutivo,
-				ReceptorIdentificacion AS cliente_identificacion,
-                                ReceptorNombre AS cliente_nombre,
-                                CorreoEnviadoReceptor as correo_enviado,
+				EmisorIdentificacion AS cliente_identificacion,
+                                EmisorNombre AS cliente_nombre,
                                 FechaEmision as fecha,
                                 RespuestaHaciendaEstado as estado
-			FROM $tabla
+			FROM tb_59_mensaje_receptor
 			WHERE (Clave LIKE '%$busqueda%' OR
                                 ConsecutivoHacienda LIKE '%$busqueda%' OR
-                                ReceptorIdentificacion LIKE '%$busqueda%' OR
-                                ReceptorNombre LIKE '%$busqueda%')
-			AND    Sucursal = $sucursal
-		");		
+                                EmisorIdentificacion LIKE '%$busqueda%' OR
+                                EmisorNombre LIKE '%$busqueda%')
+			AND    Sucursal = $sucursal		
+		");
+            }else{
+                $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+                $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+                    return $this->db->query("
+                            SELECT 	Clave AS clave,
+                                    ConsecutivoHacienda AS consecutivo,
+                                    ReceptorIdentificacion AS cliente_identificacion,
+                                    ReceptorNombre AS cliente_nombre,
+                                    CorreoEnviadoReceptor as correo_enviado,
+                                    FechaEmision as fecha,
+                                    RespuestaHaciendaEstado as estado
+                            FROM $tabla
+                            WHERE (Clave LIKE '%$busqueda%' OR
+                                    ConsecutivoHacienda LIKE '%$busqueda%' OR
+                                    ReceptorIdentificacion LIKE '%$busqueda%' OR
+                                    ReceptorNombre LIKE '%$busqueda%')
+                            AND    Sucursal = $sucursal
+                    ");	
+            }
 	}
         
         function getTotalComprobantesEnSucursal($sucursal, $tipoDocumento){
             $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
             $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+            $tabla = $tipoDocumento == "MR" ? "tb_59_mensaje_receptor" : $tabla;
 		$this->db->from($tabla);
 		$this->db->where('Sucursal', $sucursal);
 		$query = $this -> db -> get();
@@ -3107,6 +3144,9 @@ Class contabilidad extends CI_Model
                         $this->db->where("Consecutivo", $consecutivo);
                         $this->db->where("Sucursal", $sucursal);
                         $this->db->update("tb_59_mensaje_receptor", $data);
+                        
+                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$comprobante->Clave."-".$comprobante->ConsecutivoHacienda.".xml",  base64_decode($xmlFirmado));
+                        
                         return true;
                     }
                 }
@@ -3193,6 +3233,28 @@ Class contabilidad extends CI_Model
             return false;
         }
         
+        function getMensajeReceptorElectronicoByClave($clave){
+            $this->db->from("tb_59_mensaje_receptor");
+            $this->db->where("Clave", $clave);
+            $query = $this->db->get();
+
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result()[0];
+            }
+        }
+        
+        function getMensajeReceptoresRecibidasHacienda(){
+            $this->db->where_in("RespuestaHaciendaEstado", array("recibido", "procesando"));
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result();
+            }
+        }
 }
 
 

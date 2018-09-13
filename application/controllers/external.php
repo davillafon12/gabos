@@ -62,7 +62,29 @@ class external extends CI_Controller {
             echo "No hay notas credito que procesar \n";
         }
         
+        echo "Revisando Mensajes Receptores... \n";
         
+        if($mensajes = $this->contabilidad->getMensajeReceptoresRecibidasHacienda()){
+            foreach($mensajes as $mensaje){
+                if(!isset($empresas[$mensaje->Sucursal])){
+                    $empresas[$mensaje->Sucursal] = $this->empresa->getEmpresa($mensaje->Sucursal)[0];
+                }
+                $empresa = $empresas[$mensaje->Sucursal];
+                echo "Obteniendo token... \n";
+                if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
+                    if($this->contabilidad->getEstadoMensajeReceptorHacienda($api, $empresa, $mensaje, $tokenData, $mensaje->Consecutivo, $mensaje->Sucursal)){
+                        echo "Se actualizo el estado del mensaje receptor #{$mensaje->Consecutivo} de la sucursal #{$mensaje->Sucursal} \n";
+                    }else{
+                        echo "NO se actualizo el estado del mensaje receptor #{$mensaje->Consecutivo} de la sucursal #{$mensaje->Sucursal} \n";
+                    }
+                }else{
+                    echo "Hubo un error al obtener el token para mensaje receptor \n";
+                }
+            }
+            
+        }else{
+            echo "No hay mensajes receptor que procesar \n";
+        }
     }
 	
 } 
