@@ -1322,6 +1322,12 @@ Class factura extends CI_Model
                 $this->db->where("Sucursal", $sucursal);
                 $this->db->update("tb_55_factura_electronica", $data);
                 log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                
+                if($estado === "aceptado"){
+                    // Guardarmos el XML firmado en un archivo
+                    file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
+                }
+                
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
                 log_message('error', "Error al revisar el estado de la factura en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
@@ -1614,7 +1620,7 @@ Class factura extends CI_Model
         }
 
         $_SESSION["flash_fe"] = $feStatus;
-        return false;
+        return $feStatus["status"];
     }
     
     

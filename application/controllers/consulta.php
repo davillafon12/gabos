@@ -1014,7 +1014,10 @@ class consulta extends CI_Controller {
                 $htmlPdf = $_POST['tipodocumento'] == "MR" ? "" : "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
                 $htmlXML = $_POST['tipodocumento'] == "MR" ? "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave."-".$art->consecutivo.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>" 
                                                             : "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
-                    $auxArray = array(
+                $htmlXMLRespuesta = $_POST['tipodocumento'] == "FE" ? "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>" 
+                                    : "<a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                
+                $auxArray = array(
                             $art->clave,
                             $art->consecutivo,
                             $art->cliente_identificacion." - ".$art->cliente_nombre,
@@ -1024,7 +1027,7 @@ class consulta extends CI_Controller {
                             "<div class='tab_opciones'>
                                     $htmlPdf
                                     $htmlXML
-                                    <a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src=".$ruta_imagen."/Information_icon.png width='21' height='21' title='Ver Respuesta de Hacienda'></a>
+                                    $htmlXMLRespuesta
                                     ".(($art->estado == "aceptado" || $art->estado == "rechazado" || $art->estado == "recibido" || $art->estado == "procesando") ? "" : "<a href='#' onclick='reenviarXML(\"$art->clave\")'><img src=".$ruta_imagen."/upload.png width='21' height='21' title='Reenviar Documento a Hacienda'></a>")."
                             </div>"
                     );

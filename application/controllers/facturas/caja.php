@@ -265,11 +265,11 @@ class caja extends CI_Controller {
             
             
             if($resFacturaElectronica["status"]){
-                $fueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+                $noFueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                 
                 $estadoFactura = 'cobrada';
                 $responseCheck['impresion'] = 1;
-                if($fueAnuladaPorRechazoDeHacienda){
+                if(!$noFueAnuladaPorRechazoDeHacienda){
                     $responseCheck['impresion'] = 0;
                     $estadoFactura = 'anulada';
                 }
@@ -304,7 +304,7 @@ class caja extends CI_Controller {
                         $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
                 }
                 
-                if($fueAnuladaPorRechazoDeHacienda === false){
+                if($noFueAnuladaPorRechazoDeHacienda){
                     $this->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
 
                     if(!$responseCheck["cliente"]->NoReceptor){
@@ -312,6 +312,7 @@ class caja extends CI_Controller {
                         $apiCorreo = new Correo();
                         $attachs = array(
                             PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".xml",
+                            PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
                             PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".pdf");
                         if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
                             $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
