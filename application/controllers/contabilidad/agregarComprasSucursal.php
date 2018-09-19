@@ -25,7 +25,7 @@ class agregarComprasSucursal extends CI_Controller {
 		{
 			redirect('accesoDenegado', 'location');			
 		}
-		
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
 		$this->load->view('contabilidad/compras_sucursales_view', $data);
 		

@@ -39,9 +39,9 @@ PARA:
 		<!--CSS ESTILO DEL Impromptu-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<!--CSS ESTILO ESPECIFICO DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_agregar_compras.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url("application/styles/contabilidad/contabilidad_agregar_compras.css?v=$javascript_cache_version"); ?>">
 		<!--SCRIPT DE HERRAMIENTAS-->		
-		<script src="<?php echo base_url('application/scripts/contabilidad/agregarComprasSucursal_tools.js'); ?>" type="text/javascript"></script>
+		<script src="<?php echo base_url("application/scripts/contabilidad/agregarComprasSucursal_tools.js?v=$javascript_cache_version"); ?>" type="text/javascript"></script>
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
