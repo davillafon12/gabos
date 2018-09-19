@@ -24,4 +24,7 @@ CREATE TABLE IF NOT EXISTS `tb_59_mensaje_receptor` (
   `RespuestaHaciendaFecha` TIMESTAMP NULL,
   `RespuestaHaciendaEstado` VARCHAR(20) NULL,
   PRIMARY KEY (`Consecutivo`, `Sucursal`))
-ENGINE = InnoDB
+ENGINE = InnoDB;
+
+ALTER TABLE  `tb_07_factura` DROP PRIMARY KEY ,
+ADD PRIMARY KEY (  `Factura_Consecutivo` ,  `TB_02_Sucursal_Codigo` );
