@@ -265,11 +265,11 @@ class caja extends CI_Controller {
             
             
             if($resFacturaElectronica["status"]){
-                $noFueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+                $resEnvio = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                 
                 $estadoFactura = 'cobrada';
                 $responseCheck['impresion'] = 1;
-                if(!$noFueAnuladaPorRechazoDeHacienda){
+                if($resEnvio["status"] === false && $resEnvio["estado"] === "rechazado"){
                     $responseCheck['impresion'] = 0;
                     $estadoFactura = 'anulada';
                 }
@@ -304,7 +304,7 @@ class caja extends CI_Controller {
                         $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
                 }
                 
-                if($noFueAnuladaPorRechazoDeHacienda){
+                if($resEnvio["status"]){
                     $this->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
 
                     if(!$responseCheck["cliente"]->NoReceptor){
@@ -318,7 +318,7 @@ class caja extends CI_Controller {
                             $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
                         }
                     }
-                }else{
+                }else if($resEnvio["status"] === false && $resEnvio["estado"] === "rechazado"){
                     // Al haber sido rechazada por hacienda se debe anular la factura, y se devuelven los articulos
                     //$this->devolverProductosdeFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
                     
