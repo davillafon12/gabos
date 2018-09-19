@@ -1323,10 +1323,8 @@ Class factura extends CI_Model
                 $this->db->update("tb_55_factura_electronica", $data);
                 log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
                 
-                if($estado === "aceptado"){
-                    // Guardarmos el XML firmado en un archivo
-                    file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
-                }
+                // Guardarmos el XML firmado en un archivo
+                file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
                 
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
