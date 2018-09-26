@@ -16,6 +16,10 @@ application/models/.DS_Store
 .DS_Store
 /nbproject/private/
 /LandingAire/nbproject/private/
+
+application/third_party/*
+application/logs/*
+application/images/articulos/*
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jasper
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
 Reportes/FACTURA/Reportes/Cartelera.jasper
