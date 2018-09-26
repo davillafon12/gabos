@@ -337,7 +337,7 @@ class editar extends CI_Controller {
 			
 			$descripcion = $this->input->post('articulo_descripcion');
 			
-			$costo = $this->input->post('costo');
+			$costo = is_numeric($this->input->post('costo-mascara')) ? $this->input->post('costo-mascara') : $this->input->post('costo');
 			$precio1 = $this->input->post('precio1');
 			$precio2 = $this->input->post('precio2');
 			$precio3 = $this->input->post('precio3');
