@@ -1,6 +1,7 @@
 var _SUCURSAL_ENTREGA = -1;
 var _SUCURSAL_RECIBE = -1;
 var _ARRAY_ARTICULOS = [];
+var _SUCURSAL_RECIBE_ES_EXENTA = false;
 
 $(window).ready(function(){
 	$("#sucursal_entrega").change(cargarArticulosConsignados);
@@ -37,6 +38,8 @@ function dibujarArticulosEnTabla(data){
 		});
 		$("#cuerpo_tabla_articulos").html(html);
 		$(".cantidad-facturar").numeric();
+                
+                _SUCURSAL_RECIBE_ES_EXENTA = data.isExento === "1";
 	}else{
 		resetAllFields();
 		notyMsg(data.error.trim(), "error");
@@ -44,20 +47,22 @@ function dibujarArticulosEnTabla(data){
 }
 
 function getArticuloHTML(articulo, numero_fila){
-	var checkbox = "<td style='width: 20px;'><input type='checkbox' value='"+numero_fila+"' class='articulos-seleccionados' meta-numero-fila='"+numero_fila+"'/></td>";
+        var decimales = 2; //_CONFIG.cantidad_decimales
+	var checkbox = "<td style='width: 20px;'><input type='checkbox' value='"+numero_fila+"' class='articulos-seleccionados' meta-numero-fila='"+numero_fila+"' onchange='actualizarTotal()'/></td>";
 	var codigo = "<td><div class='articulo_specs' style='text-align:right;'>"+articulo.Codigo+"</div><input type='hidden' id='articulo_"+numero_fila+"' value='"+articulo.Id+"'/></td>";
 	var descripcion = "<td><div class='articulo_specs'>"+articulo.Descripcion+"</div></td>";
 	var cantidad = "<td><div class='articulo_specs' style='text-align:center;' id='articulo_cantidad_consignado_"+numero_fila+"'>"+articulo.Cantidad+"</div></td>";
-	var cantidadFacturar = "<td><input type='text' class='articulo_specs cantidad-facturar' style='width: 60px; text-align:center;' id='articulo_cantidad_"+numero_fila+"' value='0'/></td>";
-	var descuento = "<td><div class='articulo_specs' style='text-align:center;'>"+articulo.Descuento+"</div></td>";
+        var bodega = "<td><div class='articulo_specs' style='text-align:center;' id='articulo_cantidad_bodega_"+numero_fila+"'>"+articulo.Bodega+"</div></td>";
+	var cantidadFacturar = "<td><input type='text' class='articulo_specs cantidad-facturar' style='width: 60px; text-align:center;' id='articulo_cantidad_"+numero_fila+"' value='0' onchange='actualizarTotal()'/></td>";
+	var descuento = "<td><div class='articulo_specs' style='text-align:center;' id='descuento_"+numero_fila+"'>"+parseFloat(articulo.Descuento).toFixed(decimales)+"</div></td>";
 	var exento = articulo.Exento.trim() === '0' ? '' : '&#10004;';
 	var retencion = articulo.Retencion.trim() === '1' ? '&#10004;' : '';
-		exento = "<td><div class='articulo_specs' style='text-align:center;'>"+exento+"</div></td>";
-		retencion = "<td><div class='articulo_specs' style='text-align:center;'>"+retencion+"</div></td>";
-	var precioUnidad = "<td><div class='articulo_specs' style='text-align:right;'>"+articulo.Precio_Unidad+"</div></td>";
-	var precioTotal = "<td><div class='articulo_specs' style='text-align:right;'>"+articulo.Precio_Total+"</div></td>";
+		exento = "<td><div class='articulo_specs' style='text-align:center;' id='exento_"+numero_fila+"' is-exento='"+articulo.Exento.trim()+"'>"+exento+"</div></td>";
+		retencion = "<td><div class='articulo_specs' style='text-align:center;'  id='retencion_"+numero_fila+"' no-retencion='"+articulo.Retencion.trim()+"'>"+retencion+"</div></td>";
+	var precioUnidad = "<td><div class='articulo_specs' style='text-align:right;' id='precio_unidad_"+numero_fila+"'>"+parseFloat(articulo.Precio_Unidad).toFixed(decimales)+"</div><span id='precio_final_"+numero_fila+"' style='display:none'>"+parseFloat(articulo.Precio_Final).toFixed(decimales)+"</span></td>";
+	var precioTotal = "<td><div class='articulo_specs' style='text-align:right;' id='precio_total_"+numero_fila+"'>"+parseFloat(articulo.Precio_Total).toFixed(decimales)+"</div></td>";
 	
-	return "<tr>"+checkbox+codigo+descripcion+cantidad+cantidadFacturar+descuento+exento+retencion+precioUnidad+precioTotal+"</tr>";
+	return "<tr>"+checkbox+codigo+descripcion+cantidad+bodega+cantidadFacturar+descuento+exento+retencion+precioUnidad+precioTotal+"</tr>";
 }
 
 
@@ -220,4 +225,35 @@ function seleccionarCheckboxes(e){
 	});
 	
 	
+}
+
+function actualizarTotal(){
+    var total = 0;
+    $.each($(".articulos-seleccionados:checked"), function(index, elem){
+        var fila = $(elem).attr("meta-numero-fila");
+        var cantidad = parseInt($("#articulo_cantidad_"+fila).val());
+        var precioUnidad = parseFloat($("#precio_unidad_"+fila).text());
+        var precioUnidadFinal = parseFloat($("#precio_final_"+fila).text());
+        var descuento = parseFloat($("#descuento_"+fila).text());
+        var isExento = $("#exento_"+fila).attr("is-exento") == 1;
+        var retencion = $("#retencion_"+fila).attr("no-retencion") == 0;
+        var precioConDescuento = precioUnidad - (precioUnidad * (descuento/100));
+        var precioFinalConDescuento = precioUnidadFinal - (precioUnidadFinal * (descuento/100));
+        var ivaFactor = parseFloat(_CONFIG.iva);
+        var precioSinIva = precioConDescuento/(1+(ivaFactor/100)); 
+        var precioFinalSinIva = precioFinalConDescuento/(1+(ivaFactor/100));
+        var iva = precioConDescuento - precioSinIva;
+        var ivaFinal = precioFinalConDescuento - precioFinalSinIva;
+        
+        if(retencion && _CONFIG.aplicar_retencion === "1"){
+            iva = ivaFinal;
+        }
+        
+        if(isExento || _SUCURSAL_RECIBE_ES_EXENTA){
+            iva = 0;
+        }
+        
+        total += (precioSinIva+iva)*cantidad;
+    });
+    $("#total_monto").text(total.toFixed(2));
 }

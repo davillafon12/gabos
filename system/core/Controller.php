@@ -30,7 +30,7 @@
 class CI_Controller {
 
 	private static $instance;
-	public $javascriptCacheVersion = 9;
+	public $javascriptCacheVersion = 11;
         public $tiposIdentificacion = array(
             "01" => "Física",
             "02" => "Jurídica",
@@ -44,6 +44,11 @@ class CI_Controller {
             "04" => "Exenciones Direccion General de Hacienda",
             "05" => "Zonas Francas",
             "99" => "Otros"
+        );
+        public $tipoMensajesMensajeReceptor = array(
+            "CCE" => "Aceptar",
+            "CPCE" => "Parcial",
+            "RCE" => "Rechazar"
         );
 
 	/**

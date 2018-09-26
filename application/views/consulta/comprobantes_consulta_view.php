@@ -39,9 +39,9 @@ PARA:
 		<!-- DATA TABES SCRIPT -->
                 <script src="<?php echo base_url('/application/scripts/datatables/dataTablesNew.js');?>" type="text/javascript"></script>
 		<!--CARGA DE HERRAMIENTAS TABLA-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/consulta/tabla_comprobantes_tools.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url("application/scripts/consulta/tabla_comprobantes_tools.js?v=$javascript_cache_version"); ?>"></script>
 		<!--CSS ESTILO DE LA PAG Y TABLA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_comprobantes.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url("application/styles/consulta/estilo_comprobantes.css?v=$javascript_cache_version"); ?>">
                 <!--CARGA DEL POPUP MODAL-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
 	</head>
@@ -59,12 +59,15 @@ PARA:
 		<div class="main_wrapper">
 			<p class="titulo_wrapper">Comprobantes Electrónicos</p>
 			<hr class="division_wrapper">
-		    
+                            <?php 
+                                $documentoSeleccionado = @$_GET["d"];
+                            ?>
 			<div id="contenido" class="contenido">
                             <label class='label-documento'>Tipo Documento:</label>
                             <select id='tipo_documento' onchange='cambiarTipoDocumento()'>
-                                <option value="FE">Factura Electrónica</option>
-                                <option value="NC">Nota Crédito</option>
+                                <option value="FE" <?= $documentoSeleccionado == "fe" ? "selected" : "" ?>>Factura Electrónica</option>
+                                <option value="NC" <?= $documentoSeleccionado == "nc" ? "selected" : "" ?>>Nota Crédito</option>
+                                <option value="MR" <?= $documentoSeleccionado == "mr" ? "selected" : "" ?>>Mensaje Receptor</option>
                             </select>
 				<table id='tabla_editar' class='tablaPrincipal' data-order='[[ 3, "asc" ]]'>
 					<thead> 

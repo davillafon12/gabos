@@ -7,12 +7,15 @@ class external extends CI_Controller {
         $this->load->model('factura','',TRUE);
         $this->load->model('empresa','',TRUE);
         $this->load->model('contabilidad','',TRUE);
+        $this->load->model('cliente','',TRUE);
     }
 
     public function actualizarComprobantes(){
         $empresas = array();
         require_once PATH_API_HACIENDA;
         $api = new API_FE();
+        require_once PATH_API_CORREO;
+        $apiCorreo = new Correo();
         echo "\n >>>>>>>>>>>>>".date(DATE_ATOM)." \n \n";
         echo "Revisando Facturas...\n";
         
@@ -24,8 +27,28 @@ class external extends CI_Controller {
                 $empresa = $empresas[$factura->Sucursal];
                 echo "Obteniendo token... \n";
                 if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
-                    if($this->factura->getEstadoFacturaHacienda($api, $empresa, $factura, $tokenData, $factura->Consecutivo, $factura->Sucursal)){
-                        echo "Se actualizo el estado de la factura #{$factura->Consecutivo} de la sucursal #{$factura->Sucursal} \n";
+                    if($resultado = $this->factura->getEstadoFacturaHacienda($api, $empresa, $factura, $tokenData, $factura->Consecutivo, $factura->Sucursal)){
+                        $estadoActualizado = $resultado["estado_hacienda"];
+                        echo "Se actualizo el estado -$estadoActualizado- de la factura #{$factura->Consecutivo} de la sucursal #{$factura->Sucursal} \n";
+                        
+                        // Revisar si fue aceptado para enviar correo
+                        if($resultado["status"] && $estadoActualizado === "aceptado"){
+                            echo "Enviando correo \n";
+                            if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                $attachs = array(
+                                    PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave.".xml",
+                                    PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",
+                                    PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave.".pdf");
+                                if($apiCorreo->enviarCorreo($factura->ReceptorEmail, "Factura Electrónica #".$factura->Consecutivo." | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+                                    $this->factura->marcarEnvioCorreoFacturaElectronica($factura->Sucursal, $factura->Consecutivo);
+                                    echo "Correo enviado con exito \n"; 
+                                }else{
+                                    echo "Error al enviar correo \n";
+                                }
+                            }else{
+                                echo "Cliente no es receptor de correo \n";
+                            }
+                        }
                     }else{
                         echo "NO se actualizo el estado de la factura #{$factura->Consecutivo} de la sucursal #{$factura->Sucursal} \n";
                     }
@@ -62,7 +85,29 @@ class external extends CI_Controller {
             echo "No hay notas credito que procesar \n";
         }
         
+        echo "Revisando Mensajes Receptores... \n";
         
+        if($mensajes = $this->contabilidad->getMensajeReceptoresRecibidasHacienda()){
+            foreach($mensajes as $mensaje){
+                if(!isset($empresas[$mensaje->Sucursal])){
+                    $empresas[$mensaje->Sucursal] = $this->empresa->getEmpresa($mensaje->Sucursal)[0];
+                }
+                $empresa = $empresas[$mensaje->Sucursal];
+                echo "Obteniendo token... \n";
+                if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
+                    if($this->contabilidad->getEstadoMensajeReceptorHacienda($api, $empresa, $mensaje, $tokenData, $mensaje->Consecutivo, $mensaje->Sucursal)){
+                        echo "Se actualizo el estado del mensaje receptor #{$mensaje->Consecutivo} de la sucursal #{$mensaje->Sucursal} \n";
+                    }else{
+                        echo "NO se actualizo el estado del mensaje receptor #{$mensaje->Consecutivo} de la sucursal #{$mensaje->Sucursal} \n";
+                    }
+                }else{
+                    echo "Hubo un error al obtener el token para mensaje receptor \n";
+                }
+            }
+            
+        }else{
+            echo "No hay mensajes receptor que procesar \n";
+        }
     }
 	
 } 

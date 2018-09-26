@@ -2691,9 +2691,9 @@ Class contabilidad extends CI_Model
                         &&is_numeric($facturaAcreditar)&&$this->factura->existe_Factura($facturaAcreditar, $sucursal)){
                         if($this->existeProductosAcreditar($productosAAcreditar, $sucursal)){
                                 //Preguntamos si la factura a aplicar ya fue aplicada en otra nota
-                                $facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $sucursal)[0];
-                                if(!$this->facturaAplciarYaFueAplicada($facturaAplicar, $sucursal) ||
-                                        $facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
+//                                $facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $sucursal)[0];
+//                                if(!$this->facturaAplciarYaFueAplicada($facturaAplicar, $sucursal) ||
+//                                        $facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
                                         //Listo para realizar nota
                                         //Obtenemos el consecutivo
                                         if($consecutivo = $this->getConsecutivo($sucursal)){
@@ -2771,10 +2771,10 @@ Class contabilidad extends CI_Model
                                                 //No se pudo obtener el nuevo consecutivo
                                                 $retorno['error'] = '8';
                                         }
-                                }else{
-                                        //La factura a aplicar ya fue aplicada
-                                        $retorno['error'] = '7';
-                                }
+//                                }else{
+//                                        //La factura a aplicar ya fue aplicada
+//                                        $retorno['error'] = '7';
+//                                }
                         }else{
                                 //Algun producto ya no existe
                                 $retorno['error'] = '6';
@@ -2797,8 +2797,26 @@ Class contabilidad extends CI_Model
 	}
         
         function obtenerComprobantesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
-            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+            if($tipoDocumento == "MR"){
+                return $this->db->query("
+			SELECT 	Clave AS clave,
+                                ConsecutivoHacienda AS consecutivo,
+				EmisorIdentificacion AS cliente_identificacion,
+                                EmisorNombre AS cliente_nombre,
+                                FechaEmision as fecha,
+                                RespuestaHaciendaEstado as estado
+			FROM tb_59_mensaje_receptor
+			WHERE (Clave LIKE '%$busqueda%' OR
+                                ConsecutivoHacienda LIKE '%$busqueda%' OR
+                                EmisorIdentificacion LIKE '%$busqueda%' OR
+                                EmisorNombre LIKE '%$busqueda%')
+			AND    Sucursal = $sucursal
+			ORDER BY $columnaOrden $tipoOrden
+			LIMIT $inicio,$cantidad		
+		");
+            }else{
+                $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+                $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
 		return $this->db->query("
 			SELECT 	Clave AS clave,
                                 ConsecutivoHacienda AS consecutivo,
@@ -2815,32 +2833,51 @@ Class contabilidad extends CI_Model
 			AND    Sucursal = $sucursal
 			ORDER BY $columnaOrden $tipoOrden
 			LIMIT $inicio,$cantidad		
-		");		
+		");
+            }	
 	}
         
         function obtenerComprobantesParaTablaFiltrados($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
-            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
-		return $this->db->query("
+            if($tipoDocumento == "MR"){
+                return $this->db->query("
 			SELECT 	Clave AS clave,
                                 ConsecutivoHacienda AS consecutivo,
-				ReceptorIdentificacion AS cliente_identificacion,
-                                ReceptorNombre AS cliente_nombre,
-                                CorreoEnviadoReceptor as correo_enviado,
+				EmisorIdentificacion AS cliente_identificacion,
+                                EmisorNombre AS cliente_nombre,
                                 FechaEmision as fecha,
                                 RespuestaHaciendaEstado as estado
-			FROM $tabla
+			FROM tb_59_mensaje_receptor
 			WHERE (Clave LIKE '%$busqueda%' OR
                                 ConsecutivoHacienda LIKE '%$busqueda%' OR
-                                ReceptorIdentificacion LIKE '%$busqueda%' OR
-                                ReceptorNombre LIKE '%$busqueda%')
-			AND    Sucursal = $sucursal
-		");		
+                                EmisorIdentificacion LIKE '%$busqueda%' OR
+                                EmisorNombre LIKE '%$busqueda%')
+			AND    Sucursal = $sucursal		
+		");
+            }else{
+                $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+                $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+                    return $this->db->query("
+                            SELECT 	Clave AS clave,
+                                    ConsecutivoHacienda AS consecutivo,
+                                    ReceptorIdentificacion AS cliente_identificacion,
+                                    ReceptorNombre AS cliente_nombre,
+                                    CorreoEnviadoReceptor as correo_enviado,
+                                    FechaEmision as fecha,
+                                    RespuestaHaciendaEstado as estado
+                            FROM $tabla
+                            WHERE (Clave LIKE '%$busqueda%' OR
+                                    ConsecutivoHacienda LIKE '%$busqueda%' OR
+                                    ReceptorIdentificacion LIKE '%$busqueda%' OR
+                                    ReceptorNombre LIKE '%$busqueda%')
+                            AND    Sucursal = $sucursal
+                    ");	
+            }
 	}
         
         function getTotalComprobantesEnSucursal($sucursal, $tipoDocumento){
             $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
             $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+            $tabla = $tipoDocumento == "MR" ? "tb_59_mensaje_receptor" : $tabla;
 		$this->db->from($tabla);
 		$this->db->where('Sucursal', $sucursal);
 		$query = $this -> db -> get();
@@ -2960,6 +2997,262 @@ Class contabilidad extends CI_Model
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
                 log_message('error', "Error al revisar el estado de la nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
+        }
+        
+        
+        function getSiguienteConsecutivoMensajeReceptor($sucursal){
+            $this->db->select("max(Consecutivo) as consecutivo");
+            $this->db->where("Sucursal", $sucursal);
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            if($query->num_rows() == 0){
+                return 1;
+            }else{
+                return intval($query->result()[0]->consecutivo)+1;
+            }
+        }
+        
+        function agregarInfoBasicaMensajeReceptor($sucursal, $consecutivo, $receptorTipoIdentificacion, $receptorIdentificacion, $receptorCodigoPais, $situacion, $codigoSeguridad, $tipoDocumento, $clave, $emisorNombre, $emisorIdentificacion, $emisorTipoIdentificacion, $fechaEmision, $totalImpuestos, $totalComprobante, $fechaEmisionComprobante){
+            //array("fisico", "juridico", "dimex", "nite")
+            $tipoIdentificacion = "";
+            switch($receptorTipoIdentificacion){
+                case "01":
+                    $tipoIdentificacion = "fisico";
+                break;
+                case "01":
+                    $tipoIdentificacion = "juridico";
+                break;
+                case "01":
+                    $tipoIdentificacion = "dimex";
+                break;
+                case "01":
+                    $tipoIdentificacion = "nite";
+                break;
+            }
+            
+            
+            $data = array(
+                "Sucursal" => $sucursal,
+                "Consecutivo" => $consecutivo,
+                "ConsecutivoFormateado" => $this->formatearConsecutivo($consecutivo),
+                "ReceptorTipoIdentificacion" => $tipoIdentificacion,
+                "ReceptorIdentificacion" => $receptorIdentificacion,
+                "ReceptorCodigoPais" => $receptorCodigoPais,
+                "Situacion" => $situacion,
+                "CodigoSeguridad" => $codigoSeguridad,
+                "TipoDocumento" => $tipoDocumento,
+                "Clave" => $clave,
+                "EmisorIdentificacion" => $emisorIdentificacion,
+                "EmisorTipoIdentificacion" => $emisorTipoIdentificacion,
+                "EmisorNombre" => $emisorNombre,
+                "FechaEmision" => $fechaEmision,
+                "TotalImpuestos" => $totalImpuestos,
+                "TotalComprobante" => $totalComprobante,
+                "FechaEmisionComprobante" => $fechaEmisionComprobante,
+                "RespuestaHaciendaEstado" => "sin_enviar"
+            );
+            $this->db->insert('tb_59_mensaje_receptor', $data);
+        }
+        
+        function generarClaveYConsecutivoMensajeReceptor($consecutivo, $sucursal){
+            $this->db->where("Sucursal", $sucursal);
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            
+            if($query->num_rows() > 0){
+                $comprobante = $query->result()[0];
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+                if($claveRs = $api->createClave($comprobante->ReceptorTipoIdentificacion, $comprobante->ReceptorIdentificacion, $comprobante->ReceptorCodigoPais, $comprobante->ConsecutivoFormateado, $comprobante->Situacion, $comprobante->CodigoSeguridad, $comprobante->TipoDocumento)){
+                    $data = array(
+                        "ConsecutivoHacienda" => $claveRs["consecutivo"]
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+                    $this->db->update("tb_59_mensaje_receptor", $data);
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }
+        
+        function generarXMLMensajeReceptor($consecutivo, $sucursal){
+            $this->db->where("Sucursal", $sucursal);
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            
+            if($query->num_rows() > 0){
+                $comprobante = $query->result()[0];
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+                $tipoMensaje = "";
+                switch($comprobante->TipoDocumento){
+                    case 'CCE':
+                        $tipoMensaje = "1";
+                    break;
+                    case 'CPCE':
+                        $tipoMensaje = "2";
+                    break;
+                    case 'RCE':
+                        $tipoMensaje = "3";
+                    break;
+                }
+                
+                if($xmlRes = $api->crearXMLMensajeReceptor($comprobante->Clave, $comprobante->ConsecutivoHacienda, $comprobante->FechaEmision, $comprobante->EmisorIdentificacion, $comprobante->ReceptorIdentificacion, $tipoMensaje, "", $comprobante->TotalImpuestos, $comprobante->TotalComprobante)){
+                    $data = array(
+                        "XMLSinFirmar" => $xmlRes["xml"]
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+                    $this->db->update("tb_59_mensaje_receptor", $data);
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }
+        
+        function firmarXMLMensajeReceptor($consecutivo, $sucursal){
+            $this->db->where("Sucursal", $sucursal);
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            
+            if($query->num_rows() > 0){
+                $comprobante = $query->result()[0];
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+                
+                $this->db->from("tb_02_sucursal");
+                $this->db->where("Codigo", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $empresa = $query->result()[0];
+                    
+                    if($xmlFirmado = $api->firmarDocumento($empresa->Token_Certificado_Tributa, $comprobante->XMLSinFirmar, $empresa->Pass_Certificado_Tributa, $comprobante->TipoDocumento)){
+                        $data = array(
+                            "XMLFirmado" => $xmlFirmado
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_59_mensaje_receptor", $data);
+                        
+                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$comprobante->Clave."-".$comprobante->ConsecutivoHacienda.".xml",  base64_decode($xmlFirmado));
+                        
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        
+        function enviarMensajeReceptorHacienda($consecutivo, $sucursal){
+            $this->db->where("Sucursal", $sucursal);
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            if($query->num_rows() > 0){
+                $comprobante = $query->result()[0];
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+                $factura = $query->result()[0];
+                $this->db->from("tb_02_sucursal");
+                $this->db->where("Codigo", $sucursal);
+                $query = $this->db->get();
+                if($query->num_rows()>0){
+                    $empresa = $query->result()[0];
+                    if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
+                        if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $comprobante->Clave, $comprobante->FechaEmision, $comprobante->EmisorTipoIdentificacion, $comprobante->EmisorIdentificacion, $comprobante->ReceptorTipoIdentificacion, $comprobante->ReceptorIdentificacion, $tokenData["access_token"], $comprobante->XMLFirmado, $comprobante->ConsecutivoHacienda)){
+                            $data = array(
+                                "RespuestaHaciendaEstado" => "procesando",
+                                "FechaRecibidoHacienda" => date("y/m/d : H:i:s")
+                            );
+                            $this->db->where("Consecutivo", $consecutivo);
+                            $this->db->where("Sucursal", $sucursal);
+                            $this->db->update("tb_59_mensaje_receptor", $data);
+                            
+                            return $this->getEstadoMensajeReceptorHacienda($api, $empresa, $comprobante, $tokenData, $consecutivo, $sucursal);
+                        }else{
+                            $data = array(
+                                "RespuestaHaciendaEstado" => "fallo_envio"
+                            );
+                            $this->db->where("Consecutivo", $consecutivo);
+                            $this->db->where("Sucursal", $sucursal);
+                            $this->db->update("tb_59_mensaje_receptor", $data);
+                            log_message('error', "Error al enviar el mensaje receptor a Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                        }
+                    }else{
+                        $data = array(
+                            "RespuestaHaciendaEstado" => "fallo_token"
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_59_mensaje_receptor", $data);
+                        log_message('error', "Error al generar el token para envio de mensaje receptor | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                    }
+                }
+            }
+            return false;
+        }
+        
+        public function getEstadoMensajeReceptorHacienda($api, $empresa, $comprobante, $tokenData, $consecutivo, $sucursal){
+            // Obtener resultado de la factura
+            $resCheck = array();
+            $counter = 0;
+            do {
+                sleep(2);
+                $counter++;
+                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $comprobante->Clave."-".$comprobante->ConsecutivoHacienda, $tokenData["access_token"]);
+                log_message('error', "Revisando estado de mensaje receptor en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+
+            if($resCheck["status"]){
+                $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+                $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
+                $data = array(
+                    "RespuestaHaciendaEstado" => $estado,
+                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
+                    "RespuestaHaciendaXML" => $xmlRespuesta
+                );
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $this->db->update("tb_59_mensaje_receptor", $data);
+                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                return array("status" => true, "estado_hacienda" => $estado);
+            }else{
+                log_message('error', "Error al revisar el estado del mensaje receptor en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
+            return false;
+        }
+        
+        function getMensajeReceptorElectronicoByClave($clave){
+            $this->db->from("tb_59_mensaje_receptor");
+            $this->db->where("Clave", $clave);
+            $query = $this->db->get();
+
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result()[0];
+            }
+        }
+        
+        function getMensajeReceptoresRecibidasHacienda(){
+            $this->db->where_in("RespuestaHaciendaEstado", array("recibido", "procesando"));
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result();
             }
         }
 }

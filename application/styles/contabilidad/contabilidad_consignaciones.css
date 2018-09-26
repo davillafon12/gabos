@@ -219,3 +219,11 @@
     font-size: 26px;
     color: #C1C1C1;
 } 
+
+.total-container{
+        width: 99%;
+    margin: auto;
+    text-align: right;
+    padding-top: 5px;
+    font-size: 22px;
+}

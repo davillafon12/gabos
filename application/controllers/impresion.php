@@ -228,6 +228,7 @@ class impresion extends CI_Controller {
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
 							if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal)){
+                                                            if($notaElectronica = $this->contabilidad->getNotaCreditoElectronica($consecutivo, $sucursal)){
 								unset($this->retorno['error']);
 								$this->retorno['status'] = 'success';
 								$this->retorno['empresa'] = $empresa;
@@ -371,7 +372,12 @@ class impresion extends CI_Controller {
 								$notaCreditoHead[0]->total = $costo_total;
 								$notaCreditoHead[0]->subtotal = $costo_sin_iva;
 								$notaCreditoHead[0]->total_iva = $iva;
-								$notaCreditoHead[0]->retencion = $retencion;						
+								$notaCreditoHead[0]->retencion = $retencion;
+                                                                $notaCreditoHead[0]->consecutivoH = $notaElectronica->ConsecutivoHacienda;
+                                                                $notaCreditoHead[0]->clave = $notaElectronica->Clave;
+                                                            }else{
+                                                                $this->retorno['error'] = 'No se pudo cargar la nota crédito electrónica';
+                                                            }
 							}else{
 								$this->retorno['error'] = 'No se pudo cargar los artículos de la nota crédito';
 							}

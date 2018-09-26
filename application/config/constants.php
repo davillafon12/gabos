@@ -78,7 +78,7 @@ define('PATH_FOOTER',FCPATH.'application/views/Footer/Default_Footer.php');
 define('PATH_USER_DATA',FCPATH.'application/controllers/get_session_data.php');
 define('PATH_USER_DATA_DOUBLE',FCPATH.'application/controllers/get_session_data.php');
 define('PATH_FPDF_LIBRARY', FCPATH.'application/libraries/fpdf/fpdf.php');
-define('PATH_MENU_PRINCIPAL_VENDEDOR', FCPATH.'application/views/Menu_Principal_Vendedor.php');
+define('PATH_MENU_PRINCIPAL_VENDEDOR', FCPATH.'application/views/Header/Menu_Principal_Vendedor.php');
 define('PATH_MENU_PRINCIPAL_CAJERO', FCPATH.'application/views/Header/Menu_Principal_Cajero.php');
 define('PATH_MENU_PRINCIPAL',FCPATH.'application/views/Header/Menu_Principal.php');
 define('PATH_PERMISOS', FCPATH.'application/controllers/usuarios/permisos.php');
@@ -96,7 +96,7 @@ define('PATH_DOCUMENTOS_ELECTRONICOS', FCPATH.'application/third_party/');
 define('PATH_API_CORREO', FCPATH.'application/libraries/Correo.php');
 
 
-define('URL_API_CRLIBE', 'http://192.168.0.24');
+define('URL_API_CRLIBE', 'http://192.168.10.17');
 define('API_CRLIBRE_CURL_TIMEOUT', 10);
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
