@@ -2691,9 +2691,9 @@ Class contabilidad extends CI_Model
                         &&is_numeric($facturaAcreditar)&&$this->factura->existe_Factura($facturaAcreditar, $sucursal)){
                         if($this->existeProductosAcreditar($productosAAcreditar, $sucursal)){
                                 //Preguntamos si la factura a aplicar ya fue aplicada en otra nota
-                                $facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $sucursal)[0];
-                                if(!$this->facturaAplciarYaFueAplicada($facturaAplicar, $sucursal) ||
-                                        $facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
+//                                $facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $sucursal)[0];
+//                                if(!$this->facturaAplciarYaFueAplicada($facturaAplicar, $sucursal) ||
+//                                        $facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
                                         //Listo para realizar nota
                                         //Obtenemos el consecutivo
                                         if($consecutivo = $this->getConsecutivo($sucursal)){
@@ -2771,10 +2771,10 @@ Class contabilidad extends CI_Model
                                                 //No se pudo obtener el nuevo consecutivo
                                                 $retorno['error'] = '8';
                                         }
-                                }else{
-                                        //La factura a aplicar ya fue aplicada
-                                        $retorno['error'] = '7';
-                                }
+//                                }else{
+//                                        //La factura a aplicar ya fue aplicada
+//                                        $retorno['error'] = '7';
+//                                }
                         }else{
                                 //Algun producto ya no existe
                                 $retorno['error'] = '6';
