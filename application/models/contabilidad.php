@@ -2797,6 +2797,28 @@ Class contabilidad extends CI_Model
 	}
         
         function obtenerComprobantesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
+            $extraQuery = "";
+            
+            if($tipoDocumento != "MR"){
+                if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+                    $facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+                    $sucursal = $this->sucursales_trueque[$sucursal];
+                    if(!empty($facturas_trueque)){
+                        if($tipoDocumento == "FE"){
+                            $extraQuery = " AND Consecutivo in (".  implode(",", $facturas_trueque).")";
+                        }
+                    }
+                }elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+                    $facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+                    if(!empty($facturas_trueque)){
+                        if($tipoDocumento == "FE"){
+                            $extraQuery = " AND Consecutivo not in (".  implode(",", $facturas_trueque).")";
+                        }
+                    }
+                }
+            }
+            
+            
             if($tipoDocumento == "MR"){
                 return $this->db->query("
 			SELECT 	Clave AS clave,
@@ -2811,6 +2833,7 @@ Class contabilidad extends CI_Model
                                 EmisorIdentificacion LIKE '%$busqueda%' OR
                                 EmisorNombre LIKE '%$busqueda%')
 			AND    Sucursal = $sucursal
+                        $extraQuery
 			ORDER BY $columnaOrden $tipoOrden
 			LIMIT $inicio,$cantidad		
 		");
@@ -2831,6 +2854,7 @@ Class contabilidad extends CI_Model
                                 ReceptorIdentificacion LIKE '%$busqueda%' OR
                                 ReceptorNombre LIKE '%$busqueda%')
 			AND    Sucursal = $sucursal
+                        $extraQuery
 			ORDER BY $columnaOrden $tipoOrden
 			LIMIT $inicio,$cantidad		
 		");
