@@ -96,7 +96,7 @@ define('PATH_DOCUMENTOS_ELECTRONICOS', FCPATH.'application/third_party/');
 define('PATH_API_CORREO', FCPATH.'application/libraries/Correo.php');
 
 
-define('URL_API_CRLIBE', 'http://192.168.0.24');
+define('URL_API_CRLIBE', 'http://192.168.10.17');
 define('API_CRLIBRE_CURL_TIMEOUT', 10);
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
