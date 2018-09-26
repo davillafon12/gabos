@@ -16,3 +16,6 @@ application/models/.DS_Store
 .DS_Store
 /nbproject/private/
 /LandingAire/nbproject/private/
+
+application/third_party/*
+application/logs/*
