@@ -822,6 +822,17 @@ Class articulo extends CI_Model
 			return $query->result();
 		}
 	}
+        
+        function getArticulosFromSucursal($sucursal){
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->from('tb_06_articulo');
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
 	
 	function borrarArticulosTemporalesDeSucursal($sucursal){
 		$this->db->where('Sucursal', $sucursal);

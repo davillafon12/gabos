@@ -216,6 +216,29 @@ class traspaso extends CI_Controller {
 					$this->articulo->agregarArticuloTraspasoInventario($traspaso, $art->codigo, $art->cantidad, $art->descripcion);
 			}
 	}
+        
+        public function getArticulosSucursal(){
+            $sucursal = trim(@$_GET["s"]) == "" ? 99 : trim(@$_GET["s"]);
+            if($this->empresa->getEmpresa($sucursal)){
+                if($articulos = $this->articulo->getArticulosFromSucursal($sucursal)){
+                    for($i = 0; $i < sizeof($articulos); $i++){
+                        $precios["p0"] = $this->articulo->getPrecioProducto($articulos[$i]->Articulo_Codigo, 0, $sucursal);
+                        $precios["p1"] = $this->articulo->getPrecioProducto($articulos[$i]->Articulo_Codigo, 1, $sucursal);
+                        $precios["p2"] = $this->articulo->getPrecioProducto($articulos[$i]->Articulo_Codigo, 2, $sucursal);
+                        $precios["p3"] = $this->articulo->getPrecioProducto($articulos[$i]->Articulo_Codigo, 3, $sucursal);
+                        $precios["p4"] = $this->articulo->getPrecioProducto($articulos[$i]->Articulo_Codigo, 4, $sucursal);
+                        $precios["p5"] = $this->articulo->getPrecioProducto($articulos[$i]->Articulo_Codigo, 5, $sucursal);
+                        
+                        $articulos[$i]->precios = $precios;
+                    }
+                    echo json_encode($articulos);
+                }else{
+                    echo json_encode(array("status"=>0, "error"=>"No hay articulos"));
+                }
+            }else{
+                echo json_encode(array("status"=>0, "error"=>"No existe sucursal"));
+            }
+        }
 
 }
 
