@@ -216,6 +216,65 @@ class traspaso extends CI_Controller {
 					$this->articulo->agregarArticuloTraspasoInventario($traspaso, $art->codigo, $art->cantidad, $art->descripcion);
 			}
 	}
+        
+        public function traspasoEs(){
+            $sucursalAPasar = trim(@$_GET["s"]) == "" ? 99999 : trim(@$_GET["s"]);
+            $url = "http://201.200.125.10";
+            if($this->empresa->getEmpresa($sucursalAPasar) && $sucursalAPasar != 4){
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch,CURLOPT_URL,$url."/articulos/traspaso/getArticulosSucursal?s=".$sucursalAPasar);
+                curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+                curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.A.B.C Safari/525.13");
+                $datos = curl_exec($ch);
+                curl_close($ch);
+                //$datos = file_get_contents($url."/articulos/traspaso/getArticulosSucursal?s=".$sucursalAPasar);
+                $datos = json_decode($datos, true);
+                if(is_array($datos)){
+                    echo "Borrando articulos actuales en BD<br>";
+                    $this->articulo->borrarArticulosDeSucursalCompleto($sucursalAPasar);
+                    echo "Articulos borrados<br>";
+                    echo "Insertando ".sizeof($datos)." articulos<br>";
+                    $articulosIngresados = 0;
+                    $articulosConError = 0;
+                    $articulosError = array();
+                    foreach($datos as $art){
+                        if($this->articulo->registrar($art["Articulo_Codigo"], 
+                                                    $art["Articulo_Descripcion"], 
+                                                    $art["Articulo_Codigo_Barras"], 
+                                                    $art["Articulo_Cantidad_Inventario"], 
+                                                    $art["Articulo_Cantidad_Defectuoso"], 
+                                                    $art["Articulo_Descuento"], 
+                                                    $art["Articulo_Imagen_URL"], 
+                                                    $art["Articulo_Exento"], 
+                                                    $art["Articulo_No_Retencion"], 
+                                                    $art["TB_05_Familia_Familia_Codigo"], 
+                                                    $art["TB_02_Sucursal_Codigo"], 
+                                                    $art["precios"]["p0"], 
+                                                    $art["precios"]["p1"], 
+                                                    $art["precios"]["p2"], 
+                                                    $art["precios"]["p3"], 
+                                                    $art["precios"]["p4"], 
+                                                    $art["precios"]["p5"])){
+                            $articulosIngresados++;
+                        }else{
+                            $articulosConError++;
+                            array_push($articulosError, $art["Articulo_Codigo"]);
+                        }                        
+                    }
+                    echo "Insercion finalizada<br>";
+                    echo "$articulosIngresados articulos insertados<br>";
+                    echo "$articulosConError articulos no insertados (Error):<br>";
+                    foreach($articulosError as $ae){
+                        echo "-$ae <br>";
+                    }
+                }else{
+                    die("Error al cargar los articulos desde remoto");
+                }
+            }else{
+                die("Sucursal ingresada no existe");
+            }
+        }
 
 }
 

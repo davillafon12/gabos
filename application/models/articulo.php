@@ -982,6 +982,15 @@ Class articulo extends CI_Model
 			return $query->result();
 		}
 	}
+        
+        
+        function borrarArticulosDeSucursalCompleto($sucursal){
+            $this->db->where('TB_06_Articulo_TB_02_Sucursal_Codigo', $sucursal);
+            $this->db->delete('tb_11_precios');	
+            
+            $this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+            $this->db->delete('tb_06_articulo');	
+	}
 	
 	
 	
