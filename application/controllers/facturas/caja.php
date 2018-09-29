@@ -295,7 +295,7 @@ class caja extends CI_Controller {
                 $this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
 
 
-                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: {$responseCheck["factura"]->Factura_Consecutivo}",$responseCheck["factura"]->TB_02_Sucursal_Codigo,'cobro');
+                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: {$responseCheck["factura"]->Factura_Consecutivo}",$data['Sucursal_Codigo'],'cobro');
 
                 
                 //Valorar si factura es de cliente defectuoso
