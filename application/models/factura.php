@@ -1368,12 +1368,13 @@ Class factura extends CI_Model
         }
         
         public function getFacturaElectronica($consecutivo, $sucursal){
+            $sucursalFinal = $sucursal;
             if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
-                $sucursal = $this->sucursales_trueque[$sucursal];
+                $sucursalFinal = $this->sucursales_trueque[$sucursal];
             }
             $this->db->from("tb_55_factura_electronica");
             $this->db->where("Consecutivo", $consecutivo);
-            $this->db->where("Sucursal", $sucursal);
+            $this->db->where("Sucursal", $sucursalFinal);
             $query = $this->db->get();
             if($query->num_rows()>0){
                 return $query->result()[0];
