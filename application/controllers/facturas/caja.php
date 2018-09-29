@@ -299,7 +299,7 @@ class caja extends CI_Controller {
 
                 
                 //Valorar si factura es de cliente defectuoso
-                $facturaHeader = $this->factura->getFacturasHeaders($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo)[0];
+                $facturaHeader = $this->factura->getFacturasHeaders($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo'])[0];
                 if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
                         $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
                 }
