@@ -237,11 +237,11 @@ Class contabilidad extends CI_Model
 	
 	function agregarProductosNotaCredito($consecutivo, $sucursal, $productos, $cliente, $facturaAcreditar){
 		
-/*
+
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
-*/
+
 		
 		
 		$datos = array();
