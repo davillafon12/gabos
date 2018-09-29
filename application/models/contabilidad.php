@@ -2691,7 +2691,7 @@ Class contabilidad extends CI_Model
                         &&is_numeric($facturaAcreditar)&&$this->factura->existe_Factura($facturaAcreditar, $sucursal)){
                         if($this->existeProductosAcreditar($productosAAcreditar, $sucursal)){
                                 //Preguntamos si la factura a aplicar ya fue aplicada en otra nota
-//                                $facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $sucursal)[0];
+                                $facturaAcreditarHeader = $this->factura->getFacturasHeaders($facturaAcreditar, $sucursal)[0];
 //                                if(!$this->facturaAplciarYaFueAplicada($facturaAplicar, $sucursal) ||
 //                                        $facturaAcreditarHeader->Factura_Tipo_Pago == 'credito'){
                                         //Listo para realizar nota
