@@ -288,11 +288,11 @@ class caja extends CI_Controller {
                         'Factura_Recibido_Vuelto' => $recibidoParaVuelto
                 );
 
-                $this->factura->actualizarFacturaHead($datos, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+                $this->factura->actualizarFacturaHead($datos, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
 
                 //Agregamos tipo de pago
                 //Tarjeta, Deposito, Cheque, Mixto, Apartado
-                $this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+                $this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
 
 
                 $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: {$responseCheck["factura"]->Factura_Consecutivo}",$data['Sucursal_Codigo'],'cobro');
@@ -301,7 +301,7 @@ class caja extends CI_Controller {
                 //Valorar si factura es de cliente defectuoso
                 $facturaHeader = $this->factura->getFacturasHeaders($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo'])[0];
                 if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
-                        $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+                        $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
                 }
                 
                 if($resEnvio["status"]){
