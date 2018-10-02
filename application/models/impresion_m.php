@@ -633,7 +633,7 @@ Class impresion_m extends CI_Model{
 				$this->observaciones($encabezado->observaciones, $pdf);
 				//Leyenda de tributacion
 				$pdf->SetFont('Arial','',8);
-				$pdf->SetXY(10, 267);
+				$pdf->SetXY(10, 257);
                                 $pdf->MultiCell(190,3,"Versión: 4.2",0,'C');
                                 $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');

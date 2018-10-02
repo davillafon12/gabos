@@ -533,7 +533,14 @@ class impresion extends CI_Controller {
 					$consecutivo = $_GET['n'];
 					if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
 						if($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)){
-                                                    if($fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal)){
+                                                    $fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal);
+                                                    if(!$fElectornica){
+                                                        $fElectornica = new stdClass();
+                                                        $fElectornica->ConsecutivoHacienda = "No se ha generado FE";
+                                                        $fElectornica->Clave = "No se ha generado FE";
+                                                    }
+                                                    
+                                                    if($fElectornica){
 							if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
                                                                 //Valoramos si un credito para poner la fecha de vencimiento
                                                                 if($facturaHead[0] -> tipo == 'credito'){
