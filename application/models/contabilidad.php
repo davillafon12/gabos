@@ -354,9 +354,9 @@ Class contabilidad extends CI_Model
 	}
         
         function getArticulosNotaCredito($consecutivo, $sucursal){
-		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
-		}
+//		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+//				$sucursal = $this->sucursales_trueque[$sucursal];
+//		}
                 $this->db->where("Nota_Credito_Consecutivo", $consecutivo);
                 $this->db->where("Sucursal", $sucursal);
                 $this->db->from("tb_28_productos_notas_credito");
