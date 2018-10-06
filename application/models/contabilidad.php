@@ -3002,6 +3002,9 @@ Class contabilidad extends CI_Model
         }
         
         function getEstadoNotaCreditoHacienda($api, $nota, $empresa, $tokenData, $consecutivo, $sucursal){
+            if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
+                $sucursal = $this->sucursales_trueque[$sucursal];
+            }
              // Obtener resultado de la factura
             $resCheck = array();
             $counter = 0;
