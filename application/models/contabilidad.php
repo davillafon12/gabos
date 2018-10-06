@@ -189,10 +189,10 @@ Class contabilidad extends CI_Model
 	
 	function agregarNotaCreditoCabecera($consecutivo, $fecha, $nombre, $cliente, $sucursal, $facturaAcreditar, $facturaAplicar, $tipoPago, $moneda, $por_iva, $tipo_cambio, $esAnulacion = false){
 		$sucursalVendedor = $sucursal;
-		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
-				$sucursal = $this->sucursales_trueque[$sucursal];
-				$this->truequeAplicado = true;
-		}
+//		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
+//				$sucursal = $this->sucursales_trueque[$sucursal];
+//				$this->truequeAplicado = true;
+//		}
 		$datos = array(
 						'Consecutivo' => $consecutivo,
 						'Nombre_Cliente' => $nombre,
