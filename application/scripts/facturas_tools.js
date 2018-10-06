@@ -731,7 +731,7 @@ function actualizaCostosTotales(decimales_int){
 				//Obtenemos el precio total de la linea del producto
 				precio_unitario_articulo = getPrecioTotalRow(i+1);
 				var precioUnitarioSinDescuento = $.isNumeric($("#costo_total_articulo_sin_descuento_"+(i+1)).val()) ? parseFloat($("#costo_total_articulo_sin_descuento_"+(i+1)).val()) : 0.0;
-				
+				var descuento = $.isNumeric($("#descuento_articulo_"+(i+1)).text()) ? parseFloat($("#descuento_articulo_"+(i+1)).text()) : 0;
 				//Obtenemos el precio de cliente final de la linea del producto
 				precio_cliente_final_articulo = getPrecioTotalRowFINAL(i+1);
 				//Obtenemos si el producto es exento de impuestos	
@@ -748,6 +748,7 @@ function actualizaCostosTotales(decimales_int){
 				
 					if(noRetencion==='0'){//Sacamos el valor de los impuestos por RETENCION
 							//Si aplica la retencion sacamos la base imponible del producto final
+                                                        precio_cliente_final_articulo = precio_cliente_final_articulo - (precio_cliente_final_articulo * (descuento / 100));
 							precio_cliente_final_articulo_sin_iva = precio_cliente_final_articulo/(1+porcentaje_iva);
 							//Luego obtenemos la cantidad de IVA por pagar
 							costo_retencion += precio_cliente_final_articulo-precio_cliente_final_articulo_sin_iva;
@@ -785,12 +786,11 @@ function actualizaCostosTotales(decimales_int){
 		
 	//Formateo e impresion a UI
 	//precio_unidad_FACTOR_float = precio_unidad_FACTOR_float.format(2, 3, '.', ',');
-	
+
 	IVA_Factura = costo_total_factura-costo_sin_IVA_factura;
 	//A este punto el costo de la retencion va con todos los impuestos del cliente final
 	//Ahora le quitamos los impuestos del cliente afiliado para onbtener la retencion real
-	costo_retencion -= costo_sin_IVA_factura_sin_descuento;
-	
+	costo_retencion -= IVA_Factura;
 	if(clienteEsDeTipoExento=="1"){
 		costo_total_factura -= IVA_Factura;
 		IVA_Factura = 0;

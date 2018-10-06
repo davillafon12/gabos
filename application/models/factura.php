@@ -213,9 +213,7 @@ Class factura extends CI_Model
 				$precio_total_articulo = (($articulo->Articulo_Factura_Precio_Unitario)-(($articulo->Articulo_Factura_Precio_Unitario)*(($articulo->Articulo_Factura_Descuento)/100)))*$articulo->Articulo_Factura_Cantidad;
 				$precio_total_articulo_sin_descuento = $articulo->Articulo_Factura_Precio_Unitario*$articulo->Articulo_Factura_Cantidad;
                                 $descuento = $precio_total_articulo_sin_descuento - $precio_total_articulo;
-				$precio_articulo_final = $articulo->Articulo_Factura_Precio_Final;
-				$precio_articulo_final = $precio_articulo_final * $articulo->Articulo_Factura_Cantidad;
-				
+                                $precio_articulo_final = ($articulo->Articulo_Factura_Precio_Final - ($articulo->Articulo_Factura_Precio_Final * ($articulo->Articulo_Factura_Descuento/100))) * $articulo->Articulo_Factura_Cantidad;
 				//Calculamos los impuestos
 				
 				$isExento = $articulo->Articulo_Factura_Exento;
@@ -223,17 +221,11 @@ Class factura extends CI_Model
 				if($isExento=='0'){
 					$costo_sin_iva += $precio_total_articulo/(1+(floatval($c_array['iva'])/100));
 					
-					
-					$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($c_array['iva'])/100)));
-					$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($c_array['iva'])/100))); 
-					
 					$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($c_array['iva'])/100));
 					$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
 					
-                                        
-                                        
 					if(!$articulo->Articulo_Factura_No_Retencion){
-                                            $retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
+                                            $retencion += $iva_precio_final;
                                             $totalGravados += $costo_sin_iva + $iva_precio_final;
                                         }else{
                                             $totalGravados += $precio_total_articulo;
@@ -248,7 +240,7 @@ Class factura extends CI_Model
 			}
 			$iva = $costo_total-$costo_sin_iva;
 		}
-		//$retencion -= $iva;
+		$retencion -= $iva;
 		//Si aplica la retencion entonces modificamos los costos
 		if(!$c_array['aplicar_retencion']){
 			$retencion = 0;

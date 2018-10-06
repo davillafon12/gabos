@@ -235,7 +235,6 @@ class CI_Model {
             $impuestos = array();
             $iva = $this->getIVA();
             $montoDeImpuesto = $subTotalSinIVA * ($iva / 100);
-            $montoDeImpuestoRetencion = 0;
             if($a->Articulo_Factura_No_Retencion == "0"){
                 $precioFinalUnitarioSinIVA = $this->removeIVA(floatval($a->Articulo_Factura_Precio_Final));
                 $precioFinalTotalSinIVA = $cantidad*$precioFinalUnitarioSinIVA;
@@ -244,7 +243,7 @@ class CI_Model {
                     $descuentoPrecioFinalSinIva = $precioFinalTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100);
                 }
                 $subTotalFinalSinIVA = $precioFinalTotalSinIVA - $descuentoPrecioFinalSinIva;
-                $montoDeImpuestoRetencion = ($subTotalFinalSinIVA * ($iva / 100)) - $montoDeImpuesto;
+                $montoDeImpuesto = ($subTotalFinalSinIVA * ($iva / 100));
             }
             if($a->Articulo_Factura_Exento == 1){ // Es exento
                 // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
@@ -260,7 +259,7 @@ class CI_Model {
                 $montoDeImpuesto = 0;
             }
             // Se debe cambiar el porcentaje de impuesto, ya que se debe tomar en cuenta la retencion
-            $factorIVAFinal = (($montoDeImpuesto + $montoDeImpuestoRetencion) * 100) / $subTotalSinIVA;
+            $factorIVAFinal = (($montoDeImpuesto) * 100) / $subTotalSinIVA;
             $montoFinalDeImpuesto = $subTotalSinIVA * ($factorIVAFinal / 100);
             $impuesto = array(
                 "codigo" => "01", // "Impuesto General sobre las ventas"
