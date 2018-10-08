@@ -257,10 +257,10 @@ class consulta extends CI_Controller {
 					$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
 					$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");							
 				}else{
-					$retorno['error'] = '12';
+					$this->retorno['error'] = '12';
 				}
 			}else{
-				$retorno['error'] = '11';
+				$this->retorno['error'] = '11';
 			}
 		}else{
 			//URL MALA
