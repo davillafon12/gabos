@@ -369,11 +369,11 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal){
-/*
+
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
-*/
+
 		$this->db->select("
 		Codigo AS codigo, 
 		Descripcion AS descripcion, 
@@ -2559,6 +2559,9 @@ Class contabilidad extends CI_Model
         }
         
         public function getNotaCreditoElectronica($consecutivo, $sucursal){
+            if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
+                $sucursal = $this->sucursales_trueque[$sucursal];
+            }
             $this->db->from("tb_57_nota_credito_electronica");
             $this->db->where("Consecutivo", $consecutivo);
             $this->db->where("Sucursal", $sucursal);
