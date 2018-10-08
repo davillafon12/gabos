@@ -218,7 +218,7 @@ class CI_Model {
             // DESCUENTO
             $descuentoPrecioSinIva = 0;
             if(floatval($a->Articulo_Factura_Descuento) > 0){
-                $descuentoPrecioSinIva = $precioTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100);
+                $descuentoPrecioSinIva = round($precioTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100), 0);
                 $linea["montoDescuento"] = $this->fn($descuentoPrecioSinIva);
                 $naturalezaDescuento = "Otorgado a cliente por empresa";
                 $linea["naturalezaDescuento"] = $naturalezaDescuento;
@@ -228,8 +228,8 @@ class CI_Model {
             }
             
              // SUBTOTAL
-            $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
-            $linea["subtotal"] = $this->fn($subTotalSinIVA);
+            $subTotalSinIVA = round($precioTotalSinIVA, 0) - $descuentoPrecioSinIva;
+            $linea["subtotal"] = $this->fn(round($subTotalSinIVA, 0));
             
             // IMPUESTOS
             $impuestos = array();
@@ -243,7 +243,7 @@ class CI_Model {
                     $descuentoPrecioFinalSinIva = $precioFinalTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100);
                 }
                 $subTotalFinalSinIVA = $precioFinalTotalSinIVA - $descuentoPrecioFinalSinIva;
-                $montoDeImpuesto = ($subTotalFinalSinIVA * ($iva / 100));
+                $montoDeImpuesto = round(($subTotalFinalSinIVA * ($iva / 100)), 0);
             }
             if($a->Articulo_Factura_Exento == 1){ // Es exento
                 // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
@@ -264,14 +264,14 @@ class CI_Model {
             $impuesto = array(
                 "codigo" => "01", // "Impuesto General sobre las ventas"
                 "tarifa" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
-                "monto" => $this->fn($montoFinalDeImpuesto)
+                "monto" => $this->fn(round($montoFinalDeImpuesto, 0))
             );
             
             array_push($impuestos, $impuesto);
             $linea["impuesto"] = $impuestos;
             
             // MONTO TOTAL DE LA LINEA
-            $linea["montoTotalLinea"] = $this->fn($subTotalSinIVA + floatval($impuesto["monto"]));
+            $linea["montoTotalLinea"] = $this->fn(round($subTotalSinIVA + floatval($impuesto["monto"]), 0));
             
             return $linea;
         }
@@ -319,7 +319,6 @@ class CI_Model {
             $impuestos = array();
             $iva = $this->getIVA();
             $montoDeImpuesto = $subTotalSinIVA * ($iva / 100);
-            $montoDeImpuestoRetencion = 0;
             if($a->No_Retencion == "0"){
                 $precioFinalUnitarioSinIVA = $this->removeIVA(floatval($a->Precio_Final));
                 $precioFinalTotalSinIVA = $cantidad*$precioFinalUnitarioSinIVA;
@@ -328,7 +327,7 @@ class CI_Model {
                     $descuentoPrecioFinalSinIva = $precioFinalTotalSinIVA * (floatval($a->Descuento) / 100);
                 }
                 $subTotalFinalSinIVA = $precioFinalTotalSinIVA - $descuentoPrecioFinalSinIva;
-                $montoDeImpuestoRetencion = ($subTotalFinalSinIVA * ($iva / 100)) - $montoDeImpuesto;
+                $montoDeImpuesto = ($subTotalFinalSinIVA * ($iva / 100));
             }
             if($a->Exento == 1){ // Es exento
                 // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
