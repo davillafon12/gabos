@@ -343,7 +343,7 @@ class CI_Model {
                 $montoDeImpuesto = 0;
             }
             // Se debe cambiar el porcentaje de impuesto, ya que se debe tomar en cuenta la retencion
-            $factorIVAFinal = (($montoDeImpuesto + $montoDeImpuestoRetencion) * 100) / $subTotalSinIVA;
+            $factorIVAFinal = (($montoDeImpuesto) * 100) / $subTotalSinIVA;
             $montoFinalDeImpuesto = $subTotalSinIVA * ($factorIVAFinal / 100);
             $impuesto = array(
                 "codigo" => "01", // "Impuesto General sobre las ventas"
