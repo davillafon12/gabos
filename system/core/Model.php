@@ -277,7 +277,7 @@ class CI_Model {
         }
         
         
-        public function getDetalleLineaNotaCredito($a){
+        public function getDetalleLineaNotaCredito($a, $aplicaRetencion = true){
             $linea = array();
             
             // CANTIDAD
@@ -301,15 +301,15 @@ class CI_Model {
             
             // DESCUENTO
             $descuentoPrecioSinIva = 0;
-            if(floatval($a->Descuento) > 0){
-                $descuentoPrecioSinIva = $precioTotalSinIVA * (floatval($a->Descuento) / 100);
-                $linea["montoDescuento"] = $this->fn($descuentoPrecioSinIva);
-                $naturalezaDescuento = "Otorgado a cliente por empresa";
-                $linea["naturalezaDescuento"] = $naturalezaDescuento;
-            }else{
+//            if(floatval($a->Descuento) > 0){
+//                $descuentoPrecioSinIva = $precioTotalSinIVA * (floatval($a->Descuento) / 100);
+//                $linea["montoDescuento"] = $this->fn($descuentoPrecioSinIva);
+//                $naturalezaDescuento = "Otorgado a cliente por empresa";
+//                $linea["naturalezaDescuento"] = $naturalezaDescuento;
+//            }else{
                 $linea["montoDescuento"] = $this->fn(0);
                 $linea["naturalezaDescuento"] = "Ninguna";
-            }
+//            }
             
              // SUBTOTAL
             $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
@@ -319,7 +319,7 @@ class CI_Model {
             $impuestos = array();
             $iva = $this->getIVA();
             $montoDeImpuesto = $subTotalSinIVA * ($iva / 100);
-            if($a->No_Retencion == "0"){
+            if($a->No_Retencion == "0" && $aplicaRetencion){
                 $precioFinalUnitarioSinIVA = $this->removeIVA(floatval($a->Precio_Final));
                 $precioFinalTotalSinIVA = $cantidad*$precioFinalUnitarioSinIVA;
                 $descuentoPrecioFinalSinIva = 0;
