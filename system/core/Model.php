@@ -193,7 +193,7 @@ class CI_Model {
             return $consecutivo;
         }
         
-        public function getDetalleLinea($a){
+        public function getDetalleLinea($a, $aplicaRetencion = true){
             $linea = array();
             
             // CANTIDAD
@@ -235,7 +235,7 @@ class CI_Model {
             $impuestos = array();
             $iva = $this->getIVA();
             $montoDeImpuesto = $subTotalSinIVA * ($iva / 100);
-            if($a->Articulo_Factura_No_Retencion == "0"){
+            if($a->Articulo_Factura_No_Retencion == "0" && $aplicaRetencion){
                 $precioFinalUnitarioSinIVA = $this->removeIVA(floatval($a->Articulo_Factura_Precio_Final));
                 $precioFinalTotalSinIVA = $cantidad*$precioFinalUnitarioSinIVA;
                 $descuentoPrecioFinalSinIva = 0;

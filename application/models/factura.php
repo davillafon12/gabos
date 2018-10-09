@@ -1528,7 +1528,7 @@ Class factura extends CI_Model
                                 );
                                 $artFinales = array();
                                 foreach($articulosFactura as $a){
-                                    $linea = $this->getDetalleLinea($a);
+                                    $linea = $this->getDetalleLinea($a, $facturaBODY["cliente"]->Aplica_Retencion == 0);
                                     array_push($artFinales, $linea);
                                     
                                     if($a->Articulo_Factura_Exento == 0){
