@@ -725,7 +725,7 @@ function actualizaCostosTotales(decimales_int){
 	for (var i = 0; i < rows; i++){	
             if($("#descripcion_articulo_"+(i+1)).html().trim()!==''){
                 var a = {cantidad:parseInt($("#cantidad_articulo_"+(i+1)).val()), 
-                        precio_unitario: parseFloat($("#costo_total_articulo_"+(i+1)).text().replace(/,/g, "")) / parseInt($("#cantidad_articulo_"+(i+1)).val()), 
+                        precio_unitario: parseFloat($("#costo_unidad_articulo_ORIGINAL_"+(i+1)).val()), 
                         descuento: ($.isNumeric($("#descuento_articulo_"+(i+1)).text()) ? parseFloat($("#descuento_articulo_"+(i+1)).text()) : 0), 
                         no_retencion: $("#producto_retencion_"+(i+1)).val(), 
                         precio_final: parseFloat($("#costo_unidad_articulo_FINAL_"+(i+1)).val().replace(/,/g, "")), 
@@ -735,7 +735,7 @@ function actualizaCostosTotales(decimales_int){
                 if(clienteEsDeTipoExento=="1" || !aplicarRetencionHacienda || clienteNoAplicaRetencion=="1"){
                     aplicaRetencion = false;
                 }
-
+ 
                 var detalle = getDetalleLinea(a, aplicaRetencion);
                 console.log(detalle);
                 IVA_Factura += detalle.iva;
