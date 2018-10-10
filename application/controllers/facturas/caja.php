@@ -1187,16 +1187,16 @@ class caja extends CI_Controller {
                             $facturaHead[0]->clave = $fElectornica->Clave;
                             $this->impresion_m->facturaPDF($empresa, $facturaHead, $facturaBody, true);								
                     }else{
-                            //$this->retorno['error'] = '9';
+                        log_message('error', "No se genero el PDF de factura, no existen los articulos de la factura | Consecutivo: $consecutivo | Sucursal: $sucursal");
                     }
                 }else{
-                    //$this->retorno['error'] = '50';
+                    log_message('error', "No se genero el PDF de factura, no existe la factura electronica | Consecutivo: $consecutivo | Sucursal: $sucursal");
                 }
             }else{
-                    //$this->retorno['error'] = '8';
+                    log_message('error', "No se genero el PDF de factura, no existe la factura | Consecutivo: $consecutivo | Sucursal: $sucursal");
             }						
         }else{
-                //$this->retorno['error'] = '7';
+                log_message('error', "No se genero el PDF de factura, no existe la empresa | Consecutivo: $consecutivo | Sucursal: $sucursal");
         }
     }
 	
