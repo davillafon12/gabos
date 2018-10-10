@@ -235,6 +235,8 @@ class CI_Model {
             $impuestos = array();
             $iva = $this->getIVA();
             $montoDeImpuesto = $subTotalSinIVA * ($iva / 100);
+            $linea["iva"] = $subTotalSinIVA * ($iva / 100);
+            $linea["retencion"] = 0;
             if($a->Articulo_Factura_No_Retencion == "0" && $aplicaRetencion){
                 $precioFinalUnitarioSinIVA = $this->removeIVA(floatval($a->Articulo_Factura_Precio_Final));
                 $precioFinalTotalSinIVA = $cantidad*$precioFinalUnitarioSinIVA;
@@ -244,6 +246,7 @@ class CI_Model {
                 }
                 $subTotalFinalSinIVA = $precioFinalTotalSinIVA - $descuentoPrecioFinalSinIva;
                 $montoDeImpuesto = round(($subTotalFinalSinIVA * ($iva / 100)), 0);
+                $linea["retencion"] = $montoDeImpuesto - $linea["iva"];
             }
             if($a->Articulo_Factura_Exento == 1){ // Es exento
                 // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
@@ -257,6 +260,7 @@ class CI_Model {
                 );
                 $impuesto["exoneracion"] = $exoneracion;
                 $montoDeImpuesto = 0;
+                $linea["iva"] = 0;
             }
             // Se debe cambiar el porcentaje de impuesto, ya que se debe tomar en cuenta la retencion
             $factorIVAFinal = (($montoDeImpuesto) * 100) / $subTotalSinIVA;

@@ -18,6 +18,7 @@ function getArticulo(codigo, id_fila, num_fila, cedula) {
 				}
 			}catch(e){
 				notyConTipo('¡La respuesta tiene un formato indebido, contacte al administrador!','error');
+                                console.error(e);
 			}		
 		},
 		error: function (jqXHR, textStatus, errorThrown)
