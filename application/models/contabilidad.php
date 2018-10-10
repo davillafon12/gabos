@@ -2659,6 +2659,9 @@ Class contabilidad extends CI_Model
         
         
         function marcarEnvioCorreoNotaCreditoElectronica($sucursal, $consecutivo){
+            if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
+                $sucursal = $this->sucursales_trueque[$sucursal];
+            }
             $this->db->where("Consecutivo", $consecutivo);
             $this->db->where("Sucursal", $sucursal);
             $data = array(
