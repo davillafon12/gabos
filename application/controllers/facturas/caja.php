@@ -305,7 +305,7 @@ class caja extends CI_Controller {
                 }
                 
                 if($resEnvio["status"]){
-                    $this->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+                    $this->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
 
                     if(!$responseCheck["cliente"]->NoReceptor){
                         require_once PATH_API_CORREO;
