@@ -1071,14 +1071,10 @@ function getDetalleLinea(a, aplicaRetencion){
     linea.iva = subTotalSinIVA * iva;
     linea.retencion = 0;
     if(a.no_retencion == "0" && aplicaRetencion){
+        // Para le retencion NO SE TOMA EN CUENTA EL DESCUENTO
         var precioFinalUnitarioSinIVA = removeIVA(parseFloat(a.precio_final));
         var precioFinalTotalSinIVA = cantidad*precioFinalUnitarioSinIVA;
-        var descuentoPrecioFinalSinIva = 0;
-        if(parseFloat(a.descuento) > 0){
-            descuentoPrecioFinalSinIva = precioFinalTotalSinIVA * (parseFloat(a.descuento) / 100);
-        }
-        var subTotalFinalSinIVA = precioFinalTotalSinIVA - descuentoPrecioFinalSinIva;
-        var montoDeImpuesto = subTotalFinalSinIVA * iva;
+        var montoDeImpuesto = precioFinalTotalSinIVA * iva;
         linea.retencion = montoDeImpuesto - linea.iva;
         linea.costo_final = (parseFloat(a.precio_final) - (parseFloat(a.precio_final) * (parseFloat(a.descuento) / 100))) * cantidad;
     }

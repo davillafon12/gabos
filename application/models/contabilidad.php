@@ -2576,63 +2576,29 @@ Class contabilidad extends CI_Model
         public function generarPDFNotaCredito($consecutivo, $sucursal){
             if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
                 if($notaCreditoHead = $this->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
-                    if($notaCreditoBody = $this->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal)){
-                        if($notaElectronica = $this->getNotaCreditoElectronica($consecutivo, $sucursal)){
+                    if($notaCreditoBody = $this->contabilidad->getArticulosNotaCredito($consecutivo, $sucursal)){
+                        if($notaElectronica = $this->contabilidad->getNotaCreditoElectronica($consecutivo, $sucursal)){
+                           
+                            $notaCreditoHead[0]->body = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal);
+
                             $cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+                            $c_array = $this->configuracion->getConfiguracionArray();
                             $costo_total = 0;
                             $iva = 0;
                             $costo_sin_iva = 0;
                             $retencion = 0;
+                            $aplicaRetencion = true;
+                            if(!$c_array['aplicar_retencion'] || $cliente[0]->Aplica_Retencion == "1" || $cliente[0]->Cliente_EsExento == "1"){
+                                $aplicaRetencion = false;
+                            }
                             foreach($notaCreditoBody as $art){
-
-
-                                    $cantidadArt = $art->bueno + $art->defectuoso;
-                                    //Calculamos el precio total de los articulos
-                                    //$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
-                                    $precio_total_articulo = $art->precio*$cantidadArt;
-                                    $precio_articulo_final = ($art->precio_final - ($art->precio_final * ($art->descuento/100))) * $cantidadArt;
-
-                                    //Calculamos los impuestos
-
-                                    $isExento = $art->exento;
-
-                                    if($isExento=='0'){
-                                            $costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
-
-                                            $precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
-                                            $iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
-
-                                            if(!$art->no_retencion){
-                                                $retencion += $iva_precio_final;
-                                            }
-                                    }
-                                    else if($isExento=='1'){
-                                            $costo_sin_iva += $precio_total_articulo;
-                                            //$retencion = 0;
-                                    }
-                                    $costo_total += $precio_total_articulo;
+                                $detalle = $this->getDetalleLineaNotaCredito($art, $aplicaRetencion);
+                                $iva += $detalle["iva"];
+                                $retencion += $detalle["retencion"];
+                                $costo_sin_iva += $detalle["subtotal"];
                             }
-                            $iva = $costo_total-$costo_sin_iva;
-                            $retencion -= $iva;
-                            $c_array = $this->configuracion->getConfiguracionArray();
-                            //Si aplica la retencion entonces modificamos los costos
-                            if(!$c_array['aplicar_retencion']){
-                                $retencion = 0;
-                            }
+                            $costo_total += round($iva, intval($c_array["cantidad_decimales"])) + round($retencion, intval($c_array["cantidad_decimales"])) + $costo_sin_iva;
 
-                            if($cliente[0]->Aplica_Retencion == "1"){
-                                $retencion = 0;
-                            }
-
-                            //Si el cliente es exento o no aplica retencion, lo valoramos
-                            if($cliente[0]->Cliente_EsExento == "1"){
-                                $costo_total -= $iva;
-                                $iva = 0;
-                                $retencion = 0;
-                            }
-
-
-                            $costo_total += $retencion;
 
 
                             $notaCreditoHead[0]->total = $costo_total;
@@ -2643,7 +2609,7 @@ Class contabilidad extends CI_Model
                             $notaCreditoHead[0]->clave = $notaElectronica->Clave;
 
 
-                            $this->impresion_m->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $notaCreditoBody, true);
+                            $this->impresion_m->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $notaCreditoHead[0]->body, true);
                             
                         }
                     }else{
@@ -2909,63 +2875,30 @@ Class contabilidad extends CI_Model
         
         function getCostoTotalNotaCredito($consecutivo, $sucursal){
             if($notaCreditoHead = $this->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
-		if($notaCreditoBody = $this->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal)){
+		if($notaCreditoBody = $this->contabilidad->getArticulosNotaCredito($consecutivo, $sucursal)){
+                    unset($this->retorno['error']);
+                    $this->retorno['status'] = 'success';
+                    $this->retorno['empresa'] = $empresa;
+                    $this->retorno['notaHead'] = $notaCreditoHead;
+                    $this->retorno['notaBody'] = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal);
+
                     $cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+                    $c_array = $this->configuracion->getConfiguracionArray();
                     $costo_total = 0;
                     $iva = 0;
                     $costo_sin_iva = 0;
                     $retencion = 0;
+                    $aplicaRetencion = true;
+                    if(!$c_array['aplicar_retencion'] || $cliente[0]->Aplica_Retencion == "1" || $cliente[0]->Cliente_EsExento == "1"){
+                        $aplicaRetencion = false;
+                    }
                     foreach($notaCreditoBody as $art){
-
-
-                            $cantidadArt = $art->bueno + $art->defectuoso;
-                            //Calculamos el precio total de los articulos
-                            //$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
-                            $precio_total_articulo = $art->precio*$cantidadArt;
-                            $precio_articulo_final = ($art->precio_final - ($art->precio_final * ($art->descuento/100))) * $cantidadArt;
-
-                            //Calculamos los impuestos
-
-                            $isExento = $art->exento;
-
-                            if($isExento=='0'){
-                                    $costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
-
-                                    $precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
-                                    $iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
-
-                                    if(!$art->no_retencion){
-                                        $retencion += $iva_precio_final;
-                                    }
-                            }
-                            else if($isExento=='1'){
-                                    $costo_sin_iva += $precio_total_articulo;
-                                    //$retencion = 0;
-                            }
-                            $costo_total += $precio_total_articulo;
+                        $detalle = $this->contabilidad->getDetalleLineaNotaCredito($art, $aplicaRetencion);
+                        $iva += $detalle["iva"];
+                        $retencion += $detalle["retencion"];
+                        $costo_sin_iva += $detalle["subtotal"];
                     }
-                    $iva = $costo_total-$costo_sin_iva;
-                    $retencion -= $iva;
-                    $c_array = $this->configuracion->getConfiguracionArray();
-                    //Si aplica la retencion entonces modificamos los costos
-                    if(!$c_array['aplicar_retencion']){
-                        $retencion = 0;
-                    }
-
-                    if($cliente[0]->Aplica_Retencion == "1"){
-                        $retencion = 0;
-                    }
-
-                    //Si el cliente es exento o no aplica retencion, lo valoramos
-                    if($cliente[0]->Cliente_EsExento == "1"){
-                        $costo_total -= $iva;
-                        $iva = 0;
-                        $retencion = 0;
-                    }
-
-
-                    $costo_total += $retencion;
-
+                    $costo_total += round($iva, intval($c_array["cantidad_decimales"])) + round($retencion, intval($c_array["cantidad_decimales"])) + $costo_sin_iva;
 
                     return $costo_total;
                 }
