@@ -1,9 +1,8 @@
-DROP PROCEDURE `gabo_fe`.`PA_ListaDeFacturasPorUsuario`;
-
+DROP PROCEDURE `gabo_fe`.`PA_ListaDeFacturasPorUsuarioResumido`;
 
 USE gabo_fe; 
 DELIMITER ;;
-CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_ListaDeFacturasPorUsuario(
+CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_ListaDeFacturasPorUsuarioResumido(
 	IN paEstadoFactura VARCHAR(30),
 	IN paFechaI VARCHAR(30), 
 	IN paFechaF VARCHAR(30),
@@ -20,11 +19,9 @@ BEGIN
 	SET @whereCliente = CONCAT(' and cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'');								 
 	SET @QUERY 			= CONCAT( ' SELECT  user.Usuario_Nombre_Usuario usuario, 
 											CONCAT(user.Usuario_Nombre, \' \', user.Usuario_Apellidos) nombre,
-											fac.Factura_Consecutivo consecutivo, 
-											fac.Factura_Fecha_Hora fecha, 
-											fac.Factura_Monto_Total montoTotal, 
-											fac.Factura_Monto_IVA montoIVA, 
-											fac.Factura_Monto_Sin_IVA montoSinIVA, 
+											SUM(fac.Factura_Monto_Total) AS  montoTotal, 
+											SUM(fac.Factura_Monto_IVA) AS montoIVA, 
+										  SUM(fac.Factura_Monto_Sin_IVA) AS montoSinIVA, 
 											suc.Sucursal_Nombre
 									FROM    tb_01_usuario user inner join 
 											tb_07_factura fac on user.Usuario_Codigo = fac.Factura_Vendedor_Codigo ');
@@ -50,16 +47,16 @@ BEGIN
 									  inner join tb_46_relacion_trueque des on fac.Factura_Consecutivo  = des.Consecutivo and
 									  des.Documento = \'factura\'', @wherePrincipal, ')');
 	IF paSuDesamparados = 'true' AND paSuGarotasBonitas = 'false' then 
-		SET @QUERY = CONCAT(@QUERY, @QUERYDESAMPA, @wherePrincipal, @whereCliente, ' order by user.Usuario_Codigo, fac.Factura_Fecha_Hora');
+		SET @QUERY = CONCAT(@QUERY, @QUERYDESAMPA, @wherePrincipal, @whereCliente, ' group by USER.usuario_nombre_usuario  order by user.Usuario_Codigo, fac.Factura_Fecha_Hora');
 	END IF;
 	IF paSuDesamparados = 'false' AND paSuGarotasBonitas = 'true' then 
-		SET @QUERY = CONCAT(@QUERY, @wherePrincipal, @whereCliente, @WHEREDESAMPA, ' order by user.Usuario_Codigo, fac.Factura_Fecha_Hora');
+		SET @QUERY = CONCAT(@QUERY, @wherePrincipal, @whereCliente, @WHEREDESAMPA, ' group by USER.usuario_nombre_usuario  order by user.Usuario_Codigo, fac.Factura_Fecha_Hora');
 	END IF;
 	IF paSuDesamparados = 'false' AND paSuGarotasBonitas = 'false' then 
-		SET @QUERY = CONCAT(@QUERY, @wherePrincipal, @whereCliente, ' order by user.Usuario_Codigo, fac.Factura_Fecha_Hora');
+		SET @QUERY = CONCAT(@QUERY, @wherePrincipal, @whereCliente, ' group by USER.usuario_nombre_usuario  order by user.Usuario_Codigo, fac.Factura_Fecha_Hora');
 	END IF;
 	IF paSuDesamparados = 'true' AND paSuGarotasBonitas = 'true' then 
-		SET @QUERY = CONCAT(@QUERY,@AgregarSucursal,@AgregarCliente, @wherePrincipal, @whereCliente, ' order by user.Usuario_Codigo, fac.Factura_Fecha_Hora');
+		SET @QUERY = CONCAT(@QUERY,@AgregarSucursal,@AgregarCliente, @wherePrincipal, @whereCliente, ' group by USER.usuario_nombre_usuario order by user.Usuario_Codigo, fac.Factura_Fecha_Hora');
 	END IF;
   -- select @QUERY as 'Resultado';  
   -- preparamos el objete Statement a partir de nuestra variable

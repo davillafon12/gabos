@@ -38,6 +38,7 @@ PARA:
 			?>				
 			<div class="header">
 				<h1>Ingreso GABO</h1>
+				<h2>Factura Electrónica</h2>
 				<span>Ingrese sus datos de usuario y contrase&ntilde;a para ingresar al sistema GABO</span>
 			</div>		
 			<div class="content">
