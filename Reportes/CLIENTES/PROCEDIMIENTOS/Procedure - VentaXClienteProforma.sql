@@ -1,7 +1,6 @@
--- VENTA POR CLIENTES POR RANGOS DE FECHAS PROFORMA
--- NOTA: ESTA VENTA TRAE TODAS LAS PROFORMAS DE LOS CLIENTES Y TRAE TODOS LOS CLIENTES
+DROP PROCEDURE `gabo_fe`.`PA_VentaXClienteProforma`;
 
-USE gabo_trueque; 
+USE gabo_fe; 
 DELIMITER ;;
 
 CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteProforma
@@ -9,19 +8,21 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteProforma
 	IN paSucursal VARCHAR(10),
 	IN paFechaI VARCHAR(30), 
 	IN paFechaF VARCHAR(30),
-	IN paEstadoProforma VARCHAR(30),
+	IN paEstadoProforma VARCHAR(100),
 	IN paEsSucursal VARCHAR(30),
 	IN paNombre VARCHAR(50), 
 	IN paCedula VARCHAR(20), 
 	IN paRango VARCHAR(10), 
 	IN paMontoI VARCHAR(20), 
 	IN paMontoF VARCHAR(20)
+	-- IN paSuDesamparados VARCHAR(10),
+	-- IN paSuGarotasBonitas VARCHAR(10)
  )
  BEGIN
 	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
 								 'and pro.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
-								 'and pro.Proforma_Estado =', '\'', paEstadoProforma, '\'', 
-								 'and UNIX_TIMESTAMP(pro.Proforma_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
+								 'and pro.Proforma_Estado IN (', paEstadoProforma, 
+								 ') and UNIX_TIMESTAMP(pro.Proforma_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
 								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
 	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
 											CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,     
@@ -57,12 +58,12 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteProforma
 	end if; -- FIN paRango = 'menorIgual' 
   end If;   -- FIN paRango <> 'null'
   -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  -- select @QUERY as 'Resultado';  
+  select @QUERY as 'Resultado';  
   -- preparamos el objete Statement a partir de nuestra variable
-  PREPARE smpt FROM @Query;
+  -- PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
-  EXECUTE smpt;
+  -- EXECUTE smpt;
   -- liberamos la memoria
-  DEALLOCATE PREPARE smpt;
+  -- DEALLOCATE PREPARE smpt;
  END
 ;;
