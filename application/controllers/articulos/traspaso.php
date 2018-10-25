@@ -219,7 +219,7 @@ class traspaso extends CI_Controller {
         
         public function traspasoEs(){
             $sucursalAPasar = trim(@$_GET["s"]) == "" ? 99999 : trim(@$_GET["s"]);
-            $url = "http://201.200.125.10";
+            $url = "http://192.168.10.27";
             if($this->empresa->getEmpresa($sucursalAPasar) && $sucursalAPasar != 4){
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
