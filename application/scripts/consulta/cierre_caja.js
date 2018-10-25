@@ -441,7 +441,7 @@ function cargarTotales(datos){
 	
 	
 	
-	$("#totales_factura_contado").html("₡"+parseFloat((datos.totalFacturasContado+datos.pagoMixto.efectivo)-datos.detalleNotasCredito.contado).format(2, 3, '.', ','));
+	$("#totales_factura_contado").html("₡"+parseFloat(datos.totalFacturasContado-datos.detalleNotasCredito.contado).format(2, 3, '.', ','));
 	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
 	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos+datos.bnserviciosc+datos.bcrserviciosc-datos.detalleNotasCredito.tarjeta).format(2, 3, '.', ','));
 	$("#totales_creditos").html("₡"+parseFloat(datos.totalCreditos.totalCredito-datos.detalleNotasCredito.credito).format(2, 3, '.', ','));
