@@ -18,7 +18,7 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturas
 	IN paSuGarotasBonitas VARCHAR(10)
  )
  BEGIN
-	SET @CodigoDesamparados = ' 4 '; 
+	SET @CodigoDesamparados = ' 7 '; 
 	
 	SET @where 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
 								 ' and fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
