@@ -2,12 +2,15 @@
 
 class external extends CI_Controller {	
     
+    public $token = "Queladilla9876!!";
+    
     function __construct(){
         parent::__construct(); 
         $this->load->model('factura','',TRUE);
         $this->load->model('empresa','',TRUE);
         $this->load->model('contabilidad','',TRUE);
         $this->load->model('cliente','',TRUE);
+        $this->load->model('impresion_m','',TRUE);
     }
 
     public function actualizarComprobantes(){
@@ -115,7 +118,7 @@ class external extends CI_Controller {
         $sucursal = trim(@$_GET["s"]);
         $token = trim(@$_GET["t"]);
         
-        if($token == "Queladilla9876!!"){
+        if($token == $this->token){
             if($resXML = $this->contabilidad->generarXMLNotaCredito($consecutivo, $sucursal)){
                 echo json_encode($resXML);
             }else{
@@ -132,7 +135,7 @@ class external extends CI_Controller {
         $sucursal = trim(@$_GET["s"]);
         $token = trim(@$_GET["t"]);
         
-        if($token == "Queladilla9876!!"){
+        if($token == $this->token){
             if($resXML = $this->contabilidad->firmarXMLNotaCredito($consecutivo, $sucursal)){
                 echo json_encode($resXML);
             }else{
@@ -143,6 +146,21 @@ class external extends CI_Controller {
         }
         
     }
+    
+    public function generarPDFNotaCredito(){
+        $consecutivo = trim(@$_GET["c"]);
+        $sucursal = trim(@$_GET["s"]);
+        $token = trim(@$_GET["t"]);
+        
+        if($token == $this->token){
+            $this->contabilidad->generarPDFNotaCredito($consecutivo, $sucursal);
+            die("Generado PDF");
+        }else{
+            die("Token");
+        }
+        
+    }
+    
     
 	
 } 
