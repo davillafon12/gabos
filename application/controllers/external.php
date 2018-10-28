@@ -120,7 +120,11 @@ class external extends CI_Controller {
         
         if($token == $this->token){
             if($resXML = $this->contabilidad->generarXMLNotaCredito($consecutivo, $sucursal)){
-                echo json_encode($resXML);
+                header('Content-Disposition: attachment; filename="xml.txt"');
+                header('Content-Type: text/plain'); # Don't use application/force-download - it's not a real MIME type, and the Content-Disposition header is sufficient
+                header('Content-Length: ' . strlen($resXML["XMLSinFirmar"]));
+                header('Connection: close');
+                echo $resXML["XMLSinFirmar"];
             }else{
                 die("Error NC");
             }
@@ -137,7 +141,11 @@ class external extends CI_Controller {
         
         if($token == $this->token){
             if($resXML = $this->contabilidad->firmarXMLNotaCredito($consecutivo, $sucursal)){
-                echo json_encode($resXML);
+                header('Content-Disposition: attachment; filename="xmlFirmado.txt"');
+                header('Content-Type: text/plain'); # Don't use application/force-download - it's not a real MIME type, and the Content-Disposition header is sufficient
+                header('Content-Length: ' . strlen($resXML["XMLFirmado"]));
+                header('Connection: close');
+                echo $resXML["XMLFirmado"];
             }else{
                 die("Error NC");
             }
