@@ -109,6 +109,41 @@ class external extends CI_Controller {
             echo "No hay mensajes receptor que procesar \n";
         }
     }
+    
+    public function regenerarXMLNotaCredito(){
+        $consecutivo = trim(@$_GET["c"]);
+        $sucursal = trim(@$_GET["s"]);
+        $token = trim(@$_GET["t"]);
+        
+        if($token == "Queladilla9876!!"){
+            if($resXML = $this->contabilidad->generarXMLNotaCredito($consecutivo, $sucursal)){
+                echo json_encode($resXML);
+            }else{
+                die("Error NC");
+            }
+        }else{
+            die("Token");
+        }
+        
+    }
+    
+    public function firmarXMLNotaCredito(){
+        $consecutivo = trim(@$_GET["c"]);
+        $sucursal = trim(@$_GET["s"]);
+        $token = trim(@$_GET["t"]);
+        
+        if($token == "Queladilla9876!!"){
+            if($resXML = $this->contabilidad->firmarXMLNotaCredito($consecutivo, $sucursal)){
+                echo json_encode($resXML);
+            }else{
+                die("Error NC");
+            }
+        }else{
+            die("Token");
+        }
+        
+    }
+    
 	
 } 
 
