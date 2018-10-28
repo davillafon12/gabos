@@ -345,22 +345,6 @@ class caja extends CI_Controller {
         echo json_encode($responseCheck);
     }
     
-    private function convertirProductosDeFacturaANotaCredito($articulos){
-        $newArticulos = array();
-        foreach($articulos as $art){
-            $a = new stdClass();
-            $a->c = $art->Articulo_Factura_Codigo;
-            $a->d = 0;
-            $a->b = $art->Articulo_Factura_Cantidad;
-            if($art->Articulo_Factura_Codigo == "00"){
-                $a->p = $art->Articulo_Factura_Precio_Unitario; 
-                $a->ds = $art->Articulo_Factura_Descripcion;
-            }
-            array_push($newArticulos, $a);
-        }
-        return $newArticulos;
-    }
-
     function descontarArticulosDefectuosos($consecutivo, $sucursal){
             $articulos = $this->factura->getArticulosFactura($consecutivo, $sucursal);
             foreach($articulos as $art){

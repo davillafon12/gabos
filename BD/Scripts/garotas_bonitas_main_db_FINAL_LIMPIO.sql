@@ -4676,3 +4676,42 @@ CREATE TABLE IF NOT EXISTS `tb_58_articulos_nota_credito_electronica` (
 ENGINE = InnoDB;
 
 ALTER TABLE  `tb_27_notas_credito` ADD  `Es_Anulacion` BOOLEAN NOT NULL DEFAULT  '0' AFTER  `Tipo_Cambio`;
+
+CREATE TABLE IF NOT EXISTS `tb_59_mensaje_receptor` (
+  `Consecutivo` INT NOT NULL,
+  `Sucursal` INT NOT NULL,
+  `ReceptorTipoIdentificacion` VARCHAR(20) NULL,
+  `ReceptorIdentificacion` VARCHAR(50) NULL,
+  `ReceptorCodigoPais` VARCHAR(4) NULL,
+  `ConsecutivoHacienda` VARCHAR(30) NULL,
+  `ConsecutivoFormateado` VARCHAR(11) NULL,
+  `Situacion` VARCHAR(15) NULL,
+  `CodigoSeguridad` VARCHAR(8) NULL,
+  `TipoDocumento` VARCHAR(4) NULL,
+  `Clave` VARCHAR(100) NULL,
+  `EmisorIdentificacion` VARCHAR(50) NULL,
+  `EmisorTipoIdentificacion` VARCHAR(20) NULL,
+  `EmisorNombre` VARCHAR(200) NULL,
+  `FechaEmision` VARCHAR(50) NULL,
+  `TotalImpuestos` VARCHAR(20) NULL,
+  `TotalComprobante` VARCHAR(20) NULL,
+  `FechaEmisionComprobante` VARCHAR(50) NULL,
+  `XMLSinFirmar` TEXT NULL,
+  `XMLFirmado` TEXT NULL,
+  `FechaRecibidoHacienda` TIMESTAMP NULL,
+  `RespuestaHaciendaXML` TEXT NULL,
+  `RespuestaHaciendaFecha` TIMESTAMP NULL,
+  `RespuestaHaciendaEstado` VARCHAR(20) NULL,
+  PRIMARY KEY (`Consecutivo`, `Sucursal`))
+ENGINE = InnoDB;
+
+ALTER TABLE  `tb_07_factura` DROP PRIMARY KEY ,
+ADD PRIMARY KEY (  `Factura_Consecutivo` ,  `TB_02_Sucursal_Codigo` );
+
+ALTER TABLE  `tb_57_nota_credito_electronica` CHANGE  `XMLSinFirmar`  `XMLSinFirmar` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE  `tb_57_nota_credito_electronica` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE  `tb_57_nota_credito_electronica` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `XMLSinFirmar`  `XMLSinFirmar` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;

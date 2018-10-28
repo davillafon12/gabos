@@ -11,6 +11,8 @@ class external extends CI_Controller {
         $this->load->model('contabilidad','',TRUE);
         $this->load->model('cliente','',TRUE);
         $this->load->model('impresion_m','',TRUE);
+        $this->load->model('articulo','',TRUE);
+        $this->load->model('user','',TRUE);
     }
 
     public function actualizarComprobantes(){
@@ -163,6 +165,28 @@ class external extends CI_Controller {
         if($token == $this->token){
             $this->contabilidad->generarPDFNotaCredito($consecutivo, $sucursal);
             die("Generado PDF");
+        }else{
+            die("Token");
+        }
+        
+    }
+    
+    public function anularFacturaSola(){
+        $consecutivo = trim(@$_GET["c"]);
+        $token = trim(@$_GET["t"]);
+        
+        if($token == $this->token){
+            $tipoPago['tipo'] = "contado";
+            if($responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago)){
+                include 'get_session_data.php';
+                $productosAAcreditar = $this->convertirProductosDeFacturaANotaCredito($responseCheck["articulosOriginales"]);
+                $retorno = array();
+                $this->contabilidad->crearNotaCreditoMacro($retorno, $responseCheck["cliente"]->Cliente_Cedula, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo, $productosAAcreditar, $data['Usuario_Codigo'], ANULAR_FACTURA, "Anulación autorizada por medio de caja o consulta", true);
+                $this->contabilidad->generarPDFNotaCredito($retorno['nota'], $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+                die("Generada NC");
+            }else{
+                die("Fallo traer factura");
+            }
         }else{
             die("Token");
         }
