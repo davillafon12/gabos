@@ -20,7 +20,7 @@ CREATE PROCEDURE PA_VentaXClienteFacturasResumido
 	IN paSuGarotasBonitas VARCHAR(10)
  )
  BEGIN
-	SET @CodigoDesamparados = ' 4 '; 
+	SET @CodigoDesamparados = ' 7 '; 
 	set @WhereGenerico  = CONCAT(' where fac2.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and 
 										   fac2.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',' 
 										   and fac2.Factura_Estado IN(', paEstadoFactura,')', 
