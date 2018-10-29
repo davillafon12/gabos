@@ -145,6 +145,10 @@ function cargarAllConsignacion(consecutivo){
                             $("#sucursal_entrega").val(data.consignacion.sucursal_entrega);
                             $("#sucursal_recibe").val(data.consignacion.sucursal_recibe);
                             setProductosFactura(data.consignacion.articulos);
+                            
+                            _I_TOKEN = data.token;
+                            _I_CONSIGNACION = data.consecutivo;
+                            _I_SUCURSAL = data.sucursal;
                         }else{
                             notyMsg("El servidor no respondió de una manera adecuada, favor contactar al administrador.", "error");
                         }
@@ -328,4 +332,14 @@ function resultadoGuardarConsignacion(data){
 		}else{
 			notyMsg(data.error, 'error');
 		}
+}
+
+var _I_TOKEN = "";
+var _I_CONSIGNACION = "";
+var _I_SUCURSAL = "";
+var anchoImpresion = 1024;
+var alturaImpresion = 768;
+function imprimir(){
+    window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+_I_TOKEN+'&d=con&n='+_I_CONSIGNACION+'&s='+_I_SUCURSAL+'&i=c','Impresion de Consignación','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+    window.location.reload();
 }

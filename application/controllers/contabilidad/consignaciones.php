@@ -612,6 +612,7 @@ class consignaciones extends CI_Controller {
         }
         
         function getConsignacion(){
+            include PATH_USER_DATA;
             $retorno["status"] = "error";
             $retorno["error"] = "No se pudo procesar su solicitud";
             
@@ -623,6 +624,9 @@ class consignaciones extends CI_Controller {
                     $retorno["status"] = "success";
                     $consignacion->articulos = $articulos;
                     $retorno["consignacion"] = $consignacion;
+                    $retorno['consecutivo'] = $consignacion->consecutivo;
+                    $retorno['sucursal']= $data['Sucursal_Codigo'];
+                    $retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
                 }else{
                    $retorno["error"] = "No hay artículos para esta consignación"; 
                 }
