@@ -148,6 +148,7 @@ Class contabilidad extends CI_Model
 			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito
 			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
 			WHERE  tb_24_credito.Credito_Sucursal_Codigo = $sucursal
+                        AND    tb_07_factura.TB_02_Sucursal_Codigo = $sucursal
 			AND    tb_26_recibos_dinero.Consecutivo = $recibo
 			$queryLoco
 		");
