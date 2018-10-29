@@ -328,7 +328,7 @@ Class articulo extends CI_Model
 			foreach($result as $row)
 			{
 				$URL_IMAGEN = $row->Articulo_Imagen_URL;				
-				$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$URL_IMAGEN;
+				$ruta_a_preguntar = CARPETA_IMAGENES.$URL_IMAGEN;
 				
 				if(!file_exists($ruta_a_preguntar)){$URL_IMAGEN = '00.jpg';}
 				

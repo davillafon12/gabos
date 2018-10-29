@@ -65,6 +65,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 //define('PATH_API_LOGGING', '/../../logs/API_FE');
 //define('PATH_DOCUMENTOS_ELECTRONICOS', '/../../third_party/');
 //define('PATH_API_CORREO', '/../libraries/Correo.php');
+//define('CARPETA_IMAGENES', FCPATH.'application\\images\\articulos\\');
 
 /**
  * ---------------------------    LINUX PATHS  ----------------------------------
@@ -94,6 +95,7 @@ define('PATH_AJAX_VERIFY_FAMILIAS', FCPATH.'application/scripts/ajax_verify_fami
 define('PATH_API_LOGGING', FCPATH.'application/logs/API_FE');
 define('PATH_DOCUMENTOS_ELECTRONICOS', FCPATH.'application/third_party/');
 define('PATH_API_CORREO', FCPATH.'application/libraries/Correo.php');
+define('CARPETA_IMAGENES', FCPATH.'application/images/articulos/');
 
 
 define('URL_API_CRLIBE', 'http://192.168.10.17');
