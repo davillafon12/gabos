@@ -1448,9 +1448,8 @@ Class contabilidad extends CI_Model
 	
 	function getRecibosFiltrados($cliente, $desde, $hasta, $tipo, $estado, $sucursal){
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
-				$this->db->where("Credito_Vendedor_Sucursal", $sucursal);
-				$sucursal = $this->sucursales_trueque[$sucursal];
-		}
+                    $sucursal = $this->sucursales_trueque[$sucursal];
+                }
 		/*
 			SELECT  tb_26_recibos_dinero.Consecutivo as consecutivo,
 					date_format(tb_26_recibos_dinero.Recibo_Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,        
@@ -1471,6 +1470,7 @@ Class contabilidad extends CI_Model
 		$this->db->join('tb_24_credito', 'tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito');
 		$this->db->join('tb_03_cliente','tb_03_cliente.Cliente_Cedula = tb_24_credito.Credito_Cliente_Cedula');
 		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
+                $this->db->where("Credito_Vendedor_Sucursal", $sucursal);
 		$this->setFiltradoCliente($cliente, 'tb_24_credito.Credito_Cliente_Cedula');
 		$this->setFiltradoFechaDesde($desde, 'tb_26_recibos_dinero.Recibo_Fecha');
 		$this->setFiltradoFechaHasta($hasta, 'tb_26_recibos_dinero.Recibo_Fecha');
@@ -1520,6 +1520,23 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getNotasCreditoTrueque($sucursal){
+			$this->db->select("Consecutivo");
+			$this->db->from("tb_46_relacion_trueque");
+			$this->db->where("Documento", "nota_credito");
+			$this->db->where("Sucursal", $sucursal);
+			$query = $this->db->get();
+			if($query->num_rows()==0){
+					return array();
+			}else{
+					$facturas = array();
+					foreach($query->result() as $f){
+							array_push($facturas, $f->Consecutivo);
+					}
+					return $facturas;
+			}
+	}
+        
+        function getRecibosDineroTrueque($sucursal){
 			$this->db->select("Consecutivo");
 			$this->db->from("tb_46_relacion_trueque");
 			$this->db->where("Documento", "nota_credito");
