@@ -1447,6 +1447,7 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getRecibosFiltrados($cliente, $desde, $hasta, $tipo, $estado, $sucursal){
+                $sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
                     $sucursal = $this->sucursales_trueque[$sucursal];
                 }
@@ -1470,7 +1471,7 @@ Class contabilidad extends CI_Model
 		$this->db->join('tb_24_credito', 'tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito');
 		$this->db->join('tb_03_cliente','tb_03_cliente.Cliente_Cedula = tb_24_credito.Credito_Cliente_Cedula');
 		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
-                $this->db->where("Credito_Vendedor_Sucursal", $sucursal);
+                $this->db->where("Credito_Vendedor_Sucursal", $sucursalVendedor);
 		$this->setFiltradoCliente($cliente, 'tb_24_credito.Credito_Cliente_Cedula');
 		$this->setFiltradoFechaDesde($desde, 'tb_26_recibos_dinero.Recibo_Fecha');
 		$this->setFiltradoFechaHasta($hasta, 'tb_26_recibos_dinero.Recibo_Fecha');
