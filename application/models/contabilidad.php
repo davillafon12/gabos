@@ -1535,23 +1535,6 @@ Class contabilidad extends CI_Model
 					return $facturas;
 			}
 	}
-        
-        function getRecibosDineroTrueque($sucursal){
-			$this->db->select("Consecutivo");
-			$this->db->from("tb_46_relacion_trueque");
-			$this->db->where("Documento", "nota_credito");
-			$this->db->where("Sucursal", $sucursal);
-			$query = $this->db->get();
-			if($query->num_rows()==0){
-					return array();
-			}else{
-					$facturas = array();
-					foreach($query->result() as $f){
-							array_push($facturas, $f->Consecutivo);
-					}
-					return $facturas;
-			}
-	}
 	
 	function getNotasCreditoTruequeResponde($sucursales){
 			$this->db->select("Consecutivo");
