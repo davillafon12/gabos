@@ -341,5 +341,4 @@ var anchoImpresion = 1024;
 var alturaImpresion = 768;
 function imprimir(){
     window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+_I_TOKEN+'&d=con&n='+_I_CONSIGNACION+'&s='+_I_SUCURSAL+'&i=c','Impresion de Consignación','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-    window.location.reload();
 }
