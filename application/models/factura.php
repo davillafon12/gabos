@@ -733,14 +733,23 @@ Class factura extends CI_Model
 			return '8';
 		}
 	}
+        
+        function eliminarFacturaPorFallo($consecutivo, $sucursal){
+            if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+                $sucursal = $this->sucursales_trueque[$sucursal];
+            }
+            $this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+            $this -> db -> where('Factura_Consecutivo', $consecutivo);
+            $this->db->delete('tb_07_factura'); 
+        }
 	
 	function eliminarArticulosFactura($consecutivo, $sucursal){
-		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
-		}
-		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
-		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
-		$this->db->delete('TB_08_Articulos_Factura'); 
+            if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+                $sucursal = $this->sucursales_trueque[$sucursal];
+            }
+            $this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
+            $this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
+            $this->db->delete('TB_08_Articulos_Factura'); 
 	}
 	
 	function getMontoTotalPago($sucursal, $consecutivo){

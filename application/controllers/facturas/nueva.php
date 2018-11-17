@@ -275,11 +275,18 @@ class nueva extends CI_Controller {
                                         $resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $data['Sucursal_Codigo']);
                                         if($resultadoExistencias["status"]){						
                                                 if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
-                                                        $this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
-                                                        $this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-                                                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
-                                                        //$this->
-                                                        echo '7'; //El ingreso fue correcto											
+                                                        $tieneArticulos = $this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
+                                                        if($tieneArticulos === true){
+                                                            $this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
+                                                            $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
+                                                        
+                                                            echo '7'; //El ingreso fue correcto
+                                                        }else{
+                                                            //Eliminamos cualquier articulos suelto que haya quedado
+                                                            $this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
+                                                            $this->factura->eliminarFacturaPorFallo($consecutivo, $data['Sucursal_Codigo']);
+                                                            echo 'No se pudo agregar los productos a la factura';
+                                                        }											
                                                 }else{
                                                         echo 'Hubo un error al crear encabezado de la factura'; //Error al crear la factura
                                                 }	
@@ -344,8 +351,9 @@ class nueva extends CI_Controller {
 			}
 			
 		}
-		//$this->factura->addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $consecutivo, $sucursal, $vendedor, $cliente);
-	}
+
+                return $this->factura->getArticulosFactura($consecutivo, $sucursal) !== false;
+        }
 	
 	function actualizarCostosFactura($consecutivo, $sucursal){
 		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
