@@ -328,8 +328,9 @@ class caja extends CI_Controller {
                     $this->contabilidad->crearNotaCreditoMacro($retorno, $responseCheck["cliente"]->Cliente_Cedula, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo, $productosAAcreditar, $data['Usuario_Codigo'], ANULAR_FACTURA, "Anulacion por rechazo de factura", true);
                 }
                
-               
-                
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+                $api->destruirSesion($responseCheck["empresa"]->Ambiente_Tributa, $responseCheck["empresa"]->Usuario_Tributa);
             }else{
                 $responseCheck["status"] = "error";
                 $responseCheck["error"] = $resFacturaElectronica["error"];
@@ -427,6 +428,7 @@ class caja extends CI_Controller {
                 // SI lo hay seguimos adelante y si no la creamos
                 $fueAnuladaPorRechazoDeHacienda = false;
                 $existeFacturaElectronica = false;
+                $facturaYaExistia = true;
                 $responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
                 if($this->factura->getFacturaElectronica($consecutivo, $data['Sucursal_Codigo']) === false){
                     if($responseCheck["status"] == "success"){
@@ -434,7 +436,7 @@ class caja extends CI_Controller {
                         if($resFacturaElectronica["status"]){
                             $fueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                             $existeFacturaElectronica = true;
-                            
+                            $facturaYaExistia = false;
                             $Current_datetime = date("y/m/d : H:i:s", $resFacturaElectronica["data"]["fecha"]);
                             $datos = array(         
                                     'Factura_Fecha_Hora'=>$Current_datetime
@@ -480,7 +482,24 @@ class caja extends CI_Controller {
                     $this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
                     //$this->devolverProductosdeFactura($consecutivo, $data['Sucursal_Codigo']);
                     $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario anulo la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'anular');
+                    
+                    if($facturaYaExistia === false){
+                        $this->guardarPDFFactura($consecutivo, $data['Sucursal_Codigo']);
 
+                        if(!$responseCheck["cliente"]->NoReceptor){
+                            $apiCorreo = new Correo();
+                            $attachs = array(
+                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".xml",
+                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
+                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".pdf");
+                            if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
+                                $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
+                            }
+                        }
+                    }
+                    require_once PATH_API_HACIENDA;
+                    $api = new API_FE();
+                    $api->destruirSesion($responseCheck["empresa"]->Ambiente_Tributa, $responseCheck["empresa"]->Usuario_Tributa);
                 }
             }else{
                 $facturaBODY['status']='error';

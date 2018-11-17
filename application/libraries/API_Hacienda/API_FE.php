@@ -404,6 +404,21 @@ class API_FE{
     }
     
     public function solicitarToken($ambienteHacienda, $usuario, $password){
+        $this->logger->info("token", "Solicitando token");
+        if($tokenCache = $this->verificarExistenciaToken($ambienteHacienda, $usuario)){
+            if((time() - intval($tokenCache["store_time"])) < intval($tokenCache["expires_in"])){
+                $this->logger->info("token", "Retornando token de cache: ".  json_encode($tokenCache));
+                return $tokenCache;
+            }else if((time() - intval($tokenCache["store_time"])) < intval($tokenCache["refresh_expires_in"])){
+                $this->logger->info("token", "Refrescando token: ".  json_encode($tokenCache));
+                return $this->refrescarSesion($ambienteHacienda, $usuario, $tokenCache["refresh_token"]);
+            }
+        }
+        $this->logger->info("token", "Solicitando nuevo token");
+        return $this->crearNuevaSesion($ambienteHacienda, $usuario, $password);
+    }
+    
+    private function crearNuevaSesion($ambienteHacienda, $usuario, $password){
         $bm = round(microtime(true) * 1000);
         $url = $ambienteHacienda == "api-stag" ? HACIENDA_TOKEN_API_STAG : HACIENDA_TOKEN_API_PROD;
         $localClient = new RestClient([
@@ -416,13 +431,14 @@ class API_FE{
             "password" => $password,
             "client_id" => $ambienteHacienda
         );
-        $result = $localClient->post("/", $params);
+        $result = $localClient->post("/token", $params);
         $this->logger->info("solicitarToken", "Request token into Hacienda API with params: ".json_encode($params));
         if($result->info->http_code == 200){
             $result = (Array) json_decode($result->response);
             if(isset($result["access_token"]) && isset($result["refresh_token"])){
                 $ms = (round(microtime(true) * 1000)) - $bm;
                 $this->logger->info("solicitarToken", $ms."ms | API returns ".json_encode($result));
+                $this->guardarNuevaInfoToken($ambienteHacienda, $usuario, $result);
                 return $result;
             }else{
                 $ms = (round(microtime(true) * 1000)) - $bm;
@@ -434,6 +450,91 @@ class API_FE{
             $this->logger->error("solicitarToken", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | HEADERS:".json_encode($result->headers)." RESPONSE:".json_encode($result->response)." INFO:".json_encode($result->info));
             return false;
         }
+    }
+    
+    private function refrescarSesion($ambienteHacienda, $usuario, $refreshToken){
+        $bm = round(microtime(true) * 1000);
+        $url = $ambienteHacienda == "api-stag" ? HACIENDA_TOKEN_API_STAG : HACIENDA_TOKEN_API_PROD;
+        $localClient = new RestClient([
+            'base_url' => $url,
+            'curl_options' => [CURLOPT_CONNECTTIMEOUT => API_CRLIBRE_CURL_TIMEOUT]
+        ]);
+        $params = array(
+            "grant_type" => "refresh_token",
+            "client_id" => $ambienteHacienda,
+            "refresh_token" => $refreshToken
+        );
+        $result = $localClient->post("/token", $params);
+        $this->logger->info("refrescarToken", "Refresh token into Hacienda API with params: ".json_encode($params));
+        if($result->info->http_code == 200){
+            $result = (Array) json_decode($result->response);
+            if(isset($result["access_token"]) && isset($result["refresh_token"])){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("refrescarToken", $ms."ms | API returns ".json_encode($result));
+                $this->guardarNuevaInfoToken($ambienteHacienda, $usuario, $result);
+                return $result;
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("refrescarToken", $ms."ms | 2 - API returns ".json_encode($result));
+                return false;
+            }
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("refrescarToken", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | HEADERS:".json_encode($result->headers)." RESPONSE:".json_encode($result->response)." INFO:".json_encode($result->info));
+            return false;
+        }
+    }
+    
+    public function destruirSesion($ambienteHacienda, $usuario){
+        $this->logger->info("destruirSesion", "Exiting session into Hacienda API");
+        if($tokenCache = $this->verificarExistenciaToken($ambienteHacienda, $usuario)){
+            $bm = round(microtime(true) * 1000);
+            $url = $ambienteHacienda == "api-stag" ? HACIENDA_TOKEN_API_STAG : HACIENDA_TOKEN_API_PROD;
+            $localClient = new RestClient([
+                'base_url' => $url,
+                'curl_options' => [CURLOPT_CONNECTTIMEOUT => API_CRLIBRE_CURL_TIMEOUT]
+            ]);
+            $params = array(
+                "client_id" => $ambienteHacienda,
+                "refresh_token" => $tokenCache["refresh_token"]
+            );
+            $result = $localClient->post("/logout", $params);
+            $this->logger->info("destruirSesion", "Request token into Hacienda API with params: ".json_encode($params));
+            if($result->info->http_code == 204){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("destruirSesion", $ms."ms | Sesion destruida con exito. API returns");
+                $this->guardarNuevaInfoToken($ambienteHacienda, $usuario, "");
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("destruirSesion", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | HEADERS:".json_encode($result->headers)." RESPONSE:".json_encode($result->response)." INFO:".json_encode($result->info));
+                return false;
+            }
+        }else{
+            $this->logger->info("destruirSesion", "Session has been destroyed by another process");
+        }
+    }
+    
+    private function guardarNuevaInfoToken($ambiente, $usuario, $tokenData){
+        if(is_array($tokenData)){
+            $tokenData["store_time"] = time();
+            $tokenData = json_encode($tokenData);
+        }
+        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS."_".$ambiente."_".$usuario."_token_data", $tokenData);
+    }
+    
+    private function verificarExistenciaToken($ambiente, $usuario){
+        if(file_exists(PATH_DOCUMENTOS_ELECTRONICOS."_".$ambiente."_".$usuario."_token_data")){
+            $contenido = file_get_contents(PATH_DOCUMENTOS_ELECTRONICOS."_".$ambiente."_".$usuario."_token_data");
+            if($this->isJson($contenido)){
+                return json_decode($contenido, true);
+            }
+        }
+        return false;
+    }
+    
+    private function isJson($string) {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
     }
     
     public function enviarDocumento($ambienteHacienda, $clave, $fecha, $emisorTipoIdentificacion, $emisorIdentificacion, $receptorTipoIdentificacion, $receptorIdentificacion, $token, $xml, $consecutivoReceptor = null){

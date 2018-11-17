@@ -3,9 +3,11 @@ Class impresion_m extends CI_Model{
     
     private $numPagina = 0;
     private $cantidadPaginas = 1;
-
+    
     public function facturaPDF($empresa, $fhead, $fbody, $makeFile){
-        require(PATH_FPDF_LIBRARY);
+        $this->numPagina = 0;
+        $this->cantidadPaginas = 1;
+        require_once(PATH_FPDF_LIBRARY);
         $pdf = new FPDF('P','mm','A4');
 
         $cantidadProductos = sizeOf($fbody);
@@ -24,7 +26,7 @@ Class impresion_m extends CI_Model{
                 }else{
                         $final = $cantidadProductos;
                 }
-
+                
                 $cantidadTotalArticulos += $this->printProducts($fbody, $inicio, $final-1, $pdf, $fhead[0]);
                 //Definimos el pie de pagina
                 $this->pieDocumentoPDF('f', $fhead[0], $empresa[0], $pdf, $cantidadTotalArticulos);
@@ -777,7 +779,9 @@ Class impresion_m extends CI_Model{
 	}
         
         public function notaCreditoPDF($empresa, $head, $productos, $makeFile){
-		require(PATH_FPDF_LIBRARY);
+                $this->numPagina = 0;
+                $this->cantidadPaginas = 1;
+		require_once(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P','mm','A4');
 		
 		$cantidadProductos = sizeOf($productos);

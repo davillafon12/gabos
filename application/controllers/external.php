@@ -23,6 +23,7 @@ class external extends CI_Controller {
         $apiCorreo = new Correo();
         echo "\n >>>>>>>>>>>>>".date(DATE_ATOM)." \n \n";
         echo "Revisando Facturas...\n";
+        $empresa = null;
         
         if($facturas = $this->factura->getFacturasRecibidasHacienda()){
             foreach($facturas as $factura){
@@ -112,6 +113,10 @@ class external extends CI_Controller {
             
         }else{
             echo "No hay mensajes receptor que procesar \n";
+        }
+        
+        if($empresa !== null){
+            $api->destruirSesion($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa);
         }
     }
     
