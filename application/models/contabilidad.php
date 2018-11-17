@@ -2684,6 +2684,7 @@ Class contabilidad extends CI_Model
                                                         $retorno['sucursal']= $sucursal;
                                                         $retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
                                                         $retorno['token'] =  md5($usuarioCodigo.$sucursal."GAimpresionBO");
+                                                        
 
 
                                                         // Realizar nota credito electronica
@@ -2696,7 +2697,7 @@ Class contabilidad extends CI_Model
                                                                     $respuestaHacienda["msg"] = $response["message"];
 
                                                                     $this->generarPDFNotaCredito($consecutivo, $sucursal);
-
+                                                                    $retorno["empresa"] = $response["empresa"];
                                                                     if(!$response["cliente"]->NoReceptor){
                                                                         require_once PATH_API_CORREO;
                                                                         $apiCorreo = new Correo();
