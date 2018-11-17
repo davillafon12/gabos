@@ -238,7 +238,7 @@ Class contabilidad extends CI_Model
 	
 	function agregarProductosNotaCredito($consecutivo, $sucursal, $productos, $cliente, $facturaAcreditar){
 		
-
+            $sucursalOriginal = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
@@ -289,9 +289,9 @@ Class contabilidad extends CI_Model
 			
 			//Ahora debemos aumentar el inventario segun sea el caso
 			//Sumamos cantidades buenas
-			$this->articulo->actualizarInventarioSUMA($producto->c, $producto->b, $sucursal);
+			$this->articulo->actualizarInventarioSUMA($producto->c, $producto->b, $sucursalOriginal);
 			//Sumamos cantidades defectuosas
-			$this->articulo->actualizarInventarioSUMADefectuoso($producto->c, $producto->d, $sucursal);
+			$this->articulo->actualizarInventarioSUMADefectuoso($producto->c, $producto->d, $sucursalOriginal);
 		}
 		$this->db->insert_batch('TB_28_Productos_Notas_Credito', $datos);
 	}
