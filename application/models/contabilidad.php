@@ -2970,13 +2970,13 @@ Class contabilidad extends CI_Model
                 case "01":
                     $tipoIdentificacion = "fisico";
                 break;
-                case "01":
+                case "02":
                     $tipoIdentificacion = "juridico";
                 break;
-                case "01":
+                case "03":
                     $tipoIdentificacion = "dimex";
                 break;
-                case "01":
+                case "04":
                     $tipoIdentificacion = "nite";
                 break;
             }
