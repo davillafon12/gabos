@@ -304,9 +304,9 @@ class caja extends CI_Controller {
                         $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
                 }
                 
+                $this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+                
                 if($resEnvio["status"]){
-                    $this->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
-
                     if(!$responseCheck["cliente"]->NoReceptor){
                         require_once PATH_API_CORREO;
                         $apiCorreo = new Correo();
@@ -1155,53 +1155,7 @@ class caja extends CI_Controller {
 		}
 	}
     
-    function guardarPDFFactura($consecutivo, $sucursal){
-        if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
-            if($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)){
-                if($fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal)){
-                    if($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)){
-                            //Valoramos si un credito para poner la fecha de vencimiento
-                            if($facturaHead[0] -> tipo == 'credito'){
-                                    $diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0] -> cliente_ced);
-                                    $facturaHead[0] -> diasCredito = $diasCredito;
-                                    $date = strtotime("+$diasCredito days", strtotime($facturaHead[0] -> fecha) );
-                                    $facturaHead[0] -> fechaVencimiento = date('d-m-Y',$date);
-                            }elseif($facturaHead[0] -> tipo == 'mixto'){
-                                    $cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
-                                    $cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
-
-                                    //Valorar si fue en colones o dolares								
-                                    if($facturaHead[0] -> moneda == 'dolares'){
-                                            $cantidadPagaTarjeta = $cantidadPagaTarjeta/$facturaHead[0] -> cambio;
-                                            $cantidadPagaContado = $cantidadPagaContado/$facturaHead[0] -> cambio;
-                                    }						
-
-                                    $facturaHead[0] -> cantidadTarjeta = $cantidadPagaTarjeta;
-                                    $facturaHead[0] -> cantidadContado = $cantidadPagaContado;
-                            }elseif($facturaHead[0] -> tipo == 'apartado'){								
-                                    $abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
-                                    //Valorar si fue en colones o dolares								
-                                    if($facturaHead[0] -> moneda == 'dolares'){
-                                            $abono = $abono/$facturaHead[0] -> cambio;
-                                    }
-                                    $facturaHead[0] -> abono = $abono;
-                            }
-                            $facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
-                            $facturaHead[0]->clave = $fElectornica->Clave;
-                            $this->impresion_m->facturaPDF($empresa, $facturaHead, $facturaBody, true);								
-                    }else{
-                        log_message('error', "No se genero el PDF de factura, no existen los articulos de la factura | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                    }
-                }else{
-                    log_message('error', "No se genero el PDF de factura, no existe la factura electronica | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                }
-            }else{
-                    log_message('error', "No se genero el PDF de factura, no existe la factura | Consecutivo: $consecutivo | Sucursal: $sucursal");
-            }						
-        }else{
-                log_message('error', "No se genero el PDF de factura, no existe la empresa | Consecutivo: $consecutivo | Sucursal: $sucursal");
-        }
-    }
+    
 	
     
     

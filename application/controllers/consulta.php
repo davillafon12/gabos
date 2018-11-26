@@ -12,6 +12,7 @@ class consulta extends CI_Controller {
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
+                $this->load->model('impresion_m','',TRUE);
 		include 'get_session_data.php';
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -1074,15 +1075,40 @@ class consulta extends CI_Controller {
             $retorno = array("status"=>0, "error"=>"No se pudo procesar la solicitud");
             if($clave != ""){
                 if($tipo != ""){
+                    include PATH_USER_DATA;
                     switch($tipo){
                         case "FE":
                             if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
-                                $factura = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
-                                $resFacturaElectronica = array("data" => array("situacion"=>"normal"));
-                                $responseCheck = array("factura" => $factura);
-                                $result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
-                                $retorno["status"] = 1;
-                                unset($retorno["error"]);
+                                if($cliente = $this->cliente->getClientes_Cedula($factura->ReceptorIdentificacion)){
+                                    if($empresaData = $this->empresa->getEmpresa($factura->Sucursal)){
+                                        $factura = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
+                                        $cliente = $cliente[0];
+                                        $empresa = $empresaData[0];
+                                        $resFacturaElectronica = array("data" => array("situacion"=>"normal"));
+                                        $responseCheck = array("factura" => $factura, "cliente"=>$cliente, "empresa"=>$empresa);
+                                        $result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+                                        if($result["status"]){ // Factura fue recibida y aceptada
+                                            $this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+                                            if(!$responseCheck["cliente"]->NoReceptor){
+                                                require_once PATH_API_CORREO;
+                                                $apiCorreo = new Correo();
+                                                $attachs = array(
+                                                    PATH_DOCUMENTOS_ELECTRONICOS.$clave.".xml",
+                                                    PATH_DOCUMENTOS_ELECTRONICOS.$clave."-respuesta.xml",
+                                                    PATH_DOCUMENTOS_ELECTRONICOS.$clave.".pdf");
+                                                if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
+                                                    $this->factura->marcarEnvioCorreoFacturaElectronica($data['Sucursal_Codigo'], $responseCheck["factura"]->Factura_Consecutivo);
+                                                }
+                                            }
+                                        }
+                                        $retorno["status"] = 1;
+                                        unset($retorno["error"]);
+                                    }else{
+                                        $retorno["error"] = "No existe sucursal para dicha factura";
+                                    }
+                                }else{
+                                    $retorno["error"] = "No existe cliente para dicha factura";
+                                }
                             }else{
                                 $retorno["error"] = "No existe factura electronica";
                             }
