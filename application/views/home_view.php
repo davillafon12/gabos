@@ -39,11 +39,11 @@ PARA:
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
-			<p class="titulo_wrapper">P&aacute;gina De Inicio</p>
+			<p class="titulo_wrapper">Página De Inicio</p>
 			<hr class="division_wrapper">
 			<p class="contenido_wrapper">
-				</br>Bienvenido a la p&aacute;gina principal del sistema de facturaci&oacute;n y control de inventario de Garotas Bonitas S.A.</br>
-				     Utilice el men&uacute; de arriba para seleccionar alguna tarea de inter&eacute;s.</br></br></p>
+				</br>Bienvenido a la página principal del sistema de facturación electronica.</br>
+				     Utilice el menú de arriba para seleccionar alguna tarea de interes.</br></br></p>
 				<!--<div id="timeout_show"></div>-->
         </div>		
 

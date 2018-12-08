@@ -4,12 +4,12 @@
 		<table class='tablaAcerca'>
 			<tr>
 				<td>
-					<p class='copyright'>Garotas Bonitas S.A.</p>				   
+					<p class='copyright'>J&ESolutions</p>				   
 				</td>
 			</tr>	
 			<tr>
 				<td>
-				   <p class='copyright'>Copyright &copy; 2014</p>
+				   <p class='copyright'>Copyright &copy; 2018</p>
 				</td>
 			</tr>
 		</table>";

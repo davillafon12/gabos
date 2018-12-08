@@ -19,6 +19,7 @@ application/models/.DS_Store
 
 application/third_party/*
 application/logs/*
+application/logs/cambiarFactura.txt
 application/images/articulos/*
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jasper
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
