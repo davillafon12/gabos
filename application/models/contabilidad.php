@@ -858,30 +858,34 @@ Class contabilidad extends CI_Model
 	
 	function getRecibosPagadosConTarjetaRangoFecha($sucursal, $banco, $inicio, $final){
 		/*
-			SELECT tb_32_tarjeta_recibos.Comision_Por,
-					tb_26_recibos_dinero.Recibo_Cantidad,
-					tb_26_recibos_dinero.Recibo_Fecha
-			FROM tb_32_tarjeta_recibos
-			JOIN tb_26_recibos_dinero ON tb_26_recibos_dinero.Consecutivo = tb_32_tarjeta_recibos.Recibo
-			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_32_tarjeta_recibos.Credito
-			WHERE tb_24_credito.Credito_Sucursal_Codigo = 0
-			AND  tb_32_tarjeta_recibos.Banco = 2
-		*/
+                SELECT tr.Comision_Por, tmp.Recibo_Cantidad, tmp.Recibo_Fecha FROM (SELECT * FROM tb_26_recibos_dinero rd
+                JOIN tb_24_credito c ON rd.Credito = c.Credito_Id
+                WHERE c.Credito_Sucursal_Codigo = 2 
+                AND c.Credito_Vendedor_Sucursal = 2
+                AND rd.Tipo_Pago = 'tarjeta' 
+                AND rd.Recibo_Fecha > '2018-12-09 16:57:20'
+                AND rd.Recibo_Fecha < '2018-12-10 18:15:35') AS tmp
+                JOIN tb_32_tarjeta_recibos tr ON tr.Recibo = tmp.Consecutivo AND tr.Credito = tmp.Credito_Id 
+                AND tr.Banco = 1
+                */
+            
 		$sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
+                    $sucursal = $this->sucursales_trueque[$sucursal];
 		}
-		$this->db->select('tb_32_tarjeta_recibos.Comision_Por, tb_26_recibos_dinero.Recibo_Cantidad, tb_26_recibos_dinero.Recibo_Fecha');
-		$this->db->from('tb_32_tarjeta_recibos');
-		$this->db->join('tb_26_recibos_dinero', 'tb_26_recibos_dinero.Consecutivo = tb_32_tarjeta_recibos.Recibo');
-		$this->db->join('tb_24_credito', 'tb_24_credito.Credito_Id = tb_32_tarjeta_recibos.Credito');
-		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
-		$this->db->where('tb_32_tarjeta_recibos.Banco', $banco);
-		$this->db->where('tb_26_recibos_dinero.Tipo_Pago', 'tarjeta');
-		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha >', $inicio);
-		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha <', $final);
-		$this->db->where('tb_24_credito.Credito_Vendedor_Sucursal', $sucursalVendedor);
-		$query = $this->db->get();
+                
+                $sql = "SELECT tr.Comision_Por, tmp.Recibo_Cantidad, tmp.Recibo_Fecha FROM (SELECT * FROM tb_26_recibos_dinero rd
+                            JOIN tb_24_credito c ON rd.Credito = c.Credito_Id
+                            WHERE c.Credito_Sucursal_Codigo = $sucursal 
+                            AND c.Credito_Vendedor_Sucursal = $sucursalVendedor
+                            AND rd.Tipo_Pago = 'tarjeta' 
+                            AND rd.Recibo_Fecha > '$inicio'
+                            AND rd.Recibo_Fecha < '$final') AS tmp
+                            JOIN tb_32_tarjeta_recibos tr ON tr.Recibo = tmp.Consecutivo AND tr.Credito = tmp.Credito_Id
+                            AND tr.Banco = $banco";
+                
+                
+		$query = $this->db->query($sql);
 		if($query->num_rows()==0)
 		{			
 			return false;
