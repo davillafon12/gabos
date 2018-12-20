@@ -874,20 +874,20 @@ Class factura extends CI_Model
 	}
 	
 	function getFacturasTrueque($sucursal){
-			$this->db->select("Consecutivo");
-			$this->db->from("tb_46_relacion_trueque");
-			$this->db->where("Documento", "factura");
-			$this->db->where("Sucursal", $sucursal);
-			$query = $this->db->get();
-			if($query->num_rows()==0){
-					return array();
-			}else{
-					$facturas = array();
-					foreach($query->result() as $f){
-							array_push($facturas, $f->Consecutivo);
-					}
-					return $facturas;
-			}
+            $this->db->select("Consecutivo");
+            $this->db->from("tb_46_relacion_trueque");
+            $this->db->where("Documento", "factura");
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()==0){
+                return array();
+            }else{
+                $facturas = array();
+                foreach($query->result() as $f){
+                    array_push($facturas, $f->Consecutivo);
+                }
+                return $facturas;
+            }
 	}
 	
 	function getFacturasTruequeResponde($sucursales){

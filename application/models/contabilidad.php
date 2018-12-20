@@ -821,16 +821,16 @@ Class contabilidad extends CI_Model
 		$queryLoco = "";
 		
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
-				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
-				$sucursal = $this->sucursales_trueque[$sucursal];
-				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
-				}
+                    $facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+                    $sucursal = $this->sucursales_trueque[$sucursal];
+                    if(!empty($facturas_trueque)){
+                        $queryLoco = "AND f.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
+                    }
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
-				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
-				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
-				}
+                    $facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+                    if(!empty($facturas_trueque)){
+                        $queryLoco = "AND f.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
+                    }
 		}
 		
 		$query = $this->db->query("
