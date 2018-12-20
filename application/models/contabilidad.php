@@ -842,7 +842,7 @@ Class contabilidad extends CI_Model
 			AND t.TB_22_Banco_Banco_Codigo = $banco
 			AND f.Factura_Fecha_Hora > '$inicio'
 			AND f.Factura_Fecha_Hora < '$final'
-                        AND f.Factur_Estado = 'cobrada' 
+                        AND f.Factura_Estado = 'cobrada' 
 			AND f.TB_03_Cliente_Cliente_Cedula != 2
 			$queryLoco
 		");
