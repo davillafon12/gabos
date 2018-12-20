@@ -834,18 +834,19 @@ Class contabilidad extends CI_Model
 		}
 		
 		$query = $this->db->query("
-			SELECT * FROM TB_07_Factura
-			JOIN TB_18_Tarjeta ON TB_07_Factura.Factura_Consecutivo = TB_18_Tarjeta.TB_07_Factura_Factura_Consecutivo
-			WHERE (TB_07_Factura.Factura_Tipo_Pago = 'tarjeta'
-			OR TB_07_Factura.Factura_Tipo_Pago = 'mixto')
-			AND TB_07_Factura.TB_02_Sucursal_Codigo = $sucursal
-			AND TB_18_Tarjeta.TB_07_Factura_TB_02_Sucursal_Codigo = $sucursal
-			AND TB_18_Tarjeta.TB_22_Banco_Banco_Codigo = $banco
-			AND TB_07_Factura.Factura_Fecha_Hora > '$inicio'
-			AND TB_07_Factura.Factura_Fecha_Hora < '$final'
-			AND TB_07_Factura.TB_03_Cliente_Cliente_Cedula != 2
+			SELECT * FROM TB_07_Factura f
+			JOIN TB_18_Tarjeta t ON f.Factura_Consecutivo = t.TB_07_Factura_Factura_Consecutivo
+			WHERE f.Factura_Tipo_Pago IN ('tarjeta','mixto')
+			AND f.TB_02_Sucursal_Codigo = $sucursal
+			AND t.TB_07_Factura_TB_02_Sucursal_Codigo = $sucursal
+			AND t.TB_22_Banco_Banco_Codigo = $banco
+			AND f.Factura_Fecha_Hora > '$inicio'
+			AND f.Factura_Fecha_Hora < '$final'
+                        AND f.Factur_Estado = 'cobrada' 
+			AND f.TB_03_Cliente_Cliente_Cedula != 2
 			$queryLoco
 		");
+                // echo $this->db->last_query();
 		if($query->num_rows()==0)
 		{			
 			return false;
@@ -886,6 +887,7 @@ Class contabilidad extends CI_Model
                 
                 
 		$query = $this->db->query($sql);
+                // echo $this->db->last_query();
 		if($query->num_rows()==0)
 		{			
 			return false;
