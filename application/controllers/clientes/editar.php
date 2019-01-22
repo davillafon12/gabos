@@ -444,20 +444,30 @@ class editar extends CI_Controller {
 		$data_update['Cliente_EsSucursal'] = $isSucursal; 
 		$data_update['Cliente_EsExento'] = $exento;
 		$data_update['Aplica_Retencion'] = $aplicaRetencion;
-                $data_update['NoReceptor'] = $noReceptor;
-                $data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($codptel);
-                $data_update['Codigo_Pais_Celular'] = mysql_real_escape_string($codpcel);
-                $data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($codpfax);
-                $data_update['Numero_Fax'] = mysql_real_escape_string($fax);
-                $data_update['Provincia'] = mysql_real_escape_string($prov);
-                $data_update['Canton'] = mysql_real_escape_string($canton);
-                $data_update['Distrito'] = mysql_real_escape_string($distr);
-                $data_update['Barrio'] = mysql_real_escape_string($barrio);
+		$data_update['NoReceptor'] = $noReceptor;
+		$data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($codptel);
+		$data_update['Codigo_Pais_Celular'] = mysql_real_escape_string($codpcel);
+		$data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($codpfax);
+		$data_update['Numero_Fax'] = mysql_real_escape_string($fax);
+		$data_update['Provincia'] = mysql_real_escape_string($prov);
+		$data_update['Canton'] = mysql_real_escape_string($canton);
+		$data_update['Distrito'] = mysql_real_escape_string($distr);
+		$data_update['Barrio'] = mysql_real_escape_string($barrio);
                 
 		
 		$this->cliente->actualizar(mysql_real_escape_string($cedula), $data_update);
 		
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+
+		$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+											$data['Sucursal_Codigo'], 
+											$data['Usuario_Codigo'], 
+											'Edicion_Cliente', 
+											'Edición Cliente : '. mysql_real_escape_string($nombre).' '. mysql_real_escape_string($apellidos) .
+											' Tipo Pago : '.mysql_real_escape_string($tipo_pago_cliente).
+											' Email : '.mysql_real_escape_string($email).
+											' Celular : '.mysql_real_escape_string($celular));  
+
 		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el cliente codigo: ".mysql_real_escape_string($tipo_Cedula),$data['Sucursal_Codigo'],'edicion');
 		
 		redirect('clientes/editar', 'location');

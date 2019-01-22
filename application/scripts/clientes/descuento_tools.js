@@ -114,7 +114,9 @@ function setDescuentosProductos(productos){
 	for (i = 0; i < productos.length; i++) { 
 		descripcion = productos[i].descripcion;
 		descripcion = descripcion.substring(0, 42);
-		$('#tabla_des_productos').append("<tr><td><p class='tiny-font'>"+productos[i].codigo+"</p></td><td><p class='tiny-font'>"+descripcion+"</p></td><td><p class='tiny-font'>"+productos[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesProducto("+productos[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
+		proCodigo = productos[i].codigo.toString(); 
+		$('#tabla_des_productos').append("<tr><td><p class='tiny-font'>"+productos[i].codigo+"</p></td><td><p class='tiny-font'>"+descripcion+
+		"</p></td><td><p class='tiny-font'>"+productos[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesProducto(\""+proCodigo+"\", "+productos[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
 	}
 	if(productos.length==0){$('#tabla_des_productos').append("<tr><td colspan='4'><p class='tiny-font'>No tiene descuentos</p></td></tr>");}
 	$('#tabla_des_productos').append(footerDescuentos);
@@ -124,7 +126,8 @@ function setDescuentosFamilias(familias){
 	footerFamilias = "<tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_familia' onkeyup='buscarFamilia()'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_familia'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_familia'/></td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoFamilia()' class='boton-cambiar'>Agregar</a></td></tr>";
 	$("#cuerpo_familia").html('');
 	for (i = 0; i < familias.length; i++) { 
-		$('#tabla_des_familias').append("<tr><td><p class='tiny-font'>"+familias[i].codigo+"</p></td><td><p class='tiny-font'>"+familias[i].descripcion+"</p></td><td><p class='tiny-font'>"+familias[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesFamilia("+familias[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
+		proCodigoFamilia = familias[i].codigo.toString(); 
+		$('#tabla_des_familias').append("<tr><td><p class='tiny-font'>"+familias[i].codigo+"</p></td><td><p class='tiny-font'>"+familias[i].descripcion+"</p></td><td><p class='tiny-font'>"+familias[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesFamilia(\""+proCodigoFamilia+"\", "+familias[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
 	}
 	if(familias.length==0){$('#tabla_des_familias').append("<tr><td colspan='4'><p class='tiny-font'>No tiene descuentos</p></td></tr>");}
 	$('#tabla_des_familias').append(footerFamilias);
@@ -279,12 +282,12 @@ function formatCreditoField(){
 *
 */
 
-function eliminarDesProducto(idDescuento){
+function eliminarDesProducto(codigo, idDescuento){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/eliminarDescuentoProducto',
 		type: "POST",		
 		async: false,
-		data: {'id':idDescuento},				
+		data: {'cedula':$("#cedula").val(), 'id':idDescuento, 'codigo':codigo},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
@@ -421,12 +424,12 @@ function envioDescuentoProducto(codigo, descuento){
 *
 */
 
-function eliminarDesFamilia(idDescuento){
+function eliminarDesFamilia(codigo, idDescuento){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/eliminarDescuentoFamilia',
 		type: "POST",		
 		async: false,
-		data: {'id':idDescuento},				
+		data: {'id':idDescuento, 'cedula':cedula, 'codigo':codigo},		
 		success: function(data, textStatus, jqXHR)
 		{
 			try{

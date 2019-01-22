@@ -25,6 +25,7 @@
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."clientes/otros>Descuentos y Credito</a></li>
 						<li class='last'><a href=".$Ruta_Base."clientes/autorizaciones>Autorizaciones</a></li>
+						<li class='last'><a href=".$Ruta_Base."clientes/autorizaciones/cargaBitacoraClientes>Bitácora Clientes</a></li>
 					</ul>
 				</li>
 				<li class='last'><a href=".$Ruta_Base."clientes/autorizaciones/verAutorizaciones>Ver Autorizaciones</a></li>

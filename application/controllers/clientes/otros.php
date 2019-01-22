@@ -111,7 +111,6 @@ class otros extends CI_Controller {
 		echo json_encode($retorno);
 	}
 	
-	
 	function actualizarDescuento(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
@@ -124,10 +123,21 @@ class otros extends CI_Controller {
 				if($this->cliente->existeClienteDescuento($cedula, $data['Sucursal_Codigo'])){
 					//Actualizamos descuento 
 					$this->cliente->actualizarDescuentoCliente($descuento, $data['Sucursal_Codigo'], $cedula);
+
+					$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+								$data['Sucursal_Codigo'], 
+								$data['Usuario_Codigo'], 
+								'Actualiza_DesClien', 
+								'Actualización descuento : '. mysql_real_escape_string($descuento));
 					$retorno['status'] = 'success';
 				}else{
 					//Agregamos descuento					
 					$this->cliente->agregarDescuentoCliente($descuento, $data['Sucursal_Codigo'], $cedula);					
+					$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+								$data['Sucursal_Codigo'], 
+								$data['Usuario_Codigo'], 
+								'Agrega_DesCliente', 
+								'Agregar descuento : '. mysql_real_escape_string($descuento));
 					$retorno['status'] = 'success';
 				}			
 			}else{
@@ -151,10 +161,20 @@ class otros extends CI_Controller {
 				if($this->cliente->existeClienteCredito($cedula, $data['Sucursal_Codigo'])){
 					//Actualizamos credito 
 					$this->cliente->actualizarCreditoCliente($credito, $data['Sucursal_Codigo'], $cedula);
+					$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+								$data['Sucursal_Codigo'], 
+								$data['Usuario_Codigo'], 
+								'Actualiza_Credito', 
+								'Actualización del Crédito : '. mysql_real_escape_string($credito));
 					$retorno['status'] = 'success';
 				}else{
 					//Agregamos credito					
 					$this->cliente->agregarCreditoCliente($credito, $data['Sucursal_Codigo'], $cedula);					
+					$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+								$data['Sucursal_Codigo'], 
+								$data['Usuario_Codigo'], 
+								'Agregar_Credito', 
+								'Agregar Crédito : '. mysql_real_escape_string($credito));
 					$retorno['status'] = 'success';
 				}			
 			}else{
@@ -170,8 +190,17 @@ class otros extends CI_Controller {
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['id'])){
+			include PATH_USER_DATA;
 			$idDescuentoProducto = $_POST['id'];
+			$cedula = $_POST['cedula'];
+			$codigoProducto = $_POST['codigo'];
 			$this->cliente->eliminarDescuentoProducto($idDescuentoProducto);
+			$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+								$data['Sucursal_Codigo'], 
+								$data['Usuario_Codigo'], 
+								'Elimina_DesProducto', 
+								'Eliminación de Descuento del producto: '. $codigoProducto);
+
 			$retorno['status'] = 'success';
 		}else{
 			$retorno['error'] = '2'; //Error en la URL
@@ -226,6 +255,12 @@ class otros extends CI_Controller {
 						
 						if($diferencia>=0){
 							$this->cliente->agregarDescuentoDeProducto($codigo, $cedula, $data['Sucursal_Codigo'], $descuentoPorcentaje, $familia);
+							$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+							$data['Sucursal_Codigo'], 
+							$data['Usuario_Codigo'], 
+							'Agrega_DesProducto', 
+							'Agregación Descuento : '.$descuentoPorcentaje." % al producto: ". $codigo);
+
 							$retorno['status'] = 'success';							
 						}else{
 							$retorno['error'] = '10'; //Descuento mayor al precio del cliente							
@@ -252,8 +287,16 @@ class otros extends CI_Controller {
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
 		if(isset($_POST['id'])){
+			include PATH_USER_DATA;
 			$idDescuentoFamilia = $_POST['id'];
+			$cedula = $_POST['cedula'];
+			$codigoFamilia = $_POST['codigo'];
 			$this->cliente->eliminarDescuentoFamilia($idDescuentoFamilia);
+			$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+								$data['Sucursal_Codigo'], 
+								$data['Usuario_Codigo'], 
+								'Elimina_DesFamilia', 
+								'Eliminación de Descuento Familia: '. $codigoFamilia);
 			$retorno['status'] = 'success';
 		}else{
 			$retorno['error'] = '2'; //Error en la URL
@@ -294,6 +337,11 @@ class otros extends CI_Controller {
 						$retorno['error'] = '9'; //Ya existe un descuento con esa familia y cliente y sucursal
 					}else{						
 						$this->cliente->agregarDescuentoDeFamilia($codigo, $cedula, $data['Sucursal_Codigo'], $descuento);
+						$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+								$data['Sucursal_Codigo'], 
+								$data['Usuario_Codigo'], 
+								'Agrega_DesFamilia', 
+								'Agregación de Descuento Familia: '. $codigo);
 						$retorno['status'] = 'success';	
 					}			
 				}else{
@@ -307,6 +355,16 @@ class otros extends CI_Controller {
 		}
 		echo json_encode($retorno);
 	}
+
+	/********************************************************************************
+	*
+	*                       Consultar bitacora de clientes 
+	*/
+	function cargaBitacoraClientes(){
+		$this->load->view('clientes/clientes_bitacora_view', $data);	
+	
+	}
+	
 }
 
 ?>
