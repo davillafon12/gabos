@@ -20,7 +20,7 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_VentaXClienteFacturas
  BEGIN
 	SET @CodigoDesamparados = ' 7 '; 
 	
-	SET @where 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
+	SET @where 		= CONCAT(' where cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
 								 ' and fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
 								 ' and fac.Factura_Estado IN(', paEstadoFactura,')', 
 								 ' and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
