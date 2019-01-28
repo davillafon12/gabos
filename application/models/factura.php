@@ -1447,21 +1447,7 @@ Class factura extends CI_Model
                             $facturaBODY['cliente']=$cliente[0];
                             $this->validarEmpresaYClienteCobrarFactura($facturaBODY);
                             if($facturaBODY["status"] == 'success'){
-                                require_once PATH_API_HACIENDA;
-                                $api_resp = API_FE::setUpLogin($data);
-                                if($api_resp["isUp"]){
-                                    if($api_resp["sessionKey"]){
-                                        $facturaBODY['status']='success';
-                                        $facturaBODY['sessionKey']=$api_resp["sessionKey"];
-                                        unset($facturaBODY['error']);
-                                    }else{
-                                        $facturaBODY["status"] = "error";
-                                        $facturaBODY['error']='51'; //Error no se genero el token de sesion para el API de crLibre
-                                    }
-                                }else{
-                                    $facturaBODY["status"] = "error";
-                                    $facturaBODY['error']='50'; //Error no hay conexion con API crLibre
-                                }
+                                unset($facturaBODY['error']);
                             }
                         }else{
                             $facturaBODY['error']='25'; //No existe cliente
