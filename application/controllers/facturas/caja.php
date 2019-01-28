@@ -28,8 +28,6 @@ class caja extends CI_Controller {
 	function index()
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-                require_once PATH_API_HACIENDA;
-                $api_resp = API_FE::setUpLogin($data);
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
@@ -39,8 +37,6 @@ class caja extends CI_Controller {
 		$fecha = date("y/m/d : H:i:s", now());
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
-                $data['api_fe_isup'] = $api_resp["isUp"];
-                $data['api_session_ready'] = $api_resp["sessionKey"];
 		$this->load->view('facturas/view_caja_factura', $data);	
 	}
 	

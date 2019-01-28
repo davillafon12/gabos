@@ -118,14 +118,6 @@ PARA:
                 });
                 
             </script>
-            
-            
-            <div class="api-hacienda-alert  <?php echo $api_fe_isup ? "success" : "error"; ?>">
-                <?php 
-                    echo $api_fe_isup ? "¡Conexión con API en línea!<br>" : "¡Conexión con API fuera de línea, alertar al encargado!<br>"; 
-                    echo $api_session_ready ? "Sesión Lista" : "Problemas con sesión!"
-                ?>
-            </div>
 	
 		<script>
 			//Anulamos los eventos de salida
