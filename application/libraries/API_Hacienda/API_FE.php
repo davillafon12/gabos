@@ -129,8 +129,6 @@ class API_FE{
                                     $productos){
         $bm = round(microtime(true) * 1000);
         $params = array(
-            'w' => "genXML", 
-            "r" => "gen_xml_fe",
             "clave" => $clave, 
             "consecutivo" => $consecutivo, 
             "fecha_emision" => $fecha_emision,
@@ -177,31 +175,34 @@ class API_FE{
             "total_impuestos" => $total_impuestos, 
             "total_comprobante" => $total_comprobante,
             "otros" => $otros,
-            "detalles" => json_encode($productos)
+            "detalles" => $productos
         );
         $this->logger->info("crearXMLFactura", "Creating factura XML into API with params: ".json_encode($params));
-        $resultOr = $this->gateway->post("api.php", $params);
-        if($resultOr->info->http_code == 200){
-            $result = (Array) json_decode($resultOr->response);
-            if(isset($result["resp"])){
-                $result["resp"] = (Array) $result["resp"];
-                if(isset($result["resp"]["clave"]) && isset($result["resp"]["xml"])){
-                    $ms = (round(microtime(true) * 1000)) - $bm;
-                    $this->logger->info("crearXMLFactura", $ms."ms | API returns ".json_encode($result));
-                    return $result["resp"];
-                }else{
-                    $ms = (round(microtime(true) * 1000)) - $bm;
-                    $this->logger->error("crearXMLFactura", $ms."ms | 3 - API returns ".json_encode($result));
-                    return false;
-                }
+        $result = $this->helper->genXMLFe($clave, $consecutivo, $fecha_emision,
+                                    $emisor_nombre, $emisor_tipo_indetif, $emisor_num_identif, $nombre_comercial, $emisor_provincia, $emisor_canton, $emisor_distrito, $emisor_barrio, $emisor_otras_senas, $emisor_cod_pais_tel, $emisor_tel, $emisor_cod_pais_fax, $emisor_fax, $emisor_email,
+                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, $receptor_canton, $receptor_distrito, $receptor_barrio, $receptor_cod_pais_tel, $receptor_tel, $receptor_cod_pais_fax, $receptor_fax, $receptor_email,
+                                    $condicion_venta,
+                                    $plazo_credito,
+                                    $medio_pago,
+                                    $cod_moneda,
+                                    $tipo_cambio,
+                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
+                                    $otros,
+                                    $productos);
+        
+        if(is_array($result)){
+            if(isset($result["clave"]) && isset($result["xml"])){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("crearXMLFactura", $ms."ms | API returns ".json_encode($result));
+                return $result;
             }else{
                 $ms = (round(microtime(true) * 1000)) - $bm;
-                $this->logger->error("crearXMLFactura", $ms."ms | 2 - API returns ".json_encode($resultOr));
+                $this->logger->error("crearXMLFactura", $ms."ms | 2 - API returns ".json_encode($result));
                 return false;
             }
         }else{
             $ms = (round(microtime(true) * 1000)) - $bm;
-            $this->logger->error("crearXMLFactura", $ms."ms | 1 - API returns ".json_encode($resultOr));
+            $this->logger->error("crearXMLFactura", $ms."ms | 1 - API returns ".json_encode($result));
             return false;
         }
     }
