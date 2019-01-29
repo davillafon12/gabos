@@ -488,6 +488,32 @@ class CI_Model {
             return $finalPath;
         }
         
+        public function getFinalPathWeb($type, $da){
+            $finalPath = base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB;
+            
+            $date = strtotime($da);
+            
+            switch($type){
+                case "fe":
+                    $finalPath .= "factura_electronica/".date("Y_m_d", $date)."/";
+                break;
+                case "nc":
+                    $finalPath .= "nota_credito_electronica/".date("Y_m_d", $date)."/";
+                break;
+                case "nd":
+                    $finalPath .= "nota_debito_electronica/".date("Y_m_d", $date)."/";
+                break;
+                case "mr":
+                    $finalPath .= "mensaje_receptor_electronica/".date("Y_m_d", $date)."/";
+                break;
+                case "cer":
+                    $finalPath .= "certificados/";
+                break;
+            }
+            
+            return $finalPath;
+        }
+        
 }
 // END Model Class
 

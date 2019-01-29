@@ -976,11 +976,26 @@ class consulta extends CI_Controller {
             $ruta_imagen = base_url('application/images/Icons');
             $comprobantesAMostrar = array();
             foreach($query->result() as $art){
-                $htmlPdf = $_POST['tipodocumento'] == "MR" ? "" : "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
-                $htmlXML = $_POST['tipodocumento'] == "MR" ? "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave."-".$art->consecutivo.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>" 
-                                                            : "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
-                $htmlXMLRespuesta = $_POST['tipodocumento'] == "FE" ? "<a target='_blank' href='".base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>" 
-                                    : "<a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                $htmlPdf = "";
+                $htmlXML = "";
+                $htmlXMLRespuesta = "";
+                $rutaWeb = $this->contabilidad->getFinalPathWeb(strtolower($_POST['tipodocumento']), $art->fecha);
+                switch($_POST['tipodocumento']){
+                    case "FE":
+                        $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                    break;
+                    case "NC":
+                        $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                    break;
+                    case "MR":
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave."-".$art->consecutivo.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                    break;
+                }
                 
                 $auxArray = array(
                             $art->clave,
