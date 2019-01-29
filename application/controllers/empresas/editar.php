@@ -350,6 +350,7 @@ class editar extends CI_Controller {
                 $cert_file = $_FILES["certificado_hacienda_file"];
                 if(is_array($cert_file)){
                     if($cert_file["type"] == "application/x-pkcs12"){
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
                         $oldLocation = $cert_file["tmp_name"];
                         $name = md5("sucursal_".$id_empresa."_token_certificate");
                         $this->empresa->storeFile($name.".p12", "cer", $oldLocation);
