@@ -162,29 +162,22 @@ class API_FE{
     
     public function firmarDocumento($tokenCertificado, $xml, $pinCertificado, $tipoDocumento){
         $bm = round(microtime(true) * 1000);
-        $params = array(
-            'w' => "signXML", 
-            "r" => "signFE", 
+        $tokenCertificado = PATH_DOCUMENTOS_ELECTRONICOS."certificados/".$tokenCertificado.".p12";
+        $params = array( 
             "p12Url" => $tokenCertificado,
             "inXml" => $xml,
             "pinP12" => $pinCertificado,
             "tipodoc" => $tipoDocumento
         );
         $this->logger->info("firmarDocumento", "Signing XML into API with params: ".json_encode($params));
-        $result = $this->gateway->post("api.php", $params);
-        if($result->info->http_code == 200){
-            $result = (Array) json_decode($result->response);
-            if(isset($result["resp"])){
-                $result["resp"] = (Array) $result["resp"];
-                if(isset($result["resp"]["xmlFirmado"])){
-                    $ms = (round(microtime(true) * 1000)) - $bm;
-                    $this->logger->info("firmarDocumento", $ms."ms | API returns ".json_encode($result));
-                    return $result["resp"]["xmlFirmado"];
-                }else{
-                    $ms = (round(microtime(true) * 1000)) - $bm;
-                    $this->logger->error("firmarDocumento", $ms."ms | 3 - API returns ".json_encode($result));
-                    return false;
-                }
+        
+        $result = $this->helper->signFE($tokenCertificado, $pinCertificado, $xml, $tipoDocumento);
+        
+        if(is_array($result)){
+            if(isset($result["xmlFirmado"])){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("firmarDocumento", $ms."ms | API returns ".json_encode($result));
+                return $result["xmlFirmado"];
             }else{
                 $ms = (round(microtime(true) * 1000)) - $bm;
                 $this->logger->error("firmarDocumento", $ms."ms | 2 - API returns ".json_encode($result));
@@ -193,7 +186,7 @@ class API_FE{
         }else{
             $ms = (round(microtime(true) * 1000)) - $bm;
             $this->logger->error("firmarDocumento", $ms."ms | 1 - API returns ".json_encode($result));
-            return false;
+            return false; 
         }
     }
     

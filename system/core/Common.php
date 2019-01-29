@@ -213,7 +213,7 @@ if ( ! function_exists('is_loaded'))
 */
 if ( ! function_exists('get_config'))
 {
-	function &get_config($replace = array())
+	function get_config($replace = array())
 	{
 		static $_config;
 
