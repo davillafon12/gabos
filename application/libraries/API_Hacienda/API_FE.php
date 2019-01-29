@@ -2,18 +2,12 @@
 
 class API_FE{
     
-    private $gateway;
     private $logger;
     private $helper;
     
     public function __construct(){
-        require_once PATH_REST_CLIENT;
         require_once PATH_API_LOGGER;
         require_once PATH_API_HELPER;
-        $this->gateway = new RestClient([
-            'base_url' => URL_API_CRLIBE,
-            'curl_options' => [CURLOPT_CONNECTTIMEOUT => API_CRLIBRE_CURL_TIMEOUT]
-        ]);
         $this->logger = new APILogger();
         $this->helper = new API_Helper();
     }
@@ -427,8 +421,6 @@ class API_FE{
                                     $tipoDocumento, $numeroDocumento, $razonDocumento, $codigoDocumento, $fechaEmisionDocumento){
         $bm = round(microtime(true) * 1000);
         $params = array(
-            'w' => "genXML", 
-            "r" => "gen_xml_nc",
             "clave" => $clave, 
             "consecutivo" => $consecutivo, 
             "fecha_emision" => $fecha_emision,
@@ -518,8 +510,6 @@ class API_FE{
     public function crearXMLMensajeReceptor($clave, $consecutivo, $fecha_emision, $emisor_num_identif, $receptor_num_identif, $mensaje, $detalleMensaje, $montoImpuestos, $montoTotal){
         $bm = round(microtime(true) * 1000);
         $params = array(
-            'w' => "genXML", 
-            "r" => "gen_xml_mr",
             "clave" => $clave, 
             "numero_consecutivo_receptor" => $consecutivo, 
             "fecha_emision_doc" => $fecha_emision,
@@ -531,28 +521,22 @@ class API_FE{
             "total_factura" => $montoTotal
         );
         $this->logger->info("crearXMLMensajeReceptor", "Creating mensaje receptor XML into API with params: ".json_encode($params));
-        $resultOr = $this->gateway->post("api.php", $params);
-        if($resultOr->info->http_code == 200){
-            $result = (Array) json_decode($resultOr->response);
-            if(isset($result["resp"])){
-                $result["resp"] = (Array) $result["resp"];
-                if(isset($result["resp"]["clave"]) && isset($result["resp"]["xml"])){
-                    $ms = (round(microtime(true) * 1000)) - $bm;
-                    $this->logger->info("crearXMLMensajeReceptor", $ms."ms | API returns ".json_encode($result));
-                    return $result["resp"];
-                }else{
-                    $ms = (round(microtime(true) * 1000)) - $bm;
-                    $this->logger->error("crearXMLMensajeReceptor", $ms."ms | 3 - API returns ".json_encode($result));
-                    return false;
-                }
+        
+        $result = $this->helper->genXMLMr($clave, $consecutivo, $fecha_emision, $emisor_num_identif, $receptor_num_identif, $mensaje, $detalleMensaje, $montoImpuestos, $montoTotal);
+        
+        if(is_array($result)){
+            if(isset($result["clave"]) && isset($result["xml"])){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("crearXMLMensajeReceptor", $ms."ms | API returns ".json_encode($result));
+                return $result;
             }else{
                 $ms = (round(microtime(true) * 1000)) - $bm;
-                $this->logger->error("crearXMLMensajeReceptor", $ms."ms | 2 - API returns ".json_encode($resultOr));
+                $this->logger->error("crearXMLMensajeReceptor", $ms."ms | 2 - API returns ".json_encode($result));
                 return false;
             }
         }else{
             $ms = (round(microtime(true) * 1000)) - $bm;
-            $this->logger->error("crearXMLMensajeReceptor", $ms."ms | 1 - API returns ".json_encode($resultOr));
+            $this->logger->error("crearXMLMensajeReceptor", $ms."ms | 1 - API returns ".json_encode($result));
             return false;
         }
     }

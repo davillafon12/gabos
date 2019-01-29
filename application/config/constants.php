@@ -100,8 +100,6 @@ define('PATH_API_CORREO', FCPATH.'application/libraries/Correo.php');
 define('CARPETA_IMAGENES', FCPATH.'application/images/articulos/');
 
 
-define('URL_API_CRLIBE', 'http://192.168.10.17');
-define('API_CRLIBRE_CURL_TIMEOUT', 10);
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
 define('FACTURA_ELECTRONICA_CODIGO', '01');

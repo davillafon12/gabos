@@ -697,4 +697,32 @@ class API_Helper{
         );
         return $arrayResp;
     }
+    
+    function genXMLMr($clave, $numeroConsecutivoReceptor, $fechaEmisionDoc, $emisor_num_identif, $receptor_num_identif, $mensaje, $detalleMensaje, $montoTotalImpuesto, $totalFactura) {
+        $numeroCedulaEmisor = str_pad($emisor_num_identif, 12, "0", STR_PAD_LEFT);
+        $numeroCedulaReceptor = str_pad($receptor_num_identif, 12, "0", STR_PAD_LEFT);
+
+        $xmlString = '<?xml version="1.0" encoding="utf-8"?>
+        <MensajeReceptor xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeReceptor" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeReceptor MensajeReceptor_4.2.xsd">
+        <Clave>' . $clave . '</Clave>
+        <NumeroCedulaEmisor>' . $numeroCedulaEmisor . '</NumeroCedulaEmisor>
+        <FechaEmisionDoc>' . $fechaEmisionDoc . '</FechaEmisionDoc>
+        <Mensaje>' . $mensaje . '</Mensaje>';
+        if (!empty($detalleMensaje)) {
+            $xmlString .= '<DetalleMensaje>' . $detalleMensaje . '</DetalleMensaje>';
+        }
+        if (!empty($montoTotalImpuesto)) {
+            $xmlString .= '<MontoTotalImpuesto>' . $montoTotalImpuesto . '</MontoTotalImpuesto>';
+        }
+        $xmlString .= '<TotalFactura>' . $totalFactura . '</TotalFactura>
+        <NumeroCedulaReceptor>' . $numeroCedulaReceptor . '</NumeroCedulaReceptor>
+        <NumeroConsecutivoReceptor>' . $numeroConsecutivoReceptor . '</NumeroConsecutivoReceptor>';
+
+        $xmlString .= '</MensajeReceptor>';
+        $arrayResp = array(
+            "clave" => $clave,
+            "xml" => base64_encode($xmlString)
+        );
+        return $arrayResp;
+    }
 }

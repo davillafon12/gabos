@@ -477,6 +477,9 @@ class CI_Model {
                 case "nd":
                     $finalPath .= "nota_debito_electronica/".date("Y_m_d", $date)."/";
                 break;
+                case "mr":
+                    $finalPath .= "mensaje_receptor_electronica/".date("Y_m_d", $date)."/";
+                break;
                 case "cer":
                     $finalPath .= "certificados/";
                 break;

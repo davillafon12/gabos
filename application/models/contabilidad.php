@@ -3101,7 +3101,7 @@ Class contabilidad extends CI_Model
                         $this->db->where("Sucursal", $sucursal);
                         $this->db->update("tb_59_mensaje_receptor", $data);
                         
-                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$comprobante->Clave."-".$comprobante->ConsecutivoHacienda.".xml",  base64_decode($xmlFirmado));
+                        $this->storeFile($comprobante->Clave."-".$comprobante->ConsecutivoHacienda.".xml", "mr", null, base64_decode($xmlFirmado));
                         
                         return true;
                     }
