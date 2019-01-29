@@ -351,35 +351,12 @@ class editar extends CI_Controller {
                 if(is_array($cert_file)){
                     if($cert_file["type"] == "application/x-pkcs12"){
                         $oldLocation = $cert_file["tmp_name"];
-                        $newLocation = "/tmp/".$cert_file["name"];
-                        if(move_uploaded_file($oldLocation,$newLocation)){
-                            require_once PATH_API_HACIENDA;
-                            include PATH_USER_DATA;
-                            $api_resp = API_FE::setUpLogin($data);
-                            if($api_resp["isUp"]){
-                                if($api_resp["sessionKey"]){
-                                    $apiFe = new API_FE();
-                                    if($tokenCert = $apiFe->uploadCertificate($data["Usuario_Nombre_Usuario"], $api_resp["sessionKey"], $newLocation, $cert_file["name"])){
-                                        $params = array("Token_Certificado_Tributa" => $tokenCert);
-                                        $this->empresa->actualizar($id_empresa, $params);
-                                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario subió el certificado con token : ".mysql_real_escape_string($tokenCert),$data['Sucursal_Codigo'],'edicion');
-                                        redirect('empresas/editar/edicion?id='.$id_empresa, 'location');
-                                    }else{
-                                        // No se pudo subir el certificado por medio del API de crLibre
-                                        exit("Hubo un error al procesar el certificado - ERR: 8");
-                                    }
-                                }else{
-                                    // No se pudo loguear al usuario para hacer varas en el API de crLibre
-                                    exit("Hubo un error al procesar el certificado - ERR: 7");
-                                }
-                            }else{
-                                // El API de crLibre no esta funcionando
-                                exit("Hubo un error al procesar el certificado - ERR: 6");
-                            }
-                        }else{
-                            // No se pudo mover el archivo
-                            exit("Hubo un error al procesar el certificado - ERR: 5");
-                        }
+                        $name = md5("sucursal_".$id_empresa."_token_certificate");
+                        $this->empresa->storeFile($name.".p12", "cer", $oldLocation);
+                        $params = array("Token_Certificado_Tributa" => $name);
+                        $this->empresa->actualizar($id_empresa, $params);
+                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario subió el certificado con token : ".mysql_real_escape_string($name),$data['Sucursal_Codigo'],'edicion');
+                        redirect('empresas/editar/edicion?id='.$id_empresa, 'location');
                     }else{
                         // No tiene el formato adecuado de .p12
                         exit("Debe seleccionar un certificado a subir - ERR: 4");

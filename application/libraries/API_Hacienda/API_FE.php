@@ -36,54 +36,6 @@ class API_FE{
         }
     }
     
-    public function uploadCertificate($user, $sessionKey, $certPath, $name){
-        $bm = round(microtime(true) * 1000);
-        $params = array(
-            'w' => "fileUploader", 
-            "r" => "subir_certif",
-            "sessionKey" => $sessionKey,
-            "fileToUpload" => "@".realpath($certPath),
-            "iam" => $user
-        );
-        $this->logger->info("uploadCertificate", "Uploading certificate into API with params: ".json_encode($params));
-        //Initialise the cURL var
-        $ch = curl_init();
-
-        //Get the response from cURL
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        //Set the Url
-        curl_setopt($ch, CURLOPT_URL, URL_API_CRLIBE."/api.php");
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, API_CRLIBRE_CURL_TIMEOUT);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-
-        // Execute the request
-        $response = (Array)json_decode(curl_exec($ch));
-        
-        if(is_array($response)){
-            if(isset($response["resp"])){
-                $response = (array) $response["resp"];
-                if(isset($response["downloadCode"]) && isset($response["name"])){
-                    $ms = (round(microtime(true) * 1000)) - $bm;
-                    $this->logger->info("uploadCertificate", $ms."ms | API returns ".json_encode($response));
-                    return $response["downloadCode"];
-                }else{
-                    $ms = (round(microtime(true) * 1000)) - $bm;
-                    $this->logger->error("uploadCertificate", $ms."ms | 3 - API returns ".json_encode($response));
-                    return false;
-                }
-            }else{
-                $ms = (round(microtime(true) * 1000)) - $bm;
-                $this->logger->error("uploadCertificate", $ms."ms | 2 - API returns ".json_encode($response));
-                return false;
-            }
-        }else{
-            $ms = (round(microtime(true) * 1000)) - $bm;
-            $this->logger->error("uploadCertificate", $ms."ms | 1 - API returns ".json_encode($response));
-            return false;
-        }
-    }
-    
     public function createClave($tipoCedula, $cedula, $codigoPais, $consecutivo, $situacion, $codigoSeguridad, $tipoDocumento){
         $bm = round(microtime(true) * 1000);
         $params = array(
