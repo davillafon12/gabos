@@ -443,6 +443,48 @@ class CI_Model {
             
             return $linea;
         }
+        
+        
+        public function storeFile($name, $type, $file = null, $stream = null){
+            $finalPath = $this->getFinalPath($type);
+            
+            if (!file_exists($finalPath)) {
+                $oldmask = umask(0);
+                mkdir($finalPath, 0777, true);
+                umask($oldmask);
+            }
+            
+            // Si es un archivo lo movemos, pero si no lo creamos
+            if($file == null){
+                file_put_contents($finalPath.$name, $stream);
+            }else{
+                rename($file, $finalPath.$name);
+            }
+        }
+        
+        public function getFinalPath($type, $date = null){
+            $finalPath = PATH_DOCUMENTOS_ELECTRONICOS;
+            
+            $date = $date == null ? time() : strtotime($date);
+            
+            switch($type){
+                case "fe":
+                    $finalPath .= "factura_electronica/".date("Y_m_d", $date)."/";
+                break;
+                case "nc":
+                    $finalPath .= "nota_credito_electronica/".date("Y_m_d", $date)."/";
+                break;
+                case "nd":
+                    $finalPath .= "nota_debito_electronica/".date("Y_m_d", $date)."/";
+                break;
+                case "cer":
+                    $finalPath .= "certificados/";
+                break;
+            }
+            
+            return $finalPath;
+        }
+        
 }
 // END Model Class
 

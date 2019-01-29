@@ -307,9 +307,9 @@ class caja extends CI_Controller {
                         require_once PATH_API_CORREO;
                         $apiCorreo = new Correo();
                         $attachs = array(
-                            PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".xml",
-                            PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
-                            PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".pdf");
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".xml",
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".pdf");
                         if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
                             $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
                         }

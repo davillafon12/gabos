@@ -362,30 +362,6 @@ PARA:
 			<img class="envio_img" src="<?php echo base_url('application/images/enviandoFactura.gif'); ?>">
 			<p class="envio_p">Enviando factura a caja... <br>Por favor, espere.</p>
 		</div>
-		
-		<!--<div class="error_crear_factura_popup" id="error_crear_factura_popup">
-			<p class="titulo_wrapper">Error al crear factura</p>
-			<hr class="division_wrapper_2">
-			<p class="contact">Por favor recargue la página.<br>
-			                   Si la situación continúa, favor contacte al encargado de soporte.<br>
-							   <a href='<?php //echo base_url('facturas/nueva');?>'> Recargar página</a><br>
-							   <a href='<?php// echo base_url('home');?>'> Ir a inicio</a>
-							   </p> 	
-		</div>
-		
-		<div class="salida_pagina" id="salida_pagina">
-			<p class="titulo_wrapper">¿Deshacer factura?</p>
-			<hr class="division_wrapper_2">
-			<p class="contact">Está a punto de salir de la página.<br>
-			                   ¿Desea eliminar la factura?<br>
-							   <div class="botones_salida">
-							   <a href='<?php //echo base_url('facturas/nueva');?>' class='boton_salida_S'> Sí</a>
-							   <a href='<?php //echo base_url('home');?>' class='boton_salida_N'> No</a>
-							   </div>
-							   </p> 
-		</div>-->
-			
-				<!--<div id="timeout_show"></div>-->
         </div>		
 
 		<!--Incluir footer-->

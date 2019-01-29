@@ -1210,7 +1210,8 @@ Class factura extends CI_Model
                         $this->db->update("tb_55_factura_electronica", $data);
                         
                         // Guardarmos el XML firmado en un archivo
-                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave.".xml",  base64_decode($xmlFirmado));
+                        //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave.".xml",  base64_decode($xmlFirmado));
+                        $this->storeFile($factura->Clave.".xml", "fe", null, base64_decode($xmlFirmado));
                         
                         return $data;
                     }
@@ -1298,7 +1299,8 @@ Class factura extends CI_Model
                 log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
                 
                 // Guardarmos el XML firmado en un archivo
-                file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
+                //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
+                $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($xmlRespuesta));
                 
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{

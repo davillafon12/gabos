@@ -34,7 +34,9 @@ Class impresion_m extends CI_Model{
         }
 
         if($makeFile){
-            $pdf->Output(PATH_DOCUMENTOS_ELECTRONICOS.$fhead[0]->clave.".pdf",'F');
+            $filePath = "/tmp/".$fhead[0]->clave.".pdf";
+            $pdf->Output($filePath,'F');
+            $this->storeFile($fhead[0]->clave.".pdf", "fe", $filePath);
         }else{
            //Imprimimos documento
             $pdf->Output(); 
