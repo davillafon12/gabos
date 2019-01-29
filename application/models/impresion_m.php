@@ -808,7 +808,9 @@ Class impresion_m extends CI_Model{
 			$this->numPagina++;
 		}
 		if($makeFile){
-                    $pdf->Output(PATH_DOCUMENTOS_ELECTRONICOS.$head->clave.".pdf",'F');
+                    $filePath = "/tmp/".$head->clave.".pdf";
+                    $pdf->Output($filePath,'F');
+                    $this->storeFile($head->clave.".pdf", "nc", $filePath);
                 }else{
                    //Imprimimos documento
                     $pdf->Output(); 

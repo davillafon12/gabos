@@ -2360,7 +2360,7 @@ Class contabilidad extends CI_Model
                         $this->db->update("tb_57_nota_credito_electronica", $data);
                         
                         // Guardarmos el XML firmado en un archivo
-                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$nota->Clave.".xml",  base64_decode($xmlFirmado));
+                        $this->storeFile($nota->Clave.".xml", "nc", null, base64_decode($xmlFirmado));
                         
                         return $data;
                     }
@@ -2708,8 +2708,8 @@ Class contabilidad extends CI_Model
                                                                         require_once PATH_API_CORREO;
                                                                         $apiCorreo = new Correo();
                                                                         $attachs = array(
-                                                                            PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".xml",
-                                                                            PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".pdf");
+                                                                            $this->getFinalPath("nc").$response["clave"].".xml",
+                                                                            $this->getFinalPath("nc").$response["clave"].".pdf");
                                                                         if($apiCorreo->enviarCorreo($response["cliente"]->Cliente_Correo_Electronico, "Nota Crédito #".$consecutivo." | ".$response["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$response["empresa"]->Sucursal_Nombre, $attachs)){
                                                                             $this->marcarEnvioCorreoNotaCreditoElectronica($sucursal, $consecutivo);
                                                                         }

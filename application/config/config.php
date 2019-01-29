@@ -357,6 +357,7 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+date_default_timezone_set("America/Costa_Rica");
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

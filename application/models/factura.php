@@ -1210,7 +1210,6 @@ Class factura extends CI_Model
                         $this->db->update("tb_55_factura_electronica", $data);
                         
                         // Guardarmos el XML firmado en un archivo
-                        //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave.".xml",  base64_decode($xmlFirmado));
                         $this->storeFile($factura->Clave.".xml", "fe", null, base64_decode($xmlFirmado));
                         
                         return $data;

@@ -465,4 +465,236 @@ class API_Helper{
 
         return $arrayResp;
     }
+    
+    function genXMLNC($clave, $consecutivo, $fechaEmision,
+                    $emisorNombre, $emisorTipoIdentif, $emisorNumIdentif, $nombreComercial, $emisorProv, $emisorCanton, $emisorDistrito, 
+                    $emisorBarrio, $emisorOtrasSenas, $emisorCodPaisTel, $emisorTel, $emisorCodPaisFax, $emisorFax, $emisorEmail,
+                    $receptorNombre, $receptorTipoIdentif, $recenprotNumIdentif, $receptorProvincia, $receptorCanton, $receptorDistrito, 
+                    $receptorBarrio, $receptorCodPaisTel, $receptorTel, $receptorCodPaisFax, $receptorFax, $receptorEmail,
+                    $condVenta,
+                    $plazoCredito,
+                    $medioPago,
+                    $codMoneda,
+                    $tipoCambio,
+                    $totalServGravados, $totalServExentos, $totalMercGravadas, $totalMercExentas, $totalGravados, $totalExentos, $totalVentas, 
+                    $totalDescuentos, $totalVentasNeta, $totalImp, $totalComprobante,
+                    $otros,
+                    $productos,
+                    $infoRefeTipoDoc, $infoRefeNumero, $infoRefeRazon, $infoRefeCodigo, $infoRefeFechaEmision) {
+   
+        $receptorOtrasSenas = "";
+        $noReceptor = (trim($receptorNombre) == "" || $receptorNombre == null || $receptorNombre == "null");
+        $otrosType = "";
+        //detalles de la compra
+        $detalles = $productos;
+        $medioPago = explode(",", $medioPago);
+        //return $detalles;
+        $xmlString = '<?xml version = "1.0" encoding = "utf-8"
+        ?>
+        <NotaCreditoElectronica xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica NotaCreditoElectronica_V4.2.xsd">
+        <Clave>' . $clave . '</Clave>
+        <NumeroConsecutivo>' . $consecutivo . '</NumeroConsecutivo>
+        <FechaEmision>' . $fechaEmision . '</FechaEmision>
+        <Emisor>
+            <Nombre>' . $emisorNombre . '</Nombre>
+            <Identificacion>
+                <Tipo>' . $emisorTipoIdentif . '</Tipo>
+                <Numero>' . $emisorNumIdentif . '</Numero>
+            </Identificacion>
+            <NombreComercial>' . $nombreComercial . '</NombreComercial>';
+
+
+        if ($emisorProv == '' or $emisorCanton == '' or $emisorDistrito == '' or $emisorBarrio == '' or $emisorOtrasSenas == '') {
+
+        } else {
+            $xmlString .= '
+            <Ubicacion>
+                <Provincia>' . $emisorProv . '</Provincia>
+                <Canton>' . $emisorCanton . '</Canton>
+                <Distrito>' . $emisorDistrito . '</Distrito>
+                <Barrio>' . $emisorBarrio . '</Barrio>
+                <OtrasSenas>' . $emisorOtrasSenas . '</OtrasSenas>
+            </Ubicacion>';
+        }
+
+
+
+        if ($emisorCodPaisTel == '' or $emisorTel == '') {
+
+        } else {
+            $xmlString .= '
+            <Telefono>
+                <CodigoPais>' . $emisorCodPaisTel . '</CodigoPais>
+                <NumTelefono>' . $emisorTel . '</NumTelefono>
+            </Telefono>';
+        }
+        if ($emisorCodPaisFax == '' or $emisorFax == '') {
+
+        } else {
+            $xmlString .= '
+            <Fax>
+                <CodigoPais>' . $emisorCodPaisFax . '</CodigoPais>
+                <NumTelefono>' . $emisorFax . '</NumTelefono>
+            </Fax>';
+        }
+
+
+        $xmlString .= '<CorreoElectronico>' . $emisorEmail . '</CorreoElectronico>
+
+            </Emisor>';
+
+        if(!$noReceptor){
+            $xmlString .= '<Receptor>
+                            <Nombre>' . $receptorNombre . '</Nombre>
+                            <Identificacion>
+                                <Tipo>' . $receptorTipoIdentif . '</Tipo>
+                                <Numero>' . $recenprotNumIdentif . '</Numero>
+                            </Identificacion>';
+
+                    if ($receptorProvincia == '' or $receptorCanton == '' or $receptorDistrito == '' or $receptorBarrio == '' or $receptorOtrasSenas != '') {
+
+                    } else {
+                        $xmlString .= '
+                                     <Ubicacion>
+                                             <Provincia>' . $receptorProvincia . '</Provincia>
+                                            <Canton>' . $receptorCanton . '</Canton>
+                                            <Distrito>' . $receptorDistrito . '</Distrito>
+                                            <Barrio>' . $receptorBarrio . '</Barrio>
+                                            <OtrasSenas>' . $receptorOtrasSenas . '</OtrasSenas>
+                                    </Ubicacion>';
+                    }
+
+                    if ($receptorCodPaisTel == '' or $receptorTel == '') {
+
+                    } else {
+                        $xmlString .= '
+                                     <Telefono>
+                                              <CodigoPais>' . $receptorCodPaisTel . '</CodigoPais>
+                                              <NumTelefono>' . $receptorTel . '</NumTelefono>
+                                    </Telefono>';
+                    }
+
+                    if ($receptorCodPaisFax == '' or $receptorFax == '') {
+
+                    } else {
+                        $xmlString .= '
+                                     <Fax>
+                                              <CodigoPais>' . $receptorCodPaisFax . '</CodigoPais>
+                                             <NumTelefono>' . $receptorFax . '</NumTelefono>
+                                    </Fax>';
+                    }
+
+
+                    $xmlString .= '
+
+                            <CorreoElectronico>' . $receptorEmail . '</CorreoElectronico>
+                        </Receptor>';
+        }
+
+        $xmlString .= '<CondicionVenta>' . $condVenta . '</CondicionVenta>
+        <PlazoCredito>' . $plazoCredito . '</PlazoCredito>';
+
+            foreach($medioPago as $mp){
+                $xmlString .= '<MedioPago>' . $mp . '</MedioPago>';
+            }
+
+            $xmlString .= '<DetalleServicio>';
+
+        /* EJEMPLO DE DETALLES
+          {
+          "1":["1","Sp","Honorarios","100000","100000","100000","100000","1000","Pronto pago",{"Imp": [{"cod": 122,"tarifa": 1,"monto": 100},{"cod": 133,"tarifa": 1,"monto": 1300}]}],
+          "2":["1","Sp","Honorarios","100000","100000","100000","100000"]
+          }
+         */
+        $l = 1;
+        foreach ($detalles as $d) {
+            $xmlString .= '<LineaDetalle>
+                      <NumeroLinea>' . $l . '</NumeroLinea>
+                      <Cantidad>' . $d["cantidad"] . '</Cantidad>
+                      <UnidadMedida>' . $d["unidadMedida"] . '</UnidadMedida>
+                      <Detalle>' . $d["detalle"] . '</Detalle>
+                      <PrecioUnitario>' . $d["precioUnitario"] . '</PrecioUnitario>
+                      <MontoTotal>' . $d["montoTotal"] . '</MontoTotal>';
+            if (isset($d["montoDescuento"]) && $d["montoDescuento"] != "") {
+                $xmlString .= '<MontoDescuento>' . $d["montoDescuento"] . '</MontoDescuento>';
+            }
+            if (isset($d["naturalezaDescuento"]) && $d["naturalezaDescuento"] != "") {
+                $xmlString .= '<NaturalezaDescuento>' . $d["naturalezaDescuento"] . '</NaturalezaDescuento>';
+            }
+
+            $xmlString .= '<SubTotal>' . $d["subtotal"] . '</SubTotal>';
+
+            if (isset($d["impuesto"]) && $d["impuesto"] != "") {
+                foreach ($d["impuesto"] as $i) {
+                    $xmlString .= '<Impuesto>
+                    <Codigo>' . $i->codigo . '</Codigo>
+                    <Tarifa>' . $i->tarifa . '</Tarifa>
+                    <Monto>' . $i->monto . '</Monto>';
+                    if (isset($i->exoneracion) && $i->exoneracion != "") {
+                        $xmlString .= '<Exoneracion>
+                        <TipoDocumento>' . $i->exoneracion->tipoDocumento . '</TipoDocumento>
+                        <NumeroDocumento>' . $i->exoneracion->numeroDocumento . '</NumeroDocumento>
+                        <NombreInstitucion>' . $i->exoneracion->nombreInstitucion . '</NombreInstitucion>
+                        <FechaEmision>' . $i->exoneracion->fechaEmision . '</FechaEmision>
+                        <MontoImpuesto>' . $i->exoneracion->montoImpuesto . '</MontoImpuesto>
+                        <PorcentajeCompra>' . $i->exoneracion->porcentajeCompra . '</PorcentajeCompra>
+                    </Exoneracion>';
+                    }
+
+                    $xmlString .= '</Impuesto>';
+                }
+            }
+
+            $xmlString .= '<MontoTotalLinea>' . $d["montoTotalLinea"] . '</MontoTotalLinea>';
+            $xmlString .= '</LineaDetalle>';
+            $l++;
+        }
+        $xmlString .= '</DetalleServicio>
+        <ResumenFactura>
+            <CodigoMoneda>' . $codMoneda . '</CodigoMoneda>
+            <TipoCambio>' . $tipoCambio . '</TipoCambio>
+            <TotalServGravados>' . $totalServGravados . '</TotalServGravados>
+            <TotalServExentos>' . $totalServExentos . '</TotalServExentos>
+            <TotalMercanciasGravadas>' . $totalMercGravadas . '</TotalMercanciasGravadas>
+            <TotalMercanciasExentas>' . $totalMercExentas . '</TotalMercanciasExentas>
+            <TotalGravado>' . $totalGravados . '</TotalGravado>
+            <TotalExento>' . $totalExentos . '</TotalExento>
+            <TotalVenta>' . $totalVentas . '</TotalVenta>
+            <TotalDescuentos>' . $totalDescuentos . '</TotalDescuentos>
+            <TotalVentaNeta>' . $totalVentasNeta . '</TotalVentaNeta>
+            <TotalImpuesto>' . $totalImp . '</TotalImpuesto>
+            <TotalComprobante>' . $totalComprobante . '</TotalComprobante>
+        </ResumenFactura>
+        <InformacionReferencia>
+            <TipoDoc>' . $infoRefeTipoDoc . '</TipoDoc>
+            <Numero>' . $infoRefeNumero . '</Numero>
+            <FechaEmision>' . $infoRefeFechaEmision . '</FechaEmision>
+            <Codigo>' . $infoRefeCodigo . '</Codigo>
+            <Razon>' . $infoRefeRazon . '</Razon>
+        </InformacionReferencia>
+        <Normativa>
+            <NumeroResolucion>DGT-R-48-2016</NumeroResolucion>
+            <FechaResolucion>07-10-2016 08:00:00</FechaResolucion>
+        </Normativa>';
+             if ($otros == '' or $otrosType == '') {
+
+        } else {
+            $tipos = array("Otros", "OtroTexto", "OtroContenido");
+            if (in_array($otrosType, $tipos)) {
+                $xmlString .= '
+                <Otros>
+            <' . $otrosType . '>' . $otros . '</' . $otrosType . '>
+            </Otros>';
+            } else {
+
+            }
+        }
+        $xmlString .= '
+        </NotaCreditoElectronica>';
+        $arrayResp = array(
+            "clave" => $clave,
+            "xml" => base64_encode($xmlString)
+        );
+        return $arrayResp;
+    }
 }
