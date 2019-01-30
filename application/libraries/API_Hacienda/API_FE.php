@@ -13,6 +13,7 @@ class API_FE{
     }
     
     public function internetIsOnline(){
+        require_once PATH_REST_CLIENT;
         $bm = round(microtime(true) * 1000);
         $localClient = new RestClient([
             'base_url' => "https://www.google.com/",
@@ -200,6 +201,7 @@ class API_FE{
     }
     
     private function crearNuevaSesion($ambienteHacienda, $usuario, $password){
+        require_once PATH_REST_CLIENT;
         $bm = round(microtime(true) * 1000);
         $url = $ambienteHacienda == "api-stag" ? HACIENDA_TOKEN_API_STAG : HACIENDA_TOKEN_API_PROD;
         $localClient = new RestClient([
@@ -234,6 +236,7 @@ class API_FE{
     }
     
     private function refrescarSesion($ambienteHacienda, $usuario, $refreshToken){
+        require_once PATH_REST_CLIENT;
         $bm = round(microtime(true) * 1000);
         $url = $ambienteHacienda == "api-stag" ? HACIENDA_TOKEN_API_STAG : HACIENDA_TOKEN_API_PROD;
         $localClient = new RestClient([
@@ -267,6 +270,7 @@ class API_FE{
     }
     
     public function destruirSesion($ambienteHacienda, $usuario){
+        require_once PATH_REST_CLIENT;
         $this->logger->info("destruirSesion", "Exiting session into Hacienda API");
         if($tokenCache = $this->verificarExistenciaToken($ambienteHacienda, $usuario)){
             $bm = round(microtime(true) * 1000);
@@ -378,6 +382,7 @@ class API_FE{
     }
     
     public function revisarEstadoAceptacion($ambienteHacienda, $clave, $token){
+        require_once PATH_REST_CLIENT;
         $bm = round(microtime(true) * 1000);
         $url = $ambienteHacienda == "api-stag" ? HACIENDA_RECEPCION_API_STAG : HACIENDA_RECEPCION_API_PROD;
         $localClient = new RestClient([
