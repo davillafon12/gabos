@@ -2885,12 +2885,6 @@ Class contabilidad extends CI_Model
         function getCostoTotalNotaCredito($consecutivo, $sucursal){
             if($notaCreditoHead = $this->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
 		if($notaCreditoBody = $this->contabilidad->getArticulosNotaCredito($consecutivo, $sucursal)){
-                    unset($this->retorno['error']);
-                    $this->retorno['status'] = 'success';
-                    $this->retorno['empresa'] = $empresa;
-                    $this->retorno['notaHead'] = $notaCreditoHead;
-                    $this->retorno['notaBody'] = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal);
-
                     $cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
                     $c_array = $this->configuracion->getConfiguracionArray();
                     $costo_total = 0;
