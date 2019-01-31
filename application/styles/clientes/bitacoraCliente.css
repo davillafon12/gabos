@@ -1,0 +1,133 @@
+body{
+	min-width: 1060px;
+}
+
+.contenidoB{
+	margin: 0 auto;
+	margin-bottom: 10px;
+	padding-left: 10px;
+	width: 90%;
+	*height: 200px;
+	border: 1px #f2f2f2 solid;
+	-moz-box-shadow: 0px 0px 2px 0px #888888;
+	-webkit-box-shadow: 0px 0px 2px 0px #888888;
+	box-shadow: 0px 0px 2px 0px #888888;
+	overflow: hidden
+}
+
+.contact { 
+	color: #000; 
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica;  
+    *padding: 7px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left:5px;
+}
+
+.input_uno{
+	width: 250px;
+	background-color: rgba(255, 255, 255, 0.4); 
+	border: 1px solid rgba(51, 51, 51, 0.15); 
+	*padding: 7px; 
+	font-family: Keffeesatz, Arial; 
+	color: #4b4b4b; 
+	font-size: 14px; 
+	*margin-top: 0px;
+	padding-left: 2px;
+}
+
+.tablaInfo{
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.division-contenido{
+	margin-right: 10px;
+}
+
+
+.descuento-cliente{
+	width: 30px;
+}
+
+.boton-cambiar{
+	margin-left: 5px;
+	background: #59B659;
+	display: inline-block;
+	padding: 2px 6px 3px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
+	-webkit-box-shadow: 0 1px 3px #999;
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	cursor: pointer;
+	font-size: 11px;
+	font-family: Verdana, Geneva, sans-serif;
+}
+
+.tiny-font{	
+	font-size: 11px;
+}
+
+.input-credito{
+	width: 100px;
+	text-align: right;
+}
+
+.tabla-credito{
+	height: 50px;
+	position: relative;
+	top: -150px;
+}
+
+.input-codigo{
+	width: 50px;
+}
+
+.input-descuento{
+	width: 55px;
+}
+
+.descripcion-thead{
+	width: 400px;
+}
+
+.borde-abajo{
+	border-bottom: 1px solid #000000;	
+	margin:0px;
+	padding:0px;
+}
+
+.borde-arriba{
+	border-top: 1px solid #000000;	
+	margin:0px;
+	padding:0px;
+}
+
+.div-tabla-productos{
+	width: 500px;
+	float: left;
+	margin-bottom: 10px;
+}
+
+.div-tabla-familias{
+	width: 500px;
+	float: right;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.ui-autocomplete{
+	max-height: 400px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
