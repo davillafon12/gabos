@@ -100,6 +100,7 @@ function imprimirFactura(data){
 	qz.append("\x1B\x21\x10");
 	//Centramos
 	qz.append("\x1B\x61\x01");
+        qz.append(" Comprobante Provisional \r\n");
 	qz.append(" "+empresa.nombre+" \r\n");
 	//Seleccionamos tipo de letra
 	qz.append("\x1B\x21\x01");
@@ -176,8 +177,11 @@ function imprimirFactura(data){
 	qz.append("Los precios incluyen impuestos de venta\r\n");
 	qz.append("Gracias por su visita\r\n");
 	qz.append(" \r\n");
+        qz.append(" Este comprobante provisional no puede ser utilizado para respaldo de creditos fiscales ni como gastos deducibles\r\n");
+        qz.append(" \r\n");
         qz.append(" Version 4.2\r\n");
 	qz.append(empresa.leyenda+"\r\n");
+        qz.append("\r\n Comprobante Provisional \r\n");
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
 	qz.append("\x1B\x69"); //Cortar
