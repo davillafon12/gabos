@@ -361,10 +361,55 @@ class otros extends CI_Controller {
 	*                       Consultar bitacora de clientes 
 	*/
 	function cargaBitacoraClientes(){
-		$this->load->view('clientes/clientes_bitacora_view', $data);	
-	
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$this->load->view('clientes/clientes_bitacora_view', $data);
 	}
-	
+
+	function getClienteBitacora(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+		if(isset($_POST['cedula'])){
+			$cedula = $_POST['cedula']; 
+			if(trim($cedula) == '1' || trim($cedula) == '0'){
+				$retorno['error'] = '4'; //Error cliente contado y afiliado
+			}else{
+				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
+					foreach($clienteArray as $row){
+						$cliente['nombre'] = $row-> Cliente_Nombre;
+						$cliente['apellidos'] = $row-> Cliente_Apellidos;						
+					}
+					include PATH_USER_DATA;
+					//Descuento con productos del cliente
+					$bitacoraCliente = $this->cliente->obtenerBitacoraCliente($cedula); 					
+					if($bitacoraCliente != false){	
+						$listaRegistroBitacora = array();
+						foreach($bitacoraCliente->result() as $registro){
+							$pro['Fecha'] = $registro->Fecha;
+							$pro['Nombre'] = $registro->Nombre;
+							$pro['Cedula'] = $registro->Cedula;						
+							$pro['Nombre_Usuario'] = $registro->Nombre_Usuario;
+							$pro['Tipo_Transaccion'] = $registro->Tipo_Transaccion;							
+							$pro['Descripcion'] = $registro->Descripcion;
+							array_push($listaRegistroBitacora, $registro);
+						}
+						$cliente['bitacora'] = $listaRegistroBitacora;						
+					}
+					else{
+						$retorno['error'] = '5'; //No existen registros de esa cédula
+					}
+					/// TODO SALIO BIEN
+					$retorno['status'] = 'success';
+					$retorno['cliente'] = $cliente;
+				}else{
+					$retorno['error'] = '3'; //Error no hay cliente
+				}
+			}
+		}else{
+			$retorno['error'] = '2'; //Error en la URL
+		}
+		echo json_encode($retorno);
+	}	
 }
 
 ?>

@@ -652,8 +652,7 @@ Class cliente extends CI_Model
 			return $result[0]->TOTAL;
 		}
 	}
-	
-	
+		
 	function eliminarAutorizacionCliente($secuencia, $cliente){
 			$autorizacion = $this->verificarSiYaTieneAutorizacion($cliente, $secuencia);
 			if($autorizacion){
@@ -708,18 +707,52 @@ Class cliente extends CI_Model
 		return $query -> num_rows();
 	}
         
-        function getCredito($factura, $sucursal, $cliente){
-            $this->db->where("Credito_Factura_Consecutivo", $factura);
-            $this->db->where("Credito_Sucursal_Codigo", $sucursal);
-            $this->db->where("Credito_Cliente_Cedula", $cliente);
-            $this->db->from('tb_24_credito');
-            $query = $this -> db -> get();
-            if($query->num_rows() == 0){
-                return false;
-            }else{
-                return $query->result()[0];
-            }
-        }
+	function getCredito($factura, $sucursal, $cliente){
+		$this->db->where("Credito_Factura_Consecutivo", $factura);
+		$this->db->where("Credito_Sucursal_Codigo", $sucursal);
+		$this->db->where("Credito_Cliente_Cedula", $cliente);
+		$this->db->from('tb_24_credito');
+		$query = $this -> db -> get();
+		if($query->num_rows() == 0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+
+
+	function obtenerBitacoraCliente($cedula){
+		
+		$query =  $this->db->query("
+			SELECT  bc.Cliente_Cedula as 'Cedula', 
+					bc.Sucursal, 
+					suc.Sucursal_Nombre as 'Nombre',  
+					bc.Usuario, 
+					usu.Usuario_Nombre_Usuario as 'Nombre_Usuario' , 
+					case bc.Trans_Tipo
+						when 'Ingreso_Cliente' THEN 'Registro Cliente' 
+						when 'Edicion_Cliente' THEN 'Actualización del Cliente' 
+						when 'Actualiza_DesClien' THEN 'Actualización descuento Cliente' 
+						when 'Agrega_DesCliente' THEN 'Agregación descuento Cliente' 
+						when 'Actualiza_Credito' THEN 'Actualización crédito Cliente' 
+						when 'Agregar_Credito' THEN 'Agregación crédito Cliente' 
+						when 'Elimina_DesProducto' THEN 'Eliminación descuento producto' 
+						when 'Agrega_DesProducto' THEN 'Agrega descuento producto' 
+						when 'Elimina_DesFamilia' THEN 'Eliminación descuento familia' 
+						when 'Agrega_DesFamilia' THEN 'Agrega descuento familia' 
+					end as 'Tipo_Transaccion',
+					bc.Trans_Fecha_Hora as 'Fecha', 
+					bc.Trans_Descripcion as 'Descripcion'
+			FROM tb_60_bitacora_cliente bc 
+			INNER JOIN tb_02_sucursal suc on bc.Sucursal = suc.Codigo
+			INNER JOIN tb_01_usuario usu on bc.Usuario = usu.Usuario_Codigo 
+			WHERE bc.Cliente_Cedula = '$cedula'");		
+		if($query->num_rows() == 0){
+			return false;
+		}else{
+			return $query;
+		}
+	}
 }
 
 
