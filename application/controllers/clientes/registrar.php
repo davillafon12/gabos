@@ -125,7 +125,15 @@ class registrar extends CI_Controller {
                                         $noReceptor)){ //Si se ingreso bien a la BD
                 //Titulo de la pagina
                 $data['Titulo_Pagina'] = "Transacción Exitosa";
-
+                $this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+                                                    $data['Sucursal_Codigo'], 
+                                                    $data['Usuario_Codigo'], 
+                                                    'Ingreso_Cliente', 
+                                                    'Registro Cliente : '. mysql_real_escape_string($nombre).' '. mysql_real_escape_string($apellidos) .
+                                                    ' Tipo Pago : '.mysql_real_escape_string($tipo_pago_cliente).
+                                                    ' Email : '.mysql_real_escape_string($email).
+                                                    ' Celular : '.mysql_real_escape_string($celular)); 
+                                                    
                 $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el cliente ".mysql_real_escape_string($nombre)." codigo: ".mysql_real_escape_string($cedula),$data['Sucursal_Codigo'],'registro');
             $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso del cliente ".$nombre." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
                                          <div class='Informacion'>

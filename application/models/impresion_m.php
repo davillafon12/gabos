@@ -34,7 +34,9 @@ Class impresion_m extends CI_Model{
         }
 
         if($makeFile){
-            $pdf->Output(PATH_DOCUMENTOS_ELECTRONICOS.$fhead[0]->clave.".pdf",'F');
+            $filePath = "/tmp/".$fhead[0]->clave.".pdf";
+            $pdf->Output($filePath,'F');
+            $this->storeFile($fhead[0]->clave.".pdf", "fe", $filePath);
         }else{
            //Imprimimos documento
             $pdf->Output(); 
@@ -123,7 +125,7 @@ Class impresion_m extends CI_Model{
                     $pdf->Text(41, $pl, substr($productos[$cc]->descripcion,0,33));
                     $pdf->cell(15,5,$productos[$cc]->cantidad,0,0,'C');
                     $pdf->cell(6,5,$this->fe($productos[$cc]->exento),0,0,'C');
-                    $pdf->cell(14,5,$productos[$cc]->descuento);
+                    $pdf->cell(14,5,$this->fni($productos[$cc]->descuento));
                     $pdf->cell(27.5,5,$this->fni($precio),0,0,'R');
                     $pdf->cell(28,5,$this->fni($total),0,0,'R');			
                     $pdf->ln($sl);
@@ -685,7 +687,7 @@ Class impresion_m extends CI_Model{
 				$pdf->Cell(28,7,$this->fni($encabezado->total),1,0,'R');
                                 
                                 $pdf->SetFont('Arial','',8);
-				$pdf->SetXY(10, 267);
+				$pdf->SetXY(10, 263);
                                 $pdf->MultiCell(190,3,"Versión: 4.2",0,'C');
                                 $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
@@ -806,7 +808,9 @@ Class impresion_m extends CI_Model{
 			$this->numPagina++;
 		}
 		if($makeFile){
-                    $pdf->Output(PATH_DOCUMENTOS_ELECTRONICOS.$head->clave.".pdf",'F');
+                    $filePath = "/tmp/".$head->clave.".pdf";
+                    $pdf->Output($filePath,'F');
+                    $this->storeFile($head->clave.".pdf", "nc", $filePath);
                 }else{
                    //Imprimimos documento
                     $pdf->Output(); 

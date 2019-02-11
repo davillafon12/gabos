@@ -491,6 +491,24 @@ function existe_Nombre_Usuario($nombre){
 			return $query->result();
 		}
 	}
+
+	// Registro Bitacora de Cliente
+
+	
+	function guardar_Bitacora_Cliente($Cliente_Cedula, $Sucursal, $Usuario, $Trans_Tipo, $Descripcion)
+    {
+	    date_default_timezone_set("America/Costa_Rica");
+        $data = array(
+				'Cliente_Cedula' => mysql_real_escape_string($Cliente_Cedula),
+				'Sucursal' => mysql_real_escape_string($Sucursal),
+				'Usuario' => mysql_real_escape_string($Usuario),
+                'Trans_Fecha_Hora' => date("y/m/d : H:i:s", now()),
+				'Trans_Tipo' => mysql_real_escape_string($Trans_Tipo),
+				'Trans_IP' => $this->input->ip_address(),
+                'Trans_Descripcion' => mysql_real_escape_string($Descripcion)
+                );
+        $this->db->insert('tb_60_Bitacora_cliente',$data);
+    }
 	
 }//FIN DE LA CLASE
 ?>

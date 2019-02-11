@@ -28,8 +28,6 @@ class caja extends CI_Controller {
 	function index()
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-                require_once PATH_API_HACIENDA;
-                $api_resp = API_FE::setUpLogin($data);
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
@@ -39,8 +37,6 @@ class caja extends CI_Controller {
 		$fecha = date("y/m/d : H:i:s", now());
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
-                $data['api_fe_isup'] = $api_resp["isUp"];
-                $data['api_session_ready'] = $api_resp["sessionKey"];
 		$this->load->view('facturas/view_caja_factura', $data);	
 	}
 	
@@ -311,9 +307,9 @@ class caja extends CI_Controller {
                         require_once PATH_API_CORREO;
                         $apiCorreo = new Correo();
                         $attachs = array(
-                            PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".xml",
-                            PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
-                            PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".pdf");
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".xml",
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".pdf");
                         if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
                             $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
                         }
@@ -484,7 +480,7 @@ class caja extends CI_Controller {
                     $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario anulo la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'anular');
                     
                     if($facturaYaExistia === false){
-                        $this->guardarPDFFactura($consecutivo, $data['Sucursal_Codigo']);
+                        $this->factura->guardarPDFFactura($consecutivo, $data['Sucursal_Codigo']);
 
                         if(!$responseCheck["cliente"]->NoReceptor){
                             $apiCorreo = new Correo();

@@ -821,31 +821,32 @@ Class contabilidad extends CI_Model
 		$queryLoco = "";
 		
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
-				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
-				$sucursal = $this->sucursales_trueque[$sucursal];
-				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
-				}
+                    $facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+                    $sucursal = $this->sucursales_trueque[$sucursal];
+                    if(!empty($facturas_trueque)){
+                        $queryLoco = "AND f.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
+                    }
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
-				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
-				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
-				}
+                    $facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+                    if(!empty($facturas_trueque)){
+                        $queryLoco = "AND f.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
+                    }
 		}
 		
 		$query = $this->db->query("
-			SELECT * FROM TB_07_Factura
-			JOIN TB_18_Tarjeta ON TB_07_Factura.Factura_Consecutivo = TB_18_Tarjeta.TB_07_Factura_Factura_Consecutivo
-			WHERE (TB_07_Factura.Factura_Tipo_Pago = 'tarjeta'
-			OR TB_07_Factura.Factura_Tipo_Pago = 'mixto')
-			AND TB_07_Factura.TB_02_Sucursal_Codigo = $sucursal
-			AND TB_18_Tarjeta.TB_07_Factura_TB_02_Sucursal_Codigo = $sucursal
-			AND TB_18_Tarjeta.TB_22_Banco_Banco_Codigo = $banco
-			AND TB_07_Factura.Factura_Fecha_Hora > '$inicio'
-			AND TB_07_Factura.Factura_Fecha_Hora < '$final'
-			AND TB_07_Factura.TB_03_Cliente_Cliente_Cedula != 2
+			SELECT * FROM TB_07_Factura f
+			JOIN TB_18_Tarjeta t ON f.Factura_Consecutivo = t.TB_07_Factura_Factura_Consecutivo
+			WHERE f.Factura_Tipo_Pago IN ('tarjeta','mixto')
+			AND f.TB_02_Sucursal_Codigo = $sucursal
+			AND t.TB_07_Factura_TB_02_Sucursal_Codigo = $sucursal
+			AND t.TB_22_Banco_Banco_Codigo = $banco
+			AND f.Factura_Fecha_Hora > '$inicio'
+			AND f.Factura_Fecha_Hora < '$final'
+                        AND f.Factura_Estado = 'cobrada' 
+			AND f.TB_03_Cliente_Cliente_Cedula != 2
 			$queryLoco
 		");
+                // echo $this->db->last_query();
 		if($query->num_rows()==0)
 		{			
 			return false;
@@ -858,30 +859,35 @@ Class contabilidad extends CI_Model
 	
 	function getRecibosPagadosConTarjetaRangoFecha($sucursal, $banco, $inicio, $final){
 		/*
-			SELECT tb_32_tarjeta_recibos.Comision_Por,
-					tb_26_recibos_dinero.Recibo_Cantidad,
-					tb_26_recibos_dinero.Recibo_Fecha
-			FROM tb_32_tarjeta_recibos
-			JOIN tb_26_recibos_dinero ON tb_26_recibos_dinero.Consecutivo = tb_32_tarjeta_recibos.Recibo
-			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_32_tarjeta_recibos.Credito
-			WHERE tb_24_credito.Credito_Sucursal_Codigo = 0
-			AND  tb_32_tarjeta_recibos.Banco = 2
-		*/
+                SELECT tr.Comision_Por, tmp.Recibo_Cantidad, tmp.Recibo_Fecha FROM (SELECT * FROM tb_26_recibos_dinero rd
+                JOIN tb_24_credito c ON rd.Credito = c.Credito_Id
+                WHERE c.Credito_Sucursal_Codigo = 2 
+                AND c.Credito_Vendedor_Sucursal = 2
+                AND rd.Tipo_Pago = 'tarjeta' 
+                AND rd.Recibo_Fecha > '2018-12-09 16:57:20'
+                AND rd.Recibo_Fecha < '2018-12-10 18:15:35') AS tmp
+                JOIN tb_32_tarjeta_recibos tr ON tr.Recibo = tmp.Consecutivo AND tr.Credito = tmp.Credito_Id 
+                AND tr.Banco = 1
+                */
+            
 		$sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
+                    $sucursal = $this->sucursales_trueque[$sucursal];
 		}
-		$this->db->select('tb_32_tarjeta_recibos.Comision_Por, tb_26_recibos_dinero.Recibo_Cantidad, tb_26_recibos_dinero.Recibo_Fecha');
-		$this->db->from('tb_32_tarjeta_recibos');
-		$this->db->join('tb_26_recibos_dinero', 'tb_26_recibos_dinero.Consecutivo = tb_32_tarjeta_recibos.Recibo');
-		$this->db->join('tb_24_credito', 'tb_24_credito.Credito_Id = tb_32_tarjeta_recibos.Credito');
-		$this->db->where('tb_24_credito.Credito_Sucursal_Codigo', $sucursal);
-		$this->db->where('tb_32_tarjeta_recibos.Banco', $banco);
-		$this->db->where('tb_26_recibos_dinero.Tipo_Pago', 'tarjeta');
-		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha >', $inicio);
-		$this->db->where('tb_26_recibos_dinero.Recibo_Fecha <', $final);
-		$this->db->where('tb_24_credito.Credito_Vendedor_Sucursal', $sucursalVendedor);
-		$query = $this->db->get();
+                
+                $sql = "SELECT tr.Comision_Por, tmp.Recibo_Cantidad, tmp.Recibo_Fecha FROM (SELECT * FROM tb_26_recibos_dinero rd
+                            JOIN tb_24_credito c ON rd.Credito = c.Credito_Id
+                            WHERE c.Credito_Sucursal_Codigo = $sucursal 
+                            AND c.Credito_Vendedor_Sucursal = $sucursalVendedor
+                            AND rd.Tipo_Pago = 'tarjeta' 
+                            AND rd.Recibo_Fecha > '$inicio'
+                            AND rd.Recibo_Fecha < '$final') AS tmp
+                            JOIN tb_32_tarjeta_recibos tr ON tr.Recibo = tmp.Consecutivo AND tr.Credito = tmp.Credito_Id
+                            AND tr.Banco = $banco";
+                
+                
+		$query = $this->db->query($sql);
+                // echo $this->db->last_query();
 		if($query->num_rows()==0)
 		{			
 			return false;
@@ -2354,7 +2360,7 @@ Class contabilidad extends CI_Model
                         $this->db->update("tb_57_nota_credito_electronica", $data);
                         
                         // Guardarmos el XML firmado en un archivo
-                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$nota->Clave.".xml",  base64_decode($xmlFirmado));
+                        $this->storeFile($nota->Clave.".xml", "nc", null, base64_decode($xmlFirmado));
                         
                         return $data;
                     }
@@ -2702,8 +2708,8 @@ Class contabilidad extends CI_Model
                                                                         require_once PATH_API_CORREO;
                                                                         $apiCorreo = new Correo();
                                                                         $attachs = array(
-                                                                            PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".xml",
-                                                                            PATH_DOCUMENTOS_ELECTRONICOS.$response["clave"].".pdf");
+                                                                            $this->getFinalPath("nc").$response["clave"].".xml",
+                                                                            $this->getFinalPath("nc").$response["clave"].".pdf");
                                                                         if($apiCorreo->enviarCorreo($response["cliente"]->Cliente_Correo_Electronico, "Nota Crédito #".$consecutivo." | ".$response["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$response["empresa"]->Sucursal_Nombre, $attachs)){
                                                                             $this->marcarEnvioCorreoNotaCreditoElectronica($sucursal, $consecutivo);
                                                                         }
@@ -2879,12 +2885,6 @@ Class contabilidad extends CI_Model
         function getCostoTotalNotaCredito($consecutivo, $sucursal){
             if($notaCreditoHead = $this->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)){
 		if($notaCreditoBody = $this->contabilidad->getArticulosNotaCredito($consecutivo, $sucursal)){
-                    unset($this->retorno['error']);
-                    $this->retorno['status'] = 'success';
-                    $this->retorno['empresa'] = $empresa;
-                    $this->retorno['notaHead'] = $notaCreditoHead;
-                    $this->retorno['notaBody'] = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal);
-
                     $cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
                     $c_array = $this->configuracion->getConfiguracionArray();
                     $costo_total = 0;
@@ -3095,7 +3095,7 @@ Class contabilidad extends CI_Model
                         $this->db->where("Sucursal", $sucursal);
                         $this->db->update("tb_59_mensaje_receptor", $data);
                         
-                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$comprobante->Clave."-".$comprobante->ConsecutivoHacienda.".xml",  base64_decode($xmlFirmado));
+                        $this->storeFile($comprobante->Clave."-".$comprobante->ConsecutivoHacienda.".xml", "mr", null, base64_decode($xmlFirmado));
                         
                         return true;
                     }

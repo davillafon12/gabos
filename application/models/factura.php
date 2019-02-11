@@ -874,20 +874,20 @@ Class factura extends CI_Model
 	}
 	
 	function getFacturasTrueque($sucursal){
-			$this->db->select("Consecutivo");
-			$this->db->from("tb_46_relacion_trueque");
-			$this->db->where("Documento", "factura");
-			$this->db->where("Sucursal", $sucursal);
-			$query = $this->db->get();
-			if($query->num_rows()==0){
-					return array();
-			}else{
-					$facturas = array();
-					foreach($query->result() as $f){
-							array_push($facturas, $f->Consecutivo);
-					}
-					return $facturas;
-			}
+            $this->db->select("Consecutivo");
+            $this->db->from("tb_46_relacion_trueque");
+            $this->db->where("Documento", "factura");
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()==0){
+                return array();
+            }else{
+                $facturas = array();
+                foreach($query->result() as $f){
+                    array_push($facturas, $f->Consecutivo);
+                }
+                return $facturas;
+            }
 	}
 	
 	function getFacturasTruequeResponde($sucursales){
@@ -1210,7 +1210,7 @@ Class factura extends CI_Model
                         $this->db->update("tb_55_factura_electronica", $data);
                         
                         // Guardarmos el XML firmado en un archivo
-                        file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave.".xml",  base64_decode($xmlFirmado));
+                        $this->storeFile($factura->Clave.".xml", "fe", null, base64_decode($xmlFirmado));
                         
                         return $data;
                     }
@@ -1298,7 +1298,8 @@ Class factura extends CI_Model
                 log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
                 
                 // Guardarmos el XML firmado en un archivo
-                file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
+                //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
+                $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($xmlRespuesta));
                 
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
@@ -1447,21 +1448,7 @@ Class factura extends CI_Model
                             $facturaBODY['cliente']=$cliente[0];
                             $this->validarEmpresaYClienteCobrarFactura($facturaBODY);
                             if($facturaBODY["status"] == 'success'){
-                                require_once PATH_API_HACIENDA;
-                                $api_resp = API_FE::setUpLogin($data);
-                                if($api_resp["isUp"]){
-                                    if($api_resp["sessionKey"]){
-                                        $facturaBODY['status']='success';
-                                        $facturaBODY['sessionKey']=$api_resp["sessionKey"];
-                                        unset($facturaBODY['error']);
-                                    }else{
-                                        $facturaBODY["status"] = "error";
-                                        $facturaBODY['error']='51'; //Error no se genero el token de sesion para el API de crLibre
-                                    }
-                                }else{
-                                    $facturaBODY["status"] = "error";
-                                    $facturaBODY['error']='50'; //Error no hay conexion con API crLibre
-                                }
+                                unset($facturaBODY['error']);
                             }
                         }else{
                             $facturaBODY['error']='25'; //No existe cliente

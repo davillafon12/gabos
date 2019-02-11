@@ -1,0 +1,1 @@
+update tb_02_sucursal set Token_Certificado_Tributa = null;

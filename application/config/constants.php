@@ -59,6 +59,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 //define('PATH_API_HACIENDA', '/../libraries/API_Hacienda/API_FE.php');
 //define('PATH_REST_CLIENT', '/../libraries/API_Hacienda/RestClient.php');
 //define('PATH_API_LOGGER', '/../libraries/API_Hacienda/APILogger.php');
+//define('PATH_API_HELPER', '/../libraries/API_Hacienda/API_Helper.php');
 //define('PATH_TABLA_FAMILIAS', '/../../scripts/cargar_tabla_familias.php');
 //define('PATH_AJAX_FAMILIAS', '/../../scripts/ajax_familias.php');
 //define('PATH_AJAX_VERIFY_FAMILIAS', '/../../scripts/ajax_verify_familia_id.php');
@@ -89,6 +90,7 @@ define('PATH_BUSCAR_CLIENTE_ID_SCRIPT', FCPATH.'application/scripts/ajax_verify_
 define('PATH_API_HACIENDA', FCPATH.'application/libraries/API_Hacienda/API_FE.php');
 define('PATH_REST_CLIENT', FCPATH.'application/libraries/API_Hacienda/RestClient.php');
 define('PATH_API_LOGGER', FCPATH.'application/libraries/API_Hacienda/APILogger.php');
+define('PATH_API_HELPER', FCPATH.'application/libraries/API_Hacienda/API_Helper.php');
 define('PATH_TABLA_FAMILIAS', FCPATH.'application/scripts/cargar_tabla_familias.php');
 define('PATH_AJAX_FAMILIAS', FCPATH.'application/scripts/ajax_familias.php');
 define('PATH_AJAX_VERIFY_FAMILIAS', FCPATH.'application/scripts/ajax_verify_familia_id.php');
@@ -98,13 +100,12 @@ define('PATH_API_CORREO', FCPATH.'application/libraries/Correo.php');
 define('CARPETA_IMAGENES', FCPATH.'application/images/articulos/');
 
 
-define('URL_API_CRLIBE', 'http://192.168.10.17');
-define('API_CRLIBRE_CURL_TIMEOUT', 10);
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
 define('FACTURA_ELECTRONICA_CODIGO', '01');
 define('NOTA_CREDITO_ELECTRONICA', 'NC');
 define('HACIENDA_DECIMALES', 5);
+define('API_CRLIBRE_CURL_TIMEOUT', 5);
 define('HACIENDA_TOKEN_API_STAG', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect");
 define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect");
 define('HACIENDA_RECEPCION_API_STAG', "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/");
