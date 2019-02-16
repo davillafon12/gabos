@@ -417,7 +417,7 @@ class API_Helper{
     }
     
     function signFE($p12Url, $pinP12, $inXml, $tipoDoc) {
-        require_once 'Firmador.php';
+        require 'Firmador.php';
         $tipoDocumento = "";
         $tipos = array("FE", "ND", "NC", "TE","CCE","CPCE","RCE");
         if (in_array($tipoDoc, $tipos)) {

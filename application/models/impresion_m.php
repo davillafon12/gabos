@@ -687,7 +687,7 @@ Class impresion_m extends CI_Model{
 				$pdf->Cell(28,7,$this->fni($encabezado->total),1,0,'R');
                                 
                                 $pdf->SetFont('Arial','',8);
-				$pdf->SetXY(10, 263);
+				$pdf->SetXY(10, 267);
                                 $pdf->MultiCell(190,3,"Versión: 4.2",0,'C');
                                 $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
