@@ -77,11 +77,11 @@ PARA:
 								?>
 								</select> 
 							</td>
-							<td class="Ssucursal">
+							<td class="mSucursal">
 								<label for="sucursal"  class="labelMedium">Empresa:</label>							
 							</td>
-							<td class="Ssucursal">
-								<select id="sucursal" name="sucursal" class="styleSelect" tabindex="8">
+							<td class="mSucursal">
+								<select name="sucursal" class="styleSelect" tabindex="8">
 								<?php 					
 									foreach($Empresas as $Nombre_Empresa => $codigo_empresa)
 									{
@@ -90,20 +90,6 @@ PARA:
 									}
 								?>
 								</select> 
-							</td>
-						</tr>
-						<tr class="sucDesamparados">
-							<td>
-								<label for="lafecha_inicial"  class="labelMedium">Desamparados:</label>							
-							</td>
-							<td>
-								<input type="checkbox"name="check_Desamparados" value="1">
-							</td>
-							<td>
-								<label for="lafecha_inicial"  class="labelMedium">GarotasBonitas:</label>							
-							</td>
-							<td>
-								<input type="checkbox"name="check_GarotasBonitas" value="1">
 							</td>
 						</tr>
 						<tr class="fFechas">
@@ -143,27 +129,13 @@ PARA:
 								?>
 								</select> 
 							</td>
-							<td>
-								<label for="sucursalTodas"  class="labelMedium">Sucursal Ingreso:</label>							
-							</td>
-							<td>
-								<select id="sucursalTodas" name="sucursalTodas" class="styleSelect" tabindex="8">
-								<?php 					
-									foreach($EmpresasTodas as $Nombre_Empresa => $codigo_empresa)
-									{
-										echo "<option value='".$codigo_empresa."'";
-										echo">".$codigo_empresa." - ".$Nombre_Empresa."</option>";
-									}
-								?>
-								</select> 
-							</td>							
 						</tr>
 						<tr class="uFacturas">
 							<td>
-								<label for="paEstadoFactura" id="paEstadoFacturaLabel" class="labelMedium">Estado Factura:</label>							
+								<label for="paEstadoFactura"  class="labelMedium">Estado Factura:</label>							
 							</td>
 							<td>
-								<select name="paEstadoFactura" id="paEstadoFactura" class="styleSelect" tabindex="8">
+								<select name="paEstadoFactura" class="styleSelect" tabindex="8">
 								<?php 					
 									foreach($EstadoFacturas as $Codigo_Factura => $Nombre_Factura)
 									{
@@ -180,28 +152,6 @@ PARA:
 								<input type="checkbox" id="paEsSucursal" name="paEsSucursal" value="1"> Es Sucursal<br>
 							</td>
 						</tr>
-						<tr class="uProformas">
-							<td>
-								<label for="paEstadoProforma" id="paEstadoProformaLabel" class="labelMedium">Estado Proforma:</label>							
-							</td>
-							<td>
-								<select name="paEstadoProforma" id="paEstadoProforma" class="styleSelect" tabindex="8">
-								<?php 					
-									foreach($EstadoProforma as $Codigo_Factura => $Nombre_Factura)
-									{
-										echo "<option value='".$Codigo_Factura."'";
-										echo">".$Nombre_Factura."</option>";
-									}
-								?>
-								</select> 
-							</td>
-							<td>
-								<label for="paEsSucursal"  class="labelMedium">Sucursal:</label>							
-							</td>
-							<td>
-								<input type="checkbox" id="paEsSucursal" name="paEsSucursal" value="1"> Es Sucursal<br>
-							</td>
-						</tr>						
 						<tr class="mNombre">
 							<td rowspan= "3">
 								<label for="mNombre"  class="labelMedium">Filtrar Por:</label>							

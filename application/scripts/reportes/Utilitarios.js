@@ -12,8 +12,7 @@ var Utilitarios = (function (window, undefined) {
 	
 	//USUARIOS
 	var _Reporte_ListaUsuario = "ListaUsuario"; 
-    var _Reporte_ListaDefacturasPorUsuario = "ListaDefacturasPorUsuario"; 
-    var _Reporte_ListaDefacturasPorUsuarioResumido = "ListaDefacturasPorUsuarioResumido"; 
+	var _Reporte_ListaDefacturasPorUsuario = "ListaDefacturasPorUsuario"; 
 	
 	//CLIENTES
 	var _Reporte_VentaXClienteFacturas = "VentaXClienteFacturas"; 
@@ -233,8 +232,7 @@ var Utilitarios = (function (window, undefined) {
 		paReporte_CantArtVentaCliente: _Reporte_CantArtVentaCliente,
 		paReporte_ProcedenciaArticulo: _Reporte_ProcedenciaArticulo,
 		paReporte_ListaUsuario: _Reporte_ListaUsuario, 
-        paReporte_ListaDefacturasPorUsuario: _Reporte_ListaDefacturasPorUsuario, 
-        paReporte_ListaDefacturasPorUsuarioResumido: _Reporte_ListaDefacturasPorUsuarioResumido,
+		paReporte_ListaDefacturasPorUsuario: _Reporte_ListaDefacturasPorUsuario, 
 		paReporte_VentaXClienteFacturas: _Reporte_VentaXClienteFacturas,
 		paReporte_VentaXClienteFacturasResumen: _Reporte_VentaXClienteFacturasResumen,
 		paReporte_VentaXClienteProforma:_Reporte_VentaXClienteProforma,
