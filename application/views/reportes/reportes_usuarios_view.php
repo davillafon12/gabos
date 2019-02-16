@@ -76,7 +76,7 @@ PARA:
 									}
 								?>
 								</select> 
-							</td>							
+							</td>
 							<td>
 								<label for="sucursal"  class="labelMedium">Empresa:</label>							
 							</td>
@@ -92,40 +92,12 @@ PARA:
 								</select> 
 							</td>
 						</tr>
-						<tr class="sucDesamparados">
-							<td>
-								<label for="lafecha_inicial"  class="labelMedium">Desamparados:</label>							
-							</td>
-							<td>
-								<input type="checkbox"name="check_Desamparados" value="1">
-							</td>
-							<td>
-								<label for="lafecha_inicial"  class="labelMedium">GarotasBonitas:</label>							
-							</td>
-							<td>
-								<input type="checkbox"name="check_GarotasBonitas" value="1">
-							</td>
-						</tr>
 						<tr class="fFechas">
 							<td>
 								<label for="lafecha_inicial"  class="labelMedium">FiltrarFechas:</label>							
 							</td>
-							<td colspan="1">
+							<td colspan="3">
 								<input type="checkbox" id="mFecha" name="mFecha" value="1"> Mostrar Fechas<br>
-							</td>
-							<td>
-								<label for="lafecha_inicial"  class="labelMedium">Estado Usuario:</label>							
-							</td>
-							<td colspan="1">
-								<select id="paEstadoUsuario" name="paEstadoUsuario" class="styleSelect">
-								<?php 					
-									foreach($EstadoUsuario as $codigo_Estado => $nombre_Estado)
-									{
-										echo "<option value='".$codigo_Estado."'";
-										echo">".$nombre_Estado."</option>";
-									}
-								?>
-								</select> 
 							</td>
 						</tr>
 						<tr class="rFechas">
@@ -168,8 +140,7 @@ PARA:
 					</fieldset>
 					<div class="divButton">		
 						<input class="buttom" value="Volver" type="button" onclick="window.location.assign('<?php echo base_url('home')?>')">
-						<input class="buttom" name="submit" id="submit" onsubmit="" tabindex="18" value="Consultar" type="submit">	
-						<input type="hidden" id="refreshed" value="no">					
+						<input class="buttom" name="submit" id="submit" onsubmit="" tabindex="18" value="Consultar" type="submit">						
 					</div>
 				<?php
 					echo form_close();

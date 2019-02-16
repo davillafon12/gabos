@@ -2,11 +2,7 @@ $(document).ready(function (){
 	Utilitarios.fnInicializarCalendario("#fecha_inicial", true, new Date());
 	Utilitarios.fnInicializarCalendario("#fecha_final", true, new Date());
 	$("#submit").attr("disabled", true);
-	eventoTipoReporte();
-	$(".sucDesamparados").hide();
-	$("#sucursal").change(function(){
-		fnVerificarEmpresa();
-	});	
+	eventoTipoReporte();	
 	eventoRangos();
 	Utilitarios.lfEventoCheckbox($("#mNombre"), $(".fNombre")); 
 	Utilitarios.lfEventoCheckbox($("#mCedula"), $(".fCedula")); 
@@ -19,7 +15,6 @@ $(document).ready(function (){
 
 function eventoTipoReporte(){	
 	$("#tipo_reporte").change(function(){
-		fnVerificarEmpresa();
 		if($("#tipo_reporte").val() == 'null'){	
 			$("#submit").attr("disabled", true); 
 			ocultarTodo();
@@ -27,55 +22,51 @@ function eventoTipoReporte(){
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturas){
 			$(".rFechas").show();
 			$(".uFacturas").show();
-			$(".uProformas").hide();
-			$(".mFiltro").show();
-			$(".mNombre").show();
-			$(".mCedula").show();
-			$(".mRango").show();
-			$(".mEstado").hide();			
-			$("#mFecha").attr("checked", false);
-			$("#submit").attr("disabled", false);
-			$(".Ssucursal").show();
-			limpiarFormulario();
-		}										   
-		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturasResumen){
-			$(".rFechas").show();
-			$(".uFacturas").show();
-			$(".uProformas").hide();
 			$(".mFiltro").show();
 			$(".mNombre").show();
 			$(".mCedula").show();
 			$(".mRango").show();
 			$(".mEstado").hide();
-			$(".Ssucursal").show();
+			$(".mSucursal").show();
+			$("#mFecha").attr("checked", false);
+			$("#submit").attr("disabled", false);
+			limpiarFormulario();
+		}										   
+		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturasResumen){
+			$(".rFechas").show();
+			$(".uFacturas").show();
+			$(".mFiltro").show();
+			$(".mNombre").show();
+			$(".mCedula").show();
+			$(".mRango").show();
+			$(".mEstado").hide();
+			$(".mSucursal").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
 			limpiarFormulario();
 		}										 
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProforma){
 			$(".rFechas").show();
-			$(".uFacturas").hide();
-			$(".uProformas").show();
+			$(".uFacturas").show();
 			$(".mFiltro").show();
 			$(".mNombre").show();
 			$(".mCedula").show();
 			$(".mRango").show();
 			$(".mEstado").hide();
-			$(".Ssucursal").show();
+			$(".mSucursal").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
 			limpiarFormulario();
 		}
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProformaResumen){
 			$(".rFechas").show();
-			$(".uFacturas").hide();
-			$(".uProformas").show();
+			$(".uFacturas").show();
 			$(".mFiltro").show();
 			$(".mNombre").show();
 			$(".mCedula").show();
 			$(".mRango").show();
 			$(".mEstado").hide();
-			$(".Ssucursal").show();
+			$(".mSucursal").show();
 			$("#mFecha").attr("checked", false);
 			$("#submit").attr("disabled", false);
 			limpiarFormulario();
@@ -84,36 +75,22 @@ function eventoTipoReporte(){
 			$("#submit").attr("disabled", false); 
 			ocultarTodo();
 			$(".mEstado").show();			
-			$(".Ssucursal").hide();
 		}
 		if($("#tipo_reporte").val() == Utilitarios.paReporte_ClientesXDescuento){
 			$("#submit").attr("disabled", false); 			
 			ocultarTodo();	
 			$(".mCedula").show();
+			$(".mSucursal").show();
 			$(".mArticulo").show();
 			$(".mFamilia").show();
 			$(".mFiltro").show();						
-			$(".Ssucursal").show();
 		}
 	}); 
 }
-function fnVerificarEmpresa(){
-	if ((($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturas)) || 		
-		(($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteFacturasResumen))||
-		(($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProforma))||
-		(($("#sucursal").val() == Utilitarios.fnGarotas) && ($("#tipo_reporte").val() == Utilitarios.paReporte_VentaXClienteProformaResumen))){
-		$(".sucDesamparados").show();
-	}
-	else{
-		$(".sucDesamparados").hide();
-	}
-}
-
 
 function ocultarTodo(){
 	$(".rFechas").hide();
 	$(".uFacturas").hide();
-	$(".uProformas").hide();
 	$(".oculto").hide();
 	$(".fFechas").hide();
 	$(".mNombre").hide();
@@ -125,6 +102,7 @@ function ocultarTodo(){
 	$(".fRango1").hide();
 	$(".fRango2").hide();
 	$(".mEstado").hide();
+	$(".mSucursal").hide();
 	$(".mFiltro").hide();
 	$(".mFamilia").hide();
 	$(".mFiltro").hide();
@@ -136,8 +114,6 @@ function ocultarTodo(){
 	$("#paFamilia").attr("checked", false);
 	$("#paArticulo").attr("checked", false);
 	$("#paEsSucursal").attr("checked", false);
-	$(".sucDesamparados").hide();
-	$(".Ssucursal").hide();	
 }
 
 // Funcion que se encarga de limpiar todos los campos y dejarlos limpios 
