@@ -15,14 +15,8 @@ class Home extends CI_Controller {
 
  function logout()
  {
-     include 'get_session_data.php';
+    include 'get_session_data.php';
     $session_data = $this->session->userdata('logged_in');
-    require_once PATH_API_HACIENDA;
-    $apife = new API_FE();
-    $isUp = $apife->isUp();
-    if($isUp){
-        $resp = $apife->logOutUser($_SESSION["api_sessionkey"], $data["Usuario_Nombre_Usuario"]);
-    }
     $Usuario_Id = $session_data['Usuario_Codigo'];
     $Usuario_Sucursal = $session_data['Sucursal_Codigo'];
     $this->user->guardar_transaccion($Usuario_Id, 'El usuario salio del sistema',$Usuario_Sucursal, 'login');
