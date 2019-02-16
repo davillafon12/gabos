@@ -57,3 +57,7 @@ function reenviarXML(clave){
 function cambiarTipoDocumento(){
     $("#tabla_editar").dataTable().fnDraw();
 }
+
+function regenerarFacturaAviso(clave){
+    console.log(clave);
+}

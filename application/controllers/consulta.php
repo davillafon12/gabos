@@ -962,7 +962,8 @@ class consulta extends CI_Controller {
                             '1' => 'ConsecutivoHacienda',
                             '2' => 'ReceptorIdentificacion',
                             '3' => 'FechaEmision',
-                            '4' => 'RespuestaHaciendaEstado'
+                            '4' => 'CorreoEnviadoReceptor',
+                            '5' => 'RespuestaHaciendaEstado'
                         );
             
             $query = $this->contabilidad->obtenerComprobantesParaTabla($columnas[$_POST['order'][0]['column']], 
@@ -979,12 +980,16 @@ class consulta extends CI_Controller {
                 $htmlPdf = "";
                 $htmlXML = "";
                 $htmlXMLRespuesta = "";
+                $htmlRehacerFactura = "";
                 $rutaWeb = $this->contabilidad->getFinalPathWeb(strtolower($_POST['tipodocumento']), $art->fecha);
                 switch($_POST['tipodocumento']){
                     case "FE":
                         $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
                         $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
                         $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                        if($art->estado == "rechazado"){
+                            $htmlRehacerFactura = "<img class='boton-regenerar-factura' src=".$ruta_imagen."/icon-gear.png width='21' height='21' title='Regenerar Factura' onclick='regenerarFacturaAviso(\"{$art->clave}\")'>";
+                        }
                     break;
                     case "NC":
                         $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
@@ -1008,6 +1013,7 @@ class consulta extends CI_Controller {
                                     $htmlPdf
                                     $htmlXML
                                     $htmlXMLRespuesta
+                                    $htmlRehacerFactura
                                     ".(($art->estado == "aceptado" || $art->estado == "rechazado" || $art->estado == "recibido" || $art->estado == "procesando") ? "" : "<a href='#' onclick='reenviarXML(\"$art->clave\")'><img src=".$ruta_imagen."/upload.png width='21' height='21' title='Reenviar Documento a Hacienda'></a>")."
                             </div>"
                     );
