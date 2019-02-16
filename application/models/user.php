@@ -169,7 +169,13 @@ function existe_Nombre_Usuario($nombre){
 
 	function getCantidadUsuarios()
 	{
-		return $this->db->count_all('TB_01_Usuario');
+            $resultado = 0; 
+            $this->db->select_max('Usuario_Codigo');
+            $query =  $this->db->get('TB_01_Usuario');
+            foreach ($query->result() as $row) {
+                    $resultado = $row->Usuario_Codigo;
+            }
+            return $resultado;
 	}
 	function actualizar($id, $data)
 	{
