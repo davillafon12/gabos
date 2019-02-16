@@ -480,7 +480,7 @@ class caja extends CI_Controller {
                     $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario anulo la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'anular');
                     
                     if($facturaYaExistia === false){
-                        $this->guardarPDFFactura($consecutivo, $data['Sucursal_Codigo']);
+                        $this->factura->guardarPDFFactura($consecutivo, $data['Sucursal_Codigo']);
 
                         if(!$responseCheck["cliente"]->NoReceptor){
                             $apiCorreo = new Correo();
