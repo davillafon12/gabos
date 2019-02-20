@@ -2,8 +2,12 @@
 
 class APILogger{
     
-    private $defaultPath = PATH_API_LOGGING;
+    private $defaultPath;
     
+    function __construct($dp = PATH_API_LOGGING){
+        $this->defaultPath = $dp;
+    }
+
     private function writeToFile($level, $data, $from){
         $dateLog = date("H:i:s d-m-Y", time());
         $dateFile = date("d_m_Y", time());

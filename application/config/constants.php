@@ -64,6 +64,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 //define('PATH_AJAX_FAMILIAS', '/../../scripts/ajax_familias.php');
 //define('PATH_AJAX_VERIFY_FAMILIAS', '/../../scripts/ajax_verify_familia_id.php');
 //define('PATH_API_LOGGING', '/../../logs/API_FE');
+//define('PATH_UTILS_LOGGING', '/../../logs/UTILS');
 //define('PATH_DOCUMENTOS_ELECTRONICOS', '/../../third_party/');
 //define('PATH_API_CORREO', '/../libraries/Correo.php');
 //define('CARPETA_IMAGENES', FCPATH.'application\\images\\articulos\\');
@@ -95,6 +96,7 @@ define('PATH_TABLA_FAMILIAS', FCPATH.'application/scripts/cargar_tabla_familias.
 define('PATH_AJAX_FAMILIAS', FCPATH.'application/scripts/ajax_familias.php');
 define('PATH_AJAX_VERIFY_FAMILIAS', FCPATH.'application/scripts/ajax_verify_familia_id.php');
 define('PATH_API_LOGGING', FCPATH.'application/logs/API_FE');
+define('PATH_UTILS_LOGGING', FCPATH.'application/logs/UTILS');
 define('PATH_DOCUMENTOS_ELECTRONICOS', FCPATH.'application/third_party/');
 define('PATH_API_CORREO', FCPATH.'application/libraries/Correo.php');
 define('CARPETA_IMAGENES', FCPATH.'application/images/articulos/');

@@ -2,7 +2,8 @@
 
 class external extends CI_Controller {	
     
-    public $token = "Queladilla9876!!";
+    private $token = "Queladilla9876!!";
+    private $logger;
     
     function __construct(){
         parent::__construct(); 
@@ -13,6 +14,8 @@ class external extends CI_Controller {
         $this->load->model('impresion_m','',TRUE);
         $this->load->model('articulo','',TRUE);
         $this->load->model('user','',TRUE);
+        require_once PATH_API_LOGGER;
+        $this->logger = new APILogger(PATH_UTILS_LOGGING);
     }
 
     public function actualizarComprobantes(){
@@ -198,6 +201,87 @@ class external extends CI_Controller {
         
     }
     
+    
+    public function enviarComprobantesAHacienda(){
+        include 'get_session_data.php';
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de facturas");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        $empresas = array();
+        
+        if($facturas = $this->factura->getFacturasSinEnviarAHacienda()){
+            foreach($facturas as $factura){
+                if(!isset($empresas[$factura->Sucursal])){
+                    $empresas[$factura->Sucursal] = $this->empresa->getEmpresa($factura->Sucursal)[0];
+                }
+                $empresa = $empresas[$factura->Sucursal];
+                $resFacturaElectronica = array("data" => array("situacion" => "normal", "clave" => $factura->Clave));
+                $facturaObj = (Object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
+                $responseCheck["factura"] = $facturaObj;
+                $responseCheck["empresa"] = $empresa;
+                
+                $this->logger->info("enviarComprobantesAHacienda", " Enviando la factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal}");
+                
+                $res = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+                
+                if($res["status"]){
+                    $this->logger->info("enviarComprobantesAHacienda", " La factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal} fue ACEPTADA");
+                    if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                        $this->logger->info("enviarComprobantesAHacienda", "Enviando correo a cliente");
+                        require_once PATH_API_CORREO;
+                        $apiCorreo = new Correo();
+                        $attachs = array(
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".xml",
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
+                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".pdf");
+                        if($apiCorreo->enviarCorreo(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL), "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
+                            $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
+                            $this->logger->info("enviarComprobantesAHacienda", "Se envio correo con exito");
+                        }else{
+                            $this->logger->error("enviarComprobantesAHacienda", "Correo no se pudo enviar al cliente");
+                        }
+                    }else{
+                        $this->logger->info("enviarComprobantesAHacienda", "Cliente no requiere envio de correo");
+                    }
+                }else{
+                    $this->logger->error("enviarComprobantesAHacienda", " La factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal} no fue enviada por:");
+                    $this->logger->error("enviarComprobantesAHacienda", $res["message"]);
+                    if($res["status"] === false && $res["estado"] === "rechazado"){
+                        $this->logger->info("enviarComprobantesAHacienda", "Generamos nota credito respectiva por factura rechazada");
+                        // Al haber sido rechazada por hacienda se debe anular la factura, y se devuelven los articulos
+                        //$this->devolverProductosdeFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
+                        if($articulosFactura = $this->factura->getArticulosFactura($factura->Consecutivo, $factura->Sucursal)){
+                            $this->logger->info("enviarComprobantesAHacienda", "Articulos Obtenidos");
+                            // Creamos la nota credito respectiva para la factura
+                            $productosAAcreditar = $this->convertirProductosDeFacturaANotaCredito($articulosFactura);
+                            $facturaGabo = $this->factura->getFacturasHeaders($factura->Consecutivo, $factura->Sucursal);
+                 
+                            $retorno = array();
+                            $this->logger->info("enviarComprobantesAHacienda", "Generando y enviando NC de anulacion");
+                            
+                            $this->contabilidad->crearNotaCreditoMacro($retorno, $facturaGabo[0]->TB_03_Cliente_Cliente_Cedula, $factura->Consecutivo, $factura->Consecutivo, $factura->Sucursal, $productosAAcreditar, $data['Usuario_Codigo'], ANULAR_FACTURA, "Anulacion por rechazo de factura", true);
+                            $this->logger->info("enviarComprobantesAHacienda", "Resultado de la NC: ".json_encode($retorno));
+                        }else{
+                            $this->logger->error("enviarComprobantesAHacienda", "No se logro obtener los articulos para generar la NC");
+                        }
+                    }
+                }
+            }
+            $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+            $this->logger->info("enviarComprobantesAHacienda", "Saliendo de sesiones de token:");
+            require_once PATH_API_HACIENDA;
+            $api = new API_FE();
+            foreach($empresas as $empresa){
+                $this->logger->info("enviarComprobantesAHacienda", "Destruyendo token de {$empresa->Usuario_Tributa}");
+                $api->destruirSesion($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa);
+            }
+            $this->logger->info("enviarComprobantesAHacienda", "Sesiones terminadas");
+            $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        }else{
+            $this->logger->info("enviarComprobantesAHacienda", "No hay facturas que enviar a Hacienda");
+        }
+        echo "FIN";
+    }
     
 	
 } 
