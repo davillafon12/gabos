@@ -45,9 +45,9 @@ class external extends CI_Controller {
                             echo "Enviando correo \n";
                             if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
                                 $attachs = array(
-                                    PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave.".xml",
-                                    PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",
-                                    PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave.".pdf");
+                                    $this->factura->getFinalPath("fe").$factura->Clave.".xml",
+                                    $this->factura->getFinalPath("fe").$factura->Clave."-respuesta.xml",
+                                    $this->factura->getFinalPath("fe").$factura->Clave.".pdf");
                                 if($apiCorreo->enviarCorreo($factura->ReceptorEmail, "Factura Electrónica #".$factura->Consecutivo." | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                     $this->factura->marcarEnvioCorreoFacturaElectronica($factura->Sucursal, $factura->Consecutivo);
                                     echo "Correo enviado con exito \n"; 
