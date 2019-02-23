@@ -28,6 +28,7 @@
 			<ul>
 				<li class='first_Level_2'><a href=".$Ruta_Base."facturas/nueva>Crear factura</a></li>
 				<li><a href=".$Ruta_Base."facturas/caja>Caja</a></li>
+				<li><a href=".$Ruta_Base."facturas/proforma/fijarProforma>Procesar proforma</a></li>
 				<li class='last' ><a href=".$Ruta_Base."facturas/proforma>Crear proforma</a></li>
 			</ul>
 		</li>
