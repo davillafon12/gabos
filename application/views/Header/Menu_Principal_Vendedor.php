@@ -1,6 +1,7 @@
 <?php
 	$Ruta_Icono_Home = base_url('application/images/Icons/home.png');
 	$Ruta_Icono_Clientes = base_url('application/images/Icons/Clientes.ico');
+	$Ruta_Icono_Articulos = base_url('application/images/Icons/Articulos.ico');
 	$Ruta_Icono_Facturacion = base_url('application/images/Icons/Facturacion.ico');	
 	$Ruta_Base = base_url('');
 	
@@ -19,6 +20,13 @@
 				<li class='last'><a href=".$Ruta_Base."clientes/autorizaciones/verAutorizaciones>Ver Autorizaciones</a></li>
 			</ul>
 		</li>
+		<li >
+		    <img class='icono' src=".$Ruta_Icono_Articulos." alt='Articulos' width='22' height='22'>
+		    <a href='#' class='dir'>Articulos</a>
+		    <ul>
+			   <li><a href=".$Ruta_Base."articulos/editar/soloConsultaArticulos>Consultar</a></li>	
+		    </ul>
+	    </li>	
 		<li class='last_last'>
 			<img class='icono' src=".$Ruta_Icono_Facturacion." alt='Facturacion' width='22' height='22'>
 			<a href='#' class='dir'>Facturaci&oacute;n</a>

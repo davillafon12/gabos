@@ -50,6 +50,7 @@
 					</ul>
 				</li>
 				<li><a href=".$Ruta_Base."articulos/editar>Edición</a></li>				
+				<li><a href=".$Ruta_Base."articulos/editar/soloConsultaArticulos>Consultar</a></li>				
 				<li class='last'><a href=".$Ruta_Base."articulos/cambio>Cambio de Código</a></li>
 			</ul>
 		</li>
