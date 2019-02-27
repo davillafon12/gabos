@@ -26,6 +26,13 @@ class editar extends CI_Controller {
 	$this->load->helper(array('form'));
 	$this->load->view('articulos/articulos_editar_view', $data);
  }
+
+
+ function soloConsultaArticulos(){
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+	$this->load->helper(array('form'));
+	$this->load->view('articulos/articulos_consultar_view', $data);
+ }
  
  function getMainTable()
  {	
@@ -161,6 +168,44 @@ class editar extends CI_Controller {
 					<a href='".base_url('')."articulos/editar/edicion?id=".$art->codigo."' ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>
 				</div>
 				"
+			);
+			array_push($articulosAMostrar, $auxArray);
+		}
+		
+		$filtrados = $this->articulo->obtenerArticulosParaTablaFiltrados($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $data['Sucursal_Codigo']);
+		
+		$retorno = array(
+					'draw' => $_POST['draw'],
+					'recordsTotal' => $this->articulo->getTotalArticulosEnSucursal($data['Sucursal_Codigo']),
+					'recordsFiltered' => $filtrados -> num_rows(),
+					'data' => $articulosAMostrar
+				);
+		echo json_encode($retorno);
+	}
+
+	function obtenerArticulosSoloConsulta(){
+		include PATH_USER_DATA;
+		//Un array que contiene el nombre de las columnas que se pueden ordenar
+		$columnas = array(
+								'0' => 'Articulo_Codigo',
+								'1' => 'Articulo_Codigo',
+								'2' => 'Articulo_Descripcion',
+								'3' => 'Articulo_Cantidad_Inventario',
+								'4' => 'Articulo_Descuento'
+								);
+		$query = $this->articulo->obtenerArticulosParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $data['Sucursal_Codigo']);
+		
+		$ruta_imagen = base_url('application/images/Icons');
+		$articulosAMostrar = array();
+		foreach($query->result() as $art){
+			$auxArray = array(
+				$art->codigo,
+				$art->descripcion,
+				$art->inventario,
+				$art->descuento,
+				number_format($this->articulo->getPrecioProducto($art->codigo, 1, $data['Sucursal_Codigo']),2),
+				number_format($this->articulo->getPrecioProducto($art->codigo, 2, $data['Sucursal_Codigo']),2),
+				number_format($this->articulo->getPrecioProducto($art->codigo, 4, $data['Sucursal_Codigo']),2)
 			);
 			array_push($articulosAMostrar, $auxArray);
 		}

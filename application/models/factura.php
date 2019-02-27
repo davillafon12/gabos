@@ -1615,6 +1615,17 @@ Class factura extends CI_Model
         }
     }
     
+    function getFacturasSinEnviarAHacienda(){
+        $this->db->where_in("RespuestaHaciendaEstado", array("sin_enviar"));
+        $this->db->from("tb_55_factura_electronica");
+        $query = $this->db->get();
+        if($query->num_rows() == 0){
+            return false;
+        }else{
+            return $query->result();
+        }
+    }
+    
     
     function guardarPDFFactura($consecutivo, $sucursal){
         if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){

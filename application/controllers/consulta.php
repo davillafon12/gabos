@@ -1041,6 +1041,9 @@ class consulta extends CI_Controller {
             if($estado == "rechazado"){
                 return "<div class='estado-label error'>Rechazado</div>";
             }
+            if($estado == "sin_enviar"){
+                return "<div class='estado-label info'>Sin Enviar</div>";
+            }
             
             return "<div class='estado-label warning'>".ucfirst($estado)."</div>";
         }

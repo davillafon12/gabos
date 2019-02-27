@@ -561,3 +561,7 @@
     font-family: Arial, Helvetica;
     margin-left: 33px;
 }
+
+.estado-label.info {
+    background: #109ef9;
+}
