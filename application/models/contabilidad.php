@@ -2380,7 +2380,7 @@ Class contabilidad extends CI_Model
 //                    $r["empresa"] = $sucursal;
                 $responseCreacion = $this->crearNotaCreditoElectronica($responseFetch["empresa"], $responseFetch["cliente"], $responseFetch["notaCreditoHead"], $responseFetch["costos"], $responseFetch["articulos"], $codigo, $razon, $numero, $tipoDoc, $fechaEmision);
 
-                if($responseCreacion["status"]){
+                /*if($responseCreacion["status"]){
                     if($responseCreacion["data"]["situacion"] == "normal"){
                         if($resEnvio = $this->enviarNotaCreditoElectronicaAHacienda($consecutivo, $sucursal)){
                             if($resEnvio["estado_hacienda"] == "rechazado"){
@@ -2422,7 +2422,7 @@ Class contabilidad extends CI_Model
                     $responseFetch["status"] = false;
                     $responseFetch['error'] = $responseCreacion["error"];
                     $responseFetch["error_msg"] = $responseCreacion["error_msg"];
-                }
+                }*/
             }
             return $responseFetch;
         }
@@ -2698,7 +2698,8 @@ Class contabilidad extends CI_Model
                                                         if($notaCreditoHead = $this->getNotaCredito($consecutivo, $sucursal)){
                                                             if($facturaElectronicaHead = $this->factura->getFacturaElectronica($notaCreditoHead->Factura_Acreditar, $sucursal)){
                                                                 $response = $this->generarNotaCreditoElectronica($consecutivo, $sucursal, $razon, $justificacion, $facturaElectronicaHead->Clave, FACTURA_ELECTRONICA_CODIGO, $facturaElectronicaHead->FechaEmision);
-                                                                if($response["status"]){
+                                                                $this->generarPDFNotaCredito($consecutivo, $sucursal);
+                                                               /* if($response["status"]){
                                                                     $respuestaHacienda["type"] = "success";
                                                                     $respuestaHacienda["msg"] = $response["message"];
 
@@ -2716,7 +2717,7 @@ Class contabilidad extends CI_Model
                                                                     }
                                                                 }else{
                                                                     $respuestaHacienda["msg"] = $response["error_msg"]." | ERROR #".$response["error"];
-                                                                }
+                                                                }*/
                                                             }else{
                                                                 $respuestaHacienda["msg"] = "No existe factura electrónica para generar la nota crédito electrónica.";
                                                             }
@@ -3198,6 +3199,17 @@ Class contabilidad extends CI_Model
         function getMensajeReceptoresRecibidasHacienda(){
             $this->db->where_in("RespuestaHaciendaEstado", array("recibido", "procesando"));
             $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result();
+            }
+        }
+        
+        function getNotasCreditoSinEnviarAHacienda(){
+            $this->db->where_in("RespuestaHaciendaEstado", array("sin_enviar"));
+            $this->db->from("tb_57_nota_credito_electronica");
             $query = $this->db->get();
             if($query->num_rows() == 0){
                 return false;

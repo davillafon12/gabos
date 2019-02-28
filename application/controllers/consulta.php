@@ -997,6 +997,10 @@ class consulta extends CI_Controller {
                     break;
                 }
                 
+                if($art->estado != "aceptado" && $art->estado != "rechazado" && $art->estado != "recibido" && $art->estado != "procesando"){
+                    $htmlXMLRespuesta = "";
+                }
+                
                 $auxArray = array(
                             $art->clave,
                             $art->consecutivo,

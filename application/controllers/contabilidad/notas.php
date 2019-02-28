@@ -194,11 +194,6 @@ class notas extends CI_Controller {
 				//Verificamos que exista cliente
 				$this->contabilidad->crearNotaCreditoMacro($retorno, $cedula, $facturaAcreditar, $facturaAplicar, $data['Sucursal_Codigo'], $productosAAcreditar, $data['Usuario_Codigo'], CORRIGE_FACTURA, "Devolucion de mercancia");
                                 
-                                if(isset($retorno["empresa"])){
-                                    require_once PATH_API_HACIENDA;
-                                    $api = new API_FE();
-                                    $api->destruirSesion($retorno["empresa"]->Ambiente_Tributa, $retorno["empresa"]->Usuario_Tributa);
-                                }
 			}else{
 				//Campos Vacios
 				$retorno['error'] = '3';
