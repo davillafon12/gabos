@@ -160,8 +160,6 @@ function enviarServer(json){
 						//Impresion carta
 						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+informacion[0].token+'&d=nc&n='+informacion[0].nota+'&s='+informacion[0].sucursal+'&i='+tipoImpresion,'Impresion de Nota Crédito','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}
-					
-                                        notyMsg(informacion[0].hacienda.msg, informacion[0].hacienda.type);
 				}
 			}catch(e){
 				//alert(e);

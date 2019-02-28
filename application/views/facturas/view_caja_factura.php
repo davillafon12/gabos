@@ -92,32 +92,7 @@ PARA:
 		
 	</head>
 	<body onload="setMainValues()" oncopy="return false" oncut="return false" onpaste="return false" style="min-width:1280px;">
-            <script>
-                function notyFlash(Mensaje, Tipo){
-                    flashnoty = noty({
-                        layout: 'topRight',
-                        text: Mensaje,
-                        type: Tipo,
-                        timeout: 10000
-                     });
-                }
-                
-                $(document).ready(function(){
-                    <?php 
-                        if(isset($_SESSION["flash_fe"])){
-                            if(is_array($_SESSION["flash_fe"])){
-                                $tipo = $_SESSION["flash_fe"]["status"] ? "success" : "error";
-                                $mensaje = $_SESSION["flash_fe"]["message"];
-
-                                echo "notyFlash('$mensaje', '$tipo');";
-                                
-                                unset($_SESSION["flash_fe"]);
-                            }
-                        }
-                    ?>
-                });
-                
-            </script>
+            
 	
 		<script>
 			//Anulamos los eventos de salida
