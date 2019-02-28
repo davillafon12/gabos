@@ -80,8 +80,25 @@ class external extends CI_Controller {
                 $empresa = $empresas[$nota->Sucursal];
                 echo "Obteniendo token... \n";
                 if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
-                    if($this->contabilidad->getEstadoNotaCreditoHacienda($api, $nota, $empresa, $tokenData, $nota->Consecutivo, $nota->Sucursal)){
-                        echo "Se actualizo el estado de la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} \n";
+                    if($resEnvio = $this->contabilidad->getEstadoNotaCreditoHacienda($api, $nota, $empresa, $tokenData, $nota->Consecutivo, $nota->Sucursal)){
+                        echo "Se actualizo al estado {$resEnvio["estado_hacienda"]} en la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} \n";
+                        
+                        if($resEnvio){
+                            if($resEnvio["estado_hacienda"] == "aceptado"){
+                                if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                    require_once PATH_API_CORREO;
+                                    $apiCorreo = new Correo();
+                                    $attachs = array(
+                                        $this->contabilidad->getFinalPath("nc").$nota->Clave.".xml",
+                                        $this->contabilidad->getFinalPath("nc").$nota->Clave.".pdf");
+                                    if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+                                        $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
+                                    }
+                                }
+                            }
+                        }
+                        
+                        
                     }else{
                         echo "NO se actualizo el estado de la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} \n";
                     }
