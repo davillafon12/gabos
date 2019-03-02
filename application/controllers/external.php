@@ -24,8 +24,8 @@ class external extends CI_Controller {
         $api = new API_FE();
         require_once PATH_API_CORREO;
         $apiCorreo = new Correo();
-        echo "\n >>>>>>>>>>>>>".date(DATE_ATOM)." \n \n";
-        echo "Revisando Facturas...\n";
+        echo "<br> >>>>>>>>>>>>>".date(DATE_ATOM)." <br> <br>";
+        echo "Revisando Facturas...<br>";
         $empresa = null;
         
         if($facturas = $this->factura->getFacturasRecibidasHacienda()){
@@ -34,43 +34,43 @@ class external extends CI_Controller {
                     $empresas[$factura->Sucursal] = $this->empresa->getEmpresa($factura->Sucursal)[0];
                 }
                 $empresa = $empresas[$factura->Sucursal];
-                echo "Obteniendo token... \n";
+                echo "Obteniendo token... <br>";
                 if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
                     if($resultado = $this->factura->getEstadoFacturaHacienda($api, $empresa, $factura, $tokenData, $factura->Consecutivo, $factura->Sucursal)){
                         $estadoActualizado = $resultado["estado_hacienda"];
-                        echo "Se actualizo el estado -$estadoActualizado- de la factura #{$factura->Consecutivo} de la sucursal #{$factura->Sucursal} \n";
+                        echo "Se actualizo el estado -$estadoActualizado- de la factura #{$factura->Consecutivo} de la sucursal #{$factura->Sucursal} <br>";
                         
                         // Revisar si fue aceptado para enviar correo
                         if($resultado["status"] && $estadoActualizado === "aceptado"){
-                            echo "Enviando correo \n";
+                            echo "Enviando correo <br>";
                             if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
                                 $attachs = array(
-                                    $this->factura->getFinalPath("fe").$factura->Clave.".xml",
-                                    $this->factura->getFinalPath("fe").$factura->Clave."-respuesta.xml",
-                                    $this->factura->getFinalPath("fe").$factura->Clave.".pdf");
+                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
                                 if($apiCorreo->enviarCorreo($factura->ReceptorEmail, "Factura Electrónica #".$factura->Consecutivo." | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                     $this->factura->marcarEnvioCorreoFacturaElectronica($factura->Sucursal, $factura->Consecutivo);
-                                    echo "Correo enviado con exito \n"; 
+                                    echo "Correo enviado con exito <br>"; 
                                 }else{
-                                    echo "Error al enviar correo \n";
+                                    echo "Error al enviar correo <br>";
                                 }
                             }else{
-                                echo "Cliente no es receptor de correo \n";
+                                echo "Cliente no es receptor de correo <br>";
                             }
                         }
                     }else{
-                        echo "NO se actualizo el estado de la factura #{$factura->Consecutivo} de la sucursal #{$factura->Sucursal} \n";
+                        echo "NO se actualizo el estado de la factura #{$factura->Consecutivo} de la sucursal #{$factura->Sucursal} <br>";
                     }
                 }else{
-                    echo "Hubo un error al obtener el token para facturas \n";
+                    echo "Hubo un error al obtener el token para facturas <br>";
                 }
             }
             
         }else{
-            echo "No hay facturas que procesar \n";
+            echo "No hay facturas que procesar <br>";
         }
         
-        echo "Revisando Notas Credito... \n";
+        echo "Revisando Notas Credito... <br>";
         
         if($notas = $this->contabilidad->getNotasCreditoRecibidasHacienda()){
             foreach($notas as $nota){
@@ -78,10 +78,10 @@ class external extends CI_Controller {
                     $empresas[$nota->Sucursal] = $this->empresa->getEmpresa($nota->Sucursal)[0];
                 }
                 $empresa = $empresas[$nota->Sucursal];
-                echo "Obteniendo token... \n";
+                echo "Obteniendo token... <br>";
                 if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
                     if($resEnvio = $this->contabilidad->getEstadoNotaCreditoHacienda($api, $nota, $empresa, $tokenData, $nota->Consecutivo, $nota->Sucursal)){
-                        echo "Se actualizo al estado {$resEnvio["estado_hacienda"]} en la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} \n";
+                        echo "Se actualizo al estado {$resEnvio["estado_hacienda"]} en la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} <br>";
                         
                         if($resEnvio){
                             if($resEnvio["estado_hacienda"] == "aceptado"){
@@ -89,8 +89,8 @@ class external extends CI_Controller {
                                     require_once PATH_API_CORREO;
                                     $apiCorreo = new Correo();
                                     $attachs = array(
-                                        $this->contabilidad->getFinalPath("nc").$nota->Clave.".xml",
-                                        $this->contabilidad->getFinalPath("nc").$nota->Clave.".pdf");
+                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
+                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf");
                                     if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                         $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
                                     }
@@ -100,18 +100,18 @@ class external extends CI_Controller {
                         
                         
                     }else{
-                        echo "NO se actualizo el estado de la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} \n";
+                        echo "NO se actualizo el estado de la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} <br>";
                     }
                 }else{
-                    echo "Hubo un error al obtener el token para notas \n";
+                    echo "Hubo un error al obtener el token para notas <br>";
                 }
             }
             
         }else{
-            echo "No hay notas credito que procesar \n";
+            echo "No hay notas credito que procesar <br>";
         }
         
-        echo "Revisando Mensajes Receptores... \n";
+        echo "Revisando Mensajes Receptores... <br>";
         
         if($mensajes = $this->contabilidad->getMensajeReceptoresRecibidasHacienda()){
             foreach($mensajes as $mensaje){
@@ -119,20 +119,20 @@ class external extends CI_Controller {
                     $empresas[$mensaje->Sucursal] = $this->empresa->getEmpresa($mensaje->Sucursal)[0];
                 }
                 $empresa = $empresas[$mensaje->Sucursal];
-                echo "Obteniendo token... \n";
+                echo "Obteniendo token... <br>";
                 if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
                     if($this->contabilidad->getEstadoMensajeReceptorHacienda($api, $empresa, $mensaje, $tokenData, $mensaje->Consecutivo, $mensaje->Sucursal)){
-                        echo "Se actualizo el estado del mensaje receptor #{$mensaje->Consecutivo} de la sucursal #{$mensaje->Sucursal} \n";
+                        echo "Se actualizo el estado del mensaje receptor #{$mensaje->Consecutivo} de la sucursal #{$mensaje->Sucursal} <br>";
                     }else{
-                        echo "NO se actualizo el estado del mensaje receptor #{$mensaje->Consecutivo} de la sucursal #{$mensaje->Sucursal} \n";
+                        echo "NO se actualizo el estado del mensaje receptor #{$mensaje->Consecutivo} de la sucursal #{$mensaje->Sucursal} <br>";
                     }
                 }else{
-                    echo "Hubo un error al obtener el token para mensaje receptor \n";
+                    echo "Hubo un error al obtener el token para mensaje receptor <br>";
                 }
             }
             
         }else{
-            echo "No hay mensajes receptor que procesar \n";
+            echo "No hay mensajes receptor que procesar <br>";
         }
         
         if($empresa !== null){
@@ -248,9 +248,9 @@ class external extends CI_Controller {
                         require_once PATH_API_CORREO;
                         $apiCorreo = new Correo();
                         $attachs = array(
-                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".xml",
-                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
-                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".pdf");
+                            $this->factura->getFinalPath("fe", $factura->FechaEmision).$resFacturaElectronica["data"]["clave"].".xml",
+                            $this->factura->getFinalPath("fe", $factura->FechaEmision).$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
+                            $this->factura->getFinalPath("fe", $factura->FechaEmision).$resFacturaElectronica["data"]["clave"].".pdf");
                         if($apiCorreo->enviarCorreo(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL), "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
                             $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
                             $this->logger->info("enviarComprobantesAHacienda", "Se envio correo con exito");
@@ -320,8 +320,8 @@ class external extends CI_Controller {
                             require_once PATH_API_CORREO;
                             $apiCorreo = new Correo();
                             $attachs = array(
-                                $this->contabilidad->getFinalPath("nc").$nota->Clave.".xml",
-                                $this->contabilidad->getFinalPath("nc").$nota->Clave.".pdf");
+                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
+                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf");
                             if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                 $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
                                 $this->logger->info("enviarComprobantesAHacienda", "Se envio correo con exito");
