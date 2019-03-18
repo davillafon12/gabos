@@ -58,3 +58,20 @@ function reenviarXML(clave){
 function cambiarTipoDocumento(){
     $("#tabla_editar").dataTable().fnDraw();
 }
+
+function reenviarCorreo(clave, tipo){
+    $("#tipo_documento").val(tipo);
+    $.ajax({
+        url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/reenviarCorreo',
+        type: "POST",
+        dataType: "json",
+        data: {clave:clave, tipo:tipo},	
+        success: function(data, textStatus, jqXHR){
+            var documentoSeleccionado = $("#tipo_documento").val();
+            window.location.replace(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/comprobantesElectronicos?d='+documentoSeleccionado.toLowerCase());
+        },
+        error: function (jqXHR, textStatus, errorThrown){
+
+        }
+    });
+}
