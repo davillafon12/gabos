@@ -979,6 +979,7 @@ class consulta extends CI_Controller {
                 $htmlPdf = "";
                 $htmlXML = "";
                 $htmlXMLRespuesta = "";
+                $htmlReenvioCorreo = "";
                 $rutaWeb = $this->contabilidad->getFinalPathWeb(strtolower($_POST['tipodocumento']), $art->fecha);
                 switch($_POST['tipodocumento']){
                     case "FE":
@@ -1001,6 +1002,10 @@ class consulta extends CI_Controller {
                     $htmlXMLRespuesta = "";
                 }
                 
+                if(($art->estado == "aceptado" || $art->estado == "rechazado") && filter_var($art->email, FILTER_VALIDATE_EMAIL)){
+                    $htmlReenvioCorreo = "<a href='#' onclick='reenviarCorreo(\"".$art->clave."\", \"".$_POST['tipodocumento']."\")'><img src=".$ruta_imagen."/mail.png width='21' height='21' title='Reenviar Correo a Cliente'></a>";
+                }
+                
                 $auxArray = array(
                             $art->clave,
                             $art->consecutivo,
@@ -1012,6 +1017,7 @@ class consulta extends CI_Controller {
                                     $htmlPdf
                                     $htmlXML
                                     $htmlXMLRespuesta
+                                    $htmlReenvioCorreo
                                     ".(($art->estado == "aceptado" || $art->estado == "rechazado" || $art->estado == "recibido" || $art->estado == "procesando") ? "" : "<a href='#' onclick='reenviarXML(\"$art->clave\")'><img src=".$ruta_imagen."/upload.png width='21' height='21' title='Reenviar Documento a Hacienda'></a>")."
                             </div>"
                     );
@@ -1115,9 +1121,9 @@ class consulta extends CI_Controller {
                                                 require_once PATH_API_CORREO;
                                                 $apiCorreo = new Correo();
                                                 $attachs = array(
-                                                    PATH_DOCUMENTOS_ELECTRONICOS.$clave.".xml",
-                                                    PATH_DOCUMENTOS_ELECTRONICOS.$clave."-respuesta.xml",
-                                                    PATH_DOCUMENTOS_ELECTRONICOS.$clave.".pdf");
+                                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+                                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+                                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
                                                 if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
                                                     $this->factura->marcarEnvioCorreoFacturaElectronica($data['Sucursal_Codigo'], $responseCheck["factura"]->Factura_Consecutivo);
                                                 }
@@ -1152,6 +1158,64 @@ class consulta extends CI_Controller {
                             }else{
                                 $retorno["error"] = "No existe mensaje receptor";
                             }
+                        break;
+                    }
+                }else{
+                    $retorno["error"] = "El tipo no puede ser vacio";
+                }
+            }else{
+                $retorno["error"] = "La clave no puede ser vacia";
+            }
+            echo json_encode($retorno);
+        }
+        
+        public function reenviarCorreo(){
+            $clave = @$_POST["clave"];
+            $tipo = @$_POST["tipo"];
+            $retorno = array("status"=>0, "error"=>"No se pudo procesar la solicitud");
+            if($clave != ""){
+                if($tipo != ""){
+                    include PATH_USER_DATA;
+                    switch($tipo){
+                        case "FE":
+                            if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
+                                if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                    $empresa = $this->empresa->getEmpresa($factura->Sucursal)[0];
+                                    require_once PATH_API_CORREO;
+                                    $apiCorreo = new Correo();
+                                    $attachs = array(
+                                        $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+                                        $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+                                        $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
+                                    if($apiCorreo->enviarCorreo($factura->ReceptorEmail, "Factura Electrónica #".$factura->Consecutivo." | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+                                        $this->factura->marcarEnvioCorreoFacturaElectronica($factura->Sucursal, $factura->Consecutivo);
+                                        $retorno["status"] = 1;
+                                        unset($retorno["error"]);
+                                    }
+                                }
+                            }else{
+                                $retorno["error"] = "No existe factura electronica";
+                            }
+                        break;
+                        case "NC":
+                            if($nota = $this->contabilidad->getNotaCreditoElectronicaByClave($clave)){
+                                if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                    $empresa = $this->empresa->getEmpresa($nota->Sucursal)[0];
+                                    require_once PATH_API_CORREO;
+                                    $apiCorreo = new Correo();
+                                    $attachs = array(
+                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
+                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf");
+                                    if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+                                        $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
+                                        $retorno["status"] = 1;
+                                        unset($retorno["error"]);
+                                    }
+                                }
+                            }else{
+                                $retorno["error"] = "No existe nota credito electronica";
+                            }
+                            
                         break;
                     }
                 }else{

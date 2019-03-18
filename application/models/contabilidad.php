@@ -2789,7 +2789,8 @@ Class contabilidad extends CI_Model
 				EmisorIdentificacion AS cliente_identificacion,
                                 EmisorNombre AS cliente_nombre,
                                 FechaEmision as fecha,
-                                RespuestaHaciendaEstado as estado
+                                RespuestaHaciendaEstado as estado,
+                                ReceptorEmail as email
 			FROM tb_59_mensaje_receptor
 			WHERE (Clave LIKE '%$busqueda%' OR
                                 ConsecutivoHacienda LIKE '%$busqueda%' OR
@@ -2810,7 +2811,8 @@ Class contabilidad extends CI_Model
                                 ReceptorNombre AS cliente_nombre,
                                 CorreoEnviadoReceptor as correo_enviado,
                                 FechaEmision as fecha,
-                                RespuestaHaciendaEstado as estado
+                                RespuestaHaciendaEstado as estado,
+                                ReceptorEmail as email
 			FROM $tabla
 			WHERE (Clave LIKE '%$busqueda%' OR
                                 ConsecutivoHacienda LIKE '%$busqueda%' OR
