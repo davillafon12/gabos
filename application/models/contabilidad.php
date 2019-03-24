@@ -2789,8 +2789,7 @@ Class contabilidad extends CI_Model
 				EmisorIdentificacion AS cliente_identificacion,
                                 EmisorNombre AS cliente_nombre,
                                 FechaEmision as fecha,
-                                RespuestaHaciendaEstado as estado,
-                                ReceptorEmail as email
+                                RespuestaHaciendaEstado as estado
 			FROM tb_59_mensaje_receptor
 			WHERE (Clave LIKE '%$busqueda%' OR
                                 ConsecutivoHacienda LIKE '%$busqueda%' OR
