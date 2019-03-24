@@ -249,6 +249,20 @@ class nueva extends CI_Controller {
 				}
 			}
 		}
+                if($tipo == "11"){
+                    if($this->user->login($usuario, $contrasena)){
+                        $codigo_usuario = $this->user->getIdFromUserID($usuario, $data['Sucursal_Codigo']);
+                        if($tipo=='11'){  //Autorizo anular factura
+				$permisos = $this->user->get_permisos($codigo_usuario, $data['Sucursal_Codigo']);
+				if(isset($permisos['procesar_proformas'])&&$permisos['procesar_proformas']){
+					$this->user->guardar_transaccion($codigo_usuario, "$usuario autorizo editar proforma, sesion de: ".$data['Usuario_Codigo'], $data['Sucursal_Codigo'],'autoriza');
+				}else{
+					$repuesta = '-1';
+				}
+			}
+                    }
+                }
+                
 		echo $repuesta; //No se encontro
 	}
 	

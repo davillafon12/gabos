@@ -11,19 +11,20 @@ class proforma extends CI_Controller {
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('configuracion','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
-		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-			
-		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-
-		if(!$permisos['crear_proforma'])
-		{	
-		   redirect('accesoDenegado', 'location');
-		}
 	}
 
 	function index()
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+                
+                $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+
+		if(!$permisos['crear_proforma'])
+		{	
+		   redirect('accesoDenegado', 'location');
+		}
+                
+                
 		$this->load->helper(array('form'));
 		//echo $this->factura->getConsecutivo($data['Sucursal_Codigo']);
 		//date_default_timezone_set("America/Costa_Rica");
@@ -316,10 +317,19 @@ class proforma extends CI_Controller {
 	}
 	
 	function fijarProforma(){
-		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+                include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+                
+                $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+
+		if(!$permisos['procesar_proformas'])
+		{	
+		   redirect('accesoDenegado', 'location');
+		}
+                
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
+                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('facturas/fijar_proforma', $data);	
 	}
 	

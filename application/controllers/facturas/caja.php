@@ -15,6 +15,11 @@ class caja extends CI_Controller {
 		$this->load->model('proforma_m','',TRUE);
                 $this->load->model('impresion_m','',TRUE);
                 $this->load->model('contabilidad','',TRUE);
+		
+	}
+    
+	function index()
+	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -23,11 +28,7 @@ class caja extends CI_Controller {
 		{	
 		   redirect('accesoDenegado', 'location');
 		}
-	}
-    
-	function index()
-	{
-		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+                
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
