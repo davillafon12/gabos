@@ -34,7 +34,32 @@ Class contabilidad extends CI_Model
 		{			
 			return $query->result();
 		}
-	}	
+	}
+        
+        function getCreditoParaAnularFacturaCredito($consecutivo, $sucursal, $vendedor, $sucursalVendedor, $cliente){
+		$this->db->where('Credito_Factura_Consecutivo', $consecutivo);
+                $this->db->where('Credito_Sucursal_Codigo', $sucursal);
+                $this->db->where('Credito_Vendedor_Codigo', $vendedor);
+                $this->db->where('Credito_Vendedor_Sucursal', $sucursalVendedor);
+                $this->db->where('Credito_Cliente_Cedula', $cliente);
+		$this->db->from('tb_24_credito');
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{			
+			return $query->result()[0];
+		}
+	}
+        
+        function marcarRecibosComoPendientes($creditoId){
+           // echo "ENTRO 3";
+            $data = array("Pendiente"=>1);
+            $this->db->where("Credito", $creditoId);
+            $this->db->update("tb_26_recibos_dinero", $data);
+        }
 	
 	function saldarFactura($id, $saldoNuevo){
 		$datos = array(
