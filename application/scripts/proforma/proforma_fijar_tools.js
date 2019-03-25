@@ -654,16 +654,23 @@ function setMainValues(){
 function makeProformaEditable(){  // FALTA VALIDAR seCambioFactura en dos metodos
 	if(consecutivoActual===0){return false;} //Si no se ha ingresado una factura
 	else{
-		seCambioFactura = true;
-		
-		enableArticulosInputs();
-		enableArticulosCantidades();
-		enableArticulosArrows();
-		$("#observaciones").attr("disabled", false);
-				//Agregar boton de guardar
-		$("#boton_guardar_editar").css('display','inline-block');
+            numeroPopUp = 11;
+            $('#pop_up_administrador').bPopup({
+                    modalClose: false
+            });
 		
 	}	
+}
+
+function proformaEditable(){
+    seCambioFactura = true;
+		
+    enableArticulosInputs();
+    enableArticulosCantidades();
+    enableArticulosArrows();
+    $("#observaciones").attr("disabled", false);
+                    //Agregar boton de guardar
+    $("#boton_guardar_editar").css('display','inline-block');
 }
 
 function enableArticulosInputs()

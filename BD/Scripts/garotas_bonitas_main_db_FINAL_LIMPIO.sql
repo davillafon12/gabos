@@ -4715,3 +4715,5 @@ ALTER TABLE  `tb_57_nota_credito_electronica` CHANGE  `RespuestaHaciendaXML`  `R
 ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `XMLSinFirmar`  `XMLSinFirmar` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+update tb_02_sucursal set Token_Certificado_Tributa = null;

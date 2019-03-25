@@ -1002,10 +1002,11 @@ class consulta extends CI_Controller {
                     $htmlXMLRespuesta = "";
                 }
                 
-                if(($art->estado == "aceptado" || $art->estado == "rechazado") && filter_var($art->email, FILTER_VALIDATE_EMAIL)){
-                    $htmlReenvioCorreo = "<a href='#' onclick='reenviarCorreo(\"".$art->clave."\", \"".$_POST['tipodocumento']."\")'><img src=".$ruta_imagen."/mail.png width='21' height='21' title='Reenviar Correo a Cliente'></a>";
+                if($_POST['tipodocumento'] != "MR"){
+                    if(($art->estado == "aceptado" || $art->estado == "rechazado") && filter_var($art->email, FILTER_VALIDATE_EMAIL)){
+                        $htmlReenvioCorreo = "<a href='#' onclick='reenviarCorreo(\"".$art->clave."\", \"".$_POST['tipodocumento']."\")'><img src=".$ruta_imagen."/mail.png width='21' height='21' title='Reenviar Correo a Cliente'></a>";
+                    }
                 }
-                
                 $auxArray = array(
                             $art->clave,
                             $art->consecutivo,

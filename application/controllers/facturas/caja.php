@@ -15,6 +15,11 @@ class caja extends CI_Controller {
 		$this->load->model('proforma_m','',TRUE);
                 $this->load->model('impresion_m','',TRUE);
                 $this->load->model('contabilidad','',TRUE);
+		
+	}
+    
+	function index()
+	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -23,11 +28,7 @@ class caja extends CI_Controller {
 		{	
 		   redirect('accesoDenegado', 'location');
 		}
-	}
-    
-	function index()
-	{
-		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+                
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
@@ -417,7 +418,7 @@ class caja extends CI_Controller {
             $consecutivo = $_POST['consecutivo'];
             include PATH_USER_DATA;	
 
-            if($this->factura->existe_Factura($consecutivo, $data['Sucursal_Codigo'])){
+            if($facturaHeaders = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){
                 $tipoPago = array("tipo"=>"contado");
             	//include PATH_USER_DATA; 						
                 // Primero validamos si existe una factura electronica asociada a esta factura
@@ -471,7 +472,6 @@ class caja extends CI_Controller {
 
                     $facturaBODY['status']='success';
                     $datos = array(         
-                            'Factura_Tipo_Pago'=>$tipoPago["tipo"],
                             'Factura_Estado'=>'anulada'
                     );
 
@@ -496,6 +496,16 @@ class caja extends CI_Controller {
 //                    require_once PATH_API_HACIENDA;
 //                    $api = new API_FE();
 //                    $api->destruirSesion($responseCheck["empresa"]->Ambiente_Tributa, $responseCheck["empresa"]->Usuario_Tributa);
+                }
+                $facturaHeaders = $facturaHeaders[0];
+                if($facturaHeaders->Factura_Tipo_Pago == "credito"){
+                    if($creditoHeader = $this->contabilidad->getCreditoParaAnularFacturaCredito($facturaHeaders->Factura_Consecutivo, 
+                                                                                                $facturaHeaders->TB_02_Sucursal_Codigo, 
+                                                                                                $facturaHeaders->Factura_Vendedor_Codigo, 
+                                                                                                $facturaHeaders->Factura_Vendedor_Sucursal,    
+                                                                                                $facturaHeaders->TB_03_Cliente_Cliente_Cedula)){
+                        $this->contabilidad->marcarRecibosComoPendientes($creditoHeader->Credito_Id);
+                    }
                 }
             }else{
                 $facturaBODY['status']='error';

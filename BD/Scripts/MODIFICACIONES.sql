@@ -1,1 +1,2 @@
-update tb_02_sucursal set Token_Certificado_Tributa = null;
+
+ALTER TABLE  `tb_26_recibos_dinero` ADD  `Pendiente` BOOLEAN NOT NULL DEFAULT  '0' AFTER  `Anulado`
