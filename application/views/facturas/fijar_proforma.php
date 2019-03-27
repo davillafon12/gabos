@@ -39,9 +39,9 @@ PARA:
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/consulta/estilo_proformas.css'); ?>">
 		<!--CARGA DEL SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/proforma_fijar_tools.js?v='.$javascriptCacheVersion); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/proforma_fijar_tools.js?v='.$javascript_cache_version); ?>"></script>
                 <!--CARGA DEL SCRIPT DE HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_popup.js?v='.$javascriptCacheVersion); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/proforma/facturas_popup.js?v='.$javascript_cache_version); ?>"></script>
 		<!--JQUERY IMPROMPTU-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
 		<!--CARGA DEL POPUP MODAL-->
