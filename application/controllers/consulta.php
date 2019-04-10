@@ -1110,11 +1110,11 @@ class consulta extends CI_Controller {
                             if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
                                 if($cliente = $this->cliente->getClientes_Cedula($factura->ReceptorIdentificacion)){
                                     if($empresaData = $this->empresa->getEmpresa($factura->Sucursal)){
-                                        $factura = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
+                                        $facturaa = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
                                         $cliente = $cliente[0];
                                         $empresa = $empresaData[0];
                                         $resFacturaElectronica = array("data" => array("situacion"=>"normal"));
-                                        $responseCheck = array("factura" => $factura, "cliente"=>$cliente, "empresa"=>$empresa);
+                                        $responseCheck = array("factura" => $facturaa, "cliente"=>$cliente, "empresa"=>$empresa);
                                         $result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                                         if($result["status"]){ // Factura fue recibida y aceptada
                                             $this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);

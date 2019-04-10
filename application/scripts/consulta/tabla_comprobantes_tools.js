@@ -66,6 +66,11 @@ function reenviarCorreo(clave, tipo){
         type: "POST",
         dataType: "json",
         data: {clave:clave, tipo:tipo},	
+        beforeSend: function(jqXHR, settings) {
+            $('#envio_hacienda').bPopup({
+                    modalClose: false
+            });
+        },
         success: function(data, textStatus, jqXHR){
             var documentoSeleccionado = $("#tipo_documento").val();
             window.location.replace(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/comprobantesElectronicos?d='+documentoSeleccionado.toLowerCase());
