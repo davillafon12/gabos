@@ -283,10 +283,12 @@ Class contabilidad extends CI_Model
 			$exento = 0;
 			$noRetencion = 0;
 			$precioFinal = 0;
+                        $tipoCodigo = "";
 			if(trim($producto->c) == "00"){
 				$descripcion = trim($producto->ds);
 				$precio = trim($producto->p);
 				$precioFinal = $precio;
+                                $tipoCodigo = "99";
 			}else{
 				$descripcion = $this->articulo->getArticuloDescripcion($producto->c, $sucursal);
 				$precio = $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c);
@@ -295,10 +297,12 @@ Class contabilidad extends CI_Model
 				$exento = $articuloCompleto->Articulo_Factura_Exento;
 				$noRetencion = $articuloCompleto->Articulo_Factura_No_Retencion;
 				$precioFinal = $articuloCompleto->Articulo_Factura_Precio_Final;
+                                $tipoCodigo = $this->articulo->getArticuloTipoCodigo($producto->c, $sucursal);
 			}
 			//Agregamos los datos a un array para ser agregado a la bd
 			$pro = array(
 						'Codigo' => $producto->c,
+                                                'TipoCodigo' => $tipoCodigo,
 						'Descripcion' => $descripcion,
 						'Cantidad_Bueno' => $producto->b,
 						'Cantidad_Defectuoso' => $producto->d,
@@ -2167,14 +2171,19 @@ Class contabilidad extends CI_Model
                 "TipoCambio" => $tipoCambio,
                 "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
                 "TotalServiciosExentos" => $this->fn($costos['total_serv_exentos']),
+                "TotalServiciosExonerados" => $this->fn($costos['total_serv_exonerados']),
                 "TotalMercanciaGravada" => $this->fn($costos['total_merc_gravada']),
                 "TotalMercanciaExenta" => $this->fn($costos['total_merc_exenta']),
+                "TotalMercanciaExonerada" => $this->fn($costos['total_merc_exonerada']),
                 "TotalGravados" => $this->fn($costos['total_gravados']),
                 "TotalExentos" => $this->fn($costos['total_exentos']),
+                "TotalExonerado" => $this->fn($costos['total_exonerado']),
                 "TotalVentas" => $this->fn($costos['total_ventas']),
                 "TotalDescuentos" => $this->fn($costos['total_descuentos']),
                 "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
                 "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+                "TotalIVADevuelto" => $this->fn($costos['total_iva_devuelto']),
+                "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
                 "TotalComprobante" => $this->fn($costos['total_comprobante']),
                 "Otros" => trim($otros) == "" ? "-" : trim($otros),
                 "TipoDocumento" => NOTA_CREDITO_ELECTRONICA,
@@ -2188,7 +2197,8 @@ Class contabilidad extends CI_Model
                 "DocumentoReferenciaTipo" => $tipoDoc,
                 "DocumentoReferenciaFechaEmision" => $fechaEmisionDoc,
                 "DocumentoReferenciaCodigo" => $codigo,
-                "DocumentoReferenciaRazon" => $razon
+                "DocumentoReferenciaRazon" => $razon,
+                "CodigoActividad" => $emisor->CodigoActividad
             );
            
             if($receptor != NULL){
@@ -2217,11 +2227,14 @@ Class contabilidad extends CI_Model
                     "MontoTotal" => $art["montoTotal"],
                     "MontoDescuento" => $art["montoDescuento"],
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
+                    "BaseImponible" => $art["base_imponible"],
                     "Subtotal" => $art["subtotal"],
                     "ImpuestoObject" => json_encode($art["impuesto"]),
                     "MontoTotalLinea" => $art["montoTotalLinea"],
                     "Consecutivo" => $nota->Consecutivo,
-                    "Sucursal" => $nota->Sucursal
+                    "Sucursal" => $nota->Sucursal,
+                    "Codigo" => $art["codigo"],
+                    "TipoCodigo" => $art["tipoCodigo"]
                 );
                 
                 $this->db->insert("tb_58_articulos_nota_credito_electronica", $data);
@@ -2345,7 +2358,14 @@ Class contabilidad extends CI_Model
                                                     $nota->DocumentoReferenciaNumero, 
                                                     $nota->DocumentoReferenciaRazon, 
                                                     $nota->DocumentoReferenciaCodigo, 
-                                                    $nota->DocumentoReferenciaFechaEmision);
+                                                    $nota->DocumentoReferenciaFechaEmision,
+                            
+                                                    $nota->CodigoActividad,
+                                                    $nota->TotalServiciosExonerados,
+                                                    $nota->TotalMercanciaExonerada,
+                                                    $nota->TotalExonerado,
+                                                    $nota->TotalIVADevuelto,
+                                                    $nota->TotalOtrosCargos);
                     if($xmlRes){
                         $data = array(
                             "XMLSinFirmar" => $xmlRes["xml"]
@@ -2472,27 +2492,34 @@ Class contabilidad extends CI_Model
                             $costos = array(
                                 "total_serv_gravados" => 0,
                                 "total_serv_exentos" => 0,
+                                "total_serv_exonerados" => 0,
                                 "total_merc_gravada" => 0,
                                 "total_merc_exenta" => 0,
+                                "total_merc_exonerada" => 0,
                                 "total_gravados" => 0,
                                 "total_exentos" => 0,
+                                "total_exonerado" => 0,
                                 "total_ventas" => 0,
                                 "total_descuentos" => 0,
                                 "total_ventas_neta" => 0,
                                 "total_impuestos" => 0,
-                                "total_comprobante" => 0,
+                                "total_iva_devuelto" => 0,
+                                "total_otros_cargos" => 0,
+                                "total_comprobante" => 0
                             );
                             $artFinales = array();
                             foreach($notaCreditoArticulos as $a){
                                 $linea = $this->getDetalleLineaNotaCredito($a,  $cliente->Aplica_Retencion == 0);
                                 array_push($artFinales, $linea);
-
+                            
                                 if($a->Exento == 0){
                                     $costos["total_merc_gravada"] += $linea["montoTotal"];
                                     $costos["total_gravados"] += $linea["montoTotal"];
                                 }else{
                                     $costos["total_merc_exenta"] += $linea["montoTotal"];
+                                    $costos["total_merc_exonerada"] += $linea["montoTotal"];
                                     $costos["total_exentos"] += $linea["montoTotal"];
+                                    $costos["total_exonerado"] += $linea["montoTotal"];
                                 }
                                 $costos["total_ventas"] += $linea["montoTotal"];
 
@@ -2503,9 +2530,9 @@ Class contabilidad extends CI_Model
                                 $impuesto = $linea["impuesto"][0]["monto"];
                                 $costos["total_impuestos"] += $impuesto;
                             }
+                            $costos["total_exonerado"] =  $costos["total_serv_exonerados"] + $costos["total_merc_exonerada"];
                             $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
-                            $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"];
-
+                            $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"] + $costos["total_otros_cargos"];
 
                             unset($r["error"]);
                             unset($r["error_msg"]);

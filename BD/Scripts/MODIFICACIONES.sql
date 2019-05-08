@@ -49,3 +49,21 @@ ALTER TABLE  `tb_55_factura_electronica` CHANGE  `CodigoActividad`  `CodigoActiv
 ALTER TABLE  `tb_55_factura_electronica` ADD  `TotalOtrosCargos` VARCHAR( 20 ) NULL AFTER  `TotalIVADevuelto`;
 
 ALTER TABLE  `tb_56_articulos_factura_electronica` ADD  `BaseImponible` VARCHAR( 20 ) NULL AFTER  `Subtotal`;
+
+ALTER TABLE  `tb_28_productos_notas_credito` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL AFTER  `Codigo`;
+
+ALTER TABLE  `tb_58_articulos_nota_credito_electronica` ADD  `Codigo` VARCHAR( 30 ) NOT NULL AFTER  `Id` ,
+ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL AFTER  `Codigo`;
+
+ALTER TABLE  `tb_58_articulos_nota_credito_electronica` CHANGE  `Codigo`  `Codigo` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_58_articulos_nota_credito_electronica` CHANGE  `TipoCodigo`  `TipoCodigo` VARCHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_58_articulos_nota_credito_electronica` ADD  `BaseImponible` VARCHAR( 20 ) NULL AFTER  `NaturalezaDescuento`;
+
+ALTER TABLE  `tb_57_nota_credito_electronica` ADD  `CodigoActividad` VARCHAR( 20 ) NULL ,
+ADD  `TotalServiciosExonerados` VARCHAR( 20 ) NULL ,
+ADD  `TotalMercanciaExonerada` VARCHAR( 20 ) NULL ,
+ADD  `TotalExonerado` VARCHAR( 20 ) NULL ,
+ADD  `TotalIVADevuelto` VARCHAR( 20 ) NULL ,
+ADD  `TotalOtrosCargos` VARCHAR( 20 ) NULL;

@@ -495,7 +495,8 @@ class API_Helper{
                     $totalDescuentos, $totalVentasNeta, $totalImp, $totalComprobante,
                     $otros,
                     $productos,
-                    $infoRefeTipoDoc, $infoRefeNumero, $infoRefeRazon, $infoRefeCodigo, $infoRefeFechaEmision) {
+                    $infoRefeTipoDoc, $infoRefeNumero, $infoRefeRazon, $infoRefeCodigo, $infoRefeFechaEmision,
+                    $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos) {
    
         $receptorOtrasSenas = "";
         $noReceptor = (trim($receptorNombre) == "" || $receptorNombre == null || $receptorNombre == "null");
@@ -506,8 +507,9 @@ class API_Helper{
         //return $detalles;
         $xmlString = '<?xml version = "1.0" encoding = "utf-8"
         ?>
-        <NotaCreditoElectronica xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica NotaCreditoElectronica_V4.2.xsd">
+        <NotaCreditoElectronica xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaCreditoElectronica.xsd">
         <Clave>' . $clave . '</Clave>
+        <CodigoActividad>' . $codigoActividad . '</CodigoActividad>
         <NumeroConsecutivo>' . $consecutivo . '</NumeroConsecutivo>
         <FechaEmision>' . $fechaEmision . '</FechaEmision>
         <Emisor>
@@ -615,50 +617,54 @@ class API_Helper{
 
             $xmlString .= '<DetalleServicio>';
 
-        /* EJEMPLO DE DETALLES
-          {
-          "1":["1","Sp","Honorarios","100000","100000","100000","100000","1000","Pronto pago",{"Imp": [{"cod": 122,"tarifa": 1,"monto": 100},{"cod": 133,"tarifa": 1,"monto": 1300}]}],
-          "2":["1","Sp","Honorarios","100000","100000","100000","100000"]
-          }
-         */
         $l = 1;
         foreach ($detalles as $d) {
             $xmlString .= '<LineaDetalle>
                       <NumeroLinea>' . $l . '</NumeroLinea>
+                      <Codigo>' . $d["codigo"] . '</Codigo>
+                      <CodigoComercial>
+                        <Tipo>' . $d["tipoCodigo"] . '</Tipo>
+                        <Codigo>' . $d["codigo"] . '</Codigo>
+                      </CodigoComercial>
                       <Cantidad>' . $d["cantidad"] . '</Cantidad>
                       <UnidadMedida>' . $d["unidadMedida"] . '</UnidadMedida>
                       <Detalle>' . $d["detalle"] . '</Detalle>
                       <PrecioUnitario>' . $d["precioUnitario"] . '</PrecioUnitario>
                       <MontoTotal>' . $d["montoTotal"] . '</MontoTotal>';
             if (isset($d["montoDescuento"]) && $d["montoDescuento"] != "") {
-                $xmlString .= '<MontoDescuento>' . $d["montoDescuento"] . '</MontoDescuento>';
-            }
-            if (isset($d["naturalezaDescuento"]) && $d["naturalezaDescuento"] != "") {
-                $xmlString .= '<NaturalezaDescuento>' . $d["naturalezaDescuento"] . '</NaturalezaDescuento>';
+                
+                $xmlString .= '<Descuento>'
+                        . '<MontoDescuento>' . $d["montoDescuento"] . '</MontoDescuento>'
+                        . '<NaturalezaDescuento>' . $d["naturalezaDescuento"] . '</NaturalezaDescuento>'
+                        . '</Descuento>';
             }
 
-            $xmlString .= '<SubTotal>' . $d["subtotal"] . '</SubTotal>';
-
+            $xmlString .= '<SubTotal>' . $d["subtotal"] . '</SubTotal>'
+                    . '<BaseImponible>' . $d["baseImponible"] . '</BaseImponible>';
             if (isset($d["impuesto"]) && $d["impuesto"] != "") {
                 foreach ($d["impuesto"] as $i) {
                     $xmlString .= '<Impuesto>
                     <Codigo>' . $i->codigo . '</Codigo>
+                    <CodigoTarifa>' . $i->codigoTarifa . '</CodigoTarifa>
                     <Tarifa>' . $i->tarifa . '</Tarifa>
+                    <FactorIVA>' . $i->factorIVA . '</FactorIVA>
                     <Monto>' . $i->monto . '</Monto>';
                     if (isset($i->exoneracion) && $i->exoneracion != "") {
-                        $xmlString .= '<Exoneracion>
-                        <TipoDocumento>' . $i->exoneracion->tipoDocumento . '</TipoDocumento>
-                        <NumeroDocumento>' . $i->exoneracion->numeroDocumento . '</NumeroDocumento>
-                        <NombreInstitucion>' . $i->exoneracion->nombreInstitucion . '</NombreInstitucion>
-                        <FechaEmision>' . $i->exoneracion->fechaEmision . '</FechaEmision>
-                        <MontoImpuesto>' . $i->exoneracion->montoImpuesto . '</MontoImpuesto>
-                        <PorcentajeCompra>' . $i->exoneracion->porcentajeCompra . '</PorcentajeCompra>
-                    </Exoneracion>';
+                        $xmlString .= '
+                        <Exoneracion>
+                            <TipoDocumento>' . $i->exoneracion->tipoDocumento . '</TipoDocumento>
+                            <NumeroDocumento>' . $i->exoneracion->numeroDocumento . '</NumeroDocumento>
+                            <NombreInstitucion>' . $i->exoneracion->nombreInstitucion . '</NombreInstitucion>
+                            <FechaEmision>' . $i->exoneracion->fechaEmision . '</FechaEmision>
+                            <PorcentajeExoneracion>' . $i->exoneracion->porcentajeCompra . '</PorcentajeExoneracion>
+                            <MontoExoneracion>' . $i->exoneracion->montoImpuesto . '</MontoExoneracion>
+                        </Exoneracion>';
                     }
 
                     $xmlString .= '</Impuesto>';
                 }
             }
+
 
             $xmlString .= '<MontoTotalLinea>' . $d["montoTotalLinea"] . '</MontoTotalLinea>';
             $xmlString .= '</LineaDetalle>';
@@ -666,18 +672,25 @@ class API_Helper{
         }
         $xmlString .= '</DetalleServicio>
         <ResumenFactura>
-            <CodigoMoneda>' . $codMoneda . '</CodigoMoneda>
-            <TipoCambio>' . $tipoCambio . '</TipoCambio>
+            <CodigoTipoMoneda>
+                <CodigoMoneda>' . $codMoneda . '</CodigoMoneda>
+                <TipoCambio>' . $tipoCambio . '</TipoCambio>
+            </CodigoTipoMoneda>
             <TotalServGravados>' . $totalServGravados . '</TotalServGravados>
             <TotalServExentos>' . $totalServExentos . '</TotalServExentos>
+            <TotalServExonerado>' . $totalServiciosExonerados . '</TotalServExonerado>
             <TotalMercanciasGravadas>' . $totalMercGravadas . '</TotalMercanciasGravadas>
             <TotalMercanciasExentas>' . $totalMercExentas . '</TotalMercanciasExentas>
+            <TotalMercExonerada>' . $totalMercanciaExonerada . '</TotalMercExonerada>
             <TotalGravado>' . $totalGravados . '</TotalGravado>
             <TotalExento>' . $totalExentos . '</TotalExento>
+            <TotalExonerado>' . $totalExonerado . '</TotalExonerado>
             <TotalVenta>' . $totalVentas . '</TotalVenta>
             <TotalDescuentos>' . $totalDescuentos . '</TotalDescuentos>
             <TotalVentaNeta>' . $totalVentasNeta . '</TotalVentaNeta>
             <TotalImpuesto>' . $totalImp . '</TotalImpuesto>
+            <TotalIVADevuelto>' . $totalIVADevuelto . '</TotalIVADevuelto>
+            <TotalOtrosCargos>' . $totalOtrosCargos . '</TotalOtrosCargos>
             <TotalComprobante>' . $totalComprobante . '</TotalComprobante>
         </ResumenFactura>
         <InformacionReferencia>
@@ -686,11 +699,7 @@ class API_Helper{
             <FechaEmision>' . $infoRefeFechaEmision . '</FechaEmision>
             <Codigo>' . $infoRefeCodigo . '</Codigo>
             <Razon>' . $infoRefeRazon . '</Razon>
-        </InformacionReferencia>
-        <Normativa>
-            <NumeroResolucion>DGT-R-48-2016</NumeroResolucion>
-            <FechaResolucion>07-10-2016 08:00:00</FechaResolucion>
-        </Normativa>';
+        </InformacionReferencia>';
              if ($otros == '' or $otrosType == '') {
 
         } else {

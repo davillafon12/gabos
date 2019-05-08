@@ -203,6 +203,7 @@ class CI_Model {
             $cantidad = floatval($a->Articulo_Factura_Cantidad);
             $linea["cantidad"] = $this->fn($cantidad, 3);
             
+            // CODIGO
             $linea["codigo"] = $a->Articulo_Factura_Codigo;
             $linea["tipoCodigo"] = $a->TipoCodigo;
             
@@ -297,6 +298,10 @@ class CI_Model {
             $cantidad = floatval($a->Cantidad_Bueno) + floatval($a->Cantidad_Defectuoso);
             $linea["cantidad"] = $this->fn($cantidad, 3);
             
+            // CODIGO
+            $linea["codigo"] = $a->Codigo;
+            $linea["tipoCodigo"] = $a->TipoCodigo;
+            
             // UNIDAD DE MEDIDA
             $linea["unidadMedida"] = "Unid";
             
@@ -327,6 +332,9 @@ class CI_Model {
              // SUBTOTAL
             $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
             $linea["subtotal"] = $this->fn($subTotalSinIVA);
+            
+            // BASE IMPONIBLE
+            $linea["base_imponible"] = $this->fn(round($subTotalSinIVA, 0));
             
             // IMPUESTOS
             $impuestos = array();
@@ -362,9 +370,11 @@ class CI_Model {
             }
             $montoFinalDeImpuesto = round($subTotalSinIVA,0) * ($factorIVAFinal / 100);
             $impuesto = array(
-                "codigo" => "01", // "Impuesto General sobre las ventas"
+                "codigo" => ($a->No_Retencion == "0" && $aplicaRetencion) ? "07" : "01", // 01 = Impuesto al Valor Agregado / 07 = IVA (cálculo especial)
+                "codigoTarifa" => $a->Exento == 1 ? "01" : "08", // 01 = Exento / 08 = General 13%
                 "tarifa" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
-                "monto" => $this->fn($montoFinalDeImpuesto)
+                "factorIVA" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
+                "monto" => $this->fn(round($montoFinalDeImpuesto, 0))
             );
             
             array_push($impuestos, $impuesto);
