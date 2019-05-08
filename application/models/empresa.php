@@ -40,7 +40,8 @@ Class empresa extends CI_Model
                             $provincia,
                             $canton,
                             $distrito,
-                            $barrio)
+                            $barrio,
+                            $codigo_actividad)
 	{
 		//echo $creador_empresa;
 		date_default_timezone_set("America/Costa_Rica");
@@ -69,7 +70,8 @@ Class empresa extends CI_Model
                                 'Provincia'=> mysql_real_escape_string($provincia),
                                 'Canton'=> mysql_real_escape_string($canton),
                                 'Distrito'=> mysql_real_escape_string($distrito),
-                                'Barrio'=> mysql_real_escape_string($barrio)
+                                'Barrio'=> mysql_real_escape_string($barrio),
+                                'CodigoActividad'=> mysql_real_escape_string($codigo_actividad)
                     );
 		try{
         $this->db->insert('tb_02_sucursal',$data); }

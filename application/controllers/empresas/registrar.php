@@ -83,6 +83,8 @@ class registrar extends CI_Controller {
         $canton = trim($this->input->post("canton"));
         $distrito = trim($this->input->post("distrito"));
         $barrio = trim($this->input->post("barrio"));
+        
+        $codigo_actividad = trim($this->input->post("codigo_actividad"));
 	
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
@@ -112,7 +114,8 @@ class registrar extends CI_Controller {
                                         $provincia,
                                         $canton,
                                         $distrito,
-                                        $barrio))
+                                        $barrio,
+                                        $codigo_actividad))
 	{ //Si se ingreso bien a la BD
 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la empresa ".mysql_real_escape_string($nombre_empresa)." codigo: ".$id_empresa,$data['Sucursal_Codigo'],'registro');
 			

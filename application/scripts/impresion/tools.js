@@ -179,7 +179,7 @@ function imprimirFactura(data){
 	qz.append(" \r\n");
         qz.append(" Este comprobante provisional no puede ser utilizado para respaldo de creditos fiscales ni como gastos deducibles\r\n");
         qz.append(" \r\n");
-        qz.append(" Version 4.2\r\n");
+        qz.append(" Version 4.3\r\n");
 	qz.append(empresa.leyenda+"\r\n");
         qz.append("\r\n Comprobante Provisional \r\n");
 	//Damos espacio al final

@@ -160,11 +160,14 @@ PARA:
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<td>
 						<p class="contact"><label for="direccion">Dirección:</label></p> 
-						<input id="direccion" autocomplete="off" name="direccion" placeholder="Dirección de la empresa"  tabindex="6" type="text" style="    width: 820px;"> 
+						<input id="direccion" autocomplete="off" name="direccion" placeholder="Dirección de la empresa"  tabindex="6" type="text"> 
 					</td>
-					
+					<td>
+						<p class="contact"><label for="codigo_actividad">Código actividad tributaria:</label></p> 
+						<input id="codigo_actividad" autocomplete="off" name="codigo_actividad" placeholder="Código actividad tributaria"  tabindex="6" type="text" required=""> 
+					</td>
 				</tr>
                                 <tr>
 					<td>

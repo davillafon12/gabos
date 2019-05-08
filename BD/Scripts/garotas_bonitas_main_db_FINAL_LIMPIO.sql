@@ -4717,3 +4717,5 @@ ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEX
 ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
 update tb_02_sucursal set Token_Certificado_Tributa = null;
+
+ALTER TABLE  `tb_26_recibos_dinero` ADD  `Pendiente` BOOLEAN NOT NULL DEFAULT  '0' AFTER  `Anulado`

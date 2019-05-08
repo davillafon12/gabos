@@ -176,7 +176,10 @@ class CI_Model {
                     "naturalezaDescuento" => $art->NaturalezaDescuento,
                     "subtotal" => $art->Subtotal,
                     "impuesto" =>  json_decode($art->ImpuestoObject),
-                    "montoTotalLinea" => $art->MontoTotalLinea
+                    "montoTotalLinea" => $art->MontoTotalLinea,
+                    "codigo" => $art->Codigo,
+                    "tipoCodigo" => $art->TipoCodigo,
+                    "baseImponible" => $art->BaseImponible
                 );
                 array_push($finalArray, $artt);
             }
@@ -199,6 +202,9 @@ class CI_Model {
             // CANTIDAD
             $cantidad = floatval($a->Articulo_Factura_Cantidad);
             $linea["cantidad"] = $this->fn($cantidad, 3);
+            
+            $linea["codigo"] = $a->Articulo_Factura_Codigo;
+            $linea["tipoCodigo"] = $a->TipoCodigo;
             
             // UNIDAD DE MEDIDA
             $linea["unidadMedida"] = "Unid";
@@ -230,6 +236,9 @@ class CI_Model {
              // SUBTOTAL
             $subTotalSinIVA = round($precioTotalSinIVA, 0) - $descuentoPrecioSinIva;
             $linea["subtotal"] = $this->fn(round($subTotalSinIVA, 0));
+            
+            // BASE IMPONIBLE
+            $linea["base_imponible"] = $this->fn(round($subTotalSinIVA, 0));
             
             // IMPUESTOS
             $impuestos = array();
@@ -264,8 +273,10 @@ class CI_Model {
             }
             $montoFinalDeImpuesto = $subTotalSinIVA * ($factorIVAFinal / 100);
             $impuesto = array(
-                "codigo" => "01", // "Impuesto General sobre las ventas"
+                "codigo" => ($a->Articulo_Factura_No_Retencion == "0" && $aplicaRetencion) ? "07" : "01", // 01 = Impuesto al Valor Agregado / 07 = IVA (cálculo especial)
+                "codigoTarifa" => $a->Articulo_Factura_Exento == 1 ? "01" : "08", // 01 = Exento / 08 = General 13%
                 "tarifa" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
+                "factorIVA" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
                 "monto" => $this->fn(round($montoFinalDeImpuesto, 0))
             );
             

@@ -10,6 +10,7 @@ class editar extends CI_Controller {
 	$this->load->model('familia','',TRUE);
 	$this->load->model('user','',TRUE);
 	$this->load->model('bodega_m','',TRUE);
+        $this->load->model('catalogo','',TRUE);
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -312,6 +313,8 @@ class editar extends CI_Controller {
 	
 	if(isset($_GET['id'])){ //Verifica que traiga esa variable
 		$sucursal = $data['Sucursal_Codigo'];
+                $tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
+                $data['tipos_codigo'] = $tiposCodigos;
 		//Si viene sucursal usamos la que viene, sino deja la del log del usuario
 		if(isset($_GET['suc'])){
 			if($this->empresa->getEmpresa($_GET['suc'])){
@@ -330,6 +333,7 @@ class editar extends CI_Controller {
 				//$data['Articulo_Imagen_URL'] = $row -> Articulo_Imagen_URL;
 				$data['Articulo_Exento'] = $row -> Articulo_Exento;
 				$data['retencion'] = $row -> Articulo_No_Retencion;
+                                $data['tipoCodigo'] = $row -> TipoCodigo;
 				
 				
 				$URL_IMAGEN = $row->Articulo_Imagen_URL;				
@@ -390,7 +394,8 @@ class editar extends CI_Controller {
 			$precio5 = $this->input->post('precio5');
 			
 			
-			
+			$tipo_codigo = $this->input->post('tipo_codigo');
+                        
 			//Si es exento
 			$exento = 0;
 			$exento = isset($_POST['exento']) && $_POST['exento']  ? "1" : "0";
@@ -438,7 +443,8 @@ class editar extends CI_Controller {
 															'Articulo_Descuento' => $descuento,
 															'Articulo_Imagen_URL' => $foto,
 															'Articulo_Exento' => $exento,
-															'Articulo_No_Retencion'	 => $retencion											
+															'Articulo_No_Retencion'	 => $retencion,
+                                                                                                                        'TipoCodigo' => $tipo_codigo
 														);
 										$info['precios'] = array(
 															'p0' => $costo,

@@ -191,9 +191,13 @@ PARA:
 					</td>
 				</tr>
                                 <tr>
-					<td colspan="2">
+					<td>
 						<p class="contact"><label for="direccion">Dirección:</label></p> 
-						<input id="direccion" autocomplete="off" name="direccion" placeholder="Dirección de la empresa"  tabindex="6" type="text" value="<?php echo $Empresa_Direccion;?>" style="    width: 820px;"> 
+						<input id="direccion" autocomplete="off" name="direccion" placeholder="Dirección de la empresa"  tabindex="6" type="text" value="<?php echo $Empresa_Direccion;?>"> 
+					</td>
+                                        <td>
+						<p class="contact"><label for="codigo_actividad">Código de actividad tributaria:</label></p> 
+						<input id="codigo_actividad" autocomplete="off" name="codigo_actividad" placeholder="Código de actividad tributaria"  tabindex="6" type="text" required="" value="<?php echo $CodigoActividad;?>"> 
 					</td>
 				</tr>
                                 <tr>

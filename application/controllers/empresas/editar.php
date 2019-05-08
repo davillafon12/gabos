@@ -241,6 +241,7 @@ class editar extends CI_Controller {
                                 $data['Canton'] = $row -> Canton;
                                 $data['Distrito'] = $row -> Distrito;
                                 $data['Barrio'] = $row -> Barrio;
+                                $data['CodigoActividad'] = $row -> CodigoActividad;
                                 
                                 $data['tiposIdentificacion'] = $this->tiposIdentificacion;
                                 $provincias = $this->ubicacion->getProvincias();
@@ -305,6 +306,8 @@ class editar extends CI_Controller {
         $canton = trim($this->input->post("canton"));
         $distrito = trim($this->input->post("distrito"));
         $barrio = trim($this->input->post("barrio"));
+        
+        $codigo_actividad = trim($this->input->post("codigo_actividad"));
 		
 	$data_update['Sucursal_Cedula'] = mysql_real_escape_string($cedula_empresa);
 	$data_update['Sucursal_Nombre'] = mysql_real_escape_string($nombre_empresa);
@@ -329,6 +332,8 @@ class editar extends CI_Controller {
         $data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($cod_telefono_empresa);
         $data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($cod_fax_empresa);
 	
+        $data_update['CodigoActividad'] = mysql_real_escape_string($codigo_actividad);
+        
 	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
 	
 	

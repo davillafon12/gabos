@@ -73,7 +73,8 @@ class API_FE{
                                     $tipo_cambio,
                                     $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
                                     $otros,
-                                    $productos){
+                                    $productos,
+                                    $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos){
         $bm = round(microtime(true) * 1000);
         $params = array(
             "clave" => $clave, 
@@ -112,16 +113,22 @@ class API_FE{
             "tipo_cambio" => $tipo_cambio,
             "total_serv_gravados" => $total_serv_gravados, 
             "total_serv_exentos" => $total_serv_exentos, 
+            "toal_serv_exonerados" => $totalServiciosExonerados,
             "total_merc_gravada" => $total_merc_gravada, 
             "total_merc_exenta" => $total_merc_exenta, 
+            "total_merc_exonerada" => $totalMercanciaExonerada,
             "total_gravados" => $total_gravados, 
             "total_exentos" => $total_exentos, 
             "total_ventas" => $total_ventas, 
             "total_descuentos" => $total_descuentos, 
             "total_ventas_neta" => $total_ventas_neta, 
             "total_impuestos" => $total_impuestos, 
+            "total_exonerado" => $totalExonerado,
+            "total_iva_devuelto" => $totalIVADevuelto,
+            "total_otros_cargos" => $totalOtrosCargos,
             "total_comprobante" => $total_comprobante,
             "otros" => $otros,
+            "codigo_actividad" => $codigoActividad,
             "detalles" => $productos
         );
         $this->logger->info("crearXMLFactura", "Creating factura XML into API with params: ".json_encode($params));
@@ -135,7 +142,8 @@ class API_FE{
                                     $tipo_cambio,
                                     $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
                                     $otros,
-                                    $productos);
+                                    $productos,
+                                    $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos);
         
         if(is_array($result)){
             if(isset($result["clave"]) && isset($result["xml"])){

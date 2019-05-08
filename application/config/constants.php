@@ -104,6 +104,7 @@ define('CARPETA_IMAGENES', FCPATH.'application/images/articulos/');
 
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
+define('TIQUETE_ELECTRONICO', 'TE');
 define('FACTURA_ELECTRONICA_CODIGO', '01');
 define('NOTA_CREDITO_ELECTRONICA', 'NC');
 define('HACIENDA_DECIMALES', 5);

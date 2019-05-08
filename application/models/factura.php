@@ -163,7 +163,7 @@ Class factura extends CI_Model
 		}
 	}
 	
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo = "01"){
 		$sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
@@ -182,7 +182,8 @@ Class factura extends CI_Model
 							'TB_07_Factura_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
 							'TB_07_Factura_Factura_Vendedor_Codigo'=>mysql_real_escape_string($vendedor),
 							'TB_07_Factura_Factura_Vendedor_Sucursal'=>mysql_real_escape_string($sucursalVendedor),
-							'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cliente)							
+							'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cliente),
+                                                        'TipoCodigo' => mysql_real_escape_string($tipoCodigo)
 	                    );			
 	        $this->db->insert('TB_08_Articulos_Factura',$dataItem);
 	}
@@ -1002,23 +1003,29 @@ Class factura extends CI_Model
                 "TipoCambio" => $tipoCambio,
                 "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
                 "TotalServiciosExentos" => $this->fn($costos['total_serv_exentos']),
+                "TotalServiciosExonerados" => $this->fn($costos['total_serv_exonerados']),
                 "TotalMercanciaGravada" => $this->fn($costos['total_merc_gravada']),
                 "TotalMercanciaExenta" => $this->fn($costos['total_merc_exenta']),
+                "TotalMercanciaExonerada" => $this->fn($costos['total_merc_exonerada']),
                 "TotalGravados" => $this->fn($costos['total_gravados']),
                 "TotalExentos" => $this->fn($costos['total_exentos']),
+                "TotalExonerado" => $this->fn($costos['total_exonerado']),
                 "TotalVentas" => $this->fn($costos['total_ventas']),
                 "TotalDescuentos" => $this->fn($costos['total_descuentos']),
                 "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
                 "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+                "TotalIVADevuelto" => $this->fn($costos['total_iva_devuelto']),
+                "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
                 "TotalComprobante" => $this->fn($costos['total_comprobante']),
                 "Otros" => trim($otros) == "" ? "-" : trim($otros),
-                "TipoDocumento" => FACTURA_ELECTRONICA,
+                "TipoDocumento" => $receptor == null ? TIQUETE_ELECTRONICO : FACTURA_ELECTRONICA,
                 "CodigoPais" => CODIGO_PAIS,
                 "ConsecutivoFormateado" => $this->formatearConsecutivo($factura->Factura_Consecutivo),
                 "Situacion" => $situacion,
                 "CodigoSeguridad" => rand(10000000,99999999),
                 "RespuestaHaciendaEstado" => "sin_enviar",
-                "CorreoEnviadoReceptor" => 0
+                "CorreoEnviadoReceptor" => 0,
+                "CodigoActividad" => $emisor->CodigoActividad
             );
             
             if($receptor != NULL){
@@ -1048,10 +1055,13 @@ Class factura extends CI_Model
                     "MontoDescuento" => $art["montoDescuento"],
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
                     "Subtotal" => $art["subtotal"],
+                    "BaseImponible" => $art["base_imponible"],
                     "ImpuestoObject" => json_encode($art["impuesto"]),
                     "MontoTotalLinea" => $art["montoTotalLinea"],
                     "Consecutivo" => $factura->Factura_Consecutivo,
-                    "Sucursal" => $factura->TB_02_Sucursal_Codigo
+                    "Sucursal" => $factura->TB_02_Sucursal_Codigo,
+                    "Codigo" => $art["codigo"],
+                    "TipoCodigo" => $art["tipoCodigo"]
                 );
                 
                 $this->db->insert("tb_56_articulos_factura_electronica", $data);
@@ -1170,7 +1180,14 @@ Class factura extends CI_Model
                                                     $factura->TotalComprobante,
 
                                                     $factura->Otros, 
-                                                    $this->prepararArticulosParaXML($articulos));
+                                                    $this->prepararArticulosParaXML($articulos),
+                            
+                                                    $factura->CodigoActividad,
+                                                    $factura->TotalServiciosExonerados,
+                                                    $factura->TotalMercanciaExonerada,
+                                                    $factura->TotalExonerado,
+                                                    $factura->TotalIVADevuelto,
+                                                    $factura->TotalOtrosCargos);
                     if($xmlRes){
                         $data = array(
                             "XMLSinFirmar" => $xmlRes["xml"]
@@ -1485,15 +1502,20 @@ Class factura extends CI_Model
                                 $costos = array(
                                     "total_serv_gravados" => 0,
                                     "total_serv_exentos" => 0,
+                                    "total_serv_exonerados" => 0,
                                     "total_merc_gravada" => 0,
                                     "total_merc_exenta" => 0,
+                                    "total_merc_exonerada" => 0,
                                     "total_gravados" => 0,
                                     "total_exentos" => 0,
+                                    "total_exonerado" => 0,
                                     "total_ventas" => 0,
                                     "total_descuentos" => 0,
                                     "total_ventas_neta" => 0,
                                     "total_impuestos" => 0,
-                                    "total_comprobante" => 0,
+                                    "total_iva_devuelto" => 0,
+                                    "total_otros_cargos" => 0,
+                                    "total_comprobante" => 0
                                 );
                                 $artFinales = array();
                                 foreach($articulosFactura as $a){
@@ -1505,7 +1527,9 @@ Class factura extends CI_Model
                                         $costos["total_gravados"] += $linea["montoTotal"];
                                     }else{
                                         $costos["total_merc_exenta"] += $linea["montoTotal"];
+                                        $costos["total_merc_exonerada"] += $linea["montoTotal"];
                                         $costos["total_exentos"] += $linea["montoTotal"];
+                                        $costos["total_exonerado"] += $linea["montoTotal"];
                                     }
                                     $costos["total_ventas"] += $linea["montoTotal"];
                                     
@@ -1516,8 +1540,9 @@ Class factura extends CI_Model
                                     $impuesto = $linea["impuesto"][0]["monto"];
                                     $costos["total_impuestos"] += $impuesto;
                                 }
+                                $costos["total_exonerado"] =  $costos["total_serv_exonerados"] + $costos["total_merc_exonerada"];
                                 $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
-                                $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"];
+                                $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"] + $costos["total_otros_cargos"];
                                 $facturaBODY['articulos'] = $artFinales;
                                 $facturaBODY['costos'] = $costos;
                                 $facturaBODY['status']='success';
@@ -1660,6 +1685,7 @@ Class factura extends CI_Model
                             }
                             $facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
                             $facturaHead[0]->clave = $fElectornica->Clave;
+                            $facturaHead[0]->isTE = $fElectornica->ReceptorNombre == null;
                             $this->impresion_m->facturaPDF($empresa, $facturaHead, $facturaBody, true);								
                     }else{
                         log_message('error', "No se genero el PDF de factura, no existen los articulos de la factura | Consecutivo: $consecutivo | Sucursal: $sucursal");

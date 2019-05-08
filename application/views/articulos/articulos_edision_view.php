@@ -172,6 +172,20 @@ PARA:
 							<td>
 								<input type="checkbox" name="retencion" id="retencion"  value="1" <?php if($retencion){echo "checked";}?> >
 							</td>
+                                                    <td>
+                                                        <label class="contact">Tipo Código:</label>
+                                                    </td>
+                                                    <td>
+                                                        <select name="tipo_codigo" class="input_dos">
+                                                            <?php 
+                                                                foreach($tipos_codigo as $tc){
+                                                                    ?>
+                                                            <option value="<?= $tc->Codigo ?>" <?= $tc->Codigo == $tipoCodigo ? "selected" : "" ?>><?= $tc->Descripcion ?></option>
+                                                                    <?php
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </td>
 						</tr>
 					</table>
 				</fieldset>
