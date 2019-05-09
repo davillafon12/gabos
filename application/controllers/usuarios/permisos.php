@@ -13,6 +13,7 @@
 						'crear_factura' => 'Crear Factura',
 						'crear_proforma' => 'Crear Proforma',
 						'crear_consignaciones' => 'Crear Consignaciones',
+                                                'crear_factura_elec_compra' => 'Crear FEC',
 						'crear_retiros' => 'Retiros Parciales',
 						'entrar_notas' => 'Crear Notas Crédito',
 						'entrar_notas_d' => 'Crear Notas Débito',
