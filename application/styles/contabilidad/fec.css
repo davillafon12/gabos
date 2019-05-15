@@ -10,6 +10,9 @@
     -moz-box-shadow: 0px 0px 7px 0px #888888;
     -webkit-box-shadow: 0px 0px 7px 0px #888888;
     box-shadow: 0px 0px 7px 0px #888888;
+    padding-top: 10px;
+    padding-left: 5px;
+        overflow: hidden;
 }
 
 .contact {
@@ -23,7 +26,7 @@
 }
 
 .input_uno {
-    width: 250px;
+    width: 100%;
     background-color: rgba(255, 255, 255, 0.4);
     border: 1px solid rgba(51, 51, 51, 0.15);
     font-family: Keffeesatz, Arial;
@@ -31,4 +34,27 @@
     font-size: 14px;
     -webkit-border-radius: 5px;
     padding-left: 2px;
+}
+
+.tabla-emisor{
+    float: left;
+    width: 50%;
+}
+
+.tabla-factura{
+    float: right;
+    width: 50%;
+}
+
+.header-container{
+    width: 100%;
+    overflow: hidden;
+}
+.details-container{
+    width: 100%;
+    overflow: hidden;
+}
+.tabla-detalles-head{
+    margin-top: 20px;
+    width: 100%;
 }

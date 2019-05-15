@@ -50,6 +50,26 @@ class CI_Controller {
             "CPCE" => "Parcial",
             "RCE" => "Rechazar"
         );
+        public $condicionesdeventa = array(
+            "01" => "Contado",
+            "02" => "Crédito",
+            "03" => "Consignación",
+            "04" => "Apartado",
+            "05" => "Arrendamiento con opción de compra",
+            "06" => "Arrendamiento en función financiera",
+            "07" => "Cobro a favor de un tercero",
+            "08" => "Servicios prestados al Estado a crédito",
+            "09" => "Pago del servicios prestado al Estado",
+            "99" => "Otros"
+        );
+        public $tiposdepago = array(
+            "01" => "Efectivo",
+            "02" => "Tarjeta",
+            "03" => "Cheque",
+            "04" => "Transferencia - depósito bancario",
+            "05" => "Recaudado por terceros",
+            "99" => "Otros"
+        );
 
 	/**
 	 * Constructor

@@ -1,6 +1,10 @@
 $(window).ready(function(){
     $("#emisor_provincia").change(getCantones);
     $("#emisor_canton").change(getDistritos);
+    
+    $("#condicion_venta_factura").change(revisarCondicionCredito);
+    
+    revisarCondicionCredito();
 });
 
 function getCantones(e){
@@ -60,4 +64,14 @@ function notyConTipo(Mensaje, tipo){
 function isEmail(email) {
   var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   return regex.test(email);
+}
+
+function revisarCondicionCredito(){
+    var value = $("#condicion_venta_factura").val();
+    if(value == "02"){
+        $("#plazo_factura_row").show();
+    }else{
+        $("#plazo_factura_row").hide();
+        $("#plazo_factura").val("");
+    }
 }

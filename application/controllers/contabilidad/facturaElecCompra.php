@@ -19,6 +19,8 @@ class facturaElecCompra extends CI_Controller {
         if($permisos['crear_factura_elec_compra']){
             $data['javascript_cache_version'] = $this->javascriptCacheVersion;
             $data['provincias'] = $this->ubicacion->getProvincias();
+            $data['condicionesventa'] = $this->condicionesdeventa;
+            $data['tiposdepago'] = $this->tiposdepago;
             $this->load->view('contabilidad/crear_factura_elec_compra_view', $data);	
         }else{
            redirect('accesoDenegado', 'location');

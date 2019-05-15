@@ -62,83 +62,166 @@ PARA:
 
                 <div id="contenido" class="contenido">
                     <div class="factura-wrapper">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <label class="contact">Información sobre emisor:</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="contact">&nbsp;</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="contact">Nombre:</label>
-                                    </td>
-                                    <td>
-                                        <input id="nombre_emisor" class="input_uno" placeholder="Nombre del emisor" name="nombre_emisor" type="text" required="" tabindex="1" autocomplete="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="contact">Identificación:</label>
-                                    </td>
-                                    <td>
-                                        <input id="identificacion_emisor" class="input_uno" placeholder="Identificación del emisor" name="identificacion_emisor" type="text" required="" tabindex="2" autocomplete="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="contact">Correo Electrónico:</label>
-                                    </td>
-                                    <td>
-                                        <input id="email_emisor" class="input_uno" placeholder="Correo electrónico del emisor" name="email_emisor" type="text" required="" tabindex="3" autocomplete="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="contact">Provincia:</label>
-                                    </td>
-                                    <td>
-                                        <label class="contact">Cantón:</label>
-                                    </td>
-                                    <td>
-                                        <label class="contact">Distrito:</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <select class="input_uno" name="emisor_provincia" id="emisor_provincia">
-                                            <option value="0">Seleccione un provincia</option>
-                                            <?php foreach($provincias as $p): ?>
-                                                <option value="<?= $p->ProvinciaID ?>"><?= $p->ProvinciaNombre ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="input_uno" name="emisor_canton" id="emisor_canton">
-                                            
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="input_uno" name="emisor_distrito" id="emisor_distrito">
-                                            
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="contact">Otras Señas:</label>
-                                    </td>
-                                    <td>
-                                        <input id="otras_sennas_emisor" class="input_uno" placeholder="Detalles de la direccion del emisor" name="otras_sennas_emisor" type="text" required="" tabindex="4" autocomplete="">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="header-container">
+                            <table class="tabla-emisor">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3">
+                                            <label class="contact">Información sobre emisor:</label><hr>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="    width: 33%;">
+                                            <label class="contact">Nombre:</label>
+                                        </td>
+                                        <td style="    width: 33%;">
+                                            <input id="nombre_emisor" class="input_uno" placeholder="Nombre del emisor" name="nombre_emisor" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Identificación:</label>
+                                        </td>
+                                        <td>
+                                            <input id="identificacion_emisor" class="input_uno" placeholder="Identificación del emisor" name="identificacion_emisor" type="text" required="" tabindex="2" autocomplete="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Correo Electrónico:</label>
+                                        </td>
+                                        <td>
+                                            <input id="email_emisor" class="input_uno" placeholder="Correo electrónico del emisor" name="email_emisor" type="text" required="" tabindex="3" autocomplete="">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Otras Señas:</label>
+                                        </td>
+                                        <td>
+                                            <input id="otras_sennas_emisor" class="input_uno" placeholder="Detalles de la direccion del emisor" name="otras_sennas_emisor" type="text" required="" tabindex="4" autocomplete="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Provincia:</label>
+                                        </td>
+                                        <td>
+                                            <label class="contact">Cantón:</label>
+                                        </td>
+                                        <td style="    width: 33%;">
+                                            <label class="contact">Distrito:</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <select class="input_uno" name="emisor_provincia" id="emisor_provincia">
+                                                <option value="0">Seleccione un provincia</option>
+                                                <?php foreach($provincias as $p): ?>
+                                                    <option value="<?= $p->ProvinciaID ?>"><?= $p->ProvinciaNombre ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="input_uno" name="emisor_canton" id="emisor_canton">
+
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="input_uno" name="emisor_distrito" id="emisor_distrito">
+
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <table class="tabla-factura">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3">
+                                            <label class="contact">Información sobre la factura:</label><hr>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="    width: 30%;">
+                                            <label class="contact">Consecutivo:</label>
+                                        </td>
+                                        <td style="    width: 33%;">
+                                            <input id="consecutivo_factura" class="input_uno" placeholder="Consecutivo de la factura" name="consecutivo_factura" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td style="    width: 36%;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Código de Actividad:</label>
+                                        </td>
+                                        <td>
+                                            <input id="codigo_actividad_factura" class="input_uno" placeholder="Código de actividad de la factura" name="codigo_actividad_factura" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Fecha:</label>
+                                        </td>
+                                        <td>
+                                            <input id="fecha_factura" class="input_uno" placeholder="Fecha de la factura" name="fecha_factura" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Condición de venta:</label>
+                                        </td>
+                                        <td>
+                                            <select id="condicion_venta_factura" class="input_uno" name="condicion_venta_factura">
+                                                <option value="-1">Seleccionar</option>
+                                                <?php foreach($condicionesventa as $id => $name): ?>
+                                                 <option value="<?= $id ?>"><?= $name ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr id="plazo_factura_row">
+                                        <td>
+                                            <label class="contact">Plazo de Crédito:</label>
+                                        </td>
+                                        <td>
+                                            <input id="plazo_factura" class="input_uno" placeholder="Plazo de crédito (En dias)" name="plazo_factura" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Medio de pago:</label>
+                                        </td>
+                                        <td>
+                                            <select id="tipo_pago_factura" class="input_uno" name="tipo_pago_factura">
+                                                <option value="-1">Seleccionar</option>
+                                                <?php foreach($tiposdepago as $id => $name): ?>
+                                                 <option value="<?= $id ?>"><?= $name ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="details-container">
+                            <table class="tabla-detalles-head">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Detalles de la factura:</label><hr>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
