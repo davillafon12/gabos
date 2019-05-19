@@ -183,3 +183,6 @@ INSERT INTO `catalogo_unidad_medida` (`Id`, `Codigo`, `Descripcion`) VALUES
 
 ALTER TABLE  `tb_06_articulo` ADD  `UnidadMedida` VARCHAR( 10 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL AFTER  `TipoCodigo`;
 
+ALTER TABLE  `tb_08_articulos_factura` ADD  `UnidadMedida` VARCHAR( 10 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL AFTER  `TipoCodigo`;
+
+UPDATE tb_06_articulo SET  `UnidadMedida` =  'Unid';

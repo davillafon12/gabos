@@ -163,7 +163,7 @@ Class factura extends CI_Model
 		}
 	}
 	
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo = "01"){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo = "01", $unidadMedida){
 		$sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
@@ -171,19 +171,20 @@ Class factura extends CI_Model
 		$dataItem = array(
 	                        'Articulo_Factura_Codigo'=>mysql_real_escape_string($codigo),
 	                        'Articulo_Factura_Descripcion'=>mysql_real_escape_string($descripcion), 
-							'Articulo_Factura_Cantidad'=>mysql_real_escape_string($cantidad),
-							'Articulo_Factura_Descuento'=>mysql_real_escape_string($descuento),
-							'Articulo_Factura_Exento'=>mysql_real_escape_string($exento),
-							'Articulo_Factura_No_Retencion'=>mysql_real_escape_string($retencion),
-							'Articulo_Factura_Precio_Unitario'=>mysql_real_escape_string($precio),
-							'Articulo_Factura_Precio_Final' => 	$precioFinal,
-							'Articulo_Factura_Imagen'=>mysql_real_escape_string($imagen),
-							'TB_07_Factura_Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
-							'TB_07_Factura_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
-							'TB_07_Factura_Factura_Vendedor_Codigo'=>mysql_real_escape_string($vendedor),
-							'TB_07_Factura_Factura_Vendedor_Sucursal'=>mysql_real_escape_string($sucursalVendedor),
-							'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cliente),
-                                                        'TipoCodigo' => mysql_real_escape_string($tipoCodigo)
+                                'Articulo_Factura_Cantidad'=>mysql_real_escape_string($cantidad),
+                                'Articulo_Factura_Descuento'=>mysql_real_escape_string($descuento),
+                                'Articulo_Factura_Exento'=>mysql_real_escape_string($exento),
+                                'Articulo_Factura_No_Retencion'=>mysql_real_escape_string($retencion),
+                                'Articulo_Factura_Precio_Unitario'=>mysql_real_escape_string($precio),
+                                'Articulo_Factura_Precio_Final' => 	$precioFinal,
+                                'Articulo_Factura_Imagen'=>mysql_real_escape_string($imagen),
+                                'TB_07_Factura_Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
+                                'TB_07_Factura_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
+                                'TB_07_Factura_Factura_Vendedor_Codigo'=>mysql_real_escape_string($vendedor),
+                                'TB_07_Factura_Factura_Vendedor_Sucursal'=>mysql_real_escape_string($sucursalVendedor),
+                                'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cliente),
+                                'TipoCodigo' => mysql_real_escape_string($tipoCodigo),
+                                'UnidadMedida' => $unidadMedida
 	                    );			
 	        $this->db->insert('TB_08_Articulos_Factura',$dataItem);
 	}
@@ -1522,12 +1523,23 @@ Class factura extends CI_Model
                                     $linea = $this->getDetalleLinea($a, $facturaBODY["cliente"]->Aplica_Retencion == 0);
                                     array_push($artFinales, $linea);
                                     
+                                    $isMercancia = !in_array($a->UnidadMedida, $this->codigosUnidadDeServivicios);
+                                    
                                     if($a->Articulo_Factura_Exento == 0){
-                                        $costos["total_merc_gravada"] += $linea["montoTotal"];
+                                        if($isMercancia){
+                                            $costos["total_merc_gravada"] += $linea["montoTotal"];
+                                        }else{
+                                            $costos["total_serv_gravados"] += $linea["montoTotal"];
+                                        }
                                         $costos["total_gravados"] += $linea["montoTotal"];
                                     }else{
-                                        $costos["total_merc_exenta"] += $linea["montoTotal"];
-                                        $costos["total_merc_exonerada"] += $linea["montoTotal"];
+                                        if($isMercancia){
+                                            $costos["total_merc_exenta"] += $linea["montoTotal"];
+                                            $costos["total_merc_exonerada"] += $linea["montoTotal"];
+                                        }else{
+                                            $costos["total_serv_exentos"] += $linea["montoTotal"];
+                                            $costos["total_serv_exonerados"] += $linea["montoTotal"];
+                                        }
                                         $costos["total_exentos"] += $linea["montoTotal"];
                                         $costos["total_exonerado"] += $linea["montoTotal"];
                                     }

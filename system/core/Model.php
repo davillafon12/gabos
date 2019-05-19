@@ -31,6 +31,7 @@ class CI_Model {
 	public $truequeHabilitado = true;
 	public $truequeAplicado = false; 
 	public $sucursales_trueque = array(7=>2);
+        public $codigosUnidadDeServivicios = array("Os","Spe","Sp","St");
 	
 	public function esUsadaComoSucursaldeRespaldo($sucursal){
 		foreach($this->sucursales_trueque as $key => $content){
@@ -208,7 +209,7 @@ class CI_Model {
             $linea["tipoCodigo"] = $a->TipoCodigo;
             
             // UNIDAD DE MEDIDA
-            $linea["unidadMedida"] = "Unid";
+            $linea["unidadMedida"] = $a->UnidadMedida;
             
             // DETALLE
             $linea["detalleCompleto"] = $a->Articulo_Factura_Descripcion;

@@ -777,6 +777,28 @@ Class articulo extends CI_Model
 		    return false;
 		}
 	}
+        
+        function getArticuloUnidadMedida($codigo, $sucursal){
+		$this -> db -> select('UnidadMedida');
+		$this -> db -> from('TB_06_Articulo');
+		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));		
+		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+		
+		if($query -> num_rows() != 0)
+		{
+			$result = $query->result();
+			foreach($result as $row)
+			{
+				return $row->UnidadMedida;
+			}			
+		}
+		else
+		{
+		    return false;
+		}
+	}
 	
 	function getArticuloImagen($codigo, $sucursal){
 		$this -> db -> select('Articulo_Imagen_URL');

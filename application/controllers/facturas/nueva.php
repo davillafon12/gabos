@@ -351,15 +351,17 @@ class nueva extends CI_Controller {
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico					
-					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'');
+					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'','04');
 			}else{ //Si es normal					
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
 					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
+                                        $tipoCodigo = $this->articulo->getArticuloTipoCodigo($item['co'], $sucursal);
+                                        $unidadMedida = $this->articulo->getArticuloUnidadMedida($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
-					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
+					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida);
 					$this->articulo->actualizarInventarioRESTA($item['co'], $item['ca'], $sucursal);
 				}
 			}
