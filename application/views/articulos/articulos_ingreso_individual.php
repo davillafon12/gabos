@@ -163,6 +163,22 @@ PARA:
                                                         </select>
                                                     </td>
 						</tr>
+                                                <tr>
+                                                    <td>
+                                                        <label class="contact">Unidad Medida:</label>
+                                                    </td>
+                                                    <td>
+                                                        <select name="unidad_medida" class="input_dos">
+                                                            <?php 
+                                                                foreach($unidades_medida as $um){
+                                                                    ?>
+                                                            <option value="<?= $um->Id ?>"><?= $um->Codigo." - ".$um->Descripcion ?></option>
+                                                                    <?php
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </td>
+						</tr>
 					</table>
 				</fieldset>
 				<fieldset class="field_precios">

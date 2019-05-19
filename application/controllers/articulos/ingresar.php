@@ -32,9 +32,11 @@ class ingresar extends CI_Controller {
 		$empresas_actuales = $this->empresa->get_empresas_ids_array();
 		$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
                 $tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
+                $unidadesMedida = $this->catalogo->getUnidadesDeMedida();
 		$data['Familia_Empresas'] = $empresas_actuales;
 		$data['Familias'] = $familias_actuales;
                 $data['tipo_codigo'] = $tiposCodigos;
+                $data['unidades_medida'] = $unidadesMedida;
 		$this->load->view('articulos/articulos_ingreso_individual', $data);
 	}
 	
@@ -61,11 +63,14 @@ class ingresar extends CI_Controller {
 		$precio5_Articulo = $this->input->post('precio5');
                 
                 $tipo_codigo = $this->input->post('tipo_codigo');
+                $unidad_medida = $this->input->post('unidad_medida');
+                
+                $unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
 		
 
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
-		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo, $tipo_codigo))
+		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo, $tipo_codigo, $unidad_medida))
 		{ //Si se ingreso bien a la BD
 			//$this->bodega_m->restarCantidadBodega($cantidad_Articulos, $codigoBrasil, $empresa_Articulo);
 			

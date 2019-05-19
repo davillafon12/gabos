@@ -90,7 +90,7 @@ Class articulo extends CI_Model
 		");		
 	}
 	
-	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $retencion, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5, $tipo_codigo = "01")
+	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $retencion, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5, $tipo_codigo = "01", $unidadmedida = "Unid")
 	{
 		if($this->existe_Articulo($articulo_Codigo, $TB_02_Sucursal_Codigo)){
 			return false;
@@ -108,7 +108,8 @@ Class articulo extends CI_Model
 							'Articulo_No_Retencion'=>mysql_real_escape_string($retencion), 			                       
 							'TB_05_Familia_Familia_Codigo'=>mysql_real_escape_string($TB_05_Familia_Familia_Codigo),
 							'TB_02_Sucursal_Codigo'=>mysql_real_escape_string($TB_02_Sucursal_Codigo),
-                                                        'TipoCodigo'=>mysql_real_escape_string($tipo_codigo)
+                                                        'TipoCodigo'=>mysql_real_escape_string($tipo_codigo),
+                                                        'UnidadMedida'=>  mysql_real_escape_string($unidadmedida)
 							
 	                    );
 			try{

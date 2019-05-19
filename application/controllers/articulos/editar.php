@@ -315,6 +315,8 @@ class editar extends CI_Controller {
 		$sucursal = $data['Sucursal_Codigo'];
                 $tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
                 $data['tipos_codigo'] = $tiposCodigos;
+                $unidadesMedida = $this->catalogo->getUnidadesDeMedida();
+                $data['unidades_medida'] = $unidadesMedida;
 		//Si viene sucursal usamos la que viene, sino deja la del log del usuario
 		if(isset($_GET['suc'])){
 			if($this->empresa->getEmpresa($_GET['suc'])){
@@ -334,6 +336,7 @@ class editar extends CI_Controller {
 				$data['Articulo_Exento'] = $row -> Articulo_Exento;
 				$data['retencion'] = $row -> Articulo_No_Retencion;
                                 $data['tipoCodigo'] = $row -> TipoCodigo;
+                                $data['unidadMedida'] = $row -> UnidadMedida;
 				
 				
 				$URL_IMAGEN = $row->Articulo_Imagen_URL;				
@@ -396,6 +399,10 @@ class editar extends CI_Controller {
 			
 			$tipo_codigo = $this->input->post('tipo_codigo');
                         
+                        $unidad_medida = $this->input->post('unidad_medida');
+                
+                        $unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
+                        
 			//Si es exento
 			$exento = 0;
 			$exento = isset($_POST['exento']) && $_POST['exento']  ? "1" : "0";
@@ -444,7 +451,8 @@ class editar extends CI_Controller {
 															'Articulo_Imagen_URL' => $foto,
 															'Articulo_Exento' => $exento,
 															'Articulo_No_Retencion'	 => $retencion,
-                                                                                                                        'TipoCodigo' => $tipo_codigo
+                                                                                                                        'TipoCodigo' => $tipo_codigo,
+                                                                                                                        'UnidadMedida' => $unidad_medida
 														);
 										$info['precios'] = array(
 															'p0' => $costo,
