@@ -9,6 +9,7 @@ class facturaElecCompra extends CI_Controller {
             $this->load->model('contabilidad','',TRUE);
             $this->load->model('empresa','',TRUE);
             $this->load->model('ubicacion','',TRUE);
+            $this->load->model('catalogo','',TRUE);
     }
     
     function index(){
@@ -21,6 +22,15 @@ class facturaElecCompra extends CI_Controller {
             $data['provincias'] = $this->ubicacion->getProvincias();
             $data['condicionesventa'] = $this->condicionesdeventa;
             $data['tiposdepago'] = $this->tiposdepago;
+            
+            $tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
+            $data['tipos_codigo'] = $tiposCodigos;
+            $unidadesMedida = $this->catalogo->getUnidadesDeMedida();
+            $data['unidades_medida'] = $unidadesMedida;
+            $tiposImpuesto = $this->catalogo->getTipoImpuestos();
+            $data['tipos_impuesto'] = $tiposImpuesto;
+            $tiposTarifa = $this->catalogo->getTipoTarifas();
+            $data['tipos_tarifa'] = $tiposTarifa;
             $this->load->view('contabilidad/crear_factura_elec_compra_view', $data);	
         }else{
            redirect('accesoDenegado', 'location');

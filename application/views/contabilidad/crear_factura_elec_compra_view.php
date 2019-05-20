@@ -145,15 +145,6 @@ PARA:
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="    width: 30%;">
-                                            <label class="contact">Consecutivo:</label>
-                                        </td>
-                                        <td style="    width: 33%;">
-                                            <input id="consecutivo_factura" class="input_uno" placeholder="Consecutivo de la factura" name="consecutivo_factura" type="text" required="" tabindex="1" autocomplete="">
-                                        </td>
-                                        <td style="    width: 36%;"></td>
-                                    </tr>
-                                    <tr>
                                         <td>
                                             <label class="contact">Código de Actividad:</label>
                                         </td>
@@ -217,6 +208,114 @@ PARA:
                                     <tr>
                                         <td>
                                             <label class="contact">Detalles de la factura:</label><hr>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="tabla-detalles-body">
+                                <tbody>
+                                    <tr>
+                                        <td style="    width: 11%;">
+                                            <label class="contact">Código:</label>
+                                        </td>
+                                        <td style="    width: 13%;">
+                                            <input id="codigo_detalle" class="input_uno" placeholder="Código del artículo" name="codigo_detalle" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td style="    width: 12%;">
+                                            <label class="contact">Tipo Código:</label>
+                                        </td>
+                                        <td style="    width: 13%;">
+                                            <select name="tipo_codigo_detalle" class="input_uno" id="tipo_codigo_detalle">
+                                                <?php 
+                                                    foreach($tipos_codigo as $tc){
+                                                        ?>
+                                                            <option value="<?= $tc->Codigo ?>"><?= $tc->Descripcion ?></option>
+                                                        <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </td>
+                                        <td style="    width: 12%;">
+                                            <label class="contact">Detalle:</label>
+                                        </td>
+                                        <td colspan="3">
+                                            <input id="detalle_detalle" class="input_uno" placeholder="Detalle del artículo" name="detalle_detalle" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Cantidad:</label>
+                                        </td>
+                                        <td>
+                                            <input id="cantidad_detalle" class="input_uno" placeholder="Cantidad del artículo" name="cantidad_detalle" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td>
+                                            <label class="contact">Unidad Medida:</label>
+                                        </td>
+                                        <td>
+                                            <select name="unidad_medida_detalle" class="input_uno" id="unidad_medida_detalle">
+                                                <?php 
+                                                    foreach($unidades_medida as $um){
+                                                        ?>
+                                                            <option value="<?= $um->Id ?>" <?= $um->Id == 85 ? "selected" : "" ?> ><?= $um->Codigo." - ".$um->Descripcion ?></option>
+                                                        <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <label class="contact">Precio Unitario:</label>
+                                        </td>
+                                        <td>
+                                            <input id="precio_unitario_detalle" class="input_uno" placeholder="Precio unitario del artículo" name="precio_unitario_detalle" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td style="    width: 12%;">
+                                            <label class="contact">Descuento (%):</label>
+                                        </td>
+                                        <td style="    width: 10%;">
+                                            <input id="descuento_detalle" class="input_uno" placeholder="Descuento en procentaje" name="descuento_detalle" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Tarifa IVA (%):</label>
+                                        </td>
+                                        <td>
+                                            <input id="tarifa_iva_detalle" class="input_uno" placeholder="IVA en procentaje" name="tarifa_iva_detalle" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td>
+                                            <label class="contact">Tipo Tarifa:</label>
+                                        </td>
+                                        <td>
+                                            <select name="tipo_tarifa_detalle" class="input_uno" id="tipo_tarifa_detalle">
+                                                <?php 
+                                                    foreach($tipos_tarifa as $tt){
+                                                        ?>
+                                                            <option value="<?= $tt->Id ?>" <?= $tt->Id == "08" ? "selected" : "" ?> ><?= $tt->Descripcion ?></option>
+                                                        <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <label class="contact">Tipo Impuesto:</label>
+                                        </td>
+                                        <td>
+                                            <select name="tipo_impuesto_detalle" class="input_uno" id="tipo_impuesto_detalle">
+                                                <?php 
+                                                    foreach($tipos_impuesto as $ti){
+                                                        ?>
+                                                            <option value="<?= $ti->Id ?>"><?= $ti->Descripcion ?></option>
+                                                        <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            <button class="boton_agregar_detalle">Agregar Detalle</button>
                                         </td>
                                     </tr>
                                 </tbody>

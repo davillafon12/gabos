@@ -46,5 +46,33 @@ Class catalogo extends CI_Model
           return array();
         }
     }
+    
+    public function getTipoImpuestos(){
+        $this->db->from("catalogo_tipo_impuesto");
+        $query = $this -> db -> get();
+
+        if($query -> num_rows() != 0)
+        {
+          return $query->result();
+        }
+        else
+        {
+          return array();
+        }
+    }
+    
+    public function getTipoTarifas(){
+        $this->db->from("catalogo_tipo_tarifa");
+        $query = $this -> db -> get();
+
+        if($query -> num_rows() != 0)
+        {
+          return $query->result();
+        }
+        else
+        {
+          return array();
+        }
+    }
 }
 

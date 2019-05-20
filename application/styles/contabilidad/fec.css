@@ -58,3 +58,31 @@
     margin-top: 20px;
     width: 100%;
 }
+
+.tabla-detalles-body{
+    width:100%;
+    padding-right: 10px;
+}
+
+.boton_agregar_detalle{
+    margin-left: 5px;
+    margin-bottom: 5px;
+    background: #59B659;
+    display: inline-block;
+    padding: 5px 10px 6px;
+    color: #fbf7f7;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 1;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px #999;
+    -webkit-box-shadow: 0 1px 3px #999;
+    box-shadow: 0 1px 3px #999;
+    text-shadow: 0 -1px 1px #222;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: Verdana, Geneva, sans-serif;
+}

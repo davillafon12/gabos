@@ -186,3 +186,58 @@ ALTER TABLE  `tb_06_articulo` ADD  `UnidadMedida` VARCHAR( 10 ) CHARACTER SET ut
 ALTER TABLE  `tb_08_articulos_factura` ADD  `UnidadMedida` VARCHAR( 10 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL AFTER  `TipoCodigo`;
 
 UPDATE tb_06_articulo SET  `UnidadMedida` =  'Unid';
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `catalogo_tipo_impuesto`
+--
+
+CREATE TABLE IF NOT EXISTS `catalogo_tipo_impuesto` (
+  `Id` varchar(2) NOT NULL,
+  `Descripcion` varchar(100) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `catalogo_tipo_impuesto`
+--
+
+INSERT INTO `catalogo_tipo_impuesto` (`Id`, `Descripcion`) VALUES
+('01', 'Impuesto al Valor Agregado'),
+('02', 'Impuesto Selectivo de Consumo'),
+('03', 'Impuesto unico a los combustivos'),
+('04', 'Impuesto especifico de bebidas alcohólicas'),
+('05', 'impuesto especifico sobre las bebidas envasadas sin contenido alcoholico y jabones de tocador'),
+('06', 'impuesto a los productos de tabaco'),
+('07', 'IVA (cálculo especial)'),
+('08', 'IVA Régimen de Bienes Usados (Factor)'),
+('12', 'Impuesto Especifico al Cemento'),
+('99', 'Otros');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `catalogo_tipo_tarifa`
+--
+
+CREATE TABLE IF NOT EXISTS `catalogo_tipo_tarifa` (
+  `Id` varchar(2) NOT NULL,
+  `Descripcion` varchar(50) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `catalogo_tipo_tarifa`
+--
+
+INSERT INTO `catalogo_tipo_tarifa` (`Id`, `Descripcion`) VALUES
+('01', 'Tarifa 0% (Exento)'),
+('02', 'Tarifa Reducida 1%'),
+('03', 'Tarifa reducida 2%'),
+('04', 'Tarifa reducida 4%'),
+('05', 'Transitorio 0%'),
+('06', 'Transitorio 4%'),
+('07', 'Transitorio 8%'),
+('08', 'Tarifa General 13%');
