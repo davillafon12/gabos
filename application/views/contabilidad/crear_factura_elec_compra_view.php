@@ -273,7 +273,7 @@ PARA:
                                             <label class="contact">Descuento (%):</label>
                                         </td>
                                         <td style="    width: 10%;">
-                                            <input id="descuento_detalle" class="input_uno" placeholder="Descuento en procentaje" name="descuento_detalle" type="text" required="" tabindex="1" autocomplete="">
+                                            <input id="descuento_detalle" class="input_uno" placeholder="Descuento en porcentaje" name="descuento_detalle" type="text" required="" tabindex="1" autocomplete="" value="0">
                                         </td>
                                     </tr>
                                     <tr>
@@ -281,7 +281,7 @@ PARA:
                                             <label class="contact">Tarifa IVA (%):</label>
                                         </td>
                                         <td>
-                                            <input id="tarifa_iva_detalle" class="input_uno" placeholder="IVA en procentaje" name="tarifa_iva_detalle" type="text" required="" tabindex="1" autocomplete="">
+                                            <input id="tarifa_iva_detalle" class="input_uno" placeholder="IVA en porcentaje" name="tarifa_iva_detalle" type="text" required="" tabindex="1" autocomplete="">
                                         </td>
                                         <td>
                                             <label class="contact">Tipo Tarifa:</label>
@@ -315,10 +315,25 @@ PARA:
                                             
                                         </td>
                                         <td>
-                                            <button class="boton_agregar_detalle">Agregar Detalle</button>
+                                            <button id="boton_agregar_detalle" class="boton_agregar_detalle">Agregar Detalle</button>
                                         </td>
                                     </tr>
                                 </tbody>
+                            </table>
+                            <table  class="tabla_productos">
+                                <thead>
+                                    <tr>
+                                        <th class="th_codigo">Código</th>
+                                        <th class="th_descripcion">Descripción</th>
+                                        <th class="th_cantidad">Cantidad</th>
+                                        <th class="th_descuento">Descuento</th>
+                                        <th class="th_costo_unidad">Precio por unidad</th>
+                                        <th class="th_costo_total">Precio total</th>
+                                        <th class="th_eliminar"></th>	
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_productos">
+                                </tbody>				
                             </table>
                         </div>
                     </div>

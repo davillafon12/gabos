@@ -86,3 +86,61 @@
     font-size: 14px;
     font-family: Verdana, Geneva, sans-serif;
 }
+
+.tabla_productos {
+    width: 99%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    text-align: left;
+    font: normal 12px/150% Arial, Helvetica, sans-serif;
+    background: #fff;
+    overflow: hidden;
+    border: 1px solid #8C8C8C;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.tabla_productos thead th {
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #999999), color-stop(1, #DBDBDB) );
+    background: -moz-linear-gradient( center top, #999999 5%, #DBDBDB 100% );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#DBDBDB');
+    background-color: #999999;
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold;
+    border-left: 1px solid #A3A3A3;
+}
+
+.tabla_productos td, .tabla_productos th {
+    padding: 3px 10px;
+}
+
+.boton-eliminar-detalle{
+    padding: 2px;
+    background: red;
+    width: 20px;
+    margin: auto;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 45px;
+    cursor: pointer;
+    color: white;
+}
+
+.th_codigo{
+    width: 110px;
+}
+
+.th_cantidad, .th_descuento{
+    width: 80px;
+}
+
+.th_costo_unidad, .th_costo_total{
+    width: 160px;
+}
+
+.th_eliminar{
+    width: 50px;
+}
