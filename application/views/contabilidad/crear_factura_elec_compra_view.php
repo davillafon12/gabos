@@ -27,7 +27,9 @@ PARA:
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
 		<?php include PATH_LOG_OUT_HEADER;?>			
 		<!--CARGA DEL JQUERY-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script> 		
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script> 
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/validate.min.js'); ?>"></script> 
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/moment.min.js'); ?>"></script> 		
 		<!--CARGA DE MODAL-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
 		<!--CSS ESTILO DEL MODAL-->
@@ -39,12 +41,16 @@ PARA:
 		<!-- DATA TABES SCRIPT -->
                 <script src="<?php echo base_url('/application/scripts/datatables/dataTablesNew.js');?>" type="text/javascript"></script>
                 <!--CARGA DEL POPUP MODAL-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
-                
-                <link rel="stylesheet" type="text/css" href="<?php echo base_url("application/styles/contabilidad/fec.css?v=$javascript_cache_version"); ?>">
-                    
-                    <script src="<?php echo base_url("/application/scripts/contabilidad/fec_tools.js?v=$javascript_cache_version");?>" type="text/javascript"></script>
-	</head>
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
+		<!--CSS ESTILO DEL MODAL-->
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("application/styles/contabilidad/fec.css?v=$javascript_cache_version"); ?>">
+        <script src="<?php echo base_url("/application/scripts/contabilidad/fec_tools.js?v=$javascript_cache_version");?>" type="text/javascript"></script>
+        <script>
+            var _CANTIDAD_DECIMALES = <?= $c_array['cantidad_decimales'] ?>;
+        </script>
+    </head>
 	<body >
             <!--Incluir imagen de cabezera-->
             <?php include PATH_HEADER_PICTURE;?>
@@ -76,6 +82,18 @@ PARA:
                                         </td>
                                         <td style="    width: 33%;">
                                             <input id="nombre_emisor" class="input_uno" placeholder="Nombre del emisor" name="nombre_emisor" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Tipo de Identificación:</label>
+                                        </td>
+                                        <td>
+                                            <select class="input_uno" name="tipo_identificacion_emisor" id="tipo_identificacion_emisor">
+                                                <?php foreach($tipo_identificacion as $tiKey => $tiValue): ?>
+                                                    <option value="<?= $tiKey?>"><?= $tiValue ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
@@ -158,7 +176,7 @@ PARA:
                                             <label class="contact">Fecha:</label>
                                         </td>
                                         <td>
-                                            <input id="fecha_factura" class="input_uno" placeholder="Fecha de la factura" name="fecha_factura" type="text" required="" tabindex="1" autocomplete="">
+                                            <input id="fecha_factura" class="input_uno" placeholder="DD-MM-YYYY hh:mm:ss" name="fecha_factura" type="text" required="" tabindex="1" autocomplete="">
                                         </td>
                                         <td></td>
                                     </tr>
@@ -336,8 +354,15 @@ PARA:
                                 </tbody>				
                             </table>
                         </div>
+                        <div class="send-buttom-container">
+                            <button id="boton_crear_factura" class="boton_crear_factura">Crear Factura de Compra</button>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="envio_factura" id="envio_factura">
+                <img class="envio_img" src="<?php echo base_url('application/images/enviandoFactura.gif'); ?>">
+                <p class="envio_p">Guardando factura... <br>Por favor, espere.</p>
             </div>
             <!--Incluir footer-->
             <?php include PATH_FOOTER;?>

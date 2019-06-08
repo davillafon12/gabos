@@ -241,3 +241,112 @@ INSERT INTO `catalogo_tipo_tarifa` (`Id`, `Descripcion`) VALUES
 ('06', 'Transitorio 4%'),
 ('07', 'Transitorio 8%'),
 ('08', 'Tarifa General 13%');
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `tb_61_factura_compra_electronica` (
+  `Consecutivo` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL,
+  `Clave` varchar(100) DEFAULT NULL,
+  `ConsecutivoHacienda` varchar(30) DEFAULT NULL,
+  `FechaEmision` varchar(50) DEFAULT NULL,
+  `EmisorNombre` varchar(200) DEFAULT NULL,
+  `EmisorTipoIdentificacion` varchar(20) DEFAULT NULL,
+  `EmisorIdentificacion` varchar(50) DEFAULT NULL,
+  `EmisorProvincia` varchar(2) DEFAULT NULL,
+  `EmisorCanton` varchar(2) DEFAULT NULL,
+  `EmisorDistrito` varchar(2) DEFAULT NULL,
+  `EmisorOtrasSennas` varchar(200) DEFAULT NULL,
+  `EmisorEmail` varchar(200) DEFAULT NULL,
+  `ReceptorNombre` varchar(200) DEFAULT NULL,
+  `ReceptorTipoIdentificacion` varchar(20) DEFAULT NULL,
+  `ReceptorIdentificacion` varchar(50) DEFAULT NULL,
+  `ReceptorProvincia` varchar(2) DEFAULT NULL,
+  `ReceptorCanton` varchar(2) DEFAULT NULL,
+  `ReceptorDistrito` varchar(2) DEFAULT NULL,
+  `ReceptorEmail` varchar(200) DEFAULT NULL,
+  `CondicionVenta` varchar(30) DEFAULT NULL,
+  `PlazoCredito` int(3) DEFAULT NULL,
+  `MedioPago` varchar(10) DEFAULT NULL,
+  `CodigoMoneda` varchar(5) DEFAULT NULL,
+  `TipoCambio` varchar(20) DEFAULT NULL,
+  `TotalServiciosGravados` varchar(20) DEFAULT NULL,
+  `TotalServiciosExentos` varchar(20) DEFAULT NULL,
+  `TotalServiciosExonerados` varchar(20) DEFAULT NULL,
+  `TotalMercanciaGravada` varchar(20) DEFAULT NULL,
+  `TotalMercanciaExenta` varchar(20) DEFAULT NULL,
+  `TotalMercanciaExonerada` varchar(20) DEFAULT NULL,
+  `TotalGravados` varchar(20) DEFAULT NULL,
+  `TotalExentos` varchar(20) DEFAULT NULL,
+  `TotalExonerado` varchar(20) DEFAULT NULL,
+  `TotalVentas` varchar(20) DEFAULT NULL,
+  `TotalDescuentos` varchar(20) DEFAULT NULL,
+  `TotalVentasNeta` varchar(20) DEFAULT NULL,
+  `TotalImpuestos` varchar(20) DEFAULT NULL,
+  `TotalIVADevuelto` varchar(20) DEFAULT NULL,
+  `TotalOtrosCargos` varchar(20) DEFAULT NULL,
+  `TotalComprobante` varchar(20) DEFAULT NULL,
+  `XMLSinFirmar` longtext,
+  `XMLFirmado` longtext,
+  `FechaRecibidoPorHacienda` timestamp NULL DEFAULT NULL,
+  `RespuestaHaciendaXML` longtext,
+  `RespuestaHaciendaFecha` timestamp NULL DEFAULT NULL,
+  `RespuestaHaciendaEstado` varchar(20) DEFAULT NULL,
+  `CorreoEnviadoReceptor` int(11) DEFAULT NULL,
+  `TipoDocumento` varchar(4) DEFAULT NULL,
+  `CodigoPais` varchar(4) DEFAULT NULL,
+  `ConsecutivoFormateado` varchar(11) DEFAULT NULL,
+  `Situacion` varchar(15) DEFAULT NULL,
+  `CodigoSeguridad` varchar(8) DEFAULT NULL,
+  `CodigoActividad` varchar(6) DEFAULT NULL,
+  PRIMARY KEY (`Consecutivo`,`Sucursal`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `tb_62_articulos_factura_compra_electronica` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Codigo` varchar(30) NOT NULL,
+  `TipoCodigo` varchar(2) NOT NULL,
+  `Cantidad` varchar(7) DEFAULT NULL,
+  `UnidadMedida` varchar(10) DEFAULT NULL,
+  `Detalle` varchar(150) DEFAULT NULL,
+  `PrecioUnitario` varchar(20) DEFAULT NULL,
+  `MontoTotal` varchar(20) DEFAULT NULL,
+  `MontoDescuento` varchar(20) DEFAULT NULL,
+  `NaturalezaDescuento` varchar(20) DEFAULT NULL,
+  `Subtotal` varchar(20) DEFAULT NULL,
+  `ImpuestoObject` text,
+  `MontoTotalLinea` varchar(20) DEFAULT NULL,
+  `Consecutivo` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

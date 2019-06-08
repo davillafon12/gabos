@@ -1712,6 +1712,141 @@ Class factura extends CI_Model
                 log_message('error', "No se genero el PDF de factura, no existe la empresa | Consecutivo: $consecutivo | Sucursal: $sucursal");
         }
     }
+
+
+
+
+
+
+
+
+
+    /*
+    
+         _____          _                         _      
+        |  ___|_ _  ___| |_ _   _ _ __ __ _    __| | ___ 
+        | |_ / _` |/ __| __| | | | '__/ _` |  / _` |/ _ \
+        |  _| (_| | (__| |_| |_| | | | (_| | | (_| |  __/
+        |_|  \__,_|\___|\__|\__,_|_|  \__,_|  \__,_|\___|
+                                                        
+          ____                                
+         / ___|___  _ __ ___  _ __  _ __ __ _ 
+        | |   / _ \| '_ ` _ \| '_ \| '__/ _` |
+        | |__| (_) | | | | | | |_) | | | (_| |
+         \____\___/|_| |_| |_| .__/|_|  \__,_|
+                             |_|              
+    
+    */
+
+    function guardarDatosBasicosFacturaDeComprasElectronica($emisor, $receptor, $factura, $costos, $articulos){
+        // Eliminamos informacion antigua de la misma factura
+        $this->db->where("Consecutivo", $factura["consecutivo"]);
+        $this->db->where("Sucursal", $factura["sucursal"]);
+        $this->db->delete("tb_62_articulos_factura_compra_electronica");
+        
+        $this->db->where("Consecutivo", $factura["consecutivo"]);
+        $this->db->where("Sucursal", $factura["sucursal"]);
+        $this->db->delete("tb_61_factura_compra_electronica");
+        
+        // Guardamos el encabezado de la factura
+        require_once PATH_API_HACIENDA;
+        $api = new API_FE();
+        $situacion = $api->internetIsOnline() ? "normal" : "sininternet";
+        
+        // Agregamos la info nueva
+        $data = array(
+            "Consecutivo" => $factura["consecutivo"],
+            "Sucursal" => $factura["sucursal"],
+            "FechaEmision" => $factura["fecha"],
+            "EmisorNombre" => $emisor["nombre"],
+            "EmisorTipoIdentificacion" => $emisor["tipoIdentificacion"],
+            "EmisorIdentificacion" => $emisor["identificacion"],
+            "EmisorProvincia" => $emisor["provincia"],
+            "EmisorCanton" => str_pad($emisor["canton"],2,"0", STR_PAD_LEFT),
+            "EmisorDistrito" => str_pad($emisor["distrito"],2,"0", STR_PAD_LEFT),
+            "EmisorOtrasSennas" => $emisor["direccion"],
+            "EmisorEmail" => $emisor["email"],
+            "CondicionVenta" => $factura["condicionVenta"],
+            "PlazoCredito" => $factura["plazoCredito"],
+            "MedioPago" => $factura["tipoPago"],
+            "CodigoMoneda" => $factura["moneda"],
+            "TipoCambio" => $factura["tipoCambio"],
+            "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
+            "TotalServiciosExentos" => $this->fn($costos['total_serv_exentos']),
+            "TotalServiciosExonerados" => $this->fn($costos['total_serv_exonerados']),
+            "TotalMercanciaGravada" => $this->fn($costos['total_merc_gravada']),
+            "TotalMercanciaExenta" => $this->fn($costos['total_merc_exenta']),
+            "TotalMercanciaExonerada" => $this->fn($costos['total_merc_exonerada']),
+            "TotalGravados" => $this->fn($costos['total_gravados']),
+            "TotalExentos" => $this->fn($costos['total_exentos']),
+            "TotalExonerado" => $this->fn($costos['total_exonerado']),
+            "TotalVentas" => $this->fn($costos['total_ventas']),
+            "TotalDescuentos" => $this->fn($costos['total_descuentos']),
+            "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
+            "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+            "TotalIVADevuelto" => $this->fn($costos['total_iva_devuelto']),
+            "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
+            "TotalComprobante" => $this->fn($costos['total_comprobante']),
+            "TipoDocumento" => FACTURA_COMPRA_ELECTRONICA,
+            "CodigoPais" => CODIGO_PAIS,
+            "ConsecutivoFormateado" => $this->formatearConsecutivo($factura["consecutivo"]),
+            "Situacion" => $situacion,
+            "CodigoSeguridad" => rand(10000000,99999999),
+            "RespuestaHaciendaEstado" => "sin_enviar",
+            "CorreoEnviadoReceptor" => 0,
+            "CodigoActividad" => $emisor["codigoActividad"]
+        );
+        
+        if($receptor != NULL){
+            $data["ReceptorNombre"] = $receptor->Sucursal_Nombre;
+            $data["ReceptorTipoIdentificacion"] = $receptor->Tipo_Cedula;
+            $data["ReceptorIdentificacion"] = $receptor->Sucursal_Cedula;
+            $data["ReceptorProvincia"] = $receptor->Provincia;
+            $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
+            $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
+            $data["ReceptorEmail"] = $receptor->Sucursal_Email;
+        }
+        
+        $this->db->insert("tb_61_factura_compra_electronica", $data);
+        
+        foreach ($articulos as $art){
+            $data = array(
+                "Cantidad" => $art["cantidad"],
+                "UnidadMedida" => $art["unidadMedida"],
+                "Detalle" => $art["detalle"],
+                "PrecioUnitario" => $art["precioUnitario"],
+                "MontoTotal" => $art["montoTotal"],
+                "MontoDescuento" => $art["montoDescuento"],
+                "NaturalezaDescuento" => $art["naturalezaDescuento"],
+                "Subtotal" => $art["subtotal"],
+                "ImpuestoObject" => json_encode($art["impuesto"]),
+                "MontoTotalLinea" => $art["montoTotalLinea"],
+                "Consecutivo" => $factura["consecutivo"],
+                "Sucursal" => $factura["sucursal"],
+                "Codigo" => $art["codigo"],
+                "TipoCodigo" => $art["tipoCodigo"]
+            );
+            
+            $this->db->insert("tb_62_articulos_factura_compra_electronica", $data);
+        }
+        return array("situacion" => $situacion, "fecha" => $factura["fecha"]);
+    }
+
+    function getNuevoConsecutivoFEC($sucursal){
+        $result = $this->db->query("select MAX(Consecutivo) as Consecutivo from tb_61_factura_compra_electronica where Sucursal = $sucursal");
+
+        if($result->result()[0]->Consecutivo == NULL){
+            return 1;
+        }else{
+            return $result->result()[0]->Consecutivo + 1;
+        }
+    }
+
+
+
+
+
+
 }
 
 

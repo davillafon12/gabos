@@ -7,8 +7,23 @@ $(window).ready(function(){
     $("#condicion_venta_factura").change(revisarCondicionCredito);
 
     $("#boton_agregar_detalle").click(agregarDetalle);
+
+    $("#boton_crear_factura").click(crearFactura);
     
     revisarCondicionCredito();
+
+    validate.extend(validate.validators.datetime, {
+        // The value is guaranteed not to be null or undefined but otherwise it
+        // could be anything.
+        parse: function(value, options) {
+          return +moment.utc(value);
+        },
+        // Input is a unix timestamp
+        format: function(value, options) {
+          var format = options.dateOnly ? "DD-MM-YYYY" : "DD-MM-YYYY hh:mm:ss";
+          return moment.utc(value).format(format);
+        }
+      });
 });
 
 function getCantones(e){
@@ -161,9 +176,9 @@ function validarDetalle(){
         codigo: codigo,
         cantidad: cantidad,
         detalle: detalle,
-        precio: precio,
-        descuento: descuento,
-        tarifaIVA: tarifaIVA,
+        precio: precio.toFixed(_CANTIDAD_DECIMALES),
+        descuento: descuento.toFixed(_CANTIDAD_DECIMALES),
+        tarifaIVA: tarifaIVA.toFixed(_CANTIDAD_DECIMALES),
         tipoCodigo: tipoCodigo,
         unidadMedida: unidadMedida,
         tipoTarifa: tipoTarifa,
@@ -185,15 +200,25 @@ function dibujarProductosenTabla(){
     var cuerpo = "";
     for(var index in _DETALLES_FACTURA){
         var detalle = _DETALLES_FACTURA[index];
-        var precioFinal = detalle.cantidad * detalle.precio;
-        precioFinal = precioFinal - (precioFinal * (detalle.descuento / 100));
+        var precioSinIVA = detalle.precio / (1 + detalle.tarifaIVA / 100);
+        precioSinIVA = precioSinIVA.toFixed(_CANTIDAD_DECIMALES);
+
+        var precioFinalSinDescuentoSinIVA = precioSinIVA * detalle.cantidad;
+        precioFinalSinDescuentoSinIVA = precioFinalSinDescuentoSinIVA.toFixed(_CANTIDAD_DECIMALES);
+
+        var precioFinalConDescuentoSinIVA = precioFinalSinDescuentoSinIVA - (precioFinalSinDescuentoSinIVA * (detalle.descuento / 100));
+        precioFinalConDescuentoSinIVA = precioFinalConDescuentoSinIVA.toFixed(_CANTIDAD_DECIMALES);
+
+        var precioFinalConDescuentoConIVA =+ precioFinalConDescuentoSinIVA + precioFinalConDescuentoSinIVA * (detalle.tarifaIVA / 100);
+        precioFinalConDescuentoConIVA = precioFinalConDescuentoConIVA.toFixed(_CANTIDAD_DECIMALES);
+
         cuerpo +=   "<tr>"
                         +"<td>"+detalle.codigo+"</td>"
                         +"<td>"+detalle.detalle+"</td>"
                         +"<td style='text-align: center;'>"+detalle.cantidad+"</td>"
                         +"<td style='text-align: center;'>"+detalle.descuento+"</td>"
                         +"<td style='text-align: right;'>"+detalle.precio+"</td>"
-                        +"<td style='text-align: right;'>"+precioFinal+"</td>"
+                        +"<td style='text-align: right;'>"+precioFinalConDescuentoConIVA+"</td>"
                         +"<td><div class='boton-eliminar-detalle' id-detalle='"+index+"'>x</div></td>"
                    +"</tr>";
     }
@@ -206,3 +231,153 @@ function eliminarDetalle(event){
     _DETALLES_FACTURA.splice(id,1);
     dibujarProductosenTabla();
 }
+
+function crearFactura(){
+    var resultado = validarCrearFactura();
+    if(resultado){
+        $.prompt("¡Esto creará una factura de compra!", {
+            title: "¿Esta seguro que desea generar esta factura?",
+            buttons: { "Si, estoy seguro": true, "Cancelar": false },
+            submit:function(e,v,m,f){
+                if(v){
+                    $('#envio_factura').bPopup({
+						modalClose: false
+                    });	
+                    doAjax("/contabilidad/facturaElecCompra/crearFactura", "json", true, "POST", resultado, function(data){
+                        if(data.status){
+                            
+                        }
+                    }, function(){}, function(){
+                        $('#envio_factura').bPopup().close();
+                    });					
+                }
+            }
+        });
+    }
+}
+
+function validarCrearFactura(){
+    var nombreEmisor = $("#nombre_emisor").val().trim();
+    var tipoIdentificacionEmisor = $("#tipo_identificacion_emisor").val();
+    var identificacionEmisor = $("#identificacion_emisor").val().trim().replace(/\-/, "");
+    var emailEmisor = $("#email_emisor").val().trim();
+    var otrasSennasEmisor = $("#otras_sennas_emisor").val().trim();
+    var provinciaEmisor = $("#emisor_provincia").val();
+    var cantonEmisor = $("#emisor_canton").val();
+    var distritoEmisor = $("#emisor_distrito").val();
+    var codigoActividadEmisor = $("#codigo_actividad_factura").val().trim();
+    var fechaFactura = $("#fecha_factura").val().trim();
+    var condicionVenta = $("#condicion_venta_factura").val();
+    var tipoPago = $("#tipo_pago_factura").val();
+    var plazoCredito = $("#plazo_factura").val().trim();
+
+    if(nombreEmisor == ""){
+        notyConTipo("Debe ingresar el nombre del emisor", "error");
+        return false;
+    }
+
+    if(identificacionEmisor == ""){
+        notyConTipo("Debe ingresar la identificación del emisor", "error");
+        return false;
+    }
+
+    if(emailEmisor == ""){
+        notyConTipo("Debe ingresar el correo electrónico del emisor", "error");
+        return false;
+    }
+
+    if(!validateEmail(emailEmisor)){
+        notyConTipo("Debe ingresar un correo electrónico con formato válido", "error");
+        return false;
+    }
+
+    if(otrasSennasEmisor == ""){
+        notyConTipo("Debe ingresar la dirección del emisor", "error");
+        return false;
+    }
+
+    if(provinciaEmisor == 0){
+        notyConTipo("Debe escoger la provincia del emisor", "error");
+        return false;
+    }
+
+    if(cantonEmisor == null || cantonEmisor == 0){
+        notyConTipo("Debe escoger el cantón del emisor", "error");
+        return false;
+    }
+
+    if(distritoEmisor == null || distritoEmisor == 0){
+        notyConTipo("Debe escoger el distrito del emisor", "error");
+        return false;
+    }
+
+    if(codigoActividadEmisor == ""){
+        notyConTipo("Debe ingresar el código de actividad del emisor", "error");
+        return false;
+    }
+
+    if(!$.isNumeric(codigoActividadEmisor)){
+        notyConTipo("Debe ingresar un código de actividad válido", "error");
+        return false;
+    }
+
+    if(fechaFactura == ""){
+        notyConTipo("Debe ingresar la fecha y hora de la factura", "error");
+        return false;
+    }
+
+    if(validate({fecha: fechaFactura}, {fecha: {datetime: true}}) != undefined){
+        notyConTipo("Debe ingresar una fecha con formato válido", "error");
+        return false;
+    }
+
+    if(condicionVenta == -1){
+        notyConTipo("Debe ingresar un tipo de condición de venta", "error");
+        return false;
+    }
+
+    //Si es credito
+    if(condicionVenta == "02"){
+        if(!$.isNumeric(plazoCredito)){
+            notyConTipo("Debe ingresar un plazo de crédito válido", "error");
+            return false;
+        }
+
+        if(plazoCredito < 1){
+            notyConTipo("El plazo de crédito debe ser mayor o igual a un día", "error");
+            return false;
+        }
+    }
+
+    if(tipoPago == -1){
+        notyConTipo("Debe ingresar un tipo de pago", "error");
+        return false;
+    }
+
+    if(_DETALLES_FACTURA.length <= 0){
+        notyConTipo("Debe ingresar al menos un artículo o servicio a la factura", "error");
+        return false;
+    }
+
+    return {
+        nombreEmisor: nombreEmisor,
+        tipoIdentificacionEmisor: tipoIdentificacionEmisor,
+        identificacionEmisor: identificacionEmisor,
+        emailEmisor: emailEmisor,
+        otrasSennasEmisor: otrasSennasEmisor,
+        provinciaEmisor: provinciaEmisor,
+        cantonEmisor: cantonEmisor,
+        distritoEmisor: distritoEmisor,
+        codigoActividadEmisor: codigoActividadEmisor,
+        fechaFactura: fechaFactura,
+        condicionVenta: condicionVenta,
+        plazoCredito: plazoCredito,
+        tipoPago: tipoPago,
+        detalles: JSON.stringify(_DETALLES_FACTURA)
+    };
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }

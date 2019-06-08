@@ -144,3 +144,43 @@
 .th_eliminar{
     width: 50px;
 }
+
+.send-buttom-container{
+    margin-top: 10px;
+    text-align: right;
+    width: 99%;
+}
+
+.boton_crear_factura{
+    margin-left: 5px;
+    margin-bottom: 5px;
+    background: rgb(36, 95, 255);
+    display: inline-block;
+    padding: 5px 10px 6px;
+    color: #fbf7f7;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 1;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px #999;
+    -webkit-box-shadow: 0 1px 3px #999;
+    box-shadow: 0 1px 3px #999;
+    text-shadow: 0 -1px 1px #222;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+.envio_factura{
+	display: none;
+	text-align: center;
+}
+
+.envio_p {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif;
+	font-size: 26px; 
+	color: #C1C1C1;
+}
