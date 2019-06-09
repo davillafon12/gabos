@@ -94,9 +94,9 @@ class Firmadocr {
         $xmnls_signedprops='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica" ';
         $xmnls_signeg='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica" ';
     } elseif ($this->tipoDoc == '02'){
-        $xmlns_keyinfo='xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica" ';
-        $xmnls_signedprops='xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica" ';
-        $xmnls_signeg='xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica" ';
+        $xmlns_keyinfo='xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaDebitoElectronica" ';
+        $xmnls_signedprops='xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaDebitoElectronica" ';
+        $xmnls_signeg='xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaDebitoElectronica" ';
     } elseif ($this->tipoDoc == '03'){
         $xmlns_keyinfo='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica" ';
         $xmnls_signedprops='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica" ';
@@ -109,7 +109,11 @@ class Firmadocr {
         $xmlns_keyinfo='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor" ';
         $xmnls_signedprops='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor" ';
         $xmnls_signeg='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor" ';
-    }
+	} elseif ($this->tipoDoc == '08'){
+        $xmlns_keyinfo='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra" ';
+        $xmnls_signedprops='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra" ';
+        $xmnls_signeg='xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra" ';
+    } 
     $xmlns= 'xmlns:ds="http://www.w3.org/2000/09/xmldsig#" '.
             'xmlns:fe="http://www.dian.gov.co/contratos/facturaelectronica/v1" ' .
             'xmlns:xades="http://uri.etsi.org/01903/v1.3.2#"';
@@ -267,6 +271,9 @@ class Firmadocr {
     } elseif ($this->tipoDoc == '05' || $this->tipoDoc == '06' || $this->tipoDoc == '07'){
     	$buscar = '</MensajeReceptor>';
         $remplazar = $sig."</MensajeReceptor>";
+    } elseif ($this->tipoDoc == '08'){
+        $buscar = '</FacturaElectronicaCompra>';
+        $remplazar = $sig."</FacturaElectronicaCompra>";
     }
   	$pos = strrpos($xml, $buscar);
     if($pos !== false){

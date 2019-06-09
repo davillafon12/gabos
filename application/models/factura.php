@@ -371,12 +371,12 @@ Class factura extends CI_Model
 				$facturas_trueque = $this->getFacturasTrueque($sucursal);
 				$sucursal = $this->sucursales_trueque[$sucursal];
 				if(!empty($facturas_trueque)){
-						$queryLoco = " AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
+						$queryLoco = " AND TB_07_Factura.Factura_Consecutivo IN (".implode(',',$facturas_trueque).")";
 				}
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
 				$facturas_trueque = $this->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
 				if(!empty($facturas_trueque)){
-						$queryLoco = " AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
+						$queryLoco = " AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode(',',$facturas_trueque).")";
 				}
 		}
 		
@@ -1084,21 +1084,21 @@ Class factura extends CI_Model
                     $api = new API_FE();
                 }
                 $row = $query->result()[0];
-		$tipoIdentificacion = "fisico";
-		switch($row->EmisorTipoIdentificacion){
-			case "01":
-				$tipoIdentificacion = "fisico";
-			break;
-			case "02":
-				$tipoIdentificacion = "juridico";
-			break;
-			case "03":
-				$tipoIdentificacion = "dimex";
-			break;
-			case "04":
-				$tipoIdentificacion = "nite";
-			break;
-		}
+                $tipoIdentificacion = "fisico";
+                switch($row->EmisorTipoIdentificacion){
+                    case "01":
+                        $tipoIdentificacion = "fisico";
+                    break;
+                    case "02":
+                        $tipoIdentificacion = "juridico";
+                    break;
+                    case "03":
+                        $tipoIdentificacion = "dimex";
+                    break;
+                    case "04":
+                        $tipoIdentificacion = "nite";
+                    break;
+                }
                 if($claveRs = $api->createClave($tipoIdentificacion, $row->EmisorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento)){
                     $data = array(
                         "Clave" => $claveRs["clave"],
@@ -1738,6 +1738,42 @@ Class factura extends CI_Model
     
     */
 
+    function crearFacturaCompraElectronica($emisor, $receptor, $factura, $costos, $articulos){
+        $feedback["status"] = false;
+        
+        //Fix de cedula para desampa
+        if($receptor->Sucursal_Cedula == 31013507850){
+            $receptor->Sucursal_Cedula = 3101350785;
+        }
+        
+        $responseData = $this->guardarDatosBasicosFacturaDeComprasElectronica($emisor, $receptor, $factura, $costos, $articulos);
+        
+        if($resClave = $this->generarClaveYConsecutivoParaFacturaDeCompraElectronica($factura["consecutivo"], $factura["sucursal"])){
+            if($resXML = $this->generarXMLFacturaCompraElectronica($factura["consecutivo"], $factura["sucursal"])){
+                if($resXMLFirmado = $this->firmarXMLFacturaDeCompra($factura["consecutivo"], $factura["sucursal"])){
+                    $feedback["data"] = $responseData;
+                    $feedback["data"]["clave"] = $resClave["Clave"];
+                    $feedback["status"] = true;
+                    unset($feedback['error']);
+                    log_message('error', "Se genero bien el XML firmado FEC | Consecutivo: {$factura["consecutivo"]} | Sucursal: ".$factura["sucursal"]);
+                }else{
+                    // ERROR AL FIRMAR EL XML DE FE
+                    $feedback['error']='54';
+                    log_message('error', "Error al firmar el XML FEC | Consecutivo: {$factura["consecutivo"]} | Sucursal: ".$factura["sucursal"]);
+                }
+            }else{
+                // ERROR AL GENERAR EL XML DE FE
+                $feedback['error']='53';
+                log_message('error', "Error al generar el XML FEC | Consecutivo: {$factura["consecutivo"]} | Sucursal: ".$factura["sucursal"]);
+            }
+        }else{
+            // ERROR AL GENERAR LA CLAVE
+            $feedback["error"] = '52';
+            log_message('error', "Error al generar la clave FEC | Consecutivo: {$factura["consecutivo"]} | Sucursal: ".$factura["sucursal"]);
+        }
+        return $feedback;
+    }
+
     function guardarDatosBasicosFacturaDeComprasElectronica($emisor, $receptor, $factura, $costos, $articulos){
         // Eliminamos informacion antigua de la misma factura
         $this->db->where("Consecutivo", $factura["consecutivo"]);
@@ -1842,8 +1878,172 @@ Class factura extends CI_Model
         }
     }
 
+    function generarClaveYConsecutivoParaFacturaDeCompraElectronica($consecutivo, $sucursal, $api = NULL){
+        $this->db->select("EmisorTipoIdentificacion, EmisorIdentificacion, CodigoPais, ConsecutivoFormateado, Situacion, CodigoSeguridad, TipoDocumento");
+        $this->db->from("tb_61_factura_compra_electronica");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+        
+        $query = $this->db->get();
+        if($query->num_rows()>0){
+            if($api == NULL){
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+            }
+            $row = $query->result()[0];
+            $tipoIdentificacion = "fisico";
+            switch($row->EmisorTipoIdentificacion){
+                case "01":
+                    $tipoIdentificacion = "fisico";
+                break;
+                case "02":
+                    $tipoIdentificacion = "juridico";
+                break;
+                case "03":
+                    $tipoIdentificacion = "dimex";
+                break;
+                case "04":
+                    $tipoIdentificacion = "nite";
+                break;
+            }
+            if($claveRs = $api->createClave($tipoIdentificacion, $row->EmisorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento)){
+                $data = array(
+                    "Clave" => $claveRs["clave"],
+                    "ConsecutivoHacienda" => $claveRs["consecutivo"]
+                );
+                $this->db->where("Consecutivo", $consecutivo);
+                $this->db->where("Sucursal", $sucursal);
+                $this->db->update("tb_61_factura_compra_electronica", $data);
+                return $data;
+            }
+        }
+        return false;
+    }
 
+    function generarXMLFacturaCompraElectronica($consecutivo, $sucursal, $api = NULL){
+        $this->db->from("tb_61_factura_compra_electronica");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+        $query = $this->db->get();
+        if($query->num_rows()>0){
+            if($api == NULL){
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+            }
+            $factura = $query->result()[0];
+            $this->db->from("tb_62_articulos_factura_compra_electronica");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                $articulos = $query->result();
+                $xmlRes = $api->crearXMLFactura($factura->Clave, 
+                                                $factura->ConsecutivoHacienda, 
+                                                $factura->FechaEmision, 
 
+                                                $factura->EmisorNombre, 
+                                                $factura->EmisorTipoIdentificacion, 
+                                                $factura->EmisorIdentificacion, 
+                                                $factura->EmisorNombre, 
+                                                $factura->EmisorProvincia, 
+                                                $factura->EmisorCanton, 
+                                                $factura->EmisorDistrito, 
+                                                null, 
+                                                $factura->EmisorOtrasSennas, 
+                                                null, 
+                                                null, 
+                                                null, 
+                                                null, 
+                                                $factura->EmisorEmail, 
+
+                                                $factura->ReceptorNombre, 
+                                                $factura->ReceptorTipoIdentificacion, 
+                                                $factura->ReceptorIdentificacion, 
+                                                $factura->ReceptorProvincia, 
+                                                $factura->ReceptorCanton, 
+                                                $factura->ReceptorDistrito, 
+                                                null, 
+                                                null, 
+                                                null, 
+                                                null, 
+                                                null, 
+                                                $factura->ReceptorEmail,
+
+                                                $factura->CondicionVenta, 
+                                                $factura->PlazoCredito, 
+                                                $factura->MedioPago, 
+                                                $factura->CodigoMoneda, 
+                                                $factura->TipoCambio, 
+
+                                                $factura->TotalServiciosGravados, 
+                                                $factura->TotalServiciosExentos, 
+                                                $factura->TotalMercanciaGravada, 
+                                                $factura->TotalMercanciaExenta, 
+                                                $factura->TotalGravados, 
+                                                $factura->TotalExentos, 
+                                                $factura->TotalVentas, 
+                                                $factura->TotalDescuentos, 
+                                                $factura->TotalVentasNeta, 
+                                                $factura->TotalImpuestos, 
+                                                $factura->TotalComprobante,
+
+                                                null, 
+                                                $this->prepararArticulosParaXML($articulos),
+                        
+                                                $factura->CodigoActividad,
+                                                $factura->TotalServiciosExonerados,
+                                                $factura->TotalMercanciaExonerada,
+                                                $factura->TotalExonerado,
+                                                $factura->TotalIVADevuelto,
+                                                $factura->TotalOtrosCargos,
+                                                true);
+                if($xmlRes){
+                    $data = array(
+                        "XMLSinFirmar" => $xmlRes["xml"]
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+                    $this->db->update("tb_61_factura_compra_electronica", $data);
+                    return $data;
+                }
+            }
+        }
+        return false;
+    }
+
+    function firmarXMLFacturaDeCompra($consecutivo, $sucursal, $api = NULL){
+        $this->db->from("tb_61_factura_compra_electronica");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+        $query = $this->db->get();
+        if($query->num_rows()>0){
+            if($api == NULL){
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+            }
+            $factura = $query->result()[0];
+            $this->db->from("tb_02_sucursal");
+            $this->db->where("Codigo", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                $empresa = $query->result()[0];
+                if($xmlFirmado = $api->firmarDocumento($empresa->Token_Certificado_Tributa, $factura->XMLSinFirmar, $empresa->Pass_Certificado_Tributa, $factura->TipoDocumento)){
+                    $data = array(
+                        "XMLFirmado" => $xmlFirmado
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+                    $this->db->update("tb_61_factura_compra_electronica", $data);
+                    
+                    // Guardarmos el XML firmado en un archivo
+                    $this->storeFile($factura->Clave.".xml", "fec", null, base64_decode($xmlFirmado));
+                    
+                    return $data;
+                }
+            }
+        }
+        return false;
+    }
 
 
 

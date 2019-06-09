@@ -110,7 +110,9 @@ class facturaElecCompra extends CI_Controller {
 
                                                 $articulosYCostos = $this->convertirArticulosALineaDetalle($detalles);
 
-                                                $this->factura->guardarDatosBasicosFacturaDeComprasElectronica($emisor, $receptor, $factura, $articulosYCostos["costos"], $articulosYCostos["articulos"]);
+                                                $r["res"] = $this->factura->crearFacturaCompraElectronica($emisor, $receptor, $factura, $articulosYCostos["costos"], $articulosYCostos["articulos"]);
+                                                $r["status"] = 1;
+                                                unset($r["msg"]);
                                             }else{
                                                 $r["msg"] = $validacionCredito;
                                             }

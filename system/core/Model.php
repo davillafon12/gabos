@@ -180,7 +180,7 @@ class CI_Model {
                     "montoTotalLinea" => $art->MontoTotalLinea,
                     "codigo" => $art->Codigo,
                     "tipoCodigo" => $art->TipoCodigo,
-                    "baseImponible" => $art->BaseImponible
+                    "baseImponible" => property_exists($art, 'BaseImponible') ? $art->BaseImponible : 0
                 );
                 array_push($finalArray, $artt);
             }
@@ -504,6 +504,9 @@ class CI_Model {
                 break;
                 case "cer":
                     $finalPath .= "certificados/";
+                break;
+                case "fec":
+                    $finalPath .= "factura_electronica_compra/";
                 break;
             }
             

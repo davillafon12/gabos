@@ -103,7 +103,7 @@ class API_Helper{
 
         $tipoDoc = $tipoDocumento;
 
-        $tipos = array("FE", "ND", "NC", "TE", "CCE", "CPCE", "RCE");
+        $tipos = array("FE", "ND", "NC", "TE", "CCE", "CPCE", "RCE", "FEC");
 
         if (in_array($tipoDoc, $tipos)) {
             switch ($tipoDoc) {
@@ -127,6 +127,9 @@ class API_Helper{
                     break;
                 case 'RCE': // Rechazo Comprobante Electronico
                     $tipoDocumento = "07";
+                    break;
+                case 'FEC': // Factura Elctronica de Compra
+                    $tipoDocumento = "08";
                     break;
             }
         } else {
@@ -211,9 +214,9 @@ class API_Helper{
                             $totalDescuentos, $totalVentasNeta, $totalImp, $totalComprobante,
                             $otros,
                             $productos,
-                            $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos) {
+                            $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
+                            $esFacturaCompra = false, $receptorOtrasSenas = "-") {
         
-        $receptorOtrasSenas = "";
         $noReceptor = (trim($receptorNombre) == "" || $receptorNombre == null || $receptorNombre == "null");
         //detalles de tiquete / factura
         $medioPago = explode(",", $medio_pago);
@@ -228,6 +231,11 @@ class API_Helper{
         if($noReceptor){
             $openTag = '<TiqueteElectronico xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/tiqueteElectronico.xsd">';
             $closeTag = "</TiqueteElectronico>";
+        }
+
+        if($esFacturaCompra){
+            $openTag = '<FacturaElectronicaCompra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/facturaElectronicaCompra.xsd">';
+            $closeTag = "</FacturaElectronicaCompra>";
         }
         
         $xmlString = '<?xml version="1.0" encoding="utf-8"?>
@@ -244,20 +252,20 @@ class API_Helper{
                 </Identificacion>
                 <NombreComercial>' . $nombreComercial . '</NombreComercial>';
 
-        if ($emisorProv == '' or $emisorCanton == '' or $emisorDistrito == '' or $emisorBarrio == '' or $emisorOtrasSenas == '') {
+        if ($emisorProv == '' or $emisorCanton == '' or $emisorDistrito == '' or $emisorOtrasSenas == '') {
 
         } else {
             $xmlString .= '
                 <Ubicacion>
                     <Provincia>' . $emisorProv . '</Provincia>
                     <Canton>' . $emisorCanton . '</Canton>
-                    <Distrito>' . $emisorDistrito . '</Distrito>
-                    <Barrio>' . $emisorBarrio . '</Barrio>
-                    <OtrasSenas>' . $emisorOtrasSenas . '</OtrasSenas>
+                    <Distrito>' . $emisorDistrito . '</Distrito>'
+                    .($emisorBarrio == null ? '' : '<Barrio>' . $emisorBarrio . '</Barrio>').
+                    '<OtrasSenas>' . $emisorOtrasSenas . '</OtrasSenas>
                 </Ubicacion>';
         }
 
-        if ($emisorCodPaisTel == '' or $emisorTel == '') {
+        if ($emisorCodPaisTel == '' or $emisorTel == '' or $emisorCodPaisTel == null or $emisorTel == null) {
 
         } else {
             $xmlString .= '
@@ -266,7 +274,7 @@ class API_Helper{
                     <NumTelefono>' . $emisorTel . '</NumTelefono>
                 </Telefono>';
         }
-        if ($emisorCodPaisFax == '' or $emisorFax == '') {
+        if ($emisorCodPaisFax == '' or $emisorFax == '' or $emisorCodPaisFax == null or $emisorFax == null) {
 
         } else {
             $xmlString .= '
@@ -286,20 +294,20 @@ class API_Helper{
                         <Numero>' . $recenprotNumIdentif . '</Numero>
                     </Identificacion>';
 
-                    if ($receptorProvincia == '' or $receptorCanton == '' or $receptorDistrito == '' or $receptorBarrio == '' or $receptorOtrasSenas == '') {
+                    if ($receptorProvincia == '' or $receptorCanton == '' or $receptorDistrito == '' or $receptorOtrasSenas == '') {
 
                     } else {
 
                        $xmlString .= '<Ubicacion>
                                              <Provincia>' . $receptorProvincia . '</Provincia>
                                             <Canton>' . $receptorCanton . '</Canton>
-                                            <Distrito>' . $receptorDistrito . '</Distrito>
-                                            <Barrio>' . $receptorBarrio . '</Barrio>
-                                            <OtrasSenas>' . $receptorOtrasSenas . '</OtrasSenas>
+                                            <Distrito>' . $receptorDistrito . '</Distrito>'
+                                            .($receptorBarrio == null ? '' : '<Barrio>' . $receptorBarrio . '</Barrio>').
+                                            '<OtrasSenas>' . $receptorOtrasSenas . '</OtrasSenas>
                                     </Ubicacion>';
                     }
 
-                    if ($receptorCodPaisTel == '' or $receptorTel == '') {
+                    if ($receptorCodPaisTel == '' or $receptorTel == '' or $receptorCodPaisTel == null or $receptorTel == null) {
 
                     } else {
 
@@ -310,7 +318,7 @@ class API_Helper{
                                     </Telefono>';
                     }
 
-                    if ($receptorCodPaisFax == '' or $receptorFax == '') {
+                    if ($receptorCodPaisFax == '' or $receptorFax == '' or $receptorCodPaisFax == null or $receptorFax == null) {
 
                     } else {
                         $xmlString .= '<Fax>
@@ -409,7 +417,7 @@ class API_Helper{
             <TotalOtrosCargos>' . $totalOtrosCargos . '</TotalOtrosCargos>
             <TotalComprobante>' . $totalComprobante . '</TotalComprobante>
             </ResumenFactura>';
-        if ($otros == '' or $otrosType == '') {
+        if ($otros == '' or $otrosType == '' or $otros == null or $otrosType == null) {
 
         } else {
             $tipos = array("Otros", "OtroTexto", "OtroContenido");
@@ -434,7 +442,7 @@ class API_Helper{
     function signFE($p12Url, $pinP12, $inXml, $tipoDoc) {
         require_once 'Firmador.php';
         $tipoDocumento = "";
-        $tipos = array("FE", "ND", "NC", "TE","CCE","CPCE","RCE");
+        $tipos = array("FE", "ND", "NC", "TE","CCE","CPCE","RCE","FEC");
         if (in_array($tipoDoc, $tipos)) {
             switch ($tipoDoc) {
                 case 'FE': //Factura Electronica
@@ -457,6 +465,9 @@ class API_Helper{
                     break;
                 case 'RCE': // Rechazo Comprobante Electronico
                     $tipoDocumento = "07";
+                    break;
+                case 'FEC': // Factura Electronica de Compras
+                    $tipoDocumento = "08";
                     break;
             }
         } else {
