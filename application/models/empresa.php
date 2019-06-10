@@ -120,6 +120,25 @@ Class empresa extends CI_Model
 		  return false;
 		}
 	}
+
+	function getLeyendaEmpresa($id)
+	{
+		$this -> db -> select('Sucursal_leyenda_tributacion');
+		$this -> db -> from('TB_02_sucursal');		
+		$this -> db -> where('Codigo', mysql_real_escape_string($id));
+		$this -> db -> limit(1);
+		
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		  return $query->result()[0]->Sucursal_leyenda_tributacion;
+		}
+		else
+		{
+		  return false;
+		}
+	}
 	
 	function getEmpresaImpresion($id)
 	{

@@ -35,8 +35,14 @@ Class impresion_m extends CI_Model{
 
         if($makeFile){
             $filePath = "/tmp/".$fhead[0]->clave.".pdf";
-            $pdf->Output($filePath,'F');
-            $this->storeFile($fhead[0]->clave.".pdf", "fe", $filePath);
+			$pdf->Output($filePath,'F');
+			$tipoDocumento = "fe";
+			if(property_exists($fhead[0], "isFEC")){
+				if($fhead[0]->isFEC){
+					$tipoDocumento = "fec";
+				}
+			}
+            $this->storeFile($fhead[0]->clave.".pdf", $tipoDocumento, $filePath);
         }else{
            //Imprimimos documento
             $pdf->Output(); 
@@ -162,8 +168,13 @@ Class impresion_m extends CI_Model{
                                 $pdf->ln(4);
                                 $pdf->Cell(40,10,'Dirección: '.$empresa->direccion);
 		
-                                $pdf->SetFont('Arial','B',12);
-                                $pdf->Text(11, 15, $encabezado->isTE ? 'Tiquete Electrónico' : 'Factura Electrónica');
+								$pdf->SetFont('Arial','B',12);
+								if(property_exists($encabezado, "isFEC")){
+									$pdf->Text(11, 15, 'Factura Electrónica de Compra');
+								}else{
+									$pdf->Text(11, 15, $encabezado->isTE ? 'Tiquete Electrónico' : 'Factura Electrónica');
+								}
+                                
                                 $pdf->SetFont('Arial','',11);
                                 $pdf->Text(172, 15, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
                                 

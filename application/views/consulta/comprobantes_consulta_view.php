@@ -67,7 +67,8 @@ PARA:
                             <select id='tipo_documento' onchange='cambiarTipoDocumento()'>
                                 <option value="FE" <?= $documentoSeleccionado == "fe" ? "selected" : "" ?>>Factura Electrónica</option>
                                 <option value="NC" <?= $documentoSeleccionado == "nc" ? "selected" : "" ?>>Nota Crédito</option>
-                                <option value="MR" <?= $documentoSeleccionado == "mr" ? "selected" : "" ?>>Mensaje Receptor</option>
+								<option value="MR" <?= $documentoSeleccionado == "mr" ? "selected" : "" ?>>Mensaje Receptor</option>
+								<option value="FEC" <?= $documentoSeleccionado == "fec" ? "selected" : "" ?>>Factura Electrónica de Compras</option>
                             </select>
 				<table id='tabla_editar' class='tablaPrincipal' data-order='[[ 3, "asc" ]]'>
 					<thead> 

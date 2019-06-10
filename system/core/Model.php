@@ -31,7 +31,16 @@ class CI_Model {
 	public $truequeHabilitado = true;
 	public $truequeAplicado = false; 
 	public $sucursales_trueque = array(7=>2);
-        public $codigosUnidadDeServivicios = array("Os","Spe","Sp","St");
+    public $codigosUnidadDeServivicios = array("Os","Spe","Sp","St");
+
+    public $tiposdepago = array(
+        "01" => "Efectivo",
+        "02" => "Tarjeta",
+        "03" => "Cheque",
+        "04" => "Transferencia - depósito bancario",
+        "05" => "Recaudado por terceros",
+        "99" => "Otros"
+    );
 	
 	public function esUsadaComoSucursaldeRespaldo($sucursal){
 		foreach($this->sucursales_trueque as $key => $content){
@@ -475,7 +484,6 @@ class CI_Model {
                 mkdir($finalPath, 0777, true);
                 umask($oldmask);
             }
-            
             // Si es un archivo lo movemos, pero si no lo creamos
             if($file == null){
                 file_put_contents($finalPath.$name, $stream);
@@ -506,7 +514,7 @@ class CI_Model {
                     $finalPath .= "certificados/";
                 break;
                 case "fec":
-                    $finalPath .= "factura_electronica_compra/";
+                    $finalPath .= "factura_electronica_compra/".date("Y_m_d", $date)."/";
                 break;
             }
             
@@ -533,6 +541,9 @@ class CI_Model {
                 break;
                 case "cer":
                     $finalPath .= "certificados/";
+                break;
+                case "fec":
+                    $finalPath .= "factura_electronica_compra/".date("Y_m_d", $date)."/";
                 break;
             }
             

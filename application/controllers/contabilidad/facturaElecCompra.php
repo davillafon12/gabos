@@ -15,6 +15,7 @@ class facturaElecCompra extends CI_Controller {
             $this->load->model('catalogo','',TRUE);
             $this->load->model('factura','',TRUE);
             $this->load->model('configuracion','',TRUE);
+            $this->load->model('impresion_m','',TRUE);
     }
     
     function index(){
@@ -111,6 +112,10 @@ class facturaElecCompra extends CI_Controller {
                                                 $articulosYCostos = $this->convertirArticulosALineaDetalle($detalles);
 
                                                 $r["res"] = $this->factura->crearFacturaCompraElectronica($emisor, $receptor, $factura, $articulosYCostos["costos"], $articulosYCostos["articulos"]);
+                                                
+                                                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario genero la factura electronica de compra consecutivo: {$factura["consecutivo"]}",$data['Sucursal_Codigo'],'factura_electronica_compra');
+                                                $this->factura->guardarPDFFacturaCompra($factura["consecutivo"], $data['Sucursal_Codigo']);
+
                                                 $r["status"] = 1;
                                                 unset($r["msg"]);
                                             }else{

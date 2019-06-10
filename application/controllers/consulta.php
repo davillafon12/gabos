@@ -995,6 +995,11 @@ class consulta extends CI_Controller {
                     case "MR":
                         $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave."-".$art->consecutivo.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
                         $htmlXMLRespuesta = "<a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+					break;
+					case "FEC":
+                        $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
                     break;
                 }
                 

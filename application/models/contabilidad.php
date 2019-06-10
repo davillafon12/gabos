@@ -147,12 +147,12 @@ Class contabilidad extends CI_Model
 				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
 				$sucursal = $this->sucursales_trueque[$sucursal];
 				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
+						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode(',',$facturas_trueque).")";
 				}
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
 				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
 				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
+						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode(',',$facturas_trueque).")";
 				}
 		}
 		$query = $this->db->query("
@@ -853,12 +853,12 @@ Class contabilidad extends CI_Model
                     $facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
                     $sucursal = $this->sucursales_trueque[$sucursal];
                     if(!empty($facturas_trueque)){
-                        $queryLoco = "AND f.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
+                        $queryLoco = "AND f.Factura_Consecutivo IN (".implode(',',$facturas_trueque).")";
                     }
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
                     $facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
                     if(!empty($facturas_trueque)){
-                        $queryLoco = "AND f.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
+                        $queryLoco = "AND f.Factura_Consecutivo NOT IN (".implode(',',$facturas_trueque).")";
                     }
 		}
 		
@@ -2854,7 +2854,8 @@ Class contabilidad extends CI_Model
 		");
             }else{
                 $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-                $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+				$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+				$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
 		return $this->db->query("
 			SELECT 	Clave AS clave,
                                 ConsecutivoHacienda AS consecutivo,
@@ -2895,7 +2896,8 @@ Class contabilidad extends CI_Model
 		");
             }else{
                 $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-                $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+				$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+				$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
                     return $this->db->query("
                             SELECT 	Clave AS clave,
                                     ConsecutivoHacienda AS consecutivo,
@@ -2914,10 +2916,11 @@ Class contabilidad extends CI_Model
             }
 	}
         
-        function getTotalComprobantesEnSucursal($sucursal, $tipoDocumento){
-            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
-            $tabla = $tipoDocumento == "MR" ? "tb_59_mensaje_receptor" : $tabla;
+    function getTotalComprobantesEnSucursal($sucursal, $tipoDocumento){
+		$tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+		$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+		$tabla = $tipoDocumento == "MR" ? "tb_59_mensaje_receptor" : $tabla;
+		$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
 		$this->db->from($tabla);
 		$this->db->where('Sucursal', $sucursal);
 		$query = $this -> db -> get();

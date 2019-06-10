@@ -1714,6 +1714,9 @@ Class factura extends CI_Model
     }
 
 
+    
+
+
 
 
 
@@ -2045,7 +2048,86 @@ Class factura extends CI_Model
         return false;
     }
 
+    function guardarPDFFacturaCompra($consecutivo, $sucursal){
+        if($facturaElectronica = $this->getFacturaDeCompraElectronica($consecutivo, $sucursal)){
+            if($leyenda = $this->empresa->getLeyendaEmpresa($sucursal)){
+                if($articulosFEC = $this->getArticulosFacturaElectronicaCompra($consecutivo, $sucursal)){
+                    $empresa = array(new stdClass());
+                    $empresa[0]->nombre = $facturaElectronica->EmisorNombre;
+                    $empresa[0]->administrador = "";
+                    $empresa[0]->cedula = $facturaElectronica->EmisorIdentificacion;
+                    $empresa[0]->telefono = "";
+                    $empresa[0]->email = $facturaElectronica->EmisorEmail;
+                    $empresa[0]->direccion = $facturaElectronica->EmisorOtrasSennas;
+                    $empresa[0]->leyenda = $leyenda;
 
+                    $factura = array(new stdClass());
+                    $factura[0]->isTE = false;
+                    $factura[0]->cliente_ced = $facturaElectronica->ReceptorIdentificacion;
+                    $factura[0]->cliente_nom = $facturaElectronica->ReceptorNombre;
+                    $factura[0]->consecutivoH = $facturaElectronica->ConsecutivoHacienda;
+                    $factura[0]->fecha = $facturaElectronica->FechaEmision;
+                    $factura[0]->moneda = "colones";
+                    $factura[0]->estado = "cobrada";
+                    $factura[0]->vendedor = "";
+                    $factura[0]->tipo = $this->tiposdepago[$facturaElectronica->MedioPago];
+                    $factura[0]->diasCredito = $facturaElectronica->PlazoCredito;
+                    $factura[0]->fechaVencimiento = "";
+                    $factura[0]->observaciones = "";
+                    $factura[0]->subtotal = $facturaElectronica->TotalGravados;
+                    $factura[0]->total_iva = $facturaElectronica->TotalImpuestos;
+                    $factura[0]->total = $facturaElectronica->TotalComprobante;
+                    $factura[0]->retencion = 0;
+                    $factura[0]->clave = $facturaElectronica->Clave;
+                    $factura[0]->isFEC = true;
+
+                    $articulos = array();
+                    foreach($articulosFEC as $a){
+                        $ao = new stdClass();
+                        $ao->cantidad = $a->Cantidad;
+                        $ao->precio = $a->PrecioUnitario;
+                        $ao->descuento = ($a->MontoDescuento * 100) / $a->PrecioUnitario;
+                        $ao->codigo = $a->Codigo;
+                        $ao->descripcion = $a->Detalle;
+                        $ao->exento = false;
+                        array_push($articulos, $ao);
+                    }
+                    
+                    $this->impresion_m->facturaPDF($empresa, $factura, $articulos, true);
+                }else{
+                    log_message('error', "No se genero el PDF de factura de compra, no se pudo obtener los articulos | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                }
+            }else{
+                log_message('error', "No se genero el PDF de factura de compra, no se pudo obtener leyenda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
+        }else{
+            log_message('error', "No se genero el PDF de factura de compra, no existe la factura | Consecutivo: $consecutivo | Sucursal: $sucursal");
+        }
+    }
+
+    function getFacturaDeCompraElectronica($consecutivo, $sucursal){
+        $this->db->from("tb_61_factura_compra_electronica");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+        $query = $this->db->get();
+        if($query->num_rows()>0){
+            return $query->result()[0];
+        }else{
+            return false;
+        }
+    }
+
+    function getArticulosFacturaElectronicaCompra($consecutivo, $sucursal){
+        $this->db->from("tb_62_articulos_factura_compra_electronica");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+        $query = $this->db->get();
+        if($query->num_rows()>0){
+            return $query->result();
+        }else{
+            return false;
+        }
+    }
 
 }
 
