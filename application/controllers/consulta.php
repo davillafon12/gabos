@@ -1007,7 +1007,7 @@ class consulta extends CI_Controller {
                     $htmlXMLRespuesta = "";
                 }
                 
-                if($_POST['tipodocumento'] != "MR"){
+                if($_POST['tipodocumento'] != "MR" && $_POST['tipodocumento'] != "FEC"){
                     if(($art->estado == "aceptado" || $art->estado == "rechazado") && filter_var($art->email, FILTER_VALIDATE_EMAIL)){
                         $htmlReenvioCorreo = "<a href='#' onclick='reenviarCorreo(\"".$art->clave."\", \"".$_POST['tipodocumento']."\")'><img src=".$ruta_imagen."/mail.png width='21' height='21' title='Reenviar Correo a Cliente'></a>";
                     }

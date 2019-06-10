@@ -195,6 +195,18 @@ function resetCamposDetalle(){
     $("#tarifa_iva_detalle").val("");
 }
 
+function resetCamposPrincipales(){
+    $("#nombre_emisor").val("");
+    $("#identificacion_emisor").val("");
+    $("#email_emisor").val("");
+    $("#otras_sennas_emisor").val("");
+    $("#emisor_provincia").val(0);
+    $("#codigo_actividad_factura").val("");
+    $("#fecha_factura").val("");
+    $("#condicion_venta_factura").val(-1);
+    $("#tipo_pago_factura").val(-1);
+}
+
 function dibujarProductosenTabla(){
     $("#tabla_productos").html("");
     var cuerpo = "";
@@ -244,10 +256,18 @@ function crearFactura(){
 						modalClose: false
                     });	
                     doAjax("/contabilidad/facturaElecCompra/crearFactura", "json", true, "POST", resultado, function(data){
-                        if(data.status){
-                            
+                        if(data.status == 1){
+                            notyConTipo("Se creó la factura electrónica de compra con éxito", "success");
+                            resetCamposDetalle();
+                            resetCamposPrincipales();
+                            _DETALLES_FACTURA={};
+                            dibujarProductosenTabla();
+                        }else{
+                            notyConTipo(data.msg, "error");
                         }
-                    }, function(){}, function(){
+                    }, function(){
+                        notyConTipo("Hubo un error en el servidor al crear la factura de compra, favor contactar al administrador", "error");
+                    }, function(){
                         $('#envio_factura').bPopup().close();
                     });					
                 }
