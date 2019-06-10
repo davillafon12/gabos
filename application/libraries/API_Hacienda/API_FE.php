@@ -203,7 +203,12 @@ class API_FE{
                 return $tokenCache;
             }else if((time() - intval($tokenCache["store_time"])) < intval($tokenCache["refresh_expires_in"])){
                 $this->logger->info("token", "Refrescando token: ".  json_encode($tokenCache));
-                return $this->refrescarSesion($ambienteHacienda, $usuario, $tokenCache["refresh_token"]);
+                if($this->refrescarSesion($ambienteHacienda, $usuario, $tokenCache["refresh_token"]) ==false){
+                    $this->logger->info("token", "Solicitando nuevo token");
+                    return $this->crearNuevaSesion($ambienteHacienda, $usuario, $password);
+                }else{
+                    return true;
+                }
             }
         }
         $this->logger->info("token", "Solicitando nuevo token");

@@ -1855,6 +1855,7 @@ Class factura extends CI_Model
                 "Detalle" => $art["detalle"],
                 "PrecioUnitario" => $art["precioUnitario"],
                 "MontoTotal" => $art["montoTotal"],
+                "BaseImponible" => $art["base_imponible"],
                 "MontoDescuento" => $art["montoDescuento"],
                 "NaturalezaDescuento" => $art["naturalezaDescuento"],
                 "Subtotal" => $art["subtotal"],
@@ -2127,6 +2128,95 @@ Class factura extends CI_Model
         }else{
             return false;
         }
+    }
+
+    function enviarFacturaElectronicaDeCompraAHacienda($consecutivo, $sucursal, $api = NULL){
+        $this->db->from("tb_61_factura_compra_electronica");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+        $query = $this->db->get();
+        if($query->num_rows()>0){
+            if($api == NULL){
+                require_once PATH_API_HACIENDA;
+                $api = new API_FE();
+            }
+            $factura = $query->result()[0];
+            $this->db->from("tb_02_sucursal");
+            $this->db->where("Codigo", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                $empresa = $query->result()[0];
+                if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
+                    if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $factura->Clave, $factura->FechaEmision, $factura->EmisorTipoIdentificacion, $factura->EmisorIdentificacion, $factura->ReceptorTipoIdentificacion, $factura->ReceptorIdentificacion, $tokenData["access_token"], $factura->XMLFirmado)){
+                        $data = array(
+                            "RespuestaHaciendaEstado" => "procesando",
+                            "FechaRecibidoPorHacienda" => date("y/m/d : H:i:s")
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_61_factura_compra_electronica", $data);
+                        
+                        return $this->getEstadoFacturaCompraHacienda($api, $empresa, $factura, $tokenData, $consecutivo, $sucursal);
+                    }else{
+                        $data = array(
+                            "RespuestaHaciendaEstado" => "fallo_envio"
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+                        $this->db->update("tb_61_factura_compra_electronica", $data);
+                        log_message('error', "Error al enviar la factura a Hacienda FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                    }
+                }else{
+                    $data = array(
+                        "RespuestaHaciendaEstado" => "fallo_token"
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+                    $this->db->update("tb_61_factura_compra_electronica", $data);
+                    log_message('error', "Error al generar el token para envio de factura FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                }
+            }else{
+                log_message('error', "No existe empresa para su envio FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
+        }else{
+            log_message('error', "No existe factura para su envio FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
+        }
+        return false;
+    }
+
+    public function getEstadoFacturaCompraHacienda($api, $empresa, $factura, $tokenData, $consecutivo, $sucursal){
+        // Obtener resultado de la factura
+        $resCheck = array();
+        $counter = 0;
+        do {
+            sleep(2);
+            $counter++;
+            $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $factura->Clave, $tokenData["access_token"]);
+            log_message('error', "Revisando estado de factura en Hacienda FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
+        } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+
+        if($resCheck["status"]){
+            $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+            $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
+            $data = array(
+                "RespuestaHaciendaEstado" => $estado,
+                "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
+                "RespuestaHaciendaXML" => $xmlRespuesta
+            );
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+            $this->db->update("tb_61_factura_compra_electronica", $data);
+            log_message('error', "Se obtuvo el estado de hacienda <$estado> FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            
+            // Guardarmos el XML firmado en un archivo
+            //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
+            $this->storeFile($factura->Clave."-respuesta.xml", "fec", null, base64_decode($xmlRespuesta));
+            
+            return array("status" => true, "estado_hacienda" => $estado);
+        }else{
+            log_message('error', "Error al revisar el estado de la factura en Hacienda FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
+        }
+        return false;
     }
 
 }

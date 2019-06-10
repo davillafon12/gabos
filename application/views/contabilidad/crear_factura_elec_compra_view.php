@@ -275,7 +275,7 @@ PARA:
                                                 <?php 
                                                     foreach($unidades_medida as $um){
                                                         ?>
-                                                            <option value="<?= $um->Id ?>" <?= $um->Id == 85 ? "selected" : "" ?> ><?= $um->Codigo." - ".$um->Descripcion ?></option>
+                                                            <option value="<?= $um->Codigo ?>" <?= $um->Id == 85 ? "selected" : "" ?> ><?= $um->Codigo." - ".$um->Descripcion ?></option>
                                                         <?php
                                                     }
                                                 ?>

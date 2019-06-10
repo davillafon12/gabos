@@ -189,7 +189,7 @@ class CI_Model {
                     "montoTotalLinea" => $art->MontoTotalLinea,
                     "codigo" => $art->Codigo,
                     "tipoCodigo" => $art->TipoCodigo,
-                    "baseImponible" => property_exists($art, 'BaseImponible') ? $art->BaseImponible : 0
+                    "baseImponible" => $art->BaseImponible
                 );
                 array_push($finalArray, $artt);
             }

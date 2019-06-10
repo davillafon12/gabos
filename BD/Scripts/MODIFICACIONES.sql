@@ -350,3 +350,5 @@ CREATE TABLE IF NOT EXISTS `tb_62_articulos_factura_compra_electronica` (
   `Sucursal` int(11) NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+ALTER TABLE  `tb_62_articulos_factura_compra_electronica` ADD  `BaseImponible` VARCHAR( 20 ) NOT NULL AFTER  `MontoTotal`;

@@ -412,9 +412,9 @@ class API_Helper{
             <TotalVenta>' . $totalVentas . '</TotalVenta>
             <TotalDescuentos>' . $totalDescuentos . '</TotalDescuentos>
             <TotalVentaNeta>' . $totalVentasNeta . '</TotalVentaNeta>
-            <TotalImpuesto>' . $totalImp . '</TotalImpuesto>
-            <TotalIVADevuelto>' . $totalIVADevuelto . '</TotalIVADevuelto>
-            <TotalOtrosCargos>' . $totalOtrosCargos . '</TotalOtrosCargos>
+            <TotalImpuesto>' . $totalImp . '</TotalImpuesto>'.
+            ($esFacturaCompra ? '' : '<TotalIVADevuelto>' . $totalIVADevuelto . '</TotalIVADevuelto>')
+            .'<TotalOtrosCargos>' . $totalOtrosCargos . '</TotalOtrosCargos>
             <TotalComprobante>' . $totalComprobante . '</TotalComprobante>
             </ResumenFactura>';
         if ($otros == '' or $otrosType == '' or $otros == null or $otrosType == null) {

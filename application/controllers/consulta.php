@@ -1164,6 +1164,15 @@ class consulta extends CI_Controller {
                             }else{
                                 $retorno["error"] = "No existe mensaje receptor";
                             }
+						break;
+						case "FEC":
+                            if($factura = $this->contabilidad->getFacturaDeCompraElectronicaByClave($clave)){
+								$this->factura->enviarFacturaElectronicaDeCompraAHacienda($factura->Consecutivo, $factura->Sucursal);
+                                $retorno["status"] = 1;
+                                unset($retorno["error"]);
+                            }else{
+                                $retorno["error"] = "No existe mensaje receptor";
+                            }
                         break;
                     }
                 }else{

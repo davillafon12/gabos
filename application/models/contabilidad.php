@@ -3272,7 +3272,18 @@ Class contabilidad extends CI_Model
             }else{
                 return $query->result();
             }
-        }
+		}
+		
+		function getFacturaDeCompraElectronicaByClave($clave){
+			$this->db->from("tb_61_factura_compra_electronica");
+			$this->db->where("Clave", $clave);
+			$query = $this->db->get();
+			if($query->num_rows()>0){
+				return $query->result()[0];
+			}else{
+				return false;
+			}
+		}
 }
 
 
