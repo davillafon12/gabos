@@ -476,8 +476,8 @@ class CI_Model {
         }
         
         
-        public function storeFile($name, $type, $file = null, $stream = null){
-            $finalPath = $this->getFinalPath($type);
+        public function storeFile($name, $type, $file = null, $stream = null, $date = null){
+            $finalPath = $this->getFinalPath($type, $date);
             
             if (!file_exists($finalPath)) {
                 $oldmask = umask(0);

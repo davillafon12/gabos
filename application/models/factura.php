@@ -1228,7 +1228,7 @@ Class factura extends CI_Model
                         $this->db->update("tb_55_factura_electronica", $data);
                         
                         // Guardarmos el XML firmado en un archivo
-                        $this->storeFile($factura->Clave.".xml", "fe", null, base64_decode($xmlFirmado));
+                        $this->storeFile($factura->Clave.".xml", "fe", null, base64_decode($xmlFirmado), $factura->FechaEmision);
                         
                         return $data;
                     }
@@ -1317,7 +1317,7 @@ Class factura extends CI_Model
                 
                 // Guardarmos el XML firmado en un archivo
                 //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
-                $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($xmlRespuesta));
+                $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($xmlRespuesta), $factura->FechaEmision);
                 
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
@@ -2040,7 +2040,7 @@ Class factura extends CI_Model
                     $this->db->update("tb_61_factura_compra_electronica", $data);
                     
                     // Guardarmos el XML firmado en un archivo
-                    $this->storeFile($factura->Clave.".xml", "fec", null, base64_decode($xmlFirmado));
+                    $this->storeFile($factura->Clave.".xml", "fec", null, base64_decode($xmlFirmado), $factura->FechaEmision);
                     
                     return $data;
                 }
@@ -2210,7 +2210,7 @@ Class factura extends CI_Model
             
             // Guardarmos el XML firmado en un archivo
             //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
-            $this->storeFile($factura->Clave."-respuesta.xml", "fec", null, base64_decode($xmlRespuesta));
+            $this->storeFile($factura->Clave."-respuesta.xml", "fec", null, base64_decode($xmlRespuesta), $factura->FechaEmision);
             
             return array("status" => true, "estado_hacienda" => $estado);
         }else{

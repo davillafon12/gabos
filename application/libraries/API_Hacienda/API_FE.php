@@ -145,7 +145,7 @@ class API_FE{
                                     $otros,
                                     $productos,
                                     $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
-                                true);
+                                    $esFacturaCompra);
         
         if(is_array($result)){
             if(isset($result["clave"]) && isset($result["xml"])){
