@@ -52,12 +52,12 @@ function agregarFila(index){
 					 +"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+siguienteFila+"'></div>";
 	cell4.innerHTML = "<div class='articulo_specs' id='bodega_articulo_"+siguienteFila+"'></div>";
 	cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+siguienteFila+"' ondblclick='changeDiscount("+siguienteFila+")'></div>";
-	cell6.innerHTML = "<div class='articulo_specs' id='costo_unidad_articulo_"+siguienteFila+"'>"
+	cell6.innerHTML = "<div class='articulo_specs unitario' id='costo_unidad_articulo_"+siguienteFila+"'>"
 					 +"</div><input id='costo_unidad_articulo_ORIGINAL_"+siguienteFila+"' type='hidden' >"
 					 +"<input id='costo_unidad_articulo_FINAL_"+siguienteFila+"' type='hidden' >"
 					 +"<input id='producto_exento_"+siguienteFila+"' type='hidden' >"
 					 +"<input id='producto_retencion_"+siguienteFila+"' type='hidden' >";
-	cell7.innerHTML = "<div class='articulo_specs' id='costo_total_articulo_"+siguienteFila+"'></div>"
+	cell7.innerHTML = "<div class='articulo_specs final' id='costo_total_articulo_"+siguienteFila+"'></div>"
 					 +"<input type='hidden' id='costo_total_articulo_sin_descuento_"+siguienteFila+"'/>";
 
 	//Agrega la nueva fila al array de indices
@@ -695,10 +695,9 @@ function actualizaCostoTotalArticulo(id){
 	$("#costo_total_articulo_sin_descuento_"+num_row).val(precioFinalSinDescuento);
 	
 	//Formateamos el valor
-	precio_total = precio_total.toFixed(decimales_int);
-	precio_total = parseFloat(precio_total);		
-	precio_total = precio_total.format(2, 3, '.', ',');	
-	costo_total.innerHTML = precio_total;
+	precio_total = precio_total
+	precio_total = parseFloat(precio_total);
+	costo_total.innerHTML = precio_total.format(decimales_int, 3, '.', ',');
 
 	//Actualizamos el costo total
 	actualizaCostosTotales(decimales_int);
@@ -757,17 +756,17 @@ function actualizaCostosTotales(decimales_int){
 		//Si es dolares, pasamos la retencion de colones a dolares
 		costo_retencion = costo_retencion/factor_tipo_moneda_float;
 	}
-	
+
 	//Calculamos la ganancia y le quitamos la retencion
 	costo_cliente_final -= costo_retencion;
-	costo_cliente_final = costo_cliente_final.toFixed(decimales_int);
+	//costo_cliente_final = costo_cliente_final.toFixed(decimales_int);
 	
-	costo_sin_IVA_factura = costo_sin_IVA_factura.toFixed(decimales_int);
-	IVA_Factura = IVA_Factura.toFixed(decimales_int);
+	//costo_sin_IVA_factura = costo_sin_IVA_factura.toFixed(decimales_int);
+	//IVA_Factura = IVA_Factura.toFixed(decimales_int);
 	
-	costo_total_factura = costo_total_factura.toFixed(decimales_int);
+	//costo_total_factura = costo_total_factura.toFixed(decimales_int);
 	
-	costo_retencion = costo_retencion.toFixed(decimales_int);
+	//costo_retencion = costo_retencion.toFixed(decimales_int);
 	
 	//Como el toFixed devuelve un string debemos convertirlos de nuevo a float para formatear
 	costo_cliente_final = parseFloat(costo_cliente_final);
@@ -777,20 +776,20 @@ function actualizaCostosTotales(decimales_int){
 	costo_retencion = parseFloat(costo_retencion);
 	
 	//Formateamos
-	costo_cliente_final = costo_cliente_final.format(decimales_int, 3, '.', ',');
-	costo_sin_IVA_factura = costo_sin_IVA_factura.format(decimales_int, 3, '.', ',');
-	IVA_Factura = IVA_Factura.format(decimales_int, 3, '.', ',');
-	costo_total_factura = costo_total_factura.format(decimales_int, 3, '.', ',');
-	costo_retencion = costo_retencion.format(decimales_int, 3, '.', ',');
+	//costo_cliente_final = costo_cliente_final.format(decimales_int, 3, '.', ',');
+	//costo_sin_IVA_factura = costo_sin_IVA_factura.format(decimales_int, 3, '.', ',');
+	//IVA_Factura = IVA_Factura.format(decimales_int, 3, '.', ',');
+	//costo_total_factura = costo_total_factura.format(decimales_int, 3, '.', ',');
+	//costo_retencion = costo_retencion.format(decimales_int, 3, '.', ',');
 	
 	
 	
 	
-	$("#ganancia").val(costo_cliente_final);
-	$("#costo").val(costo_sin_IVA_factura);
-	$("#iva").val(IVA_Factura);
-	$("#retencion").val(costo_retencion);
-	$("#costo_total").val(costo_total_factura);
+	$("#ganancia").val(costo_cliente_final.format(decimales_int, 3, '.', ','));
+	$("#costo").val(costo_sin_IVA_factura.format(decimales_int, 3, '.', ','));
+	$("#iva").val(IVA_Factura.format(decimales_int, 3, '.', ','));
+	$("#retencion").val(costo_retencion.format(decimales_int, 3, '.', ','));
+	$("#costo_total").val(costo_total_factura.format(decimales_int, 3, '.', ','));
 	
 	/*alert(typeof costo_cliente_final);
 	document.getElementById("ganancia").value = costo_cliente_final;
@@ -1040,8 +1039,6 @@ Number.prototype.format = function(n, x, s, c) {
 
 
 function getDetalleLinea(a, aplicaRetencion){
-    var decimales = parseInt($("#cantidad_decimales").val());
-    
     if(typeof aplicaRetencion === "undefined")
         aplicaRetencion = true;
     
@@ -1059,17 +1056,18 @@ function getDetalleLinea(a, aplicaRetencion){
     // DESCUENTO
     var descuentoPrecioSinIva = 0;
     if(parseFloat(a.descuento) > 0){
-        descuentoPrecioSinIva = (precioTotalSinIVA * (parseFloat(a.descuento) / 100)).toFixed(decimales);
+        descuentoPrecioSinIva = (precioTotalSinIVA * (parseFloat(a.descuento) / 100));
     }
-
+	
      // SUBTOTAL
-    var subTotalSinIVA = precioTotalSinIVA - descuentoPrecioSinIva;
-    linea.subtotal = parseFloat(subTotalSinIVA.toFixed(decimales));
+    var subTotalSinIVA = (precioTotalSinIVA - descuentoPrecioSinIva);
+    linea.subtotal = parseFloat(subTotalSinIVA);
 
     // IMPUESTOS
     var iva = getIVAvalue_float();
-    linea.iva = subTotalSinIVA * iva;
-    linea.retencion = 0;
+    linea.iva = parseFloat((subTotalSinIVA * iva));
+	linea.retencion = 0;
+	linea.costo_final = 0;
     if(a.no_retencion == "0" && aplicaRetencion){
         // Para le retencion NO SE TOMA EN CUENTA EL DESCUENTO
         var precioFinalUnitarioSinIVA = removeIVA(parseFloat(a.precio_final));
@@ -1077,7 +1075,9 @@ function getDetalleLinea(a, aplicaRetencion){
         var montoDeImpuesto = precioFinalTotalSinIVA * iva;
         linea.retencion = montoDeImpuesto - linea.iva;
         linea.costo_final = (parseFloat(a.precio_final) - (parseFloat(a.precio_final) * (parseFloat(a.descuento) / 100))) * cantidad;
-    }
+    }else{
+		linea.costo_final = cantidad * parseFloat(a.precio_unitario);
+	}
     
     if(a.exento == 1){ // Es exento
         linea.iva = 0;
@@ -1088,7 +1088,6 @@ function getDetalleLinea(a, aplicaRetencion){
 }
 
 function removeIVA(price){
-    var decimales = parseInt($("#cantidad_decimales").val());
     var iva = getIVAvalue_float();
-    return (price/(1+iva)).toFixed(decimales); 
+    return (price/(1+iva)); 
 }

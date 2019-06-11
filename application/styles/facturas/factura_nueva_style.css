@@ -575,3 +575,11 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+
+.tabla_costos input{
+	text-align: right;
+}
+
+.articulo_specs.final, .articulo_specs.unitario{
+	text-align: right;
+}

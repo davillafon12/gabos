@@ -204,14 +204,15 @@ function setProductosFactura(productos){
 	isCajaLoad=false;
 	cantidad = productos.length;
 	//artHTML = '';
+	//Capturar decimales
+	decimales = $("#cantidad_decimales").val();
+	decimales = parseInt(decimales);
 	array_pos_rows = []; //Reiniciamos el index, para utilizar el metodo de crear JSON de factura de los articulos
 	for (var i = 0; i < cantidad; i++) 
 	{
 		array_pos_rows[i] = i+1;
 		row = table.insertRow(table.rows.length);	
 		row.setAttribute("id","articulo_"+(i+1));
-		decimales = $("#cantidad_decimales").val();
-		decimales = parseInt(decimales);
 		precio = parseFloat(productos[i].precio);
 		precio = precio.toFixed(decimales);
 		cell1 = row.insertCell(0);
@@ -242,14 +243,14 @@ function setProductosFactura(productos){
 		cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+(i+1)+"' ondblclick='changeDiscount("+(i+1)+")'>"+productos[i].descuento+"</div>";
 		
 		precioUI = parseFloat(precio);
-		precioUI = precioUI.format(2, 3, '.', ',');
+		precioUI = precioUI.format(decimales, 3, '.', ',');
 		
-		cell6.innerHTML = "<div class='articulo_specs' id='costo_unidad_articulo_"+(i+1)+"'>"+precioUI+"</div>"
+		cell6.innerHTML = "<div class='articulo_specs unitario' id='costo_unidad_articulo_"+(i+1)+"'>"+precioUI+"</div>"
 				+"<input id='costo_unidad_articulo_ORIGINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precio+"'>"
 				+"<input id='costo_unidad_articulo_FINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precioFinal+"'>"
 				+"<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'>"
 				+"<input id='producto_retencion_"+(i+1)+"' type='hidden' value='"+productos[i].retencion+"'>";
-		cell7.innerHTML = "<div class='articulo_specs' id='costo_total_articulo_"+(i+1)+"'></div>"
+		cell7.innerHTML = "<div class='articulo_specs final' id='costo_total_articulo_"+(i+1)+"'></div>"
 						  +"<input type='hidden' id='costo_total_articulo_sin_descuento_"+(i+1)+"'/>";
 		
 		
