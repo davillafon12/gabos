@@ -41,7 +41,8 @@ Class empresa extends CI_Model
                             $canton,
                             $distrito,
                             $barrio,
-                            $codigo_actividad)
+							$codigo_actividad,
+							$requiereFE)
 	{
 		//echo $creador_empresa;
 		date_default_timezone_set("America/Costa_Rica");
@@ -71,7 +72,8 @@ Class empresa extends CI_Model
                                 'Canton'=> $canton,
                                 'Distrito'=> $distrito,
                                 'Barrio'=> $barrio,
-                                'CodigoActividad'=> $codigo_actividad
+								'CodigoActividad'=> $codigo_actividad,
+								'RequiereFE' => $requiereFE
                     );
 		try{
         $this->db->insert('tb_02_sucursal',$data); }

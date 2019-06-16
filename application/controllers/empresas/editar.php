@@ -228,30 +228,31 @@ class editar extends CI_Controller {
 				$data['Empresa_Tributacion']=$row-> Sucursal_leyenda_tributacion;
 				$data['Empresa_Observaciones'] = $row -> Sucursal_Observaciones;
                                 
-                                $data['User_Tributa'] = $row -> Usuario_Tributa;
-                                $data['Pass_Tributa'] = $row -> Pass_Tributa;
-                                $data['Pin_Tributa'] = $row -> Pass_Certificado_Tributa;
-                                $data['Ambiente_Tributa'] = $row -> Ambiente_Tributa;
-                                $data['Token_Tributa'] = $row -> Token_Certificado_Tributa;
-                                
-                                $data['tipo_cedula'] = $row -> Tipo_Cedula;
-                                $data['cod_telefono'] = $row -> Codigo_Pais_Telefono;
-                                $data['cod_fax'] = $row -> Codigo_Pais_Fax;
-                                $data['Provincia'] = $row -> Provincia;
-                                $data['Canton'] = $row -> Canton;
-                                $data['Distrito'] = $row -> Distrito;
-                                $data['Barrio'] = $row -> Barrio;
-                                $data['CodigoActividad'] = $row -> CodigoActividad;
-                                
-                                $data['tiposIdentificacion'] = $this->tiposIdentificacion;
-                                $provincias = $this->ubicacion->getProvincias();
-                                $data["provincias"] = $provincias;
-                                $cantones = $this->ubicacion->getCantones($row -> Provincia);
-                                $data["cantones"] = $cantones;
-                                $distritos = $this->ubicacion->getDistritos($row -> Provincia, $row -> Canton);
-                                $data["distritos"] = $distritos;
-                                $barrios = $this->ubicacion->getBarrios($row -> Provincia, $row -> Canton, $row->Distrito);
-                                $data["barrios"] = $barrios;
+				$data['User_Tributa'] = $row -> Usuario_Tributa;
+				$data['Pass_Tributa'] = $row -> Pass_Tributa;
+				$data['Pin_Tributa'] = $row -> Pass_Certificado_Tributa;
+				$data['Ambiente_Tributa'] = $row -> Ambiente_Tributa;
+				$data['Token_Tributa'] = $row -> Token_Certificado_Tributa;
+				
+				$data['tipo_cedula'] = $row -> Tipo_Cedula;
+				$data['cod_telefono'] = $row -> Codigo_Pais_Telefono;
+				$data['cod_fax'] = $row -> Codigo_Pais_Fax;
+				$data['Provincia'] = $row -> Provincia;
+				$data['Canton'] = $row -> Canton;
+				$data['Distrito'] = $row -> Distrito;
+				$data['Barrio'] = $row -> Barrio;
+				$data['CodigoActividad'] = $row -> CodigoActividad;
+				$data['RequiereFE'] = $row -> RequiereFE == 1;
+				
+				$data['tiposIdentificacion'] = $this->tiposIdentificacion;
+				$provincias = $this->ubicacion->getProvincias();
+				$data["provincias"] = $provincias;
+				$cantones = $this->ubicacion->getCantones($row -> Provincia);
+				$data["cantones"] = $cantones;
+				$distritos = $this->ubicacion->getDistritos($row -> Provincia, $row -> Canton);
+				$data["distritos"] = $distritos;
+				$barrios = $this->ubicacion->getBarrios($row -> Provincia, $row -> Canton, $row->Distrito);
+				$data["barrios"] = $barrios;
 				
 				$ligaCliente = $this->empresa->getClienteLigaByEmpresa($id_request);
 				
@@ -291,23 +292,26 @@ class editar extends CI_Controller {
 	$observaciones_empresa = $this->input->post('observaciones');
 	$leyenda_tributacion = $this->input->post('leyenda');
         
-        $user_tributa = trim($this->input->post("user_tributa"));
-        $pass_tributa = trim($this->input->post("pass_tributa"));
-        $ambiente_tributa = trim($this->input->post("ambiente_tributa"));
-        $pin_tributa = trim($this->input->post("pin_tributa"));
+	$user_tributa = trim($this->input->post("user_tributa"));
+	$pass_tributa = trim($this->input->post("pass_tributa"));
+	$ambiente_tributa = trim($this->input->post("ambiente_tributa"));
+	$pin_tributa = trim($this->input->post("pin_tributa"));
 	
 	$liga_cliente_nombre = trim($this->input->post("cliente_asociado"));
 	$liga_cliente = $liga_cliente_nombre != "" ? trim($this->input->post('cliente_liga_id')) : "";
 	
-        $tipo_identificacion = $this->input->post('tipo_identificacion');
-        $cod_telefono_empresa = $this->input->post('cod_tel');
+	$tipo_identificacion = $this->input->post('tipo_identificacion');
+	$cod_telefono_empresa = $this->input->post('cod_tel');
 	$cod_fax_empresa = $this->input->post('cod_fax');
-        $provincia = trim($this->input->post("provincia"));
-        $canton = trim($this->input->post("canton"));
-        $distrito = trim($this->input->post("distrito"));
-        $barrio = trim($this->input->post("barrio"));
-        
-        $codigo_actividad = trim($this->input->post("codigo_actividad"));
+	$provincia = trim($this->input->post("provincia"));
+	$canton = trim($this->input->post("canton"));
+	$distrito = trim($this->input->post("distrito"));
+	$barrio = trim($this->input->post("barrio"));
+	
+	$codigo_actividad = trim($this->input->post("codigo_actividad"));
+
+	$requiereFE = trim($this->input->post("is_factura_electronica")) == "1" ? 1 : 0;
+
 		
 	$data_update['Sucursal_Cedula'] = $cedula_empresa;
 	$data_update['Sucursal_Nombre'] = $nombre_empresa;
@@ -332,7 +336,10 @@ class editar extends CI_Controller {
         $data_update['Codigo_Pais_Telefono'] = $cod_telefono_empresa;
         $data_update['Codigo_Pais_Fax'] = $cod_fax_empresa;
 	
-        $data_update['CodigoActividad'] = $codigo_actividad;
+		$data_update['CodigoActividad'] = $codigo_actividad;
+		
+		$data_update['RequiereFE'] = $requiereFE;
+
         
 	$this->empresa->actualizar($id_empresa, $data_update);
 	
@@ -381,6 +388,3 @@ class editar extends CI_Controller {
     }
 	
 }// FIN DE LA CLASE
-
-
-?>

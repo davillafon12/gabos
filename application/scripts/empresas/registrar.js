@@ -8,6 +8,8 @@ $(window).ready(function(){
     $("#cod_fax").mask("999");
     
     $('#registrar_empresa_form').submit(chequearFormulario);
+
+    $("#is_factura_electronica").click(toggleFacturaElectronica);
 });
 
 function getCantones(e){
@@ -128,4 +130,13 @@ function notyConTipo(Mensaje, tipo){
 function isEmail(email) {
   var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   return regex.test(email);
+}
+
+function toggleFacturaElectronica(){
+    var isChecked = $("#is_factura_electronica").is(":checked");
+    $("#codigo_actividad").prop('disabled', !isChecked);
+    $("#user_tributa").prop('disabled', !isChecked);
+    $("#pass_tributa").prop('disabled', !isChecked);
+    $("#ambiente_tributacion").prop('disabled', !isChecked);
+    $("#pin_tributa").prop('disabled', !isChecked);
 }

@@ -46,11 +46,11 @@ PARA:
 	<body>
             <style>
                 .form{
-                        height: 870px;
+                        height: 920px;
                 }
                 .form.cert-contenedor{
                         height: 135px;
-                }
+                } 
             </style>
 		<!--Incluir imagen de cabezera-->
 		<?php include PATH_HEADER_PICTURE;?>
@@ -190,7 +190,15 @@ PARA:
                                                 </select>
 					</td>
 				</tr>
-                                <tr>
+				<tr>
+					<td>
+						<p class="contact"><label for="is_factura_electronica">Aplica Factura Electrónica:</label><input id="is_factura_electronica"  name="is_factura_electronica"  type="checkbox" value="1" <?= $RequiereFE ? "checked" : ""?> > </p> 
+						
+					</td>
+					<td>
+					</td>
+				</tr>
+                <tr>
 					<td>
 						<p class="contact"><label for="direccion">Dirección:</label></p> 
 						<input id="direccion" autocomplete="off" name="direccion" placeholder="Dirección de la empresa"  tabindex="6" type="text" value="<?php echo $Empresa_Direccion;?>"> 
@@ -213,7 +221,7 @@ PARA:
                                 <tr>
 					<td>
 						<p class="contact"><label for="direccion">Ambiente Tributación:</label></p> 
-                                                <select name='ambiente_tributa'>
+                                                <select name='ambiente_tributa' id="ambiente_tributacion">
                                                     <option value='api-stag' <?= $Ambiente_Tributa == 'api-stag' ? 'selected' : ''; ?>>Pruebas</option>
                                                     <option value='api-prod' <?= $Ambiente_Tributa == 'api-stag' ? '' : 'selected'; ?>>Producción</option>
                                                 </select>

@@ -161,28 +161,36 @@ PARA:
 				</tr>
 				<tr>
 					<td>
+						<p class="contact"><label for="is_factura_electronica">Aplica Factura Electrónica:</label><input id="is_factura_electronica"  name="is_factura_electronica"  type="checkbox" value="1"> </p> 
+						
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>
 						<p class="contact"><label for="direccion">Dirección:</label></p> 
 						<input id="direccion" autocomplete="off" name="direccion" placeholder="Dirección de la empresa"  tabindex="6" type="text"> 
 					</td>
 					<td>
 						<p class="contact"><label for="codigo_actividad">Código actividad tributaria:</label></p> 
-						<input id="codigo_actividad" autocomplete="off" name="codigo_actividad" placeholder="Código actividad tributaria"  tabindex="6" type="text" required=""> 
+						<input id="codigo_actividad" autocomplete="off" name="codigo_actividad" placeholder="Código actividad tributaria"  tabindex="6" type="text" disabled> 
 					</td>
 				</tr>
                                 <tr>
 					<td>
 						<p class="contact"><label for="direccion">Usuario Tributación:</label></p> 
-						<input id="user_tributa" autocomplete="off" name="user_tributa" placeholder="Usuario generado en el ATV para la facturación electrónica"  tabindex="6" type="text" > 
+						<input id="user_tributa" autocomplete="off" name="user_tributa" placeholder="Usuario generado en el ATV para la facturación electrónica"  tabindex="6" type="text" disabled> 
 					</td>
 					<td>
 						<p class="contact"><label for="cliente_asociado">Contraseña Tributación:</label></p> 
-						<input id="pass_tributa" autocomplete="off" name="pass_tributa" placeholder="Contraseña generada en el ATV para la facturación electrónica"  tabindex="6" type="password"/> 
+						<input id="pass_tributa" autocomplete="off" name="pass_tributa" placeholder="Contraseña generada en el ATV para la facturación electrónica"  tabindex="6" type="password" disabled/> 
 					</td>
 				</tr>
                                 <tr>
 					<td>
 						<p class="contact"><label for="direccion">Ambiente Tributación:</label></p> 
-                                                <select name='ambiente_tributa'>
+                                                <select name='ambiente_tributa' id="ambiente_tributacion" disabled>
                                                     <option value='api-stag' selected>Pruebas</option>
                                                     <option value='api-prod' >Producción</option>
                                                 </select>
@@ -190,7 +198,7 @@ PARA:
 					</td>
                                         <td>
 						<p class="contact"><label for="cliente_asociado">PIN del certificado de Tributación:</label></p> 
-						<input id="pin_tributa" autocomplete="off" name="pin_tributa" placeholder="PIN generado en el ATV para el certificado de facturación electrónica"  tabindex="6" type="password"/> 
+						<input id="pin_tributa" autocomplete="off" name="pin_tributa" placeholder="PIN generado en el ATV para el certificado de facturación electrónica"  tabindex="6" type="password" disabled/> 
                                                 <p class="advertencia_longitud" style='    color: red;'>El certificado debe subirse en la parte de edición de empresa</p> 
 					</td>
 				</tr>
