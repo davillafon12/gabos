@@ -1883,7 +1883,7 @@ Class factura extends CI_Model
     }
 
     function generarClaveYConsecutivoParaFacturaDeCompraElectronica($consecutivo, $sucursal, $api = NULL){
-        $this->db->select("EmisorTipoIdentificacion, EmisorIdentificacion, CodigoPais, ConsecutivoFormateado, Situacion, CodigoSeguridad, TipoDocumento");
+        $this->db->select("ReceptorTipoIdentificacion, ReceptorIdentificacion, CodigoPais, ConsecutivoFormateado, Situacion, CodigoSeguridad, TipoDocumento");
         $this->db->from("tb_61_factura_compra_electronica");
         $this->db->where("Consecutivo", $consecutivo);
         $this->db->where("Sucursal", $sucursal);

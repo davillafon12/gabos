@@ -28,7 +28,6 @@ PARA:
 		<?php include PATH_LOG_OUT_HEADER;?>			
 		<!--CARGA DEL JQUERY-->
         <script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script> 
-        <script type="text/javascript" src="<?php echo base_url('application/scripts/validate.min.js'); ?>"></script> 
         <script type="text/javascript" src="<?php echo base_url('application/scripts/moment.min.js'); ?>"></script> 		
 		<!--CARGA DE MODAL-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>

@@ -11,19 +11,6 @@ $(window).ready(function(){
     $("#boton_crear_factura").click(crearFactura);
     
     revisarCondicionCredito();
-
-    validate.extend(validate.validators.datetime, {
-        // The value is guaranteed not to be null or undefined but otherwise it
-        // could be anything.
-        parse: function(value, options) {
-          return +moment.utc(value);
-        },
-        // Input is a unix timestamp
-        format: function(value, options) {
-          var format = options.dateOnly ? "DD-MM-YYYY" : "DD-MM-YYYY hh:mm:ss";
-          return moment.utc(value).format(format);
-        }
-      });
 });
 
 function getCantones(e){
@@ -346,7 +333,7 @@ function validarCrearFactura(){
         return false;
     }
 
-    if(validate({fecha: fechaFactura}, {fecha: {datetime: true}}) != undefined){
+    if(!moment(fechaFactura,"DD-MM-YYYY HH:mm:ss", true).isValid()){
         notyConTipo("Debe ingresar una fecha con formato válido", "error");
         return false;
     }
