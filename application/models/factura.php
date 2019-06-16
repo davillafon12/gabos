@@ -1896,7 +1896,7 @@ Class factura extends CI_Model
             }
             $row = $query->result()[0];
             $tipoIdentificacion = "fisico";
-            switch($row->EmisorTipoIdentificacion){
+            switch($row->ReceptorTipoIdentificacion){
                 case "01":
                     $tipoIdentificacion = "fisico";
                 break;
@@ -1910,7 +1910,7 @@ Class factura extends CI_Model
                     $tipoIdentificacion = "nite";
                 break;
             }
-            if($claveRs = $api->createClave($tipoIdentificacion, $row->EmisorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento)){
+            if($claveRs = $api->createClave($tipoIdentificacion, $row->ReceptorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento)){
                 $data = array(
                     "Clave" => $claveRs["clave"],
                     "ConsecutivoHacienda" => $claveRs["consecutivo"]
