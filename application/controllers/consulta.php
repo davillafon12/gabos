@@ -1113,36 +1113,39 @@ class consulta extends CI_Controller {
                     switch($tipo){
                         case "FE":
                             if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
-                                if($cliente = $this->cliente->getClientes_Cedula($factura->ReceptorIdentificacion)){
-                                    if($empresaData = $this->empresa->getEmpresa($factura->Sucursal)){
-                                        $facturaa = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
-                                        $cliente = $cliente[0];
-                                        $empresa = $empresaData[0];
-                                        $resFacturaElectronica = array("data" => array("situacion"=>"normal"));
-                                        $responseCheck = array("factura" => $facturaa, "cliente"=>$cliente, "empresa"=>$empresa);
-                                        $result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
-                                        if($result["status"]){ // Factura fue recibida y aceptada
-                                            $this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
-                                            if(!$responseCheck["cliente"]->NoReceptor){
-                                                require_once PATH_API_CORREO;
-                                                $apiCorreo = new Correo();
-                                                $attachs = array(
-                                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
-                                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
-                                                    $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
-                                                if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
-                                                    $this->factura->marcarEnvioCorreoFacturaElectronica($data['Sucursal_Codigo'], $responseCheck["factura"]->Factura_Consecutivo);
-                                                }
-                                            }
-                                        }
-                                        $retorno["status"] = 1;
-                                        unset($retorno["error"]);
-                                    }else{
-                                        $retorno["error"] = "No existe sucursal para dicha factura";
-                                    }
-                                }else{
-                                    $retorno["error"] = "No existe cliente para dicha factura";
-                                }
+								$cliente = array();
+								if($factura->ReceptorIdentificacion == null){
+									array_push($cliente, new stdClass());
+									$cliente[0]->NoReceptor = true;
+								}else{
+									$this->cliente->getClientes_Cedula($factura->ReceptorIdentificacion);
+								}
+								if($empresaData = $this->empresa->getEmpresa($factura->Sucursal)){
+									$facturaa = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
+									$cliente = $cliente[0];
+									$empresa = $empresaData[0];
+									$resFacturaElectronica = array("data" => array("situacion"=>"normal"));
+									$responseCheck = array("factura" => $facturaa, "cliente"=>$cliente, "empresa"=>$empresa);
+									$result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+									if($result["status"]){ // Factura fue recibida y aceptada
+										$this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+										if(!$responseCheck["cliente"]->NoReceptor){
+											require_once PATH_API_CORREO;
+											$apiCorreo = new Correo();
+											$attachs = array(
+												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
+											if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
+												$this->factura->marcarEnvioCorreoFacturaElectronica($data['Sucursal_Codigo'], $responseCheck["factura"]->Factura_Consecutivo);
+											}
+										}
+									}
+									$retorno["status"] = 1;
+									unset($retorno["error"]);
+								}else{
+									$retorno["error"] = "No existe sucursal para dicha factura";
+								}
                             }else{
                                 $retorno["error"] = "No existe factura electronica";
                             }
