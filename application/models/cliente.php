@@ -7,7 +7,7 @@ Class cliente extends CI_Model
 	function existe_Cliente($cedula){
 		$this -> db -> select('Cliente_Cedula');
 		$this -> db -> from('TB_03_Cliente');
-		$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($cedula));
+		$this -> db -> where('Cliente_Cedula', $cedula);
 		$this -> db -> limit(1);
 
 		$query = $this -> db -> get();
@@ -25,7 +25,7 @@ Class cliente extends CI_Model
 	function obtener_Imagen_Cliente($cedula){
 		$this -> db -> select('Cliente_Imagen_URL');
 		$this -> db -> from('TB_03_Cliente');
-		$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($cedula));
+		$this -> db -> where('Cliente_Cedula', $cedula);
 		$this -> db -> limit(1);
 
 		$query = $this -> db -> get();
@@ -51,35 +51,35 @@ Class cliente extends CI_Model
 			date_default_timezone_set("America/Costa_Rica");
 		    $Current_datetime = date("y/m/d : H:i:s", now());
 			$data = array(
-	                        'Cliente_Nombre'=>mysql_real_escape_string($nombre),
-	                        'Cliente_Apellidos'=>mysql_real_escape_string($apellidos), 
-							'Cliente_Cedula'=>mysql_real_escape_string($cedula),
-							'Cliente_Tipo_Cedula'=>mysql_real_escape_string($tipo_cedula),
+	                        'Cliente_Nombre'=>$nombre,
+	                        'Cliente_Apellidos'=>$apellidos, 
+							'Cliente_Cedula'=>$cedula,
+							'Cliente_Tipo_Cedula'=>$tipo_cedula,
 							'Fecha_Nacimiento'=>$fecha_nacimiento,
-							'Cliente_Celular'=>mysql_real_escape_string($celular),	
-							'Cliente_Telefono'=>mysql_real_escape_string($telefono),	
-							'Cliente_Fecha_Ingreso'=>mysql_real_escape_string($Current_datetime),	
-							'Cliente_Pais'=>mysql_real_escape_string($pais),	
-							'Cliente_Direccion'=>mysql_real_escape_string($direccion),	
-							'Cliente_Observaciones'=>mysql_real_escape_string($observaciones),	
-							'Cliente_Imagen_URL'=>mysql_real_escape_string($direccion_url_imagen),	
-							'Cliente_Correo_Electronico'=>mysql_real_escape_string($correo),	
-							'Cliente_Estado'=>mysql_real_escape_string($estado_Cliente),	
-							'Cliente_Calidad'=>mysql_real_escape_string($calidad_Cliente),								
-							'Cliente_Numero_Pago'=>mysql_real_escape_string($tipo_pago_Cliente),
-							'Cliente_EsSucursal' => mysql_real_escape_string($isSucursal),
-							'Cliente_EsExento' => mysql_real_escape_string($exento),
+							'Cliente_Celular'=>$celular,	
+							'Cliente_Telefono'=>$telefono,	
+							'Cliente_Fecha_Ingreso'=>$Current_datetime,	
+							'Cliente_Pais'=>$pais,	
+							'Cliente_Direccion'=>$direccion,	
+							'Cliente_Observaciones'=>$observaciones,	
+							'Cliente_Imagen_URL'=>$direccion_url_imagen,	
+							'Cliente_Correo_Electronico'=>$correo,	
+							'Cliente_Estado'=>$estado_Cliente,	
+							'Cliente_Calidad'=>$calidad_Cliente,								
+							'Cliente_Numero_Pago'=>$tipo_pago_Cliente,
+							'Cliente_EsSucursal' => $isSucursal,
+							'Cliente_EsExento' => $exento,
 							'Aplica_Retencion' => $aplicaRetencion,
 							'Sucursal_Ingreso' => $sucursalID,
 							'Usuario_Ingreso' => $usuarioID,
-                                                        'Codigo_Pais_Telefono' => mysql_real_escape_string($codptel),
-                                                        'Codigo_Pais_Celular' => mysql_real_escape_string($codpcel),
-                                                        'Codigo_Pais_Fax' => mysql_real_escape_string($codpfax),
-                                                        'Numero_Fax' => mysql_real_escape_string($fax),
-                                                        'Provincia' => mysql_real_escape_string($prov),
-                                                        'Canton' => mysql_real_escape_string($canton),
-                                                        'Distrito' => mysql_real_escape_string($distr),
-                                                        'Barrio' => mysql_real_escape_string($barrio),
+                                                        'Codigo_Pais_Telefono' => $codptel,
+                                                        'Codigo_Pais_Celular' => $codpcel,
+                                                        'Codigo_Pais_Fax' => $codpfax,
+                                                        'Numero_Fax' => $fax,
+                                                        'Provincia' => $prov,
+                                                        'Canton' => $canton,
+                                                        'Distrito' => $distr,
+                                                        'Barrio' => $barrio,
                                                         'NoReceptor' => $noReceptor
                             
 	                    );
@@ -93,8 +93,8 @@ Class cliente extends CI_Model
 			//Agregamos el descuento por separado a su tabla
 			include '/../controllers/get_session_data.php';
 			$arrayDescuento = array(
-								'Descuento_cliente_porcentaje' =>mysql_real_escape_string($descuento),
-								'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+								'Descuento_cliente_porcentaje' =>$descuento,
+								'TB_03_Cliente_Cliente_Cedula'=>$cedula,
 								'TB_02_Sucursal_Codigo'=>$data['Sucursal_Codigo']
 							);
 			$this->db->insert('TB_21_Descuento_Cliente',$arrayDescuento);
@@ -103,8 +103,8 @@ Class cliente extends CI_Model
 			
 			//AGREGAMOS TOPE CREDITO
 			$arrayCredito = array(
-								'Credito_Cliente_Cantidad_Maxima' => mysql_real_escape_string($maxCredito),
-								'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+								'Credito_Cliente_Cantidad_Maxima' => $maxCredito,
+								'TB_03_Cliente_Cliente_Cedula'=>$cedula,
 								'TB_02_Sucursal_Codigo'=>$data['Sucursal_Codigo']
 							);
 			$this->db->insert('TB_25_Maximo_Credito_Cliente',$arrayCredito);*/
@@ -132,7 +132,7 @@ Class cliente extends CI_Model
 	{
 		$this -> db -> select('*');
 		$this -> db -> from('TB_03_Cliente');		
-		$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($id));
+		$this -> db -> where('Cliente_Cedula', $id);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -151,7 +151,7 @@ Class cliente extends CI_Model
 	{
 		$this -> db -> select('Cliente_Estado');
 		$this -> db -> from('TB_03_Cliente');
-		$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($id));
+		$this -> db -> where('Cliente_Cedula', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		$result = $query->result();
@@ -170,7 +170,7 @@ Class cliente extends CI_Model
 	}
 	function actualizar($id, $data)
 	{
-			$this->db->where('Cliente_Cedula', mysql_real_escape_string($id));
+			$this->db->where('Cliente_Cedula', $id);
 			$this->db->update('TB_03_Cliente' ,$data);
 	}	
 	
@@ -178,7 +178,7 @@ Class cliente extends CI_Model
 	{
 		$this -> db -> select('*');
 		$this -> db -> from('TB_03_Cliente');
-		$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($id));
+		$this -> db -> where('Cliente_Cedula', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 				
@@ -195,7 +195,7 @@ Class cliente extends CI_Model
                             $actualizar = $row->NoReceptor ? false : $actualizar;
                             return array('nombre'=>$row->Cliente_Nombre." ".$row->Cliente_Apellidos,
 							 'estado'=>$row->Cliente_Estado,
-							 'descuento'=>$this->getClienteDescuento(mysql_real_escape_string($id), $data['Sucursal_Codigo']),
+							 'descuento'=>$this->getClienteDescuento($id, $data['Sucursal_Codigo']),
 							 'exento' => $row->Cliente_EsExento,
 							 'sucursal' => $row->Cliente_EsSucursal,
 							 'retencion' => $row->Aplica_Retencion,
@@ -229,7 +229,7 @@ Class cliente extends CI_Model
 	
 	function clienteEsExentoDeIVA($cedula){
 			$this -> db -> from('TB_03_Cliente');
-			$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($cedula));
+			$this -> db -> where('Cliente_Cedula', $cedula);
 			$this -> db -> limit(1);
 			$query = $this -> db -> get();
 			if($query->num_rows()==0)
@@ -242,7 +242,7 @@ Class cliente extends CI_Model
 	
 	function clienteEsExentoDeRetencion($cedula){
 			$this -> db -> from('TB_03_Cliente');
-			$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($cedula));
+			$this -> db -> where('Cliente_Cedula', $cedula);
 			$this -> db -> limit(1);
 			$query = $this -> db -> get();
 			if($query->num_rows()==0)
@@ -304,8 +304,8 @@ Class cliente extends CI_Model
 	function getDescuentosDeClienteConProductos($cedula, $sucursal){
 		$this -> db -> select('*');
 		$this -> db -> from('TB_17_Descuento_Producto');
-		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', $cedula);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$query = $this -> db -> get();
 		
 		if($query->num_rows()==0)
@@ -319,8 +319,8 @@ Class cliente extends CI_Model
 	function getDescuentosDeClienteConFamilias($cedula, $sucursal){
 		$this -> db -> select('*');
 		$this -> db -> from('TB_20_Descuento_Familia');
-		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', $cedula);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$query = $this -> db -> get();
 		
 		if($query->num_rows()==0)
@@ -335,7 +335,7 @@ Class cliente extends CI_Model
 	{
 		$this -> db -> select('Cliente_Numero_Pago');
 		$this -> db -> from('TB_03_Cliente');
-		$this -> db -> where('Cliente_Cedula', mysql_real_escape_string($id));
+		$this -> db -> where('Cliente_Cedula', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		
@@ -380,19 +380,19 @@ Class cliente extends CI_Model
 	
 	function agregarDescuentoCliente($descuento, $sucursal, $cedula){
 		$arrayDescuento = array(
-							'Descuento_cliente_porcentaje' =>mysql_real_escape_string($descuento),
-							'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+							'Descuento_cliente_porcentaje' =>$descuento,
+							'TB_03_Cliente_Cliente_Cedula'=>$cedula,
 							'TB_02_Sucursal_Codigo'=>$sucursal
 						);
 		$this->db->insert('TB_21_Descuento_Cliente',$arrayDescuento);
 	}
 	
 	function actualizarDescuentoCliente($descuento, $sucursal, $cedula){
-		$this->db->where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
-		$this->db->where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this->db->where('TB_03_Cliente_Cliente_Cedula', $cedula);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
 		
 		$arrayDescuento = array(
-							'Descuento_cliente_porcentaje' =>mysql_real_escape_string($descuento)
+							'Descuento_cliente_porcentaje' =>$descuento
 						);
 						
 		$this->db->update('TB_21_Descuento_Cliente' ,$arrayDescuento);
@@ -400,19 +400,19 @@ Class cliente extends CI_Model
 	
 	function agregarCreditoCliente($credito, $sucursal, $cedula){
 		$arrayDescuento = array(
-							'Credito_Cliente_Cantidad_Maxima' =>mysql_real_escape_string($credito),
-							'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+							'Credito_Cliente_Cantidad_Maxima' =>$credito,
+							'TB_03_Cliente_Cliente_Cedula'=>$cedula,
 							'TB_02_Sucursal_Codigo'=>$sucursal
 						);
 		$this->db->insert('TB_25_Maximo_Credito_Cliente',$arrayDescuento);
 	}
 	
 	function actualizarCreditoCliente($credito, $sucursal, $cedula){
-		$this->db->where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
-		$this->db->where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this->db->where('TB_03_Cliente_Cliente_Cedula', $cedula);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
 		
 		$arrayDescuento = array(
-							'Credito_Cliente_Cantidad_Maxima' =>mysql_real_escape_string($credito)
+							'Credito_Cliente_Cantidad_Maxima' =>$credito
 						);
 						
 		$this->db->update('TB_25_Maximo_Credito_Cliente' ,$arrayDescuento);
@@ -420,15 +420,15 @@ Class cliente extends CI_Model
 	
 	
 	function eliminarDescuentoProducto($idDescuentoProducto){
-		$this->db->delete('TB_17_Descuento_Producto', array('Descuento_producto_id' => mysql_real_escape_string($idDescuentoProducto))); 
+		$this->db->delete('TB_17_Descuento_Producto', array('Descuento_producto_id' => $idDescuentoProducto)); 
 	}
 	
 	function existeDescuentoConProducto($codigo, $cedula, $sucursal){
 		$this -> db -> select('*');
 		$this -> db -> from('TB_17_Descuento_Producto');
-		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
-		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', $cedula);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', $codigo);
 		$query = $this -> db -> get();
 		
 		if($query->num_rows()==0)
@@ -444,26 +444,26 @@ Class cliente extends CI_Model
 		$precioArticulo = $this->articulo->getPrecioProducto($codigo, $numeroPrecio, $sucursal);
 		$descuentoMonto = $precioArticulo - ($precioArticulo * ($descuentoPorcentaje)/100);
 		$arrayDescuento = array(
-							'TB_06_Articulo_Articulo_Codigo' =>mysql_real_escape_string($codigo),
-							'TB_03_Cliente_Cliente_Cedula'=> mysql_real_escape_string($cedula),
+							'TB_06_Articulo_Articulo_Codigo' =>$codigo,
+							'TB_03_Cliente_Cliente_Cedula'=> $cedula,
 							'Descuento_producto_monto' => $descuentoMonto,
 							'Descuento_producto_porcentaje' => $descuentoPorcentaje,
-							'TB_06_Articulo_TB_05_Familia_Familia_Codigo' => mysql_real_escape_string($familia),
+							'TB_06_Articulo_TB_05_Familia_Familia_Codigo' => $familia,
 							'TB_02_Sucursal_Codigo'=>$sucursal
 						);
 		$this->db->insert('TB_17_Descuento_Producto',$arrayDescuento);
 	}
 	
 	function eliminarDescuentoFamilia($idDescuentoFamilia){
-		$this->db->delete('TB_20_Descuento_Familia', array('Descuento_familia_id' => mysql_real_escape_string($idDescuentoFamilia))); 
+		$this->db->delete('TB_20_Descuento_Familia', array('Descuento_familia_id' => $idDescuentoFamilia)); 
 	}
 	
 	function existeDescuentoConFamilia($codigo, $cedula, $sucursal){
 		$this -> db -> select('*');
 		$this -> db -> from('TB_20_Descuento_Familia');
-		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
-		$this -> db -> where('TB_05_Familia_Familia_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', $cedula);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('TB_05_Familia_Familia_Codigo', $codigo);
 		$query = $this -> db -> get();
 		
 		if($query->num_rows()==0)
@@ -476,9 +476,9 @@ Class cliente extends CI_Model
 	
 	function agregarDescuentoDeFamilia($codigo, $cedula, $sucursal, $descuento){
 		$arrayDescuento = array(
-							'TB_05_Familia_Familia_Codigo' =>mysql_real_escape_string($codigo),
-							'TB_03_Cliente_Cliente_Cedula'=> mysql_real_escape_string($cedula),
-							'Descuento_familia_porcentaje' => mysql_real_escape_string($descuento),
+							'TB_05_Familia_Familia_Codigo' =>$codigo,
+							'TB_03_Cliente_Cliente_Cedula'=> $cedula,
+							'Descuento_familia_porcentaje' => $descuento,
 							'TB_05_Familia_TB_02_Sucursal_Codigo' => $sucursal,
 							'TB_02_Sucursal_Codigo'=>$sucursal
 						);
@@ -488,7 +488,7 @@ Class cliente extends CI_Model
 	function verificarSiYaTieneAutorizacion($cedula, $secuencia){
 		$this -> db -> select('*');
 		$this -> db -> from('TB_16_Authclientes');
-		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
+		$this -> db -> where('TB_03_Cliente_Cliente_Cedula', $cedula);
 		$this -> db -> where('AuthClientes_Seq', $secuencia);
 		$query = $this -> db -> get();
 		
@@ -502,10 +502,10 @@ Class cliente extends CI_Model
 	
 	function agregarAutorizacion($persona, $cedula){
 		$arrayAutorizacion = array(
-									'AuthClientes_Cedula'=>mysql_real_escape_string($persona['cedula']),
-									'AuthClientes_Nombre'=>mysql_real_escape_string($persona['nombre']),
-									'AuthClientes_Apellidos'=>mysql_real_escape_string($persona['apellido']),
-									'AuthClientes_Seq'=>mysql_real_escape_string($persona['secuencia']),
+									'AuthClientes_Cedula'=>$persona['cedula'],
+									'AuthClientes_Nombre'=>$persona['nombre'],
+									'AuthClientes_Apellidos'=>$persona['apellido'],
+									'AuthClientes_Seq'=>$persona['secuencia'],
 									'TB_03_Cliente_Cliente_Cedula'=>$cedula
 									);
 		$this->db->insert('TB_16_Authclientes',$arrayAutorizacion);
@@ -515,21 +515,21 @@ Class cliente extends CI_Model
 		$arrayAutorizacion = array(
 									'AuthClientes_Carta_URL'=>$Imagen_URL
 									);
-		$this->db->where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
-		$this->db->where('AuthClientes_Seq', mysql_real_escape_string($secuencia));
+		$this->db->where('TB_03_Cliente_Cliente_Cedula', $cedula);
+		$this->db->where('AuthClientes_Seq', $secuencia);
 									
 		$this->db->update('TB_16_Authclientes' ,$arrayAutorizacion);
 	}
 	
 	function actualizarAutorizacion($persona, $cedula){
 		$arrayAutorizacion = array(
-									'AuthClientes_Cedula'=>mysql_real_escape_string($persona['cedula']),
-									'AuthClientes_Nombre'=>mysql_real_escape_string($persona['nombre']),
-									'AuthClientes_Apellidos'=>mysql_real_escape_string($persona['apellido'])									
+									'AuthClientes_Cedula'=>$persona['cedula'],
+									'AuthClientes_Nombre'=>$persona['nombre'],
+									'AuthClientes_Apellidos'=>$persona['apellido']								
 									);
 									
-		$this->db->where('TB_03_Cliente_Cliente_Cedula', mysql_real_escape_string($cedula));
-		$this->db->where('AuthClientes_Seq', mysql_real_escape_string($persona['secuencia']));
+		$this->db->where('TB_03_Cliente_Cliente_Cedula', $cedula);
+		$this->db->where('AuthClientes_Seq', $persona['secuencia']);
 									
 		$this->db->update('TB_16_Authclientes' ,$arrayAutorizacion);
 	}

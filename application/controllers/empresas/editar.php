@@ -309,39 +309,39 @@ class editar extends CI_Controller {
         
         $codigo_actividad = trim($this->input->post("codigo_actividad"));
 		
-	$data_update['Sucursal_Cedula'] = mysql_real_escape_string($cedula_empresa);
-	$data_update['Sucursal_Nombre'] = mysql_real_escape_string($nombre_empresa);
-	$data_update['Sucursal_Telefono'] = mysql_real_escape_string($telefono_empresa);
-	$data_update['Sucursal_Fax'] = mysql_real_escape_string($fax_empresa);
-	$data_update['Sucursal_Email'] = mysql_real_escape_string($email_empresa);
-	$data_update['Sucursal_Direccion'] = mysql_real_escape_string($direccion_empresa);
-	$data_update['Sucursal_Administrador'] = mysql_real_escape_string($administrador_empresa);
-	$data_update['Sucursal_Observaciones'] = mysql_real_escape_string($observaciones_empresa);
-	$data_update['Sucursal_leyenda_tributacion'] = mysql_real_escape_string($leyenda_tributacion);
+	$data_update['Sucursal_Cedula'] = $cedula_empresa;
+	$data_update['Sucursal_Nombre'] = $nombre_empresa;
+	$data_update['Sucursal_Telefono'] = $telefono_empresa;
+	$data_update['Sucursal_Fax'] = $fax_empresa;
+	$data_update['Sucursal_Email'] = $email_empresa;
+	$data_update['Sucursal_Direccion'] = $direccion_empresa;
+	$data_update['Sucursal_Administrador'] = $administrador_empresa;
+	$data_update['Sucursal_Observaciones'] = $observaciones_empresa;
+	$data_update['Sucursal_leyenda_tributacion'] = $leyenda_tributacion;
         
-        $data_update['Usuario_Tributa'] = mysql_real_escape_string($user_tributa);
-        $data_update['Pass_Tributa'] = mysql_real_escape_string($pass_tributa);
-        $data_update['Ambiente_Tributa'] = mysql_real_escape_string($ambiente_tributa);
-        $data_update['Pass_Certificado_Tributa'] = mysql_real_escape_string($pin_tributa);
+        $data_update['Usuario_Tributa'] = $user_tributa;
+        $data_update['Pass_Tributa'] = $pass_tributa;
+        $data_update['Ambiente_Tributa'] = $ambiente_tributa;
+        $data_update['Pass_Certificado_Tributa'] = $pin_tributa;
         
-        $data_update['Provincia'] = mysql_real_escape_string($provincia);
-        $data_update['Canton'] = mysql_real_escape_string($canton);
-        $data_update['Distrito'] = mysql_real_escape_string($distrito);
-        $data_update['Barrio'] = mysql_real_escape_string($barrio);
-        $data_update['Tipo_Cedula'] = mysql_real_escape_string($tipo_identificacion);
-        $data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($cod_telefono_empresa);
-        $data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($cod_fax_empresa);
+        $data_update['Provincia'] = $provincia;
+        $data_update['Canton'] = $canton;
+        $data_update['Distrito'] = $distrito;
+        $data_update['Barrio'] = $barrio;
+        $data_update['Tipo_Cedula'] = $tipo_identificacion;
+        $data_update['Codigo_Pais_Telefono'] = $cod_telefono_empresa;
+        $data_update['Codigo_Pais_Fax'] = $cod_fax_empresa;
 	
-        $data_update['CodigoActividad'] = mysql_real_escape_string($codigo_actividad);
+        $data_update['CodigoActividad'] = $codigo_actividad;
         
-	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
+	$this->empresa->actualizar($id_empresa, $data_update);
 	
 	
 	$this->empresa->actualizarLigaEmpresaCliente($id_empresa, $liga_cliente);
 	
 	
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".mysql_real_escape_string($id_empresa),$data['Sucursal_Codigo'],'edicion');
+	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".$id_empresa,$data['Sucursal_Codigo'],'edicion');
 	
 	redirect('empresas/editar', 'location');
  }
@@ -361,7 +361,7 @@ class editar extends CI_Controller {
                         $this->empresa->storeFile($name.".p12", "cer", $oldLocation);
                         $params = array("Token_Certificado_Tributa" => $name);
                         $this->empresa->actualizar($id_empresa, $params);
-                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario subió el certificado con token : ".mysql_real_escape_string($name),$data['Sucursal_Codigo'],'edicion');
+                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario subió el certificado con token : ".$name,$data['Sucursal_Codigo'],'edicion');
                         redirect('empresas/editar/edicion?id='.$id_empresa, 'location');
                     }else{
                         // No tiene el formato adecuado de .p12

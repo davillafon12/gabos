@@ -117,7 +117,7 @@ class registrar extends CI_Controller {
                                         $barrio,
                                         $codigo_actividad))
 	{ //Si se ingreso bien a la BD
-			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la empresa ".mysql_real_escape_string($nombre_empresa)." codigo: ".$id_empresa,$data['Sucursal_Codigo'],'registro');
+			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la empresa ".$nombre_empresa." codigo: ".$id_empresa,$data['Sucursal_Codigo'],'registro');
 			
 			if($cliente_liga != ""){
 				if($this->cliente->existe_Cliente($cliente_liga)){

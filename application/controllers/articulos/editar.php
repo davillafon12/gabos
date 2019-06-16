@@ -509,18 +509,18 @@ class editar extends CI_Controller {
 	$observaciones_empresa = $this->input->post('observaciones');
 	$direccion_empresa = $this->input->post('direccion');
 		
-	$data_update['Sucursal_Nombre'] = mysql_real_escape_string($nombre_empresa);
-	$data_update['Sucursal_Telefono'] = mysql_real_escape_string($telefono_empresa);
-	$data_update['Sucursal_Direccion'] = mysql_real_escape_string($direccion_empresa);
-	$data_update['Sucursal_Observaciones'] = mysql_real_escape_string($observaciones_empresa);
+	$data_update['Sucursal_Nombre'] = $nombre_empresa);
+	$data_update['Sucursal_Telefono'] = $telefono_empresa);
+	$data_update['Sucursal_Direccion'] = $direccion_empresa);
+	$data_update['Sucursal_Observaciones'] = $observaciones_empresa);
 	
 	//echo $id_empresa;
 	//echo $nombre_empresa;
 	
-	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
+	$this->empresa->actualizar($id_empresa), $data_update);
 	
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".mysql_real_escape_string($id_empresa),$data['Sucursal_Codigo'],'edicion');
+	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".$id_empresa),$data['Sucursal_Codigo'],'edicion');
 	
 	redirect('empresas/editar', 'location');
 	*/

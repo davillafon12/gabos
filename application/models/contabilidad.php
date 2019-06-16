@@ -5,7 +5,7 @@ Class contabilidad extends CI_Model
 	 
 	
 	function existeFacturaPorId($id){
-		$this->db->where('Credito_Id', mysql_real_escape_string($id));
+		$this->db->where('Credito_Id', $id);
 		$this->db->from('tb_24_credito');
 		$this->db-> limit(1);
 		$query = $this->db->get();

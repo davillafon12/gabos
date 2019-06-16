@@ -9,8 +9,8 @@ Class articulo extends CI_Model
 		
 		
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($Codigo));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Articulo_Codigo', $Codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		
 		$this -> db -> limit(1);
 
@@ -97,19 +97,19 @@ Class articulo extends CI_Model
 		}
 		else{
 			$data = array(
-	                        'Articulo_Codigo'=>mysql_real_escape_string($articulo_Codigo),
-							'Articulo_Descripcion'=>mysql_real_escape_string($articulo_Descripcion),                        
-							'Articulo_Codigo_Barras'=>mysql_real_escape_string($articulo_Codigo_Barras),                        
-							'Articulo_Cantidad_Inventario'=>mysql_real_escape_string($articulo_Cantidad_Inventario),                        
-							'Articulo_Cantidad_Defectuoso'=>mysql_real_escape_string($articulo_Cantidad_Defectuoso),                        
-							'Articulo_Descuento'=>mysql_real_escape_string($articulo_Descuento), 
-							'Articulo_Imagen_URL'=>mysql_real_escape_string($Articulo_Imagen_URL),
-							'Articulo_Exento'=>mysql_real_escape_string($Articulo_Exento), 			
-							'Articulo_No_Retencion'=>mysql_real_escape_string($retencion), 			                       
-							'TB_05_Familia_Familia_Codigo'=>mysql_real_escape_string($TB_05_Familia_Familia_Codigo),
-							'TB_02_Sucursal_Codigo'=>mysql_real_escape_string($TB_02_Sucursal_Codigo),
-                                                        'TipoCodigo'=>mysql_real_escape_string($tipo_codigo),
-                                                        'UnidadMedida'=>  mysql_real_escape_string($unidadmedida)
+	                        'Articulo_Codigo'=>$articulo_Codigo,
+							'Articulo_Descripcion'=>$articulo_Descripcion,                        
+							'Articulo_Codigo_Barras'=>$articulo_Codigo_Barras,                        
+							'Articulo_Cantidad_Inventario'=>$articulo_Cantidad_Inventario,                        
+							'Articulo_Cantidad_Defectuoso'=>$articulo_Cantidad_Defectuoso,                        
+							'Articulo_Descuento'=>$articulo_Descuento, 
+							'Articulo_Imagen_URL'=>$Articulo_Imagen_URL,
+							'Articulo_Exento'=>$Articulo_Exento, 			
+							'Articulo_No_Retencion'=>$retencion, 			                       
+							'TB_05_Familia_Familia_Codigo'=>$TB_05_Familia_Familia_Codigo,
+							'TB_02_Sucursal_Codigo'=>$TB_02_Sucursal_Codigo,
+                                                        'TipoCodigo'=>$tipo_codigo,
+                                                        'UnidadMedida'=>  $unidadmedida
 							
 	                    );
 			try{
@@ -136,8 +136,8 @@ Class articulo extends CI_Model
 
 	function actualizar($codigo, $sucursal, $data)
 	{
-		$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this->db->where('Articulo_Codigo', $codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->update('TB_06_Articulo' ,$data);
 	}	
 	
@@ -157,7 +157,7 @@ Class articulo extends CI_Model
 	{
 		$this -> db -> select('*');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -174,8 +174,8 @@ Class articulo extends CI_Model
 	{
 		$this -> db -> select('*');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Articulo_Codigo', $codigo);
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -192,9 +192,9 @@ Class articulo extends CI_Model
 	{
 		$this -> db -> select('*');
 		$this -> db -> from('TB_08_Articulos_Factura');
-		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
-		$this -> db -> where('Articulo_Factura_Codigo', mysql_real_escape_string($codigo));
-		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', mysql_real_escape_string($consecutivo));
+		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Articulo_Factura_Codigo', $codigo);
+		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -215,9 +215,9 @@ Class articulo extends CI_Model
 	{
 		$this -> db -> select('Articulo_Factura_Cantidad');
 		$this -> db -> from('TB_08_Articulos_Factura');
-		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
-		$this -> db -> where('Articulo_Factura_Codigo', mysql_real_escape_string($codigo));
-		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', mysql_real_escape_string($consecutivo));
+		$this -> db -> where('TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Articulo_Factura_Codigo', $codigo);
+		$this -> db -> where('TB_07_Factura_Factura_Consecutivo', $consecutivo);
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -237,11 +237,11 @@ Class articulo extends CI_Model
 	function registrar_Precio_Articulo($Precio_Numero, $Precio_Monto, $TB_06_Articulo_Articulo_Codigo, $TB_06_Articulo_TB_05_Familia_Familia_Codigo, $sucursal)
 	{
 		$data = array(
-                        'Precio_Numero'=>mysql_real_escape_string($Precio_Numero),
-						'Precio_Monto'=>mysql_real_escape_string($Precio_Monto),                        
-						'TB_06_Articulo_Articulo_Codigo'=>mysql_real_escape_string($TB_06_Articulo_Articulo_Codigo),
-						'TB_06_Articulo_TB_05_Familia_Familia_Codigo'=>mysql_real_escape_string($TB_06_Articulo_TB_05_Familia_Familia_Codigo),                        
-						'TB_06_Articulo_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal)
+                        'Precio_Numero'=>$Precio_Numero,
+						'Precio_Monto'=>$Precio_Monto,                        
+						'TB_06_Articulo_Articulo_Codigo'=>$TB_06_Articulo_Articulo_Codigo,
+						'TB_06_Articulo_TB_05_Familia_Familia_Codigo'=>$TB_06_Articulo_TB_05_Familia_Familia_Codigo,                        
+						'TB_06_Articulo_TB_02_Sucursal_Codigo'=>$sucursal
                     );
 		try{
         	$this->db->insert('TB_11_Precios',$data); 
@@ -257,8 +257,8 @@ Class articulo extends CI_Model
 
 	/*function actualizar_Precio_Articulo($codigo, $data, $sucursal)
 	{
-			$this->db->where('TB_06_Articulo_Articulo_Codigo', mysql_real_escape_string($codigo));
-			$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+			$this->db->where('TB_06_Articulo_Articulo_Codigo', $codigo);
+			$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', $sucursal);
 			$this->db->update('TB_11_Precios' ,$data);
 	}*/	
 
@@ -272,14 +272,14 @@ Class articulo extends CI_Model
 		//include '/../controllers/get_session_data.php';
 		$this -> db -> select('Articulo_Codigo, Articulo_Descripcion, Articulo_Cantidad_Inventario, Articulo_Descuento, TB_05_Familia_Familia_Codigo, Articulo_Imagen_URL, Articulo_Exento');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('Articulo_Codigo', $codigo);
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		//$this -> db -> where('TB_05_Familia_Familia_Codigo', $data['']);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
 		
-		$articuloXML;
+		$articuloXML = "";
 		
 		//Traemos el numero de precio utilizado por este cliente
 		$numero_precio=$this->getNumeroPrecio($cedula);
@@ -316,7 +316,7 @@ Class articulo extends CI_Model
 	function getArticuloArray($codigo, $cedula, $sucursal)
 	{		
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));
+		$this -> db -> where('Articulo_Codigo', $codigo);
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
@@ -465,9 +465,9 @@ Class articulo extends CI_Model
 	{
 		$this -> db -> select('Precio_Monto');
 		$this -> db -> from('TB_11_Precios');
-		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', mysql_real_escape_string($codigo_articulo));
-		$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
-		$this -> db -> where('Precio_Numero', mysql_real_escape_string($numero_precio));
+		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', $codigo_articulo);
+		$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Precio_Numero', $numero_precio);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		if($query -> num_rows() != 0)
@@ -512,15 +512,15 @@ Class articulo extends CI_Model
 					//echo 'Paso 3';
 					$nuevoInventario = $cantidadInventario-$cantidad;
 					$data['Articulo_Cantidad_Inventario']=$nuevoInventario;
-					$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
-					$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+					$this->db->where('Articulo_Codigo', $codigo_producto);
+					$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 			        $this->db->update('TB_06_Articulo' ,$data);
 					return '3'; //Numero que afirma un buen ingreso
 				}
 			}
 		}
 		/*$data['Articulo_Cantidad_Inventario']=$cantidad;
-		$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
+		$this->db->where('Articulo_Codigo', $codigo_producto);
 		$this->db->update('TB_06_Articulo' ,$data);
 		return '-3';*/
 	}
@@ -545,20 +545,20 @@ Class articulo extends CI_Model
 				$nuevoInventario = $cantidadInventario+$cantidad;
 				//echo 'Actual: '.$cantidadInventario.' Siguiente: '.$nuevoInventario
 				$data['Articulo_Cantidad_Inventario']=$nuevoInventario;
-				$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
+				$this->db->where('Articulo_Codigo', $codigo_producto);
 				$this->db->update('TB_06_Articulo' ,$data);
 				return '3'; //Numero que afirma un buen ingreso				
 			}*/
 			$nuevoInventario = $cantidadInventario+$cantidad;
 			//echo 'Actual: '.$cantidadInventario.' Siguiente: '.$nuevoInventario
 			$data['Articulo_Cantidad_Inventario']=$nuevoInventario;
-			$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
-			$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+			$this->db->where('Articulo_Codigo', $codigo_producto);
+			$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 			$this->db->update('TB_06_Articulo' ,$data);
 			return '3'; //Numero que afirma un buen ingreso
 		}
 		/*$data['Articulo_Cantidad_Inventario']=$cantidad;
-		$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
+		$this->db->where('Articulo_Codigo', $codigo_producto);
 		$this->db->update('TB_06_Articulo' ,$data);
 		return '-3';*/
 	}
@@ -645,20 +645,20 @@ Class articulo extends CI_Model
 				$nuevoInventario = $cantidadInventario+$cantidad;
 				//echo 'Actual: '.$cantidadInventario.' Siguiente: '.$nuevoInventario
 				$data['Articulo_Cantidad_Inventario']=$nuevoInventario;
-				$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
+				$this->db->where('Articulo_Codigo', $codigo_producto);
 				$this->db->update('TB_06_Articulo' ,$data);
 				return '3'; //Numero que afirma un buen ingreso				
 			}*/
 			$nuevoInventario = $cantidadInventario+$cantidad;
 			//echo 'Actual: '.$cantidadInventario.' Siguiente: '.$nuevoInventario
 			$data['Articulo_Cantidad_Defectuoso']=$nuevoInventario;
-			$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
-			$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+			$this->db->where('Articulo_Codigo', $codigo_producto);
+			$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 			$this->db->update('TB_06_Articulo' ,$data);
 			return '3'; //Numero que afirma un buen ingreso
 		}
 		/*$data['Articulo_Cantidad_Inventario']=$cantidad;
-		$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
+		$this->db->where('Articulo_Codigo', $codigo_producto);
 		$this->db->update('TB_06_Articulo' ,$data);
 		return '-3';*/
 	}
@@ -681,8 +681,8 @@ Class articulo extends CI_Model
 			$nuevoInventario = $cantidadInventario-$cantidad;
 			//echo 'Actual: '.$cantidadInventario.' Siguiente: '.$nuevoInventario
 			$data['Articulo_Cantidad_Defectuoso']=$nuevoInventario;
-			$this->db->where('Articulo_Codigo', mysql_real_escape_string($codigo_producto));
-			$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+			$this->db->where('Articulo_Codigo', $codigo_producto);
+			$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 			$this->db->update('TB_06_Articulo' ,$data);
 			return '3'; //Numero que afirma un buen ingreso
 		}
@@ -691,8 +691,8 @@ Class articulo extends CI_Model
 	function inventarioActual($codigo, $sucursal){
 		$this -> db -> select('Articulo_Cantidad_Inventario');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Articulo_Codigo', $codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -714,8 +714,8 @@ Class articulo extends CI_Model
 	function inventarioDefectuosoActual($codigo, $sucursal){
 		$this -> db -> select('Articulo_Cantidad_Defectuoso');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Articulo_Codigo', $codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -737,8 +737,8 @@ Class articulo extends CI_Model
 	function getArticuloDescripcion($codigo, $sucursal){
 		$this -> db -> select('Articulo_Descripcion');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));		
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Articulo_Codigo', $codigo);		
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		
@@ -759,8 +759,8 @@ Class articulo extends CI_Model
         function getArticuloTipoCodigo($codigo, $sucursal){
 		$this -> db -> select('TipoCodigo');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));		
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Articulo_Codigo', $codigo);		
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		
@@ -781,8 +781,8 @@ Class articulo extends CI_Model
         function getArticuloUnidadMedida($codigo, $sucursal){
 		$this -> db -> select('UnidadMedida');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));		
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Articulo_Codigo', $codigo);		
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		
@@ -803,8 +803,8 @@ Class articulo extends CI_Model
 	function getArticuloImagen($codigo, $sucursal){
 		$this -> db -> select('Articulo_Imagen_URL');
 		$this -> db -> from('TB_06_Articulo');
-		$this -> db -> where('Articulo_Codigo', mysql_real_escape_string($codigo));		
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Articulo_Codigo', $codigo);		
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		

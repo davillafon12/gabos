@@ -60,7 +60,7 @@ PARA:
 			<p class="titulo_wrapper">Comprobantes Electrónicos</p>
 			<hr class="division_wrapper">
                             <?php 
-                                $documentoSeleccionado = @$_GET["d"];
+                                $documentoSeleccionado = isset($_GET["d"]) ? $_GET["d"] : "";
                             ?>
 			<div id="contenido" class="contenido">
                             <label class='label-documento'>Tipo Documento:</label>

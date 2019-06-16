@@ -92,18 +92,18 @@ Class factura extends CI_Model
                 date_default_timezone_set("America/Costa_Rica");
                 $Current_datetime = date("y/m/d : H:i:s", now());
                 $dataFactura = array(
-                        'Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
-                        'Factura_Observaciones'=>mysql_real_escape_string($observaciones), 
+                        'Factura_Consecutivo'=>$consecutivo,
+                        'Factura_Observaciones'=>$observaciones, 
                         'Factura_Estado'=>'pendiente',
-                        'Factura_Moneda'=>mysql_real_escape_string($currency),
+                        'Factura_Moneda'=>$currency,
                         'Factura_porcentaje_iva'=>$c_array['iva'],
                         'Factura_tipo_cambio'=>$c_array['dolar_venta'],
-                        'Factura_Nombre_Cliente'=>mysql_real_escape_string($nombre),
+                        'Factura_Nombre_Cliente'=>$nombre,
                         'TB_02_Sucursal_Codigo'=>$sucursal,
                         'Factura_Vendedor_Codigo'=>$vendedor,	
                         'Factura_Vendedor_Sucursal'=>$sucursalVendedor,	
                         'Factura_Fecha_Hora'=>$Current_datetime,
-                        'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+                        'TB_03_Cliente_Cliente_Cedula'=>$cedula,
                         'Factura_Cliente_Exento'=>$clienteArray['exento'],
                         'Factura_Cliente_No_Retencion'=>$clienteArray['retencion'],
                         'Factura_Cliente_Sucursal'=>$clienteArray['sucursal']												
@@ -169,21 +169,21 @@ Class factura extends CI_Model
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$dataItem = array(
-	                        'Articulo_Factura_Codigo'=>mysql_real_escape_string($codigo),
-	                        'Articulo_Factura_Descripcion'=>mysql_real_escape_string($descripcion), 
-                                'Articulo_Factura_Cantidad'=>mysql_real_escape_string($cantidad),
-                                'Articulo_Factura_Descuento'=>mysql_real_escape_string($descuento),
-                                'Articulo_Factura_Exento'=>mysql_real_escape_string($exento),
-                                'Articulo_Factura_No_Retencion'=>mysql_real_escape_string($retencion),
-                                'Articulo_Factura_Precio_Unitario'=>mysql_real_escape_string($precio),
+	                        'Articulo_Factura_Codigo'=>$codigo,
+	                        'Articulo_Factura_Descripcion'=>$descripcion, 
+                                'Articulo_Factura_Cantidad'=>$cantidad,
+                                'Articulo_Factura_Descuento'=>$descuento,
+                                'Articulo_Factura_Exento'=>$exento,
+                                'Articulo_Factura_No_Retencion'=>$retencion,
+                                'Articulo_Factura_Precio_Unitario'=>$precio,
                                 'Articulo_Factura_Precio_Final' => 	$precioFinal,
-                                'Articulo_Factura_Imagen'=>mysql_real_escape_string($imagen),
-                                'TB_07_Factura_Factura_Consecutivo'=>mysql_real_escape_string($consecutivo),
-                                'TB_07_Factura_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
-                                'TB_07_Factura_Factura_Vendedor_Codigo'=>mysql_real_escape_string($vendedor),
-                                'TB_07_Factura_Factura_Vendedor_Sucursal'=>mysql_real_escape_string($sucursalVendedor),
-                                'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cliente),
-                                'TipoCodigo' => mysql_real_escape_string($tipoCodigo),
+                                'Articulo_Factura_Imagen'=>$imagen,
+                                'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
+                                'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
+                                'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
+                                'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursalVendedor,
+                                'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>$cliente,
+                                'TipoCodigo' => $tipoCodigo,
                                 'UnidadMedida' => $unidadMedida
 	                    );			
 	        $this->db->insert('TB_08_Articulos_Factura',$dataItem);
@@ -558,8 +558,8 @@ Class factura extends CI_Model
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
-		$this->db->where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
-		$this->db->where('Factura_Consecutivo', mysql_real_escape_string($consecutivo));
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('Factura_Consecutivo', $consecutivo);
 		$this->db->update('TB_07_Factura' ,$datos);
 	}
 	
@@ -569,8 +569,8 @@ Class factura extends CI_Model
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$dataFactura = array(
-						'Tarjeta_Numero_Transaccion'=>mysql_real_escape_string($transaccion),
-						'Tarjeta_Comision_Banco'=>mysql_real_escape_string($comision), 
+						'Tarjeta_Numero_Transaccion'=>$transaccion,
+						'Tarjeta_Comision_Banco'=>$comision, 
 						'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
 						'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
@@ -588,8 +588,8 @@ Class factura extends CI_Model
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$dataFactura = array(
-						'Cheque_Numero'=>mysql_real_escape_string($transaccion), 
-						'Banco'=>mysql_real_escape_string($banco), 
+						'Cheque_Numero'=>$transaccion, 
+						'Banco'=>$banco, 
 						'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
 						'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
@@ -605,7 +605,7 @@ Class factura extends CI_Model
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$dataFactura = array(
-						'Deposito_Numero_Transaccion'=>mysql_real_escape_string($transaccion), 
+						'Deposito_Numero_Transaccion'=>$transaccion, 
 						'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
 						'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
@@ -626,7 +626,7 @@ Class factura extends CI_Model
 		}
 		//Creamos el pago mixto
 		$dataFactura = array(
-						'Mixto_Cantidad_Paga'=>mysql_real_escape_string($cantidadPagoTarjeta), 
+						'Mixto_Cantidad_Paga'=>$cantidadPagoTarjeta, 
 						'TB_18_Tarjeta_Tarjeta_Id'=>$tarjeta,
 						'TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
@@ -1228,7 +1228,7 @@ Class factura extends CI_Model
                         $this->db->update("tb_55_factura_electronica", $data);
                         
                         // Guardarmos el XML firmado en un archivo
-                        $this->storeFile($factura->Clave.".xml", "fe", null, base64_decode($xmlFirmado), $factura->FechaEmision);
+                        $this->storeFile($factura->Clave.".xml", "fe", null, base64_decode($xmlFirmado, $factura->FechaEmision));
                         
                         return $data;
                     }
@@ -1316,8 +1316,8 @@ Class factura extends CI_Model
                 log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
                 
                 // Guardarmos el XML firmado en un archivo
-                //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
-                $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($xmlRespuesta), $factura->FechaEmision);
+                //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta);
+                $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($xmlRespuesta, $factura->FechaEmision));
                 
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
@@ -2040,7 +2040,7 @@ Class factura extends CI_Model
                     $this->db->update("tb_61_factura_compra_electronica", $data);
                     
                     // Guardarmos el XML firmado en un archivo
-                    $this->storeFile($factura->Clave.".xml", "fec", null, base64_decode($xmlFirmado), $factura->FechaEmision);
+                    $this->storeFile($factura->Clave.".xml", "fec", null, base64_decode($xmlFirmado, $factura->FechaEmision));
                     
                     return $data;
                 }
@@ -2209,8 +2209,8 @@ Class factura extends CI_Model
             log_message('error', "Se obtuvo el estado de hacienda <$estado> FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
             
             // Guardarmos el XML firmado en un archivo
-            //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta));
-            $this->storeFile($factura->Clave."-respuesta.xml", "fec", null, base64_decode($xmlRespuesta), $factura->FechaEmision);
+            //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta);
+            $this->storeFile($factura->Clave."-respuesta.xml", "fec", null, base64_decode($xmlRespuesta, $factura->FechaEmision));
             
             return array("status" => true, "estado_hacienda" => $estado);
         }else{

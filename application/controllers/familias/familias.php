@@ -278,18 +278,18 @@ class familias extends CI_Controller {
 		$sucursal_familia = $this->input->post('sucursal');
 		
 			
-		$data_update['Familia_Nombre'] = mysql_real_escape_string($nombre_familia);
-		//$data_update['Familia_Descuento'] = mysql_real_escape_string($descuento_familia);
-		//$data_update['Familia_Direccion'] = mysql_real_escape_string($direccion_empresa);
-		$data_update['Familia_Observaciones'] = mysql_real_escape_string($observaciones_familia);
-        //$data_update['TB_02_Sucursal_Codigo'] = mysql_real_escape_string($sucursal_familia);
+		$data_update['Familia_Nombre'] = $nombre_familia;
+		//$data_update['Familia_Descuento'] = $descuento_familia);
+		//$data_update['Familia_Direccion'] = $direccion_empresa);
+		$data_update['Familia_Observaciones'] = $observaciones_familia;
+        //$data_update['TB_02_Sucursal_Codigo'] = $sucursal_familia);
 		//echo $id_empresa;
 		//echo $nombre_empresa;
 
-		$this->familia->actualizar(mysql_real_escape_string($id_familia), $sucursal_familia, $data_update);
+		$this->familia->actualizar($id_familia, $sucursal_familia, $data_update);
 
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la familia codigo: ".mysql_real_escape_string($id_familia),$data['Sucursal_Codigo'],'edicion');
+		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la familia codigo: ".$id_familia,$data['Sucursal_Codigo'],'edicion');
 
 		redirect('familias/familias', 'location');
 	}

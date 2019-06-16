@@ -278,7 +278,7 @@ class caja extends CI_Controller {
 
                 $Current_datetime = date("y/m/d : H:i:s", $resFacturaElectronica["data"]["fecha"]);
                 $datos = array(         
-                        'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
+                        'Factura_Tipo_Pago'=>$tipoPago['tipo'],
                         'Factura_Fecha_Hora'=>$Current_datetime, 
                         'Factura_Estado'=>$estadoFactura,
                         'Factura_Entregado_Vuelto' => $vuelto,
@@ -1117,9 +1117,9 @@ class caja extends CI_Controller {
 	
 	function imprimirFactura(){
 		if(isset($_GET['consecutivo'])&&isset($_GET['sucursal'])&&isset($_GET['tipo'])){
-			$consecutivo = 	mysql_real_escape_string($_GET['consecutivo']);
-			$sucursal = mysql_real_escape_string($_GET['sucursal']);
-			$tipo = mysql_real_escape_string($_GET['tipo']);
+			$consecutivo = 	$_GET['consecutivo'];
+			$sucursal = $_GET['sucursal'];
+			$tipo = $_GET['tipo'];
 			
 			if($empresa = $this->empresa->getEmpresa($sucursal)){
 				if($facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal)){

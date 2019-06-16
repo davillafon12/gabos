@@ -52,13 +52,13 @@ Class familia extends CI_Model
 		date_default_timezone_set("America/Costa_Rica");
 	    $Current_datetime = date("y/m/d : H:i:s", now());
 		$data = array(
-                        'Familia_Codigo'=>mysql_real_escape_string($id_familia),
-                        'Familia_Nombre'=>mysql_real_escape_string($nombre_familia), 
-						//'Familia_Descuento'=>mysql_real_escape_string($descuento_familia),						
+                        'Familia_Codigo'=>$id_familia,
+                        'Familia_Nombre'=>$nombre_familia, 
+						//'Familia_Descuento'=>$descuento_familia,						
 						'Familia_Fecha_Creacion'=>$Current_datetime,
-						'Familia_Observaciones'=>mysql_real_escape_string($observaciones_familia),	
-						'TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal_familia),
-						'Familia_Creador'=>mysql_real_escape_string($nombre),
+						'Familia_Observaciones'=>$observaciones_familia,	
+						'TB_02_Sucursal_Codigo'=>$sucursal_familia,
+						'Familia_Creador'=>$nombre,
 						'Familia_Estado'=> 1
                     );
 		try{
@@ -99,7 +99,7 @@ Class familia extends CI_Model
 	function getFamilia($id, $sucursal)
 	{
 		$this -> db -> from('TB_05_familia');		
-		$this -> db -> where('Familia_Codigo', mysql_real_escape_string($id));
+		$this -> db -> where('Familia_Codigo', $id);
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		
@@ -119,7 +119,7 @@ Class familia extends CI_Model
 	{
 		$this -> db -> select('Familia_Nombre');
 		$this -> db -> from('TB_05_Familia');		
-		$this -> db -> where('Familia_Codigo', mysql_real_escape_string($id));
+		$this -> db -> where('Familia_Codigo', $id);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -135,8 +135,8 @@ Class familia extends CI_Model
 	{
 		$this -> db -> select('Familia_Nombre');
 		$this -> db -> from('TB_05_Familia');		
-		$this -> db -> where('Familia_Codigo', mysql_real_escape_string($id));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Familia_Codigo', $id);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -156,7 +156,7 @@ Class familia extends CI_Model
 		$this -> db -> select('Familia_Fecha_Desactivacion');
 		$this -> db -> from('TB_05_Familia');
 		$this -> db -> where('Familia_Codigo', $codigo);
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		$result = $query->result();
@@ -176,8 +176,8 @@ Class familia extends CI_Model
 	
 	function actualizar($codigo, $sucursal, $data)
 	{		    
-		$this->db->where('Familia_Codigo', mysql_real_escape_string($codigo));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this->db->where('Familia_Codigo', $codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->update('TB_05_Familia' ,$data);		
 	}
 	

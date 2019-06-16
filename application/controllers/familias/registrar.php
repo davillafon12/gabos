@@ -75,14 +75,14 @@ class registrar extends CI_Controller {
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	if($this->familia->registrar($id_familia, $nombre_familia, $observaciones_familia, $sucursal_familia, $nombre))
 	{ //Si se ingreso bien a la BD
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la familia ".mysql_real_escape_string($nombre_familia)." codigo: ".mysql_real_escape_string($id_familia),$data['Sucursal_Codigo'],'registro');
+				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la familia ".$nombre_familia." codigo: ".$id_familia,$data['Sucursal_Codigo'],'registro');
 
 		//Titulo de la pagina
 		//echo "PASO POR AQUI";
 		/*$data['Titulo_Pagina'] = "Transacción Exitosa";
 	
 	    $nombre_empresa = $this->empresa->getNombreEmpresa($sucursal_familia);
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la familia ".mysql_real_escape_string($nombre_familia)." codigo: ".mysql_real_escape_string($id_familia),$data['Sucursal_Codigo'],'registro');
+		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la familia ".$nombre_familia)." codigo: ".$id_familia),$data['Sucursal_Codigo'],'registro');
 	    $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso de la empresa ".$nombre_familia." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
 		                         <div class='Informacion'>
 					             <form action=".base_url('familias/familias').">

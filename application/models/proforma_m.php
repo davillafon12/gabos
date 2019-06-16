@@ -25,7 +25,7 @@ Class proforma_m extends CI_Model
 		}
 		else
 		{
-			$consecutivo;
+			$consecutivo=0;
 			$result = $query->result();
 			foreach($result as $row)
 			{$consecutivo=$row->Proforma_Consecutivo;}
@@ -47,18 +47,18 @@ Class proforma_m extends CI_Model
 			$this->load->model('cliente','',TRUE);
 			$clienteArray = $this->cliente->getNombreCliente($cedula);
 			$dataProforma = array(
-	                        'Proforma_Consecutivo'=>mysql_real_escape_string($consecutivo),
-	                        'Proforma_Observaciones'=>mysql_real_escape_string($observaciones), 
+	                        'Proforma_Consecutivo'=>$consecutivo,
+	                        'Proforma_Observaciones'=>$observaciones, 
 													'Proforma_Estado'=>'sin_procesar',
-													'Proforma_Moneda'=>mysql_real_escape_string($currency),
+													'Proforma_Moneda'=>$currency,
 													'Proforma_Porcentaje_IVA'=>$c_array['iva'],
 													'Proforma_Tipo_Cambio'=>$c_array['dolar_venta'],
-													'Proforma_Nombre_Cliente'=>mysql_real_escape_string($nombre),
+													'Proforma_Nombre_Cliente'=>$nombre,
 													'Proforma_Fecha_Hora'=>$Current_datetime,
 													'TB_02_Sucursal_Codigo'=>$sucursal,
 													'Proforma_Vendedor_Codigo'=>$vendedor,	
 													'Proforma_Vendedor_Sucursal'=>$sucursalVendedor,	
-													'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+													'TB_03_Cliente_Cliente_Cedula'=>$cedula,
 													'Proforma_Cliente_Sucursal'=>$clienteArray['sucursal'],
 													'Proforma_Cliente_Exento'=>$clienteArray['exento'],
 													'Proforma_Cliente_No_Retencion'=>$clienteArray['retencion']													
@@ -107,20 +107,20 @@ Class proforma_m extends CI_Model
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$dataItem = array(
-              'Articulo_Proforma_Codigo'=>mysql_real_escape_string($codigo),
-              'Articulo_Proforma_Descripcion'=>mysql_real_escape_string($descripcion), 
-							'Articulo_Proforma_Cantidad'=>mysql_real_escape_string($cantidad),
-							'Articulo_Proforma_Descuento'=>mysql_real_escape_string($descuento),
-							'Articulo_Proforma_Exento'=>mysql_real_escape_string($exento),
-							'Articulo_Proforma_No_Retencion'=>mysql_real_escape_string($retencion),
-							'Articulo_Proforma_Precio_Unitario'=>mysql_real_escape_string($precio),
-							'Articulo_Proforma_Precio_Final'=>mysql_real_escape_string($precioFinal),	
-							'Articulo_Proforma_Imagen'=>mysql_real_escape_string($imagen),
-							'TB_10_Proforma_Proforma_Consecutivo'=>mysql_real_escape_string($consecutivo),
-							'TB_10_Proforma_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
-							'TB_10_Proforma_Proforma_Vendedor_Codigo'=>mysql_real_escape_string($vendedor),
-							'TB_10_Proforma_Proforma_Vendedor_Sucursal'=>mysql_real_escape_string($sucursalVendedor),
-							'TB_10_Proforma_TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cliente)							
+              'Articulo_Proforma_Codigo'=>$codigo,
+              'Articulo_Proforma_Descripcion'=>$descripcion, 
+							'Articulo_Proforma_Cantidad'=>$cantidad,
+							'Articulo_Proforma_Descuento'=>$descuento,
+							'Articulo_Proforma_Exento'=>$exento,
+							'Articulo_Proforma_No_Retencion'=>$retencion,
+							'Articulo_Proforma_Precio_Unitario'=>$precio,
+							'Articulo_Proforma_Precio_Final'=>$precioFinal,	
+							'Articulo_Proforma_Imagen'=>$imagen,
+							'TB_10_Proforma_Proforma_Consecutivo'=>$consecutivo,
+							'TB_10_Proforma_TB_02_Sucursal_Codigo'=>$sucursal,
+							'TB_10_Proforma_Proforma_Vendedor_Codigo'=>$vendedor,
+							'TB_10_Proforma_Proforma_Vendedor_Sucursal'=>$sucursalVendedor,
+							'TB_10_Proforma_TB_03_Cliente_Cliente_Cedula'=>$cliente							
 	                    );			
 	        $this->db->insert('TB_04_Articulos_Proforma',$dataItem);
 	}
@@ -395,8 +395,8 @@ Class proforma_m extends CI_Model
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
-		$this->db->where('Proforma_Consecutivo', mysql_real_escape_string($consecutivo));
-		$this->db->where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this->db->where('Proforma_Consecutivo', $consecutivo);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->update('TB_10_Proforma' ,$data);		
 	}
 	

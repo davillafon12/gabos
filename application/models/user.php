@@ -8,8 +8,8 @@ Class User extends CI_Model
  {
    $this -> db -> select('Usuario_Codigo, Usuario_Cedula, Usuario_Nombre_Usuario, Usuario_Password, TB_02_Sucursal_Codigo, Usuario_Imagen_URL, Usuario_Nombre, Usuario_Apellidos, Usuario_Observaciones, Usuario_Rango');
    $this -> db -> from('TB_01_Usuario');
-   $this -> db -> where('Usuario_Nombre_Usuario', mysql_real_escape_string($username));
-   $this -> db -> where('Usuario_Password', MD5(mysql_real_escape_string($password)));
+   $this -> db -> where('Usuario_Nombre_Usuario', $username);
+   $this -> db -> where('Usuario_Password', MD5($password));
    $this -> db -> limit(1);
 
    $query = $this -> db -> get();
@@ -27,7 +27,7 @@ Class User extends CI_Model
 function existe_Usuario_Cedula($cedula){
 	$this -> db -> select('Usuario_Cedula');
 	$this -> db -> from('TB_01_Usuario');
-	$this -> db -> where('Usuario_Cedula', mysql_real_escape_string($cedula));
+	$this -> db -> where('Usuario_Cedula', $cedula);
 	$this -> db -> limit(1);
 
 	$query = $this -> db -> get();
@@ -45,7 +45,7 @@ function existe_Usuario_Cedula($cedula){
 function existe_Nombre_Usuario($nombre){
 	$this -> db -> select('Usuario_Nombre_Usuario');
 	$this -> db -> from('TB_01_Usuario');
-	$this -> db -> where('Usuario_Nombre_Usuario', mysql_real_escape_string($nombre));
+	$this -> db -> where('Usuario_Nombre_Usuario', $nombre);
 	$this -> db -> limit(1);
 
 	$query = $this -> db -> get();
@@ -64,12 +64,12 @@ function existe_Nombre_Usuario($nombre){
     {
 	    date_default_timezone_set("America/Costa_Rica");
         $data = array(
-                'Trans_Descripcion' => mysql_real_escape_string($descripcion),
+                'Trans_Descripcion' => $descripcion,
                 'Trans_Fecha_Hora' => date("y/m/d : H:i:s", now()),
-				'Trans_Tipo' => mysql_real_escape_string($tipo),
+				'Trans_Tipo' => $tipo,
 				'Trans_IP' => $this->input->ip_address(),
-                'TB_01_Usuario_Usuario_Codigo' => mysql_real_escape_string($id_usuario),
-                'TB_01_Usuario_TB_02_Sucursal_Codigo' => mysql_real_escape_string($id_sucursal),
+                'TB_01_Usuario_Usuario_Codigo' => $id_usuario,
+                'TB_01_Usuario_TB_02_Sucursal_Codigo' => $id_sucursal,
                 );
         $this->db->insert('TB_12_Transacciones',$data);
     }
@@ -78,8 +78,8 @@ function existe_Nombre_Usuario($nombre){
 	{
 		$this -> db -> select('Permisos_Area, Permisos_Value');
 		$this -> db -> from('tb_15_permisos');
-		$this -> db -> where('TB_01_Usuario_Usuario_Codigo', mysql_real_escape_string($id_usuario));
-		$this -> db -> where('TB_01_Usuario_TB_02_Sucursal_Codigo', mysql_real_escape_string($id_sucursal));
+		$this -> db -> where('TB_01_Usuario_Usuario_Codigo', $id_usuario);
+		$this -> db -> where('TB_01_Usuario_TB_02_Sucursal_Codigo', $id_sucursal);
 		$data = array(); // create a variable to hold the information
 		
 			
@@ -101,7 +101,7 @@ function existe_Nombre_Usuario($nombre){
 		//echo $id_usuario;
 		$this -> db -> select('Usuario_Nombre_Usuario');
 		$this -> db -> from('TB_01_Usuario');
-		$this -> db -> where('Usuario_Codigo', mysql_real_escape_string($id_usuario));
+		$this -> db -> where('Usuario_Codigo', $id_usuario);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -118,8 +118,8 @@ function existe_Nombre_Usuario($nombre){
 		//echo $id_usuario;
 		$this -> db -> select('Usuario_Codigo');
 		$this -> db -> from('TB_01_Usuario');
-		$this -> db -> where('Usuario_Nombre_Usuario', mysql_real_escape_string($id_usuario));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Usuario_Nombre_Usuario', $id_usuario);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -137,23 +137,23 @@ function existe_Nombre_Usuario($nombre){
 		//date_default_timezone_set("America/Costa_Rica");
 	    //$Current_datetime = date("y/m/d : H:i:s", now());
 		$data = array(
-                        'Usuario_Codigo'=>mysql_real_escape_string($codigo),
-						'Usuario_Nombre'=>mysql_real_escape_string($nombre),                        
-						'Usuario_Apellidos'=>mysql_real_escape_string($apellidos),                        
-						'Usuario_Cedula'=>mysql_real_escape_string($cedula),                        
-						'Usuario_Tipo_Cedula'=>mysql_real_escape_string($tipo_cedula),                        
-						'Usuario_Celular'=>mysql_real_escape_string($celular),                        
-						'Usuario_Telefono'=>mysql_real_escape_string($telefono),                        
-						'Usuario_Fecha_Ingreso'=>mysql_real_escape_string($Usuario_Fecha_Ingreso),                        
-						//'Usuario_Fecha_Cesantia'=>mysql_real_escape_string(NULL),                        
-						//'Usuario_Fecha_Recontratacion'=>mysql_real_escape_string(NULL),                        
-						'Usuario_Nombre_Usuario'=>mysql_real_escape_string($Usuario_Nombre_Usuario),                        
-						'Usuario_Observaciones'=>mysql_real_escape_string($Usuario_Observaciones),                        
+                        'Usuario_Codigo'=>$codigo,
+						'Usuario_Nombre'=>$nombre,                        
+						'Usuario_Apellidos'=>$apellidos,                        
+						'Usuario_Cedula'=>$cedula,                        
+						'Usuario_Tipo_Cedula'=>$tipo_cedula,                        
+						'Usuario_Celular'=>$celular,                        
+						'Usuario_Telefono'=>$telefono,                        
+						'Usuario_Fecha_Ingreso'=>$Usuario_Fecha_Ingreso,                        
+						//'Usuario_Fecha_Cesantia'=>NULL,                        
+						//'Usuario_Fecha_Recontratacion'=>NULL,                        
+						'Usuario_Nombre_Usuario'=>$Usuario_Nombre_Usuario,                        
+						'Usuario_Observaciones'=>$Usuario_Observaciones,                        
 						'Usuario_Password'=>md5($Usuario_Password),                        
-						'Usuario_Imagen_URL'=>mysql_real_escape_string($Usuario_Imagen_URL),                        
-						'Usuario_Correo_Electronico'=>mysql_real_escape_string($Usuario_Correo_Electronico),                        
-						'Usuario_Rango'=>mysql_real_escape_string($Usuario_Rango),                        
-						'TB_02_Sucursal_Codigo'=>mysql_real_escape_string($Sucursal_Correspondiente)                      
+						'Usuario_Imagen_URL'=>$Usuario_Imagen_URL,                        
+						'Usuario_Correo_Electronico'=>$Usuario_Correo_Electronico,                        
+						'Usuario_Rango'=>$Usuario_Rango,                        
+						'TB_02_Sucursal_Codigo'=>$Sucursal_Correspondiente                      
                     );
 		//print_r($data);
 		try{
@@ -179,7 +179,7 @@ function existe_Nombre_Usuario($nombre){
 	}
 	function actualizar($id, $data)
 	{
-			$this->db->where('Usuario_Codigo', mysql_real_escape_string($id));
+			$this->db->where('Usuario_Codigo', $id);
 			$this->db->update('TB_01_Usuario' ,$data);
 	}	
 
@@ -202,7 +202,7 @@ function existe_Nombre_Usuario($nombre){
 	function getUsuario_Cedula($cedula){
 		$this -> db -> select('*');
 		$this -> db -> from('TB_01_Usuario');
-		$this -> db -> where('Usuario_Cedula', mysql_real_escape_string($cedula));
+		$this -> db -> where('Usuario_Cedula', $cedula);
 		$this -> db -> limit(1);
 
 		$query = $this -> db -> get();
@@ -222,7 +222,7 @@ function existe_Nombre_Usuario($nombre){
 		//echo $id_usuario;
 		$this -> db -> select('*');
 		$this -> db -> from('TB_01_Usuario');
-		$this -> db -> where('Usuario_Codigo', mysql_real_escape_string($id_usuario));
+		$this -> db -> where('Usuario_Codigo', $id_usuario);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -240,8 +240,8 @@ function existe_Nombre_Usuario($nombre){
 	function existeUsuario($codigo, $sucursal)
 	{		
 		$this -> db -> from('TB_01_Usuario');
-		$this -> db -> where('Usuario_Codigo', mysql_real_escape_string($codigo));
-		$this -> db -> where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this -> db -> where('Usuario_Codigo', $codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -260,7 +260,7 @@ function existe_Nombre_Usuario($nombre){
 	{
 		$this -> db -> select('Usuario_Fecha_Cesantia');
 		$this -> db -> from('TB_01_Usuario');
-		$this -> db -> where('Usuario_Codigo', mysql_real_escape_string($id));
+		$this -> db -> where('Usuario_Codigo', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		$result = $query->result();
@@ -281,7 +281,7 @@ function existe_Nombre_Usuario($nombre){
 	function isActivatedByUserName($username){
 		$this -> db -> select('Usuario_Fecha_Cesantia');
 		$this -> db -> from('TB_01_Usuario');
-		$this -> db -> where('Usuario_Nombre_Usuario', mysql_real_escape_string($username));
+		$this -> db -> where('Usuario_Nombre_Usuario', $username);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		$result = $query->result();
@@ -302,7 +302,7 @@ function existe_Nombre_Usuario($nombre){
 	function obtener_Imagen_Usuario($cedula){
 		$this -> db -> select('Usuario_Imagen_URL');
 		$this -> db -> from('TB_01_Usuario');
-		$this -> db -> where('Usuario_Cedula', mysql_real_escape_string($cedula));
+		$this -> db -> where('Usuario_Cedula', $cedula);
 		$this -> db -> limit(1);
 
 		$query = $this -> db -> get();
@@ -349,10 +349,10 @@ function existe_Nombre_Usuario($nombre){
 	
 	function agregarPermiso($usuario, $sucursal, $area, $valor){
 		$data = array(
-                        'Permisos_Area'=>mysql_real_escape_string($area),
-						'Permisos_Value'=>mysql_real_escape_string($valor),                        
-						'TB_01_Usuario_Usuario_Codigo'=>mysql_real_escape_string($usuario),                        
-						'TB_01_Usuario_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal) 
+                        'Permisos_Area'=>$area,
+						'Permisos_Value'=>$valor,                        
+						'TB_01_Usuario_Usuario_Codigo'=>$usuario,                        
+						'TB_01_Usuario_TB_02_Sucursal_Codigo'=>$sucursal 
                     );
 		try{
         	$this->db->insert('TB_15_Permisos',$data); 
@@ -505,13 +505,13 @@ function existe_Nombre_Usuario($nombre){
     {
 	    date_default_timezone_set("America/Costa_Rica");
         $data = array(
-				'Cliente_Cedula' => mysql_real_escape_string($Cliente_Cedula),
-				'Sucursal' => mysql_real_escape_string($Sucursal),
-				'Usuario' => mysql_real_escape_string($Usuario),
+				'Cliente_Cedula' => $Cliente_Cedula,
+				'Sucursal' => $Sucursal,
+				'Usuario' => $Usuario,
                 'Trans_Fecha_Hora' => date("y/m/d : H:i:s", now()),
-				'Trans_Tipo' => mysql_real_escape_string($Trans_Tipo),
+				'Trans_Tipo' => $Trans_Tipo,
 				'Trans_IP' => $this->input->ip_address(),
-                'Trans_Descripcion' => mysql_real_escape_string($Descripcion)
+                'Trans_Descripcion' => $Descripcion
                 );
         $this->db->insert('tb_60_Bitacora_cliente',$data);
     }

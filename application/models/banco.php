@@ -20,9 +20,9 @@ Class banco extends CI_Model
 	function registrar($nombre, $comision, $usuario)
 	{				
 		$data = array(					
-                        'Banco_Nombre'=>mysql_real_escape_string($nombre), 
-						'Banco_Comision_Porcentaje'=>mysql_real_escape_string($comision),
-						'Banco_Creado_Por'=>mysql_real_escape_string($usuario)
+                        'Banco_Nombre'=>$nombre, 
+						'Banco_Comision_Porcentaje'=>$comision,
+						'Banco_Creado_Por'=>$usuario
                     );
 		try{
         $this->db->insert('TB_22_Banco',$data); }
@@ -41,7 +41,7 @@ Class banco extends CI_Model
 	{
 		$this -> db -> select('*');
 		$this -> db -> from('TB_22_Banco');		
-		$this -> db -> where('Banco_Codigo', mysql_real_escape_string($id));
+		$this -> db -> where('Banco_Codigo', $id);
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -59,7 +59,7 @@ Class banco extends CI_Model
 	function actualizar($id, $data)
 	{
 		    
-			$this->db->where('Banco_Codigo', mysql_real_escape_string($id));
+			$this->db->where('Banco_Codigo', $id);
 			$this->db->update('TB_22_Banco' ,$data);
 		
 	}
@@ -68,7 +68,7 @@ Class banco extends CI_Model
 	{
 		$this -> db -> select('Banco_Comision_Porcentaje');
 		$this -> db -> from('TB_22_Banco');
-		$this -> db -> where('Banco_Codigo', mysql_real_escape_string($id));
+		$this -> db -> where('Banco_Codigo', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		
