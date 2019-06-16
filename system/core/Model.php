@@ -229,7 +229,7 @@ class CI_Model {
             $linea["detalle"] = substr($a->Articulo_Factura_Descripcion,0,159);
             
             // PRECIO UNITARIO
-            $precioUnitarioSinIVA = $this->removeIVA(floatval($a->Articulo_Factura_Precio_Unitario));
+            $precioUnitarioSinIVA = $this->fn($this->removeIVA(floatval($a->Articulo_Factura_Precio_Unitario)));
             $linea["precioUnitario"] = $precioUnitarioSinIVA;
             
             // MONTO TOTAL
