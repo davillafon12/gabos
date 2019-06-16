@@ -1298,8 +1298,16 @@ Class factura extends CI_Model
             do {
                 sleep(2);
                 $counter++;
-                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $factura->Clave, $tokenData["access_token"]);
+                $mensajeError = "";
+                $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $factura->Clave, $tokenData["access_token"], $mensajeError);
+                log_message("error", "Mensaje de error: [$mensajeError]");
                 log_message('error', "Revisando estado de factura en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
+
+                if($mensajeError == "NO_HA_SIDO_RECIBIDO"){
+                    log_message("error", "Factura Consecutivo: $consecutivo | Sucursal: $sucursal no ha sido recibida, vamos a enviarla de nuevo");
+                    $this->enviarFacturaElectronicaAHacienda($consecutivo, $sucursal);
+                }
+
             } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
 
             if($resCheck["status"]){

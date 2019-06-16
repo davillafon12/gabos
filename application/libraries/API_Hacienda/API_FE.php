@@ -396,7 +396,7 @@ class API_FE{
         }
     }
     
-    public function revisarEstadoAceptacion($ambienteHacienda, $clave, $token){
+    public function revisarEstadoAceptacion($ambienteHacienda, $clave, $token, &$mensajeError = ""){
         require_once PATH_REST_CLIENT;
         $bm = round(microtime(true) * 1000);
         $url = $ambienteHacienda == "api-stag" ? HACIENDA_RECEPCION_API_STAG : HACIENDA_RECEPCION_API_PROD;
@@ -420,6 +420,9 @@ class API_FE{
                 $this->logger->error("revisarEstadoAceptacion", $ms."ms | 2 - API returns ".json_encode($result));
             }
         }else{
+            if(strpos(json_encode($result->headers), "El comprobante [$clave] no ha sido recibido")){
+                $mensajeError = "NO_HA_SIDO_RECIBIDO";
+            }
             $ms = (round(microtime(true) * 1000)) - $bm;
             $this->logger->error("revisarEstadoAceptacion", $ms."ms | 1 - API returns STATUS: ".$result->info->http_code." | HEADERS:".json_encode($result->headers)." RESPONSE:".json_encode($result->response)." INFO:".json_encode($result->info));
         }
