@@ -1122,6 +1122,7 @@ class consulta extends CI_Controller {
 								}
 								if($empresaData = $this->empresa->getEmpresa($factura->Sucursal)){
 									$facturaa = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
+									var_dump($cliente); die;
 									$cliente = $cliente[0];
 									$empresa = $empresaData[0];
 									$resFacturaElectronica = array("data" => array("situacion"=>"normal"));
