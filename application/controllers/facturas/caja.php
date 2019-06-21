@@ -251,25 +251,28 @@ class caja extends CI_Controller {
         $consecutivo = filter_input(INPUT_POST, "consecutivo");
         $tipoPago = json_decode(filter_input(INPUT_POST, "tipoPago"), true)[0];
         
-        $responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
+		$responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
+		
+		$requiereFE = $responseCheck["empresa"]->RequiereFE == 1;
+
         
         if($responseCheck["status"] == "success"){
             $recibidoParaVuelto = filter_input(INPUT_POST, "entregado");
             $vuelto = filter_input(INPUT_POST, "vuelto");
             include PATH_USER_DATA; 
-            
-            $resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
-            
+			
+			$resFacturaElectronica = array();
+			if($requiereFE){
+				$resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
+			}else{
+				$resFacturaElectronica["status"] = true;
+				$resFacturaElectronica["data"] = array( "fecha" => now());
+			}
             
             if($resFacturaElectronica["status"]){
-                //$resEnvio = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                 
                 $estadoFactura = 'cobrada';
                 $responseCheck['impresion'] = 1;
-//                if($resEnvio["status"] === false && $resEnvio["estado"] === "rechazado"){
-//                    $responseCheck['impresion'] = 0;
-//                    $estadoFactura = 'anulada';
-//                }
                 
                 //Para efecto de impresion
                 $responseCheck['sucursal']= $data['Sucursal_Codigo'];
@@ -300,34 +303,11 @@ class caja extends CI_Controller {
                 if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
                         $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
                 }
+				
+				if($requiereFE){
+					$this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+				}
                 
-                $this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
-                
-//                if($resEnvio["status"]){
-//                    if(!$responseCheck["cliente"]->NoReceptor){
-//                        require_once PATH_API_CORREO;
-//                        $apiCorreo = new Correo();
-//                        $attachs = array(
-//                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".xml",
-//                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
-//                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".pdf");
-//                        if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
-//                            $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
-//                        }
-//                    }
-//                }else if($resEnvio["status"] === false && $resEnvio["estado"] === "rechazado"){
-//                    // Al haber sido rechazada por hacienda se debe anular la factura, y se devuelven los articulos
-//                    //$this->devolverProductosdeFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
-//                    
-//                    // Creamos la nota credito respectiva para la factura
-//                    $productosAAcreditar = $this->convertirProductosDeFacturaANotaCredito($responseCheck["articulosOriginales"]);
-//                    $retorno = array();
-//                    $this->contabilidad->crearNotaCreditoMacro($retorno, $responseCheck["cliente"]->Cliente_Cedula, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo, $productosAAcreditar, $data['Usuario_Codigo'], ANULAR_FACTURA, "Anulacion por rechazo de factura", true);
-//                }
-//               
-//                require_once PATH_API_HACIENDA;
-//                $api = new API_FE();
-//                $api->destruirSesion($responseCheck["empresa"]->Ambiente_Tributa, $responseCheck["empresa"]->Usuario_Tributa);
             }else{
                 $responseCheck["status"] = "error";
                 $responseCheck["error"] = $resFacturaElectronica["error"];

@@ -1501,11 +1501,11 @@ Class factura extends CI_Model
             if($empresaData->Sucursal_Estado == 1){ // Sucursal esta activa
                 if($empresaData->Provincia>0 && $empresaData->Canton>0 && $empresaData->Distrito>0 && $empresaData->Barrio>0){
                     if(filter_var($empresaData->Sucursal_Email, FILTER_VALIDATE_EMAIL)){
-                        if( trim($empresaData->Usuario_Tributa) != "" && 
+                        if( (trim($empresaData->Usuario_Tributa) != "" && 
                             trim($empresaData->Pass_Tributa) != "" && 
                             trim($empresaData->Ambiente_Tributa) != "" && 
                             trim($empresaData->Token_Certificado_Tributa) != "" && 
-                            trim($empresaData->Pass_Certificado_Tributa) != ""){
+                            trim($empresaData->Pass_Certificado_Tributa) != "") || $empresaData->RequiereFE == 0){
                             $facturaBODY["empresa"] = $empresaData; 
                             if($articulosFactura = $this->getArticulosFactura($facturaBODY["factura"]->Factura_Consecutivo, $facturaBODY["factura"]->TB_02_Sucursal_Codigo)){
                                 $costos = array(
