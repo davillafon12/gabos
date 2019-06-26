@@ -191,7 +191,7 @@ $config['log_threshold'] = 1;
 | application/logs/ folder. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+$config['log_path'] = '/var/log/gabos/codeigniter/';
 
 /*
 |--------------------------------------------------------------------------
