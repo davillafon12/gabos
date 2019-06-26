@@ -1661,7 +1661,7 @@ Class factura extends CI_Model
     }
     
     function getFacturasSinEnviarAHacienda(){
-        $this->db->where_in("RespuestaHaciendaEstado", array("sin_enviar"));
+        $this->db->where_in("RespuestaHaciendaEstado", array("sin_enviar", "fallo_token", "fallo_envio"));
         $this->db->from("tb_55_factura_electronica");
         $query = $this->db->get();
         if($query->num_rows() == 0){
