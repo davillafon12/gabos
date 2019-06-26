@@ -90,7 +90,8 @@ class external extends CI_Controller {
                                     $apiCorreo = new Correo();
                                     $attachs = array(
                                         $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
-                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf");
+                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf",
+                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml",);
                                     if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                         $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
                                     }
@@ -321,7 +322,8 @@ class external extends CI_Controller {
                             $apiCorreo = new Correo();
                             $attachs = array(
                                 $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
-                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf");
+                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf",
+                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml");
                             if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                 $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
                                 $this->logger->info("enviarComprobantesAHacienda", "Se envio correo con exito");

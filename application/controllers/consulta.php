@@ -990,7 +990,7 @@ class consulta extends CI_Controller {
                     case "NC":
                         $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
                         $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
-                        $htmlXMLRespuesta = "<a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
                     break;
                     case "MR":
                         $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave."-".$art->consecutivo.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
@@ -1152,9 +1152,38 @@ class consulta extends CI_Controller {
                         break;
                         case "NC":
                             if($nota = $this->contabilidad->getNotaCreditoElectronicaByClave($clave)){
-                                $this->contabilidad->enviarNotaCreditoElectronicaAHacienda($nota->Consecutivo, $nota->Sucursal);
-                                $retorno["status"] = 1;
-                                unset($retorno["error"]);
+                                if($responseCheck = $this->contabilidad->enviarNotaCreditoElectronicaAHacienda($nota->Consecutivo, $nota->Sucursal)){
+									if(isset($responseCheck["status"])){
+										if($responseCheck["status"] === true){
+											if($responseCheck["estado_hacienda"] == "aceptado"){
+												if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+													if($empresaData = $this->empresa->getEmpresa($nota->Sucursal)){
+														$empresa = $empresaData[0];
+														require_once PATH_API_CORREO;
+														$apiCorreo = new Correo();
+														$attachs = array(
+															$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
+															$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf",
+															$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml",);
+														if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+															$this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
+														}
+													}else{
+
+													}
+												}
+											}
+											$retorno["status"] = 1;
+                                			unset($retorno["error"]);
+										}else{
+											$retorno["error"] = "No se pudo enviar nota crédito a Hacienda | BAD STATUS";
+										}
+									}else{
+										$retorno["error"] = "No se pudo enviar nota crédito a Hacienda | NO STATUS";
+									}
+								}else{
+									$retorno["error"] = "No se pudo enviar nota crédito a Hacienda";
+								}
                             }else{
                                 $retorno["error"] = "No existe nota credito electronica";
                             }
@@ -1223,7 +1252,8 @@ class consulta extends CI_Controller {
                                     $apiCorreo = new Correo();
                                     $attachs = array(
                                         $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
-                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf");
+										$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf",
+										$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml");
                                     if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                         $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
                                         $retorno["status"] = 1;

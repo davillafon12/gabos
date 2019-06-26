@@ -3000,7 +3000,9 @@ Class contabilidad extends CI_Model
                 $this->db->where("Consecutivo", $consecutivo);
                 $this->db->where("Sucursal", $sucursal);
                 $this->db->update("tb_57_nota_credito_electronica", $data);
-                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+				log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+				
+				$this->storeFile($nota->Clave."-respuesta.xml", "nc", null, base64_decode($xmlRespuesta, $nota->FechaEmision));
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
                 log_message('error', "Error al revisar el estado de la nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
