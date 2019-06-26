@@ -253,10 +253,10 @@ class caja extends CI_Controller {
         
 		$responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
 		
-		$requiereFE = $responseCheck["empresa"]->RequiereFE == 1;
-
-        
         if($responseCheck["status"] == "success"){
+
+			$requiereFE = $responseCheck["empresa"]->RequiereFE == 1;
+			
             $recibidoParaVuelto = filter_input(INPUT_POST, "entregado");
             $vuelto = filter_input(INPUT_POST, "vuelto");
             include PATH_USER_DATA; 
