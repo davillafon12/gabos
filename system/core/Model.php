@@ -324,31 +324,35 @@ class CI_Model {
             $linea["detalle"] = substr($a->Descripcion,0,159);
             
             // PRECIO UNITARIO
-            $precioUnitarioSinIVA = $this->removeIVA(floatval($a->Precio_Unitario));
-            $linea["precioUnitario"] = $this->fn($precioUnitarioSinIVA);
+            // En el caso de NC los precios unitarios tienen impuesto pero tambien el descuento
+            // tons debemos agregarle el descuento para que haga bien la matematica esta vara
+            // PrecioFinal / (1 - Porcentaje / 100) = PrecioUnitario 
+            $a->Precio_Unitario = floatval($a->Precio_Unitario) / (1 - (floatval($a->Descuento) / 100));
+            $precioUnitarioSinIVA = $this->fn($this->removeIVA($a->Precio_Unitario));
+            $linea["precioUnitario"] = $precioUnitarioSinIVA;
             
             // MONTO TOTAL
             $precioTotalSinIVA = $cantidad*$precioUnitarioSinIVA;
-            $linea["montoTotal"] = $this->fn($precioTotalSinIVA);
+            $linea["montoTotal"] = $precioTotalSinIVA;
             
             // DESCUENTO
             $descuentoPrecioSinIva = 0;
-//            if(floatval($a->Descuento) > 0){
-//                $descuentoPrecioSinIva = $precioTotalSinIVA * (floatval($a->Descuento) / 100);
-//                $linea["montoDescuento"] = $this->fn($descuentoPrecioSinIva);
-//                $naturalezaDescuento = "Otorgado a cliente por empresa";
-//                $linea["naturalezaDescuento"] = $naturalezaDescuento;
-//            }else{
-                $linea["montoDescuento"] = $this->fn(0);
+            if(floatval($a->Descuento) > 0){
+                $descuentoPrecioSinIva = $this->fn($precioTotalSinIVA * (floatval($a->Descuento) / 100));
+                $linea["montoDescuento"] = $descuentoPrecioSinIva;
+                $naturalezaDescuento = "Otorgado a cliente por empresa";
+                $linea["naturalezaDescuento"] = $naturalezaDescuento;
+            }else{
+                $linea["montoDescuento"] = 0;
                 $linea["naturalezaDescuento"] = "Ninguna";
-//            }
+            }
             
              // SUBTOTAL
             $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
-            $linea["subtotal"] = $this->fn($subTotalSinIVA);
+            $linea["subtotal"] = $subTotalSinIVA;
             
             // BASE IMPONIBLE
-            $linea["base_imponible"] = $this->fn(round($subTotalSinIVA, 0));
+            $linea["base_imponible"] = $subTotalSinIVA;
             
             // IMPUESTOS
             $impuestos = array();
@@ -382,20 +386,20 @@ class CI_Model {
             if($subTotalSinIVA != 0){
                 $factorIVAFinal = (($montoDeImpuesto) * 100) / round($subTotalSinIVA,0);
             }
-            $montoFinalDeImpuesto = round($subTotalSinIVA,0) * ($factorIVAFinal / 100);
+            $montoFinalDeImpuesto = $subTotalSinIVA * ($factorIVAFinal / 100);
             $impuesto = array(
                 "codigo" => ($a->No_Retencion == "0" && $aplicaRetencion) ? "07" : "01", // 01 = Impuesto al Valor Agregado / 07 = IVA (cálculo especial)
                 "codigoTarifa" => $a->Exento == 1 ? "01" : "08", // 01 = Exento / 08 = General 13%
                 "tarifa" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
                 "factorIVA" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
-                "monto" => $this->fn(round($montoFinalDeImpuesto, 0))
+                "monto" => $montoFinalDeImpuesto
             );
             
             array_push($impuestos, $impuesto);
             $linea["impuesto"] = $impuestos;
             
             // MONTO TOTAL DE LA LINEA
-            $linea["montoTotalLinea"] = $this->fn($subTotalSinIVA + floatval($impuesto["monto"]));
+            $linea["montoTotalLinea"] = $subTotalSinIVA + floatval($impuesto["monto"]);
             
             return $linea;
         }
