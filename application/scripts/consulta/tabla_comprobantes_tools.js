@@ -47,7 +47,7 @@ function reenviarXML(clave){
         },
         success: function(data, textStatus, jqXHR){
             var documentoSeleccionado = $("#tipo_documento").val();
-            window.location.replace(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/comprobantesElectronicos?d='+documentoSeleccionado.toLowerCase());
+            //window.location.replace(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/comprobantesElectronicos?d='+documentoSeleccionado.toLowerCase());
         },
         error: function (jqXHR, textStatus, errorThrown){
 

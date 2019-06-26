@@ -3177,7 +3177,8 @@ Class contabilidad extends CI_Model
                 $this->db->where("Codigo", $sucursal);
                 $query = $this->db->get();
                 if($query->num_rows()>0){
-                    $empresa = $query->result()[0];
+					$empresa = $query->result()[0];
+					var_dump($empresa);
                     if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
                         if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $comprobante->Clave, $comprobante->FechaEmision, $comprobante->EmisorTipoIdentificacion, $comprobante->EmisorIdentificacion, $comprobante->ReceptorTipoIdentificacion, $comprobante->ReceptorIdentificacion, $tokenData["access_token"], $comprobante->XMLFirmado, $comprobante->ConsecutivoHacienda)){
                             $data = array(
@@ -3207,7 +3208,9 @@ Class contabilidad extends CI_Model
                         $this->db->update("tb_59_mensaje_receptor", $data);
                         log_message('error', "Error al generar el token para envio de mensaje receptor | Consecutivo: $consecutivo | Sucursal: $sucursal");
                     }
-                }
+                }else{
+					echo "NO TRAJO EMPRESA";
+				}
             }
             return false;
         }
