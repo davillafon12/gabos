@@ -221,7 +221,6 @@ class external extends CI_Controller {
     
     
     public function enviarComprobantesAHacienda(){
-        include 'get_session_data.php';
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de facturas");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
@@ -264,25 +263,6 @@ class external extends CI_Controller {
                 }else{
                     $this->logger->error("enviarComprobantesAHacienda", " La factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal} no fue enviada por:");
                     $this->logger->error("enviarComprobantesAHacienda", $res["message"]);
-                    if($res["status"] === false && $res["estado"] === "rechazado"){
-                        $this->logger->info("enviarComprobantesAHacienda", "Generamos nota credito respectiva por factura rechazada");
-                        // Al haber sido rechazada por hacienda se debe anular la factura, y se devuelven los articulos
-                        //$this->devolverProductosdeFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
-                        if($articulosFactura = $this->factura->getArticulosFactura($factura->Consecutivo, $factura->Sucursal)){
-                            $this->logger->info("enviarComprobantesAHacienda", "Articulos Obtenidos");
-                            // Creamos la nota credito respectiva para la factura
-                            $productosAAcreditar = $this->convertirProductosDeFacturaANotaCredito($articulosFactura);
-                            $facturaGabo = $this->factura->getFacturasHeaders($factura->Consecutivo, $factura->Sucursal);
-                 
-                            $retorno = array();
-                            $this->logger->info("enviarComprobantesAHacienda", "Generando y enviando NC de anulacion");
-                            
-                            $this->contabilidad->crearNotaCreditoMacro($retorno, $facturaGabo[0]->TB_03_Cliente_Cliente_Cedula, $factura->Consecutivo, $factura->Consecutivo, $factura->Sucursal, $productosAAcreditar, $data['Usuario_Codigo'], ANULAR_FACTURA, "Anulacion por rechazo de factura", true);
-                            $this->logger->info("enviarComprobantesAHacienda", "Resultado de la NC: ".json_encode($retorno));
-                        }else{
-                            $this->logger->error("enviarComprobantesAHacienda", "No se logro obtener los articulos para generar la NC");
-                        }
-                    }
                 }
             }
         }else{
