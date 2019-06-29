@@ -97,7 +97,7 @@ class impresion extends CI_Controller
 
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
 						if ($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)) {
-							if($empresa[0]->isFE === 1){
+							if($empresa[0]->isFE == 1){
 								$fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal);
 
 								if (!$fElectornica) {
@@ -243,7 +243,7 @@ class impresion extends CI_Controller
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
 						if ($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)) {
 							if ($notaCreditoBody = $this->contabilidad->getArticulosNotaCredito($consecutivo, $sucursal)) {
-								if($empresa[0]->isFE === 1){
+								if($empresa[0]->isFE == 1){
 									$notaElectronica = $this->contabilidad->getNotaCreditoElectronica($consecutivo, $sucursal);
 								}else{
 									$notaElectronica = new stdClass();
@@ -439,7 +439,7 @@ class impresion extends CI_Controller
 					$consecutivo = $_GET['n'];
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
 						if ($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)) {
-							if($empresa[0]->isFE === 1){
+							if($empresa[0]->isFE == 1){
 								$fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal);
 
 								if (!$fElectornica) {
