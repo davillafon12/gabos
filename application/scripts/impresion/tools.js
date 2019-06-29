@@ -113,7 +113,13 @@ function imprimirFactura(data){
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	qz.append("----------------------------------------\r\n");
-        qz.append(" FACTURA ELECTRONICA\r\n");
+	if(!factura.isTE){
+		qz.append(" FACTURA ELECTRONICA\r\n");
+		console.log("IS FE");
+	}else{
+		qz.append(" TIQUETE ELECTRONICO\r\n");
+		console.log("NO FE");
+	}  
 	qz.append(" Consecutivo: "+factura.consecutivoH+"\r\n"); 
         qz.append(" Clave: "+factura.clave+"\r\n"); 
 	qz.append(" Fecha: "+factura.fecha+"\r\n"); 

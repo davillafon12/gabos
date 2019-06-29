@@ -26,11 +26,11 @@ var qzConfig = {
 
 
 function deployQZ() {
-    console.log(WebSocket);
+    //console.log(WebSocket);
 
     //Old standard of WebSocket used const CLOSED as 2, new standards use const CLOSED as 3, we need the newer standard for jetty
     if ("WebSocket" in window && WebSocket.CLOSED != null && WebSocket.CLOSED > 2) {
-        console.log('Starting deploy of qz');
+        //console.log('Starting deploy of qz');
 
         connectWebsocket(qzConfig.ports[qzConfig.portIndex]);
     } else {
@@ -40,7 +40,7 @@ function deployQZ() {
 }
 
 function connectWebsocket(port) {
-    console.log('Attempting connection on port ' + port);
+    //console.log('Attempting connection on port ' + port);
 
     try {
         var websocket = new WebSocket(qzConfig.protocol[qzConfig.protocolIndex] + qzConfig.uri + ":" + port);
@@ -53,8 +53,8 @@ function connectWebsocket(port) {
         websocket.valid = false;
 
         websocket.onopen = function(evt) {
-            console.log('Open:');
-            console.log(evt);
+            //console.log('Open:');
+            //console.log(evt);
 
             websocket.valid = true;
             connectionSuccess(websocket);
@@ -104,12 +104,12 @@ function connectWebsocket(port) {
 }
 
 function connectionSuccess(websocket) {
-    console.log('Websocket connection successful');
+    //console.log('Websocket connection successful');
 
     websocket.sendObj = function(objMsg) {
         var msg = JSON.stringify(objMsg);
 
-        console.log("Sending " + msg);
+        //console.log("Sending " + msg);
         var ws = this;
 
         // Determine if the message requires signing
@@ -128,7 +128,7 @@ function connectionSuccess(websocket) {
         var message = JSON.parse(evt.data);
 
         if (message.error != undefined) {
-            console.log(message.error);
+            //console.log(message.error);
             return;
         }
 
@@ -140,8 +140,8 @@ function connectionSuccess(websocket) {
 
         } else {
             // Got a return value from a call
-            console.log('Message:');
-            console.log(message);
+            //console.log('Message:');
+            //console.log(message);
 
             if (typeof message.result == 'string') {
                 //unescape special characters
@@ -177,8 +177,8 @@ function connectionSuccess(websocket) {
             }
 
             if (message.callback == 'setupMethods') {
-                console.log("Resetting function call");
-                console.log(message.result);
+                //console.log("Resetting function call");
+                //console.log(message.result);
                 qz[message.method] = function() {
                     return message.result;
                 }
@@ -186,7 +186,7 @@ function connectionSuccess(websocket) {
 
             if (message.callback != null) {
                 try {
-                    console.log("Callbacking: " + message.callback);
+                    //console.log("Callbacking: " + message.callback);
                     if (window["qz"][message.callback] != undefined) {
                         window["qz"][message.callback].apply(this, message.init ? [message.method] : message.result);
                     } else {
@@ -199,7 +199,7 @@ function connectionSuccess(websocket) {
             }
         }
 
-        console.log("Finished processing message");
+        //console.log("Finished processing message");
     };
 }
 
@@ -212,7 +212,7 @@ function createQZ(websocket) {
 }
 
 function mapMethods(websocket, methods) {
-    console.log('Adding ' + methods.length + ' methods to qz object');
+    //console.log('Adding ' + methods.length + ' methods to qz object');
     for(var x = 0; x < methods.length; x++) {
         var name = methods[x].name;
         var returnType = methods[x].returns;
@@ -256,11 +256,11 @@ function mapMethods(websocket, methods) {
 
                     window["qz"][cbName] = cb;
                 } else {
-                    console.log("Using mapped callback " + qzConfig.callbackMap[_name] + "() for " + _name + "()");
+                    //console.log("Using mapped callback " + qzConfig.callbackMap[_name] + "() for " + _name + "()");
                     cbName = qzConfig.callbackMap[_name];
                 }
 
-                console.log("Calling " + _name + "(" + args + ") --> CB: " + cbName + "()");
+                //console.log("Calling " + _name + "(" + args + ") --> CB: " + cbName + "()");
                 websocket.sendObj({method: _name, params: args, callback: cbName, init: (cbName == 'setupMethods')});
             }
         })(name, numParams, returnType);
@@ -271,15 +271,15 @@ function mapMethods(websocket, methods) {
         window["qz"][key](setupMethods);
     }
 
-    console.log("Sent methods off to get rehabilitated");
+    //console.log("Sent methods off to get rehabilitated");
 }
 
 function setupMethods(methodName) {
     if ($.param(qzConfig.preemptive).length > 0) {
-        console.log("Reset " + methodName);
+        //console.log("Reset " + methodName);
         delete qzConfig.preemptive[methodName];
 
-        console.log("Methods left to return: " + $.param(qzConfig.preemptive).length);
+        //console.log("Methods left to return: " + $.param(qzConfig.preemptive).length);
 
         // Fire ready method when everything on the QZ object has been added
         if ($.param(qzConfig.preemptive).length == 0) {

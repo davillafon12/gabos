@@ -97,70 +97,75 @@ class impresion extends CI_Controller
 
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
 						if ($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)) {
-							if ($fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal)) {
-								//Valoramos si un credito para poner la fecha de vencimiento
-								if ($facturaHead[0]->tipo == 'credito') {
-									$diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0]->cliente_ced);
-									$facturaHead[0]->diasCredito = $diasCredito;
-									$date = strtotime("+$diasCredito days", strtotime($facturaHead[0]->fecha));
-									$facturaHead[0]->fechaVencimiento = date('d-m-Y', $date);
-								} elseif ($facturaHead[0]->tipo == 'mixto') {
-									$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
-									$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
-									//Valorar si fue en colones o dolares								
-									if ($facturaHead[0]->moneda == 'dolares') {
-										$cantidadPagaTarjeta = $cantidadPagaTarjeta / $facturaHead[0]->cambio;
-										$cantidadPagaContado = $cantidadPagaContado / $facturaHead[0]->cambio;
-									}
-									$facturaHead[0]->cantidadTarjeta = $cantidadPagaTarjeta;
-									$facturaHead[0]->cantidadContado = $cantidadPagaContado;
-								} elseif ($facturaHead[0]->tipo == 'apartado') {
-									$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
-									$saldo = $facturaHead[0]->total - $abono;
-									//Valorar si fue en colones o dolares								
-									if ($facturaHead[0]->moneda == 'dolares') {
-										$abono = $abono / $facturaHead[0]->cambio;
-										$saldo = $saldo / $facturaHead[0]->cambio;
-									}
-									$facturaHead[0]->abono = $abono;
-									$facturaHead[0]->saldo = $saldo;
+							$fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal);
+							if (!$fElectornica) {
+								$fElectornica = new stdClass();
+								$fElectornica->ConsecutivoHacienda = "No se ha generado FE";
+								$fElectornica->Clave = "No se ha generado FE";
+								$fElectornica->ReceptorNombre = $facturaHead[0]->cliente_ced == 0 ? null : $facturaHead[0]->cliente_nom;
+							}
+							
+							//Valoramos si un credito para poner la fecha de vencimiento
+							if ($facturaHead[0]->tipo == 'credito') {
+								$diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0]->cliente_ced);
+								$facturaHead[0]->diasCredito = $diasCredito;
+								$date = strtotime("+$diasCredito days", strtotime($facturaHead[0]->fecha));
+								$facturaHead[0]->fechaVencimiento = date('d-m-Y', $date);
+							} elseif ($facturaHead[0]->tipo == 'mixto') {
+								$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
+								$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
+								//Valorar si fue en colones o dolares								
+								if ($facturaHead[0]->moneda == 'dolares') {
+									$cantidadPagaTarjeta = $cantidadPagaTarjeta / $facturaHead[0]->cambio;
+									$cantidadPagaContado = $cantidadPagaContado / $facturaHead[0]->cambio;
 								}
+								$facturaHead[0]->cantidadTarjeta = $cantidadPagaTarjeta;
+								$facturaHead[0]->cantidadContado = $cantidadPagaContado;
+							} elseif ($facturaHead[0]->tipo == 'apartado') {
+								$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
+								$saldo = $facturaHead[0]->total - $abono;
+								//Valorar si fue en colones o dolares								
+								if ($facturaHead[0]->moneda == 'dolares') {
+									$abono = $abono / $facturaHead[0]->cambio;
+									$saldo = $saldo / $facturaHead[0]->cambio;
+								}
+								$facturaHead[0]->abono = $abono;
+								$facturaHead[0]->saldo = $saldo;
+							}
 
-								//Costos totales
-								$subtotal = $facturaHead[0]->subtotal;
-								$totalIVA = $facturaHead[0]->total_iva;
-								$total = $facturaHead[0]->total;
+							//Costos totales
+							$subtotal = $facturaHead[0]->subtotal;
+							$totalIVA = $facturaHead[0]->total_iva;
+							$total = $facturaHead[0]->total;
+							//Valoramos si es en dolares
+							if ($facturaHead[0]->moneda == 'dolares') {
+								$facturaHead[0]->subtotal = $subtotal / $facturaHead[0]->cambio;
+								$facturaHead[0]->total_iva = $totalIVA / $facturaHead[0]->cambio;
+								$facturaHead[0]->total = $total / $facturaHead[0]->cambio;
+							}
+
+
+							if ($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)) {
+
 								//Valoramos si es en dolares
 								if ($facturaHead[0]->moneda == 'dolares') {
-									$facturaHead[0]->subtotal = $subtotal / $facturaHead[0]->cambio;
-									$facturaHead[0]->total_iva = $totalIVA / $facturaHead[0]->cambio;
-									$facturaHead[0]->total = $total / $facturaHead[0]->cambio;
-								}
-
-
-								if ($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)) {
-
-									//Valoramos si es en dolares
-									if ($facturaHead[0]->moneda == 'dolares') {
-										for ($i = 0; $i < sizeOf($facturaBody); $i++) {
-											$facturaBody[$i]->precio = ($facturaBody[$i]->precio) / $facturaHead[0]->cambio;
-										}
+									for ($i = 0; $i < sizeOf($facturaBody); $i++) {
+										$facturaBody[$i]->precio = ($facturaBody[$i]->precio) / $facturaHead[0]->cambio;
 									}
-
-									$this->retorno['status'] = 'success';
-									unset($this->retorno['error']);
-
-									$facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
-									$facturaHead[0]->clave = $fElectornica->Clave;
-
-									$this->retorno['empresa'] = $empresa;
-									$this->retorno['fHead'] = $facturaHead;
-									$this->retorno['fBody'] = $facturaBody;
-								} else {
-									$this->retorno['error'] = 'No se pudo cargar los artículos de la factura';
 								}
+
+								$this->retorno['status'] = 'success';
+								unset($this->retorno['error']);
+
+								$facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
+								$facturaHead[0]->clave = $fElectornica->Clave;
+								$facturaHead[0]->isTE = $fElectornica->ReceptorNombre == null;
+
+								$this->retorno['empresa'] = $empresa;
+								$this->retorno['fHead'] = $facturaHead;
+								$this->retorno['fBody'] = $facturaBody;
 							} else {
-								$this->retorno['error'] = 'No se pudo cargar encabezado de factura electrónica';
+								$this->retorno['error'] = 'No se pudo cargar los artículos de la factura';
 							}
 						} else {
 							$this->retorno['error'] = 'No se pudo cargar encabezado de factura';
@@ -427,6 +432,7 @@ class impresion extends CI_Controller
 								$fElectornica = new stdClass();
 								$fElectornica->ConsecutivoHacienda = "No se ha generado FE";
 								$fElectornica->Clave = "No se ha generado FE";
+								$fElectornica->ReceptorNombre = $facturaHead[0]->cliente_ced == 0 ? null : $facturaHead[0]->cliente_nom;
 							}
 
 							if ($fElectornica) {
