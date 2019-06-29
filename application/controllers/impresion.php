@@ -97,12 +97,20 @@ class impresion extends CI_Controller
 
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
 						if ($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)) {
-							$fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal);
-							if (!$fElectornica) {
+							if($empresa[0]->isFE === 1){
+								$fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal);
+
+								if (!$fElectornica) {
+									$fElectornica = new stdClass();
+									$fElectornica->ConsecutivoHacienda = "No se ha generado FE";
+									$fElectornica->Clave = "No se ha generado FE";
+									$fElectornica->ReceptorNombre = $facturaHead[0]->cliente_ced == 0 ? null : $facturaHead[0]->cliente_nom;
+								}
+							}else{
 								$fElectornica = new stdClass();
-								$fElectornica->ConsecutivoHacienda = "No se ha generado FE";
-								$fElectornica->Clave = "No se ha generado FE";
-								$fElectornica->ReceptorNombre = $facturaHead[0]->cliente_ced == 0 ? null : $facturaHead[0]->cliente_nom;
+								$fElectornica->ConsecutivoHacienda = $consecutivo;
+								$fElectornica->Clave = false;
+								$fElectornica->ReceptorNombre = null;
 							}
 							
 							//Valoramos si un credito para poner la fecha de vencimiento
@@ -427,13 +435,22 @@ class impresion extends CI_Controller
 					$consecutivo = $_GET['n'];
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
 						if ($facturaHead = $this->factura->getFacturasHeadersImpresion($consecutivo, $sucursal)) {
-							$fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal);
-							if (!$fElectornica) {
+							if($empresa[0]->isFE === 1){
+								$fElectornica = $this->factura->getFacturaElectronica($consecutivo, $sucursal);
+
+								if (!$fElectornica) {
+									$fElectornica = new stdClass();
+									$fElectornica->ConsecutivoHacienda = "No se ha generado FE";
+									$fElectornica->Clave = "No se ha generado FE";
+									$fElectornica->ReceptorNombre = $facturaHead[0]->cliente_ced == 0 ? null : $facturaHead[0]->cliente_nom;
+								}
+							}else{
 								$fElectornica = new stdClass();
-								$fElectornica->ConsecutivoHacienda = "No se ha generado FE";
-								$fElectornica->Clave = "No se ha generado FE";
-								$fElectornica->ReceptorNombre = $facturaHead[0]->cliente_ced == 0 ? null : $facturaHead[0]->cliente_nom;
+								$fElectornica->ConsecutivoHacienda = $consecutivo;
+								$fElectornica->Clave = false;
+								$fElectornica->ReceptorNombre = null;
 							}
+							
 
 							if ($fElectornica) {
 								if ($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)) {

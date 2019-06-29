@@ -113,15 +113,23 @@ function imprimirFactura(data){
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	qz.append("----------------------------------------\r\n");
-	if(!factura.isTE){
-		qz.append(" FACTURA ELECTRONICA\r\n");
-		console.log("IS FE");
+	if(factura.clave !== false){
+		if(!factura.isTE){
+			qz.append(" FACTURA ELECTRONICA\r\n");
+			console.log("IS FE");
+		}else{
+			qz.append(" TIQUETE ELECTRONICO\r\n");
+			console.log("NO FE");
+		}  
 	}else{
-		qz.append(" TIQUETE ELECTRONICO\r\n");
-		console.log("NO FE");
-	}  
+		qz.append(" FACTURA\r\n");
+		console.log("SIMPLIFICADO");
+	}
+	
 	qz.append(" Consecutivo: "+factura.consecutivoH+"\r\n"); 
-        qz.append(" Clave: "+factura.clave+"\r\n"); 
+	if(factura.clave !== false){
+		qz.append(" Clave: "+factura.clave+"\r\n"); 
+	}
 	qz.append(" Fecha: "+factura.fecha+"\r\n"); 
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Cliente: "+factura.cliente_ced+"\r\n");
@@ -183,11 +191,15 @@ function imprimirFactura(data){
 	qz.append("Los precios incluyen impuestos de venta\r\n");
 	qz.append("Gracias por su visita\r\n");
 	qz.append(" \r\n");
-        qz.append(" Este comprobante provisional no puede ser utilizado para respaldo de creditos fiscales ni como gastos deducibles\r\n");
+	if(factura.clave !== false){
+		qz.append(" Este comprobante provisional no puede ser utilizado para respaldo de creditos fiscales ni como gastos deducibles\r\n");
         qz.append(" \r\n");
-        qz.append(" Version 4.3\r\n");
-	qz.append(empresa.leyenda+"\r\n");
+		qz.append(" Version 4.3\r\n");
+		qz.append(empresa.leyenda+"\r\n");
         qz.append("\r\n Comprobante Provisional \r\n");
+	}else{
+		qz.append(empresa.leyenda+"\r\n");
+	}
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
 	qz.append("\x1B\x69"); //Cortar

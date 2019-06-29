@@ -169,11 +169,16 @@ Class impresion_m extends CI_Model{
                                 $pdf->Cell(40,10,'Dirección: '.$empresa->direccion);
 		
 								$pdf->SetFont('Arial','B',12);
-								if(property_exists($encabezado, "isFEC")){
-									$pdf->Text(11, 15, 'Factura Electrónica de Compra');
+								if($encabezado->clave !== false){
+									if(property_exists($encabezado, "isFEC")){
+										$pdf->Text(11, 15, 'Factura Electrónica de Compra');
+									}else{
+										$pdf->Text(11, 15, $encabezado->isTE ? 'Tiquete Electrónico' : 'Factura Electrónica');
+									}
 								}else{
-									$pdf->Text(11, 15, $encabezado->isTE ? 'Tiquete Electrónico' : 'Factura Electrónica');
+									$pdf->Text(11, 15, 'Factura');
 								}
+								
                                 
                                 $pdf->SetFont('Arial','',11);
                                 $pdf->Text(172, 15, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
@@ -649,8 +654,11 @@ Class impresion_m extends CI_Model{
 				//Leyenda de tributacion
 				$pdf->SetFont('Arial','',8);
 				$pdf->SetXY(10, 257);
-                                $pdf->MultiCell(190,3,"Versión: 4.3",0,'C');
-                                $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
+				if($encabezado->clave !== false){
+					$pdf->MultiCell(190,3,"Versión: 4.3",0,'C');
+                    $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
+				}
+                                
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 				//Costos totales
 				$subtotal = $encabezado->subtotal;
