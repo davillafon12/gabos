@@ -386,11 +386,19 @@ function imprimirNotaCredito(data){
 	qz.append("----------------------------------------\r\n");
 	//Seleccionamos el tipo de letra
 	qz.append("\x1B\x21\x08");	
-	qz.append("NOTA CREDITO ELECTRONICA\r\n");
+	if(nota.clave !== false){
+		console.log("Cabeza de NCE");
+		qz.append("NOTA CREDITO ELECTRONICA\r\n");
+	}else{
+		console.log("Cabeza");
+		qz.append("NOTA CREDITO\r\n");
+	}
 	qz.append("\x1B\x40"); //Reset todo
 	qz.append("\x1B\x74\x16"); //Code page WPC1252
 	qz.append("Consecutivo: "+nota.consecutivoH+"\r\n"); 
-        qz.append("Clave: "+nota.clave+"\r\n"); 
+	if(nota.clave !== false){
+		qz.append("Clave: "+nota.clave+"\r\n"); 
+	}
 	qz.append("Fecha: "+nota.fecha+"\r\n");
 	qz.append("Moneda: "+nota.moneda+"\r\n");
 	qz.append("Tipo de Pago: "+nota.tipo_pago+"\r\n");
@@ -435,8 +443,11 @@ function imprimirNotaCredito(data){
 	qz.append("Los precios incluyen impuestos de venta\r\n");
 	qz.append("Gracias por su visita\r\n");
 	qz.append(" \r\n");
-        qz.append(" Version 4.3\r\n");
-	qz.append(empresa.leyenda+"\r\n");
+	if(nota.clave !== false){
+		console.log("Pie de NCE");
+		qz.append(" Version 4.3\r\n");
+		qz.append(empresa.leyenda+"\r\n");
+	}
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
 	qz.append("\x1B\x69"); //Cortar

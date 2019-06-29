@@ -2743,41 +2743,24 @@ Class contabilidad extends CI_Model
                                                         $retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
                                                         $retorno['token'] =  md5($usuarioCodigo.$sucursal."GAimpresionBO");
                                                         
+														$empresaObj = $this->empresa->getEmpresa($sucursal)[0];
 
-
-                                                        // Realizar nota credito electronica
-                                                        $respuestaHacienda["type"] = "error";
-                                                        if($notaCreditoHead = $this->getNotaCredito($consecutivo, $sucursal)){
-                                                            if($facturaElectronicaHead = $this->factura->getFacturaElectronica($notaCreditoHead->Factura_Acreditar, $sucursal)){
-                                                                $response = $this->generarNotaCreditoElectronica($consecutivo, $sucursal, $razon, $justificacion, $facturaElectronicaHead->Clave, FACTURA_ELECTRONICA_CODIGO, $facturaElectronicaHead->FechaEmision);
-                                                                $this->generarPDFNotaCredito($consecutivo, $sucursal);
-                                                               /* if($response["status"]){
-                                                                    $respuestaHacienda["type"] = "success";
-                                                                    $respuestaHacienda["msg"] = $response["message"];
-
-                                                                    $this->generarPDFNotaCredito($consecutivo, $sucursal);
-                                                                    $retorno["empresa"] = $response["empresa"];
-                                                                    if(!$response["cliente"]->NoReceptor){
-                                                                        require_once PATH_API_CORREO;
-                                                                        $apiCorreo = new Correo();
-                                                                        $attachs = array(
-                                                                            $this->getFinalPath("nc").$response["clave"].".xml",
-                                                                            $this->getFinalPath("nc").$response["clave"].".pdf");
-                                                                        if($apiCorreo->enviarCorreo($response["cliente"]->Cliente_Correo_Electronico, "Nota Crédito #".$consecutivo." | ".$response["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$response["empresa"]->Sucursal_Nombre, $attachs)){
-                                                                            $this->marcarEnvioCorreoNotaCreditoElectronica($sucursal, $consecutivo);
-                                                                        }
-                                                                    }
-                                                                }else{
-                                                                    $respuestaHacienda["msg"] = $response["error_msg"]." | ERROR #".$response["error"];
-                                                                }*/
-                                                            }else{
-                                                                $respuestaHacienda["msg"] = "No existe factura electrónica para generar la nota crédito electrónica.";
-                                                            }
-                                                        }else{
-                                                            $respuestaHacienda["msg"] = "No se pudo obtener la nota crédito para generar la nota crédito electrónica.";
-                                                        }
-
-                                                        $retorno['hacienda'] = $respuestaHacienda;
+														if($empresaObj->RequiereFE == 1){
+															// Realizar nota credito electronica
+															$respuestaHacienda["type"] = "error";
+															if($notaCreditoHead = $this->getNotaCredito($consecutivo, $sucursal)){
+																if($facturaElectronicaHead = $this->factura->getFacturaElectronica($notaCreditoHead->Factura_Acreditar, $sucursal)){
+																	$response = $this->generarNotaCreditoElectronica($consecutivo, $sucursal, $razon, $justificacion, $facturaElectronicaHead->Clave, FACTURA_ELECTRONICA_CODIGO, $facturaElectronicaHead->FechaEmision);
+																	$this->generarPDFNotaCredito($consecutivo, $sucursal);
+																}else{
+																	$respuestaHacienda["msg"] = "No existe factura electrónica para generar la nota crédito electrónica.";
+																}
+															}else{
+																$respuestaHacienda["msg"] = "No se pudo obtener la nota crédito para generar la nota crédito electrónica.";
+															}
+	
+															$retorno['hacienda'] = $respuestaHacienda;
+														}
                                                 }else{
                                                         //No se pudo crear la nota
                                                         $retorno['error'] = '9';

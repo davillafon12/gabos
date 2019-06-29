@@ -243,42 +243,46 @@ class impresion extends CI_Controller
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
 						if ($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)) {
 							if ($notaCreditoBody = $this->contabilidad->getArticulosNotaCredito($consecutivo, $sucursal)) {
-								if ($notaElectronica = $this->contabilidad->getNotaCreditoElectronica($consecutivo, $sucursal)) {
-									unset($this->retorno['error']);
-									$this->retorno['status'] = 'success';
-									$this->retorno['empresa'] = $empresa;
-									$this->retorno['notaHead'] = $notaCreditoHead;
-									$this->retorno['notaBody'] = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal);
-
-									$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
-									$c_array = $this->configuracion->getConfiguracionArray();
-									$costo_total = 0;
-									$iva = 0;
-									$costo_sin_iva = 0;
-									$retencion = 0;
-									$aplicaRetencion = true;
-									if (!$c_array['aplicar_retencion'] || $cliente[0]->Aplica_Retencion == "1" || $cliente[0]->Cliente_EsExento == "1") {
-										$aplicaRetencion = false;
-									}
-									foreach ($notaCreditoBody as $art) {
-										$detalle = $this->contabilidad->getDetalleLineaNotaCredito($art, $aplicaRetencion);
-										$iva += $detalle["iva"];
-										$retencion += $detalle["retencion"];
-										$costo_sin_iva += $detalle["subtotal"];
-									}
-									$costo_total += round($iva, intval($c_array["cantidad_decimales"])) + round($retencion, intval($c_array["cantidad_decimales"])) + $costo_sin_iva;
-
-
-
-									$notaCreditoHead[0]->total = $costo_total;
-									$notaCreditoHead[0]->subtotal = $costo_sin_iva;
-									$notaCreditoHead[0]->total_iva = $iva;
-									$notaCreditoHead[0]->retencion = $retencion;
-									$notaCreditoHead[0]->consecutivoH = $notaElectronica->ConsecutivoHacienda;
-									$notaCreditoHead[0]->clave = $notaElectronica->Clave;
-								} else {
-									$this->retorno['error'] = 'No se pudo cargar la nota crédito electrónica';
+								if($empresa[0]->isFE === 1){
+									$notaElectronica = $this->contabilidad->getNotaCreditoElectronica($consecutivo, $sucursal);
+								}else{
+									$notaElectronica = new stdClass();
+									$notaElectronica->ConsecutivoHacienda = $consecutivo;
+									$notaElectronica->Clave = false;
 								}
+
+								unset($this->retorno['error']);
+								$this->retorno['status'] = 'success';
+								$this->retorno['empresa'] = $empresa;
+								$this->retorno['notaHead'] = $notaCreditoHead;
+								$this->retorno['notaBody'] = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal);
+
+								$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+								$c_array = $this->configuracion->getConfiguracionArray();
+								$costo_total = 0;
+								$iva = 0;
+								$costo_sin_iva = 0;
+								$retencion = 0;
+								$aplicaRetencion = true;
+								if (!$c_array['aplicar_retencion'] || $cliente[0]->Aplica_Retencion == "1" || $cliente[0]->Cliente_EsExento == "1") {
+									$aplicaRetencion = false;
+								}
+								foreach ($notaCreditoBody as $art) {
+									$detalle = $this->contabilidad->getDetalleLineaNotaCredito($art, $aplicaRetencion);
+									$iva += $detalle["iva"];
+									$retencion += $detalle["retencion"];
+									$costo_sin_iva += $detalle["subtotal"];
+								}
+								$costo_total += round($iva, intval($c_array["cantidad_decimales"])) + round($retencion, intval($c_array["cantidad_decimales"])) + $costo_sin_iva;
+
+
+
+								$notaCreditoHead[0]->total = $costo_total;
+								$notaCreditoHead[0]->subtotal = $costo_sin_iva;
+								$notaCreditoHead[0]->total_iva = $iva;
+								$notaCreditoHead[0]->retencion = $retencion;
+								$notaCreditoHead[0]->consecutivoH = $notaElectronica->ConsecutivoHacienda;
+								$notaCreditoHead[0]->clave = $notaElectronica->Clave;
 							} else {
 								$this->retorno['error'] = 'No se pudo cargar los artículos de la nota crédito';
 							}
@@ -555,43 +559,49 @@ class impresion extends CI_Controller
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
 						if ($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal)) {
 							if ($notaCreditoBody = $this->contabilidad->getArticulosNotaCredito($consecutivo, $sucursal)) {
-								if ($notaElectronica = $this->contabilidad->getNotaCreditoElectronica($consecutivo, $sucursal)) {
-									unset($this->retorno['error']);
-									$this->retorno['status'] = 'success';
-									$this->retorno['empresa'] = $empresa;
-									$this->retorno['notaHead'] = $notaCreditoHead;
-									$this->retorno['notaBody'] = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal);
-
-									$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
-									$c_array = $this->configuracion->getConfiguracionArray();
-									$costo_total = 0;
-									$iva = 0;
-									$costo_sin_iva = 0;
-									$retencion = 0;
-									$aplicaRetencion = true;
-									if (!$c_array['aplicar_retencion'] || $cliente[0]->Aplica_Retencion == "1" || $cliente[0]->Cliente_EsExento == "1") {
-										$aplicaRetencion = false;
-									}
-									foreach ($notaCreditoBody as $art) {
-										$detalle = $this->contabilidad->getDetalleLineaNotaCredito($art, $aplicaRetencion);
-										$iva += $detalle["iva"];
-										$retencion += $detalle["retencion"];
-										$costo_sin_iva += $detalle["subtotal"];
-									}
-									$costo_total += round($iva, intval($c_array["cantidad_decimales"])) + round($retencion, intval($c_array["cantidad_decimales"])) + $costo_sin_iva;
-
-
-
-									$notaCreditoHead[0]->total = $costo_total;
-									$notaCreditoHead[0]->subtotal = $costo_sin_iva;
-									$notaCreditoHead[0]->total_iva = $iva;
-									$notaCreditoHead[0]->retencion = $retencion;
-									$notaCreditoHead[0]->consecutivoH = $notaElectronica->ConsecutivoHacienda;
-									$notaCreditoHead[0]->clave = $notaElectronica->Clave;
-
-
-									$this->impresion_m->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $this->retorno['notaBody'], false);
+								if($empresa[0]->isFE == 1){
+									$notaElectronica = $this->contabilidad->getNotaCreditoElectronica($consecutivo, $sucursal);
+								}else{
+									$notaElectronica = new stdClass();
+									$notaElectronica->ConsecutivoHacienda = $consecutivo;
+									$notaElectronica->Clave = false;
 								}
+								
+								unset($this->retorno['error']);
+								$this->retorno['status'] = 'success';
+								$this->retorno['empresa'] = $empresa;
+								$this->retorno['notaHead'] = $notaCreditoHead;
+								$this->retorno['notaBody'] = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $sucursal);
+
+								$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+								$c_array = $this->configuracion->getConfiguracionArray();
+								$costo_total = 0;
+								$iva = 0;
+								$costo_sin_iva = 0;
+								$retencion = 0;
+								$aplicaRetencion = true;
+								if (!$c_array['aplicar_retencion'] || $cliente[0]->Aplica_Retencion == "1" || $cliente[0]->Cliente_EsExento == "1") {
+									$aplicaRetencion = false;
+								}
+								foreach ($notaCreditoBody as $art) {
+									$detalle = $this->contabilidad->getDetalleLineaNotaCredito($art, $aplicaRetencion);
+									$iva += $detalle["iva"];
+									$retencion += $detalle["retencion"];
+									$costo_sin_iva += $detalle["subtotal"];
+								}
+								$costo_total += round($iva, intval($c_array["cantidad_decimales"])) + round($retencion, intval($c_array["cantidad_decimales"])) + $costo_sin_iva;
+
+
+
+								$notaCreditoHead[0]->total = $costo_total;
+								$notaCreditoHead[0]->subtotal = $costo_sin_iva;
+								$notaCreditoHead[0]->total_iva = $iva;
+								$notaCreditoHead[0]->retencion = $retencion;
+								$notaCreditoHead[0]->consecutivoH = $notaElectronica->ConsecutivoHacienda;
+								$notaCreditoHead[0]->clave = $notaElectronica->Clave;
+
+
+								$this->impresion_m->notaCreditoPDF($empresa[0], $notaCreditoHead[0], $this->retorno['notaBody'], false);
 							} else {
 								$this->retorno['error'] = '12';
 							}

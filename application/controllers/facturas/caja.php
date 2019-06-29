@@ -428,7 +428,8 @@ class caja extends CI_Controller {
                         $facturaBODY['error']='71'; // No se logro validar los campos para hacer la factura electronica
                     }
                 }else{
-                    $existeFacturaElectronica = false;
+					$empresaObj = $this->empresa->getEmpresa($data['Sucursal_Codigo'])[0];
+                    $existeFacturaElectronica = $empresaObj->RequiereFE == 0;
                 }
 
                 if($responseCheck["status"] != "success"){
