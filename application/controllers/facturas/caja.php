@@ -403,7 +403,6 @@ class caja extends CI_Controller {
             	//include PATH_USER_DATA; 						
                 // Primero validamos si existe una factura electronica asociada a esta factura
                 // SI lo hay seguimos adelante y si no la creamos
-                $fueAnuladaPorRechazoDeHacienda = false;
                 $existeFacturaElectronica = false;
                 $facturaYaExistia = true;
                 $responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
@@ -429,7 +428,7 @@ class caja extends CI_Controller {
                         $facturaBODY['error']='71'; // No se logro validar los campos para hacer la factura electronica
                     }
                 }else{
-                    $existeFacturaElectronica = true;
+                    $existeFacturaElectronica = false;
                 }
 
                 if($responseCheck["status"] != "success"){
@@ -461,22 +460,12 @@ class caja extends CI_Controller {
                     
                     if($facturaYaExistia === false){
                         $this->factura->guardarPDFFactura($consecutivo, $data['Sucursal_Codigo']);
-
-                        /*if(!$responseCheck["cliente"]->NoReceptor){
-                            $apiCorreo = new Correo();
-                            $attachs = array(
-                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".xml",
-                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
-                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".pdf");
-                            if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
-                                $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
-                            }
-                        }*/
                     }
-//                    require_once PATH_API_HACIENDA;
-//                    $api = new API_FE();
-//                    $api->destruirSesion($responseCheck["empresa"]->Ambiente_Tributa, $responseCheck["empresa"]->Usuario_Tributa);
-                }
+				}elseif(!$existeFacturaElectronica){
+					$facturaBODY['status']='error';
+                	$facturaBODY['error']='73'; //Error no existe esa factura electronica
+				}
+
                 $facturaHeaders = $facturaHeaders[0];
                 if($facturaHeaders->Factura_Tipo_Pago == "credito"){
                     if($creditoHeader = $this->contabilidad->getCreditoParaAnularFacturaCredito($facturaHeaders->Factura_Consecutivo, 
