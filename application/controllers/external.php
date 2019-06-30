@@ -326,8 +326,32 @@ class external extends CI_Controller {
         }
         
         
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de mensajes receptores");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
         
-        
+        if($mensajesReceptores = $this->contabilidad->getMensajeReceptoresParaEnviarAHacienda()){
+            foreach($mensajesReceptores as $mensajeReceptor){
+                if(!isset($empresas[$mensajeReceptor->Sucursal])){
+                    $empresas[$mensajeReceptor->Sucursal] = $this->empresa->getEmpresa($mensajeReceptor->Sucursal)[0];
+                }
+                $empresa = $empresas[$mensajeReceptor->Sucursal];
+                
+                $this->logger->info("enviarComprobantesAHacienda", " Enviando el mensaje receptor {$mensajeReceptor->Consecutivo} de la sucursal {$mensajeReceptor->Sucursal}");
+            
+                $respuesta = $this->contabilidad->enviarMensajeReceptorHacienda($mensajeReceptor->Consecutivo, $mensajeReceptor->Sucursal);
+
+                if($respuesta){
+                    if(isset($respuesta["status"])){
+                        $this->logger->info("enviarComprobantesAHacienda", "Se envió mensaje receptor con estado <{$respuesta["estado_hacienda"]}>");
+                    }
+                }else{
+                    $this->logger->info("enviarComprobantesAHacienda", "No se pudo enviar mensaje receptor");
+                }
+            }
+        }else{
+            $this->logger->info("enviarComprobantesAHacienda", "No hay mensajes receptores que enviar a Hacienda");
+        }
         
         
         

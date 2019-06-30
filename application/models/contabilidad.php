@@ -3246,6 +3246,17 @@ Class contabilidad extends CI_Model
             }else{
                 return $query->result();
             }
+		}
+		
+		function getMensajeReceptoresParaEnviarAHacienda(){
+            $this->db->where_in("RespuestaHaciendaEstado", array("sin_enviar", "fallo_token", "fallo_envio"));
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result();
+            }
         }
         
         function getNotasCreditoSinEnviarAHacienda(){
