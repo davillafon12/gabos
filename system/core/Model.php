@@ -179,6 +179,12 @@ class CI_Model {
                 $impuesto = json_decode($art->ImpuestoObject);
                 $impuesto[0]->monto = $this->fn($impuesto[0]->monto);
                 $impuesto[0]->tarifa = $this->fn($impuesto[0]->tarifa, 2);
+                if(!property_exists($impuesto[0], 'factorIVA') && property_exists($impuesto[0], 'tarifa')){
+                    $impuesto[0]->factorIVA = $impuesto[0]->factor;
+                }
+                if(!property_exists($impuesto[0], 'codigoTarifa')){
+                    $impuesto[0]->codigoTarifa = "08";
+                }
                 $impuesto[0]->factorIVA = $this->fn($impuesto[0]->factorIVA, 2);
                 $artt = array(
                     "cantidad" => $art->Cantidad,
