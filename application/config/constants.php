@@ -109,7 +109,7 @@ define('FACTURA_COMPRA_ELECTRONICA', 'FEC');
 define('FACTURA_ELECTRONICA_CODIGO', '01');
 define('NOTA_CREDITO_ELECTRONICA', 'NC');
 define('HACIENDA_DECIMALES', 5);
-define('API_CRLIBRE_CURL_TIMEOUT', 5);
+define('API_CRLIBRE_CURL_TIMEOUT', 120);
 define('HACIENDA_TOKEN_API_STAG', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect");
 define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect");
 define('HACIENDA_RECEPCION_API_STAG', "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/");
