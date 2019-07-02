@@ -48,7 +48,7 @@ class external extends CI_Controller {
                                     "xml" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
                                     "respuesta" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
                                     "pdf" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
-
+                                $this->factura->checkArchivosCorreoFE($checkAttachs, $factura);
                                 $attachs = array(
                                     $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
                                     $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",

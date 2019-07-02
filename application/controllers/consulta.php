@@ -1229,7 +1229,12 @@ class consulta extends CI_Controller {
                                 if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
                                     $empresa = $this->empresa->getEmpresa($factura->Sucursal)[0];
                                     require_once PATH_API_CORREO;
-                                    $apiCorreo = new Correo();
+									$apiCorreo = new Correo();
+									$checkAttachs = array(
+										"xml" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+										"respuesta" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+										"pdf" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
+									$this->factura->checkArchivosCorreoFE($checkAttachs, $factura);
                                     $attachs = array(
                                         $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
                                         $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",

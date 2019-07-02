@@ -1326,7 +1326,7 @@ Class factura extends CI_Model
                 
                 // Guardarmos el XML firmado en un archivo
                 //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta);
-                $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($xmlRespuesta, $factura->FechaEmision));
+                $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($xmlRespuesta), $factura->FechaEmision);
                 
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
@@ -2219,13 +2219,35 @@ Class factura extends CI_Model
             
             // Guardarmos el XML firmado en un archivo
             //file_put_contents(PATH_DOCUMENTOS_ELECTRONICOS.$factura->Clave."-respuesta.xml",  base64_decode($xmlRespuesta);
-            $this->storeFile($factura->Clave."-respuesta.xml", "fec", null, base64_decode($xmlRespuesta, $factura->FechaEmision));
+            $this->storeFile($factura->Clave."-respuesta.xml", "fec", null, base64_decode($xmlRespuesta), $factura->FechaEmision);
             
             return array("status" => true, "estado_hacienda" => $estado);
         }else{
             log_message('error', "Error al revisar el estado de la factura en Hacienda FEC | Consecutivo: $consecutivo | Sucursal: $sucursal");
         }
         return false;
+    }
+
+    public function checkArchivosCorreoFE($archivos, $factura){
+        foreach($archivos as $tipo => $ruta){
+            switch($tipo){
+                case "xml":
+                    if (!file_exists($ruta)) {
+                        $this->storeFile($factura->Clave.".xml", "fe", null, base64_decode($factura->XMLFirmado), $factura->FechaEmision);
+                    }
+                break;
+                case "respuesta":
+                    if (!file_exists($ruta)) {
+                        $this->storeFile($factura->Clave."-respuesta.xml", "fe", null, base64_decode($factura->RespuestaHaciendaXML), $factura->FechaEmision);
+                    }
+                break;
+                case "pdf":
+                    if (!file_exists($ruta)) {
+                        $this->guardarPDFFactura($factura->Consecutivo, $factura->Sucursal);
+                    }
+                break;
+            }
+        }
     }
 
 }
