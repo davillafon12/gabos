@@ -1263,7 +1263,8 @@ Class factura extends CI_Model
                             $this->db->where("Sucursal", $sucursal);
                             $this->db->update("tb_55_factura_electronica", $data);
                             
-                            return $this->getEstadoFacturaHacienda($api, $empresa, $factura, $tokenData, $consecutivo, $sucursal);
+                            return true;
+                            //return $this->getEstadoFacturaHacienda($api, $empresa, $factura, $tokenData, $consecutivo, $sucursal);
                         }else{
                             $data = array(
                                 "RespuestaHaciendaEstado" => "fallo_envio"

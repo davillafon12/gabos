@@ -44,6 +44,11 @@ class external extends CI_Controller {
                         if($resultado["status"] && $estadoActualizado === "aceptado"){
                             echo "Enviando correo <br>";
                             if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                $checkAttachs = array(
+                                    "xml" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+                                    "respuesta" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+                                    "pdf" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
+
                                 $attachs = array(
                                     $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
                                     $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
@@ -241,7 +246,7 @@ class external extends CI_Controller {
                 
                 $res = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                 
-                if($res["status"]){
+                /*if($res["status"]){
                     $this->logger->info("enviarComprobantesAHacienda", " La factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal} fue ACEPTADA");
                     if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
                         $this->logger->info("enviarComprobantesAHacienda", "Enviando correo a cliente");
@@ -263,7 +268,7 @@ class external extends CI_Controller {
                 }else{
                     $this->logger->error("enviarComprobantesAHacienda", " La factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal} no fue enviada por:");
                     $this->logger->error("enviarComprobantesAHacienda", $res["message"]);
-                }
+                }*/
             }
         }else{
             $this->logger->info("enviarComprobantesAHacienda", "No hay facturas que enviar a Hacienda");
@@ -291,7 +296,7 @@ class external extends CI_Controller {
                 
                 $resEnvio = $this->contabilidad->enviarNotaCreditoElectronicaAHacienda($nota->Consecutivo, $nota->Sucursal);
                 
-                if($resEnvio){
+                /*if($resEnvio){
                     if($resEnvio["estado_hacienda"] == "rechazado"){
                         $this->logger->error("enviarComprobantesAHacienda", "Nota credito fue RECHAZADA por Hacienda. | Consecutivo: {$nota->Consecutivo} | Sucursal: {$nota->Sucursal}");
                     }else if($resEnvio["estado_hacienda"] == "aceptado"){
@@ -318,7 +323,7 @@ class external extends CI_Controller {
                     }
                 }else{
                     $this->logger->error("enviarComprobantesAHacienda", "No se pudo enviar la nota credito a Hacienda, debemos marcarla como contingencia | Consecutivo: {$nota->Consecutivo} | Sucursal: {$nota->Sucursal}");
-                }
+                }*/
                 
             }
         }else{
