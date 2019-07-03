@@ -101,7 +101,7 @@ Class proforma_m extends CI_Model
 		}
 	}
 	
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida){
 		$sucursalVendedor =  $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
@@ -120,7 +120,9 @@ Class proforma_m extends CI_Model
 							'TB_10_Proforma_TB_02_Sucursal_Codigo'=>$sucursal,
 							'TB_10_Proforma_Proforma_Vendedor_Codigo'=>$vendedor,
 							'TB_10_Proforma_Proforma_Vendedor_Sucursal'=>$sucursalVendedor,
-							'TB_10_Proforma_TB_03_Cliente_Cliente_Cedula'=>$cliente							
+							'TB_10_Proforma_TB_03_Cliente_Cliente_Cedula'=>$cliente,
+							'TipoCodigo' => $tipoCodigo,
+							'UnidadMedida' => $unidadMedida							
 	                    );			
 	        $this->db->insert('TB_04_Articulos_Proforma',$dataItem);
 	}
