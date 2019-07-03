@@ -1981,7 +1981,7 @@ Class contabilidad extends CI_Model
 			}
 	}
 	
-	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final){
+	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final, $tipoCodigo, $unidadMedida){
 			$datos = array(
 										"Codigo"=> $codigo,
 										"Descripcion" => $descripcion,
@@ -1994,7 +1994,9 @@ Class contabilidad extends CI_Model
 										"Retencion" => $retencion,
 										"Imagen" => $imagen,
 										"Sucursal_Entrega" => $sucursalEntrega,
-										"Sucursal_Recibe" => $sucursalRecibe
+										"Sucursal_Recibe" => $sucursalRecibe,
+										"TipoCodigo" => $tipoCodigo,
+										"UnidadMedida" => $unidadMedida
 										);
 			$this->db->insert("tb_51_lista_consignacion", $datos);
 	}

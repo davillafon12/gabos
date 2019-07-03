@@ -236,7 +236,9 @@ class consignaciones extends CI_Controller {
                 
                 //Agregamos dicho articulo a la consignacion
                 $articuloDeSucursalEntrega = $this->articulo->existe_Articulo($art->codigo,$sucursalEntrega);
-                $imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
+				$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
+				$tipoCodigo = $articuloDeSucursalEntrega[0]->TipoCodigo;
+				$unidadMedida = $articuloDeSucursalEntrega[0]->UnidadMedida;
                 $this->contabilidad->registrarArticuloConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $consignacion, $art->precio_final);
 
                 if($aplicarConsignacion){
@@ -245,7 +247,7 @@ class consignaciones extends CI_Controller {
                         $nuevaCantidad = $larticulo->Cantidad + $art->cantidad;
                         $this->contabilidad->actualizarArticuloEnListaConsignacion($art->codigo, $nuevaCantidad, $art->precio_unidad, $sucursalEntrega, $sucursalRecibe);
                     }else{
-                        $this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $art->precio_final);
+                        $this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $art->precio_final, $tipoCodigo, $unidadMedida);
                     }
                 }
             }
@@ -437,7 +439,9 @@ class consignaciones extends CI_Controller {
 						$sucursal, 
 						$vendedor, 
 						$cliente, 
-						$articuloBD->Imagen
+						$articuloBD->Imagen,
+						$articuloBD->TipoCodigo,
+						$articuloBD->UnidadMedida
 					);
 					
 					$nuevaCantidad = $articuloBD->Cantidad - $cantidadConsignadaAFacturar;
