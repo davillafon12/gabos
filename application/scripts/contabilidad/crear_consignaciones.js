@@ -3,6 +3,8 @@ var _SUCURSAL_RECIBE_SELECCIONADA = "-1";
 var _ARRAY_ARTICULOS = [];
 var anchoImpresion = 1024;
 var alturaImpresion = 768;
+var _CLIENTE_RETENCION = "1";
+var _CLIENTE_EXENTO = "0";
 
 //Cargamos los eventos iniciales
 $(window).on("load", function(){
@@ -161,6 +163,8 @@ function cargarInfoArticulo(articulo, fila){
 		$("#articulo_precio_unidad_final_"+fila).val(articulo.precio_no_afiliado);
 		$("#exento_articulo_"+fila).val(articulo.exento);
 		$("#retencion_articulo_"+fila).val(articulo.retencion);
+		_CLIENTE_RETENCION = articulo.retencion_cliente;
+		_CLIENTE_EXENTO = articulo.exento_cliente;
 		actualizarPrecioTotalFila(fila);
 }
 
@@ -389,60 +393,107 @@ function actualizarPrecioTotalFila(fila){
 }
 
 function actualizarTotales(){
-		var montoSinIVA = 0.0;
-		var iva = 0.0;
-		var total = 0.0;
-		var ivaSinDescuento = 0.0;
-		var retencion = 0.0;
+		var costo_sin_IVA_factura = 0.0;
+		var costo_total_factura = 0.0;
+		var IVA_Factura = 0.0;
+		var costo_cliente_final = 0.0;
+		var costo_retencion = 0.0;
 		
 		var cantidadFilas = $("#tabla_productos tr").length - 1;
 		var cantidadArticulos = 0;
 		
 		for(var i=1; i <= cantidadFilas; i++){
-				var precioTotalArticulo = $("#articulo_precio_total_"+i).val().trim() === "" ? 0.0 : parseFloat($("#articulo_precio_total_"+i).val());
-				var precioTotalArticuloSinDescuento = $("#articulo_precio_total_sin_descuento_"+i).val().trim() === "" ? 0.0 : parseFloat($("#articulo_precio_total_sin_descuento_"+i).val());
-				total += precioTotalArticulo;
-				cantidadArticulos += parseInt($("#cantidad_articulo_"+i).val().trim() === "" ? 0 : $("#cantidad_articulo_"+i).val().trim());
+
+			if(!$.isNumeric($("#cantidad_articulo_"+(i)).val()))
+				continue;
+
+				var a = {cantidad:parseInt($("#cantidad_articulo_"+(i)).val()), 
+					precio_unitario: parseFloat($("#articulo_precio_unidad_"+(i)).val()), 
+					descuento: ($.isNumeric($("#descuento_articulo_"+(i)).val()) ? parseFloat($("#descuento_articulo_"+(i)).val()) : 0), 
+					no_retencion: $("#retencion_articulo_"+(i)).val(), 
+					precio_final: parseFloat($("#articulo_precio_unidad_final_"+(i)).val().replace(/,/g, "")), 
+					exento: $("#exento_articulo_"+(i)).val()};
 				
-				//Valoramos exentos y retenciones
-				var isExento = $("#exento_articulo_"+i).val() === '1' ? true : false;
-				var aplicaRetencion = $("#retencion_articulo_"+i).val() === '0' ? true : false;
-						
-				if(!isExento){
-						iva += precioTotalArticulo - (precioTotalArticulo / ( 1 + (_PORCENTAJE_IVA / 100)));
-						ivaSinDescuento += precioTotalArticuloSinDescuento - (precioTotalArticuloSinDescuento / ( 1 + (_PORCENTAJE_IVA / 100)));
-						//Si no es exento quiere decir que puede o no aplicar retencion
-						if(aplicaRetencion){
-								
-								//Obtenemos el precio por unidad del cliente final
-								var precioUnidadClienteFinal = $("#articulo_precio_unidad_final_"+i).val().trim() === "" ? 0.0 : parseFloat($("#articulo_precio_unidad_final_"+i).val().trim());
-								//Obtenemos la cantidad de articulos
-								var cantidad = $("#cantidad_articulo_"+i).val().trim() === "" ? 0 : $("#cantidad_articulo_"+i).val().trim();
-										cantidad = parseInt(cantidad);
-								//Obtenemos el costo final
-								var precioTotalClienteFinalDeArticulo = precioUnidadClienteFinal * cantidad;
-								var ivaArticuloClienteFinal = precioTotalClienteFinalDeArticulo - (precioTotalClienteFinalDeArticulo / ( 1 + (_PORCENTAJE_IVA / 100)));
-								retencion += ivaArticuloClienteFinal - ivaSinDescuento;
-						}
+				var aplicaRetencion = true;
+				if(_CLIENTE_EXENTO=="1" || _APLICA_RETENCION != 1 || _CLIENTE_RETENCION=="1"){
+					aplicaRetencion = false;
 				}
+				
+				var detalle = getDetalleLinea(a, aplicaRetencion);
+				IVA_Factura += detalle.iva;
+				costo_sin_IVA_factura += detalle.subtotal;
+				costo_retencion += detalle.retencion;
+				costo_cliente_final += detalle.costo_final;
+
+				
 		}
-		
-		if(!_APLICA_RETENCION){
-				retencion = 0;
-		}
-		
-		montoSinIVA = total / ( 1 + (_PORCENTAJE_IVA / 100)); 
-		total +=  retencion;
-		
-		//console.log("Total: "+total+" IVA: "+iva+" Retencion: "+retencion+" "+" Costo: "+montoSinIVA);
-		
-		
-		
-		$("#costo").val(montoSinIVA.format(_CANTIDAD_DECIMALES, 3, '.', ','));
-		$("#iva").val(iva.format(_CANTIDAD_DECIMALES, 3, '.', ','));
-		$("#retencion").val(retencion.format(_CANTIDAD_DECIMALES, 3, '.', ','));
-		$("#costo_total").val(total.format(_CANTIDAD_DECIMALES, 3, '.', ','));
+
+		costo_total_factura = IVA_Factura + costo_sin_IVA_factura + costo_retencion;
+
+		$("#costo").val(costo_sin_IVA_factura.format(_CANTIDAD_DECIMALES, 3, '.', ','));
+		$("#iva").val(IVA_Factura.format(_CANTIDAD_DECIMALES, 3, '.', ','));
+		$("#retencion").val(costo_retencion.format(_CANTIDAD_DECIMALES, 3, '.', ','));
+		$("#costo_total").val(costo_total_factura.format(_CANTIDAD_DECIMALES, 3, '.', ','));
 		$("#cant_total_articulos").html(cantidadArticulos);
+}
+
+function getDetalleLinea(a, aplicaRetencion){
+    if(typeof aplicaRetencion === "undefined")
+        aplicaRetencion = true;
+    
+    var linea = {};
+
+    // CANTIDAD
+    var cantidad = parseFloat(a.cantidad);
+    
+    // PRECIO UNITARIO
+    var precioUnitarioSinIVA = removeIVA(parseFloat(a.precio_unitario));
+
+    // MONTO TOTAL
+    var precioTotalSinIVA = cantidad*precioUnitarioSinIVA;
+
+    // DESCUENTO
+    var descuentoPrecioSinIva = 0;
+    if(parseFloat(a.descuento) > 0){
+        descuentoPrecioSinIva = (precioTotalSinIVA * (parseFloat(a.descuento) / 100));
+    }
+	
+     // SUBTOTAL
+    var subTotalSinIVA = (precioTotalSinIVA - descuentoPrecioSinIva);
+    linea.subtotal = parseFloat(subTotalSinIVA);
+
+    // IMPUESTOS
+    var iva = getIVAvalue_float();
+    linea.iva = parseFloat((subTotalSinIVA * iva));
+	linea.retencion = 0;
+	linea.costo_final = 0;
+    if(a.no_retencion == "0" && aplicaRetencion){
+        // Para le retencion NO SE TOMA EN CUENTA EL DESCUENTO
+        var precioFinalUnitarioSinIVA = removeIVA(parseFloat(a.precio_final));
+        var precioFinalTotalSinIVA = cantidad*precioFinalUnitarioSinIVA;
+        var montoDeImpuesto = precioFinalTotalSinIVA * iva;
+        linea.retencion = montoDeImpuesto - linea.iva;
+        linea.costo_final = (parseFloat(a.precio_final) - (parseFloat(a.precio_final) * (parseFloat(a.descuento) / 100))) * cantidad;
+    }else{
+		linea.costo_final = cantidad * parseFloat(a.precio_unitario);
+	}
+    
+    if(a.exento == 1){ // Es exento
+        linea.iva = 0;
+        linea.retencion = 0;
+    }
+
+    return linea;
+}
+
+function removeIVA(price){
+    var iva = getIVAvalue_float();
+    return (price/(1+iva)); 
+}
+
+function getIVAvalue_float(){	
+	var impuesto_venta_float = parseFloat(_PORCENTAJE_IVA);
+	return impuesto_venta_float/100; 
 }
 
 function habilitarCampos(){

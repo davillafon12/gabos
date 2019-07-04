@@ -51,7 +51,10 @@ class consignaciones extends CI_Controller {
 										$retorno['status'] = 'success';
 										$articulo['retencion'] = $this->getRetencionReal($clienteLiga->Cliente, $articulo['retencion']);
 										$articulo['exento'] = $this->getExentoReal($clienteLiga->Cliente, $articulo['exento']);
+										$articulo['retencion_cliente'] = $clienteLiga->informacion["retencion"];
+										$articulo['exento_cliente'] = $clienteLiga->informacion["exento"];
 										$retorno['articulo'] = $articulo;
+										
 										unset($retorno['error']);
 								}else{
 										$retorno['status'] = 'success';
