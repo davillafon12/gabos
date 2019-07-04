@@ -216,6 +216,11 @@ function enableArticulosInputs()
 	{
 		inputsCodigo[i].disabled=false;
 	}
+
+	// Fix para cuando sea factura sin productos
+	if(inputsCodigo.length == 0){
+		agregarFila(1);
+	}
 }
 
 function disableArticulosInputs()
