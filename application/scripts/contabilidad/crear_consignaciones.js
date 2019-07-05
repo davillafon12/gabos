@@ -425,7 +425,7 @@ function actualizarTotales(){
 				costo_retencion += detalle.retencion;
 				costo_cliente_final += detalle.costo_final;
 
-				
+				cantidadArticulos += a.cantidad;
 		}
 
 		costo_total_factura = IVA_Factura + costo_sin_IVA_factura + costo_retencion;
