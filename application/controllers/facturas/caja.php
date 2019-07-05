@@ -636,6 +636,7 @@ class caja extends CI_Controller {
 			
 			if($factura = $this->factura-> existe_Factura($consecutivo, $data['Sucursal_Codigo'])){
 				$articulosFacturaActual = $this->factura->getItemsFactura($consecutivo, $data['Sucursal_Codigo']);
+				$articulosFacturaActual = $articulosFacturaActual === false ? array() : $articulosFacturaActual;
 				if(sizeOf($items_factura)>0){
 					$resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $articulosFacturaActual, $data['Sucursal_Codigo']);
 					if($resultadoExistencias["status"]){
