@@ -529,6 +529,7 @@
     border-radius: 2px;
     color: white;
     font-weight: bold;
+    margin: auto;
 }
 
 .estado-label.error{

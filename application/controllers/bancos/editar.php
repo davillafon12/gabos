@@ -145,16 +145,16 @@ class editar extends CI_Controller {
 		$nombre_banco = $this->input->post('name');
 		$comision_banco = $this->input->post('comision');
 			
-		$data_update['Banco_Nombre'] = mysql_real_escape_string($nombre_banco);
-		$data_update['Banco_Comision_Porcentaje'] = mysql_real_escape_string($comision_banco);
+		$data_update['Banco_Nombre'] = $nombre_banco;
+		$data_update['Banco_Comision_Porcentaje'] = $comision_banco;
 		
 		//echo $id_empresa;
 		//echo $nombre_empresa;
 		
-		$this->banco->actualizar(mysql_real_escape_string($id_banco), $data_update);
+		$this->banco->actualizar($id_banco, $data_update);
 		
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el banco codigo: ".mysql_real_escape_string($id_banco),$data['Sucursal_Codigo'],'edicion');
+		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el banco codigo: ".$id_banco,$data['Sucursal_Codigo'],'edicion');
 		
 		redirect('bancos/editar', 'location');
 	 }

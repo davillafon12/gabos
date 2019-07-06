@@ -251,25 +251,28 @@ class caja extends CI_Controller {
         $consecutivo = filter_input(INPUT_POST, "consecutivo");
         $tipoPago = json_decode(filter_input(INPUT_POST, "tipoPago"), true)[0];
         
-        $responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
-        
+		$responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
+		
         if($responseCheck["status"] == "success"){
+
+			$requiereFE = $responseCheck["empresa"]->RequiereFE == 1;
+			
             $recibidoParaVuelto = filter_input(INPUT_POST, "entregado");
             $vuelto = filter_input(INPUT_POST, "vuelto");
             include PATH_USER_DATA; 
-            
-            $resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
-            
+			
+			$resFacturaElectronica = array();
+			if($requiereFE){
+				$resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
+			}else{
+				$resFacturaElectronica["status"] = true;
+				$resFacturaElectronica["data"] = array( "fecha" => now());
+			}
             
             if($resFacturaElectronica["status"]){
-                //$resEnvio = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                 
                 $estadoFactura = 'cobrada';
                 $responseCheck['impresion'] = 1;
-//                if($resEnvio["status"] === false && $resEnvio["estado"] === "rechazado"){
-//                    $responseCheck['impresion'] = 0;
-//                    $estadoFactura = 'anulada';
-//                }
                 
                 //Para efecto de impresion
                 $responseCheck['sucursal']= $data['Sucursal_Codigo'];
@@ -278,7 +281,7 @@ class caja extends CI_Controller {
 
                 $Current_datetime = date("y/m/d : H:i:s", $resFacturaElectronica["data"]["fecha"]);
                 $datos = array(         
-                        'Factura_Tipo_Pago'=>mysql_real_escape_string($tipoPago['tipo']),
+                        'Factura_Tipo_Pago'=>$tipoPago['tipo'],
                         'Factura_Fecha_Hora'=>$Current_datetime, 
                         'Factura_Estado'=>$estadoFactura,
                         'Factura_Entregado_Vuelto' => $vuelto,
@@ -300,34 +303,11 @@ class caja extends CI_Controller {
                 if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
                         $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
                 }
+				
+				if($requiereFE){
+					$this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+				}
                 
-                $this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
-                
-//                if($resEnvio["status"]){
-//                    if(!$responseCheck["cliente"]->NoReceptor){
-//                        require_once PATH_API_CORREO;
-//                        $apiCorreo = new Correo();
-//                        $attachs = array(
-//                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".xml",
-//                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
-//                            $this->factura->getFinalPath("fe").$resFacturaElectronica["data"]["clave"].".pdf");
-//                        if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
-//                            $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
-//                        }
-//                    }
-//                }else if($resEnvio["status"] === false && $resEnvio["estado"] === "rechazado"){
-//                    // Al haber sido rechazada por hacienda se debe anular la factura, y se devuelven los articulos
-//                    //$this->devolverProductosdeFactura($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
-//                    
-//                    // Creamos la nota credito respectiva para la factura
-//                    $productosAAcreditar = $this->convertirProductosDeFacturaANotaCredito($responseCheck["articulosOriginales"]);
-//                    $retorno = array();
-//                    $this->contabilidad->crearNotaCreditoMacro($retorno, $responseCheck["cliente"]->Cliente_Cedula, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo, $productosAAcreditar, $data['Usuario_Codigo'], ANULAR_FACTURA, "Anulacion por rechazo de factura", true);
-//                }
-//               
-//                require_once PATH_API_HACIENDA;
-//                $api = new API_FE();
-//                $api->destruirSesion($responseCheck["empresa"]->Ambiente_Tributa, $responseCheck["empresa"]->Usuario_Tributa);
             }else{
                 $responseCheck["status"] = "error";
                 $responseCheck["error"] = $resFacturaElectronica["error"];
@@ -423,12 +403,16 @@ class caja extends CI_Controller {
             	//include PATH_USER_DATA; 						
                 // Primero validamos si existe una factura electronica asociada a esta factura
                 // SI lo hay seguimos adelante y si no la creamos
-                $fueAnuladaPorRechazoDeHacienda = false;
                 $existeFacturaElectronica = false;
                 $facturaYaExistia = true;
-                $responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
-                if($this->factura->getFacturaElectronica($consecutivo, $data['Sucursal_Codigo']) === false){
-                    if($responseCheck["status"] == "success"){
+				$responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
+				$empresaObj = $this->empresa->getEmpresa($data['Sucursal_Codigo'])[0];
+                if($facturaElectronica = $this->factura->getFacturaElectronica($consecutivo, $data['Sucursal_Codigo'])){
+					$existeFacturaElectronica = true;
+                }else if($empresaObj->RequiereFE == 0){
+					$existeFacturaElectronica = true;
+				}else{
+					if($responseCheck["status"] == "success"){
                         $resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
                         if($resFacturaElectronica["status"]){
                             //$fueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
@@ -448,8 +432,6 @@ class caja extends CI_Controller {
                         $facturaBODY['status']='error';
                         $facturaBODY['error']='71'; // No se logro validar los campos para hacer la factura electronica
                     }
-                }else{
-                    $existeFacturaElectronica = true;
                 }
 
                 if($responseCheck["status"] != "success"){
@@ -481,22 +463,12 @@ class caja extends CI_Controller {
                     
                     if($facturaYaExistia === false){
                         $this->factura->guardarPDFFactura($consecutivo, $data['Sucursal_Codigo']);
-
-                        /*if(!$responseCheck["cliente"]->NoReceptor){
-                            $apiCorreo = new Correo();
-                            $attachs = array(
-                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".xml",
-                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
-                                PATH_DOCUMENTOS_ELECTRONICOS.$resFacturaElectronica["data"]["clave"].".pdf");
-                            if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
-                                $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
-                            }
-                        }*/
                     }
-//                    require_once PATH_API_HACIENDA;
-//                    $api = new API_FE();
-//                    $api->destruirSesion($responseCheck["empresa"]->Ambiente_Tributa, $responseCheck["empresa"]->Usuario_Tributa);
-                }
+				}elseif(!$existeFacturaElectronica){
+					$facturaBODY['status']='error';
+                	$facturaBODY['error']='73'; //Error no existe esa factura electronica
+				}
+
                 $facturaHeaders = $facturaHeaders[0];
                 if($facturaHeaders->Factura_Tipo_Pago == "credito"){
                     if($creditoHeader = $this->contabilidad->getCreditoParaAnularFacturaCredito($facturaHeaders->Factura_Consecutivo, 
@@ -665,7 +637,8 @@ class caja extends CI_Controller {
 			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 			if($factura = $this->factura-> existe_Factura($consecutivo, $data['Sucursal_Codigo'])){
-				if($articulosFacturaActual = $this->factura->getItemsFactura($consecutivo, $data['Sucursal_Codigo']))
+				$articulosFacturaActual = $this->factura->getItemsFactura($consecutivo, $data['Sucursal_Codigo']);
+				$articulosFacturaActual = $articulosFacturaActual === false ? array() : $articulosFacturaActual;
 				if(sizeOf($items_factura)>0){
 					$resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $articulosFacturaActual, $data['Sucursal_Codigo']);
 					if($resultadoExistencias["status"]){
@@ -748,7 +721,7 @@ class caja extends CI_Controller {
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico					
-					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'');
+					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'','01','Unid');
 			}else{ //Si es normal					
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
@@ -756,7 +729,10 @@ class caja extends CI_Controller {
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
-					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
+					$tipoCodigo = $this->articulo->getArticuloTipoCodigo($item['co'], $sucursal);
+					$unidadMedida = $this->articulo->getArticuloUnidadMedida($item['co'], $sucursal);
+
+					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida);
 					$this->articulo->actualizarInventarioRESTA($item['co'], $item['ca'], $sucursal);
 				}
 			}
@@ -1117,9 +1093,9 @@ class caja extends CI_Controller {
 	
 	function imprimirFactura(){
 		if(isset($_GET['consecutivo'])&&isset($_GET['sucursal'])&&isset($_GET['tipo'])){
-			$consecutivo = 	mysql_real_escape_string($_GET['consecutivo']);
-			$sucursal = mysql_real_escape_string($_GET['sucursal']);
-			$tipo = mysql_real_escape_string($_GET['tipo']);
+			$consecutivo = 	$_GET['consecutivo'];
+			$sucursal = $_GET['sucursal'];
+			$tipo = $_GET['tipo'];
 			
 			if($empresa = $this->empresa->getEmpresa($sucursal)){
 				if($facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal)){

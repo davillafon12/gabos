@@ -203,14 +203,14 @@ PARA:
 							<div class='articulo_specs' id='descuento_articulo_".$numero_id."' ondblclick='changeDiscount(".$numero_id.")'></div>
 						</td>
 						<td>
-							<div class='articulo_specs' id='costo_unidad_articulo_".$numero_id."'></div>
+							<div class='articulo_specs unitario' id='costo_unidad_articulo_".$numero_id."'></div>
 							<input id='costo_unidad_articulo_ORIGINAL_".$numero_id."' type='hidden' >
 							<input id='costo_unidad_articulo_FINAL_".$numero_id."' type='hidden' >
 							<input id='producto_exento_".$numero_id."' type='hidden' >
 							<input id='producto_retencion_".$numero_id."' type='hidden' >
 						</td>
 						<td>
-							<div class='articulo_specs' id='costo_total_articulo_".$numero_id."'></div>
+							<div class='articulo_specs final' id='costo_total_articulo_".$numero_id."'></div>
 							<input type='hidden' id='costo_total_articulo_sin_descuento_".$numero_id."'/>
 						</td>
 					</tr>";

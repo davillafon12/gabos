@@ -429,46 +429,46 @@ class editar extends CI_Controller {
 		$this->do_upload($cedula); // metodo encargado de cargar la imagen con la cedula del usuario
 
 
-		$data_update['Cliente_Nombre'] = mysql_real_escape_string($nombre);
-		$data_update['Cliente_Apellidos'] = mysql_real_escape_string($apellidos);
-		$data_update['Fecha_Nacimiento'] = mysql_real_escape_string($fecha_nacimiento);
-		$data_update['Cliente_Celular'] = mysql_real_escape_string($celular);
-		$data_update['Cliente_Telefono'] = mysql_real_escape_string($telefono);
-		$data_update['Cliente_Pais'] = mysql_real_escape_string($pais);
-		$data_update['Cliente_Direccion'] = mysql_real_escape_string($direccion);
-		$data_update['Cliente_Observaciones'] = mysql_real_escape_string($observaciones);
-		$data_update['Cliente_Imagen_URL'] = mysql_real_escape_string($this->direccion_url_imagen);
-		$data_update['Cliente_Correo_Electronico'] = mysql_real_escape_string($email);
-		$data_update['Cliente_Estado'] = mysql_real_escape_string($estado_Cliente);
-		$data_update['Cliente_Numero_Pago'] = mysql_real_escape_string($tipo_pago_cliente);
+		$data_update['Cliente_Nombre'] = $nombre;
+		$data_update['Cliente_Apellidos'] = $apellidos;
+		$data_update['Fecha_Nacimiento'] = $fecha_nacimiento;
+		$data_update['Cliente_Celular'] = $celular;
+		$data_update['Cliente_Telefono'] = $telefono;
+		$data_update['Cliente_Pais'] = $pais;
+		$data_update['Cliente_Direccion'] = $direccion;
+		$data_update['Cliente_Observaciones'] = $observaciones;
+		$data_update['Cliente_Imagen_URL'] = $this->direccion_url_imagen;
+		$data_update['Cliente_Correo_Electronico'] = $email;
+		$data_update['Cliente_Estado'] = $estado_Cliente;
+		$data_update['Cliente_Numero_Pago'] = $tipo_pago_cliente;
 		$data_update['Cliente_EsSucursal'] = $isSucursal; 
 		$data_update['Cliente_EsExento'] = $exento;
 		$data_update['Aplica_Retencion'] = $aplicaRetencion;
 		$data_update['NoReceptor'] = $noReceptor;
-		$data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($codptel);
-		$data_update['Codigo_Pais_Celular'] = mysql_real_escape_string($codpcel);
-		$data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($codpfax);
-		$data_update['Numero_Fax'] = mysql_real_escape_string($fax);
-		$data_update['Provincia'] = mysql_real_escape_string($prov);
-		$data_update['Canton'] = mysql_real_escape_string($canton);
-		$data_update['Distrito'] = mysql_real_escape_string($distr);
-		$data_update['Barrio'] = mysql_real_escape_string($barrio);
+		$data_update['Codigo_Pais_Telefono'] = $codptel;
+		$data_update['Codigo_Pais_Celular'] = $codpcel;
+		$data_update['Codigo_Pais_Fax'] = $codpfax;
+		$data_update['Numero_Fax'] = $fax;
+		$data_update['Provincia'] = $prov;
+		$data_update['Canton'] = $canton;
+		$data_update['Distrito'] = $distr;
+		$data_update['Barrio'] = $barrio;
                 
 		
-		$this->cliente->actualizar(mysql_real_escape_string($cedula), $data_update);
+		$this->cliente->actualizar($cedula, $data_update);
 		
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 
-		$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+		$this->user->guardar_Bitacora_Cliente($cedula, 
 											$data['Sucursal_Codigo'], 
 											$data['Usuario_Codigo'], 
 											'Edicion_Cliente', 
-											'Edición Cliente : '. mysql_real_escape_string($nombre).' '. mysql_real_escape_string($apellidos) .
-											' Tipo Pago : '.mysql_real_escape_string($tipo_pago_cliente).
-											' Email : '.mysql_real_escape_string($email).
-											' Celular : '.mysql_real_escape_string($celular));  
+											'Edición Cliente : '. $nombre.' '. $apellidos .
+											' Tipo Pago : '.$tipo_pago_cliente.
+											' Email : '.$email.
+											' Celular : '.$celular);  
 
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el cliente codigo: ".mysql_real_escape_string($tipo_Cedula),$data['Sucursal_Codigo'],'edicion');
+		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el cliente codigo: ".$tipo_Cedula,$data['Sucursal_Codigo'],'edicion');
 		
 		redirect('clientes/editar', 'location');
 		

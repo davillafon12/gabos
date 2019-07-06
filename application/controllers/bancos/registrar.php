@@ -37,7 +37,7 @@ class registrar extends CI_Controller {
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	if($id = $this->banco->registrar($nombre_banco, $comision_banco, $data['Usuario_Codigo']))
 	{ //Si se ingreso bien a la BD
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el banco ".mysql_real_escape_string($nombre_banco)." codigo: ".$id,$data['Sucursal_Codigo'],'registro');
+		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el banco ".$nombre_banco." codigo: ".$id,$data['Sucursal_Codigo'],'registro');
 		//Titulo de la pagina
 		redirect('bancos/editar', 'location');
 	}

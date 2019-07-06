@@ -35,8 +35,14 @@ Class impresion_m extends CI_Model{
 
         if($makeFile){
             $filePath = "/tmp/".$fhead[0]->clave.".pdf";
-            $pdf->Output($filePath,'F');
-            $this->storeFile($fhead[0]->clave.".pdf", "fe", $filePath);
+			$pdf->Output($filePath,'F');
+			$tipoDocumento = "fe";
+			if(property_exists($fhead[0], "isFEC")){
+				if($fhead[0]->isFEC){
+					$tipoDocumento = "fec";
+				}
+			}
+            $this->storeFile($fhead[0]->clave.".pdf", $tipoDocumento, $filePath);
         }else{
            //Imprimimos documento
             $pdf->Output(); 
@@ -162,8 +168,18 @@ Class impresion_m extends CI_Model{
                                 $pdf->ln(4);
                                 $pdf->Cell(40,10,'Dirección: '.$empresa->direccion);
 		
-                                $pdf->SetFont('Arial','B',12);
-                                $pdf->Text(11, 15, 'Factura Electrónica');
+								$pdf->SetFont('Arial','B',12);
+								if($encabezado->clave !== false){
+									if(property_exists($encabezado, "isFEC")){
+										$pdf->Text(11, 15, 'Factura Electrónica de Compra');
+									}else{
+										$pdf->Text(11, 15, $encabezado->isTE ? 'Tiquete Electrónico' : 'Factura Electrónica');
+									}
+								}else{
+									$pdf->Text(11, 15, 'Factura');
+								}
+								
+                                
                                 $pdf->SetFont('Arial','',11);
                                 $pdf->Text(172, 15, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
                                 
@@ -291,8 +307,13 @@ Class impresion_m extends CI_Model{
                                 $pdf->ln(4);
                                 $pdf->Cell(40,10,'Dirección: '.$empresa->direccion);
 		
-                                $pdf->SetFont('Arial','B',12);
-                                $pdf->Text(11, 15, 'Nota Crédito Electrónica');
+								$pdf->SetFont('Arial','B',12);
+								if($encabezado->clave !== false){
+									$pdf->Text(11, 15, 'Nota Crédito Electrónica');
+								}else{
+									$pdf->Text(11, 15, 'Nota Crédito');
+								}
+                                
                                 $pdf->SetFont('Arial','',11);
                                 $pdf->Text(172, 15, 'Pag. # '.($this->numPagina+1)." de ".$this->cantidadPaginas);
                                 
@@ -638,8 +659,11 @@ Class impresion_m extends CI_Model{
 				//Leyenda de tributacion
 				$pdf->SetFont('Arial','',8);
 				$pdf->SetXY(10, 257);
-                                $pdf->MultiCell(190,3,"Versión: 4.2",0,'C');
-                                $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
+				if($encabezado->clave !== false){
+					$pdf->MultiCell(190,3,"Versión: 4.3",0,'C');
+                    $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
+				}
+                                
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 				//Costos totales
 				$subtotal = $encabezado->subtotal;
@@ -688,8 +712,11 @@ Class impresion_m extends CI_Model{
                                 
                                 $pdf->SetFont('Arial','',8);
 				$pdf->SetXY(10, 260);
-                                $pdf->MultiCell(190,3,"Versión: 4.2",0,'C');
-                                $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
+				if($encabezado->clave !== false){
+					$pdf->MultiCell(190,3,"Versión: 4.3",0,'C');
+                    $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
+				}
+                                
 				$pdf->MultiCell(190,3,$empresa->leyenda,0,'C');
 			break;
 			case 'nd':

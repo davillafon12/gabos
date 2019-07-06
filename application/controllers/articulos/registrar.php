@@ -98,7 +98,7 @@ class registrar extends CI_Controller {
 		}
 		$data['Titulo_Pagina'] = "Transacción Exitosa";
 	
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el articulo ".mysql_real_escape_string($codigo_Articulo)." cantidad: ".mysql_real_escape_string($cantidad_Articulos),$data['Sucursal_Codigo'],'registro');
+		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el articulo ".$codigo_Articulo." cantidad: ".$cantidad_Articulos,$data['Sucursal_Codigo'],'registro');
 	    $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso del articulo ".$codigo_Articulo." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
 		                         <div class='Informacion'>
 					             <form action=".base_url('articulos/registrar').">				                 				

@@ -132,7 +132,7 @@ class proforma extends CI_Controller {
 			
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico					
-					$this->proforma_m->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, '00.png');
+					$this->proforma_m->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, '00.png', '01','Unid');
 			}else{ //Si es normal					
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
@@ -140,7 +140,9 @@ class proforma extends CI_Controller {
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
-					$this->proforma_m->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen);
+					$tipoCodigo = $this->articulo->getArticuloTipoCodigo($item['co'], $sucursal);
+					$unidadMedida = $this->articulo->getArticuloUnidadMedida($item['co'], $sucursal);
+					$this->proforma_m->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida);
 				}
 			}
 			
@@ -250,11 +252,11 @@ class proforma extends CI_Controller {
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
 		foreach($items_factura as $item){
 			if($item->Articulo_Proforma_Codigo == '00'){ //Si es generico					
-					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Unitario, $consecutivo, $sucursal, $vendedor, $cliente,'');
+					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Unitario, $consecutivo, $sucursal, $vendedor, $cliente,'','01','Unid');
 			}else{ //Si es normal					
 				if($this->articulo->existe_Articulo($item->Articulo_Proforma_Codigo, $sucursal)){ //Verificamos que el codigo exista
 					
-					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Final, $consecutivo, $sucursal, $vendedor, $cliente, $item->Articulo_Proforma_Imagen);
+					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Final, $consecutivo, $sucursal, $vendedor, $cliente, $item->Articulo_Proforma_Imagen, $item->TipoCodigo, $item->UnidadMedida);
 				}
 			}
 			

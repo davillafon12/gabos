@@ -1,3 +1,26 @@
 #!/bin/bash
 
-wget 127.0.0.1:8181/external/actualizarComprobantes -O ->> "/var/www/gabos/application/logs/updater_log_$(date +'%Y_%m_%d')"
+RUTA_LOG="/var/log/gabos/updater/$(date +'%Y_%m_%d').log"
+HOST_GABO=127.0.0.1
+PUERTO_GABO=8080
+
+URL_REENVIO="$HOST_GABO:$PUERTO_GABO/external/enviarComprobantesAHacienda"
+URL_ACTUALIZAR="$HOST_GABO:$PUERTO_GABO/external/actualizarComprobantes"
+
+
+echo "$(date +'%H:%M') | Enviando comprobantes!!!" >> $RUTA_LOG
+echo "$(date +'%H:%M') | Executing: wget curl $URL_REENVIO >> $RUTA_LOG" >> $RUTA_LOG
+
+curl "${URL_REENVIO}" >> "${RUTA_LOG}"
+
+echo "$(date +'%H:%M') | Enviar comprobantes | DONE" >> $RUTA_LOG
+
+
+
+echo "$(date +'%H:%M') | Actualizando estados!!!" >> $RUTA_LOG
+echo "$(date +'%H:%M') | Executing: curl $URL_ACTUALIZAR >> $RUTA_LOG" >> $RUTA_LOG
+
+curl "${URL_ACTUALIZAR}" >> "${RUTA_LOG}"
+
+echo "$(date +'%H:%M') | Actualizar estados | DONE" >> $RUTA_LOG
+

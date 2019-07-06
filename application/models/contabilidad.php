@@ -5,7 +5,7 @@ Class contabilidad extends CI_Model
 	 
 	
 	function existeFacturaPorId($id){
-		$this->db->where('Credito_Id', mysql_real_escape_string($id));
+		$this->db->where('Credito_Id', $id);
 		$this->db->from('tb_24_credito');
 		$this->db-> limit(1);
 		$query = $this->db->get();
@@ -147,12 +147,12 @@ Class contabilidad extends CI_Model
 				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
 				$sucursal = $this->sucursales_trueque[$sucursal];
 				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
+						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode(',',$facturas_trueque).")";
 				}
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
 				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
 				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
+						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode(',',$facturas_trueque).")";
 				}
 		}
 		$query = $this->db->query("
@@ -283,10 +283,12 @@ Class contabilidad extends CI_Model
 			$exento = 0;
 			$noRetencion = 0;
 			$precioFinal = 0;
+                        $tipoCodigo = "";
 			if(trim($producto->c) == "00"){
 				$descripcion = trim($producto->ds);
 				$precio = trim($producto->p);
 				$precioFinal = $precio;
+                                $tipoCodigo = "99";
 			}else{
 				$descripcion = $this->articulo->getArticuloDescripcion($producto->c, $sucursal);
 				$precio = $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c);
@@ -295,10 +297,12 @@ Class contabilidad extends CI_Model
 				$exento = $articuloCompleto->Articulo_Factura_Exento;
 				$noRetencion = $articuloCompleto->Articulo_Factura_No_Retencion;
 				$precioFinal = $articuloCompleto->Articulo_Factura_Precio_Final;
+                                $tipoCodigo = $this->articulo->getArticuloTipoCodigo($producto->c, $sucursal);
 			}
 			//Agregamos los datos a un array para ser agregado a la bd
 			$pro = array(
 						'Codigo' => $producto->c,
+                                                'TipoCodigo' => $tipoCodigo,
 						'Descripcion' => $descripcion,
 						'Cantidad_Bueno' => $producto->b,
 						'Cantidad_Defectuoso' => $producto->d,
@@ -849,12 +853,12 @@ Class contabilidad extends CI_Model
                     $facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
                     $sucursal = $this->sucursales_trueque[$sucursal];
                     if(!empty($facturas_trueque)){
-                        $queryLoco = "AND f.Factura_Consecutivo IN (".implode($facturas_trueque,',').")";
+                        $queryLoco = "AND f.Factura_Consecutivo IN (".implode(',',$facturas_trueque).")";
                     }
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
                     $facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
                     if(!empty($facturas_trueque)){
-                        $queryLoco = "AND f.Factura_Consecutivo NOT IN (".implode($facturas_trueque,',').")";
+                        $queryLoco = "AND f.Factura_Consecutivo NOT IN (".implode(',',$facturas_trueque).")";
                     }
 		}
 		
@@ -1977,7 +1981,7 @@ Class contabilidad extends CI_Model
 			}
 	}
 	
-	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final){
+	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final, $tipoCodigo, $unidadMedida){
 			$datos = array(
 										"Codigo"=> $codigo,
 										"Descripcion" => $descripcion,
@@ -1990,7 +1994,9 @@ Class contabilidad extends CI_Model
 										"Retencion" => $retencion,
 										"Imagen" => $imagen,
 										"Sucursal_Entrega" => $sucursalEntrega,
-										"Sucursal_Recibe" => $sucursalRecibe
+										"Sucursal_Recibe" => $sucursalRecibe,
+										"TipoCodigo" => $tipoCodigo,
+										"UnidadMedida" => $unidadMedida
 										);
 			$this->db->insert("tb_51_lista_consignacion", $datos);
 	}
@@ -2167,14 +2173,19 @@ Class contabilidad extends CI_Model
                 "TipoCambio" => $tipoCambio,
                 "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
                 "TotalServiciosExentos" => $this->fn($costos['total_serv_exentos']),
+                "TotalServiciosExonerados" => $this->fn($costos['total_serv_exonerados']),
                 "TotalMercanciaGravada" => $this->fn($costos['total_merc_gravada']),
                 "TotalMercanciaExenta" => $this->fn($costos['total_merc_exenta']),
+                "TotalMercanciaExonerada" => $this->fn($costos['total_merc_exonerada']),
                 "TotalGravados" => $this->fn($costos['total_gravados']),
                 "TotalExentos" => $this->fn($costos['total_exentos']),
+                "TotalExonerado" => $this->fn($costos['total_exonerado']),
                 "TotalVentas" => $this->fn($costos['total_ventas']),
                 "TotalDescuentos" => $this->fn($costos['total_descuentos']),
                 "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
                 "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+                "TotalIVADevuelto" => $this->fn($costos['total_iva_devuelto']),
+                "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
                 "TotalComprobante" => $this->fn($costos['total_comprobante']),
                 "Otros" => trim($otros) == "" ? "-" : trim($otros),
                 "TipoDocumento" => NOTA_CREDITO_ELECTRONICA,
@@ -2188,7 +2199,8 @@ Class contabilidad extends CI_Model
                 "DocumentoReferenciaTipo" => $tipoDoc,
                 "DocumentoReferenciaFechaEmision" => $fechaEmisionDoc,
                 "DocumentoReferenciaCodigo" => $codigo,
-                "DocumentoReferenciaRazon" => $razon
+                "DocumentoReferenciaRazon" => $razon,
+                "CodigoActividad" => $emisor->CodigoActividad
             );
            
             if($receptor != NULL){
@@ -2217,11 +2229,14 @@ Class contabilidad extends CI_Model
                     "MontoTotal" => $art["montoTotal"],
                     "MontoDescuento" => $art["montoDescuento"],
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
+                    "BaseImponible" => $art["base_imponible"],
                     "Subtotal" => $art["subtotal"],
                     "ImpuestoObject" => json_encode($art["impuesto"]),
                     "MontoTotalLinea" => $art["montoTotalLinea"],
                     "Consecutivo" => $nota->Consecutivo,
-                    "Sucursal" => $nota->Sucursal
+                    "Sucursal" => $nota->Sucursal,
+                    "Codigo" => $art["codigo"],
+                    "TipoCodigo" => $art["tipoCodigo"]
                 );
                 
                 $this->db->insert("tb_58_articulos_nota_credito_electronica", $data);
@@ -2345,7 +2360,14 @@ Class contabilidad extends CI_Model
                                                     $nota->DocumentoReferenciaNumero, 
                                                     $nota->DocumentoReferenciaRazon, 
                                                     $nota->DocumentoReferenciaCodigo, 
-                                                    $nota->DocumentoReferenciaFechaEmision);
+                                                    $nota->DocumentoReferenciaFechaEmision,
+                            
+                                                    $nota->CodigoActividad,
+                                                    $nota->TotalServiciosExonerados,
+                                                    $nota->TotalMercanciaExonerada,
+                                                    $nota->TotalExonerado,
+                                                    $nota->TotalIVADevuelto,
+                                                    $nota->TotalOtrosCargos);
                     if($xmlRes){
                         $data = array(
                             "XMLSinFirmar" => $xmlRes["xml"]
@@ -2472,27 +2494,34 @@ Class contabilidad extends CI_Model
                             $costos = array(
                                 "total_serv_gravados" => 0,
                                 "total_serv_exentos" => 0,
+                                "total_serv_exonerados" => 0,
                                 "total_merc_gravada" => 0,
                                 "total_merc_exenta" => 0,
+                                "total_merc_exonerada" => 0,
                                 "total_gravados" => 0,
                                 "total_exentos" => 0,
+                                "total_exonerado" => 0,
                                 "total_ventas" => 0,
                                 "total_descuentos" => 0,
                                 "total_ventas_neta" => 0,
                                 "total_impuestos" => 0,
-                                "total_comprobante" => 0,
+                                "total_iva_devuelto" => 0,
+                                "total_otros_cargos" => 0,
+                                "total_comprobante" => 0
                             );
                             $artFinales = array();
                             foreach($notaCreditoArticulos as $a){
                                 $linea = $this->getDetalleLineaNotaCredito($a,  $cliente->Aplica_Retencion == 0);
                                 array_push($artFinales, $linea);
-
+                            
                                 if($a->Exento == 0){
                                     $costos["total_merc_gravada"] += $linea["montoTotal"];
                                     $costos["total_gravados"] += $linea["montoTotal"];
                                 }else{
                                     $costos["total_merc_exenta"] += $linea["montoTotal"];
+                                    $costos["total_merc_exonerada"] += $linea["montoTotal"];
                                     $costos["total_exentos"] += $linea["montoTotal"];
+                                    $costos["total_exonerado"] += $linea["montoTotal"];
                                 }
                                 $costos["total_ventas"] += $linea["montoTotal"];
 
@@ -2503,9 +2532,9 @@ Class contabilidad extends CI_Model
                                 $impuesto = $linea["impuesto"][0]["monto"];
                                 $costos["total_impuestos"] += $impuesto;
                             }
+                            $costos["total_exonerado"] =  $costos["total_serv_exonerados"] + $costos["total_merc_exonerada"];
                             $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
-                            $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"];
-
+                            $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"] + $costos["total_otros_cargos"];
 
                             unset($r["error"]);
                             unset($r["error_msg"]);
@@ -2716,41 +2745,24 @@ Class contabilidad extends CI_Model
                                                         $retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
                                                         $retorno['token'] =  md5($usuarioCodigo.$sucursal."GAimpresionBO");
                                                         
+														$empresaObj = $this->empresa->getEmpresa($sucursal)[0];
 
-
-                                                        // Realizar nota credito electronica
-                                                        $respuestaHacienda["type"] = "error";
-                                                        if($notaCreditoHead = $this->getNotaCredito($consecutivo, $sucursal)){
-                                                            if($facturaElectronicaHead = $this->factura->getFacturaElectronica($notaCreditoHead->Factura_Acreditar, $sucursal)){
-                                                                $response = $this->generarNotaCreditoElectronica($consecutivo, $sucursal, $razon, $justificacion, $facturaElectronicaHead->Clave, FACTURA_ELECTRONICA_CODIGO, $facturaElectronicaHead->FechaEmision);
-                                                                $this->generarPDFNotaCredito($consecutivo, $sucursal);
-                                                               /* if($response["status"]){
-                                                                    $respuestaHacienda["type"] = "success";
-                                                                    $respuestaHacienda["msg"] = $response["message"];
-
-                                                                    $this->generarPDFNotaCredito($consecutivo, $sucursal);
-                                                                    $retorno["empresa"] = $response["empresa"];
-                                                                    if(!$response["cliente"]->NoReceptor){
-                                                                        require_once PATH_API_CORREO;
-                                                                        $apiCorreo = new Correo();
-                                                                        $attachs = array(
-                                                                            $this->getFinalPath("nc").$response["clave"].".xml",
-                                                                            $this->getFinalPath("nc").$response["clave"].".pdf");
-                                                                        if($apiCorreo->enviarCorreo($response["cliente"]->Cliente_Correo_Electronico, "Nota Crédito #".$consecutivo." | ".$response["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$response["empresa"]->Sucursal_Nombre, $attachs)){
-                                                                            $this->marcarEnvioCorreoNotaCreditoElectronica($sucursal, $consecutivo);
-                                                                        }
-                                                                    }
-                                                                }else{
-                                                                    $respuestaHacienda["msg"] = $response["error_msg"]." | ERROR #".$response["error"];
-                                                                }*/
-                                                            }else{
-                                                                $respuestaHacienda["msg"] = "No existe factura electrónica para generar la nota crédito electrónica.";
-                                                            }
-                                                        }else{
-                                                            $respuestaHacienda["msg"] = "No se pudo obtener la nota crédito para generar la nota crédito electrónica.";
-                                                        }
-
-                                                        $retorno['hacienda'] = $respuestaHacienda;
+														if($empresaObj->RequiereFE == 1){
+															// Realizar nota credito electronica
+															$respuestaHacienda["type"] = "error";
+															if($notaCreditoHead = $this->getNotaCredito($consecutivo, $sucursal)){
+																if($facturaElectronicaHead = $this->factura->getFacturaElectronica($notaCreditoHead->Factura_Acreditar, $sucursal)){
+																	$response = $this->generarNotaCreditoElectronica($consecutivo, $sucursal, $razon, $justificacion, $facturaElectronicaHead->Clave, FACTURA_ELECTRONICA_CODIGO, $facturaElectronicaHead->FechaEmision);
+																	$this->generarPDFNotaCredito($consecutivo, $sucursal);
+																}else{
+																	$respuestaHacienda["msg"] = "No existe factura electrónica para generar la nota crédito electrónica.";
+																}
+															}else{
+																$respuestaHacienda["msg"] = "No se pudo obtener la nota crédito para generar la nota crédito electrónica.";
+															}
+	
+															$retorno['hacienda'] = $respuestaHacienda;
+														}
                                                 }else{
                                                         //No se pudo crear la nota
                                                         $retorno['error'] = '9';
@@ -2827,7 +2839,8 @@ Class contabilidad extends CI_Model
 		");
             }else{
                 $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-                $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+				$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+				$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
 		return $this->db->query("
 			SELECT 	Clave AS clave,
                                 ConsecutivoHacienda AS consecutivo,
@@ -2868,7 +2881,8 @@ Class contabilidad extends CI_Model
 		");
             }else{
                 $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-                $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+				$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+				$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
                     return $this->db->query("
                             SELECT 	Clave AS clave,
                                     ConsecutivoHacienda AS consecutivo,
@@ -2887,10 +2901,11 @@ Class contabilidad extends CI_Model
             }
 	}
         
-        function getTotalComprobantesEnSucursal($sucursal, $tipoDocumento){
-            $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
-            $tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
-            $tabla = $tipoDocumento == "MR" ? "tb_59_mensaje_receptor" : $tabla;
+    function getTotalComprobantesEnSucursal($sucursal, $tipoDocumento){
+		$tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
+		$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
+		$tabla = $tipoDocumento == "MR" ? "tb_59_mensaje_receptor" : $tabla;
+		$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
 		$this->db->from($tabla);
 		$this->db->where('Sucursal', $sucursal);
 		$query = $this -> db -> get();
@@ -2970,7 +2985,9 @@ Class contabilidad extends CI_Model
                 $this->db->where("Consecutivo", $consecutivo);
                 $this->db->where("Sucursal", $sucursal);
                 $this->db->update("tb_57_nota_credito_electronica", $data);
-                log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+				log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+				
+				$this->storeFile($nota->Clave."-respuesta.xml", "nc", null, base64_decode($xmlRespuesta, $nota->FechaEmision));
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
                 log_message('error', "Error al revisar el estado de la nota credito en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
@@ -3231,6 +3248,17 @@ Class contabilidad extends CI_Model
             }else{
                 return $query->result();
             }
+		}
+		
+		function getMensajeReceptoresParaEnviarAHacienda(){
+            $this->db->where_in("RespuestaHaciendaEstado", array("sin_enviar", "fallo_token", "fallo_envio"));
+            $this->db->from("tb_59_mensaje_receptor");
+            $query = $this->db->get();
+            if($query->num_rows() == 0){
+                return false;
+            }else{
+                return $query->result();
+            }
         }
         
         function getNotasCreditoSinEnviarAHacienda(){
@@ -3242,7 +3270,18 @@ Class contabilidad extends CI_Model
             }else{
                 return $query->result();
             }
-        }
+		}
+		
+		function getFacturaDeCompraElectronicaByClave($clave){
+			$this->db->from("tb_61_factura_compra_electronica");
+			$this->db->where("Clave", $clave);
+			$query = $this->db->get();
+			if($query->num_rows()>0){
+				return $query->result()[0];
+			}else{
+				return false;
+			}
+		}
 }
 
 

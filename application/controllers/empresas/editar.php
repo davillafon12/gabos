@@ -228,29 +228,31 @@ class editar extends CI_Controller {
 				$data['Empresa_Tributacion']=$row-> Sucursal_leyenda_tributacion;
 				$data['Empresa_Observaciones'] = $row -> Sucursal_Observaciones;
                                 
-                                $data['User_Tributa'] = $row -> Usuario_Tributa;
-                                $data['Pass_Tributa'] = $row -> Pass_Tributa;
-                                $data['Pin_Tributa'] = $row -> Pass_Certificado_Tributa;
-                                $data['Ambiente_Tributa'] = $row -> Ambiente_Tributa;
-                                $data['Token_Tributa'] = $row -> Token_Certificado_Tributa;
-                                
-                                $data['tipo_cedula'] = $row -> Tipo_Cedula;
-                                $data['cod_telefono'] = $row -> Codigo_Pais_Telefono;
-                                $data['cod_fax'] = $row -> Codigo_Pais_Fax;
-                                $data['Provincia'] = $row -> Provincia;
-                                $data['Canton'] = $row -> Canton;
-                                $data['Distrito'] = $row -> Distrito;
-                                $data['Barrio'] = $row -> Barrio;
-                                
-                                $data['tiposIdentificacion'] = $this->tiposIdentificacion;
-                                $provincias = $this->ubicacion->getProvincias();
-                                $data["provincias"] = $provincias;
-                                $cantones = $this->ubicacion->getCantones($row -> Provincia);
-                                $data["cantones"] = $cantones;
-                                $distritos = $this->ubicacion->getDistritos($row -> Provincia, $row -> Canton);
-                                $data["distritos"] = $distritos;
-                                $barrios = $this->ubicacion->getBarrios($row -> Provincia, $row -> Canton, $row->Distrito);
-                                $data["barrios"] = $barrios;
+				$data['User_Tributa'] = $row -> Usuario_Tributa;
+				$data['Pass_Tributa'] = $row -> Pass_Tributa;
+				$data['Pin_Tributa'] = $row -> Pass_Certificado_Tributa;
+				$data['Ambiente_Tributa'] = $row -> Ambiente_Tributa;
+				$data['Token_Tributa'] = $row -> Token_Certificado_Tributa;
+				
+				$data['tipo_cedula'] = $row -> Tipo_Cedula;
+				$data['cod_telefono'] = $row -> Codigo_Pais_Telefono;
+				$data['cod_fax'] = $row -> Codigo_Pais_Fax;
+				$data['Provincia'] = $row -> Provincia;
+				$data['Canton'] = $row -> Canton;
+				$data['Distrito'] = $row -> Distrito;
+				$data['Barrio'] = $row -> Barrio;
+				$data['CodigoActividad'] = $row -> CodigoActividad;
+				$data['RequiereFE'] = $row -> RequiereFE == 1;
+				
+				$data['tiposIdentificacion'] = $this->tiposIdentificacion;
+				$provincias = $this->ubicacion->getProvincias();
+				$data["provincias"] = $provincias;
+				$cantones = $this->ubicacion->getCantones($row -> Provincia);
+				$data["cantones"] = $cantones;
+				$distritos = $this->ubicacion->getDistritos($row -> Provincia, $row -> Canton);
+				$data["distritos"] = $distritos;
+				$barrios = $this->ubicacion->getBarrios($row -> Provincia, $row -> Canton, $row->Distrito);
+				$data["barrios"] = $barrios;
 				
 				$ligaCliente = $this->empresa->getClienteLigaByEmpresa($id_request);
 				
@@ -290,53 +292,63 @@ class editar extends CI_Controller {
 	$observaciones_empresa = $this->input->post('observaciones');
 	$leyenda_tributacion = $this->input->post('leyenda');
         
-        $user_tributa = trim($this->input->post("user_tributa"));
-        $pass_tributa = trim($this->input->post("pass_tributa"));
-        $ambiente_tributa = trim($this->input->post("ambiente_tributa"));
-        $pin_tributa = trim($this->input->post("pin_tributa"));
+	$user_tributa = trim($this->input->post("user_tributa"));
+	$pass_tributa = trim($this->input->post("pass_tributa"));
+	$ambiente_tributa = trim($this->input->post("ambiente_tributa"));
+	$pin_tributa = trim($this->input->post("pin_tributa"));
 	
 	$liga_cliente_nombre = trim($this->input->post("cliente_asociado"));
 	$liga_cliente = $liga_cliente_nombre != "" ? trim($this->input->post('cliente_liga_id')) : "";
 	
-        $tipo_identificacion = $this->input->post('tipo_identificacion');
-        $cod_telefono_empresa = $this->input->post('cod_tel');
+	$tipo_identificacion = $this->input->post('tipo_identificacion');
+	$cod_telefono_empresa = $this->input->post('cod_tel');
 	$cod_fax_empresa = $this->input->post('cod_fax');
-        $provincia = trim($this->input->post("provincia"));
-        $canton = trim($this->input->post("canton"));
-        $distrito = trim($this->input->post("distrito"));
-        $barrio = trim($this->input->post("barrio"));
-		
-	$data_update['Sucursal_Cedula'] = mysql_real_escape_string($cedula_empresa);
-	$data_update['Sucursal_Nombre'] = mysql_real_escape_string($nombre_empresa);
-	$data_update['Sucursal_Telefono'] = mysql_real_escape_string($telefono_empresa);
-	$data_update['Sucursal_Fax'] = mysql_real_escape_string($fax_empresa);
-	$data_update['Sucursal_Email'] = mysql_real_escape_string($email_empresa);
-	$data_update['Sucursal_Direccion'] = mysql_real_escape_string($direccion_empresa);
-	$data_update['Sucursal_Administrador'] = mysql_real_escape_string($administrador_empresa);
-	$data_update['Sucursal_Observaciones'] = mysql_real_escape_string($observaciones_empresa);
-	$data_update['Sucursal_leyenda_tributacion'] = mysql_real_escape_string($leyenda_tributacion);
-        
-        $data_update['Usuario_Tributa'] = mysql_real_escape_string($user_tributa);
-        $data_update['Pass_Tributa'] = mysql_real_escape_string($pass_tributa);
-        $data_update['Ambiente_Tributa'] = mysql_real_escape_string($ambiente_tributa);
-        $data_update['Pass_Certificado_Tributa'] = mysql_real_escape_string($pin_tributa);
-        
-        $data_update['Provincia'] = mysql_real_escape_string($provincia);
-        $data_update['Canton'] = mysql_real_escape_string($canton);
-        $data_update['Distrito'] = mysql_real_escape_string($distrito);
-        $data_update['Barrio'] = mysql_real_escape_string($barrio);
-        $data_update['Tipo_Cedula'] = mysql_real_escape_string($tipo_identificacion);
-        $data_update['Codigo_Pais_Telefono'] = mysql_real_escape_string($cod_telefono_empresa);
-        $data_update['Codigo_Pais_Fax'] = mysql_real_escape_string($cod_fax_empresa);
+	$provincia = trim($this->input->post("provincia"));
+	$canton = trim($this->input->post("canton"));
+	$distrito = trim($this->input->post("distrito"));
+	$barrio = trim($this->input->post("barrio"));
 	
-	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
+	$codigo_actividad = trim($this->input->post("codigo_actividad"));
+
+	$requiereFE = trim($this->input->post("is_factura_electronica")) == "1" ? 1 : 0;
+
+		
+	$data_update['Sucursal_Cedula'] = $cedula_empresa;
+	$data_update['Sucursal_Nombre'] = $nombre_empresa;
+	$data_update['Sucursal_Telefono'] = $telefono_empresa;
+	$data_update['Sucursal_Fax'] = $fax_empresa;
+	$data_update['Sucursal_Email'] = $email_empresa;
+	$data_update['Sucursal_Direccion'] = $direccion_empresa;
+	$data_update['Sucursal_Administrador'] = $administrador_empresa;
+	$data_update['Sucursal_Observaciones'] = $observaciones_empresa;
+	$data_update['Sucursal_leyenda_tributacion'] = $leyenda_tributacion;
+        
+        $data_update['Usuario_Tributa'] = $user_tributa;
+        $data_update['Pass_Tributa'] = $pass_tributa;
+        $data_update['Ambiente_Tributa'] = $ambiente_tributa;
+        $data_update['Pass_Certificado_Tributa'] = $pin_tributa;
+        
+        $data_update['Provincia'] = $provincia;
+        $data_update['Canton'] = $canton;
+        $data_update['Distrito'] = $distrito;
+        $data_update['Barrio'] = $barrio;
+        $data_update['Tipo_Cedula'] = $tipo_identificacion;
+        $data_update['Codigo_Pais_Telefono'] = $cod_telefono_empresa;
+        $data_update['Codigo_Pais_Fax'] = $cod_fax_empresa;
+	
+		$data_update['CodigoActividad'] = $codigo_actividad;
+		
+		$data_update['RequiereFE'] = $requiereFE;
+
+        
+	$this->empresa->actualizar($id_empresa, $data_update);
 	
 	
 	$this->empresa->actualizarLigaEmpresaCliente($id_empresa, $liga_cliente);
 	
 	
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".mysql_real_escape_string($id_empresa),$data['Sucursal_Codigo'],'edicion');
+	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".$id_empresa,$data['Sucursal_Codigo'],'edicion');
 	
 	redirect('empresas/editar', 'location');
  }
@@ -356,7 +368,7 @@ class editar extends CI_Controller {
                         $this->empresa->storeFile($name.".p12", "cer", $oldLocation);
                         $params = array("Token_Certificado_Tributa" => $name);
                         $this->empresa->actualizar($id_empresa, $params);
-                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario subió el certificado con token : ".mysql_real_escape_string($name),$data['Sucursal_Codigo'],'edicion');
+                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario subió el certificado con token : ".$name,$data['Sucursal_Codigo'],'edicion');
                         redirect('empresas/editar/edicion?id='.$id_empresa, 'location');
                     }else{
                         // No tiene el formato adecuado de .p12
@@ -376,6 +388,3 @@ class editar extends CI_Controller {
     }
 	
 }// FIN DE LA CLASE
-
-
-?>

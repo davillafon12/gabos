@@ -124,20 +124,20 @@ class otros extends CI_Controller {
 					//Actualizamos descuento 
 					$this->cliente->actualizarDescuentoCliente($descuento, $data['Sucursal_Codigo'], $cedula);
 
-					$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+					$this->user->guardar_Bitacora_Cliente($cedula, 
 								$data['Sucursal_Codigo'], 
 								$data['Usuario_Codigo'], 
 								'Actualiza_DesClien', 
-								'Actualización descuento : '. mysql_real_escape_string($descuento));
+								'Actualización descuento : '. $descuento);
 					$retorno['status'] = 'success';
 				}else{
 					//Agregamos descuento					
 					$this->cliente->agregarDescuentoCliente($descuento, $data['Sucursal_Codigo'], $cedula);					
-					$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+					$this->user->guardar_Bitacora_Cliente($cedula, 
 								$data['Sucursal_Codigo'], 
 								$data['Usuario_Codigo'], 
 								'Agrega_DesCliente', 
-								'Agregar descuento : '. mysql_real_escape_string($descuento));
+								'Agregar descuento : '. $descuento);
 					$retorno['status'] = 'success';
 				}			
 			}else{
@@ -161,20 +161,20 @@ class otros extends CI_Controller {
 				if($this->cliente->existeClienteCredito($cedula, $data['Sucursal_Codigo'])){
 					//Actualizamos credito 
 					$this->cliente->actualizarCreditoCliente($credito, $data['Sucursal_Codigo'], $cedula);
-					$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+					$this->user->guardar_Bitacora_Cliente($cedula, 
 								$data['Sucursal_Codigo'], 
 								$data['Usuario_Codigo'], 
 								'Actualiza_Credito', 
-								'Actualización del Crédito : '. mysql_real_escape_string($credito));
+								'Actualización del Crédito : '. $credito);
 					$retorno['status'] = 'success';
 				}else{
 					//Agregamos credito					
 					$this->cliente->agregarCreditoCliente($credito, $data['Sucursal_Codigo'], $cedula);					
-					$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+					$this->user->guardar_Bitacora_Cliente($cedula, 
 								$data['Sucursal_Codigo'], 
 								$data['Usuario_Codigo'], 
 								'Agregar_Credito', 
-								'Agregar Crédito : '. mysql_real_escape_string($credito));
+								'Agregar Crédito : '. $credito);
 					$retorno['status'] = 'success';
 				}			
 			}else{
@@ -195,7 +195,7 @@ class otros extends CI_Controller {
 			$cedula = $_POST['cedula'];
 			$codigoProducto = $_POST['codigo'];
 			$this->cliente->eliminarDescuentoProducto($idDescuentoProducto);
-			$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+			$this->user->guardar_Bitacora_Cliente($cedula, 
 								$data['Sucursal_Codigo'], 
 								$data['Usuario_Codigo'], 
 								'Elimina_DesProducto', 
@@ -255,7 +255,7 @@ class otros extends CI_Controller {
 						
 						if($diferencia>=0){
 							$this->cliente->agregarDescuentoDeProducto($codigo, $cedula, $data['Sucursal_Codigo'], $descuentoPorcentaje, $familia);
-							$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+							$this->user->guardar_Bitacora_Cliente($cedula, 
 							$data['Sucursal_Codigo'], 
 							$data['Usuario_Codigo'], 
 							'Agrega_DesProducto', 
@@ -292,7 +292,7 @@ class otros extends CI_Controller {
 			$cedula = $_POST['cedula'];
 			$codigoFamilia = $_POST['codigo'];
 			$this->cliente->eliminarDescuentoFamilia($idDescuentoFamilia);
-			$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+			$this->user->guardar_Bitacora_Cliente($cedula, 
 								$data['Sucursal_Codigo'], 
 								$data['Usuario_Codigo'], 
 								'Elimina_DesFamilia', 
@@ -337,7 +337,7 @@ class otros extends CI_Controller {
 						$retorno['error'] = '9'; //Ya existe un descuento con esa familia y cliente y sucursal
 					}else{						
 						$this->cliente->agregarDescuentoDeFamilia($codigo, $cedula, $data['Sucursal_Codigo'], $descuento);
-						$this->user->guardar_Bitacora_Cliente(mysql_real_escape_string($cedula), 
+						$this->user->guardar_Bitacora_Cliente($cedula, 
 								$data['Sucursal_Codigo'], 
 								$data['Usuario_Codigo'], 
 								'Agrega_DesFamilia', 

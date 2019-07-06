@@ -146,7 +146,7 @@ function cobrarEImprimirPostPopUp(){
 	}
 }
 
-function validarFactura(){
+function validarFactura(isEditar){
 	cedula_field = document.getElementById("cedula").value;
 	nombre_field = document.getElementById("nombre").value;
 	if(cedula_field.trim()===''){
@@ -170,25 +170,34 @@ function validarFactura(){
 	productosCantidad = document.getElementById("tabla_productos").rows.length-1;
 	//Verifica si hay productos por cantidad de filas de la tabla
 	if(productosCantidad<1){
-		n = noty({
-					   layout: 'topRight',
-					   text: '¡No hay articulos en la factura!',
-					   type: 'error',
-					   timeout: 4000
-					});
-		return false;
+		if(isEditar === true){
+			agregarFila(1);
+			array_pos_rows = [1];
+		}else{
+			n = noty({
+							layout: 'topRight',
+							text: '¡No hay articulos en la factura!',
+							type: 'error',
+							timeout: 4000
+						});
+			return false;
+		}
 	}
 	//Verifica si hay productos ingresados
 	createJSON();
 	tamJSONArray = invoiceItemsJSON.length;
 	if(tamJSONArray<1){
-		n = noty({
-					   layout: 'topRight',
-					   text: '¡No hay articulos en la factura!',
-					   type: 'error',
-					   timeout: 4000
-					});
-		return false;
+		if(isEditar === true){
+
+		}else{
+			n = noty({
+						layout: 'topRight',
+						text: '¡No hay articulos en la factura!',
+						type: 'error',
+						timeout: 4000
+						});
+			return false;
+		}
 	}
 	return true;
 }
@@ -519,7 +528,7 @@ function editarFactura(){
 		notyError('¡No se puede editar una proforma. Si desea modificarla debe crear una factura pendiente, a partir de esta proforma!');
 		return false;
 	}
-	if(validarFactura()){
+	if(validarFactura(true)){
 		$('#pop_up_administrador').bPopup({
 			modalClose: false
 		});

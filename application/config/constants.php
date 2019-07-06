@@ -95,8 +95,8 @@ define('PATH_API_HELPER', FCPATH.'application/libraries/API_Hacienda/API_Helper.
 define('PATH_TABLA_FAMILIAS', FCPATH.'application/scripts/cargar_tabla_familias.php');
 define('PATH_AJAX_FAMILIAS', FCPATH.'application/scripts/ajax_familias.php');
 define('PATH_AJAX_VERIFY_FAMILIAS', FCPATH.'application/scripts/ajax_verify_familia_id.php');
-define('PATH_API_LOGGING', FCPATH.'application/logs/API_FE');
-define('PATH_UTILS_LOGGING', FCPATH.'application/logs/UTILS');
+define('PATH_API_LOGGING', '/var/log/gabos/api/API');
+define('PATH_UTILS_LOGGING', '/var/log/gabos/utils/UTILS');
 define('PATH_DOCUMENTOS_ELECTRONICOS', FCPATH.'application/third_party/');
 define('PATH_API_CORREO', FCPATH.'application/libraries/Correo.php');
 define('CARPETA_IMAGENES', FCPATH.'application/images/articulos/');
@@ -104,10 +104,12 @@ define('CARPETA_IMAGENES', FCPATH.'application/images/articulos/');
 
 define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
+define('TIQUETE_ELECTRONICO', 'TE');
+define('FACTURA_COMPRA_ELECTRONICA', 'FEC');
 define('FACTURA_ELECTRONICA_CODIGO', '01');
 define('NOTA_CREDITO_ELECTRONICA', 'NC');
 define('HACIENDA_DECIMALES', 5);
-define('API_CRLIBRE_CURL_TIMEOUT', 5);
+define('API_CRLIBRE_CURL_TIMEOUT', 300);
 define('HACIENDA_TOKEN_API_STAG', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect");
 define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect");
 define('HACIENDA_RECEPCION_API_STAG', "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/");

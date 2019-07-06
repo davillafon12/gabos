@@ -96,6 +96,7 @@
 					</ul>
 				</li>
                                 <li><a href='".$Ruta_Base."contabilidad/comprobantes'>Aceptar o Rechazar Comprobantes Electrónicos</a></li>
+                                <li><a href='".$Ruta_Base."contabilidad/facturaElecCompra'>Crear Factura Electrónica de Compras</a></li>
 				<li class='last'><a href='".$Ruta_Base."contabilidad/consultaVenta'>Consulta de Ventas</a></li>
 			</ul>
 		</li>

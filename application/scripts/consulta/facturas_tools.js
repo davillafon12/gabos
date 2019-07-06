@@ -601,31 +601,61 @@ function anularFacturaAJAX(URL){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
-                async : true,
+		dataType: "json",
 		data: {'consecutivo':consecutivoActual},
-                beforeSend: function(jqXHR, settings) {
-                    $('#envio_anulacion').bPopup({
-                            modalClose: false
-                    });
-                },
-		success: function(data, textStatus, jqXHR)
-		{
-                    $('#envio_anulacion').bPopup().close();
-			try{
-				result = $.parseJSON('[' + data.trim() + ']');
-				if(result[0].status==="error"){
-					displayErrors(result[0].error);
-				}else if(result[0].status==="success"){
-					location.reload();
+		beforeSend: function(jqXHR, settings) {
+						$('#envio_anulacion').bPopup({
+								modalClose: false
+						});
+					},
+		success: function(data){
+					$('#envio_anulacion').bPopup().close();
+					if(data.status==="error"){
+						displayErrors(data.error);
+					}else if(data.status==="success"){
+						noty({
+							layout: 'topRight',
+							text: "Se anuló la factura con éxito",
+							type: 'success',
+							timeout: 4000
+						});
+					}
+				},
+		error: function (jqXHR, textStatus, errorThrown){
+					notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+					console.log(errorThrown);
 				}
-			}catch(e){
-				notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-			}
-		},
-		error: function (jqXHR, textStatus, errorThrown)
-		{
-	 
-		}
 	});
 }
 
+function notyError(Mensaje){
+	n = noty({
+					   layout: 'topRight',
+					   text: Mensaje,
+					   type: 'error',
+					   timeout: 4000
+					});
+}
+
+function displayErrors(NumError){
+	switch(NumError) {
+		case "17":
+			notyError('No se logró anular la factura, por favor contacte al administrador \nERROR: '+NumError);
+			break;
+		case "72":
+			notyError('No se logró crear la factura electrónica, por favor contacte al administrador \nERROR: '+NumError);
+			break;
+		case "71":
+			notyError('No se logró validar campos para la factura electrónica, por favor contacte al administrador \nERROR: '+NumError);
+			break;
+		case "19":
+			notyError('No se existe la factura que se desea anular, por favor contacte al administrador \nERROR: '+NumError);
+			break;
+		case "16":
+			notyError('Error al leer datos de entrada, por favor contacte al administrador \nERROR: '+NumError);
+			break;
+		case "73":
+			notyError('No existe la factura electrónica para dicha factura, por favor contacte al administrador \nERROR: '+NumError);
+			break;
+	}
+}

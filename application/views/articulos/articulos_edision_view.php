@@ -172,6 +172,36 @@ PARA:
 							<td>
 								<input type="checkbox" name="retencion" id="retencion"  value="1" <?php if($retencion){echo "checked";}?> >
 							</td>
+                                                    <td>
+                                                        <label class="contact">Tipo Código:</label>
+                                                    </td>
+                                                    <td>
+                                                        <select name="tipo_codigo" class="input_dos">
+                                                            <?php 
+                                                                foreach($tipos_codigo as $tc){
+                                                                    ?>
+                                                            <option value="<?= $tc->Codigo ?>" <?= $tc->Codigo == $tipoCodigo ? "selected" : "" ?>><?= $tc->Descripcion ?></option>
+                                                                    <?php
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </td>
+						</tr>
+                                                <tr>
+                                                    <td>
+                                                        <label class="contact">Unidad Medida:</label>
+                                                    </td>
+                                                    <td>
+                                                        <select name="unidad_medida" class="input_dos">
+                                                            <?php 
+                                                                foreach($unidades_medida as $um){
+                                                                    ?>
+                                                            <option value="<?= $um->Id ?>" <?= $unidadMedida == $um->Codigo ? "selected" : "" ?>><?= $um->Codigo." - ".$um->Descripcion ?></option>
+                                                                    <?php
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </td>
 						</tr>
 					</table>
 				</fieldset>
