@@ -405,9 +405,14 @@ class caja extends CI_Controller {
                 // SI lo hay seguimos adelante y si no la creamos
                 $existeFacturaElectronica = false;
                 $facturaYaExistia = true;
-                $responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
-                if($this->factura->getFacturaElectronica($consecutivo, $data['Sucursal_Codigo']) === false){
-                    if($responseCheck["status"] == "success"){
+				$responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
+				$empresaObj = $this->empresa->getEmpresa($data['Sucursal_Codigo'])[0];
+                if($facturaElectronica = $this->factura->getFacturaElectronica($consecutivo, $data['Sucursal_Codigo'])){
+					$existeFacturaElectronica = true;
+                }else if($empresaObj->RequiereFE == 0){
+					$existeFacturaElectronica = true;
+				}else{
+					if($responseCheck["status"] == "success"){
                         $resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
                         if($resFacturaElectronica["status"]){
                             //$fueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
@@ -427,9 +432,6 @@ class caja extends CI_Controller {
                         $facturaBODY['status']='error';
                         $facturaBODY['error']='71'; // No se logro validar los campos para hacer la factura electronica
                     }
-                }else{
-					$empresaObj = $this->empresa->getEmpresa($data['Sucursal_Codigo'])[0];
-                    $existeFacturaElectronica = $empresaObj->RequiereFE == 0;
                 }
 
                 if($responseCheck["status"] != "success"){
