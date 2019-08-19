@@ -2797,11 +2797,11 @@ Class contabilidad extends CI_Model
 	}
         
         function obtenerComprobantesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
-            $extraQuery = "";
+			$extraQuery = "";
             
             if($tipoDocumento != "MR"){
                 if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
-                    $facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+					$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
                     $sucursal = $this->sucursales_trueque[$sucursal];
                     if(!empty($facturas_trueque)){
                         if($tipoDocumento == "FE"){
@@ -3281,6 +3281,15 @@ Class contabilidad extends CI_Model
 			}else{
 				return false;
 			}
+		}
+
+		function deleteCreditoForApartadoAnulado($consecutivo, $sucursal){
+			if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
+                $sucursal = $this->sucursales_trueque[$sucursal];
+			}
+			$this->db->where("Credito_Factura_Consecutivo", $consecutivo);
+			$this->db->where("Credito_Sucursal_Codigo", $sucursal);
+            $this->db->delete("tb_24_credito");
 		}
 }
 

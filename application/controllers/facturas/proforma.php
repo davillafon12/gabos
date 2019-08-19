@@ -219,9 +219,9 @@ class proforma extends CI_Controller {
 					if($proformaHeaders->Proforma_Estado == "pendiente" || $proformaHeaders->Proforma_Estado == "pagada" || $proformaHeaders->Proforma_Estado == "descontada" ){
 						if($articulos = $this->proforma_m->getArticulosProforma($consecutivo, $sucursal)){
 								if($this->valorarSiHayExistenciaDeProductos($articulos, $sucursal)){
-									if($consecutivoFactura = $this->factura->crearfactura($proformaHeaders->TB_03_Cliente_Cliente_Cedula, $proformaHeaders->Proforma_Nombre_Cliente, $proformaHeaders->Proforma_Moneda, "", $proformaHeaders->TB_02_Sucursal_Codigo, $proformaHeaders->Proforma_Vendedor_Codigo, false)){
-										$this->agregarItemsFactura($articulos, $consecutivoFactura, $proformaHeaders->TB_02_Sucursal_Codigo, $proformaHeaders->Proforma_Vendedor_Codigo, $proformaHeaders->TB_03_Cliente_Cliente_Cedula);
-										$this->actualizarCostosFactura($consecutivoFactura, $proformaHeaders->TB_02_Sucursal_Codigo);
+									if($consecutivoFactura = $this->factura->crearfactura($proformaHeaders->TB_03_Cliente_Cliente_Cedula, $proformaHeaders->Proforma_Nombre_Cliente, $proformaHeaders->Proforma_Moneda, "", $data['Sucursal_Codigo'], $proformaHeaders->Proforma_Vendedor_Codigo, false)){
+										$this->agregarItemsFactura($articulos, $consecutivoFactura, $data['Sucursal_Codigo'], $proformaHeaders->Proforma_Vendedor_Codigo, $proformaHeaders->TB_03_Cliente_Cliente_Cedula);
+										$this->actualizarCostosFactura($consecutivoFactura, $sucursal);
 										$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." convirtió la proforma $consecutivo en la factura pendiente $consecutivoFactura", $data['Sucursal_Codigo'],'factura_envio');
 										foreach($articulos as $art){
 												$this->articulo->actualizarInventarioRESTA($art->Articulo_Proforma_Codigo, $art->Articulo_Proforma_Cantidad, $sucursal);

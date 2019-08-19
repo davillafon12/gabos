@@ -605,6 +605,9 @@ Class proforma_m extends CI_Model
 	}
 	
 	function marcarComoProformaPendiente($proforma, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
 		$datos = array("Proforma_Estado" => "pendiente");
 		$this->db->where('Proforma_Consecutivo', $proforma);
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);

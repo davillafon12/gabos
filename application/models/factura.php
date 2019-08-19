@@ -204,7 +204,7 @@ Class factura extends CI_Model
 		$c_array = $this->getConfgArray();
 		
 		//Obtenemos la info del cliente para ver si es exento y/o aplica retencion
-		$facturaEncabezado = $this->getFacturasHeaders($consecutivo, $sucursal)[0];
+        $facturaEncabezado = $this->getFacturasHeaders($consecutivo, $sucursal)[0];
 		$clienteEsExento = $this->cliente->clienteEsExentoDeIVA($facturaEncabezado->TB_03_Cliente_Cliente_Cedula);
 		$clienteNoAplicaRetencion = $this->cliente->clienteEsExentoDeRetencion($facturaEncabezado->TB_03_Cliente_Cliente_Cedula);
 		         
@@ -237,7 +237,7 @@ Class factura extends CI_Model
 	
 	function getItemsFactura($consecutivo, $sucursal){
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$this -> db -> where('TB_07_Factura_Factura_Vendedor_Sucursal', $sucursal);
+				//$this -> db -> where('TB_07_Factura_Factura_Vendedor_Sucursal', $sucursal);
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> from('TB_08_Articulos_Factura');

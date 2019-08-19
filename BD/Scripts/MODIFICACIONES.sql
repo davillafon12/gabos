@@ -1,9 +1,2 @@
-ALTER TABLE  `tb_04_articulos_proforma` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL ,
-ADD  `UnidadMedida` VARCHAR( 10 ) NOT NULL;
-
-update tb_04_articulos_proforma set `TipoCodigo` = '01', `UnidadMedida` = 'Unid';
-
-ALTER TABLE  `tb_51_lista_consignacion` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL ,
-ADD  `UnidadMedida` VARCHAR( 10 ) NOT NULL;
-
-update tb_51_lista_consignacion set `TipoCodigo` = '01', `UnidadMedida` = 'Unid';
+ALTER TABLE  `tb_02_sucursal` ADD  `RequiereIVA` BOOLEAN NOT NULL AFTER  `RequiereFE`;
+UPDATE  `tb_02_sucursal` SET  `RequiereIVA` = 1;

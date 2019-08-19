@@ -378,7 +378,7 @@ class caja extends CI_Controller {
                             }	
 
                             $totalFactura = $totalFactura - $abono;				
-                            $credito = $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, 10000, $Current_datetime, $totalFactura);
+                            $credito = $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, 60, $Current_datetime, $totalFactura);
 
                             $moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
                             $tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
@@ -478,7 +478,9 @@ class caja extends CI_Controller {
                                                                                                 $facturaHeaders->TB_03_Cliente_Cliente_Cedula)){
                         $this->contabilidad->marcarRecibosComoPendientes($creditoHeader->Credito_Id);
                     }
-                }
+                }else if($facturaHeaders->Factura_Tipo_Pago == "apartado"){
+					$this->contabilidad->deleteCreditoForApartadoAnulado($facturaHeaders->Factura_Consecutivo, $data['Sucursal_Codigo']);
+				}
             }else{
                 $facturaBODY['status']='error';
                 $facturaBODY['error']='19'; //Error no existe esa factura
@@ -987,7 +989,7 @@ class caja extends CI_Controller {
 			
 			$consecutivo = $_POST['consecutivo'];
 			include PATH_USER_DATA;	
-			
+			$sucursalOriginal = $data['Sucursal_Codigo'];
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){							
 				$articulos = $this->JSONArray($consecutivo, $data['Sucursal_Codigo']);
 				if($this->hayProductosParaProforma($data['Sucursal_Codigo'], $articulos)){
@@ -1013,7 +1015,7 @@ class caja extends CI_Controller {
 					$this->agregarItemsFactura($articulos, $consecutivo_F, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
 					
 					
-					$this->actualizarCostosFactura($consecutivo_F, $data['Sucursal_Codigo']);
+					$this->actualizarCostosFactura($consecutivo_F, $sucursalOriginal);
 					
 					
 					//Cambiamos el estado de la proforma
