@@ -536,9 +536,8 @@ Class cliente extends CI_Model
 	
 	
 	function getFacturasConSaldo($cliente, $sucursal){
-		
+		$this->db->where('Credito_Vendedor_Sucursal', $sucursal);
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-			$this->db->where('Credito_Vendedor_Sucursal', $sucursal);
 			$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		

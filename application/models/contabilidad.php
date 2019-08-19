@@ -3282,6 +3282,15 @@ Class contabilidad extends CI_Model
 				return false;
 			}
 		}
+
+		function deleteCreditoForApartadoAnulado($consecutivo, $sucursal){
+			if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
+                $sucursal = $this->sucursales_trueque[$sucursal];
+			}
+			$this->db->where("Credito_Factura_Consecutivo", $consecutivo);
+			$this->db->where("Credito_Sucursal_Codigo", $sucursal);
+            $this->db->delete("tb_24_credito");
+		}
 }
 
 
