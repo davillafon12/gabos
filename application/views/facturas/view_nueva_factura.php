@@ -77,7 +77,7 @@ PARA:
 				
 		
 	</head>
-	<body onload="setMainValues()" oncopy="return false" oncut="return false" onpaste="return false">
+	<body onload="setMainValues()">
 		<!--Incluir imagen de cabezera-->
 		<?php include PATH_HEADER_PICTURE;?>
 		
