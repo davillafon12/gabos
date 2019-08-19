@@ -2797,11 +2797,11 @@ Class contabilidad extends CI_Model
 	}
         
         function obtenerComprobantesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal, $tipoDocumento){
-            $extraQuery = "";
+			$extraQuery = "";
             
             if($tipoDocumento != "MR"){
                 if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
-                    $facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+					$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
                     $sucursal = $this->sucursales_trueque[$sucursal];
                     if(!empty($facturas_trueque)){
                         if($tipoDocumento == "FE"){

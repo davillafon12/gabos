@@ -987,7 +987,7 @@ class caja extends CI_Controller {
 			
 			$consecutivo = $_POST['consecutivo'];
 			include PATH_USER_DATA;	
-			
+			$sucursalOriginal = $data['Sucursal_Codigo'];
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){							
 				$articulos = $this->JSONArray($consecutivo, $data['Sucursal_Codigo']);
 				if($this->hayProductosParaProforma($data['Sucursal_Codigo'], $articulos)){
@@ -1013,7 +1013,7 @@ class caja extends CI_Controller {
 					$this->agregarItemsFactura($articulos, $consecutivo_F, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
 					
 					
-					$this->actualizarCostosFactura($consecutivo_F, $data['Sucursal_Codigo']);
+					$this->actualizarCostosFactura($consecutivo_F, $sucursalOriginal);
 					
 					
 					//Cambiamos el estado de la proforma
