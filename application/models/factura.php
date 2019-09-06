@@ -2084,7 +2084,7 @@ Class factura extends CI_Model
                     $factura[0]->diasCredito = $facturaElectronica->PlazoCredito;
                     $factura[0]->fechaVencimiento = "";
                     $factura[0]->observaciones = "";
-                    $factura[0]->subtotal = $facturaElectronica->TotalGravados;
+                    $factura[0]->subtotal = $facturaElectronica->TotalGravados - $facturaElectronica->TotalDescuentos;
                     $factura[0]->total_iva = $facturaElectronica->TotalImpuestos;
                     $factura[0]->total = $facturaElectronica->TotalComprobante;
                     $factura[0]->retencion = 0;
@@ -2096,7 +2096,7 @@ Class factura extends CI_Model
                         $ao = new stdClass();
                         $ao->cantidad = $a->Cantidad;
                         $ao->precio = $a->PrecioUnitario;
-                        $ao->descuento = ($a->MontoDescuento * 100) / $a->PrecioUnitario;
+                        $ao->descuento = (($a->MontoDescuento * 100) / $a->PrecioUnitario) / $a->Cantidad;
                         $ao->codigo = $a->Codigo;
                         $ao->descripcion = $a->Detalle;
                         $ao->exento = false;
