@@ -42,7 +42,7 @@ Class impresion_m extends CI_Model{
 					$tipoDocumento = "fec";
 				}
 			}
-            $this->storeFile($fhead[0]->clave.".pdf", $tipoDocumento, $filePath);
+            $this->storeFile($fhead[0]->clave.".pdf", $tipoDocumento, $filePath, null, $fhead[0]->fecha);
         }else{
            //Imprimimos documento
             $pdf->Output(); 

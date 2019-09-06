@@ -2049,7 +2049,7 @@ Class factura extends CI_Model
                     $this->db->update("tb_61_factura_compra_electronica", $data);
                     
                     // Guardarmos el XML firmado en un archivo
-                    $this->storeFile($factura->Clave.".xml", "fec", null, base64_decode($xmlFirmado, $factura->FechaEmision));
+                    $this->storeFile($factura->Clave.".xml", "fec", null, base64_decode($xmlFirmado), $factura->FechaEmision);
                     
                     return $data;
                 }
