@@ -100,7 +100,9 @@ function imprimirFactura(data){
 	qz.append("\x1B\x21\x10");
 	//Centramos
 	qz.append("\x1B\x61\x01");
-        qz.append(" Comprobante Provisional \r\n");
+	if(factura.clave !== false){
+		qz.append(" Comprobante Provisional \r\n");
+	}
 	qz.append(" "+empresa.nombre+" \r\n");
 	//Seleccionamos tipo de letra
 	qz.append("\x1B\x21\x01");
@@ -125,7 +127,7 @@ function imprimirFactura(data){
 		qz.append(" FACTURA\r\n");
 		console.log("SIMPLIFICADO");
 	}
-	
+
 	qz.append(" Consecutivo: "+factura.consecutivoH+"\r\n"); 
 	if(factura.clave !== false){
 		qz.append(" Clave: "+factura.clave+"\r\n"); 
@@ -157,20 +159,20 @@ function imprimirFactura(data){
 	qz.append("----------------------------------------\r\n");
 	qz.append(" Articulo      Cant. Desc.      Precio  \r\n");
 	qz.append("----------------------------------------\r\n");
-	
+
 	var cantidadTotalArticulos = 0;
-	
+
 	//PROCESADO DE PRODUCTOS
 	for(i = 0; productos.length>i; i++){
 		cantidad = productos[i].cantidad;
 		descuento = productos[i].descuento;
-		
+
 		cant = parseInt(cantidad);
 		//des = parseInt(descuento);
 		cantidadTotalArticulos += cant;
 		precio = parseFloat(productos[i].precio);
 		precio = cantidad * ( precio - ( precio * ( descuento / 100 ) ) );
-		
+
 		qz.append(formatearCodigo(productos[i].codigo)+formatearCantidad(cantidad)+formatearDescuento(descuento)+acomodarPrecio(formatearNumero(precio))+"\r\n");
 		qz.append(" ->"+productos[i].descripcion.substring(0, 36)+"\r\n");
 	}
@@ -178,7 +180,9 @@ function imprimirFactura(data){
 	qz.append("Cant. Articulos: "+cantidadTotalArticulos+"\r\n");
 	qz.append("----------------------------------------\r\n");
 	qz.append(enviarDerecha("Subtotal:"+formatearMontoTotal(formatearNumero(factura.subtotal)))+"\r\n");
-	qz.append(enviarDerecha("IVA:"+formatearMontoTotal(formatearNumero(parseFloat(factura.total_iva)+parseFloat(factura.retencion))))+"\r\n");
+	if(factura.clave !== false){
+		qz.append(enviarDerecha("IVA:"+formatearMontoTotal(formatearNumero(parseFloat(factura.total_iva)+parseFloat(factura.retencion))))+"\r\n");
+	}
 	//qz.append(enviarDerecha("Retencion:"+formatearMontoTotal(formatearNumero(factura.retencion)))+"\r\n");
 	qz.append(enviarDerecha("Total:"+formatearMontoTotal(formatearNumero(factura.total)))+"\r\n");
 	qz.append("----------------------------------------\r\n");
@@ -188,7 +192,9 @@ function imprimirFactura(data){
 	qz.append("\x1B\x61\x01");
 	qz.append("Recibido conforme: ___________\r\n");
 	qz.append(" \r\n");
-	qz.append("Los precios incluyen impuestos de venta\r\n");
+	if(factura.clave !== false){
+		qz.append("Los precios incluyen impuestos de venta\r\n");
+	}
 	qz.append("Gracias por su visita\r\n");
 	qz.append(" \r\n");
 	if(factura.clave !== false){
