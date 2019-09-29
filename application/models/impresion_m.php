@@ -681,9 +681,13 @@ Class impresion_m extends CI_Model{
 				$pdf->SetXY(131, 225);	
 				$pdf->Cell(41,7,'Subtotal:',1,0,'R');
 				$pdf->Cell(28,7,$this->fni($subtotal),1,0,'R');
-				$pdf->SetXY(131, 232);	
-				$pdf->Cell(41,7,'IVA:',1,0,'R');
-				$pdf->Cell(28,7,$this->fni($totalIVA+$retencion),1,0,'R');
+				
+				if($encabezado->clave !== false){
+					$pdf->SetXY(131, 232);	
+					$pdf->Cell(41,7,'IVA:',1,0,'R');
+					$pdf->Cell(28,7,$this->fni($totalIVA+$retencion),1,0,'R');
+				}
+				
 /*
 				$pdf->SetXY(131, 239);	
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
