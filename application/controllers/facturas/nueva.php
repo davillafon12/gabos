@@ -279,43 +279,48 @@ class nueva extends CI_Controller {
                 //Obtenemos la primera posicion del info_factura para obtener el array final
                 $info_factura = $info_factura[0];
 
+				include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
                 if($arrayCliente = $this->cliente->getNombreCliente($info_factura['ce'])){
                     if(!$arrayCliente["actualizar"]){
-                        //Verificamos que vengan productos
-                        if(sizeOf($items_factura)>0){			
-                                        include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+						if($this->cliente->tieneCreditosVencidosSinPagar($info_factura['ce'], $data['Sucursal_Codigo']) === false){
+							//Verificamos que vengan productos
+							if(sizeOf($items_factura)>0){			
+								
 
-                                        //Borramos la factura temporal
-                                        $this->articulo->eliminarFacturaTemporal($_POST['token']);
+								//Borramos la factura temporal
+								$this->articulo->eliminarFacturaTemporal($_POST['token']);
 
-                                        $resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $data['Sucursal_Codigo']);
-                                        if($resultadoExistencias["status"]){						
-                                                if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
-                                                        $tieneArticulos = $this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
-                                                        if($tieneArticulos === true){
-                                                            $this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-                                                            $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
-                                                        
-                                                            echo '7'; //El ingreso fue correcto
-                                                        }else{
-                                                            //Eliminamos cualquier articulos suelto que haya quedado
-                                                            $this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
-                                                            $this->factura->eliminarFacturaPorFallo($consecutivo, $data['Sucursal_Codigo']);
-                                                            echo 'No se pudo agregar los productos a la factura';
-                                                        }											
-                                                }else{
-                                                        echo 'Hubo un error al crear encabezado de la factura'; //Error al crear la factura
-                                                }	
-                                        }else{
-                                                $articulos = "";
-                                                foreach($resultadoExistencias["articulos"] as $arti){
-                                                        $articulos .= "-> Código: {$arti["codigo"]} Cantidad Disponible:  {$arti["inventario"]}<br>";
-                                                }
-                                                echo 'Los siguientes artículos no tienen suficiente inventario: <br>'.$articulos; // No hay suficiente existencia
-                                        }
-                        }else{
-                            echo 'Problema cargando información de los artículos'; //No vienen productos
-                        }
+								$resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $data['Sucursal_Codigo']);
+								if($resultadoExistencias["status"]){						
+										if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
+												$tieneArticulos = $this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
+												if($tieneArticulos === true){
+													$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
+													$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
+
+													echo '7'; //El ingreso fue correcto
+												}else{
+													//Eliminamos cualquier articulos suelto que haya quedado
+													$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
+													$this->factura->eliminarFacturaPorFallo($consecutivo, $data['Sucursal_Codigo']);
+													echo 'No se pudo agregar los productos a la factura';
+												}											
+										}else{
+												echo 'Hubo un error al crear encabezado de la factura'; //Error al crear la factura
+										}	
+								}else{
+										$articulos = "";
+										foreach($resultadoExistencias["articulos"] as $arti){
+												$articulos .= "-> Código: {$arti["codigo"]} Cantidad Disponible:  {$arti["inventario"]}<br>";
+										}
+										echo 'Los siguientes artículos no tienen suficiente inventario: <br>'.$articulos; // No hay suficiente existencia
+								}
+							}else{
+								echo 'Problema cargando información de los artículos'; //No vienen productos
+							}
+						}else{
+
+						}
                     }else{
                         echo 'El cliente ingresado debe actualizar sus datos para poder facturar.<br> Favor actualizar datos del cliente.';
                     }
