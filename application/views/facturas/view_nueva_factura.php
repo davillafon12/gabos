@@ -188,7 +188,7 @@ PARA:
 							<input tabindex='".$numero_tab."' id='codigo_articulo_".$numero_id."' class='input_codigo_articulo' autocomplete='off' name='codigo_articulo' type='text' onkeyup='buscarArticulo(event, this.value, this.id);' onkeydown='filtrarKeys(event, this.id);' disabled>
 							<input id='codigo_articulo_anterior_".$numero_id."' type='hidden' value=''>
 						</td>
-						<td>
+						<td class='imagen-margen-container'>
 							<div class='articulo_specs' id='descripcion_articulo_".$numero_id."'></div>
 							<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_".$numero_id."'></div>
 						</td>

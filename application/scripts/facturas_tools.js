@@ -21,10 +21,10 @@ function agregarFila(index){
 	// Create an empty <tr> element and add it to the last position of the table:
 	var row = table.insertRow(index);
 	row.setAttribute("id","articulo_"+siguienteFila);
-
 	// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
 	var cell1 = row.insertCell(0);
 	var cell2 = row.insertCell(1);
+	cell2.setAttribute("class","imagen-margen-container");
 	var cell3 = row.insertCell(2);
 	var cell4 = row.insertCell(3);
 	var cell5 = row.insertCell(4);
@@ -351,7 +351,8 @@ function setArticulo(articulo, num_fila){
 	$("#descripcion_articulo_"+num_fila).html(articulo.descripcion);
 	//Seteamos el tootltip de la imagen del articulo
 	$("#tooltip_imagen_articulo_"+num_fila).html("<img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/articulos/"+articulo.imagen+"' height='200' width='200'>");
-	agregarTooltip("#descripcion_articulo_"+num_fila);
+	
+	//agregarTooltip("#descripcion_articulo_"+num_fila);
 	//Seteamos la bodega
 	$("#bodega_articulo_"+num_fila).html(articulo.inventario);
 	//Seteamos la cantidad inicial

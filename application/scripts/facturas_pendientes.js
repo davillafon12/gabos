@@ -217,6 +217,7 @@ function setProductosFactura(productos){
 		precio = precio.toFixed(decimales);
 		cell1 = row.insertCell(0);
 		cell2 = row.insertCell(1);
+		cell2.setAttribute("class","imagen-margen-container");
 		cell3 = row.insertCell(2);
 		cell4 = row.insertCell(3);
 		cell5 = row.insertCell(4);
@@ -255,7 +256,7 @@ function setProductosFactura(productos){
 		
 		
 		//Agregamos las demas funciones de cada row
-		agregarTooltip("#descripcion_articulo_"+(i+1));
+		//agregarTooltip("#descripcion_articulo_"+(i+1));
 		updateProductsTotal();
 	}
 	setCostos(cantidad);
