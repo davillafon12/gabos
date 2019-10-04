@@ -72,9 +72,9 @@ Class contabilidad extends CI_Model
 	function getConsecutivoUltimoRecibo($sucursal)
 	{
 		$this -> db -> select('Consecutivo');
-		$this -> db -> from('TB_26_Recibos_Dinero');
-		$this -> db -> join('TB_24_Credito', 'TB_26_Recibos_Dinero.Credito = TB_24_Credito.Credito_Id');
-		$this -> db -> where('TB_24_Credito.Credito_Sucursal_Codigo', $sucursal);
+		$this -> db -> from('tb_26_recibos_dinero');
+		$this -> db -> join('tb_24_credito', 'tb_26_recibos_dinero.Credito = tb_24_credito.Credito_Id');
+		$this -> db -> where('tb_24_Credito.Credito_Sucursal_Codigo', $sucursal);
 		$this -> db -> order_by('Consecutivo', 'desc');
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
@@ -123,7 +123,7 @@ Class contabilidad extends CI_Model
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> select('Consecutivo');
-		$this -> db -> from('TB_27_Notas_Credito');
+		$this -> db -> from('tb_27_notas_credito');
 		$this -> db -> where('Sucursal', $sucursal);
 		$this -> db -> order_by("Consecutivo", "desc");
 		$this -> db -> limit(1);
@@ -147,12 +147,12 @@ Class contabilidad extends CI_Model
 				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
 				$sucursal = $this->sucursales_trueque[$sucursal];
 				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo IN (".implode(',',$facturas_trueque).")";
+						$queryLoco = "AND tb_07_factura.Factura_Consecutivo IN (".implode(',',$facturas_trueque).")";
 				}
 		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
 				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
 				if(!empty($facturas_trueque)){
-						$queryLoco = "AND TB_07_Factura.Factura_Consecutivo NOT IN (".implode(',',$facturas_trueque).")";
+						$queryLoco = "AND tb_07_factura.Factura_Consecutivo NOT IN (".implode(',',$facturas_trueque).")";
 				}
 		}
 		$query = $this->db->query("
@@ -233,7 +233,7 @@ Class contabilidad extends CI_Model
 						'Sucursal' => $sucursal,
 						'Cliente' => $cliente
 						);
-		$this->db->insert('TB_27_Notas_Credito', $datos);
+		$this->db->insert('tb_27_notas_credito', $datos);
 		
 		if($this->truequeHabilitado && $this->truequeAplicado){ //Si se aplico el trueque, se debe guardar el documento
 			$datos = array("Consecutivo" => $consecutivo,
@@ -249,7 +249,7 @@ Class contabilidad extends CI_Model
 	function existeNotaCredito($consecutivo, $sucursal){
 		$this->db->where('Consecutivo', $consecutivo);
 		$this->db->where('Sucursal', $sucursal);
-		$this->db->from('TB_27_Notas_Credito');
+		$this->db->from('tb_27_notas_credito');
 		$query = $this->db->get();
 		if($query->num_rows()==0)
 		{
@@ -322,7 +322,7 @@ Class contabilidad extends CI_Model
 			//Sumamos cantidades defectuosas
 			$this->articulo->actualizarInventarioSUMADefectuoso($producto->c, $producto->d, $sucursalOriginal);
 		}
-		$this->db->insert_batch('TB_28_Productos_Notas_Credito', $datos);
+		$this->db->insert_batch('tb_28_productos_notas_credito', $datos);
 	}
 	
 	function precioArticuloEnFacturaDeterminada($factura, $sucursal, $articulo){
@@ -354,7 +354,7 @@ Class contabilidad extends CI_Model
 					Moneda AS moneda,
 					Por_IVA AS iva,
 					Tipo_Cambio AS tipo_cambio
-			FROM TB_27_Notas_Credito
+			FROM tb_27_notas_credito
 			WHERE Consecutivo = $consecutivo
 			AND Sucursal = $sucursal
 		");
@@ -374,7 +374,7 @@ Class contabilidad extends CI_Model
 		}
                 $this->db->where("Consecutivo", $consecutivo);
                 $this->db->where("Sucursal", $sucursal);
-                $this->db->from("TB_27_Notas_Credito");
+                $this->db->from("tb_27_notas_credito");
 		$query = $this->db->get();
 		if($query->num_rows()==0){
                     return false;
@@ -433,7 +433,7 @@ Class contabilidad extends CI_Model
 	function facturaAplciarYaFueAplicada($factura, $sucursal){
 		$this->db->where('Factura_Aplicar', $factura);
 		$this->db->where('Sucursal', $sucursal);
-		$this->db->from('TB_27_Notas_Credito');
+		$this->db->from('tb_27_notas_credito');
 		$query = $this->db->get();
 		if($query->num_rows()==0)
 		{
@@ -451,8 +451,8 @@ Class contabilidad extends CI_Model
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$this -> db -> select('Consecutivo, Credito, Recibo_Cantidad, Recibo_Fecha, Recibo_Saldo, Credito_Factura_Consecutivo');
-		$this -> db -> from('TB_26_recibos_dinero');
-		$this -> db -> join('TB_24_credito','Credito_Id = Credito');
+		$this -> db -> from('tb_26_recibos_dinero');
+		$this -> db -> join('tb_24_credito','Credito_Id = Credito');
 		$this -> db -> where('Credito_Sucursal_Codigo', $sucursal); 
 		$this -> db -> where('Credito_Cliente_Cedula', $cliente);
 		$this -> db -> where('Anulado', 0);
@@ -689,19 +689,19 @@ Class contabilidad extends CI_Model
 						'Sucursal' => $sucursal,
 						'Usuario' => $usuario
 						);
-		$this->db->insert('TB_33_Retiros_Parciales', $datos);
+		$this->db->insert('tb_33_retiros_parciales', $datos);
 		return $this->db->insert_id();
 	}
 	
 	function getRetiroParcialHeadImpresion($retiro){
-		$this->db->select("	TB_33_Retiros_Parciales.Id as consecutivo,
-							TB_33_Retiros_Parciales.Monto as monto, 
-							date_format(TB_33_Retiros_Parciales.Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha,
-							TB_33_Retiros_Parciales.Tipo_Cambio as tipo,
-							TB_33_Retiros_Parciales.Sucursal as sucursal,
+		$this->db->select("	tb_33_retiros_parciales.Id as consecutivo,
+		tb_33_retiros_parciales.Monto as monto, 
+							date_format(tb_33_retiros_parciales.Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') as fecha,
+							tb_33_retiros_parciales.Tipo_Cambio as tipo,
+							tb_33_retiros_parciales.Sucursal as sucursal,
 							CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario", false);
-		$this->db->from('TB_33_Retiros_Parciales');
-		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = TB_33_Retiros_Parciales.Usuario');
+		$this->db->from('tb_33_retiros_parciales');
+		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = tb_33_retiros_parciales.Usuario');
 		$this->db->where('Id', $retiro);
 		$query = $this->db->get();
 		if($query->num_rows()==0){
@@ -863,8 +863,8 @@ Class contabilidad extends CI_Model
 		}
 		
 		$query = $this->db->query("
-			SELECT * FROM TB_07_Factura f
-			JOIN TB_18_Tarjeta t ON f.Factura_Consecutivo = t.TB_07_Factura_Factura_Consecutivo
+			SELECT * FROM tb_07_factura f
+			JOIN tb_18_tarjeta t ON f.Factura_Consecutivo = t.TB_07_Factura_Factura_Consecutivo
 			WHERE f.Factura_Tipo_Pago IN ('tarjeta','mixto')
 			AND f.TB_02_Sucursal_Codigo = $sucursal
 			AND t.TB_07_Factura_TB_02_Sucursal_Codigo = $sucursal
@@ -962,9 +962,10 @@ Class contabilidad extends CI_Model
 		$this->db->join('tb_23_mixto', 'tb_23_mixto.TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo = tb_07_factura.Factura_Consecutivo');
 		$this->db->where('tb_07_factura.Factura_Tipo_Pago', 'mixto');
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('tb_23_mixto.TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);
-		$this->db->where('TB_07_Factura.TB_03_Cliente_Cliente_Cedula !=', 2);
+		$this->db->where('tb_07_factura.TB_03_Cliente_Cliente_Cedula !=', 2);
 		return $this->db->get();
 	}
 	
@@ -1013,7 +1014,7 @@ Class contabilidad extends CI_Model
 						$this->db->where_not_in("Consecutivo", $facturas_trueque);
 				}
 		}
-		$this->db->from('TB_27_Notas_Credito');
+		$this->db->from('tb_27_notas_credito');
 		$this->db->where('Sucursal', $sucursal);
                 $this->db->where('Es_Anulacion', "0");
 		$this->db->where('Fecha_Creacion >', $inicio);
@@ -1045,13 +1046,13 @@ Class contabilidad extends CI_Model
 				}
 		}
 		$this->db->select('tb_27_notas_credito.Consecutivo, tb_27_notas_credito.Sucursal, tb_27_notas_credito.Por_IVA, tb_07_factura.Factura_Tipo_Pago as Tipo, tb_07_factura.TB_03_Cliente_Cliente_Cedula as Cliente');
-		$this->db->from('TB_27_Notas_Credito');
+		$this->db->from('tb_27_notas_credito');
 		$this->db->join('tb_07_factura', 'tb_07_factura.Factura_Consecutivo = tb_27_notas_credito.Factura_Aplicar');
-		$this->db->where('TB_27_Notas_Credito.Sucursal', $sucursal);
-                $this->db->where('TB_27_Notas_Credito.Es_Anulacion', "0");
+		$this->db->where('tb_27_notas_credito.Sucursal', $sucursal);
+                $this->db->where('tb_27_notas_credito.Es_Anulacion', "0");
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
-		$this->db->where('TB_27_Notas_Credito.Fecha_Creacion >', $inicio);
-		$this->db->where('TB_27_Notas_Credito.Fecha_Creacion <', $final);
+		$this->db->where('tb_27_notas_credito.Fecha_Creacion >', $inicio);
+		$this->db->where('tb_27_notas_credito.Fecha_Creacion <', $final);
 		$query = $this->db->get();	
 		// SELECT tb_27_notas_credito.Consecutivo, tb_27_notas_credito.Sucursal, tb_07_factura.Factura_Tipo_Pago as Factura 
 		// FROM tb_27_notas_credito 
@@ -1407,7 +1408,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('tb_03_cliente.Cliente_EsSucursal', 0);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);	
-		$this->db->where('TB_07_Factura.TB_03_Cliente_Cliente_Cedula !=', 2);
+		$this->db->where('tb_07_factura.TB_03_Cliente_Cliente_Cedula !=', 2);
 		$query = $this->db->get();
 		if($query->num_rows()==0){
 			return false;
@@ -1417,7 +1418,7 @@ Class contabilidad extends CI_Model
 	}
 	
 	function facturaTraspasoHaSidoAplicada($factura, $sucursalSalida, $sucursalEntrada){
-		$this->db->from('TB_44_Traspaso_Inventario');
+		$this->db->from('tb_44_traspaso_inventario');
 		$this->db->where('Sucursal_Salida', $sucursalSalida);
 		$this->db->where('Sucursal_Entrada', $sucursalEntrada);
 		$this->db->where('Factura_Traspasada', $factura);
@@ -1437,7 +1438,7 @@ Class contabilidad extends CI_Model
 					'Usuario' => $usuario,
 					'Factura_Traspasada' => $factura
 					);
-		$this->db->insert('TB_44_Traspaso_Inventario', $datos);
+		$this->db->insert('tb_44_traspaso_inventario', $datos);
 		return $this->db->insert_id();
 	}
 	
@@ -1448,20 +1449,20 @@ Class contabilidad extends CI_Model
 						'Cantidad' => $cantidad,
 						'Traspaso' => $traspaso
 						);
-		$this->db->insert('TB_45_Articulos_Traspaso_Inventario', $datos);				
+		$this->db->insert('tb_45_articulos_traspaso_inventario', $datos);				
 	}
 	
 	function getTraspasoArticulos($id){
-		$this->db->select("	TB_44_Traspaso_Inventario.Id as consecutivo, 
-							date_format(TB_44_Traspaso_Inventario.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,
-							TB_44_Traspaso_Inventario.Sucursal_Salida as salida,
-							TB_44_Traspaso_Inventario.Sucursal_Entrada as entrada,
-							TB_44_Traspaso_Inventario.Factura_Traspasada as factura,
-							TB_44_Traspaso_Inventario.Usuario as usuario,
+		$this->db->select("	tb_44_traspaso_inventario.Id as consecutivo, 
+							date_format(tb_44_traspaso_inventario.Fecha, '%d-%m-%Y %h:%i:%s %p') as fecha,
+							tb_44_traspaso_inventario.Sucursal_Salida as salida,
+							tb_44_traspaso_inventario.Sucursal_Entrada as entrada,
+							tb_44_traspaso_inventario.Factura_Traspasada as factura,
+							tb_44_traspaso_inventario.Usuario as usuario,
 							CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario_nombre", false);		
-		$this->db->from('TB_44_Traspaso_Inventario');
-		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = TB_44_Traspaso_Inventario.Usuario');
-		$this->db->where('TB_44_Traspaso_Inventario.Id', $id);
+		$this->db->from('tb_44_traspaso_inventario');
+		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = tb_44_traspaso_inventario.Usuario');
+		$this->db->where('tb_44_traspaso_inventario.Id', $id);
 		$query = $this->db->get();
 		if($query->num_rows()==0){
 			return false;
@@ -1471,7 +1472,7 @@ Class contabilidad extends CI_Model
 	}
 	
 	function getArticulosTraspaso($id){
-		$this->db->from('TB_45_Articulos_Traspaso_Inventario');
+		$this->db->from('tb_45_articulos_traspaso_inventario');
 		$this->db->where('Traspaso', $id);
 		$query = $this->db->get();
 		if($query->num_rows()==0){
