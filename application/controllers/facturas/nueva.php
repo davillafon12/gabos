@@ -41,6 +41,8 @@ class nueva extends CI_Controller {
 			$id_request=$_GET['cedula'];
 			$arrayCliente = $this->cliente->getNombreCliente($id_request);
 			if($arrayCliente){ //Si encontro al cliente
+				include PATH_USER_DATA;
+				$arrayCliente['tieneCreditosVencidos'] = $this->cliente->tieneCreditosVencidosSinPagar($id_request, $data['Sucursal_Codigo']);
 				$arrayCliente['status'] = 'success';
 			}else{
 				$arrayCliente['status'] = 'error';

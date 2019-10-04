@@ -6,7 +6,7 @@ Class cliente extends CI_Model
 
 	function existe_Cliente($cedula){
 		$this -> db -> select('Cliente_Cedula');
-		$this -> db -> from('TB_03_Cliente');
+		$this -> db -> from('tb_03_cliente');
 		$this -> db -> where('Cliente_Cedula', $cedula);
 		$this -> db -> limit(1);
 
@@ -24,7 +24,7 @@ Class cliente extends CI_Model
 
 	function obtener_Imagen_Cliente($cedula){
 		$this -> db -> select('Cliente_Imagen_URL');
-		$this -> db -> from('TB_03_Cliente');
+		$this -> db -> from('tb_03_cliente');
 		$this -> db -> where('Cliente_Cedula', $cedula);
 		$this -> db -> limit(1);
 
@@ -115,7 +115,7 @@ Class cliente extends CI_Model
 	function getClientes()
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('TB_03_Cliente');
+		$this -> db -> from('tb_03_cliente');
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -131,7 +131,7 @@ Class cliente extends CI_Model
 	function getClientes_Cedula($id)
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('TB_03_Cliente');		
+		$this -> db -> from('tb_03_cliente');		
 		$this -> db -> where('Cliente_Cedula', $id);
 		$this -> db -> limit(1);
 		
@@ -150,7 +150,7 @@ Class cliente extends CI_Model
 	function isActivated($id)
 	{
 		$this -> db -> select('Cliente_Estado');
-		$this -> db -> from('TB_03_Cliente');
+		$this -> db -> from('tb_03_cliente');
 		$this -> db -> where('Cliente_Cedula', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
@@ -177,7 +177,7 @@ Class cliente extends CI_Model
 	function getNombreCliente($id)
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('TB_03_Cliente');
+		$this -> db -> from('tb_03_cliente');
 		$this -> db -> where('Cliente_Cedula', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
@@ -204,6 +204,20 @@ Class cliente extends CI_Model
 			}
 		}	
 	}
+
+	function tieneCreditosVencidosSinPagar($cedula, $sucursal){
+		/*  SELECT * FROM tb_24_credito 
+			WHERE DATE_ADD(Credito_Fecha_Expedicion, INTERVAL Credito_Numero_Dias DAY) < CURDATE()
+			AND Credito_Sucursal_Codigo
+			AND Credito_Cliente_Cedula
+			AND Credito_Saldo_Actual */
+		$query = $this->db->query("SELECT * FROM tb_24_credito 
+									WHERE DATE_ADD(Credito_Fecha_Expedicion, INTERVAL Credito_Numero_Dias DAY) < CURDATE()
+									AND Credito_Sucursal_Codigo = $sucursal
+									AND Credito_Cliente_Cedula = $cedula
+									AND Credito_Saldo_Actual > 0");
+		return $query->num_rows()>0;
+	}
 	
 	function getClienteDescuento($cedula, $sucursal){
 		$this -> db -> select('*');
@@ -228,7 +242,7 @@ Class cliente extends CI_Model
 	}
 	
 	function clienteEsExentoDeIVA($cedula){
-			$this -> db -> from('TB_03_Cliente');
+			$this -> db -> from('tb_03_cliente');
 			$this -> db -> where('Cliente_Cedula', $cedula);
 			$this -> db -> limit(1);
 			$query = $this -> db -> get();
@@ -241,7 +255,7 @@ Class cliente extends CI_Model
 	}
 	
 	function clienteEsExentoDeRetencion($cedula){
-			$this -> db -> from('TB_03_Cliente');
+			$this -> db -> from('tb_03_cliente');
 			$this -> db -> where('Cliente_Cedula', $cedula);
 			$this -> db -> limit(1);
 			$query = $this -> db -> get();
@@ -334,7 +348,7 @@ Class cliente extends CI_Model
 	function getNumeroPrecio($id)
 	{
 		$this -> db -> select('Cliente_Numero_Pago');
-		$this -> db -> from('TB_03_Cliente');
+		$this -> db -> from('tb_03_cliente');
 		$this -> db -> where('Cliente_Cedula', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
@@ -359,7 +373,7 @@ Class cliente extends CI_Model
 	
 	function getNombresClientesBusqueda($nombre){
 		$this -> db -> select('Cliente_Cedula, Cliente_Nombre, Cliente_Apellidos');
-		$this -> db -> from('TB_03_Cliente');
+		$this -> db -> from('tb_03_cliente');
 		$this->db->like('Cliente_Nombre', $nombre);
         $this->db->or_like('Cliente_Apellidos', $nombre); 
 		$query = $this -> db -> get();
