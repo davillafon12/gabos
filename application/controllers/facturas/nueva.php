@@ -267,14 +267,14 @@ class nueva extends CI_Controller {
                 
 		echo $repuesta; //No se encontro
 	}
-	
+
 	function crearPendiente(){
             if(isset($_POST['head'])&&isset($_POST['items'])&&isset($_POST['token'])){
                 //Obtener las dos partes del post
                 $info_factura = $_POST['head'];
                 $items_factura = $_POST['items'];
                 //Decodificar el JSON del post
-                $info_factura = json_decode($info_factura, true);			
+                $info_factura = json_decode($info_factura, true);
                 $items_factura = json_decode($items_factura, true);
                 //Obtenemos la primera posicion del info_factura para obtener el array final
                 $info_factura = $info_factura[0];
@@ -284,14 +284,14 @@ class nueva extends CI_Controller {
                     if(!$arrayCliente["actualizar"]){
 						if($this->cliente->tieneCreditosVencidosSinPagar($info_factura['ce'], $data['Sucursal_Codigo']) === false){
 							//Verificamos que vengan productos
-							if(sizeOf($items_factura)>0){			
-								
+							if(sizeOf($items_factura)>0){
+
 
 								//Borramos la factura temporal
 								$this->articulo->eliminarFacturaTemporal($_POST['token']);
 
 								$resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $data['Sucursal_Codigo']);
-								if($resultadoExistencias["status"]){						
+								if($resultadoExistencias["status"]){
 										if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
 												$tieneArticulos = $this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
 												if($tieneArticulos === true){
@@ -304,10 +304,10 @@ class nueva extends CI_Controller {
 													$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
 													$this->factura->eliminarFacturaPorFallo($consecutivo, $data['Sucursal_Codigo']);
 													echo 'No se pudo agregar los productos a la factura';
-												}											
+												}
 										}else{
 												echo 'Hubo un error al crear encabezado de la factura'; //Error al crear la factura
-										}	
+										}
 								}else{
 										$articulos = "";
 										foreach($resultadoExistencias["articulos"] as $arti){
@@ -319,7 +319,7 @@ class nueva extends CI_Controller {
 								echo 'Problema cargando información de los artículos'; //No vienen productos
 							}
 						}else{
-
+							echo '¡Este cliente tiene créditos vencidos que debe pagar! <BR>Por favor informarle al cliente ponerse al día para poder facturarle de nuevo.';
 						}
                     }else{
                         echo 'El cliente ingresado debe actualizar sus datos para poder facturar.<br> Favor actualizar datos del cliente.';
@@ -329,17 +329,17 @@ class nueva extends CI_Controller {
                 }
             }else{
                 echo 'URL mal formado, por favor reportar al administrador';
-            } //Numero de error mal post		
+            } //Numero de error mal post
         }
-	
+
 	function checkExistenciaDeProductos($items_factura, $sucursal){
 		$r["status"] = true;
 		$r["articulos"] = array();
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
-			if($item['co']=='00'){ //Si es generico					
+			if($item['co']=='00'){ //Si es generico
 					continue;
-			}else{ //Si es normal					
+			}else{ //Si es normal
 				if($articulo = $this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					$articulo = $articulo[0];
 					if($articulo->Articulo_Cantidad_Inventario < $item['ca']){
