@@ -1,4 +1,5 @@
-USE gabo_trueque; 
+-- PENDIENTE ACTUALIZAR REPORTE
+USE gabo_fe; 
 DELIMITER ;;
 CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_RecibosXDinero
 (
@@ -12,16 +13,16 @@ CREATE DEFINER = 'consulta'@'%' PROCEDURE PA_RecibosXDinero
  BEGIN
 	SET @wherePrincipal 		= CONCAT(' where   cre.Credito_Sucursal_Codigo = ', '\'', paSucursal, '\'');
 	
-	SET @QUERY 			= CONCAT( 'SELECT  recd.Consecutivo,  
+	SET @QUERY 			= CONCAT( 'SELECT   cre.Credito_Factura_Consecutivo as consecutivoFac,
+											recd.Consecutivo,  
+											recd.Tipo_Pago,
 											recd.Recibo_Fecha, 
-											recd.Recibo_Cantidad, 
-											recd.Tipo_Pago, 
-											recd.Anulado,
-											cre.Credito_Saldo_Inicial, 
-											cre.Credito_Saldo_Actual, 
-											cre.Credito_Factura_Consecutivo as consecutivoFac, 
-											concat(cli.Cliente_Nombre, \' \', cli.Cliente_Apellidos) as Nombre,
-											cli.Cliente_cedula as identificacion
+											cli.Cliente_cedula as identificacion,
+											concat(cli.Cliente_Nombre, \' \', cli.Cliente_Apellidos) as Nombre,																						
+											If(recd.Recibo_Saldo+recd.Recibo_Cantidad=0,cre.Credito_Saldo_Inicial,recd.Recibo_Saldo+recd.Recibo_Cantidad) as Credito_Saldo_Inicial,
+											recd.Recibo_Cantidad, 											
+											recd.Recibo_Saldo as Credito_Saldo_Actual,
+											recd.Anulado
 									FROM    tb_26_recibos_dinero recd 
 											inner join tb_24_credito cre on cre.Credito_Id = recd.Credito
 											inner join tb_03_cliente cli on cre.Credito_Cliente_Cedula = cli.Cliente_Cedula ');	
