@@ -150,7 +150,7 @@ function cargarAllConsignacion(consecutivo){
                             _I_CONSIGNACION = data.consecutivo;
                             _I_SUCURSAL = data.sucursal;
                         }else{
-                            notyMsg("El servidor no respondió de una manera adecuada, favor contactar al administrador.", "error");
+                            notyMsg(data.error, "error");
                         }
                     }
                     catch(e){

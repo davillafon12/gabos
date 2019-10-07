@@ -32,7 +32,7 @@ class CI_Controller
 
     private static $instance;
 
-    public $javascriptCacheVersion = 33;
+    public $javascriptCacheVersion = 34;
 
     public $tiposIdentificacion = array(
         "01" => "Física",

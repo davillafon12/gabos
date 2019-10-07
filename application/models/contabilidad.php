@@ -1873,6 +1873,7 @@ Class contabilidad extends CI_Model
 				Total as total,
 				date_format(Fecha_Hora, '%d-%m-%Y %h:%i:%s %p') AS fecha,
 				Usuario as usuario,
+				Estado as estado,
 				Sucursal_Entrega as sucursal_entrega,
 				Sucursal_Recibe as sucursal_recibe,
 				Sucursal_Recibe_Cliente_Liga as cliente

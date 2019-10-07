@@ -634,33 +634,36 @@ class consignaciones extends CI_Controller {
                 $retorno["error"] = "No hay consignaciones con los filtros seleccionados";
                 $retorno["status"] = "error";
             }
-            
+
             echo json_encode($retorno);
         }
-        
+
         function getConsignacion(){
             include PATH_USER_DATA;
             $retorno["status"] = "error";
             $retorno["error"] = "No se pudo procesar su solicitud";
-            
+
             $consignacion = trim($_POST["consignacion"]);
-            
+
             if($consignacion = $this->contabilidad->getConsignacionParaImpresion($consignacion)){
-                if($articulos = $this->contabilidad->getArticulosDeConsignacionParaEditar($consignacion->consecutivo, $consignacion->sucursal_entrega)){
-                    unset($retorno["error"]);
-                    $retorno["status"] = "success";
-                    $consignacion->articulos = $articulos;
-                    $retorno["consignacion"] = $consignacion;
-                    $retorno['consecutivo'] = $consignacion->consecutivo;
-                    $retorno['sucursal']= $data['Sucursal_Codigo'];
-                    $retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
-                }else{
-                   $retorno["error"] = "No hay artículos para esta consignación"; 
-                }
+				if($consignacion->estado == "creada"){
+					if($articulos = $this->contabilidad->getArticulosDeConsignacionParaEditar($consignacion->consecutivo, $consignacion->sucursal_entrega)){
+						unset($retorno["error"]);
+						$retorno["status"] = "success";
+						$consignacion->articulos = $articulos;
+						$retorno["consignacion"] = $consignacion;
+						$retorno['consecutivo'] = $consignacion->consecutivo;
+						$retorno['sucursal']= $data['Sucursal_Codigo'];
+						$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+					}else{
+					   $retorno["error"] = "No hay artículos para esta consignación"; 
+					}
+				}else{
+					$retorno["error"] = "No se pueden editar consignaciones anuladas ni aplicadas";
+				}
             }else{
                 $retorno["error"] = "Número de consignación no existe";
             }
-            
             echo json_encode($retorno);
         }
 
