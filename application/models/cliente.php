@@ -214,7 +214,7 @@ Class cliente extends CI_Model
 		$query = $this->db->query("SELECT * FROM tb_24_credito 
 									WHERE DATE_ADD(Credito_Fecha_Expedicion, INTERVAL Credito_Numero_Dias DAY) < CURDATE()
 									AND Credito_Sucursal_Codigo = $sucursal
-									AND Credito_Cliente_Cedula = $cedula
+									AND Credito_Cliente_Cedula = '$cedula'
 									AND Credito_Saldo_Actual > 0");
 		return $query->num_rows()>0;
 	}
