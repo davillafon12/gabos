@@ -287,7 +287,7 @@ function imprimirProforma(data){
 	qz.append("Los precios incluyen impuestos de venta\r\n");
 	qz.append("Gracias por su visita\r\n");
 	qz.append(" \r\n");
-	qz.append(empresa.leyenda+"\r\n");
+	//qz.append(empresa.leyenda+"\r\n");
 	//Damos espacio al final
 	qz.append("\r\n\r\n\r\n\r\n\r\n\r\n");
 	qz.append("\x1B\x69"); //Cortar
