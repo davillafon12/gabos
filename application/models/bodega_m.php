@@ -108,9 +108,9 @@ Class bodega_m extends CI_Model
 					Descripcion AS descripcion,
 					Cantidad AS inventario
 			FROM tb_34_bodega
-			WHERE (Codigo LIKE '%%' OR
-				   Descripcion LIKE '%%' OR
-				   Cantidad LIKE '%%' )
+			WHERE (Codigo LIKE '%$busqueda%' OR
+				   Descripcion LIKE '%$busqueda%' OR
+				   Cantidad LIKE '%$busqueda%' )
 			AND    Sucursal = $sucursal
 			ORDER BY $columnaOrden $tipoOrden
 			LIMIT $inicio,$cantidad		
@@ -133,10 +133,7 @@ Class bodega_m extends CI_Model
 					Descripcion AS descripcion,
 					Cantidad AS inventario
 			FROM tb_34_bodega
-			WHERE (Codigo LIKE '%%' OR
-				   Descripcion LIKE '%%' OR
-				   Cantidad LIKE '%%' )
-			AND    Sucursal = $sucursal	
+			WHERE Sucursal = $sucursal	
 		");	
 	}
 	
