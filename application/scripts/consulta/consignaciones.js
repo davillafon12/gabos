@@ -154,7 +154,7 @@ function cargarAllConsignacion(consecutivo){
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/contabilidad/consignaciones/getConsignacion",
 		type: "POST",
                 dataType: "JSON",
-		data: {'consignacion':consecutivo},		
+		data: {'consignacion':consecutivo,consulta:1},		
 		success: function(data, textStatus, jqXHR)
 		{			
                     try{

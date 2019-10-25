@@ -643,10 +643,14 @@ class consignaciones extends CI_Controller {
             $retorno["status"] = "error";
             $retorno["error"] = "No se pudo procesar su solicitud";
 
-            $consignacion = trim($_POST["consignacion"]);
+			$consignacion = trim($_POST["consignacion"]);
+			$isConsulta = false; 
+			if(isset($_POST["consulta"])){
+				$isConsulta = trim($_POST["consulta"]) == 1;
+			}
 
             if($consignacion = $this->contabilidad->getConsignacionParaImpresion($consignacion)){
-				if($consignacion->estado == "creada"){
+				if($consignacion->estado == "creada" || $isConsulta){
 					if($articulos = $this->contabilidad->getArticulosDeConsignacionParaEditar($consignacion->consecutivo, $consignacion->sucursal_entrega)){
 						unset($retorno["error"]);
 						$retorno["status"] = "success";
