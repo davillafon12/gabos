@@ -4,7 +4,7 @@ Class banco extends CI_Model
 	function getBancos()
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('TB_22_Banco');
+		$this -> db -> from('tb_22_banco');
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -25,7 +25,7 @@ Class banco extends CI_Model
 						'Banco_Creado_Por'=>$usuario
                     );
 		try{
-        $this->db->insert('TB_22_Banco',$data); }
+        $this->db->insert('tb_22_banco',$data); }
 		catch(Exception $e)
 		{return false;}
 		//Verificamos y retornamos si se guardo en base de datos
@@ -34,13 +34,13 @@ Class banco extends CI_Model
 	}
 	
 	function eliminar($id){
-		$this->db->delete('TB_22_Banco', array('Banco_Codigo' => $id));
+		$this->db->delete('tb_22_banco', array('Banco_Codigo' => $id));
 	}
 	
 	function getBanco($id)
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('TB_22_Banco');		
+		$this -> db -> from('tb_22_banco');		
 		$this -> db -> where('Banco_Codigo', $id);
 		$this -> db -> limit(1);
 		
@@ -60,14 +60,14 @@ Class banco extends CI_Model
 	{
 		    
 			$this->db->where('Banco_Codigo', $id);
-			$this->db->update('TB_22_Banco' ,$data);
+			$this->db->update('tb_22_banco' ,$data);
 		
 	}
 	
 	function getComision($id)
 	{
 		$this -> db -> select('Banco_Comision_Porcentaje');
-		$this -> db -> from('TB_22_Banco');
+		$this -> db -> from('tb_22_banco');
 		$this -> db -> where('Banco_Codigo', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();

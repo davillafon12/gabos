@@ -3,7 +3,7 @@ Class empresa extends CI_Model
 {
 	function es_codigo_usado($Codigo_evaluar){
 		$this -> db -> select('Codigo');
-		$this -> db -> from('TB_02_sucursal');
+		$this -> db -> from('tb_02_sucursal');
 		$this -> db -> where('Codigo', $Codigo_evaluar);
 		$this -> db -> limit(1);
 
@@ -91,7 +91,7 @@ Class empresa extends CI_Model
 	function getEmpresas()
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('TB_02_sucursal');
+		$this -> db -> from('tb_02_sucursal');
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -107,7 +107,7 @@ Class empresa extends CI_Model
 	function getEmpresa($id)
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('TB_02_sucursal');		
+		$this -> db -> from('tb_02_sucursal');		
 		$this -> db -> where('Codigo', $id);
 		$this -> db -> limit(1);
 		
@@ -126,7 +126,7 @@ Class empresa extends CI_Model
 	function getLeyendaEmpresa($id)
 	{
 		$this -> db -> select('Sucursal_leyenda_tributacion');
-		$this -> db -> from('TB_02_sucursal');		
+		$this -> db -> from('tb_02_sucursal');		
 		$this -> db -> where('Codigo', $id);
 		$this -> db -> limit(1);
 		
@@ -145,7 +145,7 @@ Class empresa extends CI_Model
 	function getEmpresaImpresion($id)
 	{
 		$this -> db -> select('Sucursal_Cedula AS cedula, Sucursal_Nombre AS nombre, Sucursal_Telefono AS telefono, Sucursal_Email AS email, Sucursal_leyenda_tributacion AS leyenda, Sucursal_Administrador as administrador, Sucursal_Direccion as direccion, RequiereFE as isFE');
-		$this -> db -> from('TB_02_sucursal');		
+		$this -> db -> from('tb_02_sucursal');		
 		$this -> db -> where('Codigo', $id);
 		$this -> db -> limit(1);
 		
@@ -165,7 +165,7 @@ Class empresa extends CI_Model
 	{
 		if($id==-1){return "N/A";}
 		$this -> db -> select('Sucursal_Nombre');
-		$this -> db -> from('TB_02_sucursal');		
+		$this -> db -> from('tb_02_sucursal');		
 		$this -> db -> where('Codigo', $id);
 		$this -> db -> limit(1);
 		
@@ -181,7 +181,7 @@ Class empresa extends CI_Model
 	function isActivated($id)
 	{
 		$this -> db -> select('Sucursal_Fecha_Desactivacion');
-		$this -> db -> from('TB_02_sucursal');
+		$this -> db -> from('tb_02_sucursal');
 		$this -> db -> where('Codigo', $id);
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
@@ -202,13 +202,13 @@ Class empresa extends CI_Model
 	
 	function actualizar($id, $data){
             $this->db->where('codigo', $id);
-            $this->db->update('TB_02_sucursal' ,$data);
+            $this->db->update('tb_02_sucursal' ,$data);
 	}
 	
 	function get_empresas_ids_array()
 	{
 		$this -> db -> select('codigo, Sucursal_Nombre');
-		$this -> db -> from('TB_02_Sucursal');
+		$this -> db -> from('tb_02_sucursal');
 		$data = array(); // create a variable to hold the information			
 		
 		$query = $this -> db -> get();
