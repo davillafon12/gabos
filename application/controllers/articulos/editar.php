@@ -857,4 +857,85 @@ class editar extends CI_Controller {
 		return $resultado;
 	}
 
+	function imagenes()
+	{
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		$this->load->helper(array('form'));
+		$this->load->view('articulos/articulos_imagenes_masivo_view', $data);
+	}
+
+	function actualizarMasivoImagenes(){
+		if(isset($_FILES['imagenes'])){
+			if(sizeof($_FILES['imagenes']['name']) > 0){
+				if($this->revisarTamanoImagen($_FILES['imagenes'])){
+					if($this->revisarFormatoImagen($_FILES['imagenes'])){
+						include PATH_USER_DATA;
+						$imagenes = $_FILES['imagenes'];
+						$cantidad = sizeof($imagenes['name']);
+						for($index = 0; $index < $cantidad; $index++){
+							$ext = ".".pathinfo($imagenes['name'][$index], PATHINFO_EXTENSION);
+							$codigo = str_replace($ext, "", $imagenes['name'][$index]);
+							$tmpPath = $imagenes['tmp_name'][$index];
+							$fullName = $imagenes['name'][$index];
+							$sucursal = $data['Sucursal_Codigo'];
+
+							//Actualizamos en la tabla
+							$update = array("Articulo_Imagen_URL"=>$fullName);
+							$this->articulo->actualizar($codigo, $sucursal, $update);
+
+							//Actualizamos el archivo
+							$ruta_a_preguntar = FCPATH.'application/images/articulos/'.$fullName;
+							move_uploaded_file($tmpPath, $ruta_a_preguntar);
+						}
+						redirect('articulos/editar/imagenes?s=1', 'location');
+					}else{
+						$this->load->helper(array('form'));
+						$data['error'] = '4';
+						$data['msj'] = 'Las imagenes tienen un formato indebido';
+						$this->load->view('articulos/articulos_imagenes_masivo_view', $data);
+					}
+				}else{
+					$this->load->helper(array('form'));
+					$data['error'] = '3';
+					$data['msj'] = 'Las imagenes deben ser menores a 1MB';
+					$this->load->view('articulos/articulos_imagenes_masivo_view', $data);
+				}
+			}else{
+				$this->load->helper(array('form'));
+				$data['error'] = '2';
+				$data['msj'] = 'Debe seleccionar al menos una imagen para actualizar';
+				$this->load->view('articulos/articulos_imagenes_masivo_view', $data);
+			}
+		}else{
+			//URL Mala
+			//echo "URL mala";
+			$this->load->helper(array('form'));
+			$data['error'] = '1';
+			$data['msj'] = 'La URL está incompleta, contacte al administrador';
+			$this->load->view('articulos/articulos_imagenes_masivo_view', $data);
+		}
+	}
+
+	private function revisarTamanoImagen($imagenes){
+		$cantidad = sizeof($imagenes['name']);
+		for($index = 0; $index < $cantidad; $index++){
+			if(floatval($imagenes['size'][$index]) > 1024000){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private function revisarFormatoImagen($imagenes){
+		$formatos = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
+		$cantidad = sizeof($imagenes['name']);
+		for($index = 0; $index < $cantidad; $index++){
+			$ext = pathinfo($imagenes['name'][$index], PATHINFO_EXTENSION);
+			if(!array_key_exists($ext, $formatos)){
+				return false;
+			}
+		}
+		return true;
+	}
+
  }// FIN DE LA CLASE

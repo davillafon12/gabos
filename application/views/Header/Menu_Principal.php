@@ -52,7 +52,8 @@
 				<li><a href='#' class='dir'>Edición</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."articulos/editar>Individual</a></li>
-						<li class='last'><a href=".$Ruta_Base."articulos/editar/edicionMasivo>Masiva</a></li>
+						<li ><a href=".$Ruta_Base."articulos/editar/edicionMasivo>Masiva</a></li>
+						<li class='last'><a href=".$Ruta_Base."articulos/editar/imagenes>Imágenes</a></li>
 					</ul>
 				</li>
 				<li><a href=".$Ruta_Base."articulos/editar/soloConsultaArticulos>Consultar</a></li>
