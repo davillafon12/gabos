@@ -733,5 +733,128 @@ class editar extends CI_Controller {
 		echo json_encode($retorno);
 	}
 
+	function edicionMasivo()
+	{
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		$this->load->helper(array('form'));
+		$this->load->view('articulos/articulos_editar_masivo_view', $data);
+	}
+
+	function actualizarMasivo(){
+		//print_r($_FILES);
+		include PATH_USER_DATA;
+		if(isset($_FILES['archivo_excel'])){
+			$resultado = $this->procesarExcelEdicionMasiva();
+			if($resultado['status']=='success'){
+				//Verificamos que no hayan erroes, si los hay no procesar nada
+				if(sizeOf($resultado['erroresCosto']) == 0){
+					$articulos = $resultado['articulos'];
+					foreach($articulos as $articulo){
+						$codigo = $articulo["codigo"];
+						$sucursal = $data['Sucursal_Codigo'];
+						if($articuloBD = $this->articulo->existe_Articulo($codigo, $sucursal)){
+							//Actualizamos descripcion
+							$update = array("Articulo_Descripcion"=>$articulo["descripcion"]);
+							$this->articulo->actualizar($codigo, $sucursal, $update);
+
+							//Actualizamos precios
+							$this->articulo->actualizarPrecios($codigo, $sucursal, $articulo);
+
+							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario actualizó el articulo de manera masiva: ".$codigo." en la sucursal: ".$sucursal,$data['Sucursal_Codigo'],'actualizar_masivo_articulo');
+						}
+					}
+					//Todo salio bien
+					redirect('articulos/editar/edicionMasivo?s=1', 'location');
+				}else{
+					//Error en ciertos articulos
+					//echo "Error en ciertos articulos";
+					$this->load->helper(array('form'));
+					$data['error'] = '5';
+					$data['msj'] = 'Algunos artículos presentan problemas';
+					$data['errorCosto'] = $resultado['erroresCosto'];
+					$this->load->view('articulos/articulos_editar_masivo_view', $data);
+				}
+			}else{
+				if($resultado['error']=='1'){
+					//echo "No se pudo leer y procesar el excel";
+					$this->load->helper(array('form'));
+					$data['error'] = '4';
+					$data['msj'] = 'No se pudo procesar el archivo excel';
+					$this->load->view('articulos/articulos_editar_masivo_view', $data);
+				}else if($resultado['error']=='2'){
+					//echo "Columnas requeridas no vienen o estan en mal formato";
+					$this->load->helper(array('form'));
+					$data['error'] = '3';
+					$data['msj'] = 'Columnas no válidas, o no están en orden';
+					$this->load->view('articulos/articulos_editar_masivo_view', $data);
+				}
+			}
+		}else{
+			//URL Mala
+			//echo "URL mala";
+			$this->load->helper(array('form'));
+			$data['error'] = '1';
+			$data['msj'] = 'La URL está incompleta, contacte al administrador';
+			$this->load->view('articulos/articulos_editar_masivo_view', $data);
+		}
+	}
+
+	private function procesarExcelEdicionMasiva(){
+		$resultado = array('status'=>'error','error'=>'1'); //Error generico de no se pudo realizar el proceso
+		require_once './application/libraries/PHPExcel/IOFactory.php';
+    	$objPHPExcel = PHPExcel_IOFactory::load($_FILES['archivo_excel']['tmp_name']);
+		$cantidadHojas = 1; //Para que solo procese la primera hoja del excel
+		foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+			if($cantidadHojas == 1){
+				$cantidadHojas++;
+				//Probamos que el orden de las columnas sea el requerido
+				$celda01 = $worksheet->getCellByColumnAndRow(0, 1)->getValue();
+				$celda11 = $worksheet->getCellByColumnAndRow(1, 1)->getValue();
+				$celda21 = $worksheet->getCellByColumnAndRow(2, 1)->getValue();
+				$celda31 = $worksheet->getCellByColumnAndRow(3, 1)->getValue();
+				$celda41 = $worksheet->getCellByColumnAndRow(4, 1)->getValue();
+				$celda51 = $worksheet->getCellByColumnAndRow(5, 1)->getValue();
+				$celda61 = $worksheet->getCellByColumnAndRow(6, 1)->getValue();
+
+				if(trim($celda01) == 'CODIGO' && trim($celda11) == 'DESCRIPCION' && trim($celda21) == 'PRECIO 1'
+																					&& trim($celda31) == 'PRECIO 2'
+																					&& trim($celda41) == 'PRECIO 3'
+																					&& trim($celda51) == 'PRECIO 4'
+																					&& trim($celda61) == 'PRECIO 5'){
+					$highestRow = $worksheet->getHighestRow();
+					//Lleva el control de cuales productos presentaron errores
+					$erroresCosto = array();
+					$articulos = array();
+					for ($row = 2; $row <= $highestRow; ++ $row){
+						$codigo = trim($worksheet->getCellByColumnAndRow(0, $row)->getValue());
+						$descripcion = trim($worksheet->getCellByColumnAndRow(1, $row)->getValue());
+
+						if($codigo != "" && $descripcion != ""){
+							$art = array("codigo"=>$codigo,"descripcion"=>$descripcion);
+
+
+							for($index = 2; $index <= 6; $index++){
+								if(!is_numeric($worksheet->getCellByColumnAndRow($index, $row)->getValue())){
+									array_push($erroresCosto, $codigo);
+								}else{
+									$art["p".($index-1)] = $worksheet->getCellByColumnAndRow($index, $row)->getValue();
+								}
+							}
+
+							array_push($articulos, $art);
+						}
+					}
+					$resultado["status"] = "success";
+					unset($resultado["error"]);
+					$resultado["articulos"] = $articulos;
+					$resultado["erroresCosto"] = $erroresCosto;
+				}else{
+					//No tiene las columnas requeridas
+					$resultado['error'] = '2';
+				}
+			}
+		}
+		return $resultado;
+	}
 
  }// FIN DE LA CLASE
