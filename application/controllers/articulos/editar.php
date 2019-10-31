@@ -747,21 +747,24 @@ class editar extends CI_Controller {
 			$resultado = $this->procesarExcelEdicionMasiva();
 			if($resultado['status']=='success'){
 				//Verificamos que no hayan erroes, si los hay no procesar nada
-				if(sizeOf($resultado['erroresCosto']) == 0){
+				if(sizeOf($resultado['errores']) == 0){
 					$articulos = $resultado['articulos'];
 					foreach($articulos as $articulo){
 						$codigo = $articulo["codigo"];
-						$sucursal = $data['Sucursal_Codigo'];
-						if($articuloBD = $this->articulo->existe_Articulo($codigo, $sucursal)){
-							//Actualizamos descripcion
-							$update = array("Articulo_Descripcion"=>$articulo["descripcion"]);
-							$this->articulo->actualizar($codigo, $sucursal, $update);
+						$sucursal = $articulo["sucursal"];
 
-							//Actualizamos precios
-							$this->articulo->actualizarPrecios($codigo, $sucursal, $articulo);
+						//Actualizamos descripcion, retencion y cantidad
+						$update = array(
+							"Articulo_Descripcion"=>$articulo["descripcion"],
+							"Articulo_Cantidad_Inventario"=>$articulo["cantidad"],
+							"Articulo_No_Retencion"=>$articulo["retencion"]);
+						$this->articulo->actualizar($codigo, $sucursal, $update);
 
-							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario actualizó el articulo de manera masiva: ".$codigo." en la sucursal: ".$sucursal,$data['Sucursal_Codigo'],'actualizar_masivo_articulo');
-						}
+						//Actualizamos precios
+						$this->articulo->actualizarPrecios($codigo, $sucursal, $articulo);
+
+						$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario actualizó el articulo de manera masiva: ".$codigo." en la sucursal: ".$sucursal,$data['Sucursal_Codigo'],'actualizar_masivo_articulo');
+
 					}
 					//Todo salio bien
 					redirect('articulos/editar/edicionMasivo?s=1', 'location');
@@ -771,7 +774,7 @@ class editar extends CI_Controller {
 					$this->load->helper(array('form'));
 					$data['error'] = '5';
 					$data['msj'] = 'Algunos artículos presentan problemas';
-					$data['errorCosto'] = $resultado['erroresCosto'];
+					$data['erroresArticulos'] = $resultado['errores'];
 					$this->load->view('articulos/articulos_editar_masivo_view', $data);
 				}
 			}else{
@@ -815,39 +818,84 @@ class editar extends CI_Controller {
 				$celda41 = $worksheet->getCellByColumnAndRow(4, 1)->getValue();
 				$celda51 = $worksheet->getCellByColumnAndRow(5, 1)->getValue();
 				$celda61 = $worksheet->getCellByColumnAndRow(6, 1)->getValue();
+				$celda71 = $worksheet->getCellByColumnAndRow(7, 1)->getValue();
+				$celda81 = $worksheet->getCellByColumnAndRow(8, 1)->getValue();
+				$celda91 = $worksheet->getCellByColumnAndRow(9, 1)->getValue();
 
 				if(trim($celda01) == 'CODIGO' && trim($celda11) == 'DESCRIPCION' && trim($celda21) == 'PRECIO 1'
 																					&& trim($celda31) == 'PRECIO 2'
 																					&& trim($celda41) == 'PRECIO 3'
 																					&& trim($celda51) == 'PRECIO 4'
-																					&& trim($celda61) == 'PRECIO 5'){
+																					&& trim($celda61) == 'PRECIO 5'
+																					&& trim($celda71) == 'CANTIDAD'
+																					&& trim($celda81) == 'SUCURSAL'
+																					&& trim($celda91) == 'SIN RETENCION'){
 					$highestRow = $worksheet->getHighestRow();
 					//Lleva el control de cuales productos presentaron errores
-					$erroresCosto = array();
+					$errores = array();
 					$articulos = array();
 					for ($row = 2; $row <= $highestRow; ++ $row){
 						$codigo = trim($worksheet->getCellByColumnAndRow(0, $row)->getValue());
 						$descripcion = trim($worksheet->getCellByColumnAndRow(1, $row)->getValue());
+						$sucursal = trim($worksheet->getCellByColumnAndRow(8, $row)->getValue());
+						$cantidad = trim($worksheet->getCellByColumnAndRow(7, $row)->getValue());
+						$sinRetencion = trim($worksheet->getCellByColumnAndRow(9, $row)->getValue());
 
-						if($codigo != "" && $descripcion != ""){
-							$art = array("codigo"=>$codigo,"descripcion"=>$descripcion);
+						// Creamos los articulos
+						$art = array(
+							"codigo" => $codigo,
+							"sucursal" => $sucursal,
+							"descripcion" => $descripcion,
+							"cantidad" => $cantidad,
+							"retencion" => $sinRetencion
+						);
 
-
-							for($index = 2; $index <= 6; $index++){
-								if(!is_numeric($worksheet->getCellByColumnAndRow($index, $row)->getValue())){
-									array_push($erroresCosto, $codigo);
-								}else{
-									$art["p".($index-1)] = $worksheet->getCellByColumnAndRow($index, $row)->getValue();
-								}
-							}
-
-							array_push($articulos, $art);
+						// Revisamos sucursal
+						if($this->empresa->es_codigo_usado($sucursal) === false){
+							array_push($errores, "Fila #$row tiene una [Sucursal] no válida o no existe.");
+							continue;
 						}
+
+						// Revisamos codigo
+						if($codigo == "" || $this->articulo->existe_Articulo($codigo, $sucursal) === false){
+							array_push($errores, "Fila #$row tiene un [Código] no válido o no existe.");
+							continue;
+						}
+
+						// Revisamos descripcion
+						if($descripcion == ""){
+							array_push($errores, "Fila #$row tiene una [Descripción] no válida.");
+							continue;
+						}
+
+						// Revisamos precios
+						for($index = 2; $index <= 6; $index++){
+							if(!is_numeric($worksheet->getCellByColumnAndRow($index, $row)->getValue())){
+								array_push($errores, "Fila #$row tiene un [Precio #".($index-1)."] no válido.");
+								continue;
+							}else{
+								$art["p".($index-1)] = $worksheet->getCellByColumnAndRow($index, $row)->getValue();
+							}
+						}
+
+						// Revisamos cantidad
+						if(!is_numeric($cantidad) || intval($cantidad)<0){
+							array_push($errores, "Fila #$row tiene una [Cantidad] no válida.");
+							continue;
+						}
+
+						// Revisamos sin retencion
+						if($sinRetencion != "1" && $sinRetencion != "0"){
+							array_push($errores, "Fila #$row tiene un [Sin Retención] no válido.");
+							continue;
+						}
+
+						array_push($articulos, $art);
 					}
 					$resultado["status"] = "success";
 					unset($resultado["error"]);
 					$resultado["articulos"] = $articulos;
-					$resultado["erroresCosto"] = $erroresCosto;
+					$resultado["errores"] = $errores;
 				}else{
 					//No tiene las columnas requeridas
 					$resultado['error'] = '2';

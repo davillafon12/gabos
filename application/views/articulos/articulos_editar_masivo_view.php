@@ -31,7 +31,7 @@ PARA:
 		<!--SCRIPT DE NOTY-->
 		<script src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>" type="text/javascript"></script>
 
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_edicion_masiva.css'); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_edicion_masiva.css?v='.$javascript_cache_version); ?>">
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
@@ -90,6 +90,15 @@ PARA:
                                     <td>
                                     PRECIO 5
                                     </td>
+									<td>
+                                    CANTIDAD
+                                    </td>
+									<td>
+                                    SUCURSAL
+                                    </td>
+									<td>
+                                    SIN RETENCION
+                                    </td>
                                 </tr>
                             </table>
 						</td>
@@ -130,13 +139,9 @@ PARA:
 						echo "<div class='alert alert-danger'>
 								ERROR $error - $msj ";
 						if($error == '5'){ //Si es error con articulos, mostrar cuales articulos
-							echo "<br><br><small class='bold'>Problemas con el costo:</small>";
-							if(sizeOf($errorCosto)<1){
-								echo "<br><small>No hay artículos.</small>";
-							}else{
-								foreach($errorCosto as $art){
-									echo "<br><small>- $art</small>";
-								}
+							echo "<br><br><small class='bold'>Problemas:</small>";
+							foreach($erroresArticulos as $art){
+								echo "<br><small>- $art</small>";
 							}
 						}
 						echo "</div>";
