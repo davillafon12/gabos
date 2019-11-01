@@ -737,6 +737,7 @@ class editar extends CI_Controller {
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$this->load->helper(array('form'));
+		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('articulos/articulos_editar_masivo_view', $data);
 	}
 
