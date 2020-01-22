@@ -1792,7 +1792,7 @@ class impresion extends CI_Controller
 				//Leyenda de tributacion
 				$pdf->SetFont('Arial', '', 8);
 				$pdf->SetXY(10, 255);
-				$pdf->MultiCell(190, 3, $empresa->leyenda, 0, 'C');
+				//$pdf->MultiCell(190, 3, $empresa->leyenda, 0, 'C');
 				//Costos totales
 				$subtotal = $encabezado->subtotal;
 				$totalIVA = $encabezado->total_iva;

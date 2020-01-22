@@ -583,3 +583,7 @@
 .articulo_specs.final, .articulo_specs.unitario{
 	text-align: right;
 }
+
+.imagen-margen-container:hover > .tooltip_imagen_articulo{
+	display: block;
+}

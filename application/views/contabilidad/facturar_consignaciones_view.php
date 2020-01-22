@@ -119,15 +119,15 @@ PARA:
 							<th class="th_precio">Precio Total</th>
 						</thead>
 						<tbody id="cuerpo_tabla_articulos">
-						</tbody>				
+						</tbody>
 					</table>
-                            <div class="total-container contact">Total:<span id="total_monto"></span></div>	
-				
+                            <div class="total-container contact">Total:<span id="total_monto"></span></div>
+
 			</div>
 			<div class="botones_final">
 				<a href="javascript:;" id="crear_factura_consignacion" class="boton_act_all">Crear Factura</a>
 			</div>
-		</div>	
+		</div>
 
 		<!--Incluir footer-->
 		<?php include PATH_FOOTER;?>

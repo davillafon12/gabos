@@ -67,7 +67,7 @@ function getNombreCliente(str){
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombreCliente?cedula='+str,
 		type: "POST",
 		//async: false,
-		data: {'cedula':str},		
+		data: {'cedula':str},
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
@@ -76,14 +76,19 @@ function getNombreCliente(str){
 				//NO HAY CLIENTE QUE CORRESPONDA A ESA CEDULA
 					$("#nombre").val('No existe cliente!!!');
 					disableArticulosInputs();
-				}else if(result[0].status==="success"){	
-                                    
-                                    if(result[0].actualizar){
-                                        notyConTipo('¡Este cliente debe actualizar datos para poder facturar! <BR>Por favor actualizar datos del cliente.', 'error');
-                                        return false;
-                                    }
-                                    
-                                    
+				}else if(result[0].status==="success"){
+
+					if(result[0].actualizar){
+						notyConTipo('¡Este cliente debe actualizar datos para poder facturar! <BR>Por favor actualizar datos del cliente.', 'error');
+						return false;
+					}
+
+					if(result[0].tieneCreditosVencidos){
+						notyConTipo('¡Este cliente tiene créditos vencidos que debe pagar! <BR>Por favor informarle al cliente ponerse al día para poder facturarle de nuevo.', 'error');
+						return false;
+					}
+
+
 					if(str.trim() === "2"){
 						$('#pop_up_administrador').bPopup({
 							modalClose: false
@@ -99,7 +104,7 @@ function getNombreCliente(str){
 							clienteEsDeTipoExento = result[0].exento;
 							clienteNoAplicaRetencion = result[0].retencion;
 							switch(result[0].estado.trim()){ //Segun el estado del cliente debemos reportarlo
-								case 'activo':						
+								case 'activo':
 									if(result[0].descuento){
 										isCallByDescuento = true;
 										//$("#nombre").val('');
@@ -119,8 +124,8 @@ function getNombreCliente(str){
 										clienteCanBuy = true;
 									}
 									break;
-									
-									
+
+
 								case 'semiactivo':
 									//alert(result[0].descuento);
 									if(result[0].descuento){ //Si el cliente tiene descuento pide autorizacion
@@ -132,7 +137,7 @@ function getNombreCliente(str){
 										document.getElementById("pop_usuario").select();
 										numeroPopUp='5';
 										infoClientePostAutorizacion = result[0];  //Se guarda la info para ser utilizada despues
-										cedulaPostAuto = str; //Se guarda la info para ser utilizada despues								
+										cedulaPostAuto = str; //Se guarda la info para ser utilizada despues
 									}else{
 										$("#nombre").val(result[0].nombre);
 										enableArticulosInputs();
@@ -141,16 +146,16 @@ function getNombreCliente(str){
 										clienteCanBuy = true;
 									}
 									break;
-									
-									
+
+
 								case 'inactivo':
 									$("#nombre").val('');
 									disableArticulosInputs();
 									notyConTipo('¡Este cliente esta inactivo, contacte un administrador para poder activarlo!','error');
 									clienteCanBuy = false;
 									break;
-						}	
-					}							
+						}
+					}
 				}
 			}catch(e){
 				notyConTipo('¡La respuesta tiene un formato indebido, contacte al administrador!','error');
