@@ -5,7 +5,7 @@
 -- Servidor: 127.0.0.1
 -- Tiempo de generación: 21-10-2015 a las 01:22:26
 -- Versión del servidor: 5.6.21
--- Versión de PHP: 5.5.19 
+-- Versión de PHP: 5.5.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -26,81 +26,81 @@ DELIMITER $$
 --
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_ClientesXDescuento`(
 	IN paSucursal VARCHAR(10),
-    IN paCedula VARCHAR(20), 
-    IN paArticulo VARCHAR(10), 
+    IN paCedula VARCHAR(20),
+    IN paArticulo VARCHAR(10),
 	IN paFamilia VARCHAR(20)
  )
-BEGIN						 																
-	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula, 
+BEGIN
+	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
 											Concat(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											descli.Descuento_cliente_porcentaje descuCliente,
-											0 as codFamilia, 
-											\'\' as nomFamilia, 
-											0 as montoFamilia, 
+											0 as codFamilia,
+											\'\' as nomFamilia,
+											0 as montoFamilia,
 											0 as porFamilia,
 											\'\' as codArticulo,
-											\'\' as nomArticulo, 
-											0 as monArticulo, 
+											\'\' as nomArticulo,
+											0 as monArticulo,
 											0 as porcArticulo
-									from    tb_03_cliente cli 
-											inner join 
-											tb_21_descuento_cliente descli 
-											  on  descli.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
-  IF paSucursal <> 'null' and paSucursal <>'' then 
-    SET @QUERY = CONCAT (@QUERY, ' and descli.TB_02_Sucursal_Codigo = ', paSucursal);      
-  end If; 
-  IF paFamilia <> 'null' and paFamilia <>'' then 
-    SET @QUERY = CONCAT (@QUERY, ' union              
-									select  cli.Cliente_Cedula cedula, 
-											Concat(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre, 
+									from    tb_03_cliente cli
+											inner join
+											tb_21_descuento_cliente descli
+											  on  descli.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
+  IF paSucursal <> 'null' and paSucursal <>'' then
+    SET @QUERY = CONCAT (@QUERY, ' and descli.TB_02_Sucursal_Codigo = ', paSucursal);
+  end If;
+  IF paFamilia <> 'null' and paFamilia <>'' then
+    SET @QUERY = CONCAT (@QUERY, ' union
+									select  cli.Cliente_Cedula cedula,
+											Concat(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											0 as descuCliente,
 											fam.Familia_Codigo codFamilia,
 											fam.Familia_Nombre  nomFamilia,
-											desFam.Descuento_familia_monto montoFamilia, 
+											desFam.Descuento_familia_monto montoFamilia,
 											desFam.Descuento_familia_porcentaje porFamilia,
-											0 as codArticulo, 
-											\'\' as nomArticulo, 
-											0 as monArticulo, 
+											0 as codArticulo,
+											\'\' as nomArticulo,
+											0 as monArticulo,
 											0 as porcArticulo
-									from    tb_03_cliente cli 
-											inner join 
-											tb_20_descuento_familia desFam 
-											  on  cli.Cliente_Cedula = desFam.TB_03_Cliente_Cliente_Cedula and 
+									from    tb_03_cliente cli
+											inner join
+											tb_20_descuento_familia desFam
+											  on  cli.Cliente_Cedula = desFam.TB_03_Cliente_Cliente_Cedula and
 												  desFam.TB_05_Familia_TB_02_Sucursal_Codigo = ',paSucursal,'
-											 inner join 
-											tb_05_familia fam 
-											  on  fam.Familia_Codigo = desFam.TB_05_Familia_Familia_Codigo and 
-												  fam.TB_02_Sucursal_Codigo = ', paSucursal);      
-  end If;  
-  IF paArticulo <> 'null' and paArticulo <>'' then 
-    SET @QUERY = CONCAT (@QUERY, ' union 
-									select  cli.Cliente_Cedula cedula, 
+											 inner join
+											tb_05_familia fam
+											  on  fam.Familia_Codigo = desFam.TB_05_Familia_Familia_Codigo and
+												  fam.TB_02_Sucursal_Codigo = ', paSucursal);
+  end If;
+  IF paArticulo <> 'null' and paArticulo <>'' then
+    SET @QUERY = CONCAT (@QUERY, ' union
+									select  cli.Cliente_Cedula cedula,
 											Concat(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											0 as descuCliente,
-											0 as codFamilia, 
-											\'\' as nomFamilia, 
-											0 as montoFamilia, 
+											0 as codFamilia,
+											\'\' as nomFamilia,
+											0 as montoFamilia,
 											0 as porFamilia,
 											art.Articulo_Codigo codArticulo,
-											art.Articulo_Descripcion nomArticulo, 
-											prod.Descuento_producto_monto monArticulo, 
+											art.Articulo_Descripcion nomArticulo,
+											prod.Descuento_producto_monto monArticulo,
 											prod.Descuento_producto_porcentaje porcArticulo
-									from    tb_03_cliente cli 
-											left join 
-											tb_17_descuento_producto prod 
-											  on  prod.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and 
+									from    tb_03_cliente cli
+											left join
+											tb_17_descuento_producto prod
+											  on  prod.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and
 												  prod.TB_02_Sucursal_Codigo = ',paSucursal,'
-											 inner join 
-											tb_06_articulo art 
-											  on  art.Articulo_Codigo = prod.TB_06_Articulo_Articulo_Codigo and 
-												  art.TB_02_Sucursal_Codigo = ',paSucursal);      
-  end If;   
-  IF paCedula <> 'null' and paCedula <>'' then 
-    SET @QUERY = CONCAT ('select * from ( ', @QUERY, ') a 
+											 inner join
+											tb_06_articulo art
+											  on  art.Articulo_Codigo = prod.TB_06_Articulo_Articulo_Codigo and
+												  art.TB_02_Sucursal_Codigo = ',paSucursal);
+  end If;
+  IF paCedula <> 'null' and paCedula <>'' then
+    SET @QUERY = CONCAT ('select * from ( ', @QUERY, ') a
 									where a.cedula = ',paCedula,'
- order by cedula, codArticulo, codFamilia');      
-  end If;   
-  -- select @QUERY as 'Resultado';  
+ order by cedula, codArticulo, codFamilia');
+  end If;
+  -- select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -111,11 +111,11 @@ BEGIN
 
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_ConsultaUsuarios`(
 	IN paSucursal VARCHAR(10),
-	IN paFechaI VARCHAR(30), 
+	IN paFechaI VARCHAR(30),
 	IN paFechaF VARCHAR(30)
  )
 BEGIN
-	SET @SUCURSAL  		= CONCAT(' WHERE user.TB_02_Sucursal_Codigo =  '); 
+	SET @SUCURSAL  		= CONCAT(' WHERE user.TB_02_Sucursal_Codigo =  ');
 	SET @QUERY 			= CONCAT( 'SELECT  user.Usuario_Nombre nombre,
 											user.Usuario_Apellidos apellidos,
 											user.Usuario_Cedula cedula,
@@ -125,14 +125,14 @@ BEGIN
 											case isnull(user.Usuario_Fecha_Cesantia) when 1 then \'Activo\' else \'Inactivo\' end as estado,
 											user.Usuario_Fecha_Ingreso
 									FROM    tb_01_usuario user
-											inner join tb_02_sucursal suc on user.TB_02_Sucursal_Codigo = suc.Codigo');		
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, @SUCURSAL, '\'',paSucursal, '\'');      
-  end If; 
-  IF paFechaI <> 'null' AND paFechaF <> 'null' then 
-	SET @QUERY = CONCAT (@QUERY, 'AND UNIX_TIMESTAMP(user.Usuario_Fecha_Ingreso) BETWEEN UNIX_TIMESTAMP(', '\'',paFechaI, '\'', ') AND UNIX_TIMESTAMP(', '\'',paFechaF, '\')');      
-  end If; 
-  -- select @QUERY as 'Resultado';  
+											inner join tb_02_sucursal suc on user.TB_02_Sucursal_Codigo = suc.Codigo');
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, @SUCURSAL, '\'',paSucursal, '\'');
+  end If;
+  IF paFechaI <> 'null' AND paFechaF <> 'null' then
+	SET @QUERY = CONCAT (@QUERY, 'AND UNIX_TIMESTAMP(user.Usuario_Fecha_Ingreso) BETWEEN UNIX_TIMESTAMP(', '\'',paFechaI, '\'', ') AND UNIX_TIMESTAMP(', '\'',paFechaF, '\')');
+  end If;
+  -- select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -143,57 +143,57 @@ BEGIN
 
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_VentaXClienteFacturas`(
 	IN paSucursal VARCHAR(10),
-	IN paFechaI VARCHAR(30), 
+	IN paFechaI VARCHAR(30),
 	IN paFechaF VARCHAR(30),
 	IN paEstadoFactura VARCHAR(30),
 	IN paEsSucursal VARCHAR(30),
-	IN paNombre VARCHAR(50), 
-	IN paCedula VARCHAR(20), 
-	IN paRango VARCHAR(10), 
-	IN paMontoI VARCHAR(20), 
+	IN paNombre VARCHAR(50),
+	IN paCedula VARCHAR(20),
+	IN paRango VARCHAR(10),
+	IN paMontoI VARCHAR(20),
 	IN paMontoF VARCHAR(20)
  )
 BEGIN
-	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
+	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'',
 								 'and fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
-								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
-								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
-								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
-	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula, 
+								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'',
+								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'',
+								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')');
+	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
 											CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											fac.Factura_Fecha_Hora fecha,
-											fac.Factura_Consecutivo consecutivo, 
-											fac.Factura_Monto_Total montoTotal, 
-											fac.Factura_Monto_IVA montoIVA, 
+											fac.Factura_Consecutivo consecutivo,
+											fac.Factura_Monto_Total montoTotal,
+											fac.Factura_Monto_IVA montoIVA,
 											fac.Factura_Monto_Sin_IVA montoSinIVA,
 											fac.Factura_Retencion
-									from    tb_03_cliente cli inner join 
-											tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, @where2);      
-  end If; 
-  IF paNombre <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');      
-  end If;   
-  IF paCedula <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');      
-  end If;   
+									from    tb_03_cliente cli inner join
+											tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, @where2);
+  end If;
+  IF paNombre <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');
+  end If;
+  IF paCedula <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');
+  end If;
     -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
-  IF paRango <> 'null' then 
+  IF paRango <> 'null' then
 	IF paRango = 'menorIgual' then
-		SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total <= ', '\'',paMontoI, '\'');      
-	ELSE 
+		SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total <= ', '\'',paMontoI, '\'');
+	ELSE
 		IF paRango = 'mayorIgual' then
-			SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total >= ', '\'',paMontoI, '\'');      
-		ELSE 
+			SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total >= ', '\'',paMontoI, '\'');
+		ELSE
 			IF paRango = 'between' then
-				SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');      
-			end if; 
-		end if; -- FIN paRango = 'mayorIgual'	
-	end if; -- FIN paRango = 'menorIgual' 
+				SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');
+			end if;
+		end if; -- FIN paRango = 'mayorIgual'
+	end if; -- FIN paRango = 'menorIgual'
   end If;   -- FIN paRango <> 'null'
-  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  select @QUERY as 'Resultado';  
+  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
+  select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
    PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -204,84 +204,84 @@ BEGIN
 
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_VentaXClienteFacturasResumido`(
 	IN paSucursal VARCHAR(10),
-	IN paFechaI VARCHAR(30), 
+	IN paFechaI VARCHAR(30),
 	IN paFechaF VARCHAR(30),
 	IN paEstadoFactura VARCHAR(30),
 	IN paEsSucursal VARCHAR(30),
-	IN paNombre VARCHAR(50), 
-	IN paCedula VARCHAR(20), 
-	IN paRango VARCHAR(10), 
-	IN paMontoI VARCHAR(20), 
+	IN paNombre VARCHAR(50),
+	IN paCedula VARCHAR(20),
+	IN paRango VARCHAR(10),
+	IN paMontoI VARCHAR(20),
 	IN paMontoF VARCHAR(20)
  )
 BEGIN
-	set @WhereGenerico  = CONCAT(' where fac2.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and 
-										   fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',' 
-										   and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
-										   ' and UNIX_TIMESTAMP(fac2.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
-										  ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
-	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
+	set @WhereGenerico  = CONCAT(' where fac2.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and
+										   fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'','
+										   and fac.Factura_Estado =', '\'', paEstadoFactura, '\'',
+										   ' and UNIX_TIMESTAMP(fac2.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'',
+										  ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')');
+	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'',
 								 'and fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
-								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
-								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
-								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
- IF paSucursal <> 'null' then 								 
-	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula, 
+								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'',
+								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'',
+								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')');
+ IF paSucursal <> 'null' then
+	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
 									CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 									(select  Sum(fac2.Factura_Monto_Total) v
 									 from tb_07_factura fac2',@WhereGenerico ,') montoTotal,
 									(select  Sum(fac2.Factura_Monto_IVA) v2
 									 from tb_07_factura fac2',@WhereGenerico, ' ) montoIVA,
 									(select  Sum(fac2.Factura_Monto_Sin_IVA) v3
-									 from tb_07_factura fac2',@WhereGenerico, ' ) montoSinIVA,  
+									 from tb_07_factura fac2',@WhereGenerico, ' ) montoSinIVA,
 									(select  Sum(fac2.Factura_Retencion) v3
-									 from tb_07_factura fac2',@WhereGenerico, ' ) retencion       
-							from    tb_03_cliente cli inner join 
-									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
+									 from tb_07_factura fac2',@WhereGenerico, ' ) retencion
+							from    tb_03_cliente cli inner join
+									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
 ELSE
-	set @QUERY 			= CONCAT('select  cli.Cliente_Cedula cedula, 
+	set @QUERY 			= CONCAT('select  cli.Cliente_Cedula cedula,
 									CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 									fac.Factura_Monto_Total as montoTotal,
 									fac.Factura_Monto_IVA as montoIVA,
-									fac.Factura_Monto_Sin_IVA as montoSinIVA,  
-									fac.Factura_Retencion as retencion       
-							from    tb_03_cliente cli inner join 
-									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');								
-end If; 
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, @where2);      
-  end If; 
-  IF paNombre <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');      
-  end If;   
-  IF paCedula <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');      
-  end If;   
+									fac.Factura_Monto_Sin_IVA as montoSinIVA,
+									fac.Factura_Retencion as retencion
+							from    tb_03_cliente cli inner join
+									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
+end If;
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, @where2);
+  end If;
+  IF paNombre <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');
+  end If;
+  IF paCedula <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');
+  end If;
     -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
-  IF paRango <> 'null' then 
+  IF paRango <> 'null' then
 	IF paRango = 'menorIgual' then
 		SET @QUERY = CONCAT (@QUERY, 'and (select  Sum(fac2.Factura_Monto_Total) v
 										 from tb_07_factura fac2',
-										 @WhereGenerico, ') <= ', '\'', paMontoI, '\'');      
-	ELSE 
+										 @WhereGenerico, ') <= ', '\'', paMontoI, '\'');
+	ELSE
 		IF paRango = 'mayorIgual' then
 			SET @QUERY = CONCAT (@QUERY, 'and (select  Sum(fac2.Factura_Monto_Total) v
 										 from tb_07_factura fac2',
-										 @WhereGenerico, ') >= ', '\'', paMontoI, '\'');      
-		ELSE 
+										 @WhereGenerico, ') >= ', '\'', paMontoI, '\'');
+		ELSE
 			IF paRango = 'between' then
 				SET @QUERY = CONCAT (@QUERY, 'and (select  Sum(fac2.Factura_Monto_Total) v
 										 from tb_07_factura fac2',
-										 @WhereGenerico, ') BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');      
-			end if; 
-		end if; -- FIN paRango = 'mayorIgual'	
-	end if; -- FIN paRango = 'menorIgual' 
+										 @WhereGenerico, ') BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');
+			end if;
+		end if; -- FIN paRango = 'mayorIgual'
+	end if; -- FIN paRango = 'menorIgual'
   end If;   -- FIN paRango <> 'null'
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'group by cli.Cliente_Cedula');   
-  end If;  
-  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  -- select @QUERY as 'Resultado';  
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'group by cli.Cliente_Cedula');
+  end If;
+  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
+  -- select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -292,57 +292,57 @@ end If;
 
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_VentaXClienteProforma`(
 	IN paSucursal VARCHAR(10),
-	IN paFechaI VARCHAR(30), 
+	IN paFechaI VARCHAR(30),
 	IN paFechaF VARCHAR(30),
 	IN paEstadoProforma VARCHAR(30),
 	IN paEsSucursal VARCHAR(30),
-	IN paNombre VARCHAR(50), 
-	IN paCedula VARCHAR(20), 
-	IN paRango VARCHAR(10), 
-	IN paMontoI VARCHAR(20), 
+	IN paNombre VARCHAR(50),
+	IN paCedula VARCHAR(20),
+	IN paRango VARCHAR(10),
+	IN paMontoI VARCHAR(20),
 	IN paMontoF VARCHAR(20)
  )
 BEGIN
-	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
+	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'',
 								 'and pro.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
-								 'and pro.Proforma_Estado =', '\'', paEstadoProforma, '\'', 
-								 'and UNIX_TIMESTAMP(pro.Proforma_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
-								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
+								 'and pro.Proforma_Estado =', '\'', paEstadoProforma, '\'',
+								 'and UNIX_TIMESTAMP(pro.Proforma_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'',
+								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')');
 	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
-											CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,     
+											CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											pro.Proforma_Fecha_Hora fecha,
-											pro.Proforma_Consecutivo consecutivo, 
-											pro.Proforma_Monto_Total montoTotal, 
-											pro.Proforma_Monto_IVA montoIVA, 
-											pro.Proforma_Monto_Sin_IVA montoSinIVA, 
+											pro.Proforma_Consecutivo consecutivo,
+											pro.Proforma_Monto_Total montoTotal,
+											pro.Proforma_Monto_IVA montoIVA,
+											pro.Proforma_Monto_Sin_IVA montoSinIVA,
 											pro.Proforma_Retencion
-									from    tb_03_cliente cli inner join 
-											tb_10_proforma pro on pro.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, @where2);      
-  end If; 
-  IF paNombre <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and pro.Proforma_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');      
-  end If;   
-  IF paCedula <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');      
-  end If;   
+									from    tb_03_cliente cli inner join
+											tb_10_proforma pro on pro.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, @where2);
+  end If;
+  IF paNombre <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and pro.Proforma_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');
+  end If;
+  IF paCedula <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');
+  end If;
     -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
-  IF paRango <> 'null' then 
+  IF paRango <> 'null' then
 	IF paRango = 'menorIgual' then
-		SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total <= ', '\'',paMontoI, '\'');      
-	ELSE 
+		SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total <= ', '\'',paMontoI, '\'');
+	ELSE
 		IF paRango = 'mayorIgual' then
-			SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total >= ', '\'',paMontoI, '\'');      
-		ELSE 
+			SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total >= ', '\'',paMontoI, '\'');
+		ELSE
 			IF paRango = 'between' then
-				SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');      
-			end if; 
-		end if; -- FIN paRango = 'mayorIgual'	
-	end if; -- FIN paRango = 'menorIgual' 
+				SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');
+			end if;
+		end if; -- FIN paRango = 'mayorIgual'
+	end if; -- FIN paRango = 'menorIgual'
   end If;   -- FIN paRango <> 'null'
-  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  -- select @QUERY as 'Resultado';  
+  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
+  -- select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -4452,7 +4452,7 @@ ENGINE = InnoDB;
 
 ALTER TABLE `tb_53_articulos_traspaso_inventario` CHANGE `Id` `Id` INT(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `TB_28_Productos_Notas_Credito` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Unitario`, ADD `Descuento` DOUBLE NOT NULL AFTER `Precio_Final`, ADD `Exento` BOOLEAN NOT NULL AFTER `Descuento`, ADD `No_Retencion` BOOLEAN NOT NULL AFTER `Exento`; 
+ALTER TABLE `TB_28_Productos_Notas_Credito` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Unitario`, ADD `Descuento` DOUBLE NOT NULL AFTER `Precio_Final`, ADD `Exento` BOOLEAN NOT NULL AFTER `Descuento`, ADD `No_Retencion` BOOLEAN NOT NULL AFTER `Exento`;
 
 RENAME TABLE tb_46_relacion_desampa TO tb_46_relacion_trueque;
 ALTER TABLE tb_46_relacion_trueque ADD Sucursal INT NOT NULL AFTER Documento;
@@ -5121,3 +5121,6 @@ ALTER TABLE  `tb_51_lista_consignacion` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL 
 ADD  `UnidadMedida` VARCHAR( 10 ) NOT NULL;
 
 update tb_51_lista_consignacion set `TipoCodigo` = '01', `UnidadMedida` = 'Unid';
+
+ALTER TABLE  `tb_02_sucursal` ADD  `RequiereIVA` BOOLEAN NOT NULL AFTER  `RequiereFE`;
+UPDATE  `tb_02_sucursal` SET  `RequiereIVA` = 1;
