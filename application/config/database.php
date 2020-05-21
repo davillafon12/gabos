@@ -52,6 +52,12 @@ $db['default']['hostname'] = '127.0.0.1';
 $db['default']['username'] = 'root';
 $db['default']['password'] = 'coemar12';
 $db['default']['database'] = 'garotas_bonitas_main_db';
+/*
+$db['default']['hostname'] = '192.168.50.162';
+$db['default']['username'] = 'garotas_site';
+$db['default']['password'] = 'Yg#XPhwp+3!XN-kxKzDQPvMfmcT4-Phc5g!^YFyN';
+$db['default']['database'] = 'MainGarotas';
+*/
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
@@ -63,6 +69,22 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
+/*
+echo '<pre>';
+  print_r($db['default']);
+  echo '</pre>';
+
+  echo 'Connecting to database: ' .$db['default']['database'];
+  $dbh=mysql_connect
+  (
+    $db['default']['hostname'],
+    $db['default']['username'],
+    $db['default']['password'])
+    or die('Cannot connect to the database because: ' . mysql_error());
+    mysql_select_db ($db['default']['database']);
+
+    echo '<br />   Connected OK:'  ;
+    die( 'file: ' .__FILE__ . ' Line: ' .__LINE__); */
 
 
 /* End of file database.php */

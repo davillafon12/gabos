@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class external extends CI_Controller {	
-    
+class external extends CI_Controller {
+
     private $token = "Queladilla9876!!";
     private $logger;
-    
+
     function __construct(){
-        parent::__construct(); 
+        parent::__construct();
         $this->load->model('factura','',TRUE);
         $this->load->model('empresa','',TRUE);
         $this->load->model('contabilidad','',TRUE);
@@ -27,7 +27,7 @@ class external extends CI_Controller {
         echo "<br> >>>>>>>>>>>>>".date(DATE_ATOM)." <br> <br>";
         echo "Revisando Facturas...<br>";
         $empresa = null;
-        
+
         if($facturas = $this->factura->getFacturasRecibidasHacienda()){
             foreach($facturas as $factura){
                 if(!isset($empresas[$factura->Sucursal])){
@@ -39,7 +39,7 @@ class external extends CI_Controller {
                     if($resultado = $this->factura->getEstadoFacturaHacienda($api, $empresa, $factura, $tokenData, $factura->Consecutivo, $factura->Sucursal)){
                         $estadoActualizado = $resultado["estado_hacienda"];
                         echo "Se actualizo el estado -$estadoActualizado- de la factura #{$factura->Consecutivo} de la sucursal #{$factura->Sucursal} <br>";
-                        
+
                         // Revisar si fue aceptado para enviar correo
                         if($resultado["status"] && $estadoActualizado === "aceptado"){
                             echo "Enviando correo <br>";
@@ -55,7 +55,7 @@ class external extends CI_Controller {
                                     $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
                                 if($apiCorreo->enviarCorreo($factura->ReceptorEmail, "Factura Electrónica #".$factura->Consecutivo." | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                     $this->factura->marcarEnvioCorreoFacturaElectronica($factura->Sucursal, $factura->Consecutivo);
-                                    echo "Correo enviado con exito <br>"; 
+                                    echo "Correo enviado con exito <br>";
                                 }else{
                                     echo "Error al enviar correo <br>";
                                 }
@@ -70,13 +70,13 @@ class external extends CI_Controller {
                     echo "Hubo un error al obtener el token para facturas <br>";
                 }
             }
-            
+
         }else{
             echo "No hay facturas que procesar <br>";
         }
-        
+
         echo "Revisando Notas Credito... <br>";
-        
+
         if($notas = $this->contabilidad->getNotasCreditoRecibidasHacienda()){
             foreach($notas as $nota){
                 if(!isset($empresas[$nota->Sucursal])){
@@ -87,7 +87,7 @@ class external extends CI_Controller {
                 if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
                     if($resEnvio = $this->contabilidad->getEstadoNotaCreditoHacienda($api, $nota, $empresa, $tokenData, $nota->Consecutivo, $nota->Sucursal)){
                         echo "Se actualizo al estado {$resEnvio["estado_hacienda"]} en la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} <br>";
-                        
+
                         if($resEnvio){
                             if($resEnvio["estado_hacienda"] == "aceptado"){
                                 if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
@@ -103,8 +103,8 @@ class external extends CI_Controller {
                                 }
                             }
                         }
-                        
-                        
+
+
                     }else{
                         echo "NO se actualizo el estado de la nota credito #{$nota->Consecutivo} de la sucursal #{$nota->Sucursal} <br>";
                     }
@@ -112,13 +112,13 @@ class external extends CI_Controller {
                     echo "Hubo un error al obtener el token para notas <br>";
                 }
             }
-            
+
         }else{
             echo "No hay notas credito que procesar <br>";
         }
-        
+
         echo "Revisando Mensajes Receptores... <br>";
-        
+
         if($mensajes = $this->contabilidad->getMensajeReceptoresRecibidasHacienda()){
             foreach($mensajes as $mensaje){
                 if(!isset($empresas[$mensaje->Sucursal])){
@@ -136,21 +136,21 @@ class external extends CI_Controller {
                     echo "Hubo un error al obtener el token para mensaje receptor <br>";
                 }
             }
-            
+
         }else{
             echo "No hay mensajes receptor que procesar <br>";
         }
-        
+
         if($empresa !== null){
             $api->destruirSesion($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa);
         }
     }
-    
+
     public function regenerarXMLNotaCredito(){
         $consecutivo = trim(@$_GET["c"]);
         $sucursal = trim(@$_GET["s"]);
         $token = trim(@$_GET["t"]);
-        
+
         if($token == $this->token){
             if($resXML = $this->contabilidad->generarXMLNotaCredito($consecutivo, $sucursal)){
                 header('Content-Disposition: attachment; filename="xml.txt"');
@@ -164,14 +164,14 @@ class external extends CI_Controller {
         }else{
             die("Token");
         }
-        
+
     }
-    
+
     public function firmarXMLNotaCredito(){
         $consecutivo = trim(@$_GET["c"]);
         $sucursal = trim(@$_GET["s"]);
         $token = trim(@$_GET["t"]);
-        
+
         if($token == $this->token){
             if($resXML = $this->contabilidad->firmarXMLNotaCredito($consecutivo, $sucursal)){
                 header('Content-Disposition: attachment; filename="xmlFirmado.txt"');
@@ -185,27 +185,27 @@ class external extends CI_Controller {
         }else{
             die("Token");
         }
-        
+
     }
-    
+
     public function generarPDFNotaCredito(){
         $consecutivo = trim(@$_GET["c"]);
         $sucursal = trim(@$_GET["s"]);
         $token = trim(@$_GET["t"]);
-        
+
         if($token == $this->token){
             $this->contabilidad->generarPDFNotaCredito($consecutivo, $sucursal);
             die("Generado PDF");
         }else{
             die("Token");
         }
-        
+
     }
-    
+
     public function anularFacturaSola(){
         $consecutivo = trim(@$_GET["c"]);
         $token = trim(@$_GET["t"]);
-        
+
         if($token == $this->token){
             $tipoPago['tipo'] = "contado";
             if($responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago)){
@@ -221,16 +221,16 @@ class external extends CI_Controller {
         }else{
             die("Token");
         }
-        
+
     }
-    
-    
+
+
     public function enviarComprobantesAHacienda(){
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de facturas");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
         $empresas = array();
-        
+
         if($facturas = $this->factura->getFacturasSinEnviarAHacienda()){
             foreach($facturas as $factura){
                 if(!isset($empresas[$factura->Sucursal])){
@@ -241,11 +241,11 @@ class external extends CI_Controller {
                 $facturaObj = (Object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
                 $responseCheck["factura"] = $facturaObj;
                 $responseCheck["empresa"] = $empresa;
-                
+
                 $this->logger->info("enviarComprobantesAHacienda", " Enviando la factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal}");
-                
+
                 $res = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
-                
+
                 /*if($res["status"]){
                     $this->logger->info("enviarComprobantesAHacienda", " La factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal} fue ACEPTADA");
                     if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
@@ -273,29 +273,29 @@ class external extends CI_Controller {
         }else{
             $this->logger->info("enviarComprobantesAHacienda", "No hay facturas que enviar a Hacienda");
         }
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de notas credito");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
-        
+
         if($notas = $this->contabilidad->getNotasCreditoSinEnviarAHacienda()){
             foreach($notas as $nota){
                 if(!isset($empresas[$nota->Sucursal])){
                     $empresas[$nota->Sucursal] = $this->empresa->getEmpresa($nota->Sucursal)[0];
                 }
                 $empresa = $empresas[$nota->Sucursal];
-                
+
                 $this->logger->info("enviarComprobantesAHacienda", " Enviando la nota credito {$nota->Consecutivo} de la sucursal {$nota->Sucursal}");
-                
+
                 $resEnvio = $this->contabilidad->enviarNotaCreditoElectronicaAHacienda($nota->Consecutivo, $nota->Sucursal);
-                
+
                 /*if($resEnvio){
                     if($resEnvio["estado_hacienda"] == "rechazado"){
                         $this->logger->error("enviarComprobantesAHacienda", "Nota credito fue RECHAZADA por Hacienda. | Consecutivo: {$nota->Consecutivo} | Sucursal: {$nota->Sucursal}");
@@ -324,26 +324,26 @@ class external extends CI_Controller {
                 }else{
                     $this->logger->error("enviarComprobantesAHacienda", "No se pudo enviar la nota credito a Hacienda, debemos marcarla como contingencia | Consecutivo: {$nota->Consecutivo} | Sucursal: {$nota->Sucursal}");
                 }*/
-                
+
             }
         }else{
             $this->logger->info("enviarComprobantesAHacienda", "No hay notas credito que enviar a Hacienda");
         }
-        
-        
+
+
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de mensajes receptores");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
-        
+
         if($mensajesReceptores = $this->contabilidad->getMensajeReceptoresParaEnviarAHacienda()){
             foreach($mensajesReceptores as $mensajeReceptor){
                 if(!isset($empresas[$mensajeReceptor->Sucursal])){
                     $empresas[$mensajeReceptor->Sucursal] = $this->empresa->getEmpresa($mensajeReceptor->Sucursal)[0];
                 }
                 $empresa = $empresas[$mensajeReceptor->Sucursal];
-                
+
                 $this->logger->info("enviarComprobantesAHacienda", " Enviando el mensaje receptor {$mensajeReceptor->Consecutivo} de la sucursal {$mensajeReceptor->Sucursal}");
-            
+
                 $respuesta = $this->contabilidad->enviarMensajeReceptorHacienda($mensajeReceptor->Consecutivo, $mensajeReceptor->Sucursal);
 
                 if($respuesta){
@@ -357,10 +357,10 @@ class external extends CI_Controller {
         }else{
             $this->logger->info("enviarComprobantesAHacienda", "No hay mensajes receptores que enviar a Hacienda");
         }
-        
-        
-        
-        
+
+
+
+
         // Al final destruimos todas las sesiones con el API de Hacienda
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
         $this->logger->info("enviarComprobantesAHacienda", "Saliendo de sesiones de token:");
@@ -372,11 +372,22 @@ class external extends CI_Controller {
         }
         $this->logger->info("enviarComprobantesAHacienda", "Sesiones terminadas");
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
-        
+
         echo "FIN";
     }
-    
-	
-} 
+
+    public function testTLS(){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://www.howsmyssl.com/a/check");
+        curl_setopt($ch, CURLOPT_SSLVERSION, 6);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $tlsVer = json_decode($response, true);
+        echo "<pre>"; print_r($tlsVer);
+        //echo "<h1>Your TSL version is: <u>" . ( $tlsVer['tls_version'] ? $tlsVer['tls_version'] : 'no TLS support' ) . "</u></h1>";
+    }
+
+}
 
 ?>
