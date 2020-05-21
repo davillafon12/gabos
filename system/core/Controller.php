@@ -32,7 +32,7 @@ class CI_Controller
 
     private static $instance;
 
-    public $javascriptCacheVersion = 35;
+    public $javascriptCacheVersion = 36;
 
     public $tiposIdentificacion = array(
         "01" => "Física",
@@ -183,7 +183,7 @@ class CI_Controller
             $montoDeImpuestoRetencion = ($subTotalFinalSinIVA * ($iva / 100)) - $montoDeImpuesto;
         }
         if ($a->Articulo_Factura_Exento == 1) { // Es exento
-            // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
+            // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE
             $exoneracion = array(
                 "tipoDocumento" => "01", // Compras Autorizadas
                 "numeroDocumento" => "01",
