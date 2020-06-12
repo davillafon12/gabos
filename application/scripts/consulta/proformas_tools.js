@@ -28,25 +28,25 @@ $(function() {
     $.datepicker.setDefaults($.datepicker.regional['es']);
 	$( "#fecha_desde" ).datepicker();
 	$( "#fecha_hasta" ).datepicker();
-	
-	
+
+
 	$( "#nombre" ).autocomplete({
 		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
-			$("#cedula").val(ui.item.id);				  
+			$("#cedula").val(ui.item.id);
 		  }
 		});
-	
+
 	$("#consecutivo").numeric()
 });
 
 function llamarFacturas(){
-	if(validarFechas()){		
+	if(validarFechas()){
 		$.ajax({
 			url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/getProformasFiltradas',
-			type: "POST",	
-			data: {'cliente':$("#cedula").val(),'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val(), 'estado':estadosSeleccionados()},				
+			type: "POST",
+			data: {'cliente':$("#cedula").val(),'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val(), 'estado':estadosSeleccionados()},
 			success: function(data, textStatus, jqXHR)
 			{
 				try{
@@ -76,8 +76,8 @@ function validarFechas(){
 			notyMsg('La fecha -desde- no tiene un formato válido', 'error');
 			return false;
 		}
-		
-		
+
+
 	}
 	if(hasta.trim()!=''){
 		//Validamos
@@ -85,25 +85,25 @@ function validarFechas(){
 			notyMsg('La fecha -hasta- no tiene un formato válido', 'error');
 			return false;
 		}
-		
+
 	}
-	
+
 	if(desde.trim()!=''&&hasta.trim()!=''){
 		//Pasar de dd/mm/yyyy a yyyy-mm-dd
-		desde = desde.split("/");	
+		desde = desde.split("/");
 		desde = desde[2]+"-"+desde[1]+"-"+desde[0];
 		desde = new Date(desde);
 		//Pasar de dd/mm/yyyy a yyyy-mm-dd
-		hasta = hasta.split("/");	
+		hasta = hasta.split("/");
 		hasta = hasta[2]+"-"+hasta[1]+"-"+hasta[0];
 		hasta = new Date(hasta);
-		
+
 		if(desde>hasta){
 			notyMsg('La fecha -desde- debe ser menor a la fecha -hasta-', 'error');
 			return false;
 		}
-		
-	}	
+
+	}
 	return true;
 }
 
@@ -165,7 +165,7 @@ function montarFacturas(facturas){
 
 /**
  * Number.prototype.format(n, x, s, c)
- * 
+ *
  * param integer n: length of decimal
  * param integer x: length of whole part
  * param mixed   s: sections delimiter
@@ -174,7 +174,7 @@ function montarFacturas(facturas){
 	123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
 	12345678.9.format(0, 3, '-');       // "12-345-679"
  */
- 
+
 Number.prototype.format = function(n, x, s, c) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
         num = this.toFixed(Math.max(0, ~~n));
@@ -198,17 +198,17 @@ function cargarFactura(){
 
 function cargaServerFactura(consecutivo){
 	cargarEncabezado(consecutivo);
-	
-	consecutivoActual = consecutivo; //Asignamos el consecutivo actual para realizar operaciones	
+
+	consecutivoActual = consecutivo; //Asignamos el consecutivo actual para realizar operaciones
 }
 
 function cargarEncabezado(consecutivo){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/getProformaHeadersConsulta",
 		type: "POST",
-		data: {'consecutivo':consecutivo},		
+		data: {'consecutivo':consecutivo},
 		success: function(data, textStatus, jqXHR)
-		{			
+		{
 			try{
 				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
 				if(facturaHEAD[0].status==="error"){
@@ -217,12 +217,12 @@ function cargarEncabezado(consecutivo){
 				}else if(facturaHEAD[0].status==="success"){
 					setEncabezadoFactura(facturaHEAD);
 					cargarProductos(consecutivo);
-					
-					tipo_factura = facturaHEAD[0].tipo; 
+
+					tipo_factura = facturaHEAD[0].tipo;
 					sucursal = facturaHEAD[0].sucursal;
 					servidorImpresion = facturaHEAD[0].servidor_impresion;
 					token = facturaHEAD[0].token;
-					
+
 					$(".boton-estado-proforma").prop('disabled', false);
 					$(".boton-estado-proforma").css("opacity","1");
 					$(".boton-estado-proforma").css("filter","alpha(opacity=100");
@@ -231,13 +231,13 @@ function cargarEncabezado(consecutivo){
 						$(".boton-estado-proforma").prop('disabled', true);
 						$(".boton-estado-proforma").css("opacity","0.5");
 						$(".boton-estado-proforma").css("filter","alpha(opacity=50");
-						$(".boton-estado-proforma").css("cursor","not-allowed");					
+						$(".boton-estado-proforma").css("cursor","not-allowed");
 					}
 				}
 			}
 			catch(e){
 				notyMsg("Error al cargar la factura, contacte al administrador. ERROR E0", "error");
-			}			
+			}
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{}
@@ -248,9 +248,9 @@ function cargarProductos(consecutivo){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/caja/getArticulosProformaConsulta",
 		type: "POST",
-		data: {'consecutivo':consecutivo},		
+		data: {'consecutivo':consecutivo},
 		success: function(data, textStatus, jqXHR)
-		{			
+		{
 			try{
 				facturaBODY = $.parseJSON('[' + data.trim() + ']');
 				if(facturaBODY[0].status==="error"){
@@ -262,7 +262,7 @@ function cargarProductos(consecutivo){
 			}
 			catch(e){
 				notyMsg("Error al cargar la factura, contacte al administrador. ERROR B0", "error");
-			}			
+			}
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{notyError('¡Hubo un error al cargar la factura!');}
@@ -279,22 +279,22 @@ function cleanTable(){
 	}
 }
 
-function setEncabezadoFactura(facturaHEAD){	
+function setEncabezadoFactura(facturaHEAD){
 	$("#observaciones").val(facturaHEAD[0].observaciones);
-	
+
 	//Traemos decimales
 	decimales = parseInt(decimales); //Esta variable se inicializa en la vista!!
-	
+
 	iva_por = parseFloat(facturaHEAD[0].ivapor);
 	tipo_cambio = parseFloat(facturaHEAD[0].cambio);
 	tipo_moneda = facturaHEAD[0].moneda;
-	
+
 	//Costos totales
 	total = parseFloat(facturaHEAD[0].total);
 	iva = parseFloat(facturaHEAD[0].iva);
 	costo = parseFloat(facturaHEAD[0].costo);
 	retencion = parseFloat(facturaHEAD[0].retencion);
-	
+
 	if(tipo_moneda==='colones'){
 		$(".tipo_moneda_display").html("₡");
 	}else if(tipo_moneda==='dolares'){
@@ -303,56 +303,60 @@ function setEncabezadoFactura(facturaHEAD){
 		iva = iva / tipo_cambio;
 		costo = costo / tipo_cambio;
 		retencion = retencion / tipo_cambio;
-	}	
-	
+	}
+
 	$("#costo_total").val(total.format(decimales, 3, '.', ','));
 	$("#iva").val(iva.format(decimales, 3, '.', ','));
 	$("#costo").val(costo.format(decimales, 3, '.', ','));
 	$("#retencion").val(retencion.format(decimales, 3, '.', ','));
-	
+
 }
 
-function setProductosFactura(productos){	
-	
-	$("#contenidoArticulos").html('');	
+function setProductosFactura(productos){
+
+	$("#contenidoArticulos").html('');
 	cantidad = productos.length;
-	for (var i = 0; i < cantidad; i++) 
+	for (var i = 0; i < cantidad; i++)
 	{
 		fila = "<tr>";
 		fila += "<td><label class='contact'>"+productos[i].codigo+"</label></td>";
 		fila += "<td><div class='contact' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].descripcion+"</div>"
 				+"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+(i+1)+"'><img src='"+location.protocol+"//"+document.domain+(location.port ? ':'+location.port: '')+"/application/images/articulos/"+productos[i].imagen+"' height='200' width='200'></div></td>";
-		fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].cantidad+"</label></td>";	
-		
+
+		fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].cantidad+"</label></td>";
+
 		if(productos[i].exento==='1'){fila += "<td><label class='contact'>E</label>";}else{fila += "<td><label class='contact'></label>";};
 		fila += "<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'></td>";
-		
+
 		fila += "<td style='text-align: center;'><label class='contact' id='descuento_articulo_"+(i+1)+"'>"+parseFloat(productos[i].descuento).format(decimales, 3, '.', ',')+"</label></td>";
-		
+
 		//Traemos decimales
-		decimales = parseInt(decimales); //Esta variable se inicializa en la vista!!		
+		decimales = parseInt(decimales); //Esta variable se inicializa en la vista!!
 		precioUI = parseFloat(productos[i].precio);
 		precioUI = precioUI.format(decimales, 3, '.', ',');
-		
+
 		if(tipo_moneda==='dolares'){
 			precio = parseFloat(productos[i].precio) / tipo_cambio;
-			precioUI =  precio.format(decimales, 3, '.', ',');			
+			precioUI =  precio.format(decimales, 3, '.', ',');
 		}
-		
+
 		fila += "<td style='text-align: right;'><label class='contact'>"+precioUI+"</label>"
-				+"<input id='costo_unidad_articulo_"+(i+1)+"' type='hidden' value='"+productos[i].precio+"'></td>";				
+				+"<input id='costo_unidad_articulo_"+(i+1)+"' type='hidden' value='"+productos[i].precio+"'></td>";
 		fila += "<td style='text-align: right;'><label class='contact' id='costo_total_articulo_"+(i+1)+"'></label></td>";
-		
+
 		fila += "</tr>";
-		
-		agregarTooltip("#descripcion_articulo_"+(i+1));	
+
+
 
 		$("#contenidoArticulos").append(fila);
+
+		agregarTooltip("#descripcion_articulo_"+(i+1));
 	}
 	setCostos(cantidad);
 }
 
 function agregarTooltip(id_Row){
+	console.log(id_Row);
 	$(id_Row).mouseover(function(){
 		eleOffset = $(this).offset();
 
@@ -360,51 +364,51 @@ function agregarTooltip(id_Row){
 			left: eleOffset.left + 100,
 			top: eleOffset.top - 100
 		});
-		
+
 	}).mouseout(function(){
 		$(this).next().hide();
 	});
 }
 
-function setCostos(cantidad){	
-	for (var i = 0; i < cantidad; i++) 
+function setCostos(cantidad){
+	for (var i = 0; i < cantidad; i++)
 	{	actualizaCostoTotalArticulo("cantidad_articulo_"+(i+1));
 	}
 }
 
 function actualizaCostoTotalArticulo(id){
-	
+
 	num_row = id.replace("cantidad_articulo_","");
 	cantidad = document.getElementById("cantidad_articulo_"+num_row).innerHTML;
 	descuento = document.getElementById('descuento_articulo_'+num_row).innerHTML;
 	precio_unidad = document.getElementById('costo_unidad_articulo_'+num_row).value;
-	
-			
+
+
 	//Conversion de tipos
 	descuento_float = parseFloat(descuento);
 	precio_unidad_float = parseFloat(precio_unidad);
 	cantidad_float = parseFloat(cantidad);
-	
+
 	if(tipo_moneda==='dolares'){
-		precio_unidad_float = precio_unidad_float / tipo_cambio;		
+		precio_unidad_float = precio_unidad_float / tipo_cambio;
 	}
-	
-	
+
+
 	//Calculos matematicos
 	descuento_float = descuento_float/100;
 	descuento_float = descuento_float*precio_unidad_float;
 	precio_final_por_unidad = precio_unidad_float - descuento_float;
 	precio_total = precio_final_por_unidad * cantidad_float;
-	
-	
+
+
 	//Cargamos el valor al div
 	costo_total = document.getElementById("costo_total_articulo_"+num_row);
-	
-	//Formateamos el valor		
-	precio_total = precio_total.format(decimales, 3, '.', ',');	
+
+	//Formateamos el valor
+	precio_total = precio_total.format(decimales, 3, '.', ',');
 	costo_total.innerHTML = precio_total;
-	
-	
+
+
 }
 
 // Para el tamaño del windows open
@@ -462,9 +466,9 @@ function descontarArticulos(){
 													$.ajax({
 														url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/descontarArticulosProforma",
 														type: "POST",
-														data: {'consecutivo':consecutivo},		
+														data: {'consecutivo':consecutivo},
 														success: function(data, textStatus, jqXHR)
-														{			
+														{
 															try{
 																dataR = $.parseJSON('[' + data.trim() + ']');
 																if(dataR[0].status==="error"){
@@ -475,15 +479,15 @@ function descontarArticulos(){
 															}
 															catch(e){
 																	notyMsg("Error al mostrar resultado.", "error");
-															}			
+															}
 														},
 														error: function (jqXHR, textStatus, errorThrown)
 														{}
-													});				
+													});
 										}
 									}
 	});
-	
+
 }
 
 function convertirEnFactura(){
@@ -495,8 +499,8 @@ function convertirEnFactura(){
 		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
 		return false;
 	}
-	
-	
+
+
 	$.prompt("¡Esto convertirá la proforma en una factura pendiente!", {
 			title: "¿Esta seguro que desea convertir la proforma en factura pendiente?",
 			buttons: { "Si, estoy seguro": true, "Cancelar": false },
@@ -505,9 +509,9 @@ function convertirEnFactura(){
 													$.ajax({
 														url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/convertirEnFactura",
 														type: "POST",
-														data: {'consecutivo':consecutivo},		
+														data: {'consecutivo':consecutivo},
 														success: function(data, textStatus, jqXHR)
-														{			
+														{
 															try{
 																dataR = $.parseJSON('[' + data.trim() + ']');
 																if(dataR[0].status==="error"){
@@ -518,11 +522,11 @@ function convertirEnFactura(){
 															}
 															catch(e){
 																	notyMsg("Error al mostrar resultado.", "error");
-															}			
+															}
 														},
 														error: function (jqXHR, textStatus, errorThrown)
 														{}
-													});				
+													});
 										}
 									}
 	});
@@ -537,8 +541,8 @@ function anularProforma(){
 		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
 		return false;
 	}
-	
-	
+
+
 	$.prompt("¡Esto anulará la proforma cargada!", {
 			title: "¿Esta seguro que desea anular la proforma?",
 			buttons: { "Si, estoy seguro": true, "Cancelar": false },
@@ -547,9 +551,9 @@ function anularProforma(){
 													$.ajax({
 														url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/anularProforma",
 														type: "POST",
-														data: {'consecutivo':consecutivo},		
+														data: {'consecutivo':consecutivo},
 														success: function(data, textStatus, jqXHR)
-														{			
+														{
 															try{
 																dataR = $.parseJSON('[' + data.trim() + ']');
 																if(dataR[0].status==="error"){
@@ -560,11 +564,11 @@ function anularProforma(){
 															}
 															catch(e){
 																	notyMsg("Error al mostrar resultado.", "error");
-															}			
+															}
 														},
 														error: function (jqXHR, textStatus, errorThrown)
 														{}
-													});				
+													});
 										}
 									}
 	});
@@ -579,8 +583,8 @@ function marcarComoPagada(){
 		notyMsg('El consecutivo ingresado no coincide con el cargado', 'error');
 		return false;
 	}
-	
-	
+
+
 	$.prompt("¡Esto marcará la proforma cargada como pagada!", {
 			title: "¿Esta seguro que desea marcar como pagada la proforma cargada?",
 			buttons: { "Si, estoy seguro": true, "Cancelar": false },
@@ -589,9 +593,9 @@ function marcarComoPagada(){
 													$.ajax({
 														url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/facturas/proforma/marcarComoPagada",
 														type: "POST",
-														data: {'consecutivo':consecutivo},		
+														data: {'consecutivo':consecutivo},
 														success: function(data, textStatus, jqXHR)
-														{			
+														{
 															try{
 																dataR = $.parseJSON('[' + data.trim() + ']');
 																if(dataR[0].status==="error"){
@@ -602,11 +606,11 @@ function marcarComoPagada(){
 															}
 															catch(e){
 																	notyMsg("Error al mostrar resultado.", "error");
-															}			
+															}
 														},
 														error: function (jqXHR, textStatus, errorThrown)
 														{}
-													});				
+													});
 										}
 									}
 	});

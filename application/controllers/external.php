@@ -388,6 +388,39 @@ class external extends CI_Controller {
         //echo "<h1>Your TSL version is: <u>" . ( $tlsVer['tls_version'] ? $tlsVer['tls_version'] : 'no TLS support' ) . "</u></h1>";
     }
 
+
+    public function fixFacturaPelada(){
+        $consecutivoString = trim(@$_GET["c"]);
+        $sucursal = trim(@$_GET["s"]);
+        $token = trim(@$_GET["t"]);
+
+
+        if($token == $this->token){
+            if($consecutivoString != ""){
+                $consecutivos = explode(",", $consecutivoString);
+                foreach($consecutivos as $consecutivo){
+                    if(is_numeric($consecutivo)){
+                        if($this->factura->existeFactura($consecutivo, $sucursal)){
+                            if($this->factura->regenerarFacturaElectronicaPorContingencia($consecutivo, $sucursal)){
+                                echo "Se regenero factura con exito $consecutivo <br>";
+                            }else{
+                                echo "No se pudo regenerar factura $consecutivo <br>";
+                            }
+                        }else{
+                            echo "No existe factura para $consecutivo <br>";
+                        }
+                    }else{
+                        echo "Consecutivo no valido $consecutivo <br>";
+                    }
+                }
+            }else{
+                die("Consecutivo vacio");
+            }
+        }else{
+            die("You are not allowed to access here");
+        }
+    }
+
 }
 
 ?>

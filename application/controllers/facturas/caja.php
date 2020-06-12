@@ -4,7 +4,7 @@ class caja extends CI_Controller {
 
 	function __construct()
 	{
-		parent::__construct(); 
+		parent::__construct();
 		$this->load->model('user','',TRUE);
 		$this->load->model('factura','',TRUE);
 		$this->load->model('cliente','',TRUE);
@@ -15,20 +15,20 @@ class caja extends CI_Controller {
 		$this->load->model('proforma_m','',TRUE);
                 $this->load->model('impresion_m','',TRUE);
                 $this->load->model('contabilidad','',TRUE);
-		
+
 	}
-    
+
 	function index()
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-			
+
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['entrar_caja'])
-		{	
+		{
 		   redirect('accesoDenegado', 'location');
 		}
-                
+
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
@@ -38,9 +38,9 @@ class caja extends CI_Controller {
 		$fecha = date("y/m/d : H:i:s", now());
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
-		$this->load->view('facturas/view_caja_factura', $data);	
+		$this->load->view('facturas/view_caja_factura', $data);
 	}
-	
+
 	function getFacturasPendientes(){
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$request="";
@@ -49,11 +49,11 @@ class caja extends CI_Controller {
 			foreach($facturas as $factura){
 					$ClienteArray = $this->cliente->getNombreCliente($factura->TB_03_Cliente_Cliente_Cedula);
 					$NombreCliente = $ClienteArray['nombre'];
-					
-					if($factura->Factura_Nombre_Cliente!=''){ //Si el nombre del cliente de la factura es diferente de vacio 
+
+					if($factura->Factura_Nombre_Cliente!=''){ //Si el nombre del cliente de la factura es diferente de vacio
 						$NombreCliente  = $factura->Factura_Nombre_Cliente;
 					}
-					
+
 					$request = $request . "
 						<tr>
 							<td>
@@ -67,38 +67,38 @@ class caja extends CI_Controller {
 							</td>
 						</tr>";
 			}
-								
+
 					 //echo " </table>";
 		}else{
 			echo "<td>Hubo un error al cargar las facturas</td>";
 		}
-		
+
 		echo $request;
 	}
-	
+
 	function getFacturaHeaders(){
 		//var_dump($_POST);
 		$facturaHEAD['status']='error';
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include PATH_USER_DATA; 
-			//header('Content-Type: application/json');			
+			include PATH_USER_DATA;
+			//header('Content-Type: application/json');
 			if($facturaHEADS = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){
 				//var_dump($consecutivo);
 				//echo "crear array";
 				foreach($facturaHEADS as $row){
-					if($row->Factura_Estado=='pendiente'){				
-						$facturaHEAD['status']='success';				
+					if($row->Factura_Estado=='pendiente'){
+						$facturaHEAD['status']='success';
 						$facturaHEAD['cedula']=$row->TB_03_Cliente_Cliente_Cedula;
-						
+
 						$ClienteArray = $this->cliente->getNombreCliente($facturaHEAD['cedula']);
 						$NombreCliente = $ClienteArray['nombre'];
-						
-						if($row->Factura_Nombre_Cliente!=''){ //Si el nombre del cliente de la factura es diferente de vacio 
+
+						if($row->Factura_Nombre_Cliente!=''){ //Si el nombre del cliente de la factura es diferente de vacio
 							$NombreCliente  = $row->Factura_Nombre_Cliente;
 						}
-						
+
 						$facturaHEAD['nombre']= $NombreCliente;
 						$facturaHEAD['moneda']=$row->Factura_Moneda;
 						$facturaHEAD['total']=$row->Factura_Monto_Total;
@@ -107,12 +107,12 @@ class caja extends CI_Controller {
 						$facturaHEAD['observaciones']=$row->Factura_Observaciones;
 						$facturaHEAD['ivapor']=$row->Factura_porcentaje_iva;
 						$facturaHEAD['cambio']=$row->Factura_tipo_cambio;
-						
+
 						//Cargamos la variable que ocupamos de cliente
 						$facturaHEAD['cliente_sucursal'] = $row->Factura_Cliente_Sucursal;
 						$facturaHEAD['cliente_exento'] = $row->Factura_Cliente_Exento;
 						$facturaHEAD['cliente_retencion'] = $row->Factura_Cliente_No_Retencion;
-						
+
 					}else if($row->Factura_Estado=='cobrada'){
 						$facturaHEAD['status']='error';
 						$facturaHEAD['error']='11';
@@ -137,25 +137,25 @@ class caja extends CI_Controller {
 		//echo "Entro a 13";
 		echo json_encode($facturaHEAD);
 	}
-	
+
 	function getFacturaHeadersConsulta(){
 		$facturaHEAD['status']='error';
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include PATH_USER_DATA; 		
+			include PATH_USER_DATA;
 			if($facturaHEADS = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){
-				foreach($facturaHEADS as $row){			
-					$facturaHEAD['status']='success';				
+				foreach($facturaHEADS as $row){
+					$facturaHEAD['status']='success';
 					$facturaHEAD['cedula']=$row->TB_03_Cliente_Cliente_Cedula;
-					
+
 					$ClienteArray = $this->cliente->getNombreCliente($facturaHEAD['cedula']);
 					$NombreCliente = $ClienteArray['nombre'];
-					
-					if($row->Factura_Nombre_Cliente!=''){ //Si el nombre del cliente de la factura es diferente de vacio 
+
+					if($row->Factura_Nombre_Cliente!=''){ //Si el nombre del cliente de la factura es diferente de vacio
 						$NombreCliente  = $row->Factura_Nombre_Cliente;
 					}
-					
+
 					$facturaHEAD['nombre']= $NombreCliente;
 					$facturaHEAD['moneda']=$row->Factura_Moneda;
 					$facturaHEAD['total']=$row->Factura_Monto_Total;
@@ -164,8 +164,8 @@ class caja extends CI_Controller {
 					$facturaHEAD['costo']=$row->Factura_Monto_Sin_IVA;
 					$facturaHEAD['observaciones']=$row->Factura_Observaciones;
 					$facturaHEAD['ivapor']=$row->Factura_porcentaje_iva;
-					$facturaHEAD['cambio']=$row->Factura_tipo_cambio;	
-					$facturaHEAD['tipo']=$row->Factura_Estado;	
+					$facturaHEAD['cambio']=$row->Factura_tipo_cambio;
+					$facturaHEAD['tipo']=$row->Factura_Estado;
 					$facturaHEAD['sucursal']= $data['Sucursal_Codigo'];
 					$facturaHEAD['servidor_impresion']= $this->configuracion->getServidorImpresion();
 					$facturaHEAD['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
@@ -180,24 +180,24 @@ class caja extends CI_Controller {
 		}
 		echo json_encode($facturaHEAD);
 	}
-	
+
 	function getNombreCliente($cedula){
 		return $this->cliente->getNombreCliente($cedula);
 	}
-	
+
 	function getArticulosFactura(){
 		$facturaBODY['status']='error';
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include PATH_USER_DATA; 
-			//header('Content-Type: application/json');			
+			include PATH_USER_DATA;
+			//header('Content-Type: application/json');
 			if($facturaPRODUCTS = $this->factura->getArticulosFactura($consecutivo, $data['Sucursal_Codigo'])){
-				
-				
+
+
 				$facturaHEADS = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo']);
-				
-				
+
+
 				//var_dump($consecutivo);
 				//echo "crear array";
 				$facturaBODY['status']='success';
@@ -213,10 +213,10 @@ class caja extends CI_Controller {
 					$articulo['precio']=$row->Articulo_Factura_Precio_Unitario;
 					$articulo['precioFinal']=$row->Articulo_Factura_Precio_Final;
 					//Procesamos la imagen
-					$articulo['imagen'] = $row->Articulo_Factura_Imagen;				
+					$articulo['imagen'] = $row->Articulo_Factura_Imagen;
 					$ruta_a_preguntar = CARPETA_IMAGENES.$articulo['imagen'];
 					//return $ruta_a_preguntar;
-					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00.jpg';}					
+					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00.jpg';}
 					if($inventario = $this->articulo->inventarioActual($articulo['codigo'], $data['Sucursal_Codigo'])){
 						$articulo['bodega']=$inventario;
 					}else{
@@ -225,14 +225,14 @@ class caja extends CI_Controller {
 					if($articulo['codigo']=='00'){
 						$articulo['bodega']='1000';
 					}
-					
-					
+
+
 					if(trim($facturaHEADS[0]->TB_03_Cliente_Cliente_Cedula) == 2){
 						// Si es cliente de inventario defectuoso se debe poner la cantidad de bodega
 						$articulo['bodega'] = $this->articulo->inventarioDefectuosoActual($articulo['codigo'], $data['Sucursal_Codigo']) - $articulo['cantidad'];
 					}
-					
-					
+
+
 					array_push($articulos, $articulo);
 				}
 				$facturaBODY['productos']=$articulos;
@@ -246,21 +246,21 @@ class caja extends CI_Controller {
 		}
 		echo json_encode($facturaBODY);
 	}
-	
+
     function cobrarFactura(){
         $consecutivo = filter_input(INPUT_POST, "consecutivo");
         $tipoPago = json_decode(filter_input(INPUT_POST, "tipoPago"), true)[0];
-        
+
 		$responseCheck = $this->factura->validarCobrarFactura($consecutivo, $tipoPago);
-		
+
         if($responseCheck["status"] == "success"){
 
 			$requiereFE = $responseCheck["empresa"]->RequiereFE == 1;
-			
+
             $recibidoParaVuelto = filter_input(INPUT_POST, "entregado");
             $vuelto = filter_input(INPUT_POST, "vuelto");
-            include PATH_USER_DATA; 
-			
+            include PATH_USER_DATA;
+
 			$resFacturaElectronica = array();
 			if($requiereFE){
 				$resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
@@ -268,21 +268,21 @@ class caja extends CI_Controller {
 				$resFacturaElectronica["status"] = true;
 				$resFacturaElectronica["data"] = array( "fecha" => now());
 			}
-            
+
             if($resFacturaElectronica["status"]){
-                
+
                 $estadoFactura = 'cobrada';
                 $responseCheck['impresion'] = 1;
-                
+
                 //Para efecto de impresion
                 $responseCheck['sucursal']= $data['Sucursal_Codigo'];
                 $responseCheck['servidor_impresion']= $this->configuracion->getServidorImpresion();
                 $responseCheck['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 
                 $Current_datetime = date("y/m/d : H:i:s", $resFacturaElectronica["data"]["fecha"]);
-                $datos = array(         
+                $datos = array(
                         'Factura_Tipo_Pago'=>$tipoPago['tipo'],
-                        'Factura_Fecha_Hora'=>$Current_datetime, 
+                        'Factura_Fecha_Hora'=>$Current_datetime,
                         'Factura_Estado'=>$estadoFactura,
                         'Factura_Entregado_Vuelto' => $vuelto,
                         'Factura_Recibido_Vuelto' => $recibidoParaVuelto
@@ -297,17 +297,17 @@ class caja extends CI_Controller {
 
                 $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: {$responseCheck["factura"]->Factura_Consecutivo}",$data['Sucursal_Codigo'],'cobro');
 
-                
+
                 //Valorar si factura es de cliente defectuoso
                 $facturaHeader = $this->factura->getFacturasHeaders($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo'])[0];
                 if(trim($facturaHeader->TB_03_Cliente_Cliente_Cedula == 2)){
                         $this->descontarArticulosDefectuosos($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
                 }
-				
+
 				if($requiereFE){
 					$this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
 				}
-                
+
             }else{
                 $responseCheck["status"] = "error";
                 $responseCheck["error"] = $resFacturaElectronica["error"];
@@ -322,7 +322,7 @@ class caja extends CI_Controller {
         unset($responseCheck["articulosOriginales"]);
         echo json_encode($responseCheck);
     }
-    
+
     function descontarArticulosDefectuosos($consecutivo, $sucursal){
             $articulos = $this->factura->getArticulosFactura($consecutivo, $sucursal);
             foreach($articulos as $art){
@@ -347,7 +347,7 @@ class caja extends CI_Controller {
                             break;
                     case 'mixto':
                             $comision = $this->banco->getComision($tipoPago['banco']);
-                            $moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
+                            $moneda = $this->factura->getMoneda($consecutivo, $sucursal);
                             $cantidad = $tipoPago['cantidad'];
                             $tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
                             if($moneda=='dolares'){
@@ -360,7 +360,7 @@ class caja extends CI_Controller {
                             date_default_timezone_set("America/Costa_Rica");
                             $Current_datetime = date("y/m/d : H:i:s", now());
                             $facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
-                            foreach($facturaHead as $row){					
+                            foreach($facturaHead as $row){
                                     $totalFactura = $row->Factura_Monto_Total;
                             }
 
@@ -373,14 +373,14 @@ class caja extends CI_Controller {
                             date_default_timezone_set("America/Costa_Rica");
                             $Current_datetime = date("y/m/d : H:i:s", now());
                             $facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
-                            foreach($facturaHead as $row){					
+                            foreach($facturaHead as $row){
                                     $totalFactura = $row->Factura_Monto_Total;
-                            }	
+                            }
 
-                            $totalFactura = $totalFactura - $abono;				
+                            $totalFactura = $totalFactura - $abono;
                             $credito = $this->factura->guardarPagoCredito($consecutivo, $sucursal, $vendedor, $cliente, 60, $Current_datetime, $totalFactura);
 
-                            $moneda = $this->factura->getMoneda($consecutivo, $sucursal); 
+                            $moneda = $this->factura->getMoneda($consecutivo, $sucursal);
                             $tipoCambio = $this->factura->getTipoCambio($consecutivo, $sucursal);
                             if($moneda=='dolares'){
                                     $abono = $abono * $tipoCambio;
@@ -390,17 +390,17 @@ class caja extends CI_Controller {
                             break;
             }
     }
-	
+
     function anularFactura(){
         $facturaBODY['status']='error';
         $facturaBODY['error']='17'; //No se logro procesar ls productos
         if(isset($_POST['consecutivo'])){
             $consecutivo = $_POST['consecutivo'];
-            include PATH_USER_DATA;	
+            include PATH_USER_DATA;
 
             if($facturaHeaders = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){
                 $tipoPago = array("tipo"=>"contado");
-            	//include PATH_USER_DATA; 						
+            	//include PATH_USER_DATA;
                 // Primero validamos si existe una factura electronica asociada a esta factura
                 // SI lo hay seguimos adelante y si no la creamos
                 $existeFacturaElectronica = false;
@@ -419,7 +419,7 @@ class caja extends CI_Controller {
                             $existeFacturaElectronica = true;
                             $facturaYaExistia = false;
                             $Current_datetime = date("y/m/d : H:i:s", $resFacturaElectronica["data"]["fecha"]);
-                            $datos = array(         
+                            $datos = array(
                                     'Factura_Fecha_Hora'=>$Current_datetime
                             );
 
@@ -438,12 +438,12 @@ class caja extends CI_Controller {
                     $facturaBODY['status']='error';
                     $facturaBODY['error']='71'; // No se logro validar los campos para hacer la factura electronica
                 }
-                
+
                 if($existeFacturaElectronica && $responseCheck["status"] == "success"){
                     // Factura fue recibida por hacienda y no fue rechazada
                     // Acordarse que si la factura fue rechazarse al enviarse, la factura se autoanula
                     // entonces no hay necesidad de generar la nota credito
-                    // PEEEEROOOO si hacienda acepto la factura bien, debemos generar la Nota Credito 
+                    // PEEEEROOOO si hacienda acepto la factura bien, debemos generar la Nota Credito
                     // para anular esta factura
                     //if($fueAnuladaPorRechazoDeHacienda === false){
                         //Debemos generar su respectiva nota credito
@@ -453,14 +453,14 @@ class caja extends CI_Controller {
                     //}
 
                     $facturaBODY['status']='success';
-                    $datos = array(         
+                    $datos = array(
                             'Factura_Estado'=>'anulada'
                     );
 
                     $this->factura->actualizarFacturaHead($datos, $consecutivo, $data['Sucursal_Codigo']);
                     //$this->devolverProductosdeFactura($consecutivo, $data['Sucursal_Codigo']);
                     $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario anulo la factura consecutivo: $consecutivo",$data['Sucursal_Codigo'],'anular');
-                    
+
                     if($facturaYaExistia === false){
                         $this->factura->guardarPDFFactura($consecutivo, $data['Sucursal_Codigo']);
                     }
@@ -471,10 +471,10 @@ class caja extends CI_Controller {
 
                 $facturaHeaders = $facturaHeaders[0];
                 if($facturaHeaders->Factura_Tipo_Pago == "credito"){
-                    if($creditoHeader = $this->contabilidad->getCreditoParaAnularFacturaCredito($facturaHeaders->Factura_Consecutivo, 
-                                                                                                $facturaHeaders->TB_02_Sucursal_Codigo, 
-                                                                                                $facturaHeaders->Factura_Vendedor_Codigo, 
-                                                                                                $facturaHeaders->Factura_Vendedor_Sucursal,    
+                    if($creditoHeader = $this->contabilidad->getCreditoParaAnularFacturaCredito($facturaHeaders->Factura_Consecutivo,
+                                                                                                $facturaHeaders->TB_02_Sucursal_Codigo,
+                                                                                                $facturaHeaders->Factura_Vendedor_Codigo,
+                                                                                                $facturaHeaders->Factura_Vendedor_Sucursal,
                                                                                                 $facturaHeaders->TB_03_Cliente_Cliente_Cedula)){
                         $this->contabilidad->marcarRecibosComoPendientes($creditoHeader->Credito_Id);
                     }
@@ -491,7 +491,7 @@ class caja extends CI_Controller {
         }
         echo json_encode($facturaBODY);
     }
-	
+
 	function devolverProductosdeFactura($consecutivo, $sucursal){
             if($productos = $this->factura->getArticulosFactura($consecutivo, $sucursal)){
                 foreach($productos as $producto){
@@ -506,28 +506,28 @@ class caja extends CI_Controller {
                 }
             }
 	}
-	
+
 	function devolverInventario(){
 		//Limpiamos el log
 		$myfile = fopen("application/logs/devolverInventario.txt", "w");
 		fwrite($myfile, '');
 		fclose($myfile);
-		
-		
+
+
 		//file_put_contents('application/logs/devolverInventario.txt', "--Entro\n", FILE_APPEND);
 		if(isset($_POST['consecutivo'])&&isset($_POST['items'])){
 			$consecutivo = $_POST['consecutivo'];
-			include PATH_USER_DATA;	
-			
+			include PATH_USER_DATA;
+
 			$items = $_POST['items']; //Obtenemos el array
 			$items = json_decode($items, true);
-			
+
 			foreach($items as $articulo){
 				if($articulo['co']!='00'){ //NO ES GENERICO
 					if($this->articulo->existe_Articulo($articulo['co'],$data['Sucursal_Codigo'])){
 						if($articuloFactura = $this->articulo->get_ArticuloFactura($articulo['co'], $data['Sucursal_Codigo'], $consecutivo)){
 							$cantidadBD = $articuloFactura->Articulo_Factura_Cantidad;
-							$cantidadClient = $articulo['ca'];						
+							$cantidadClient = $articulo['ca'];
 							if($cantidadBD!=$cantidadClient){
 								if($cantidadBD<$cantidadClient){
 									$cantidadDevolver = $cantidadClient-$cantidadBD;
@@ -555,16 +555,16 @@ class caja extends CI_Controller {
 				}else{
 					//Si el articulo no existe no hacer nada
 						//file_put_contents('application/logs/devolverInventario.txt', "--GENERICO\n", FILE_APPEND);
-				}				
+				}
 			}
 			//Revisar si algun producto fue eliminado en edicion
 			$this->checkIfItemsWasDeletedAndRestore($items, $consecutivo, $data['Sucursal_Codigo']);
-			
+
 		}else{
 			//file_put_contents('application/logs/devolverInventario.txt', "--URL MALA\n", FILE_APPEND);
-		}		
+		}
 	}
-	
+
 	function checkIfItemsWasDeletedAndRestore($ItemsCliente, $consecutivo, $sucursal){
 		//file_put_contents('application/logs/devolverInventario.txt', "--SE VERIFICA CAMBIOS\n", FILE_APPEND);
 		/*$articulosBD = $this->factura->getArticulosFactura($consecutivo, $sucursal); //obtenemos los productos de la factura
@@ -574,7 +574,7 @@ class caja extends CI_Controller {
 		if(count($mergedArray)>0){ //Si hay elementos quiere decir que si se eliminaron elementos
 			file_put_contents('application/logs/devolverInventario.txt', "--SI HAY ELEMENTOS QUE SE ELIMINARION\n", FILE_APPEND);
 			for($contador = 0; $contador<count($mergedArray); $contador++){
-				
+
 			}
 		}*/
 		//Obtener lista de la factura original
@@ -592,18 +592,18 @@ class caja extends CI_Controller {
 					if($this->articulo->actualizarInventarioRESTA($item, $cantidadBD, $sucursal)=='3'){
 						//file_put_contents('application/logs/devolverInventario.txt', "Articulo $item esta en la factura\n", FILE_APPEND);
 						//file_put_contents('application/logs/devolverInventario.txt', "Salio bien\n", FILE_APPEND);
-					}					
+					}
 				}else{
 					//file_put_contents('application/logs/devolverInventario.txt', "Articulo $item no esta en la factura\n", FILE_APPEND);
 				}
 			}
 		}
 	}
-	
+
 	function getItemsEliminadosEnEdicion($itemsEnBD, $itemsdeCliente){
 		return array_diff($itemsEnBD,$itemsdeCliente);
 	}
-	
+
 	function makeArrayItemsOnlyByKey($itemsArray, $key){
 		$processed_array=[];
 		foreach($itemsArray as $item){
@@ -612,7 +612,7 @@ class caja extends CI_Controller {
 		}
 		return $processed_array;
 	}
-	
+
 	function makeResultItemsOnlyByKey($itemsResult, $key){
 		$processed_array=[];
 		foreach($itemsResult as $item){
@@ -621,7 +621,7 @@ class caja extends CI_Controller {
 		}
 		return $processed_array;
 	}
-	
+
 	function cambiarFactura(){
 			$retorno['status'] = 'error';
 			$retorno['error'] = 'cf_1';
@@ -631,13 +631,13 @@ class caja extends CI_Controller {
 			$items_factura = $_POST['items'];
 			$consecutivo = $_POST['consecutivo'];
 			//Decodificar el JSON del post
-			$info_factura = json_decode($info_factura, true);			
+			$info_factura = json_decode($info_factura, true);
 			$items_factura = json_decode($items_factura, true);
 			//Obtenemos la primera posicion del info_factura para obtener el array final
 			$info_factura = $info_factura[0];
-						
+
 			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-			
+
 			if($factura = $this->factura-> existe_Factura($consecutivo, $data['Sucursal_Codigo'])){
 				$articulosFacturaActual = $this->factura->getItemsFactura($consecutivo, $data['Sucursal_Codigo']);
 				$articulosFacturaActual = $articulosFacturaActual === false ? array() : $articulosFacturaActual;
@@ -657,21 +657,21 @@ class caja extends CI_Controller {
 						$this->devolverProductosdeFactura($consecutivo, $data['Sucursal_Codigo']);
 						//ELIMINAMOS LOS PRODUCTOS
 						$this->factura->eliminarArticulosFactura($consecutivo, $data['Sucursal_Codigo']);
-						
+
 						$this->factura->actualizarFacturaHead($datosHead, $consecutivo, $data['Sucursal_Codigo']);
-									
+
 						//LOS VOLVEMOS A AGREGAR LOS NUEVOS
 						$cliente = $this->factura->getCliente($consecutivo, $data['Sucursal_Codigo']);
-						
+
 						$vendedor = $this->factura->getVendedor($consecutivo, $data['Sucursal_Codigo']);
-						
-						
+
+
 						$this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
-						
+
 						$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
-					
+
 						$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_edicion');
-						
+
 						unset($retorno['error']);
 						$retorno['status'] = 'success';
 					}else{
@@ -685,18 +685,18 @@ class caja extends CI_Controller {
 			}
 		}else{
 			$retorno['error'] = 'cf_2'; //URL con mal formato
-		} 
+		}
 		echo json_encode($retorno);
 	}
-	
+
 	function checkExistenciaDeProductos($items_factura, $articulosActuales, $sucursal){
 		$r["status"] = true;
 		$r["articulos"] = array();
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
-			if($item['co']=='00'){ //Si es generico					
+			if($item['co']=='00'){ //Si es generico
 					continue;
-			}else{ //Si es normal					
+			}else{ //Si es normal
 				if($articulo = $this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					$articulo = $articulo[0];
 					if(($articulo->Articulo_Cantidad_Inventario + $this->getCantidadArticuloActual($item['co'], $articulosActuales)) < $item['ca']){
@@ -705,11 +705,11 @@ class caja extends CI_Controller {
 					}
 				}
 			}
-			
+
 		}
 		return $r;
 	}
-	
+
 	function getCantidadArticuloActual($codigo, $articulos){
 		foreach($articulos as $art){
 			if($art->Articulo_Factura_Codigo == $codigo){
@@ -718,13 +718,13 @@ class caja extends CI_Controller {
 		}
 		return 0;
 	}
-	
+
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
-			if($item['co']=='00'){ //Si es generico					
+			if($item['co']=='00'){ //Si es generico
 					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'','01','Unid');
-			}else{ //Si es normal					
+			}else{ //Si es normal
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
 					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
@@ -738,47 +738,47 @@ class caja extends CI_Controller {
 					$this->articulo->actualizarInventarioRESTA($item['co'], $item['ca'], $sucursal);
 				}
 			}
-			
+
 		}
 		//$this->factura->addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $consecutivo, $sucursal, $vendedor, $cliente);
 	}
-	
+
 	function actualizarCostosFactura($consecutivo, $sucursal){
 		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
 		$this->factura->updateCostosTotales($costosArray, $consecutivo, $sucursal);
 	}
- 
- 
+
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////// CARGA DE PROFORMAS /////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
-	
-	function getProformaHeaders(){		
+
+	function getProformaHeaders(){
 		$facturaHEAD['status']='error';
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include PATH_USER_DATA; 
+			include PATH_USER_DATA;
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
 				if($facturaHEADS = $this->proforma_m->getProformasHeaders($consecutivo, $data['Sucursal_Codigo'])){
-					
+
 					foreach($facturaHEADS as $row){
-						if($row->Proforma_Estado=='pendiente'){	
+						if($row->Proforma_Estado=='pendiente'){
 							$fecha_proforma = $row->Proforma_Fecha_Hora;
 							date_default_timezone_set("America/Costa_Rica");
-							$Current_datetime = date("Y-m-d H:i:s", now());		
+							$Current_datetime = date("Y-m-d H:i:s", now());
 							$datediff = abs(strtotime($Current_datetime) - strtotime($fecha_proforma));
 							$dias = $datediff/(60*60*24);
 							if(16>$dias){
-								
-								$facturaHEAD['status']='success';				
+
+								$facturaHEAD['status']='success';
 								$facturaHEAD['cedula']=$row->TB_03_Cliente_Cliente_Cedula;
-								
+
 								$ClienteArray = $this->cliente->getNombreCliente($facturaHEAD['cedula']);
 								$NombreCliente = $ClienteArray['nombre'];
-								
+
 								$facturaHEAD['nombre']= $NombreCliente;
 								$facturaHEAD['moneda']=$row->Proforma_Moneda;
 								$facturaHEAD['total']=$row->Proforma_Monto_Total;
@@ -787,23 +787,23 @@ class caja extends CI_Controller {
 								$facturaHEAD['observaciones']=$row->Proforma_Observaciones;
 								$facturaHEAD['ivapor']=$row->Proforma_Porcentaje_IVA;
 								$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;
-								
+
 								//Cargamos la variable que ocupamos de cliente
 								$facturaHEAD['cliente_sucursal'] = $row->Proforma_Cliente_Sucursal;
 								$facturaHEAD['cliente_exento'] = $row->Proforma_Cliente_Exento;
 								$facturaHEAD['cliente_retencion'] = $row->Proforma_Cliente_No_Retencion;
-								
+
 							}else{
 								$facturaHEAD['status']='error';
 								$facturaHEAD['error']='22';
-								
-							}							
-							
+
+							}
+
 						}else if($row->Proforma_Estado=='cobrada'){
 							$facturaHEAD['status']='error';
 							$facturaHEAD['error']='21';
 							//Factura ya cobrada
-						}						
+						}
 					}
 				}else{
 					$facturaHEAD['status']='error';
@@ -815,29 +815,29 @@ class caja extends CI_Controller {
 				$facturaHEAD['error']='20'; //Error de no existe proforma
 			}
 		}else{
-			
+
 			$facturaHEAD['status']='error';
 			$facturaHEAD['error']='13'; //Error de no leer encabezado del URL
-			
+
 		}
 		//echo "Entro a 13";
 		echo json_encode($facturaHEAD);
 	}
-	
-	function getProformaHeadersConsulta(){		
+
+	function getProformaHeadersConsulta(){
 		$facturaHEAD['status']='error';
 		$facturaHEAD['error']='14'; //No se logro procesar la factura
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include PATH_USER_DATA; 
+			include PATH_USER_DATA;
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
 				if($facturaHEADS = $this->proforma_m->getProformasHeaders($consecutivo, $data['Sucursal_Codigo'])){
-					
-					foreach($facturaHEADS as $row){							
-							$facturaHEAD['status']='success';				
-							$facturaHEAD['cedula']=$row->TB_03_Cliente_Cliente_Cedula;								
+
+					foreach($facturaHEADS as $row){
+							$facturaHEAD['status']='success';
+							$facturaHEAD['cedula']=$row->TB_03_Cliente_Cliente_Cedula;
 							$ClienteArray = $this->cliente->getNombreCliente($facturaHEAD['cedula']);
-							$NombreCliente = $ClienteArray['nombre'];								
+							$NombreCliente = $ClienteArray['nombre'];
 							$facturaHEAD['nombre']= $NombreCliente;
 							$facturaHEAD['moneda']=$row->Proforma_Moneda;
 							$facturaHEAD['total']=$row->Proforma_Monto_Total;
@@ -846,7 +846,7 @@ class caja extends CI_Controller {
 							$facturaHEAD['observaciones']=$row->Proforma_Observaciones;
 							$facturaHEAD['ivapor']=$row->Proforma_Porcentaje_IVA;
 							$facturaHEAD['retencion']=$row->Proforma_Retencion;
-							$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;	
+							$facturaHEAD['cambio']=$row->Proforma_Tipo_Cambio;
 							$facturaHEAD['estado']=$row->Proforma_Estado;
 							//Cargamos la variable que ocupamos de cliente
 							$facturaHEAD['cliente_sucursal'] = $row->Proforma_Cliente_Sucursal;
@@ -854,7 +854,7 @@ class caja extends CI_Controller {
 							$facturaHEAD['cliente_retencion'] = $row->Proforma_Cliente_No_Retencion;
 							$facturaHEAD['sucursal']= $data['Sucursal_Codigo'];
 							$facturaHEAD['servidor_impresion']= $this->configuracion->getServidorImpresion();
-							$facturaHEAD['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");										
+							$facturaHEAD['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 					}
 				}else{
 					$facturaHEAD['status']='error';
@@ -866,22 +866,22 @@ class caja extends CI_Controller {
 				$facturaHEAD['error']='20'; //Error de no existe proforma
 			}
 		}else{
-			
+
 			$facturaHEAD['status']='error';
 			$facturaHEAD['error']='13'; //Error de no leer encabezado del URL
-			
+
 		}
 		//echo "Entro a 13";
 		echo json_encode($facturaHEAD);
 	}
- 
+
 	function getArticulosProforma(){
 		$facturaBODY['status']='error';
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include PATH_USER_DATA; 
-			//header('Content-Type: application/json');			
+			include PATH_USER_DATA;
+			//header('Content-Type: application/json');
 			if($facturaPRODUCTS = $this->proforma_m->getArticulosProforma($consecutivo, $data['Sucursal_Codigo'])){
 				//var_dump($consecutivo);
 				//echo "crear array";
@@ -898,10 +898,10 @@ class caja extends CI_Controller {
 					$articulo['precio']=$row->Articulo_Proforma_Precio_Unitario;
 					$articulo['precioFinal']=$row->Articulo_Proforma_Precio_Final;
 					//Procesamos la imagen
-					$articulo['imagen'] = $row->Articulo_Proforma_Imagen;				
+					$articulo['imagen'] = $row->Articulo_Proforma_Imagen;
 					$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$articulo['imagen'].'.jpg';
 					//return $ruta_a_preguntar;
-					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00';}					
+					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00';}
 					if($inventario = $this->articulo->inventarioActual($articulo['codigo'], $data['Sucursal_Codigo'])){
 						$articulo['bodega']=$inventario;
 					}else{
@@ -927,14 +927,14 @@ class caja extends CI_Controller {
 		//echo "Entro a 13";
 		echo json_encode($facturaBODY);
 	}
-	
+
 	function getArticulosProformaConsulta(){
 		$facturaBODY['status']='error';
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){
 			$consecutivo=$_POST['consecutivo'];
-			include PATH_USER_DATA; 
-			//header('Content-Type: application/json');			
+			include PATH_USER_DATA;
+			//header('Content-Type: application/json');
 			if($facturaPRODUCTS = $this->proforma_m->getArticulosProforma($consecutivo, $data['Sucursal_Codigo'])){
 				//var_dump($consecutivo);
 				//echo "crear array";
@@ -951,10 +951,10 @@ class caja extends CI_Controller {
 					$articulo['retencion']=$row->Articulo_Proforma_No_Retencion;
 					$articulo['precioFinal']=$row->Articulo_Proforma_Precio_Final;
 					//Procesamos la imagen
-					$articulo['imagen'] = $row->Articulo_Proforma_Imagen;				
-					$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$articulo['imagen'].'.jpg';
+					$articulo['imagen'] = $row->Articulo_Proforma_Imagen;
+					$ruta_a_preguntar = CARPETA_IMAGENES.$articulo['imagen'];
 					//return $ruta_a_preguntar;
-					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00.jpg';}					
+					if(!file_exists($ruta_a_preguntar)){$articulo['imagen'] = '00.jpg';}
 					if($inventario = $this->articulo->inventarioActual($articulo['codigo'], $data['Sucursal_Codigo'])){
 						$articulo['bodega']=$inventario;
 					}else{
@@ -980,71 +980,71 @@ class caja extends CI_Controller {
 		//echo "Entro a 13";
 		echo json_encode($facturaBODY);
 	}
-	
+
 	function creaFacturaFromProforma(){
 		$facturaBODY['status']='error';
 		$facturaBODY['error']='17'; //No se logro procesar ls productos
 		if(isset($_POST['consecutivo'])){
-			
-			
+
+
 			$consecutivo = $_POST['consecutivo'];
-			include PATH_USER_DATA;	
+			include PATH_USER_DATA;
 			$sucursalOriginal = $data['Sucursal_Codigo'];
-			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){							
+			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
 				$articulos = $this->JSONArray($consecutivo, $data['Sucursal_Codigo']);
 				if($this->hayProductosParaProforma($data['Sucursal_Codigo'], $articulos)){
 					$proformaHEAD = $this->proforma_m->getProformasHeaders($consecutivo, $data['Sucursal_Codigo']);
-					
+
 					foreach($proformaHEAD as $HEAD){
 						$info_factura['ce']=$HEAD->TB_03_Cliente_Cliente_Cedula;
 						$info_factura['no']=$HEAD->Proforma_Nombre_Cliente;
 						$info_factura['cu']=$HEAD->Proforma_Moneda;
 						$info_factura['ob']=$HEAD->Proforma_Observaciones;
 					}
-					
-				
+
+
 					if($consecutivo_F = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $consecutivo)){
 					$facturaBODY['status']='success';
 					$facturaBODY['consecutivo']=$consecutivo_F;
-					
-					
+
+
 					//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 					//$articulos = $this->JSONArray($consecutivo, $data['Sucursal_Codigo']);
 					$this->bajarProductosDelInventario($articulos, $data['Sucursal_Codigo']);
-					
-					$this->agregarItemsFactura($articulos, $consecutivo_F, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
-					
-					
+
+					$this->agregarItemsFactura($articulos, $consecutivo_F, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items
+
+
 					$this->actualizarCostosFactura($consecutivo_F, $sucursalOriginal);
-					
-					
+
+
 					//Cambiamos el estado de la proforma
 					$proformaActualizacion['Proforma_Estado']='cobrada';
 					$this->proforma_m->actualizar($consecutivo, $data['Sucursal_Codigo'], $proformaActualizacion);
-					
+
 					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." cobro la proforma consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
-					
+
 					}else{
 						$facturaBODY['status']='error';
 						$facturaBODY['error']='20'; //Error de no existe proforma
 					}
-					
+
 				}else{
 					$facturaBODY['status']='error';
 					$facturaBODY['error']='23'; //Error de no existe algun producto o no hay inventario suficiente
-				}				
+				}
 			}else{
 				$facturaBODY['status']='error';
 				$facturaBODY['error']='20'; //Error de no existe proforma
 			}
-			
+
 		}else{
 			$facturaBODY['status']='error';
 			$facturaBODY['error']='16'; //Error de no leer encabezado del URL
-		}		
+		}
 		echo json_encode($facturaBODY);
-	}	
-		
+	}
+
 	function JSONArray($consecutivo, $sucursal){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 		$articulosProforma = $this->proforma_m->getArticulosProforma($consecutivo, $sucursal);
@@ -1061,7 +1061,7 @@ class caja extends CI_Controller {
 		}
 		return $articulosFactura;
 	}
-	
+
 	function hayProductosParaProforma($sucursal, $productos){  //Verifica que los articulos existan y tengan inventario
 		foreach($productos as $producto){
 			if(trim($producto['co'])!='00'){
@@ -1070,50 +1070,50 @@ class caja extends CI_Controller {
 						$invActual = (Int)$this->articulo->inventarioActual($producto['co'], $sucursal);
 						$canProforma = (Int)$producto['ca'];
 						$diferencia = $invActual-$canProforma;
-						
+
 						if($diferencia<0){return false;} //Si alguna cantidad queda en negativo significa que no hay suficiente en inevntario
 					}else{
 						return false;
-					}	
-			}		
+					}
+			}
 		}
 		return true;
 		//return false;
 	}
-	
+
 	function bajarProductosDelInventario($productos, $sucursal){
 		foreach($productos as $producto){
-			if($this->articulo->existe_Articulo($producto['co'],$sucursal)){				
+			if($this->articulo->existe_Articulo($producto['co'],$sucursal)){
 				$canProforma = (Int)$producto['ca'];
 				$this->articulo->actualizarInventarioRESTA($producto['co'], $canProforma, $sucursal);
 			}else{
 				return false;
-			}			
+			}
 		}
 		return true;
 	}
-	
+
 	function imprimirFactura(){
 		if(isset($_GET['consecutivo'])&&isset($_GET['sucursal'])&&isset($_GET['tipo'])){
 			$consecutivo = 	$_GET['consecutivo'];
 			$sucursal = $_GET['sucursal'];
 			$tipo = $_GET['tipo'];
-			
+
 			if($empresa = $this->empresa->getEmpresa($sucursal)){
 				if($facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal)){
 					if($facturaBody = $this->factura->getArticulosFactura($consecutivo, $sucursal)){
-						if($tipo=='t'||$tipo=='c'){							
+						if($tipo=='t'||$tipo=='c'){
 							$data['empresa'] = $empresa[0];
 							$data['fhead'] = $facturaHead[0];
 							$data['fbody'] = $facturaBody;
 							$data['documento'] = (object)array('tipo'=>'Factura');
-							
+
 							//Valoramos si un credito para poner la fecha de vencimiento
 							if($data['fhead'] -> Factura_Tipo_Pago == 'credito'){
 								$diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $data['fhead'] -> TB_03_Cliente_Cliente_Cedula);
 								$data['documento'] = (object)array('tipo'=>'Factura','diasCredito'=>$diasCredito);
 							}
-							
+
 							switch($tipo){
 								case 't':
 									$this->load->view('facturas/view_impresion_termica', $data);
@@ -1138,13 +1138,13 @@ class caja extends CI_Controller {
 			echo "ERROR<br>URL incorrecta. . . <br>Contacte al administrador";
 		}
 	}
-    
-    
-	
-    
-    
-    
-	
+
+
+
+
+
+
+
 }// FIN DE LA CLASE
 
 
