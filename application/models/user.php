@@ -1,15 +1,15 @@
 
 <?php
 Class User extends CI_Model
-{ 	
-	
-	
- function login($username, $password)
+{
+
+
+ function login($username, $password, $crypto = true)
  {
    $this -> db -> select('Usuario_Codigo, Usuario_Cedula, Usuario_Nombre_Usuario, Usuario_Password, TB_02_Sucursal_Codigo, Usuario_Imagen_URL, Usuario_Nombre, Usuario_Apellidos, Usuario_Observaciones, Usuario_Rango');
    $this -> db -> from('tb_01_usuario');
    $this -> db -> where('Usuario_Nombre_Usuario', $username);
-   $this -> db -> where('Usuario_Password', MD5($password));
+   $this -> db -> where('Usuario_Password', $crypto ? MD5($password) : $password);
    $this -> db -> limit(1);
 
    $query = $this -> db -> get();
@@ -23,7 +23,7 @@ Class User extends CI_Model
      return false;
    }
  }
- 
+
 function existe_Usuario_Cedula($cedula){
 	$this -> db -> select('Usuario_Cedula');
 	$this -> db -> from('tb_01_usuario');
@@ -40,7 +40,7 @@ function existe_Usuario_Cedula($cedula){
 	{
 	  return false;
 	}
-}	
+}
 
 function existe_Nombre_Usuario($nombre){
 	$this -> db -> select('Usuario_Nombre_Usuario');
@@ -58,7 +58,7 @@ function existe_Nombre_Usuario($nombre){
 	{
 	  return false;
 	}
-}	
+}
 
  function guardar_transaccion($id_usuario,$descripcion,$id_sucursal,$tipo)
     {
@@ -73,7 +73,7 @@ function existe_Nombre_Usuario($nombre){
                 );
         $this->db->insert('tb_12_transacciones',$data);
     }
-	
+
 	function get_permisos($id_usuario, $id_sucursal)
 	{
 		$this -> db -> select('Permisos_Area, Permisos_Value');
@@ -81,21 +81,21 @@ function existe_Nombre_Usuario($nombre){
 		$this -> db -> where('TB_01_Usuario_Usuario_Codigo', $id_usuario);
 		$this -> db -> where('TB_01_Usuario_TB_02_Sucursal_Codigo', $id_sucursal);
 		$data = array(); // create a variable to hold the information
-		
-			
-		
+
+
+
 		$query = $this -> db -> get();
-		
+
 			$result = $query->result();
 			foreach($result as $row)
-			{			
+			{
 			   $data[$row->Permisos_Area] = $row->Permisos_Value;  // add the row in to the results (data) array
 			}
-	   
-	   return $data;  
+
+	   return $data;
     }
-	
-	
+
+
 	function get_name($id_usuario)
 	{
 		//echo $id_usuario;
@@ -103,16 +103,16 @@ function existe_Nombre_Usuario($nombre){
 		$this -> db -> from('tb_01_usuario');
 		$this -> db -> where('Usuario_Codigo', $id_usuario);
 		$this -> db -> limit(1);
-		
+
 		$query = $this -> db -> get();
 		$result = $query->result();
-		
+
 		foreach($result as $row)
-		{			
-		   return $row->Usuario_Nombre_Usuario; 
+		{
+		   return $row->Usuario_Nombre_Usuario;
 		}
 	}
-	
+
 	function getIdFromUserID($id_usuario, $sucursal)
 	{
 		//echo $id_usuario;
@@ -121,16 +121,16 @@ function existe_Nombre_Usuario($nombre){
 		$this -> db -> where('Usuario_Nombre_Usuario', $id_usuario);
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
-		
+
 		$query = $this -> db -> get();
 		$result = $query->result();
-		
+
 		foreach($result as $row)
-		{			
-		   return $row->Usuario_Codigo; 
+		{
+		   return $row->Usuario_Codigo;
 		}
 	}
-	
+
 	function registrar($codigo, $nombre, $apellidos, $cedula, $tipo_cedula,  $celular, $telefono, $Usuario_Fecha_Ingreso, $Usuario_Fecha_Cesantia, $Usuario_Fecha_Recontratacion, $Usuario_Nombre_Usuario, $Usuario_Observaciones, $Usuario_Password, $Usuario_Imagen_URL, $Usuario_Correo_Electronico, $Usuario_Rango, $Sucursal_Correspondiente)
 	{
 		//echo $creador_empresa;
@@ -138,30 +138,30 @@ function existe_Nombre_Usuario($nombre){
 	    //$Current_datetime = date("y/m/d : H:i:s", now());
 		$data = array(
                         'Usuario_Codigo'=>$codigo,
-						'Usuario_Nombre'=>$nombre,                        
-						'Usuario_Apellidos'=>$apellidos,                        
-						'Usuario_Cedula'=>$cedula,                        
-						'Usuario_Tipo_Cedula'=>$tipo_cedula,                        
-						'Usuario_Celular'=>$celular,                        
-						'Usuario_Telefono'=>$telefono,                        
-						'Usuario_Fecha_Ingreso'=>$Usuario_Fecha_Ingreso,                        
-						//'Usuario_Fecha_Cesantia'=>NULL,                        
-						//'Usuario_Fecha_Recontratacion'=>NULL,                        
-						'Usuario_Nombre_Usuario'=>$Usuario_Nombre_Usuario,                        
-						'Usuario_Observaciones'=>$Usuario_Observaciones,                        
-						'Usuario_Password'=>md5($Usuario_Password),                        
-						'Usuario_Imagen_URL'=>$Usuario_Imagen_URL,                        
-						'Usuario_Correo_Electronico'=>$Usuario_Correo_Electronico,                        
-						'Usuario_Rango'=>$Usuario_Rango,                        
-						'TB_02_Sucursal_Codigo'=>$Sucursal_Correspondiente                      
+						'Usuario_Nombre'=>$nombre,
+						'Usuario_Apellidos'=>$apellidos,
+						'Usuario_Cedula'=>$cedula,
+						'Usuario_Tipo_Cedula'=>$tipo_cedula,
+						'Usuario_Celular'=>$celular,
+						'Usuario_Telefono'=>$telefono,
+						'Usuario_Fecha_Ingreso'=>$Usuario_Fecha_Ingreso,
+						//'Usuario_Fecha_Cesantia'=>NULL,
+						//'Usuario_Fecha_Recontratacion'=>NULL,
+						'Usuario_Nombre_Usuario'=>$Usuario_Nombre_Usuario,
+						'Usuario_Observaciones'=>$Usuario_Observaciones,
+						'Usuario_Password'=>md5($Usuario_Password),
+						'Usuario_Imagen_URL'=>$Usuario_Imagen_URL,
+						'Usuario_Correo_Electronico'=>$Usuario_Correo_Electronico,
+						'Usuario_Rango'=>$Usuario_Rango,
+						'TB_02_Sucursal_Codigo'=>$Sucursal_Correspondiente
                     );
 		//print_r($data);
 		try{
-        	$this->db->insert('tb_01_usuario',$data); 
+        	$this->db->insert('tb_01_usuario',$data);
     	}
 		catch(Exception $e)
 		{return false;}
-		
+
 		//Verificamos y retornamos si se guardo en ba
 		return $this->existe_Usuario_Cedula($cedula);
 		//return true;
@@ -169,7 +169,7 @@ function existe_Nombre_Usuario($nombre){
 
 	function getCantidadUsuarios()
 	{
-            $resultado = 0; 
+            $resultado = 0;
             $this->db->select_max('Usuario_Codigo');
             $query =  $this->db->get('tb_01_usuario');
             foreach ($query->result() as $row) {
@@ -181,7 +181,7 @@ function existe_Nombre_Usuario($nombre){
 	{
 			$this->db->where('Usuario_Codigo', $id);
 			$this->db->update('tb_01_usuario' ,$data);
-	}	
+	}
 
 	function getUsuarios()
 	{
@@ -215,8 +215,8 @@ function existe_Nombre_Usuario($nombre){
 		{
 			return false;
 		}
-	}	
-	
+	}
+
 	function getUsuario_Codigo($id_usuario)
 	{
 		//echo $id_usuario;
@@ -224,7 +224,7 @@ function existe_Nombre_Usuario($nombre){
 		$this -> db -> from('tb_01_usuario');
 		$this -> db -> where('Usuario_Codigo', $id_usuario);
 		$this -> db -> limit(1);
-		
+
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -235,15 +235,15 @@ function existe_Nombre_Usuario($nombre){
 		{
 			return false;
 		}
-	}	
-	
+	}
+
 	function existeUsuario($codigo, $sucursal)
-	{		
+	{
 		$this -> db -> from('tb_01_usuario');
 		$this -> db -> where('Usuario_Codigo', $codigo);
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this -> db -> limit(1);
-		
+
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -264,7 +264,7 @@ function existe_Nombre_Usuario($nombre){
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		$result = $query->result();
-		
+
 		foreach($result as $row)
         {
 			if($row -> Usuario_Fecha_Cesantia == NULL)
@@ -285,7 +285,7 @@ function existe_Nombre_Usuario($nombre){
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		$result = $query->result();
-		
+
 		foreach($result as $row)
         {
 			if($row -> Usuario_Fecha_Cesantia == NULL)
@@ -315,7 +315,7 @@ function existe_Nombre_Usuario($nombre){
 		{
 		  return false;
 		}
-	}	
+	}
 
 	function isAdministrador($username, $password, $sucursal)
 	{
@@ -324,16 +324,16 @@ function existe_Nombre_Usuario($nombre){
 		$this->db->where("TB_02_Sucursal_Codigo", $sucursal);
 		$this->db->where_in("Usuario_Rango", array("administra","avanzado"));
 		$this->db->from("tb_01_usuario");
-		
+
 		$query = $this->db->get();
-		
+
 		return $query -> num_rows() == 0 ? false : true;
 	}
-	
+
 	function isAdministradorPorCodigo($codigoUsuario)
-	{			
+	{
 		$this -> db -> from('tb_01_usuario');
-		$this -> db -> where('Usuario_Codigo', $codigoUsuario); 
+		$this -> db -> where('Usuario_Codigo', $codigoUsuario);
 		$this -> db -> where_in('Usuario_Rango', array('administra','avanzado'));
 		$query = $this -> db -> get();
 		//var_dump($query->result());
@@ -346,31 +346,31 @@ function existe_Nombre_Usuario($nombre){
 		 return 0;
 		}
 	}
-	
+
 	function agregarPermiso($usuario, $sucursal, $area, $valor){
 		$data = array(
                         'Permisos_Area'=>$area,
-						'Permisos_Value'=>$valor,                        
-						'TB_01_Usuario_Usuario_Codigo'=>$usuario,                        
-						'TB_01_Usuario_TB_02_Sucursal_Codigo'=>$sucursal 
+						'Permisos_Value'=>$valor,
+						'TB_01_Usuario_Usuario_Codigo'=>$usuario,
+						'TB_01_Usuario_TB_02_Sucursal_Codigo'=>$sucursal
                     );
 		try{
-        	$this->db->insert('tb_15_permisos',$data); 
+        	$this->db->insert('tb_15_permisos',$data);
     	}
 		catch(Exception $e)
 		{return false;}
 	}
-	
+
 	function eliminarPermisosUsuario($codigo_usuario, $sucursal){
 		$this->db->where('TB_01_Usuario_Usuario_Codigo', $codigo_usuario);
 		$this->db->where('TB_01_Usuario_TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->delete('tb_15_permisos');
 	}
-	
+
 	function getTransacciones(){
 		return $this->db->get('tb_12_transacciones')->result();
 	}
-	
+
 	function obtenerTransaccionesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal){
 		/*
 			SELECT 	Trans_Codigo as codigo,
@@ -390,7 +390,7 @@ function existe_Nombre_Usuario($nombre){
 				   Usuario_Nombre_Usuario LIKE '%%')
 			AND TB_01_Usuario_TB_02_Sucursal_Codigo = 0
 			ORDER BY Trans_Codigo DESC
-			LIMIT 20,10	
+			LIMIT 20,10
 		*/
 		return $this->db->query("
 			SELECT 	Trans_Codigo as codigo,
@@ -413,9 +413,9 @@ function existe_Nombre_Usuario($nombre){
 			AND TB_01_Usuario_TB_02_Sucursal_Codigo = $sucursal
 			ORDER BY $columnaOrden $tipoOrden
 			LIMIT $inicio,$cantidad
-		");		
+		");
 	}
-	
+
 	function obtenerTransaccionesParaTablaFiltrados($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $sucursal){
 		/*
 			SELECT 	Trans_Codigo as codigo,
@@ -454,25 +454,25 @@ function existe_Nombre_Usuario($nombre){
 				   Usuario_Apellidos LIKE '%$busqueda%' OR
 				   Usuario_Nombre_Usuario LIKE '%$busqueda%')
 			AND TB_01_Usuario_TB_02_Sucursal_Codigo = $sucursal
-		");		
+		");
 	}
-	
+
 	function getTotalTransaccionesEnSucursal($sucursal){
 		$this->db->where('TB_01_Usuario_TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->from('tb_12_transacciones');
 		return $this->db->get()->num_rows();
 	}
-	
+
 	function getVendedores($sucursal){
 		/*
-			SELECT Factura_Vendedor_Codigo 
+			SELECT Factura_Vendedor_Codigo
 			FROM tb_07_factura
 			WHERE TB_02_Sucursal_Codigo = 0
 			AND Factura_Estado = 'cobrada'
 			GROUP BY Factura_Vendedor_Codigo;
 		*/
 		$this->load->model("factura", "", true);
-		
+
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
 				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
 				$sucursal = $this->sucursales_trueque[$sucursal];
@@ -500,7 +500,7 @@ function existe_Nombre_Usuario($nombre){
 
 	// Registro Bitacora de Cliente
 
-	
+
 	function guardar_Bitacora_Cliente($Cliente_Cedula, $Sucursal, $Usuario, $Trans_Tipo, $Descripcion)
     {
 	    date_default_timezone_set("America/Costa_Rica");
@@ -514,8 +514,21 @@ function existe_Nombre_Usuario($nombre){
                 'Trans_Descripcion' => $Descripcion
                 );
         $this->db->insert('tb_60_bitacora_cliente',$data);
+	}
+
+	function hasPermission($userID, $sucursal, $permissionKey){
+		$this -> db -> from('tb_15_permisos');
+		$this -> db -> where('TB_01_Usuario_Usuario_Codigo', $userID);
+		$this -> db -> where('TB_01_Usuario_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Permisos_Area', $permissionKey);
+
+		$query = $this -> db -> get();
+
+		$data = array(); // create a variable to hold the information
+
+		return $query->num_rows() > 0;
     }
-	
+
 }//FIN DE LA CLASE
 ?>
 

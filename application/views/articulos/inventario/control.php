@@ -29,9 +29,36 @@
 		<!--SCRIPT DE NUMERIC-->
         <script src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
 
-        <script src="<?php echo base_url('application/scripts/articulos/inventario/control.js'); ?>" type="text/javascript"></script>
+        <script src="<?php echo base_url('application/scripts/articulos/inventario/control.js?v='.$javascript_cache_version); ?>" type="text/javascript"></script>
+        <!--LIBRERIA ENCRYPTACION-->
+		<script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js'); ?>"></script>
 	</head>
 	<body >
+        <div id="modal_autorizacion">
+            <div class="container">
+                <div class="title">
+                    Hay artículos seleccionados cuyo inventario va a ser modificado, esta acción requiere autorización
+                </div>
+                <div class="body">
+                    <label>Usuario:</label><br>
+                    <input type='text' id='usuario_auto' style="margin-bottom: 10px;"/><br>
+                    <label>Contraseña:</label><br>
+                    <input type='password' id='pass_auto'/>
+                </div>
+                <div class="footer">
+                    <button class="button" id="btn_cancelar">Cancelar</button>
+                    <button class="button" id="btn_autorizar">Autorizar</button>
+                </div>
+            </div>
+        </div>
+        <div id="modal_creacion">
+            <div class="container">
+                <div class="title">
+                    Creando control de inventario...
+                    Por favor espere...
+                </div>
+            </div>
+        </div>
 		<!--Incluir imagen de cabezera-->
 		<?php include PATH_HEADER_PICTURE;?>
 
@@ -108,6 +135,7 @@
                                 <b>F</b> = Físico&nbsp;
                                 <b>S</b> = Sistema&nbsp;
                                 <b>B</b> = Balance&nbsp;
+                                <div class="boton-generar-reporte">Generar Reporte</div>
                             </div>
                             <div class="item" style="width: 12%">
                                 Código

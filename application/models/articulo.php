@@ -1081,6 +1081,33 @@ Class articulo extends CI_Model
 		}
 	}
 
+	function generarControlInventario($sucursal, $creadoPor, $autorizadoPor){
+		date_default_timezone_set("America/Costa_Rica");
+		$fecha = date("y/m/d : H:i:s", now());
+		$datos = array(
+			'Fecha_Creacion' => $fecha,
+			'Creado_Por' => $creadoPor,
+			'Empate_Autorizado_Por' => $autorizadoPor,
+			'Sucursal' => $sucursal
+		);
+		$this->db->insert('tb_63_control_inventario', $datos);
+		return $this->db->insert_id();
+	}
+
+	function agregarArticuloControlInventario($control, $codigo, $descripcion, $fBueno, $fDefectuoso, $sBueno, $sDefectuoso, $empatar){
+		$datos = array(
+			'Codigo' => $codigo,
+			'Descripcion' => $descripcion,
+			'Fisico_Defectuoso' => $fDefectuoso,
+			'Fisico_Bueno' => $fBueno,
+			'Sistema_Defectuoso' => $sDefectuoso,
+			'Sistema_Bueno' => $sBueno,
+			'Empatar' => $empatar,
+			'Control_Inventario' => $control
+		);
+		$this->db->insert('tb_64_articulos_control_inventario', $datos);
+	}
+
 
 
 
