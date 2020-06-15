@@ -1,6 +1,7 @@
 var _SUCURSAL_SELECCIONADA = -1;
 var _ARTICULOS = {};
 var _AUTORIZACION = {};
+var _SCANNER_TRIGGER = true;
 
 $(window).ready(function(){
 
@@ -35,6 +36,18 @@ $(window).ready(function(){
 
     $("#btn_autorizar").click(obtenerAutorizacion);
 
+    $("#boton_scanner").click(function(){
+        _SCANNER_TRIGGER = !_SCANNER_TRIGGER;
+        $("#boton_scanner").removeClass("on").removeClass("off");
+        if(_SCANNER_TRIGGER){
+            $("#boton_scanner").addClass("on");
+            $("#boton_scanner").html("Scanner ON");
+        }else{
+            $("#boton_scanner").addClass("off");
+            $("#boton_scanner").html("Scanner OFF");
+        }
+    })
+
 });
 
 function cambiarSucursal(){
@@ -45,9 +58,20 @@ function cambiarSucursal(){
 function validarCodigo(e){
     var code = e.key;
     if(code==="Enter"){
-        var codigo = $("#articulo_a_comparar_id").val().trim();
-        if(codigo !== ""){
-            $("#articulo_a_comparar_defectuoso").focus();
+        if(_SCANNER_TRIGGER){
+            if(_SUCURSAL_SELECCIONADA == -1){
+                notyMsg('Por favor escoja una sucursal', 'error');
+                return false;
+            }
+
+            $("#articulo_a_comparar_defectuoso").val(0);
+            $("#articulo_a_comparar_bueno").val(1);
+            obtenerArticulo();
+        }else{
+            var codigo = $("#articulo_a_comparar_id").val().trim();
+            if(codigo !== ""){
+                $("#articulo_a_comparar_defectuoso").focus();
+            }
         }
     }
 }

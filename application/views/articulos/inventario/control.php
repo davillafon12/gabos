@@ -98,6 +98,7 @@
                                             Código:
                                         </td>
                                         <td><input type="text" id="articulo_a_comparar_id"/></td>
+                                        <td><button class="boton-scanner on" id="boton_scanner">Scanner ON</button></td>
                                     </tr>
                                     <tr>
                                         <td>
