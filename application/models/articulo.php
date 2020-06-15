@@ -1108,6 +1108,71 @@ Class articulo extends CI_Model
 		$this->db->insert('tb_64_articulos_control_inventario', $datos);
 	}
 
+	function getControlesInventarioParaConsulta($sucursal, $desde, $hasta){
+		/*
+			SELECT ci.id as id, ci.Fecha_Creacion as fecha, CONCAT(u.Usuario_Nombre, ' ', u.Usuario_Apellidos) as usuario
+			FROM tb_63_control_inventario ci
+			JOIN tb_01_usuario u on u.Usuario_Codigo = ci.Creado_Por
+			WHERE sucursal = 14
+		*/
+		$this->db->select("ci.id as id");
+		$this->db->select("date_format(ci.Fecha_Creacion, '%d-%m-%Y %h:%i:%s %p') as fecha", false);
+		$this->db->select("CONCAT(u.Usuario_Nombre, ' ', u.Usuario_Apellidos) as usuario", false);
+		$this->db->from("tb_63_control_inventario ci");
+		$this->db->join("tb_01_usuario u", "u.Usuario_Codigo = ci.Creado_Por");
+		$this->db->where("ci.sucursal", $sucursal);
+
+		if(trim($desde)!=''){
+			$fecha = $this->convertirFecha($desde, " 00:00:00");
+			$this->db->where('ci.Fecha_Creacion >=', $fecha);
+		}
+
+		if(trim($hasta)!=''){
+			$fecha = $this->convertirFecha($hasta, " 23:59:59");
+			//echo $fecha;
+			$this->db->where('ci.Fecha_Creacion <=', $fecha);
+		}
+
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
+
+	private function convertirFecha($fecha, $horas){
+		if(trim($fecha)!=''){
+			$fecha = explode("/",$fecha);
+			$fecha = $fecha[0]."-".$fecha[1]."-".$fecha[2].$horas;
+			//echo $fecha;
+			date_default_timezone_set("America/Costa_Rica");
+			return date("Y-m-d : H:i:s", strtotime($fecha));
+		}
+		return $fecha;
+	}
+
+	public function getControlInventario($consecutivo){
+		$this->db->from("tb_63_control_inventario");
+		$this->db->where("id", $consecutivo);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+
+	public function getArticulosControlInventario($controlId){
+		$this->db->from("tb_64_articulos_control_inventario");
+		$this->db->where("Control_Inventario", $controlId);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
 
 
 

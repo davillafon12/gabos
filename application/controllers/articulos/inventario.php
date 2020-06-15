@@ -162,4 +162,59 @@ class inventario extends CI_Controller {
 		return false;
 	}
 
+	function consulta(){
+		$sucursales = $this->empresa->get_empresas_ids_array();
+		$this->userdata_wrap['sucursales'] = $sucursales;
+		$this->userdata_wrap['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$this->load->view('articulos/inventario/consulta', $this->userdata_wrap);
+	}
+
+	public function getControles(){
+		$sucursal = trim(@$_POST["sucursal"]);
+		$desde = trim(@$_POST["desde"]);
+		$hasta = trim(@$_POST["hasta"]);
+		$r = $this->getDefaultResponse();
+
+		if($sucursal !== ""){
+			if($controles = $this->articulo->getControlesInventarioParaConsulta($sucursal, $desde, $hasta)){
+				$r->code = 0;
+				$r->msg = "";
+				$r->data = array("controles"=>$controles);
+			}else{
+				$r->code = 3;
+				$r->msg = "No hay controles de inventario con los filtros seleccionados";
+			}
+		}else{
+			$r->code = 2;
+			$r->msg = "Sucursal no puede ser vacío";
+		}
+
+		echo json_encode($r);
+	}
+
+	public function getControl(){
+		$consecutivo = trim(@$_POST["consecutivo"]);
+		$r = $this->getDefaultResponse();
+
+		if(is_numeric($consecutivo)){
+			if($control = $this->articulo->getControlInventario($consecutivo)){
+				if($articulos = $this->articulo->getArticulosControlInventario($consecutivo)){
+					$r->code = 0;
+					$r->msg = "";
+					$r->data = array("control"=>$control, "articulos"=>$articulos);
+				}else{
+					$r->code = 4;
+					$r->msg = "No existen artículos para el control de inventario solicitado";
+				}
+			}else{
+				$r->code = 3;
+				$r->msg = "No existe control de inventario con dicho consecutivo";
+			}
+		}else{
+			$r->code = 2;
+			$r->msg = "El consecutivo no es válido";
+		}
+
+		echo json_encode($r);
+	}
 }
