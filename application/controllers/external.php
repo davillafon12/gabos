@@ -376,6 +376,19 @@ class external extends CI_Controller {
         echo "FIN";
     }
 
+    public function testTLS(){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://www.howsmyssl.com/a/check");
+        curl_setopt($ch, CURLOPT_SSLVERSION, 6);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $tlsVer = json_decode($response, true);
+        echo "<pre>"; print_r($tlsVer);
+        //echo "<h1>Your TSL version is: <u>" . ( $tlsVer['tls_version'] ? $tlsVer['tls_version'] : 'no TLS support' ) . "</u></h1>";
+    }
+
+
     public function fixFacturaPelada(){
         $consecutivoString = trim(@$_GET["c"]);
         $sucursal = trim(@$_GET["s"]);
@@ -407,7 +420,6 @@ class external extends CI_Controller {
             die("You are not allowed to access here");
         }
     }
-
 
 }
 

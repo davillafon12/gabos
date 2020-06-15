@@ -78,6 +78,10 @@ class CI_Controller
         "99" => "Otros"
     );
 
+    public $userdata_nombre;
+    public $userdata_sucursal;
+    public $userdata_wrap;
+
     /**
      * Constructor
      */
@@ -97,6 +101,15 @@ class CI_Controller
         $this->load->initialize();
 
         log_message('debug', "Controller Class Initialized");
+
+        // Evitamos que entre en el login
+        if($_SERVER['REQUEST_URI'] !== '/login' &&
+                $_SERVER['REQUEST_URI'] !== '/verifylogin'){
+            include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+            $this->userdata_nombre = $data['Usuario_Codigo'];
+            $this->userdata_sucursal = $data['Sucursal_Codigo'];
+            $this->userdata_wrap = $data;
+        }
     }
 
     public static function &get_instance()
@@ -228,6 +241,30 @@ class CI_Controller
             array_push($newArticulos, $a);
         }
         return $newArticulos;
+    }
+
+    public function checkPermission($permissionName){
+        if(trim($permissionName) == "")
+            redirect('accesoDenegado', 'location');
+
+        if($permissionName == null)
+            redirect('accesoDenegado', 'location');
+
+        $this->load->model('user', '', TRUE);
+
+        $permisos = $this->user->get_permisos($this->userdata_nombre, $this->userdata_sucursal);
+
+		if(!$permisos[$permissionName])
+			redirect('accesoDenegado', 'location');
+
+    }
+
+    public function getDefaultResponse(){
+        $r = new stdClass();
+        $r->code = 1;
+        $r->msg = "Solicitud no procesada";
+        $r->data = array();
+        return $r;
     }
 }
 // END Controller class

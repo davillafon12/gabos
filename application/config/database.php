@@ -63,6 +63,22 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
+/*
+echo '<pre>';
+  print_r($db['default']);
+  echo '</pre>';
+
+  echo 'Connecting to database: ' .$db['default']['database'];
+  $dbh=mysql_connect
+  (
+    $db['default']['hostname'],
+    $db['default']['username'],
+    $db['default']['password'])
+    or die('Cannot connect to the database because: ' . mysql_error());
+    mysql_select_db ($db['default']['database']);
+
+    echo '<br />   Connected OK:'  ;
+    die( 'file: ' .__FILE__ . ' Line: ' .__LINE__); */
 
 
 /* End of file database.php */

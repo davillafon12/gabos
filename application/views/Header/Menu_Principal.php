@@ -56,6 +56,12 @@
 						<li class='last'><a href=".$Ruta_Base."articulos/editar/imagenes>Imágenes</a></li>
 					</ul>
 				</li>
+				<li><a href='#' class='dir'>Inventario</a>
+					<ul>
+						<li class='first'><a href=".$Ruta_Base."articulos/inventario/control>Control</a></li>
+						<li class='last'><a href=".$Ruta_Base."articulos/inventario/consulta>Consulta</a></li>
+					</ul>
+				</li>
 				<li><a href=".$Ruta_Base."articulos/editar/soloConsultaArticulos>Consultar</a></li>
 				<li class='last'><a href=".$Ruta_Base."articulos/cambio>Cambio de Código</a></li>
 			</ul>

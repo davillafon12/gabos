@@ -5124,3 +5124,6 @@ update tb_51_lista_consignacion set `TipoCodigo` = '01', `UnidadMedida` = 'Unid'
 
 ALTER TABLE  `tb_02_sucursal` ADD  `RequiereIVA` BOOLEAN NOT NULL AFTER  `RequiereFE`;
 UPDATE  `tb_02_sucursal` SET  `RequiereIVA` = 1;
+
+ALTER TABLE `tb_03_cliente` ADD `Empresa_Liga` INT NOT NULL;
+update tb_03_cliente set `Empresa_Liga` = 2;
