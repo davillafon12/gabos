@@ -140,6 +140,7 @@
                                 <b>F</b> = Físico&nbsp;
                                 <b>S</b> = Sistema&nbsp;
                                 <b>B</b> = Balance&nbsp;
+                                <b>Tip:</b> Dele doble click al código que desea marcar para empatar.
                                 <div class="boton-generar-reporte">Generar Reporte</div>
                             </div>
                             <div class="item" style="width: 12%">
