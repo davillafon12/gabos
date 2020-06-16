@@ -103,7 +103,7 @@
 							<tr class="header">
 								<td class="titulo_header_tabla contact" style="  width: 50px;">#</td>
 								<td class="titulo_header_tabla contact">Generado Por</td>
-								<td class="titulo_header_tabla contact" style="  width: 100px;">Fecha</td>
+								<td class="titulo_header_tabla contact">Fecha</td>
 							</tr>
 						</thead>
 						<tbody id="facturas_filtradas">

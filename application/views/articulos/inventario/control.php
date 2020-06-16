@@ -31,7 +31,11 @@
 
         <script src="<?php echo base_url('application/scripts/articulos/inventario/control.js?v='.$javascript_cache_version); ?>" type="text/javascript"></script>
         <!--LIBRERIA ENCRYPTACION-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/cryptoJS.js'); ?>"></script>
+
+        <script>
+            const _CANTIDAD_DECIMALES = <?= $decimales ?>;
+        </script>
 	</head>
 	<body >
         <div id="modal_autorizacion">
@@ -165,6 +169,25 @@
                         </div>
                         <div class="body" id="articulos_container">
 
+                        </div>
+                    </div>
+                    <div class="contenedor-costos-finales">
+                    <div class="contenedor-titulos">
+                            <label>Costos Totales<small class="small-disclaimer">Según cantidades físicas</small></label>
+
+                            <input type="text"  style="    opacity: 0;"/>
+                        </div>
+                        <div class="contenedor-costo-bueno">
+                            <label>Bueno</label>
+                            <input type="text" id="costo_bueno" disabled/>
+                        </div>
+                        <div class="contenedor-costo-defectuoso">
+                            <label>Defectuoso</label>
+                            <input type="text" id="costo_defectuoso" disabled/>
+                        </div>
+                        <div class="contenedor-costo-total">
+                            <label>Total</label>
+                            <input type="text" id="costo_total" disabled/>
                         </div>
                     </div>
                 </div>

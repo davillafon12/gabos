@@ -1038,14 +1038,30 @@ Class articulo extends CI_Model
             $this->db->delete('tb_06_articulo');
 	}
 
-	function getArticuloParaControlInventario($codigo, $susursal){
-		$this->db->select("Articulo_Descripcion as descripcion");
-		$this->db->select("Articulo_Cantidad_Inventario as bueno");
-		$this->db->select("Articulo_Cantidad_Defectuoso as defectuoso");
+	function getArticuloParaControlInventario($codigo, $sucursal){
+		/*
+			SELECT 	a.Articulo_Descripcion as descripcion,
+					a.Articulo_Cantidad_Inventario as bueno,
+					a.Articulo_Cantidad_Defectuoso as defectuoso,
+					p.Precio_Monto as costo
+			FROM tb_06_articulo a
+			JOIN tb_11_precios p ON a.Articulo_Codigo = p.TB_06_Articulo_Articulo_Codigo
+			WHERE 	a.TB_02_Sucursal_Codigo = 14
+					AND a.Articulo_Codigo = 111
+					AND p.TB_06_Articulo_TB_02_Sucursal_Codigo = 14
+					AND p.Precio_Numero = 0
+		*/
+		$this->db->select("a.Articulo_Descripcion as descripcion");
+		$this->db->select("a.Articulo_Cantidad_Inventario as bueno");
+		$this->db->select("a.Articulo_Cantidad_Defectuoso as defectuoso");
+		$this->db->select("p.Precio_Monto as costo");
 
-		$this->db->from("tb_06_articulo");
-		$this->db->where("TB_02_Sucursal_Codigo", $susursal);
-		$this->db->where("Articulo_Codigo", $codigo);
+		$this->db->from("tb_06_articulo a");
+		$this->db->join("tb_11_precios p", "a.Articulo_Codigo = p.TB_06_Articulo_Articulo_Codigo");
+		$this->db->where("a.TB_02_Sucursal_Codigo", $sucursal);
+		$this->db->where("a.Articulo_Codigo", $codigo);
+		$this->db->where("p.TB_06_Articulo_TB_02_Sucursal_Codigo", $sucursal);
+		$this->db->where("p.Precio_Numero", 0); // Precio de costo
 
 		$query = $this->db->get();
 		if($query->num_rows()==0)
@@ -1059,16 +1075,31 @@ Class articulo extends CI_Model
 	}
 
 	function getArticulosConInventarioParaControlDeInventario($sucursal){
+		/*
+			SELECT 	a.Articulo_Descripcion as descripcion,
+					a.Articulo_Cantidad_Inventario as bueno,
+					a.Articulo_Cantidad_Defectuoso as defectuoso,
+					p.Precio_Monto as costo
+			FROM tb_06_articulo a
+			JOIN tb_11_precios p ON a.Articulo_Codigo = p.TB_06_Articulo_Articulo_Codigo
+			WHERE 	a.TB_02_Sucursal_Codigo = 14
+					AND p.TB_06_Articulo_TB_02_Sucursal_Codigo = 14
+					AND p.Precio_Numero = 0
+		*/
 		$query = $this->db->query("
-			SELECT Articulo_Codigo AS codigo,
-					Articulo_Descripcion AS descripcion,
-					Articulo_Cantidad_Inventario as bueno,
-					Articulo_Cantidad_Defectuoso as defectuoso
-			FROM tb_06_articulo
-			WHERE (Articulo_Cantidad_Defectuoso > 0 OR
-				Articulo_Cantidad_Inventario > 0)
-			AND    TB_02_Sucursal_Codigo = $sucursal
-			ORDER BY Articulo_Codigo ASC
+			SELECT 	a.Articulo_Codigo AS codigo,
+					a.Articulo_Descripcion AS descripcion,
+					a.Articulo_Cantidad_Inventario as bueno,
+					a.Articulo_Cantidad_Defectuoso as defectuoso,
+					p.Precio_Monto as costo
+			FROM tb_06_articulo a
+			JOIN tb_11_precios p ON a.Articulo_Codigo = p.TB_06_Articulo_Articulo_Codigo
+			WHERE 	(Articulo_Cantidad_Defectuoso > 0 OR
+					Articulo_Cantidad_Inventario > 0)
+			AND a.TB_02_Sucursal_Codigo = $sucursal
+			AND p.TB_06_Articulo_TB_02_Sucursal_Codigo = $sucursal
+			AND p.Precio_Numero = 0
+			ORDER BY a.Articulo_Codigo ASC
 		");
 
 		if($query->num_rows()==0)

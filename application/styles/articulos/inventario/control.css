@@ -230,3 +230,25 @@
 .boton-scanner.off{
     background: red;
 }
+
+.contenedor-costos-finales{
+    text-align: right;
+    margin-right: 1.4%;
+    float: right;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.contenedor-costos-finales input{
+    font-size: 18px;
+    text-align: right;
+}
+
+.contenedor-costos-finales .small-disclaimer{
+    font-size: 12px;
+    font-weight: 500;
+    position: absolute;
+    margin-top: 7px;
+    margin-left: 30px;
+}

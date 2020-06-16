@@ -11,6 +11,7 @@ class inventario extends CI_Controller {
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('user','',TRUE);
+		$this->load->model('configuracion','',TRUE);
 	}
 
 	function index(){}
@@ -19,6 +20,8 @@ class inventario extends CI_Controller {
 		$sucursales = $this->empresa->get_empresas_ids_array();
 		$this->userdata_wrap['sucursales'] = $sucursales;
 		$this->userdata_wrap['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$conf_array = $this->configuracion->getConfiguracionArray();
+		$this->userdata_wrap['decimales'] = intval($conf_array["cantidad_decimales"]);
 		$this->load->view('articulos/inventario/control', $this->userdata_wrap);
 	}
 
