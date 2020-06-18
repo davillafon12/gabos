@@ -1125,7 +1125,7 @@ Class articulo extends CI_Model
 		return $this->db->insert_id();
 	}
 
-	function agregarArticuloControlInventario($control, $codigo, $descripcion, $fBueno, $fDefectuoso, $sBueno, $sDefectuoso, $empatar){
+	function agregarArticuloControlInventario($control, $codigo, $descripcion, $fBueno, $fDefectuoso, $sBueno, $sDefectuoso, $empatar, $costo){
 		$datos = array(
 			'Codigo' => $codigo,
 			'Descripcion' => $descripcion,
@@ -1134,6 +1134,7 @@ Class articulo extends CI_Model
 			'Sistema_Defectuoso' => $sDefectuoso,
 			'Sistema_Bueno' => $sBueno,
 			'Empatar' => $empatar,
+			'Costo' => $costo,
 			'Control_Inventario' => $control
 		);
 		$this->db->insert('tb_64_articulos_control_inventario', $datos);

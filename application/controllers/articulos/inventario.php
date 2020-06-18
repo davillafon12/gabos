@@ -122,7 +122,7 @@ class inventario extends CI_Controller {
 					if($idControl = $this->articulo->generarControlInventario($sucursal, $this->userdata_nombre, $requiereAutorizacion ? @$autorizacion["usuario"] : $this->userdata_nombre)){
 						//Agregamos los articulos al control
 						foreach($articulos as $art){
-							$this->articulo->agregarArticuloControlInventario($idControl, $art["codigo"], $art["descripcion"], $art["fbueno"], $art["fdefectuoso"], $art["bueno"], $art["defectuoso"], isset($art["empatar"]) ? $art["empatar"] : false);
+							$this->articulo->agregarArticuloControlInventario($idControl, $art["codigo"], $art["descripcion"], $art["fbueno"], $art["fdefectuoso"], $art["bueno"], $art["defectuoso"], isset($art["empatar"]) ? $art["empatar"] : false, $art["costo"]);
 							//Si hay que empatar entonces cambiamos el inventario
 							if(isset($art["empatar"]) && $art["empatar"]){
 								$artUpdate = array(
