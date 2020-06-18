@@ -115,6 +115,9 @@ function cargarControl(){
 }
 
 function setProductosControl(productos){
+    var costoBueno = 0;
+    var costoDefectuoso = 0;
+
 	$("#contenidoArticulos").html('');
 	cantidad = productos.length;
 	for (var i = 0; i < cantidad; i++){
@@ -147,6 +150,34 @@ function setProductosControl(productos){
         fila += "<td style='text-align: center;' class='"+classBD+"'><label class='contact'>"+balanceDefectuoso+"</label></td>";
         fila += "</tr>";
 
-		$("#contenidoArticulos").append(fila);
-	}
+        $("#contenidoArticulos").append(fila);
+
+        costoBueno += parseInt(productos[i].Fisico_Bueno) * parseFloat(productos[i].Costo);
+        costoDefectuoso += parseInt(productos[i].Fisico_Defectuoso) * parseFloat(productos[i].Costo);
+    }
+
+    var costoTotal = costoBueno + costoDefectuoso;
+
+    $("#costo_bueno").val(costoBueno.format(_CANTIDAD_DECIMALES, 3, '.', ','));
+    $("#costo_defectuoso").val(costoDefectuoso.format(_CANTIDAD_DECIMALES, 3, '.', ','));
+    $("#costo_total").val(costoTotal.format(_CANTIDAD_DECIMALES, 3, '.', ','));
 }
+
+/**
+ * Number.prototype.format(n, x, s, c)
+ *
+ * param integer n: length of decimal
+ * param integer x: length of whole part
+ * param mixed   s: sections delimiter
+ * param mixed   c: decimal delimiter
+	12345678.9.format(2, 3, '.', ',');  // "12.345.678,90"
+	123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
+	12345678.9.format(0, 3, '-');       // "12-345-679"
+ */
+
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};

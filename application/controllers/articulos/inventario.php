@@ -169,6 +169,8 @@ class inventario extends CI_Controller {
 		$sucursales = $this->empresa->get_empresas_ids_array();
 		$this->userdata_wrap['sucursales'] = $sucursales;
 		$this->userdata_wrap['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$conf_array = $this->configuracion->getConfiguracionArray();
+		$this->userdata_wrap['decimales'] = intval($conf_array["cantidad_decimales"]);
 		$this->load->view('articulos/inventario/consulta', $this->userdata_wrap);
 	}
 

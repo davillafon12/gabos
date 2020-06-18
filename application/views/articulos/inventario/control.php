@@ -173,7 +173,7 @@
                         </div>
                     </div>
                     <div class="contenedor-costos-finales">
-                    <div class="contenedor-titulos">
+                        <div class="contenedor-titulos">
                             <label>Costos Totales<small class="small-disclaimer">Según cantidades físicas</small></label>
 
                             <input type="text"  style="    opacity: 0;"/>
