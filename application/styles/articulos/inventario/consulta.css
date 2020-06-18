@@ -250,7 +250,7 @@
 
 .th_codigo {width: 100px;}
 .th_exento {  width: 10px;}
-.th_cantidad {width: 57px;}
+.th_cantidad {width: 58px;}
 .th_costo_unidad {width: 125px;}
 .th_costo_total {width: 110px;}
 .th_descuento{width: 50px;}
@@ -425,4 +425,16 @@
 
 .tabla-filtrado{
     margin-bottom: 90px;
+}
+
+.contenidoArticulos td.green{
+	background: #03c703 !important;
+}
+
+.contenidoArticulos td.red{
+	background: #ea001e !important;
+}
+
+.contenidoArticulos td.yellow{
+	background: #f1c106 !important;
 }

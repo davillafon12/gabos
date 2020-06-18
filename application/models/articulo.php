@@ -1165,6 +1165,8 @@ Class articulo extends CI_Model
 			$this->db->where('ci.Fecha_Creacion <=', $fecha);
 		}
 
+		$this->db->order_by("ci.id","desc");
+
 		$query = $this->db->get();
 		if($query->num_rows()==0){
 			return false;

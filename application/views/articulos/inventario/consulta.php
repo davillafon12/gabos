@@ -128,8 +128,10 @@
 						<th class="th_exento">E</th>
 						<th class="th_cantidad">F Bueno</th>
 						<th class="th_cantidad">S Bueno</th>
+						<th class="th_cantidad">B Bueno</th>
 						<th class="th_cantidad">F Defec</th>
 						<th class="th_cantidad">S Defec</th>
+						<th class="th_cantidad">B Defec</th>
 					</tr></thead>
 					<tbody id="contenidoArticulos" class="contenidoArticulos">
 

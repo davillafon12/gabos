@@ -118,14 +118,33 @@ function setProductosControl(productos){
 	$("#contenidoArticulos").html('');
 	cantidad = productos.length;
 	for (var i = 0; i < cantidad; i++){
+        var balanceBueno = productos[i].Fisico_Bueno - productos[i].Sistema_Bueno;
+        var balanceDefectuoso = productos[i].Fisico_Defectuoso - productos[i].Sistema_Defectuoso;
+
+        var classBB = "red";
+        if(balanceBueno == 0){
+            classBB = "green";
+        }else if(balanceBueno > 0){
+            classBB = "yellow";
+        }
+
+        var classBD = "red";
+        if(balanceDefectuoso == 0){
+            classBD = "green";
+        }else if(balanceDefectuoso > 0){
+            classBD = "yellow";
+        }
+
 		fila = "<tr>";
 		fila += "<td><label class='contact'>"+productos[i].Codigo+"</label></td>";
-        fila += "<td><div class='contact' id='descripcion_articulo_"+(i+1)+"'>"+productos[i].Descripcion+"</div>";
+        fila += "<td><div class='contact'>"+productos[i].Descripcion+"</div>";
         if(productos[i].Empatar==='1'){fila += "<td><label class='contact'>E</label>";}else{fila += "<td><label class='contact'></label>";};
-        fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].Fisico_Bueno+"</label></td>";
-        fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].Sistema_Bueno+"</label></td>";
-        fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].Fisico_Defectuoso+"</label></td>";
-        fila += "<td style='text-align: center;'><label class='contact' id='cantidad_articulo_"+(i+1)+"'>"+productos[i].Sistema_Defectuoso+"</label></td>";
+        fila += "<td style='text-align: center;'><label class='contact'>"+productos[i].Fisico_Bueno+"</label></td>";
+        fila += "<td style='text-align: center;'><label class='contact'>"+productos[i].Sistema_Bueno+"</label></td>";
+        fila += "<td style='text-align: center;' class='"+classBB+"'><label class='contact'>"+balanceBueno+"</label></td>";
+        fila += "<td style='text-align: center;'><label class='contact'>"+productos[i].Fisico_Defectuoso+"</label></td>";
+        fila += "<td style='text-align: center;'><label class='contact'>"+productos[i].Sistema_Defectuoso+"</label></td>";
+        fila += "<td style='text-align: center;' class='"+classBD+"'><label class='contact'>"+balanceDefectuoso+"</label></td>";
         fila += "</tr>";
 
 		$("#contenidoArticulos").append(fila);
