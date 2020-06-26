@@ -1,2 +1,1 @@
-ALTER TABLE `tb_03_cliente` ADD `Empresa_Liga` INT NOT NULL;
-update tb_03_cliente set `Empresa_Liga` = 2;
+ALTER TABLE `tb_64_articulos_control_inventario` ADD `Costo` DOUBLE NOT NULL AFTER `Empatar`;
