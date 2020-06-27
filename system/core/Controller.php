@@ -78,6 +78,13 @@ class CI_Controller
         "99" => "Otros"
     );
 
+    private $allowedURLS = array(
+        "/login",
+        "/verifylogin",
+        "/external/actualizarComprobantes",
+        "/external/enviarComprobantesAHacienda"
+    );
+
     public $userdata_nombre;
     public $userdata_sucursal;
     public $userdata_wrap;
@@ -103,13 +110,16 @@ class CI_Controller
         log_message('debug', "Controller Class Initialized");
 
         // Evitamos que entre en el login
-        if($_SERVER['REQUEST_URI'] !== '/login' &&
-                $_SERVER['REQUEST_URI'] !== '/verifylogin'){
+        if($this->preloadSessionMetadata()){
             include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
             $this->userdata_nombre = $data['Usuario_Codigo'];
             $this->userdata_sucursal = $data['Sucursal_Codigo'];
             $this->userdata_wrap = $data;
         }
+    }
+
+    private function preloadSessionMetadata(){
+        return !in_array($_SERVER['REQUEST_URI'], $this->allowedURLS);
     }
 
     public static function &get_instance()
