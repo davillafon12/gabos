@@ -116,7 +116,9 @@ PARA:
 
 			<a href='javascript:;' onClick='mostrarFacturas();' id="boton_mostrarFactura" class='boton_mostrarFactura' >Mostrar Facturas</a>
 			<a href='javascript:;' onClick='anularFactura()' class='boton_anular' >Anular</a>
-			<!--<a href='javascript:;' onClick='editarFactura()' class='boton_editar' >Editar</a>-->
+			<?php if($puedeEditarFacturas){ ?>
+			<a href='javascript:;' onClick='editarFactura()' class='boton_editar' >Editar</a>
+			<?php }; ?>
 			<a href='javascript:;' onClick='actualizarFactura()' id="boton_guardar_editar" class='boton_guardar_editar' title="Guardar factura editada"><i class="fa fa-floppy-o"></i></a>
 			<a href='javascript:;' onClick='cobrarFactura()' class='boton_cobrar' >Cobrar</a>
 		<div class="selector_facturas" id="selector_facturas">
