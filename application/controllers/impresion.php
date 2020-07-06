@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-//header('Access-Control-Allow-Origin: *');  
+//header('Access-Control-Allow-Origin: *');
 //header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 //header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
 
@@ -112,7 +112,7 @@ class impresion extends CI_Controller
 								$fElectornica->Clave = false;
 								$fElectornica->ReceptorNombre = null;
 							}
-							
+
 							//Valoramos si un credito para poner la fecha de vencimiento
 							if ($facturaHead[0]->tipo == 'credito') {
 								$diasCredito = $this->factura->getCreditoClienteDeFactura($consecutivo, $sucursal, $facturaHead[0]->cliente_ced);
@@ -122,7 +122,7 @@ class impresion extends CI_Controller
 							} elseif ($facturaHead[0]->tipo == 'mixto') {
 								$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
 								$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
-								//Valorar si fue en colones o dolares								
+								//Valorar si fue en colones o dolares
 								if ($facturaHead[0]->moneda == 'dolares') {
 									$cantidadPagaTarjeta = $cantidadPagaTarjeta / $facturaHead[0]->cambio;
 									$cantidadPagaContado = $cantidadPagaContado / $facturaHead[0]->cambio;
@@ -132,7 +132,7 @@ class impresion extends CI_Controller
 							} elseif ($facturaHead[0]->tipo == 'apartado') {
 								$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
 								$saldo = $facturaHead[0]->total - $abono;
-								//Valorar si fue en colones o dolares								
+								//Valorar si fue en colones o dolares
 								if ($facturaHead[0]->moneda == 'dolares') {
 									$abono = $abono / $facturaHead[0]->cambio;
 									$saldo = $saldo / $facturaHead[0]->cambio;
@@ -454,7 +454,7 @@ class impresion extends CI_Controller
 								$fElectornica->Clave = false;
 								$fElectornica->ReceptorNombre = null;
 							}
-							
+
 
 							if ($fElectornica) {
 								if ($facturaBody = $this->factura->getArticulosFacturaImpresion($consecutivo, $sucursal)) {
@@ -468,7 +468,7 @@ class impresion extends CI_Controller
 										$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
 										$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
 
-										//Valorar si fue en colones o dolares								
+										//Valorar si fue en colones o dolares
 										if ($facturaHead[0]->moneda == 'dolares') {
 											$cantidadPagaTarjeta = $cantidadPagaTarjeta / $facturaHead[0]->cambio;
 											$cantidadPagaContado = $cantidadPagaContado / $facturaHead[0]->cambio;
@@ -478,7 +478,7 @@ class impresion extends CI_Controller
 										$facturaHead[0]->cantidadContado = $cantidadPagaContado;
 									} elseif ($facturaHead[0]->tipo == 'apartado') {
 										$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
-										//Valorar si fue en colones o dolares								
+										//Valorar si fue en colones o dolares
 										if ($facturaHead[0]->moneda == 'dolares') {
 											$abono = $abono / $facturaHead[0]->cambio;
 										}
@@ -566,7 +566,7 @@ class impresion extends CI_Controller
 									$notaElectronica->ConsecutivoHacienda = $consecutivo;
 									$notaElectronica->Clave = false;
 								}
-								
+
 								unset($this->retorno['error']);
 								$this->retorno['status'] = 'success';
 								$this->retorno['empresa'] = $empresa;
@@ -811,7 +811,7 @@ class impresion extends CI_Controller
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
 		$cantidadTotalArticulos = 0;
 		while ($paginasADibujar >= $this->numPagina) {
-			//Agregamos pag		
+			//Agregamos pag
 			$pdf->AddPage();
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('p', $empresa[0], $fhead[0], $pdf);
@@ -841,7 +841,7 @@ class impresion extends CI_Controller
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
 		$cantidadTotalArticulos = 0;
 		while ($paginasADibujar >= $this->numPagina) {
-			//Agregamos pag		
+			//Agregamos pag
 			$pdf->AddPage();
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('t', $empresa[0], $fhead, $pdf);
@@ -876,7 +876,7 @@ class impresion extends CI_Controller
 		$paginasADibujar = $this->paginasADibujar($cantidadProductos);
 		$cantidadTotalArticulos = 0;
 		while ($paginasADibujar >= $this->numPagina) {
-			//Agregamos pag		
+			//Agregamos pag
 			$pdf->AddPage();
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('nd', $empresa, $head, $pdf);
@@ -935,7 +935,7 @@ class impresion extends CI_Controller
 			$pdf->MultiCell(118, 3, $recibo->comentarios, 0, 'L');
 
 			//Divisores
-			$pdf->Line(10, 74, 200, 74); //Primer divisor			
+			$pdf->Line(10, 74, 200, 74); //Primer divisor
 			$pdf->Line(10, 81, 200, 81); //Segundo divisor
 			$pdf->Line(10, 88, 200, 88); //Tercer divisor
 			//$pdf->Line(10, 95, 200, 95); //Cuarto divisor
@@ -972,7 +972,7 @@ class impresion extends CI_Controller
 		//DENOMINACIONES
 		/*
 		$pdf->SetFont('Arial','B',14);
-		$pdf->SetXY(10, 45);	
+		$pdf->SetXY(10, 45);
 		$pdf->Cell(190,5,'Efectivo',0,0,'C');
 		$pdf->ln(5);
 		$pdf->SetFont('Arial','B',12);
@@ -1293,7 +1293,7 @@ class impresion extends CI_Controller
 		$this->cantidadPaginas = $paginasADibujar + 1;
 		$cantidadTotalArticulos = 0;
 		while ($paginasADibujar >= $this->numPagina) {
-			//Agregamos pag		
+			//Agregamos pag
 			$pdf->AddPage();
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('con', $empresa[0], $head, $pdf);
@@ -1324,7 +1324,7 @@ class impresion extends CI_Controller
 		$this->cantidadPaginas = $paginasADibujar + 1;
 		$cantidadTotalArticulos = 0;
 		while ($paginasADibujar >= $this->numPagina) {
-			//Agregamos pag		
+			//Agregamos pag
 			$pdf->AddPage();
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('ti', $empresa[0], $head, $pdf);
@@ -1355,7 +1355,7 @@ class impresion extends CI_Controller
 		$this->cantidadPaginas = $paginasADibujar + 1;
 		$cantidadTotalArticulos = 0;
 		while ($paginasADibujar >= $this->numPagina) {
-			//Agregamos pag		
+			//Agregamos pag
 			$pdf->AddPage();
 			//Agregamos el encabezado
 			$this->encabezadoDocumentoPDF('cdc', $empresa[0], $head, $pdf);
@@ -1377,16 +1377,19 @@ class impresion extends CI_Controller
 	private function encabezadoDocumentoPDF($tipo, $empresa, $encabezado, &$pdf)
 	{
 		//var_dump($empresa);
-		$pdf->SetFont('Arial', 'B', 14);
-		$pdf->Cell(40, 10, $empresa->nombre);
-		$pdf->Line(10, 17, 100, 17);
-		$pdf->ln(5);
-		$pdf->SetFont('Arial', '', 10);
-		$pdf->Cell(40, 10, 'Cédula Jurídica: ' . $empresa->cedula);
-		$pdf->ln(4);
-		$pdf->Cell(40, 10, 'Teléfono: ' . $empresa->telefono);
-		$pdf->ln(4);
-		$pdf->Cell(40, 10, 'Email: ' . $empresa->email);
+		if($tipo != "p"){
+			$pdf->SetFont('Arial', 'B', 14);
+			$pdf->Cell(40, 10, $empresa->nombre);
+			$pdf->Line(10, 17, 100, 17);
+			$pdf->ln(5);
+			$pdf->SetFont('Arial', '', 10);
+			$pdf->Cell(40, 10, 'Cédula Jurídica: ' . $empresa->cedula);
+			$pdf->ln(4);
+			$pdf->Cell(40, 10, 'Teléfono: ' . $empresa->telefono);
+			$pdf->ln(4);
+			$pdf->Cell(40, 10, 'Email: ' . $empresa->email);
+		}
+
 		switch ($tipo) {
 			case 'f':
 				//Cuadro de numero de factura y hora/fecha
@@ -1412,7 +1415,7 @@ class impresion extends CI_Controller
 				$pdf->MultiCell(89, 5, 'Nombre: ' . $encabezado->cliente_nom);
 				//Caja redondeada 1
 				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
-				//Divisores				
+				//Divisores
 				//$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
 				$pdf->Line(100, 37, 100, 60); //Centro caja
 				//$pdf->Line(10, 60, 200, 60); //Borde de abajo
@@ -1470,8 +1473,8 @@ class impresion extends CI_Controller
 				$pdf->MultiCell(89, 5, 'Nombre: ' . $encabezado->cliente_nombre);
 				//Caja redondeada 1
 				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
-				//Divisores					
-				$pdf->Line(100, 37, 100, 60); //Centro caja				
+				//Divisores
+				$pdf->Line(100, 37, 100, 60); //Centro caja
 				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
 				$pdf->Line(100, 51, 200, 51); //Borde arriba vendedor
 				//Info de la factura
@@ -1521,7 +1524,7 @@ class impresion extends CI_Controller
 				$pdf->MultiCell(89, 5, 'Nombre: ' . $encabezado->cliente_nom);
 				//Caja redondeada 1
 				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
-				//Divisores				
+				//Divisores
 				$pdf->Line(100, 37, 100, 60); //Centro caja
 				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
 				$pdf->Line(100, 55, 200, 55); //Borde arriba vendedor
@@ -1558,7 +1561,7 @@ class impresion extends CI_Controller
 				$pdf->MultiCell(89, 5, 'Nombre: ' . $encabezado->cliente_nombre);
 				//Caja redondeada 1
 				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
-				//Divisores				
+				//Divisores
 				$pdf->Line(100, 37, 100, 60); //Centro caja
 				$pdf->Line(10, 44, 200, 44); //Borde debajo cliente y descripcion
 				$pdf->Line(100, 55, 200, 55); //Borde arriba vendedor
@@ -1588,7 +1591,7 @@ class impresion extends CI_Controller
 				$pdf->Text(42, 49, $encabezado->entrada . " - " . substr($encabezado->nombre_entrada, 0, 34));
 				//Caja redondeada 1
 				$pdf->RoundedRect(10, 37, 190, 14, 2, '1234', 'D');
-				//Divisores				
+				//Divisores
 				$pdf->Line(110, 37, 110, 51); //Centro caja
 				$pdf->Line(150, 37, 150, 44); //Despues de factura aplicada
 				$pdf->Line(135, 44, 135, 51); //Despues de realizador
@@ -1634,7 +1637,7 @@ class impresion extends CI_Controller
 				//$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
 				//Caja redondeada 1
 				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
-				//Divisores				
+				//Divisores
 				//$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
 				$pdf->Line(100, 37, 100, 60); //Centro caja
 				$pdf->Line(10, 43, 200, 43); //Borde debajo sucursal que entrega y descripcion
@@ -1671,7 +1674,7 @@ class impresion extends CI_Controller
 				//$pdf->MultiCell(89, 5, 'Nombre: '.$encabezado->cliente_nom);
 				//Caja redondeada 1
 				$pdf->RoundedRect(10, 37, 190, 23, 5, '1234', 'D');
-				//Divisores				
+				//Divisores
 				//$pdf->Line(10, 37, 10, 60); //Lado izquierdo borde
 				$pdf->Line(100, 37, 100, 60); //Centro caja
 				$pdf->Line(10, 43, 200, 43); //Borde debajo sucursal que entrega y descripcion
@@ -1746,7 +1749,7 @@ class impresion extends CI_Controller
 				$pdf->Cell(41, 7, 'IVA:', 1, 0, 'R');
 				$pdf->Cell(28, 7, $this->fni($totalIVA + $retencion), 1, 0, 'R');
 				/*
-				$pdf->SetXY(131, 239);	
+				$pdf->SetXY(131, 239);
 				$pdf->Cell(41,7,'Retención:',1,0,'R');
 				$pdf->Cell(28,7,$this->fni($retencion),1,0,'R');
 */
@@ -1912,7 +1915,7 @@ class impresion extends CI_Controller
 		$pdf->Line(125, 67, 125, 225); //Divisor de cantidad y exento
 		$pdf->Line(131, 67, 131, 225); //Divisor de exento y descuento
 		$pdf->Line(145, 67, 145, 225); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 225); //Divisor de precio unitario y precio total		
+		$pdf->Line(172, 67, 172, 225); //Divisor de precio unitario y precio total
 		//$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
 		//$pdf->Line(10, 240, 200, 240); //Borde abajo productos
 		//Encabezado de productos
@@ -1971,7 +1974,7 @@ class impresion extends CI_Controller
 		$pdf->Line(30, 67, 30, 225); //Divisor de codigo y descripcion
 		$pdf->Line(125, 67, 125, 225); //Divisor de descripcion y cantidad
 		$pdf->Line(145, 67, 145, 225); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 225); //Divisor de precio unitario y precio total	
+		$pdf->Line(172, 67, 172, 225); //Divisor de precio unitario y precio total
 		//Encabezado de productos
 		$pdf->SetFont('Arial', '', 10);
 		$pdf->Text(13, 72, 'Código');
@@ -2056,8 +2059,8 @@ class impresion extends CI_Controller
 		$pdf->Line(30, 67, 30, 277); //Divisor de codigo y descripcion
 		$pdf->Line(95, 67, 95, 277); //Divisor de descripcion y cantidad
 		$pdf->Line(100, 67, 100, 277); //Divisor de descuento y precio unitario
-		$pdf->Line(120, 67, 120, 277); //Divisor de precio unitario y precio total	
-		$pdf->Line(185, 67, 185, 277); //Divisor de precio unitario y precio total	
+		$pdf->Line(120, 67, 120, 277); //Divisor de precio unitario y precio total
+		$pdf->Line(185, 67, 185, 277); //Divisor de precio unitario y precio total
 		//Encabezado de productos
 		$pdf->SetFont('Arial', '', 10);
 		$pdf->Text(14, 72, 'Código');
@@ -2262,7 +2265,7 @@ class impresion extends CI_Controller
 		$total = 0;
 		$subtotal = 0;
 		$total_iva = 0;
-		
+
 */
 		$costo_total = 0;
 		$iva = 0;
@@ -2429,7 +2432,7 @@ class EnLetras
 		else
 			$Signo = "";
 
-		if (intval(number_format($x, 2, '.', '')) != $x) //<- averiguar si tiene decimales 
+		if (intval(number_format($x, 2, '.', '')) != $x) //<- averiguar si tiene decimales
 			$s = number_format($x, 2, '.', '');
 		else
 			$s = number_format($x, 2, '.', '');
@@ -2458,11 +2461,11 @@ class EnLetras
 
 		$s = $s . $Moneda;
 
-		/*if($Frc != $this->Void) 
-    { 
-       $s = $s . " " . $Frc. "/100"; 
-       //$s = $s . " " . $Frc . "/100"; 
-    } 
+		/*if($Frc != $this->Void)
+    {
+       $s = $s . " " . $Frc. "/100";
+       //$s = $s . " " . $Frc . "/100";
+    }
     $letrass=$Signo . $s . " M.N."; */
 		return ($Signo . $s);
 	}
@@ -2492,7 +2495,7 @@ class EnLetras
 		}
 
 
-		//--------------------- GoSub FiltroMil ------------------------------ 
+		//--------------------- GoSub FiltroMil ------------------------------
 		$Rtn = str_replace(" Mil Mil", " Un Mil", $Rtn);
 		while (1) {
 			$Ptr = strpos($Rtn, "Mil ");
@@ -2504,7 +2507,7 @@ class EnLetras
 			} else break;
 		}
 
-		//--------------------- GoSub FiltroCiento ------------------------------ 
+		//--------------------- GoSub FiltroCiento ------------------------------
 		$Ptr = -1;
 		do {
 			$Ptr = strpos($Rtn, "Cien ", $Ptr + 1);
@@ -2516,7 +2519,7 @@ class EnLetras
 			}
 		} while (!($Ptr === false));
 
-		//--------------------- FiltroEspeciales ------------------------------ 
+		//--------------------- FiltroEspeciales ------------------------------
 		$Rtn = str_replace("Diez Un", "Once", $Rtn);
 		$Rtn = str_replace("Diez Dos", "Doce", $Rtn);
 		$Rtn = str_replace("Diez Tres", "Trece", $Rtn);
@@ -2536,9 +2539,9 @@ class EnLetras
 		$Rtn = str_replace("Veinte Ocho", "Veintiocho", $Rtn);
 		$Rtn = str_replace("Veinte Nueve", "Veintinueve", $Rtn);
 
-		//--------------------- FiltroUn ------------------------------ 
+		//--------------------- FiltroUn ------------------------------
 		if (substr($Rtn, 0, 1) == "M") $Rtn = "Un " . $Rtn;
-		//--------------------- Adicionar Y ------------------------------ 
+		//--------------------- Adicionar Y ------------------------------
 		for ($i = 65; $i <= 88; $i++) {
 			if ($i != 77)
 				$Rtn = str_replace("a " . Chr($i), "* y " . Chr($i), $Rtn);
