@@ -9,7 +9,7 @@ function toCajaSubmit(){
 	r = confirm("¿Esta seguro que desea guardar e imprimir esta proforma?");
 	if (r == true) {
 		doSubmit();
-	} else {}	
+	} else {}
 }
 
 function doSubmit(){
@@ -25,9 +25,9 @@ function doSubmit(){
 		$('#envio_factura').bPopup({
 				modalClose: false
 			});
-		
+
 		//Enviamos la factura
-		sendInvoice(url);		
+		sendInvoice(url);
 	}
 	else
 	{return false;}
@@ -93,7 +93,7 @@ function getTamañoIndexArray(){
 function parseRowToJSON(numRow){
 	codigo = document.getElementById("codigo_articulo_"+numRow).value;
 	descripcion = document.getElementById("descripcion_articulo_"+numRow).innerHTML;
-	
+
 	if(descripcion.trim()===''){ //Si solo esta el codigo pero no hay descripcion, osea articulo no cargado
 		return false;
 	}
@@ -101,22 +101,19 @@ function parseRowToJSON(numRow){
 		cantidad = document.getElementById("cantidad_articulo_"+numRow).value;
 		descuento = document.getElementById("descuento_articulo_"+numRow).innerHTML;
 	}
-	
+
 	precio_unitario = ''; //Por defecto es vacio
-	
+
 	if(codigo.trim()==='00'){ //Si es generico traer los demas datos necesarios
 		precio_unitario = document.getElementById("costo_unidad_articulo_ORIGINAL_"+numRow).value;
 	}
-	else{
-		descripcion = ''; //Si no es generico limpiamos descripcion para que el post no sea tan pesado
-	}
-	
+
 	exento = document.getElementById("producto_exento_"+numRow).value;
 	retencion = $("#producto_retencion_"+numRow).val();
 	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento, re:retencion};
-	
+
 	return JSONRow;
-	
+
 }
 
 function getFullData(){
@@ -129,20 +126,20 @@ function getFullData(){
 	observaciones = observaciones.replace("&","");
 	observaciones = observaciones.replace(";","");
 	observaciones = observaciones.replace("+","");
-	
+
 	return [{ce:cedula_field, no:nombre_field, cu:tipo_moneda, ob:observaciones}];
-	
+
 	//return '/facturas/nueva/crearPendiente?cedula='+cedula_field+'&nombre='+nombre_field+'&currency='+tipo_moneda+'&observaciones='+observaciones+'&invoiceItems='+JSON.stringify(invoiceItemsJSON);
 }
 
-function sendInvoice(URL){	
+function sendInvoice(URL){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
-		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON)},	
+		data: {'head':JSON.stringify(getFullData()), 'items':JSON.stringify(invoiceItemsJSON)},
 		success: function(data, textStatus, jqXHR)
 		{
-			
+
 			try{
 				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
 				if(facturaHEAD[0].status==="error"){
@@ -155,8 +152,8 @@ function sendInvoice(URL){
 						});
 					$('#envio_factura').bPopup().close();
 				}else if(facturaHEAD[0].status==="success"){
-					$('#envio_factura').bPopup().close();	
-					
+					$('#envio_factura').bPopup().close();
+
 					if(tipoImpresion==='t'){
 						//Impresion termica
 						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion/termica?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
@@ -164,7 +161,7 @@ function sendInvoice(URL){
 						//Impresion carta
 						window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=p&n='+facturaHEAD[0].consecutivo+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 					}
-					
+
 					window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/home';
 				}
 			}catch(e){
@@ -179,7 +176,7 @@ function sendInvoice(URL){
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{
-	 
+
 		}
 	});
 }
