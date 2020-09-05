@@ -1,11 +1,17 @@
-.DS_Store
 
-application/third_party/*
-application/logs/*
-application/images/articulos/*
-Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jasper
-Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
-Reportes/FACTURA/Reportes/Cartelera.jasper
-Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
-Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
-Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
+application/config/database.php
+
+Servidor Impresion/.DS_Store
+
+application/scripts/.DS_Store
+
+Servidor Impresion/js/.DS_Store
+
+application/config/.DS_Store
+
+application/.DS_Store
+
+application/models/.DS_Store
+
+.DS_Store
+/nbproject/private/
