@@ -352,6 +352,8 @@ function setProductosFactura(productos){
 
 		//Agregamos las demas funciones de cada row
 		agregarTooltip("#descripcion_articulo_"+(i+1));
+		agregarTooltip("#desc_final_"+(i+1));
+
 		updateProductsTotal();
 	}
 	setCostos(cantidad);
@@ -362,13 +364,13 @@ function agregarTooltip(id_Row){
 	$(id_Row).mouseover(function(){
 		eleOffset = $(this).offset();
 
-		$(this).next().fadeIn("fast").css({
+		$(this).parent().find(".tooltip_imagen_articulo").fadeIn("fast").css({
 			left: eleOffset.left + 100,
 			top: eleOffset.top - 100
 		});
 
 	}).mouseout(function(){
-		$(this).next().hide();
+		$(this).parent().find(".tooltip_imagen_articulo").hide();
 	});
 }
 
