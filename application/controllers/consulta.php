@@ -12,6 +12,7 @@ class consulta extends CI_Controller {
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
+                $this->load->model('impresion_m','',TRUE);
 		include 'get_session_data.php';
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -81,6 +82,7 @@ class consulta extends CI_Controller {
 	
 	function recibos(){
 		include 'get_session_data.php';
+                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('consulta/recibos_consulta_view', $data);
 	}
 	
@@ -181,72 +183,36 @@ class consulta extends CI_Controller {
 			include 'get_session_data.php';
 			if($notaCreditoHead = $this->contabilidad->getNotaCreditoHeaderParaImpresion($consecutivo, $data['Sucursal_Codigo'])){
 				
-				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $data['Sucursal_Codigo'])){
+				if($notaCreditoBody = $this->contabilidad->getArticulosNotaCredito($consecutivo, $data['Sucursal_Codigo'])){
 					
 					unset($retorno['error']);
 					$retorno['status'] = 'success';
 					$retorno['notaHead'] = $notaCreditoHead;
-					$retorno['notaBody'] = $notaCreditoBody;
+					$retorno['notaBody'] = $this->contabilidad->getArticulosNotaCreditoParaImpresion($consecutivo, $data['Sucursal_Codigo']);
 					
 					$cliente = $this->cliente->getClientes_Cedula($notaCreditoHead[0]->cliente_cedula);
+					$c_array = $this->configuracion->getConfiguracionArray();
+                                        
+                                        $costo_total = 0;
+                                        $iva = 0;
+                                        $costo_sin_iva = 0;
+                                        $retencion = 0;
+                                        $aplicaRetencion = true;
+                                        if(!$c_array['aplicar_retencion'] || $cliente[0]->Aplica_Retencion == "1" || $cliente[0]->Cliente_EsExento == "1"){
+                                            $aplicaRetencion = false;
+                                        }
+                                        foreach($notaCreditoBody as $art){
+                                            $detalle = $this->contabilidad->getDetalleLineaNotaCredito($art, $aplicaRetencion);
+                                            $iva += $detalle["iva"];
+                                            $retencion += $detalle["retencion"];
+                                            $costo_sin_iva += $detalle["subtotal"];
+                                        }
+                                        $costo_total += round($iva, intval($c_array["cantidad_decimales"])) + round($retencion, intval($c_array["cantidad_decimales"])) + $costo_sin_iva;
 								
-								$costo_total = 0;
-								$iva = 0;
-								$costo_sin_iva = 0;
-								$retencion = 0;
-								foreach($notaCreditoBody as $art){
-	
-									
-									$cantidadArt = $art->bueno + $art->defectuoso;
-									//Calculamos el precio total de los articulos
-									//$precio_total_articulo = (($art->precio)-(($art->precio)*(($art->descuento)/100)))*$cantidadArt;
-									$precio_total_articulo = $art->precio*$cantidadArt;
-									$precio_total_articulo_sin_descuento = ($art->precio/(1-($art->descuento/100)))*$cantidadArt;
-									$precio_articulo_final = $art->precio_final;
-									$precio_articulo_final = $precio_articulo_final * $cantidadArt;
-									
-									//Calculamos los impuestos
-									
-									$isExento = $art->exento;
-									
-									if($isExento=='0'){
-										$costo_sin_iva += $precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100));
-										
-										
-										$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($notaCreditoHead[0]->iva)/100)));
-										$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($notaCreditoHead[0]->iva)/100))); 
-										
-										$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($notaCreditoHead[0]->iva)/100));
-										$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
-										
-										if(!$art->no_retencion){
-												$retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
-										}
-									}
-									else if($isExento=='1'){
-										$costo_sin_iva += $precio_total_articulo;
-										//$retencion = 0;
-									}
-									$costo_total += $precio_total_articulo;
-			
-								
-								
-								}
-								
-								
-								if($cliente[0]->Aplica_Retencion == "1")
-									$retencion = 0;
-								
-								
-								
-								$iva = $costo_total-$costo_sin_iva;
-								$costo_total += $retencion;
-								
-								
-								$notaCreditoHead[0]->total = $costo_total;
-								$notaCreditoHead[0]->subtotal = $costo_sin_iva;
-								$notaCreditoHead[0]->total_iva = $iva;
-								$notaCreditoHead[0]->retencion = $retencion;
+                                        $notaCreditoHead[0]->total = $costo_total;
+                                        $notaCreditoHead[0]->subtotal = $costo_sin_iva;
+                                        $notaCreditoHead[0]->total_iva = $iva;
+                                        $notaCreditoHead[0]->retencion = $retencion;
 					
 					
 					
@@ -353,6 +319,7 @@ class consulta extends CI_Controller {
 	
 	function retiroParcial(){
 		include 'get_session_data.php';
+                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('consulta/retiros_parciales_consulta_view', $data);
 	}
 	
@@ -978,6 +945,341 @@ class consulta extends CI_Controller {
             
             echo json_encode($retorno);
         }
+        
+        
+        
+        function comprobantesElectronicos(){
+            include 'get_session_data.php';
+            $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+            $this->load->view('consulta/comprobantes_consulta_view', $data);
+	}
+        
+        function obtenerComprobantesTabla(){
+            include PATH_USER_DATA;
+            //Un array que contiene el nombre de las columnas que se pueden ordenar
+            $columnas = array(
+                            '0' => 'Clave',
+                            '1' => 'ConsecutivoHacienda',
+                            '2' => 'ReceptorIdentificacion',
+                            '3' => 'FechaEmision',
+                            '4' => 'RespuestaHaciendaEstado'
+                        );
+            
+            $query = $this->contabilidad->obtenerComprobantesParaTabla($columnas[$_POST['order'][0]['column']], 
+                    $_POST['order'][0]['dir'], 
+                    $_POST['search']['value'], 
+                    intval($_POST['start']), 
+                    intval($_POST['length']), 
+                    $data['Sucursal_Codigo'],
+                    $_POST['tipodocumento']);
+
+            $ruta_imagen = base_url('application/images/Icons');
+            $comprobantesAMostrar = array();
+            foreach($query->result() as $art){
+                $htmlPdf = "";
+                $htmlXML = "";
+                $htmlXMLRespuesta = "";
+                $htmlReenvioCorreo = "";
+                $rutaWeb = $this->contabilidad->getFinalPathWeb(strtolower($_POST['tipodocumento']), $art->fecha);
+                switch($_POST['tipodocumento']){
+                    case "FE":
+                        $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                    break;
+                    case "NC":
+                        $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                    break;
+                    case "MR":
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave."-".$art->consecutivo.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+					break;
+					case "FEC":
+                        $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                    break;
+                }
+                
+                if($art->estado != "aceptado" && $art->estado != "rechazado" && $art->estado != "recibido" && $art->estado != "procesando"){
+                    $htmlXMLRespuesta = "";
+                }
+                
+                if($_POST['tipodocumento'] != "MR" && $_POST['tipodocumento'] != "FEC"){
+                    if(($art->estado == "aceptado" || $art->estado == "rechazado") && filter_var($art->email, FILTER_VALIDATE_EMAIL)){
+                        $htmlReenvioCorreo = "<a href='#' onclick='reenviarCorreo(\"".$art->clave."\", \"".$_POST['tipodocumento']."\")'><img src=".$ruta_imagen."/mail.png width='21' height='21' title='Reenviar Correo a Cliente'></a>";
+                    }
+                }
+                $auxArray = array(
+                            $art->clave,
+                            $art->consecutivo,
+                            $art->cliente_identificacion." - ".$art->cliente_nombre,
+                            date("h:i:s a d-m-Y", strtotime($art->fecha)),
+                            $_POST['tipodocumento'] == "MR" ? "" : $this->getCorreoEnviadoComprobanteHTML($art->correo_enviado),
+                            $this->getEstadoComprobanteHTML($art->estado),
+                            "<div class='tab_opciones'>
+                                    $htmlPdf
+                                    $htmlXML
+                                    $htmlXMLRespuesta
+                                    $htmlReenvioCorreo
+                                    ".(($art->estado == "aceptado" || $art->estado == "rechazado" || $art->estado == "recibido" || $art->estado == "procesando") ? "" : "<a href='#' onclick='reenviarXML(\"$art->clave\")'><img src=".$ruta_imagen."/upload.png width='21' height='21' title='Reenviar Documento a Hacienda'></a>")."
+                            </div>"
+                    );
+                    array_push($comprobantesAMostrar, $auxArray);
+            }
+
+            $filtrados = $this->contabilidad->obtenerComprobantesParaTablaFiltrados($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $data['Sucursal_Codigo'],
+                    $_POST['tipodocumento']);
+
+            $retorno = array(
+                            'draw' => $_POST['draw'],
+                            'recordsTotal' => $this->contabilidad->getTotalComprobantesEnSucursal($data['Sucursal_Codigo'], $_POST['tipodocumento']),
+                            'recordsFiltered' => $filtrados -> num_rows(),
+                            'data' => $comprobantesAMostrar
+                        );
+            echo json_encode($retorno);
+        }
+        
+        private function getCorreoEnviadoComprobanteHTML($estado){
+            if($estado == 1){
+                return "<div class='estado-label success'>Enviado</div>";
+            }
+            
+            return "<div class='estado-label error'>No enviado</div>";
+        }
+        
+        private function getEstadoComprobanteHTML($estado){
+            if($estado == "aceptado"){
+                return "<div class='estado-label success'>Aceptado</div>";
+            }
+            if($estado == "rechazado"){
+                return "<div class='estado-label error'>Rechazado</div>";
+            }
+            if($estado == "sin_enviar"){
+                return "<div class='estado-label info'>Sin Enviar</div>";
+            }
+            
+            return "<div class='estado-label warning'>".ucfirst($estado)."</div>";
+        }
+        
+        public function verXMLHacienda(){
+            $clave = @$_GET["clave"];
+            $tipo = @$_GET["tipo"];
+            if($clave != ""){
+                if($tipo == "FE"){
+                    if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
+                        $before = array('<','>');
+                        $after = array('&lt;','&gt;');
+                        $xml = str_replace($before,$after,base64_decode($factura->RespuestaHaciendaXML));
+                        echo "<pre>".$xml;
+                    }else{
+                        die("No existe factura electronica");
+                    }
+                }else if($tipo == "NC"){
+                    if($nota = $this->contabilidad->getNotaCreditoElectronicaByClave($clave)){
+                        $before = array('<','>');
+                        $after = array('&lt;','&gt;');
+                        $xml = str_replace($before,$after,base64_decode($nota->RespuestaHaciendaXML));
+                        echo "<pre>".$xml;
+                    }else{
+                        die("No existe nota credito electronica");
+                    }
+                }else if($tipo == "MR"){
+                    if($nota = $this->contabilidad->getMensajeReceptorElectronicoByClave($clave)){
+                        $before = array('<','>');
+                        $after = array('&lt;','&gt;');
+                        $xml = str_replace($before,$after,base64_decode($nota->RespuestaHaciendaXML));
+                        echo "<pre>".$xml;
+                    }else{
+                        die("No existe mensaje receptor");
+                    }
+                }else{
+                    die("Tipo de documento no valido");
+                }
+            }else{
+                die("La clave no puede ser vacia");
+            }
+        }
+        
+        public function reenviarDocumento(){
+            $clave = @$_POST["clave"];
+            $tipo = @$_POST["tipo"];
+            $retorno = array("status"=>0, "error"=>"No se pudo procesar la solicitud");
+            if($clave != ""){
+                if($tipo != ""){
+                    include PATH_USER_DATA;
+                    switch($tipo){
+                        case "FE":
+                            if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
+								$cliente = array();
+								if($factura->ReceptorIdentificacion == null){
+									array_push($cliente, new stdClass());
+									$cliente[0]->NoReceptor = true;
+								}else{
+									$cliente = $this->cliente->getClientes_Cedula($factura->ReceptorIdentificacion);
+								}
+								if($empresaData = $this->empresa->getEmpresa($factura->Sucursal)){
+									$facturaa = (object) array("Factura_Consecutivo" => $factura->Consecutivo, "TB_02_Sucursal_Codigo" => $factura->Sucursal);
+									$cliente = $cliente[0];
+									$empresa = $empresaData[0];
+									$resFacturaElectronica = array("data" => array("situacion"=>"normal"));
+									$responseCheck = array("factura" => $facturaa, "cliente"=>$cliente, "empresa"=>$empresa);
+									$result = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
+									if($result["status"]){ // Factura fue recibida y aceptada
+										$this->factura->guardarPDFFactura($responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+										if(!$responseCheck["cliente"]->NoReceptor){
+											require_once PATH_API_CORREO;
+											$apiCorreo = new Correo();
+											$attachs = array(
+												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
+											if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
+												$this->factura->marcarEnvioCorreoFacturaElectronica($data['Sucursal_Codigo'], $responseCheck["factura"]->Factura_Consecutivo);
+											}
+										}
+									}
+									$retorno["status"] = 1;
+									unset($retorno["error"]);
+								}else{
+									$retorno["error"] = "No existe sucursal para dicha factura";
+								}
+                            }else{
+                                $retorno["error"] = "No existe factura electronica";
+                            }
+                        break;
+                        case "NC":
+                            if($nota = $this->contabilidad->getNotaCreditoElectronicaByClave($clave)){
+                                if($responseCheck = $this->contabilidad->enviarNotaCreditoElectronicaAHacienda($nota->Consecutivo, $nota->Sucursal)){
+									if(isset($responseCheck["status"])){
+										if($responseCheck["status"] === true){
+											if($responseCheck["estado_hacienda"] == "aceptado"){
+												if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+													if($empresaData = $this->empresa->getEmpresa($nota->Sucursal)){
+														$empresa = $empresaData[0];
+														require_once PATH_API_CORREO;
+														$apiCorreo = new Correo();
+														$attachs = array(
+															$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
+															$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf",
+															$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml",);
+														if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+															$this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
+														}
+													}else{
+
+													}
+												}
+											}
+											$retorno["status"] = 1;
+                                			unset($retorno["error"]);
+										}else{
+											$retorno["error"] = "No se pudo enviar nota crédito a Hacienda | BAD STATUS";
+										}
+									}else{
+										$retorno["error"] = "No se pudo enviar nota crédito a Hacienda | NO STATUS";
+									}
+								}else{
+									$retorno["error"] = "No se pudo enviar nota crédito a Hacienda";
+								}
+                            }else{
+                                $retorno["error"] = "No existe nota credito electronica";
+                            }
+                        break;
+                        case "MR":
+                            if($mensaje = $this->contabilidad->getMensajeReceptorElectronicoByClave($clave)){
+                                $this->contabilidad->enviarMensajeReceptorHacienda($mensaje->Consecutivo, $mensaje->Sucursal);
+                                $retorno["status"] = 1;
+                                unset($retorno["error"]);
+                            }else{
+                                $retorno["error"] = "No existe mensaje receptor";
+                            }
+						break;
+						case "FEC":
+                            if($factura = $this->contabilidad->getFacturaDeCompraElectronicaByClave($clave)){
+								$this->factura->enviarFacturaElectronicaDeCompraAHacienda($factura->Consecutivo, $factura->Sucursal);
+                                $retorno["status"] = 1;
+                                unset($retorno["error"]);
+                            }else{
+                                $retorno["error"] = "No existe mensaje receptor";
+                            }
+                        break;
+                    }
+                }else{
+                    $retorno["error"] = "El tipo no puede ser vacio";
+                }
+            }else{
+                $retorno["error"] = "La clave no puede ser vacia";
+            }
+            echo json_encode($retorno);
+        }
+        
+        public function reenviarCorreo(){
+            $clave = @$_POST["clave"];
+            $tipo = @$_POST["tipo"];
+            $retorno = array("status"=>0, "error"=>"No se pudo procesar la solicitud");
+            if($clave != ""){
+                if($tipo != ""){
+                    include PATH_USER_DATA;
+                    switch($tipo){
+                        case "FE":
+                            if($factura = $this->factura->getFacturaElectronicaByClave($clave)){
+                                if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                    $empresa = $this->empresa->getEmpresa($factura->Sucursal)[0];
+                                    require_once PATH_API_CORREO;
+									$apiCorreo = new Correo();
+									$checkAttachs = array(
+										"xml" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+										"respuesta" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+										"pdf" => $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
+									$this->factura->checkArchivosCorreoFE($checkAttachs, $factura);
+                                    $attachs = array(
+                                        $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
+                                        $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
+                                        $this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
+                                    if($apiCorreo->enviarCorreo($factura->ReceptorEmail, "Factura Electrónica #".$factura->Consecutivo." | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+                                        $this->factura->marcarEnvioCorreoFacturaElectronica($factura->Sucursal, $factura->Consecutivo);
+                                        $retorno["status"] = 1;
+                                        unset($retorno["error"]);
+                                    }
+                                }
+                            }else{
+                                $retorno["error"] = "No existe factura electronica";
+                            }
+                        break;
+                        case "NC":
+                            if($nota = $this->contabilidad->getNotaCreditoElectronicaByClave($clave)){
+                                if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                    $empresa = $this->empresa->getEmpresa($nota->Sucursal)[0];
+                                    require_once PATH_API_CORREO;
+                                    $apiCorreo = new Correo();
+                                    $attachs = array(
+                                        $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
+										$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf",
+										$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml");
+                                    if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+                                        $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
+                                        $retorno["status"] = 1;
+                                        unset($retorno["error"]);
+                                    }
+                                }
+                            }else{
+                                $retorno["error"] = "No existe nota credito electronica";
+                            }
+                            
+                        break;
+                    }
+                }else{
+                    $retorno["error"] = "El tipo no puede ser vacio";
+                }
+            }else{
+                $retorno["error"] = "La clave no puede ser vacia";
+            }
+            echo json_encode($retorno);
+        }
+        
 } 
 
 ?>

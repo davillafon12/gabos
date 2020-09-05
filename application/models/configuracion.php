@@ -161,8 +161,26 @@
 				return $result[0]->Valor;
 			}
 		}
+
+		function requiereIVA($sucursal){
+			$this->db->from('tb_02_sucursal');
+			$this->db->where('Codigo', $sucursal);
+			$query = $this->db->get();
+			if($query->num_rows()==0)
+			{
+				return true;
+			}
+			else
+			{	
+				$result = $query->result();	
+				return $result[0]->RequiereIVA == 1;
+			}
+		}
 		
 		function getConfiguracionArray(){
+			$sucursal = $this->session->userdata('logged_in')["Sucursal_Codigo"];
+			$requiereIVA = $this->requiereIVA($sucursal);
+
 			$this->db->from('tb_39_configuracion');
 			$query = $this->db->get();		
 			if($query->num_rows()==0)
@@ -173,6 +191,9 @@
 			{	
 				$result = $query->result();				
 				foreach($result as $param){
+					if($param->Parametro == "iva" && $requiereIVA === false){
+						$param->Valor = 0;
+					}
 					$config[$param->Parametro] = $param->Valor;
 				}
 				return $config;

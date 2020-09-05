@@ -12,7 +12,7 @@ class anular extends CI_Controller {
 
 	function index()
 	{
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -35,7 +35,7 @@ class anular extends CI_Controller {
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
 			}else{
 				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
-					include '/../get_session_data.php';					
+					include PATH_USER_DATA;					
 					if($recibos = $this -> contabilidad -> getRecibos($cedula, $data['Sucursal_Codigo'])){
 						$rec_arr = array();
 						foreach($recibos as $rec){
@@ -85,7 +85,7 @@ class anular extends CI_Controller {
 				//Indicamos que el recibo fue anulado
 				$this->contabilidad->flagAnularRecibo($_POST['recibo'], $_POST['credito']);
 				
-				include '/../get_session_data.php';	
+				include PATH_USER_DATA;	
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario anuló el recibo ".$_POST['recibo']." credito: ".$_POST['credito'],$data['Sucursal_Codigo'],'anular_recibo');
 				$retorno['status'] = 'success';
 				unset($retorno['error']);

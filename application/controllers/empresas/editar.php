@@ -7,7 +7,8 @@ class editar extends CI_Controller {
     parent::__construct(); 
 	$this->load->model('user','',TRUE);
 	$this->load->model('empresa','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+        $this->load->model('ubicacion','',TRUE);
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -19,7 +20,7 @@ class editar extends CI_Controller {
 
  function index()
  {
-	/*include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	/*include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -30,7 +31,8 @@ class editar extends CI_Controller {
 	else{
 	   redirect('accesoDenegado', 'location');
 	}	*/
-	 include '/../get_session_data.php';
+	 include PATH_USER_DATA;
+         $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 	 $this->load->view('empresas/editar_view_empresas', $data);	
  }
  
@@ -142,7 +144,7 @@ class editar extends CI_Controller {
  
  function desactivar()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -169,7 +171,7 @@ class editar extends CI_Controller {
  
  function activar()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -200,8 +202,8 @@ class editar extends CI_Controller {
 	$id_request=$_GET['id'];
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	$nombre_empresa = $this->empresa->getNombreEmpresa($id_request);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-	
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+	$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
 	if(!$permisos['editar_empresa'])
@@ -225,6 +227,32 @@ class editar extends CI_Controller {
 				$data['Empresa_Administrador']=$row-> Sucursal_Administrador;
 				$data['Empresa_Tributacion']=$row-> Sucursal_leyenda_tributacion;
 				$data['Empresa_Observaciones'] = $row -> Sucursal_Observaciones;
+                                
+				$data['User_Tributa'] = $row -> Usuario_Tributa;
+				$data['Pass_Tributa'] = $row -> Pass_Tributa;
+				$data['Pin_Tributa'] = $row -> Pass_Certificado_Tributa;
+				$data['Ambiente_Tributa'] = $row -> Ambiente_Tributa;
+				$data['Token_Tributa'] = $row -> Token_Certificado_Tributa;
+				
+				$data['tipo_cedula'] = $row -> Tipo_Cedula;
+				$data['cod_telefono'] = $row -> Codigo_Pais_Telefono;
+				$data['cod_fax'] = $row -> Codigo_Pais_Fax;
+				$data['Provincia'] = $row -> Provincia;
+				$data['Canton'] = $row -> Canton;
+				$data['Distrito'] = $row -> Distrito;
+				$data['Barrio'] = $row -> Barrio;
+				$data['CodigoActividad'] = $row -> CodigoActividad;
+				$data['RequiereFE'] = $row -> RequiereFE == 1;
+				
+				$data['tiposIdentificacion'] = $this->tiposIdentificacion;
+				$provincias = $this->ubicacion->getProvincias();
+				$data["provincias"] = $provincias;
+				$cantones = $this->ubicacion->getCantones($row -> Provincia);
+				$data["cantones"] = $cantones;
+				$distritos = $this->ubicacion->getDistritos($row -> Provincia, $row -> Canton);
+				$data["distritos"] = $distritos;
+				$barrios = $this->ubicacion->getBarrios($row -> Provincia, $row -> Canton, $row->Distrito);
+				$data["barrios"] = $barrios;
 				
 				$ligaCliente = $this->empresa->getClienteLigaByEmpresa($id_request);
 				
@@ -263,37 +291,100 @@ class editar extends CI_Controller {
 	$administrador_empresa = $this->input->post('administrador');
 	$observaciones_empresa = $this->input->post('observaciones');
 	$leyenda_tributacion = $this->input->post('leyenda');
+        
+	$user_tributa = trim($this->input->post("user_tributa"));
+	$pass_tributa = trim($this->input->post("pass_tributa"));
+	$ambiente_tributa = trim($this->input->post("ambiente_tributa"));
+	$pin_tributa = trim($this->input->post("pin_tributa"));
 	
 	$liga_cliente_nombre = trim($this->input->post("cliente_asociado"));
 	$liga_cliente = $liga_cliente_nombre != "" ? trim($this->input->post('cliente_liga_id')) : "";
 	
-		
-	$data_update['Sucursal_Cedula'] = mysql_real_escape_string($cedula_empresa);
-	$data_update['Sucursal_Nombre'] = mysql_real_escape_string($nombre_empresa);
-	$data_update['Sucursal_Telefono'] = mysql_real_escape_string($telefono_empresa);
-	$data_update['Sucursal_Fax'] = mysql_real_escape_string($fax_empresa);
-	$data_update['Sucursal_Email'] = mysql_real_escape_string($email_empresa);
-	$data_update['Sucursal_Direccion'] = mysql_real_escape_string($direccion_empresa);
-	$data_update['Sucursal_Administrador'] = mysql_real_escape_string($administrador_empresa);
-	$data_update['Sucursal_Observaciones'] = mysql_real_escape_string($observaciones_empresa);
-	$data_update['Sucursal_leyenda_tributacion'] = mysql_real_escape_string($leyenda_tributacion);
+	$tipo_identificacion = $this->input->post('tipo_identificacion');
+	$cod_telefono_empresa = $this->input->post('cod_tel');
+	$cod_fax_empresa = $this->input->post('cod_fax');
+	$provincia = trim($this->input->post("provincia"));
+	$canton = trim($this->input->post("canton"));
+	$distrito = trim($this->input->post("distrito"));
+	$barrio = trim($this->input->post("barrio"));
 	
-	$this->empresa->actualizar(mysql_real_escape_string($id_empresa), $data_update);
+	$codigo_actividad = trim($this->input->post("codigo_actividad"));
+
+	$requiereFE = trim($this->input->post("is_factura_electronica")) == "1" ? 1 : 0;
+
+		
+	$data_update['Sucursal_Cedula'] = $cedula_empresa;
+	$data_update['Sucursal_Nombre'] = $nombre_empresa;
+	$data_update['Sucursal_Telefono'] = $telefono_empresa;
+	$data_update['Sucursal_Fax'] = $fax_empresa;
+	$data_update['Sucursal_Email'] = $email_empresa;
+	$data_update['Sucursal_Direccion'] = $direccion_empresa;
+	$data_update['Sucursal_Administrador'] = $administrador_empresa;
+	$data_update['Sucursal_Observaciones'] = $observaciones_empresa;
+	$data_update['Sucursal_leyenda_tributacion'] = $leyenda_tributacion;
+        
+        $data_update['Usuario_Tributa'] = $user_tributa;
+        $data_update['Pass_Tributa'] = $pass_tributa;
+        $data_update['Ambiente_Tributa'] = $ambiente_tributa;
+        $data_update['Pass_Certificado_Tributa'] = $pin_tributa;
+        
+        $data_update['Provincia'] = $provincia;
+        $data_update['Canton'] = $canton;
+        $data_update['Distrito'] = $distrito;
+        $data_update['Barrio'] = $barrio;
+        $data_update['Tipo_Cedula'] = $tipo_identificacion;
+        $data_update['Codigo_Pais_Telefono'] = $cod_telefono_empresa;
+        $data_update['Codigo_Pais_Fax'] = $cod_fax_empresa;
+	
+		$data_update['CodigoActividad'] = $codigo_actividad;
+		
+		$data_update['RequiereFE'] = $requiereFE;
+
+        
+	$this->empresa->actualizar($id_empresa, $data_update);
 	
 	
 	$this->empresa->actualizarLigaEmpresaCliente($id_empresa, $liga_cliente);
 	
 	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
-	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".mysql_real_escape_string($id_empresa),$data['Sucursal_Codigo'],'edicion');
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".$id_empresa,$data['Sucursal_Codigo'],'edicion');
 	
 	redirect('empresas/editar', 'location');
  }
  
  
- 
+    public function cargarCertificado(){
+        $id_empresa = $this->input->post('codigo');
+        if($empresa = $this->empresa->getEmpresa($id_empresa)){
+            $empresa = $empresa[0];
+            if(isset($_FILES["certificado_hacienda_file"])){
+                $cert_file = $_FILES["certificado_hacienda_file"];
+                if(is_array($cert_file)){
+                    if($cert_file["type"] == "application/x-pkcs12"){
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+                        $oldLocation = $cert_file["tmp_name"];
+                        $name = md5("sucursal_".$id_empresa."_token_certificate");
+                        $this->empresa->storeFile($name.".p12", "cer", $oldLocation);
+                        $params = array("Token_Certificado_Tributa" => $name);
+                        $this->empresa->actualizar($id_empresa, $params);
+                        $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario subió el certificado con token : ".$name,$data['Sucursal_Codigo'],'edicion');
+                        redirect('empresas/editar/edicion?id='.$id_empresa, 'location');
+                    }else{
+                        // No tiene el formato adecuado de .p12
+                        exit("Debe seleccionar un certificado a subir - ERR: 4");
+                    }
+                }else{
+                    // No es un array
+                    exit("Debe seleccionar un certificado a subir - ERR: 3");
+                }
+            }else{
+                // No viene el archivo
+                exit("Debe seleccionar un certificado a subir - ERR: 2");
+            }
+        }else{
+            exit("Empresa ingresada no existe - ERR: 1");
+        }
+    }
 	
- }// FIN DE LA CLASE
-
-
-?>
+}// FIN DE LA CLASE

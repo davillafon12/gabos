@@ -4,7 +4,7 @@ Class XMLParser extends CI_Model
 	function getConfigArray()
 	{
 	    libxml_use_internal_errors(true);
-		$aux_array;
+		$aux_array = array();
 		$xml=simplexml_load_file("application/config/gabo-conf.xml");
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
 		if ($xml === false)

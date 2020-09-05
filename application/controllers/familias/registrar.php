@@ -8,7 +8,7 @@ class registrar extends CI_Controller {
 	$this->load->model('user','',TRUE);
 	$this->load->model('empresa','',TRUE);
 	$this->load->model('familia','',TRUE);
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -20,7 +20,7 @@ class registrar extends CI_Controller {
 
  function index()
  {
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 	/*$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -64,7 +64,7 @@ class registrar extends CI_Controller {
 	$observaciones_familia = $this->input->post('observaciones');
 	$sucursal_familia = $this->input->post('sucursal');
 	
-	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	
 	$id_familia = $this->familia->getCantidadFamilias($sucursal_familia);
 	
@@ -75,14 +75,14 @@ class registrar extends CI_Controller {
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	if($this->familia->registrar($id_familia, $nombre_familia, $observaciones_familia, $sucursal_familia, $nombre))
 	{ //Si se ingreso bien a la BD
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la familia ".mysql_real_escape_string($nombre_familia)." codigo: ".mysql_real_escape_string($id_familia),$data['Sucursal_Codigo'],'registro');
+				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la familia ".$nombre_familia." codigo: ".$id_familia,$data['Sucursal_Codigo'],'registro');
 
 		//Titulo de la pagina
 		//echo "PASO POR AQUI";
 		/*$data['Titulo_Pagina'] = "Transacción Exitosa";
 	
 	    $nombre_empresa = $this->empresa->getNombreEmpresa($sucursal_familia);
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la familia ".mysql_real_escape_string($nombre_familia)." codigo: ".mysql_real_escape_string($id_familia),$data['Sucursal_Codigo'],'registro');
+		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso la familia ".$nombre_familia)." codigo: ".$id_familia),$data['Sucursal_Codigo'],'registro');
 	    $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso de la empresa ".$nombre_familia." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
 		                         <div class='Informacion'>
 					             <form action=".base_url('familias/familias').">

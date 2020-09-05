@@ -99,6 +99,42 @@ function displayErrors(NumError){
 		case "24":
 			notyError('El cliente ya no tiene credito disponible para esta factura. \nERROR: '+NumError);
 			break;
+                case "25":
+			notyError('El cliente no existe. \nERROR: '+NumError);
+			break;
+                case "26":
+			notyError('La sucursal no existe. \nERROR: '+NumError);
+			break;
+                case "27":
+			notyError('La sucursal esta deshabilitada. \nERROR: '+NumError);
+			break;
+                case "28":
+			notyError('Debe actualizar el domicilio de la sucursal para poder cobrar. \nERROR: '+NumError);
+			break;
+                case "29":
+			notyError('Debe actualizar el domicilio de la sucursal para poder cobrar. \nERROR: '+NumError);
+			break;
+                case "30":
+			notyError('La sucursal no cuenta con los datos necesarios para realizar Factura Electrónica. \nERROR: '+NumError);
+			break;
+                case "50":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "51":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "52":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "53":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "54":
+			notyError('Error al generar la factura electrónica. \nERROR: '+NumError);
+			break;
+                case "55":
+			notyError('La factura electrónica fue RECHAZADA por Hacienda, deberá generarla de nuevo. La factura ha sido ANULADA. \nERROR: '+NumError);
+			break;
 		case "cf_1":
 			notyError('No se pudo actualizar la factura editada. \nERROR: '+NumError);
 			break;
@@ -168,18 +204,20 @@ function setProductosFactura(productos){
 	isCajaLoad=false;
 	cantidad = productos.length;
 	//artHTML = '';
+	//Capturar decimales
+	decimales = $("#cantidad_decimales").val();
+	decimales = parseInt(decimales);
 	array_pos_rows = []; //Reiniciamos el index, para utilizar el metodo de crear JSON de factura de los articulos
 	for (var i = 0; i < cantidad; i++) 
 	{
 		array_pos_rows[i] = i+1;
 		row = table.insertRow(table.rows.length);	
 		row.setAttribute("id","articulo_"+(i+1));
-		decimales = $("#cantidad_decimales").val();
-		decimales = parseInt(decimales);
 		precio = parseFloat(productos[i].precio);
 		precio = precio.toFixed(decimales);
 		cell1 = row.insertCell(0);
 		cell2 = row.insertCell(1);
+		cell2.setAttribute("class","imagen-margen-container");
 		cell3 = row.insertCell(2);
 		cell4 = row.insertCell(3);
 		cell5 = row.insertCell(4);
@@ -206,19 +244,19 @@ function setProductosFactura(productos){
 		cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+(i+1)+"' ondblclick='changeDiscount("+(i+1)+")'>"+productos[i].descuento+"</div>";
 		
 		precioUI = parseFloat(precio);
-		precioUI = precioUI.format(2, 3, '.', ',');
+		precioUI = precioUI.format(decimales, 3, '.', ',');
 		
-		cell6.innerHTML = "<div class='articulo_specs' id='costo_unidad_articulo_"+(i+1)+"'>"+precioUI+"</div>"
+		cell6.innerHTML = "<div class='articulo_specs unitario' id='costo_unidad_articulo_"+(i+1)+"'>"+precioUI+"</div>"
 				+"<input id='costo_unidad_articulo_ORIGINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precio+"'>"
 				+"<input id='costo_unidad_articulo_FINAL_"+(i+1)+"' type='hidden' value='"+productos[i].precioFinal+"'>"
 				+"<input id='producto_exento_"+(i+1)+"' type='hidden' value='"+productos[i].exento+"'>"
 				+"<input id='producto_retencion_"+(i+1)+"' type='hidden' value='"+productos[i].retencion+"'>";
-		cell7.innerHTML = "<div class='articulo_specs' id='costo_total_articulo_"+(i+1)+"'></div>"
+		cell7.innerHTML = "<div class='articulo_specs final' id='costo_total_articulo_"+(i+1)+"'></div>"
 						  +"<input type='hidden' id='costo_total_articulo_sin_descuento_"+(i+1)+"'/>";
 		
 		
 		//Agregamos las demas funciones de cada row
-		agregarTooltip("#descripcion_articulo_"+(i+1));
+		//agregarTooltip("#descripcion_articulo_"+(i+1));
 		updateProductsTotal();
 	}
 	setCostos(cantidad);

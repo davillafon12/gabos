@@ -5,7 +5,7 @@
 -- Servidor: 127.0.0.1
 -- Tiempo de generación: 21-10-2015 a las 01:22:26
 -- Versión del servidor: 5.6.21
--- Versión de PHP: 5.5.19 
+-- Versión de PHP: 5.5.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -26,81 +26,81 @@ DELIMITER $$
 --
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_ClientesXDescuento`(
 	IN paSucursal VARCHAR(10),
-    IN paCedula VARCHAR(20), 
-    IN paArticulo VARCHAR(10), 
+    IN paCedula VARCHAR(20),
+    IN paArticulo VARCHAR(10),
 	IN paFamilia VARCHAR(20)
  )
-BEGIN						 																
-	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula, 
+BEGIN
+	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
 											Concat(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											descli.Descuento_cliente_porcentaje descuCliente,
-											0 as codFamilia, 
-											\'\' as nomFamilia, 
-											0 as montoFamilia, 
+											0 as codFamilia,
+											\'\' as nomFamilia,
+											0 as montoFamilia,
 											0 as porFamilia,
 											\'\' as codArticulo,
-											\'\' as nomArticulo, 
-											0 as monArticulo, 
+											\'\' as nomArticulo,
+											0 as monArticulo,
 											0 as porcArticulo
-									from    tb_03_cliente cli 
-											inner join 
-											tb_21_descuento_cliente descli 
-											  on  descli.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
-  IF paSucursal <> 'null' and paSucursal <>'' then 
-    SET @QUERY = CONCAT (@QUERY, ' and descli.TB_02_Sucursal_Codigo = ', paSucursal);      
-  end If; 
-  IF paFamilia <> 'null' and paFamilia <>'' then 
-    SET @QUERY = CONCAT (@QUERY, ' union              
-									select  cli.Cliente_Cedula cedula, 
-											Concat(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre, 
+									from    tb_03_cliente cli
+											inner join
+											tb_21_descuento_cliente descli
+											  on  descli.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
+  IF paSucursal <> 'null' and paSucursal <>'' then
+    SET @QUERY = CONCAT (@QUERY, ' and descli.TB_02_Sucursal_Codigo = ', paSucursal);
+  end If;
+  IF paFamilia <> 'null' and paFamilia <>'' then
+    SET @QUERY = CONCAT (@QUERY, ' union
+									select  cli.Cliente_Cedula cedula,
+											Concat(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											0 as descuCliente,
 											fam.Familia_Codigo codFamilia,
 											fam.Familia_Nombre  nomFamilia,
-											desFam.Descuento_familia_monto montoFamilia, 
+											desFam.Descuento_familia_monto montoFamilia,
 											desFam.Descuento_familia_porcentaje porFamilia,
-											0 as codArticulo, 
-											\'\' as nomArticulo, 
-											0 as monArticulo, 
+											0 as codArticulo,
+											\'\' as nomArticulo,
+											0 as monArticulo,
 											0 as porcArticulo
-									from    tb_03_cliente cli 
-											inner join 
-											tb_20_descuento_familia desFam 
-											  on  cli.Cliente_Cedula = desFam.TB_03_Cliente_Cliente_Cedula and 
+									from    tb_03_cliente cli
+											inner join
+											tb_20_descuento_familia desFam
+											  on  cli.Cliente_Cedula = desFam.TB_03_Cliente_Cliente_Cedula and
 												  desFam.TB_05_Familia_TB_02_Sucursal_Codigo = ',paSucursal,'
-											 inner join 
-											tb_05_familia fam 
-											  on  fam.Familia_Codigo = desFam.TB_05_Familia_Familia_Codigo and 
-												  fam.TB_02_Sucursal_Codigo = ', paSucursal);      
-  end If;  
-  IF paArticulo <> 'null' and paArticulo <>'' then 
-    SET @QUERY = CONCAT (@QUERY, ' union 
-									select  cli.Cliente_Cedula cedula, 
+											 inner join
+											tb_05_familia fam
+											  on  fam.Familia_Codigo = desFam.TB_05_Familia_Familia_Codigo and
+												  fam.TB_02_Sucursal_Codigo = ', paSucursal);
+  end If;
+  IF paArticulo <> 'null' and paArticulo <>'' then
+    SET @QUERY = CONCAT (@QUERY, ' union
+									select  cli.Cliente_Cedula cedula,
 											Concat(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											0 as descuCliente,
-											0 as codFamilia, 
-											\'\' as nomFamilia, 
-											0 as montoFamilia, 
+											0 as codFamilia,
+											\'\' as nomFamilia,
+											0 as montoFamilia,
 											0 as porFamilia,
 											art.Articulo_Codigo codArticulo,
-											art.Articulo_Descripcion nomArticulo, 
-											prod.Descuento_producto_monto monArticulo, 
+											art.Articulo_Descripcion nomArticulo,
+											prod.Descuento_producto_monto monArticulo,
 											prod.Descuento_producto_porcentaje porcArticulo
-									from    tb_03_cliente cli 
-											left join 
-											tb_17_descuento_producto prod 
-											  on  prod.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and 
+									from    tb_03_cliente cli
+											left join
+											tb_17_descuento_producto prod
+											  on  prod.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and
 												  prod.TB_02_Sucursal_Codigo = ',paSucursal,'
-											 inner join 
-											tb_06_articulo art 
-											  on  art.Articulo_Codigo = prod.TB_06_Articulo_Articulo_Codigo and 
-												  art.TB_02_Sucursal_Codigo = ',paSucursal);      
-  end If;   
-  IF paCedula <> 'null' and paCedula <>'' then 
-    SET @QUERY = CONCAT ('select * from ( ', @QUERY, ') a 
+											 inner join
+											tb_06_articulo art
+											  on  art.Articulo_Codigo = prod.TB_06_Articulo_Articulo_Codigo and
+												  art.TB_02_Sucursal_Codigo = ',paSucursal);
+  end If;
+  IF paCedula <> 'null' and paCedula <>'' then
+    SET @QUERY = CONCAT ('select * from ( ', @QUERY, ') a
 									where a.cedula = ',paCedula,'
- order by cedula, codArticulo, codFamilia');      
-  end If;   
-  -- select @QUERY as 'Resultado';  
+ order by cedula, codArticulo, codFamilia');
+  end If;
+  -- select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -111,11 +111,11 @@ BEGIN
 
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_ConsultaUsuarios`(
 	IN paSucursal VARCHAR(10),
-	IN paFechaI VARCHAR(30), 
+	IN paFechaI VARCHAR(30),
 	IN paFechaF VARCHAR(30)
  )
 BEGIN
-	SET @SUCURSAL  		= CONCAT(' WHERE user.TB_02_Sucursal_Codigo =  '); 
+	SET @SUCURSAL  		= CONCAT(' WHERE user.TB_02_Sucursal_Codigo =  ');
 	SET @QUERY 			= CONCAT( 'SELECT  user.Usuario_Nombre nombre,
 											user.Usuario_Apellidos apellidos,
 											user.Usuario_Cedula cedula,
@@ -125,14 +125,14 @@ BEGIN
 											case isnull(user.Usuario_Fecha_Cesantia) when 1 then \'Activo\' else \'Inactivo\' end as estado,
 											user.Usuario_Fecha_Ingreso
 									FROM    tb_01_usuario user
-											inner join tb_02_sucursal suc on user.TB_02_Sucursal_Codigo = suc.Codigo');		
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, @SUCURSAL, '\'',paSucursal, '\'');      
-  end If; 
-  IF paFechaI <> 'null' AND paFechaF <> 'null' then 
-	SET @QUERY = CONCAT (@QUERY, 'AND UNIX_TIMESTAMP(user.Usuario_Fecha_Ingreso) BETWEEN UNIX_TIMESTAMP(', '\'',paFechaI, '\'', ') AND UNIX_TIMESTAMP(', '\'',paFechaF, '\')');      
-  end If; 
-  -- select @QUERY as 'Resultado';  
+											inner join tb_02_sucursal suc on user.TB_02_Sucursal_Codigo = suc.Codigo');
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, @SUCURSAL, '\'',paSucursal, '\'');
+  end If;
+  IF paFechaI <> 'null' AND paFechaF <> 'null' then
+	SET @QUERY = CONCAT (@QUERY, 'AND UNIX_TIMESTAMP(user.Usuario_Fecha_Ingreso) BETWEEN UNIX_TIMESTAMP(', '\'',paFechaI, '\'', ') AND UNIX_TIMESTAMP(', '\'',paFechaF, '\')');
+  end If;
+  -- select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -143,57 +143,57 @@ BEGIN
 
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_VentaXClienteFacturas`(
 	IN paSucursal VARCHAR(10),
-	IN paFechaI VARCHAR(30), 
+	IN paFechaI VARCHAR(30),
 	IN paFechaF VARCHAR(30),
 	IN paEstadoFactura VARCHAR(30),
 	IN paEsSucursal VARCHAR(30),
-	IN paNombre VARCHAR(50), 
-	IN paCedula VARCHAR(20), 
-	IN paRango VARCHAR(10), 
-	IN paMontoI VARCHAR(20), 
+	IN paNombre VARCHAR(50),
+	IN paCedula VARCHAR(20),
+	IN paRango VARCHAR(10),
+	IN paMontoI VARCHAR(20),
 	IN paMontoF VARCHAR(20)
  )
 BEGIN
-	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
+	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'',
 								 'and fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
-								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
-								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
-								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
-	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula, 
+								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'',
+								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'',
+								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')');
+	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
 											CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											fac.Factura_Fecha_Hora fecha,
-											fac.Factura_Consecutivo consecutivo, 
-											fac.Factura_Monto_Total montoTotal, 
-											fac.Factura_Monto_IVA montoIVA, 
+											fac.Factura_Consecutivo consecutivo,
+											fac.Factura_Monto_Total montoTotal,
+											fac.Factura_Monto_IVA montoIVA,
 											fac.Factura_Monto_Sin_IVA montoSinIVA,
 											fac.Factura_Retencion
-									from    tb_03_cliente cli inner join 
-											tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, @where2);      
-  end If; 
-  IF paNombre <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');      
-  end If;   
-  IF paCedula <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');      
-  end If;   
+									from    tb_03_cliente cli inner join
+											tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, @where2);
+  end If;
+  IF paNombre <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');
+  end If;
+  IF paCedula <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');
+  end If;
     -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
-  IF paRango <> 'null' then 
+  IF paRango <> 'null' then
 	IF paRango = 'menorIgual' then
-		SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total <= ', '\'',paMontoI, '\'');      
-	ELSE 
+		SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total <= ', '\'',paMontoI, '\'');
+	ELSE
 		IF paRango = 'mayorIgual' then
-			SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total >= ', '\'',paMontoI, '\'');      
-		ELSE 
+			SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total >= ', '\'',paMontoI, '\'');
+		ELSE
 			IF paRango = 'between' then
-				SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');      
-			end if; 
-		end if; -- FIN paRango = 'mayorIgual'	
-	end if; -- FIN paRango = 'menorIgual' 
+				SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Monto_Total BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');
+			end if;
+		end if; -- FIN paRango = 'mayorIgual'
+	end if; -- FIN paRango = 'menorIgual'
   end If;   -- FIN paRango <> 'null'
-  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  select @QUERY as 'Resultado';  
+  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
+  select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
    PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -204,84 +204,84 @@ BEGIN
 
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_VentaXClienteFacturasResumido`(
 	IN paSucursal VARCHAR(10),
-	IN paFechaI VARCHAR(30), 
+	IN paFechaI VARCHAR(30),
 	IN paFechaF VARCHAR(30),
 	IN paEstadoFactura VARCHAR(30),
 	IN paEsSucursal VARCHAR(30),
-	IN paNombre VARCHAR(50), 
-	IN paCedula VARCHAR(20), 
-	IN paRango VARCHAR(10), 
-	IN paMontoI VARCHAR(20), 
+	IN paNombre VARCHAR(50),
+	IN paCedula VARCHAR(20),
+	IN paRango VARCHAR(10),
+	IN paMontoI VARCHAR(20),
 	IN paMontoF VARCHAR(20)
  )
 BEGIN
-	set @WhereGenerico  = CONCAT(' where fac2.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and 
-										   fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',' 
-										   and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
-										   ' and UNIX_TIMESTAMP(fac2.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
-										  ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
-	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
+	set @WhereGenerico  = CONCAT(' where fac2.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula and
+										   fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'','
+										   and fac.Factura_Estado =', '\'', paEstadoFactura, '\'',
+										   ' and UNIX_TIMESTAMP(fac2.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'',
+										  ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')');
+	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'',
 								 'and fac.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
-								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'', 
-								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
-								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
- IF paSucursal <> 'null' then 								 
-	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula, 
+								 'and fac.Factura_Estado =', '\'', paEstadoFactura, '\'',
+								 'and UNIX_TIMESTAMP(fac.Factura_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'',
+								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')');
+ IF paSucursal <> 'null' then
+	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
 									CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 									(select  Sum(fac2.Factura_Monto_Total) v
 									 from tb_07_factura fac2',@WhereGenerico ,') montoTotal,
 									(select  Sum(fac2.Factura_Monto_IVA) v2
 									 from tb_07_factura fac2',@WhereGenerico, ' ) montoIVA,
 									(select  Sum(fac2.Factura_Monto_Sin_IVA) v3
-									 from tb_07_factura fac2',@WhereGenerico, ' ) montoSinIVA,  
+									 from tb_07_factura fac2',@WhereGenerico, ' ) montoSinIVA,
 									(select  Sum(fac2.Factura_Retencion) v3
-									 from tb_07_factura fac2',@WhereGenerico, ' ) retencion       
-							from    tb_03_cliente cli inner join 
-									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
+									 from tb_07_factura fac2',@WhereGenerico, ' ) retencion
+							from    tb_03_cliente cli inner join
+									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
 ELSE
-	set @QUERY 			= CONCAT('select  cli.Cliente_Cedula cedula, 
+	set @QUERY 			= CONCAT('select  cli.Cliente_Cedula cedula,
 									CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 									fac.Factura_Monto_Total as montoTotal,
 									fac.Factura_Monto_IVA as montoIVA,
-									fac.Factura_Monto_Sin_IVA as montoSinIVA,  
-									fac.Factura_Retencion as retencion       
-							from    tb_03_cliente cli inner join 
-									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');								
-end If; 
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, @where2);      
-  end If; 
-  IF paNombre <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');      
-  end If;   
-  IF paCedula <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');      
-  end If;   
+									fac.Factura_Monto_Sin_IVA as montoSinIVA,
+									fac.Factura_Retencion as retencion
+							from    tb_03_cliente cli inner join
+									tb_07_factura fac on fac.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
+end If;
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, @where2);
+  end If;
+  IF paNombre <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and fac.Factura_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');
+  end If;
+  IF paCedula <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');
+  end If;
     -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
-  IF paRango <> 'null' then 
+  IF paRango <> 'null' then
 	IF paRango = 'menorIgual' then
 		SET @QUERY = CONCAT (@QUERY, 'and (select  Sum(fac2.Factura_Monto_Total) v
 										 from tb_07_factura fac2',
-										 @WhereGenerico, ') <= ', '\'', paMontoI, '\'');      
-	ELSE 
+										 @WhereGenerico, ') <= ', '\'', paMontoI, '\'');
+	ELSE
 		IF paRango = 'mayorIgual' then
 			SET @QUERY = CONCAT (@QUERY, 'and (select  Sum(fac2.Factura_Monto_Total) v
 										 from tb_07_factura fac2',
-										 @WhereGenerico, ') >= ', '\'', paMontoI, '\'');      
-		ELSE 
+										 @WhereGenerico, ') >= ', '\'', paMontoI, '\'');
+		ELSE
 			IF paRango = 'between' then
 				SET @QUERY = CONCAT (@QUERY, 'and (select  Sum(fac2.Factura_Monto_Total) v
 										 from tb_07_factura fac2',
-										 @WhereGenerico, ') BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');      
-			end if; 
-		end if; -- FIN paRango = 'mayorIgual'	
-	end if; -- FIN paRango = 'menorIgual' 
+										 @WhereGenerico, ') BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');
+			end if;
+		end if; -- FIN paRango = 'mayorIgual'
+	end if; -- FIN paRango = 'menorIgual'
   end If;   -- FIN paRango <> 'null'
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'group by cli.Cliente_Cedula');   
-  end If;  
-  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  -- select @QUERY as 'Resultado';  
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'group by cli.Cliente_Cedula');
+  end If;
+  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
+  -- select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -292,57 +292,57 @@ end If;
 
 CREATE DEFINER=`consulta`@`%` PROCEDURE `PA_VentaXClienteProforma`(
 	IN paSucursal VARCHAR(10),
-	IN paFechaI VARCHAR(30), 
+	IN paFechaI VARCHAR(30),
 	IN paFechaF VARCHAR(30),
 	IN paEstadoProforma VARCHAR(30),
 	IN paEsSucursal VARCHAR(30),
-	IN paNombre VARCHAR(50), 
-	IN paCedula VARCHAR(20), 
-	IN paRango VARCHAR(10), 
-	IN paMontoI VARCHAR(20), 
+	IN paNombre VARCHAR(50),
+	IN paCedula VARCHAR(20),
+	IN paRango VARCHAR(10),
+	IN paMontoI VARCHAR(20),
 	IN paMontoF VARCHAR(20)
  )
 BEGIN
-	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'', 
+	SET @where2 		= CONCAT(' where   cli.Cliente_EsSucursal = ', '\'', paEsSucursal, '\'',
 								 'and pro.TB_02_Sucursal_Codigo = ', '\'', paSucursal, '\'',
-								 'and pro.Proforma_Estado =', '\'', paEstadoProforma, '\'', 
-								 'and UNIX_TIMESTAMP(pro.Proforma_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'', 
-								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')'); 
+								 'and pro.Proforma_Estado =', '\'', paEstadoProforma, '\'',
+								 'and UNIX_TIMESTAMP(pro.Proforma_Fecha_Hora) BETWEEN UNIX_TIMESTAMP(', '\'', paFechaI, '\'',
+								 ') AND UNIX_TIMESTAMP(', '\'', paFechaF, '\'', ')');
 	SET @QUERY 			= CONCAT( 'select  cli.Cliente_Cedula cedula,
-											CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,     
+											CONCAT(cli.Cliente_Nombre, " ", cli.Cliente_Apellidos) nombre,
 											pro.Proforma_Fecha_Hora fecha,
-											pro.Proforma_Consecutivo consecutivo, 
-											pro.Proforma_Monto_Total montoTotal, 
-											pro.Proforma_Monto_IVA montoIVA, 
-											pro.Proforma_Monto_Sin_IVA montoSinIVA, 
+											pro.Proforma_Consecutivo consecutivo,
+											pro.Proforma_Monto_Total montoTotal,
+											pro.Proforma_Monto_IVA montoIVA,
+											pro.Proforma_Monto_Sin_IVA montoSinIVA,
 											pro.Proforma_Retencion
-									from    tb_03_cliente cli inner join 
-											tb_10_proforma pro on pro.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');		
-  IF paSucursal <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, @where2);      
-  end If; 
-  IF paNombre <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and pro.Proforma_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');      
-  end If;   
-  IF paCedula <> 'null' then 
-    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');      
-  end If;   
+									from    tb_03_cliente cli inner join
+											tb_10_proforma pro on pro.TB_03_Cliente_Cliente_Cedula = cli.Cliente_Cedula');
+  IF paSucursal <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, @where2);
+  end If;
+  IF paNombre <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and pro.Proforma_Nombre_Cliente like ','\'','%',paNombre,'%', '\'');
+  end If;
+  IF paCedula <> 'null' then
+    SET @QUERY = CONCAT (@QUERY, 'and cli.Cliente_Cedula =  ', '\'', paCedula, '\'');
+  end If;
     -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
-  IF paRango <> 'null' then 
+  IF paRango <> 'null' then
 	IF paRango = 'menorIgual' then
-		SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total <= ', '\'',paMontoI, '\'');      
-	ELSE 
+		SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total <= ', '\'',paMontoI, '\'');
+	ELSE
 		IF paRango = 'mayorIgual' then
-			SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total >= ', '\'',paMontoI, '\'');      
-		ELSE 
+			SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total >= ', '\'',paMontoI, '\'');
+		ELSE
 			IF paRango = 'between' then
-				SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');      
-			end if; 
-		end if; -- FIN paRango = 'mayorIgual'	
-	end if; -- FIN paRango = 'menorIgual' 
+				SET @QUERY = CONCAT (@QUERY, 'and pro.protura_Monto_Total BETWEEN ', '\'',paMontoI, '\'', ' AND ', '\'',paMontoF, '\'');
+			end if;
+		end if; -- FIN paRango = 'mayorIgual'
+	end if; -- FIN paRango = 'menorIgual'
   end If;   -- FIN paRango <> 'null'
-  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------  
-  -- select @QUERY as 'Resultado';  
+  -- CONSTRUCCIÓN WHERE RANGO CODIGOS ------------------------------------------------------------------
+  -- select @QUERY as 'Resultado';
   -- preparamos el objete Statement a partir de nuestra variable
   PREPARE smpt FROM @Query;
   -- ejecutamos el Statement
@@ -4452,7 +4452,7 @@ ENGINE = InnoDB;
 
 ALTER TABLE `tb_53_articulos_traspaso_inventario` CHANGE `Id` `Id` INT(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `TB_28_Productos_Notas_Credito` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Unitario`, ADD `Descuento` DOUBLE NOT NULL AFTER `Precio_Final`, ADD `Exento` BOOLEAN NOT NULL AFTER `Descuento`, ADD `No_Retencion` BOOLEAN NOT NULL AFTER `Exento`; 
+ALTER TABLE `TB_28_Productos_Notas_Credito` ADD `Precio_Final` DOUBLE NOT NULL AFTER `Precio_Unitario`, ADD `Descuento` DOUBLE NOT NULL AFTER `Precio_Final`, ADD `Exento` BOOLEAN NOT NULL AFTER `Descuento`, ADD `No_Retencion` BOOLEAN NOT NULL AFTER `Exento`;
 
 RENAME TABLE tb_46_relacion_desampa TO tb_46_relacion_trueque;
 ALTER TABLE tb_46_relacion_trueque ADD Sucursal INT NOT NULL AFTER Documento;
@@ -4471,3 +4471,704 @@ ALTER TABLE `tb_37_cierre_caja` ADD `BCRServicios` DOUBLE NOT NULL , ADD `BCRSer
 ALTER TABLE  `tb_49_consignacion` ADD  `Estado` VARCHAR( 10 ) NOT NULL AFTER  `Total`;
 
 update tb_49_consignacion set Estado = 'creada';
+
+ALTER TABLE  `tb_02_sucursal` ADD  `Usuario_Tributa` VARCHAR( 100 ) NOT NULL AFTER  `Sucursal_leyenda_tributacion` ,
+ADD  `Pass_Tributa` VARCHAR( 100 ) NOT NULL AFTER  `Usuario_Tributa` ,
+ADD  `Ambiente_Tributa` VARCHAR( 10 ) NOT NULL AFTER  `Pass_Tributa` ,
+ADD  `Token_Certificado_Tributa` VARCHAR( 40 ) NOT NULL AFTER  `Ambiente_Tributa` ,
+ADD  `Pass_Certificado_Tributa` VARCHAR( 4 ) NOT NULL AFTER  `Token_Certificado_Tributa`;
+
+ALTER TABLE  `tb_02_sucursal` ADD  `Provincia` INT NOT NULL AFTER  `Pass_Certificado_Tributa` ,
+ADD  `Canton` INT NOT NULL AFTER  `Provincia` ,
+ADD  `Distrito` INT NOT NULL AFTER  `Canton` ,
+ADD  `Barrio` INT NOT NULL AFTER  `Distrito` ,
+ADD  `Tipo_Cedula` VARCHAR( 10 ) NOT NULL AFTER  `Barrio` ,
+ADD  `Codigo_Pais_Telefono` VARCHAR( 5 ) NOT NULL AFTER  `Tipo_Cedula` ,
+ADD  `Codigo_Pais_Fax` VARCHAR( 5 ) NOT NULL AFTER  `Codigo_Pais_Telefono` ;
+
+UPDATE tb_02_sucursal SET Tipo_Cedula =  '02';
+
+UPDATE tb_02_sucursal SET  `Codigo_Pais_Telefono` =  '506',`Codigo_Pais_Fax` =  '506';
+
+CREATE TABLE IF NOT EXISTS `tb_55_factura_electronica` (
+  `Consecutivo` INT NOT NULL,
+  `Sucursal` INT NOT NULL,
+  `Clave` VARCHAR(100) NULL,
+  `ConsecutivoHacienda` VARCHAR(30) NULL,
+  `FechaEmision` VARCHAR(50) NULL,
+  `EmisorNombre` VARCHAR(200) NULL,
+  `EmisorTipoIdentificacion` VARCHAR(20) NULL,
+  `EmisorIdentificacion` VARCHAR(50) NULL,
+  `EmisorNombreComercial` VARCHAR(200) NULL,
+  `EmisorProvincia` VARCHAR(2) NULL,
+  `EmisorCanton` VARCHAR(2) NULL,
+  `EmisorDistrito` VARCHAR(2) NULL,
+  `EmisorBarrio` VARCHAR(2) NULL,
+  `EmisorOtrasSennas` VARCHAR(200) NULL,
+  `EmisorCodigoPaisTelefono` VARCHAR(4) NULL,
+  `EmisorTelefono` VARCHAR(20) NULL,
+  `EmisorCodigoPaisFax` VARCHAR(4) NULL,
+  `EmisorFax` VARCHAR(20) NULL,
+  `EmisorEmail` VARCHAR(200) NULL,
+  `ReceptorNombre` VARCHAR(200) NULL,
+  `ReceptorTipoIdentificacion` VARCHAR(20) NULL,
+  `ReceptorIdentificacion` VARCHAR(50) NULL,
+  `ReceptorProvincia` VARCHAR(2) NULL,
+  `ReceptorCanton` VARCHAR(2) NULL,
+  `ReceptorDistrito` VARCHAR(2) NULL,
+  `ReceptorBarrio` VARCHAR(2) NULL,
+  `ReceptorCodigoPaisTelefono` VARCHAR(4) NULL,
+  `ReceptorTelefono` VARCHAR(20) NULL,
+  `ReceptorCodigoPaisFax` VARCHAR(4) NULL,
+  `ReceptorFax` VARCHAR(20) NULL,
+  `ReceptorEmail` VARCHAR(200) NULL,
+  `CondicionVenta` VARCHAR(30) NULL,
+  `PlazoCredito` INT(3) NULL,
+  `MedioPago` VARCHAR(10) NULL,
+  `CodigoMoneda` VARCHAR(5) NULL,
+  `TipoCambio` VARCHAR(20) NULL,
+  `TotalServiciosGravados` VARCHAR(20) NULL,
+  `TotalServiciosExentos` VARCHAR(20) NULL,
+  `TotalMercanciaGravada` VARCHAR(20) NULL,
+  `TotalMercanciaExenta` VARCHAR(20) NULL,
+  `TotalGravados` VARCHAR(20) NULL,
+  `TotalExentos` VARCHAR(20) NULL,
+  `TotalVentas` VARCHAR(20) NULL,
+  `TotalDescuentos` VARCHAR(20) NULL,
+  `TotalVentasNeta` VARCHAR(20) NULL,
+  `TotalImpuestos` VARCHAR(20) NULL,
+  `TotalComprobante` VARCHAR(20) NULL,
+  `Otros` VARCHAR(200) NULL,
+  `XMLSinFirmar` TEXT NULL,
+  `XMLFirmado` TEXT NULL,
+  `FechaRecibidoPorHacienda` DATE NULL,
+  `RespuestaHaciendaXML` TEXT NULL,
+  `RespuestaHaciendaFecha` DATE NULL,
+  `RespuestaHaciendaEstado` VARCHAR(20) NULL,
+  `CorreoEnviadoReceptor` INT NULL,
+  `TipoDocumento` VARCHAR(4) NULL,
+  `CodigoPais` VARCHAR(4) NULL,
+  `ConsecutivoFormateado` VARCHAR(11) NULL,
+  `Situacion` VARCHAR(15) NULL,
+  `CodigoSeguridad` VARCHAR(8) NULL,
+  PRIMARY KEY (`Consecutivo`, `Sucursal`))
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `tb_56_articulos_factura_electronica` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Cantidad` VARCHAR(7) NULL,
+  `UnidadMedida` VARCHAR(10) NULL,
+  `Detalle` VARCHAR(150) NULL,
+  `PrecioUnitario` VARCHAR(20) NULL,
+  `MontoTotal` VARCHAR(20) NULL,
+  `MontoDescuento` VARCHAR(20) NULL,
+  `NaturalezaDescuento` VARCHAR(20) NULL,
+  `Subtotal` VARCHAR(20) NULL,
+  `ImpuestoObject` TEXT NULL,
+  `MontoTotalLinea` VARCHAR(20) NULL,
+  `Consecutivo` INT NOT NULL,
+  `Sucursal` INT NOT NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `RespuestaHaciendaFecha`  `RespuestaHaciendaFecha` TIMESTAMP NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `FechaRecibidoPorHacienda`  `FechaRecibidoPorHacienda` TIMESTAMP NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `XMLSinFirmar`  `XMLSinFirmar` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_03_cliente` ADD  `NoReceptor` BOOLEAN NOT NULL AFTER  `Aplica_Retencion`;
+
+UPDATE  `tb_03_cliente` SET  `NoReceptor` =  '1' WHERE  `tb_03_cliente`.`Cliente_Cedula` =  '0';
+UPDATE  `tb_03_cliente` SET  `NoReceptor` =  '1' WHERE  `tb_03_cliente`.`Cliente_Cedula` =  '1';
+UPDATE  `tb_03_cliente` SET  `NoReceptor` =  '1' WHERE  `tb_03_cliente`.`Cliente_Cedula` =  '2';
+
+CREATE TABLE IF NOT EXISTS `tb_57_nota_credito_electronica` (
+  `Consecutivo` INT NOT NULL,
+  `Sucursal` INT NOT NULL,
+  `Clave` VARCHAR(100) NULL,
+  `ConsecutivoHacienda` VARCHAR(30) NULL,
+  `FechaEmision` VARCHAR(50) NULL,
+  `EmisorNombre` VARCHAR(200) NULL,
+  `EmisorTipoIdentificacion` VARCHAR(20) NULL,
+  `EmisorIdentificacion` VARCHAR(50) NULL,
+  `EmisorNombreComercial` VARCHAR(200) NULL,
+  `EmisorProvincia` VARCHAR(2) NULL,
+  `EmisorCanton` VARCHAR(2) NULL,
+  `EmisorDistrito` VARCHAR(2) NULL,
+  `EmisorBarrio` VARCHAR(2) NULL,
+  `EmisorOtrasSennas` VARCHAR(200) NULL,
+  `EmisorCodigoPaisTelefono` VARCHAR(4) NULL,
+  `EmisorTelefono` VARCHAR(20) NULL,
+  `EmisorCodigoPaisFax` VARCHAR(4) NULL,
+  `EmisorFax` VARCHAR(20) NULL,
+  `EmisorEmail` VARCHAR(200) NULL,
+  `ReceptorNombre` VARCHAR(200) NULL,
+  `ReceptorTipoIdentificacion` VARCHAR(20) NULL,
+  `ReceptorIdentificacion` VARCHAR(50) NULL,
+  `ReceptorProvincia` VARCHAR(2) NULL,
+  `ReceptorCanton` VARCHAR(2) NULL,
+  `ReceptorDistrito` VARCHAR(2) NULL,
+  `ReceptorBarrio` VARCHAR(2) NULL,
+  `ReceptorCodigoPaisTelefono` VARCHAR(4) NULL,
+  `ReceptorTelefono` VARCHAR(20) NULL,
+  `ReceptorCodigoPaisFax` VARCHAR(4) NULL,
+  `ReceptorFax` VARCHAR(20) NULL,
+  `ReceptorEmail` VARCHAR(200) NULL,
+  `CondicionVenta` VARCHAR(30) NULL,
+  `PlazoCredito` INT(3) NULL,
+  `MedioPago` VARCHAR(10) NULL,
+  `CodigoMoneda` VARCHAR(5) NULL,
+  `TipoCambio` VARCHAR(20) NULL,
+  `TotalServiciosGravados` VARCHAR(20) NULL,
+  `TotalServiciosExentos` VARCHAR(20) NULL,
+  `TotalMercanciaGravada` VARCHAR(20) NULL,
+  `TotalMercanciaExenta` VARCHAR(20) NULL,
+  `TotalGravados` VARCHAR(20) NULL,
+  `TotalExentos` VARCHAR(20) NULL,
+  `TotalVentas` VARCHAR(20) NULL,
+  `TotalDescuentos` VARCHAR(20) NULL,
+  `TotalVentasNeta` VARCHAR(20) NULL,
+  `TotalImpuestos` VARCHAR(20) NULL,
+  `TotalComprobante` VARCHAR(20) NULL,
+  `Otros` VARCHAR(200) NULL,
+  `XMLSinFirmar` TEXT NULL,
+  `XMLFirmado` TEXT NULL,
+  `FechaRecibidoPorHacienda` DATE NULL,
+  `RespuestaHaciendaXML` TEXT NULL,
+  `RespuestaHaciendaFecha` DATE NULL,
+  `RespuestaHaciendaEstado` VARCHAR(20) NULL,
+  `CorreoEnviadoReceptor` INT NULL,
+  `TipoDocumento` VARCHAR(4) NULL,
+  `CodigoPais` VARCHAR(4) NULL,
+  `ConsecutivoFormateado` VARCHAR(11) NULL,
+  `Situacion` VARCHAR(15) NULL,
+  `CodigoSeguridad` VARCHAR(8) NULL,
+  `DocumentoReferenciaNumero` VARCHAR(100) NULL,
+  `DocumentoReferenciaTipo` VARCHAR(4) NULL,
+  `DocumentoReferenciaFechaEmision` VARCHAR(50) NULL,
+  `DocumentoReferenciaCodigo` VARCHAR(4) NULL,
+  `DocumentoReferenciaRazon` VARCHAR(180) NULL,
+  PRIMARY KEY (`Consecutivo`, `Sucursal`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+CREATE TABLE IF NOT EXISTS `tb_58_articulos_nota_credito_electronica` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Cantidad` VARCHAR(7) NULL,
+  `UnidadMedida` VARCHAR(10) NULL,
+  `Detalle` VARCHAR(150) NULL,
+  `PrecioUnitario` VARCHAR(20) NULL,
+  `MontoTotal` VARCHAR(20) NULL,
+  `MontoDescuento` VARCHAR(20) NULL,
+  `NaturalezaDescuento` VARCHAR(20) NULL,
+  `Subtotal` VARCHAR(20) NULL,
+  `ImpuestoObject` TEXT NULL,
+  `MontoTotalLinea` VARCHAR(20) NULL,
+  `Consecutivo` INT NOT NULL,
+  `Sucursal` INT NOT NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB;
+
+ALTER TABLE  `tb_27_notas_credito` ADD  `Es_Anulacion` BOOLEAN NOT NULL DEFAULT  '0' AFTER  `Tipo_Cambio`;
+
+CREATE TABLE IF NOT EXISTS `tb_59_mensaje_receptor` (
+  `Consecutivo` INT NOT NULL,
+  `Sucursal` INT NOT NULL,
+  `ReceptorTipoIdentificacion` VARCHAR(20) NULL,
+  `ReceptorIdentificacion` VARCHAR(50) NULL,
+  `ReceptorCodigoPais` VARCHAR(4) NULL,
+  `ConsecutivoHacienda` VARCHAR(30) NULL,
+  `ConsecutivoFormateado` VARCHAR(11) NULL,
+  `Situacion` VARCHAR(15) NULL,
+  `CodigoSeguridad` VARCHAR(8) NULL,
+  `TipoDocumento` VARCHAR(4) NULL,
+  `Clave` VARCHAR(100) NULL,
+  `EmisorIdentificacion` VARCHAR(50) NULL,
+  `EmisorTipoIdentificacion` VARCHAR(20) NULL,
+  `EmisorNombre` VARCHAR(200) NULL,
+  `FechaEmision` VARCHAR(50) NULL,
+  `TotalImpuestos` VARCHAR(20) NULL,
+  `TotalComprobante` VARCHAR(20) NULL,
+  `FechaEmisionComprobante` VARCHAR(50) NULL,
+  `XMLSinFirmar` TEXT NULL,
+  `XMLFirmado` TEXT NULL,
+  `FechaRecibidoHacienda` TIMESTAMP NULL,
+  `RespuestaHaciendaXML` TEXT NULL,
+  `RespuestaHaciendaFecha` TIMESTAMP NULL,
+  `RespuestaHaciendaEstado` VARCHAR(20) NULL,
+  PRIMARY KEY (`Consecutivo`, `Sucursal`))
+ENGINE = InnoDB;
+
+ALTER TABLE  `tb_07_factura` DROP PRIMARY KEY ,
+ADD PRIMARY KEY (  `Factura_Consecutivo` ,  `TB_02_Sucursal_Codigo` );
+
+ALTER TABLE  `tb_57_nota_credito_electronica` CHANGE  `XMLSinFirmar`  `XMLSinFirmar` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE  `tb_57_nota_credito_electronica` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE  `tb_57_nota_credito_electronica` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `XMLSinFirmar`  `XMLSinFirmar` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `XMLFirmado`  `XMLFirmado` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE  `tb_59_mensaje_receptor` CHANGE  `RespuestaHaciendaXML`  `RespuestaHaciendaXML` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+update tb_02_sucursal set Token_Certificado_Tributa = null;
+
+ALTER TABLE  `tb_26_recibos_dinero` ADD  `Pendiente` BOOLEAN NOT NULL DEFAULT  '0' AFTER  `Anulado`;
+
+ALTER TABLE  `tb_02_sucursal` ADD  `CodigoActividad` VARCHAR( 6 ) NOT NULL;
+
+CREATE TABLE IF NOT EXISTS `catalogo_tipo_codigo_articulo` (
+  `Codigo` varchar(2) NOT NULL,
+  `Descripcion` varchar(50) NOT NULL,
+  PRIMARY KEY (`Codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `Catalogo_Tipo_Codigo_Articulo`
+--
+
+INSERT INTO `Catalogo_Tipo_Codigo_Articulo` (`Codigo`, `Descripcion`) VALUES
+('01', 'Código del producto del vendedor'),
+('02', 'Código del producto del comprador'),
+('03', 'Código del producto asignado por la industria'),
+('04', 'Código uso interno'),
+('99', 'Otros');
+
+ALTER TABLE  `tb_06_articulo` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL AFTER  `Articulo_No_Retencion`;
+
+UPDATE tb_06_articulo SET  `TipoCodigo` =  '01';
+
+ALTER TABLE  `tb_56_articulos_factura_electronica` ADD  `Codigo` VARCHAR( 30 ) NOT NULL AFTER  `Id` ,
+ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL AFTER  `Codigo`;
+
+ALTER TABLE  `tb_08_articulos_factura` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` ADD  `CodigoActividad` VARCHAR( 6 ) NOT NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` ADD  `TotalServiciosExonerados` VARCHAR( 20 ) NOT NULL AFTER  `TotalServiciosExentos`;
+
+ALTER TABLE  `tb_55_factura_electronica` ADD  `TotalMercanciaExonerada` VARCHAR( 20 ) NOT NULL AFTER  `TotalMercanciaExenta`;
+
+ALTER TABLE  `tb_55_factura_electronica` ADD  `TotalExonerado` VARCHAR( 20 ) NOT NULL AFTER  `TotalExentos`;
+
+ALTER TABLE  `tb_55_factura_electronica` ADD  `TotalIVADevuelto` VARCHAR( 20 ) NOT NULL AFTER  `TotalImpuestos`;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `TotalServiciosExonerados`  `TotalServiciosExonerados` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `TotalExonerado`  `TotalExonerado` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `TotalMercanciaExonerada`  `TotalMercanciaExonerada` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `TotalIVADevuelto`  `TotalIVADevuelto` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` CHANGE  `CodigoActividad`  `CodigoActividad` VARCHAR( 6 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_55_factura_electronica` ADD  `TotalOtrosCargos` VARCHAR( 20 ) NULL AFTER  `TotalIVADevuelto`;
+
+ALTER TABLE  `tb_56_articulos_factura_electronica` ADD  `BaseImponible` VARCHAR( 20 ) NULL AFTER  `Subtotal`;
+
+ALTER TABLE  `tb_28_productos_notas_credito` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL AFTER  `Codigo`;
+
+ALTER TABLE  `tb_58_articulos_nota_credito_electronica` ADD  `Codigo` VARCHAR( 30 ) NOT NULL AFTER  `Id` ,
+ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL AFTER  `Codigo`;
+
+ALTER TABLE  `tb_58_articulos_nota_credito_electronica` CHANGE  `Codigo`  `Codigo` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_58_articulos_nota_credito_electronica` CHANGE  `TipoCodigo`  `TipoCodigo` VARCHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE  `tb_58_articulos_nota_credito_electronica` ADD  `BaseImponible` VARCHAR( 20 ) NULL AFTER  `NaturalezaDescuento`;
+
+ALTER TABLE  `tb_57_nota_credito_electronica` ADD  `CodigoActividad` VARCHAR( 20 ) NULL ,
+ADD  `TotalServiciosExonerados` VARCHAR( 20 ) NULL ,
+ADD  `TotalMercanciaExonerada` VARCHAR( 20 ) NULL ,
+ADD  `TotalExonerado` VARCHAR( 20 ) NULL ,
+ADD  `TotalIVADevuelto` VARCHAR( 20 ) NULL ,
+ADD  `TotalOtrosCargos` VARCHAR( 20 ) NULL;
+
+
+--
+-- Estructura de tabla para la tabla `catalogo_unidad_medida`
+--
+
+CREATE TABLE IF NOT EXISTS `catalogo_unidad_medida` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Codigo` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `Descripcion` varchar(40) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=96 ;
+
+--
+-- Volcado de datos para la tabla `catalogo_unidad_medida`
+--
+
+INSERT INTO `catalogo_unidad_medida` (`Id`, `Codigo`, `Descripcion`) VALUES
+(1, 'Al', 'Alquiler de uso habitacional'),
+(2, 'Alc', 'Alquiler de uso comercial'),
+(3, 'Cm', 'Comisiones'),
+(4, 'I', 'Intereses'),
+(5, 'Os', 'Otro tipo de servicios'),
+(6, 'Sp', 'Servicios Profesionales'),
+(7, 'Spe', 'Servicios Personales'),
+(8, 'St', 'Servicios Técnicos'),
+(9, 'm', 'Metro'),
+(10, 'kg', 'Kilogramo'),
+(11, 's', 'Segundo'),
+(12, 'A', 'Ampere'),
+(13, 'K', 'Kelvin'),
+(14, 'mol', 'Mol'),
+(15, 'cd', 'Candela'),
+(16, 'm²', 'metro cuadrado'),
+(17, 'm³', 'metro cúbico'),
+(18, 'm/s', 'metro por segundo'),
+(19, 'm/s²', 'metro por segundo cuadrado'),
+(20, '1/m', '1 por metro'),
+(21, 'kg/m³', 'kilogramo por metro cúbico'),
+(22, 'A/m²', 'ampere por metro cuadrado'),
+(23, 'A/m', 'ampere por metro'),
+(24, 'mol/m³', 'mol por metro cúbico'),
+(25, 'cd/m²', 'candela por metro cuadrado'),
+(26, '1', 'uno (indice de refracción)'),
+(27, 'rad', 'radián'),
+(28, 'sr', 'estereorradián'),
+(29, 'Hz', 'hertz'),
+(30, 'N', 'newton'),
+(31, 'Pa', 'Pascal'),
+(32, 'J', 'Joule'),
+(33, 'W', 'Watt'),
+(34, 'C', 'coulomb'),
+(35, 'V', 'volt'),
+(36, 'F', 'Farad'),
+(37, 'Ω', 'ohm'),
+(38, 'S', 'siemens'),
+(39, 'Wb', 'weber'),
+(40, 'T', 'Tesla'),
+(41, 'H', 'henry'),
+(42, '°C', 'grado Celsius'),
+(43, 'lm', 'lumen'),
+(44, 'lx', 'lux'),
+(45, 'Bq', 'Becquerel'),
+(46, 'Gy', 'gray'),
+(47, 'Sv', 'sievert'),
+(48, 'kat', 'katal'),
+(49, 'Pa·s', 'pascal segundo'),
+(50, 'N·m', 'newton metro'),
+(51, 'N/m', 'newton por metro'),
+(52, 'rad/s', 'radián por segundo'),
+(53, 'rad/s²', 'radián por segundo cuadrado'),
+(54, 'W/m²', 'watt por metro cuadrado'),
+(55, 'J/K', 'joule por kelvin'),
+(56, 'J/(kg·K)', 'joule por kilogramo kelvin'),
+(57, 'J/kg', 'joule por kilogramo'),
+(58, 'W/(m·K)', 'watt por metro kevin'),
+(59, 'J/m³', 'joule por metro cúbico'),
+(60, 'V/m', 'volt por metro'),
+(61, 'C/m³', 'coulomb por metro cúbico'),
+(62, 'C/m²', 'coulomb por metro cuadrado'),
+(63, 'F/m', 'farad por metro'),
+(64, 'H/m', 'henry por metro'),
+(65, 'J/mol', 'joule por mol'),
+(66, 'J/(mol·K)', 'joule por mol kelvin'),
+(67, 'C/kg', 'coulomb por kilogramo'),
+(68, 'Gy/s', 'gray por segundo'),
+(69, 'W/sr', 'watt por estereorradián'),
+(70, 'W/(m²·sr)', 'watt por metro cuadrado estereorradián\n'),
+(71, 'kat/m³', 'katal por metro cúbico'),
+(72, 'min', 'minuto'),
+(73, 'h', 'hora'),
+(74, 'd', 'día'),
+(75, 'º', 'grado'),
+(76, '´', 'minuto'),
+(77, '´´', 'segundo'),
+(78, 'L', 'litro'),
+(79, 't', 'tonelada'),
+(80, 'Np', 'Neper'),
+(81, 'B', 'Bel'),
+(82, 'eV', 'electronvolt'),
+(83, 'u', 'unidad de masa atómica unificada'),
+(84, 'ua', 'unidad astronómica'),
+(85, 'Unid', 'unidad'),
+(86, 'Gal', 'galón'),
+(87, 'g', 'gramo'),
+(88, 'Km', 'kilometro'),
+(89, 'Kw', 'kilovatios'),
+(90, 'In', 'pulgada'),
+(91, 'cm', 'centimetro'),
+(92, 'mL', 'mililitro'),
+(93, 'mm', 'milimetro'),
+(94, 'Oz', 'onzas'),
+(95, 'Otros', 'Otros');
+
+ALTER TABLE  `tb_06_articulo` ADD  `UnidadMedida` VARCHAR( 10 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL AFTER  `TipoCodigo`;
+
+ALTER TABLE  `tb_08_articulos_factura` ADD  `UnidadMedida` VARCHAR( 10 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL AFTER  `TipoCodigo`;
+
+UPDATE tb_06_articulo SET  `UnidadMedida` =  'Unid';
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `catalogo_tipo_impuesto`
+--
+
+CREATE TABLE IF NOT EXISTS `catalogo_tipo_impuesto` (
+  `Id` varchar(2) NOT NULL,
+  `Descripcion` varchar(100) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `catalogo_tipo_impuesto`
+--
+
+INSERT INTO `catalogo_tipo_impuesto` (`Id`, `Descripcion`) VALUES
+('01', 'Impuesto al Valor Agregado'),
+('02', 'Impuesto Selectivo de Consumo'),
+('03', 'Impuesto unico a los combustivos'),
+('04', 'Impuesto especifico de bebidas alcohólicas'),
+('05', 'impuesto especifico sobre las bebidas envasadas sin contenido alcoholico y jabones de tocador'),
+('06', 'impuesto a los productos de tabaco'),
+('07', 'IVA (cálculo especial)'),
+('08', 'IVA Régimen de Bienes Usados (Factor)'),
+('12', 'Impuesto Especifico al Cemento'),
+('99', 'Otros');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `catalogo_tipo_tarifa`
+--
+
+CREATE TABLE IF NOT EXISTS `catalogo_tipo_tarifa` (
+  `Id` varchar(2) NOT NULL,
+  `Descripcion` varchar(50) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `catalogo_tipo_tarifa`
+--
+
+INSERT INTO `catalogo_tipo_tarifa` (`Id`, `Descripcion`) VALUES
+('01', 'Tarifa 0% (Exento)'),
+('02', 'Tarifa Reducida 1%'),
+('03', 'Tarifa reducida 2%'),
+('04', 'Tarifa reducida 4%'),
+('05', 'Transitorio 0%'),
+('06', 'Transitorio 4%'),
+('07', 'Transitorio 8%'),
+('08', 'Tarifa General 13%');
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `tb_61_factura_compra_electronica` (
+  `Consecutivo` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL,
+  `Clave` varchar(100) DEFAULT NULL,
+  `ConsecutivoHacienda` varchar(30) DEFAULT NULL,
+  `FechaEmision` varchar(50) DEFAULT NULL,
+  `EmisorNombre` varchar(200) DEFAULT NULL,
+  `EmisorTipoIdentificacion` varchar(20) DEFAULT NULL,
+  `EmisorIdentificacion` varchar(50) DEFAULT NULL,
+  `EmisorProvincia` varchar(2) DEFAULT NULL,
+  `EmisorCanton` varchar(2) DEFAULT NULL,
+  `EmisorDistrito` varchar(2) DEFAULT NULL,
+  `EmisorOtrasSennas` varchar(200) DEFAULT NULL,
+  `EmisorEmail` varchar(200) DEFAULT NULL,
+  `ReceptorNombre` varchar(200) DEFAULT NULL,
+  `ReceptorTipoIdentificacion` varchar(20) DEFAULT NULL,
+  `ReceptorIdentificacion` varchar(50) DEFAULT NULL,
+  `ReceptorProvincia` varchar(2) DEFAULT NULL,
+  `ReceptorCanton` varchar(2) DEFAULT NULL,
+  `ReceptorDistrito` varchar(2) DEFAULT NULL,
+  `ReceptorEmail` varchar(200) DEFAULT NULL,
+  `CondicionVenta` varchar(30) DEFAULT NULL,
+  `PlazoCredito` int(3) DEFAULT NULL,
+  `MedioPago` varchar(10) DEFAULT NULL,
+  `CodigoMoneda` varchar(5) DEFAULT NULL,
+  `TipoCambio` varchar(20) DEFAULT NULL,
+  `TotalServiciosGravados` varchar(20) DEFAULT NULL,
+  `TotalServiciosExentos` varchar(20) DEFAULT NULL,
+  `TotalServiciosExonerados` varchar(20) DEFAULT NULL,
+  `TotalMercanciaGravada` varchar(20) DEFAULT NULL,
+  `TotalMercanciaExenta` varchar(20) DEFAULT NULL,
+  `TotalMercanciaExonerada` varchar(20) DEFAULT NULL,
+  `TotalGravados` varchar(20) DEFAULT NULL,
+  `TotalExentos` varchar(20) DEFAULT NULL,
+  `TotalExonerado` varchar(20) DEFAULT NULL,
+  `TotalVentas` varchar(20) DEFAULT NULL,
+  `TotalDescuentos` varchar(20) DEFAULT NULL,
+  `TotalVentasNeta` varchar(20) DEFAULT NULL,
+  `TotalImpuestos` varchar(20) DEFAULT NULL,
+  `TotalIVADevuelto` varchar(20) DEFAULT NULL,
+  `TotalOtrosCargos` varchar(20) DEFAULT NULL,
+  `TotalComprobante` varchar(20) DEFAULT NULL,
+  `XMLSinFirmar` longtext,
+  `XMLFirmado` longtext,
+  `FechaRecibidoPorHacienda` timestamp NULL DEFAULT NULL,
+  `RespuestaHaciendaXML` longtext,
+  `RespuestaHaciendaFecha` timestamp NULL DEFAULT NULL,
+  `RespuestaHaciendaEstado` varchar(20) DEFAULT NULL,
+  `CorreoEnviadoReceptor` int(11) DEFAULT NULL,
+  `TipoDocumento` varchar(4) DEFAULT NULL,
+  `CodigoPais` varchar(4) DEFAULT NULL,
+  `ConsecutivoFormateado` varchar(11) DEFAULT NULL,
+  `Situacion` varchar(15) DEFAULT NULL,
+  `CodigoSeguridad` varchar(8) DEFAULT NULL,
+  `CodigoActividad` varchar(6) DEFAULT NULL,
+  PRIMARY KEY (`Consecutivo`,`Sucursal`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `tb_62_articulos_factura_compra_electronica` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Codigo` varchar(30) NOT NULL,
+  `TipoCodigo` varchar(2) NOT NULL,
+  `Cantidad` varchar(7) DEFAULT NULL,
+  `UnidadMedida` varchar(10) DEFAULT NULL,
+  `Detalle` varchar(150) DEFAULT NULL,
+  `PrecioUnitario` varchar(20) DEFAULT NULL,
+  `MontoTotal` varchar(20) DEFAULT NULL,
+  `MontoDescuento` varchar(20) DEFAULT NULL,
+  `NaturalezaDescuento` varchar(20) DEFAULT NULL,
+  `Subtotal` varchar(20) DEFAULT NULL,
+  `ImpuestoObject` text,
+  `MontoTotalLinea` varchar(20) DEFAULT NULL,
+  `Consecutivo` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+ALTER TABLE  `tb_62_articulos_factura_compra_electronica` ADD  `BaseImponible` VARCHAR( 20 ) NOT NULL AFTER  `MontoTotal`;
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ALTER TABLE  `tb_02_sucursal` ADD  `RequiereFE` BOOLEAN NOT NULL AFTER  `CodigoActividad`;
+
+UPDATE tb_02_sucursal SET RequiereFE =1;
+
+
+ALTER TABLE  `tb_04_articulos_proforma` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL ,
+ADD  `UnidadMedida` VARCHAR( 10 ) NOT NULL;
+
+update tb_04_articulos_proforma set `TipoCodigo` = '01', `UnidadMedida` = 'Unid';
+
+ALTER TABLE  `tb_51_lista_consignacion` ADD  `TipoCodigo` VARCHAR( 2 ) NOT NULL ,
+ADD  `UnidadMedida` VARCHAR( 10 ) NOT NULL;
+
+update tb_51_lista_consignacion set `TipoCodigo` = '01', `UnidadMedida` = 'Unid';
+
+ALTER TABLE  `tb_02_sucursal` ADD  `RequiereIVA` BOOLEAN NOT NULL AFTER  `RequiereFE`;
+UPDATE  `tb_02_sucursal` SET  `RequiereIVA` = 1;
+
+ALTER TABLE `tb_03_cliente` ADD `Empresa_Liga` INT NOT NULL;
+update tb_03_cliente set `Empresa_Liga` = 2;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla 'tb_63_control_inventario'
+--
+
+CREATE TABLE IF NOT EXISTS tb_63_control_inventario (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  Fecha_Creacion timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Creado_Por int(11) NOT NULL,
+  Empate_Autorizado_Por int(11) NOT NULL,
+  Sucursal int(11) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla 'tb_64_articulos_control_inventario'
+--
+
+CREATE TABLE IF NOT EXISTS tb_64_articulos_control_inventario (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  Codigo varchar(30) NOT NULL,
+  Descripcion varchar(150) NOT NULL,
+  Fisico_Defectuoso int(11) NOT NULL,
+  Fisico_Bueno int(11) NOT NULL,
+  Sistema_Defectuoso int(11) NOT NULL,
+  Sistema_Bueno int(11) NOT NULL,
+  Empatar tinyint(1) NOT NULL,
+  Control_Inventario int(11) NOT NULL,
+  PRIMARY KEY (id),
+  KEY Control_Inventario (Control_Inventario)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `tb_64_articulos_control_inventario`
+--
+ALTER TABLE `tb_64_articulos_control_inventario`
+  ADD CONSTRAINT tb_64_articulos_control_inventario_ibfk_1 FOREIGN KEY (Control_Inventario) REFERENCES tb_64_articulos_control_inventario (id) ON DELETE CASCADE ON UPDATE CASCADE;

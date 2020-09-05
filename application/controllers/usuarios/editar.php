@@ -288,27 +288,27 @@ class editar extends CI_Controller {
 
 				$this->do_upload($cedula_usuario."_".$sucursal_usuario); // metodo encargado de cargar la imagen con la cedula del usuario
 				
-				$data_update['Usuario_Cedula'] = mysql_real_escape_string($cedula_usuario);
-				//$data_update['TB_02_Sucursal_Codigo'] =  mysql_real_escape_string($sucursal_usuario);
-				$data_update['Usuario_Nombre'] = mysql_real_escape_string($nombre_usuario);
-				$data_update['Usuario_Apellidos'] = mysql_real_escape_string($apellidos_usuario);
-				$data_update['Usuario_Celular'] = mysql_real_escape_string($celular_usuario);
-				$data_update['Usuario_Telefono'] = mysql_real_escape_string($telefono_usuario);
-				//$data_update['Usuario_Fecha_Ingreso'] = mysql_real_escape_string($fecha_ingreso_usuario);
+				$data_update['Usuario_Cedula'] = $cedula_usuario;
+				//$data_update['TB_02_Sucursal_Codigo'] =  $sucursal_usuario);
+				$data_update['Usuario_Nombre'] = $nombre_usuario;
+				$data_update['Usuario_Apellidos'] = $apellidos_usuario;
+				$data_update['Usuario_Celular'] = $celular_usuario;
+				$data_update['Usuario_Telefono'] = $telefono_usuario;
+				//$data_update['Usuario_Fecha_Ingreso'] = $fecha_ingreso_usuario);
 				if (!empty($fecha_cesantia_usuario)) {
-					$data_update['Usuario_Fecha_Cesantia'] = mysql_real_escape_string($fecha_cesantia_usuario);
+					$data_update['Usuario_Fecha_Cesantia'] = $fecha_cesantia_usuario;
 				}
 				if (!empty($fecha_recontratacion_Usuario)) {
-					$data_update['Usuario_Fecha_Recontratacion'] = mysql_real_escape_string($fecha_recontratacion_Usuario);
+					$data_update['Usuario_Fecha_Recontratacion'] = $fecha_recontratacion_Usuario;
 				}
 				
 				if($nombre_usuario_original!=$usuario_nombre_usuario){				
-					$data_update['Usuario_Nombre_Usuario'] = mysql_real_escape_string($usuario_nombre_usuario);
+					$data_update['Usuario_Nombre_Usuario'] = $usuario_nombre_usuario;
 				}
-				$data_update['Usuario_Observaciones'] = mysql_real_escape_string($observaciones);
-				$data_update['Usuario_Imagen_URL'] = mysql_real_escape_string($this->direccion_url_imagen);
-				$data_update['Usuario_Correo_Electronico'] = mysql_real_escape_string($email_usuario);
-				$data_update['Usuario_Rango'] = mysql_real_escape_string($rango_usuario);
+				$data_update['Usuario_Observaciones'] = $observaciones;
+				$data_update['Usuario_Imagen_URL'] = $this->direccion_url_imagen;
+				$data_update['Usuario_Correo_Electronico'] = $email_usuario;
+				$data_update['Usuario_Rango'] = $rango_usuario;
 				
 				if($usuario_password){
 					$data_update['Usuario_Password'] = MD5($usuario_password);     
@@ -331,7 +331,7 @@ class editar extends CI_Controller {
 				}		
 				
 				
-				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el usuario codigo: ".mysql_real_escape_string($codigo_usuario),$data['Sucursal_Codigo'],'edicion');
+				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el usuario codigo: ".$codigo_usuario,$data['Sucursal_Codigo'],'edicion');
 				//echo "tipo cedula ".$tipo_cedula_usuario;
 			}
 		}
@@ -392,8 +392,8 @@ class editar extends CI_Controller {
 
 	$data_update['Usuario_Password'] =MD5($usuario_password);  
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el usuario codigo: ".mysql_real_escape_string($cedula_usuario),$data['Sucursal_Codigo'],'edicion');
-	$this->user->actualizar(mysql_real_escape_string($cedula_usuario), $data_update);
+	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el usuario codigo: ".$cedula_usuario),$data['Sucursal_Codigo'],'edicion');
+	$this->user->actualizar($cedula_usuario), $data_update);
 	
 	redirect('home', 'location');*/
 	
@@ -433,18 +433,18 @@ class editar extends CI_Controller {
 		$this->do_upload($cedula_usuario."_".$sucursal_usuario); // metodo encargado de cargar la imagen con la cedula del usuario
 	//}
 	
-	$data_update['Usuario_Nombre'] = mysql_real_escape_string($nombre_usuario);
-	$data_update['Usuario_Apellidos'] = mysql_real_escape_string($apellidos_usuario);
-	$data_update['Usuario_Celular'] = mysql_real_escape_string($celular_usuario);
-	$data_update['Usuario_Telefono'] = mysql_real_escape_string($telefono_usuario);
-	$data_update['Usuario_Imagen_URL'] = mysql_real_escape_string($this->direccion_url_imagen);
-	$data_update['Usuario_Correo_Electronico'] = mysql_real_escape_string($email_usuario);
+	$data_update['Usuario_Nombre'] = $nombre_usuario;
+	$data_update['Usuario_Apellidos'] = $apellidos_usuario;
+	$data_update['Usuario_Celular'] = $celular_usuario;
+	$data_update['Usuario_Telefono'] = $telefono_usuario;
+	$data_update['Usuario_Imagen_URL'] = $this->direccion_url_imagen;
+	$data_update['Usuario_Correo_Electronico'] = $email_usuario;
 	if($usuario_password && $this->user->login($data['Usuario_Nombre_Usuario'], $usuario_password_actual)){
 		$data_update['Usuario_Password'] = MD5($usuario_password);     
 	}
 	$this->user->actualizar($codigo_usuario, $data_update);
 	
-	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cambio su perfil: ".mysql_real_escape_string($codigo_usuario),$data['Sucursal_Codigo'],'edicion');
+	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cambio su perfil: ".$codigo_usuario,$data['Sucursal_Codigo'],'edicion');
 	
 	redirect('home', 'location');
  }
