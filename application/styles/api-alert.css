@@ -1,0 +1,26 @@
+.api-hacienda-alert{
+    position: absolute;
+    width: 400px;
+    margin: auto;
+    left: calc(50% - 200px);
+    top: 0;
+    padding: 5px;
+    border-radius: 3px;
+    text-align: center;
+    color: white;
+}
+
+.api-hacienda-alert.success{
+    background: #02a237;
+}
+
+.api-hacienda-alert.error{
+    background: #e40404;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

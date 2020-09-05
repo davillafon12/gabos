@@ -198,6 +198,8 @@ function clickAceptar_Admin(event){
 			$('#pop_up_descuento').bPopup({
 				modalClose: false
 			});	
+		}else if(numeroPopUp == '3'){
+			anularPost();
 		}
 		else if(numeroPopUp=='4'){ //Si es descuento
 			event.stopPropagation();

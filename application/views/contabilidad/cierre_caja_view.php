@@ -321,7 +321,7 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Abonos</p></td>
 								</tr>
 								<tr>
-									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['efectivo']-$detalleNotasCredito['credito'],2,",",".");?></p></td>
+									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['efectivo'],2,",",".");?></p></td>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['tarjeta'],2,",",".");?></p></td>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['deposito'],2,",",".");?></p></td>
 									<td class='alg-right'><p class='parrafo'>₡<?php echo number_format($recibos['abonos'],2,",",".");?></p></td>
@@ -373,7 +373,7 @@ PARA:
 								<tr>
 									<?php
 										$totalFaltante = $totalRecibosParciales;
-										$totalFaltante -= ($recibos['efectivo']-$detalleNotasCredito['credito']);
+										$totalFaltante -= ($recibos['efectivo']);
 										//$totalFaltante -= $recibos['efectivo'];
 										$totalFaltante -= $recibos['abonos'];
 										$totalFaltante += $detalleNotasCredito['contado'];
@@ -421,7 +421,12 @@ PARA:
 									<?php
 										$contador = 1;
 										foreach($vendedores['vendidoVendedores'] as $vendedor){
-											$vendedor = $vendedor[0];											
+											$vendedor = $vendedor[0];
+                                                                                        
+                                                                                        if(trim($vendedor->usuario) == ""){
+                                                                                            continue;
+                                                                                        }
+                                                                                        
 											echo "<td style='text-align: left; width: 250px;'><p class='parrafo'>{$vendedor->usuario}</p></td>";
 											echo "<td class='' style='width: 120px;'><p class='parrafo'>₡".number_format($vendedor->total_vendido,2,",",".")."</p></td>";
 											if($contador == 2){

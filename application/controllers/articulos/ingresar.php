@@ -10,6 +10,7 @@ class ingresar extends CI_Controller {
 		$this->load->model('familia','',TRUE);
 		$this->load->model('user','',TRUE);
 		$this->load->model('bodega_m','',TRUE);
+                $this->load->model('catalogo','',TRUE);
 	}
 
 	function index()
@@ -18,7 +19,7 @@ class ingresar extends CI_Controller {
 	}
 	
 	function individual(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -30,8 +31,12 @@ class ingresar extends CI_Controller {
 		$this->load->helper(array('form'));
 		$empresas_actuales = $this->empresa->get_empresas_ids_array();
 		$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
+                $tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
+                $unidadesMedida = $this->catalogo->getUnidadesDeMedida();
 		$data['Familia_Empresas'] = $empresas_actuales;
 		$data['Familias'] = $familias_actuales;
+                $data['tipo_codigo'] = $tiposCodigos;
+                $data['unidades_medida'] = $unidadesMedida;
 		$this->load->view('articulos/articulos_ingreso_individual', $data);
 	}
 	
@@ -56,11 +61,16 @@ class ingresar extends CI_Controller {
 		$precio3_Articulo = $this->input->post('precio3');
 		$precio4_Articulo = $this->input->post('precio4');
 		$precio5_Articulo = $this->input->post('precio5');
+                
+                $tipo_codigo = $this->input->post('tipo_codigo');
+                $unidad_medida = $this->input->post('unidad_medida');
+                
+                $unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
 		
 
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
-		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo))
+		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo, $tipo_codigo, $unidad_medida))
 		{ //Si se ingreso bien a la BD
 			//$this->bodega_m->restarCantidadBodega($cantidad_Articulos, $codigoBrasil, $empresa_Articulo);
 			
@@ -74,7 +84,7 @@ class ingresar extends CI_Controller {
 			}
 			$data['Titulo_Pagina'] = "Transacción Exitosa";
 		
-			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el articulo ".mysql_real_escape_string($codigo_Articulo)." cantidad: ".mysql_real_escape_string($cantidad_Articulos),$data['Sucursal_Codigo'],'registro');
+			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el articulo ".$codigo_Articulo." cantidad: ".$cantidad_Articulos,$data['Sucursal_Codigo'],'registro');
 			$data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso del articulo ".$codigo_Articulo." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
 									 <div class='Informacion'>
 									 <form action=".base_url('articulos/ingresar/individual').">				                 				
@@ -203,7 +213,7 @@ class ingresar extends CI_Controller {
     }
 	
 	function masivo(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		
@@ -219,7 +229,7 @@ class ingresar extends CI_Controller {
 	
 	function cargaMasiva(){
 		
-		include '/../get_session_data.php';
+		include PATH_USER_DATA;
 		if(isset($_FILES['archivo_excel'])){		
 				$resultado = $this->procesarExcel();
 				//print_r($resultado);

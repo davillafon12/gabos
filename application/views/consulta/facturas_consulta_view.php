@@ -51,6 +51,17 @@ PARA:
 		<script>
 			var decimales = '<?php echo $this->configuracion->getDecimales();?>';
 		</script>
+                <style>
+                    .envio_factura {
+                        display: none;
+                        text-align: center;
+                    }
+                    .envio_p {
+                        font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif;
+                        font-size: 26px;
+                        color: #C1C1C1;
+                    }
+                </style>
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
@@ -236,6 +247,10 @@ PARA:
 					</tbody></table>
 				</div>
 			</div><!--CONTENEDOR-->
+                        <div class="envio_factura" id="envio_anulacion">
+                                <img class="envio_img" src="<?php echo base_url('application/images/enviandoFactura.gif'); ?>">
+                                <p class="envio_p">Anulando factura... <br>Por favor, espere.</p>
+                        </div>
         </div>		
 		
 		<div class="pop_up_administrador" id="pop_up_administrador">

@@ -25,7 +25,7 @@ Class proforma_m extends CI_Model
 		}
 		else
 		{
-			$consecutivo;
+			$consecutivo=0;
 			$result = $query->result();
 			foreach($result as $row)
 			{$consecutivo=$row->Proforma_Consecutivo;}
@@ -47,18 +47,18 @@ Class proforma_m extends CI_Model
 			$this->load->model('cliente','',TRUE);
 			$clienteArray = $this->cliente->getNombreCliente($cedula);
 			$dataProforma = array(
-	                        'Proforma_Consecutivo'=>mysql_real_escape_string($consecutivo),
-	                        'Proforma_Observaciones'=>mysql_real_escape_string($observaciones), 
+	                        'Proforma_Consecutivo'=>$consecutivo,
+	                        'Proforma_Observaciones'=>$observaciones, 
 													'Proforma_Estado'=>'sin_procesar',
-													'Proforma_Moneda'=>mysql_real_escape_string($currency),
+													'Proforma_Moneda'=>$currency,
 													'Proforma_Porcentaje_IVA'=>$c_array['iva'],
 													'Proforma_Tipo_Cambio'=>$c_array['dolar_venta'],
-													'Proforma_Nombre_Cliente'=>mysql_real_escape_string($nombre),
+													'Proforma_Nombre_Cliente'=>$nombre,
 													'Proforma_Fecha_Hora'=>$Current_datetime,
 													'TB_02_Sucursal_Codigo'=>$sucursal,
 													'Proforma_Vendedor_Codigo'=>$vendedor,	
 													'Proforma_Vendedor_Sucursal'=>$sucursalVendedor,	
-													'TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cedula),
+													'TB_03_Cliente_Cliente_Cedula'=>$cedula,
 													'Proforma_Cliente_Sucursal'=>$clienteArray['sucursal'],
 													'Proforma_Cliente_Exento'=>$clienteArray['exento'],
 													'Proforma_Cliente_No_Retencion'=>$clienteArray['retencion']													
@@ -101,102 +101,76 @@ Class proforma_m extends CI_Model
 		}
 	}
 	
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida){
 		$sucursalVendedor =  $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
 		$dataItem = array(
-              'Articulo_Proforma_Codigo'=>mysql_real_escape_string($codigo),
-              'Articulo_Proforma_Descripcion'=>mysql_real_escape_string($descripcion), 
-							'Articulo_Proforma_Cantidad'=>mysql_real_escape_string($cantidad),
-							'Articulo_Proforma_Descuento'=>mysql_real_escape_string($descuento),
-							'Articulo_Proforma_Exento'=>mysql_real_escape_string($exento),
-							'Articulo_Proforma_No_Retencion'=>mysql_real_escape_string($retencion),
-							'Articulo_Proforma_Precio_Unitario'=>mysql_real_escape_string($precio),
-							'Articulo_Proforma_Precio_Final'=>mysql_real_escape_string($precioFinal),	
-							'Articulo_Proforma_Imagen'=>mysql_real_escape_string($imagen),
-							'TB_10_Proforma_Proforma_Consecutivo'=>mysql_real_escape_string($consecutivo),
-							'TB_10_Proforma_TB_02_Sucursal_Codigo'=>mysql_real_escape_string($sucursal),
-							'TB_10_Proforma_Proforma_Vendedor_Codigo'=>mysql_real_escape_string($vendedor),
-							'TB_10_Proforma_Proforma_Vendedor_Sucursal'=>mysql_real_escape_string($sucursalVendedor),
-							'TB_10_Proforma_TB_03_Cliente_Cliente_Cedula'=>mysql_real_escape_string($cliente)							
+              'Articulo_Proforma_Codigo'=>$codigo,
+              'Articulo_Proforma_Descripcion'=>$descripcion, 
+							'Articulo_Proforma_Cantidad'=>$cantidad,
+							'Articulo_Proforma_Descuento'=>$descuento,
+							'Articulo_Proforma_Exento'=>$exento,
+							'Articulo_Proforma_No_Retencion'=>$retencion,
+							'Articulo_Proforma_Precio_Unitario'=>$precio,
+							'Articulo_Proforma_Precio_Final'=>$precioFinal,	
+							'Articulo_Proforma_Imagen'=>$imagen,
+							'TB_10_Proforma_Proforma_Consecutivo'=>$consecutivo,
+							'TB_10_Proforma_TB_02_Sucursal_Codigo'=>$sucursal,
+							'TB_10_Proforma_Proforma_Vendedor_Codigo'=>$vendedor,
+							'TB_10_Proforma_Proforma_Vendedor_Sucursal'=>$sucursalVendedor,
+							'TB_10_Proforma_TB_03_Cliente_Cliente_Cedula'=>$cliente,
+							'TipoCodigo' => $tipoCodigo,
+							'UnidadMedida' => $unidadMedida							
 	                    );			
 	        $this->db->insert('TB_04_Articulos_Proforma',$dataItem);
 	}
 	
 	function getCostosTotalesProforma($consecutivo, $sucursal){
-		$costo_total = 0;
-		$iva = 0;
-		$costo_sin_iva = 0;
-		$retencion = 0;
-		$this->load->model('articulo','',TRUE);
-		$this->load->model('cliente','',TRUE);
-		//Traemos el array de configuracion para obtener el porcentaje
-		$c_array = $this->getConfgArray();
-		
-		//Obtenemos la info del cliente para ver si es exento y/o aplica retencion
-		$head = $this->getProformasHeaders($consecutivo, $sucursal)[0];
-		$clienteEsExento = $this->cliente->clienteEsExentoDeIVA($head->TB_03_Cliente_Cliente_Cedula);
-		$clienteNoAplicaRetencion = $this->cliente->clienteEsExentoDeRetencion($head->TB_03_Cliente_Cliente_Cedula);
-		
-		if($articulos = $this->getArticulosProforma($consecutivo, $sucursal)){
-			foreach($articulos as $articulo)
-			{
-				//Calculamos el precio total de los articulos
-				$precio_total_articulo = (($articulo->Articulo_Proforma_Precio_Unitario)-(($articulo->Articulo_Proforma_Precio_Unitario)*(($articulo->Articulo_Proforma_Descuento)/100)))*$articulo->Articulo_Proforma_Cantidad;
-				$precio_total_articulo_sin_descuento = $articulo->Articulo_Proforma_Precio_Unitario*$articulo->Articulo_Proforma_Cantidad;
-				$precio_articulo_final = $articulo->Articulo_Proforma_Precio_Final;
-				$precio_articulo_final = $precio_articulo_final * $articulo->Articulo_Proforma_Cantidad;
-				
-				//Calculamos los impuestos
-				
-				$isExento = $articulo->Articulo_Proforma_Exento;
-				
-				if($isExento=='0'){ 
-					$costo_sin_iva += $precio_total_articulo/(1+(floatval($c_array['iva'])/100));
-					
-					
-					$iva_precio_total_cliente = $precio_total_articulo - ($precio_total_articulo/(1+(floatval($c_array['iva'])/100)));
-					$iva_precio_total_cliente_sin_descuento = $precio_total_articulo_sin_descuento - ($precio_total_articulo_sin_descuento/(1+(floatval($c_array['iva'])/100))); 
-					
-					$precio_final_sin_iva = $precio_articulo_final/(1+(floatval($c_array['iva'])/100));
-					$iva_precio_final = $precio_articulo_final - $precio_final_sin_iva;
-					
-					if(!$articulo->Articulo_Proforma_No_Retencion){
-							$retencion += ($iva_precio_final - $iva_precio_total_cliente_sin_descuento);
-					}
-				}
-				else if($isExento=='1'){
-					$costo_sin_iva += $precio_total_articulo;
-					//$retencion = 0;
-				}
-				$costo_total += $precio_total_articulo;
-			}
-			$iva = $costo_total-$costo_sin_iva;
-		}
-		
-		//$retencion -= $iva;
-		//Si aplica la retencion entonces modificamos los costos
-		if(!$c_array['aplicar_retencion']){
-			$retencion = 0;
-		}
-		
-		//Si el cliente es exento o no aplica retencion, lo valoramos
-		if($clienteEsExento){
-				$costo_total -= $iva;
-				$iva = 0;
-				$retencion = 0;
-		}
-		if($clienteNoAplicaRetencion){
-				$retencion = 0;
-		}
-		
-		$costo_total += $retencion;
-		
-		return array('Proforma_Monto_Total'=>$costo_total, 'Proforma_Monto_IVA'=>$iva, 'Proforma_Monto_Sin_IVA'=>$costo_sin_iva, 'Proforma_Retencion'=>$retencion);
-	
-	
+            $costo_total = 0;
+            $iva = 0;
+            $costo_sin_iva = 0;
+            $retencion = 0;
+            $totalGravados = 0;
+            $totalExentos = 0;
+            $descuento = 0;
+            $this->load->model('articulo','',TRUE);
+            $this->load->model('cliente','',TRUE);
+            //Traemos el array de configuracion para obtener el porcentaje
+            $c_array = $this->getConfgArray();
+
+            //Obtenemos la info del cliente para ver si es exento y/o aplica retencion
+            $facturaEncabezado = $this->getProformasHeaders($consecutivo, $sucursal)[0];
+            $clienteEsExento = $this->cliente->clienteEsExentoDeIVA($facturaEncabezado->TB_03_Cliente_Cliente_Cedula);
+            $clienteNoAplicaRetencion = $this->cliente->clienteEsExentoDeRetencion($facturaEncabezado->TB_03_Cliente_Cliente_Cedula);
+
+
+            // NUEVA METODOLOGIA
+            $costo_total = 0;
+            $iva = 0;
+            $costo_sin_iva = 0;
+            $retencion = 0;
+            $aplicaRetencion = true;
+            if(!$c_array['aplicar_retencion'] || $clienteNoAplicaRetencion || $clienteEsExento){
+                $aplicaRetencion = false;
+            }
+            if($articulos = $this->getArticulosProforma($consecutivo, $sucursal)){
+                foreach($articulos as $a){
+                    $detalleLinea = $this->getDetalleLineaProforma($a, $aplicaRetencion);
+                    $iva += $detalleLinea["iva"];
+                    $retencion += $detalleLinea["retencion"];
+                    $costo_sin_iva += $detalleLinea["subtotal"];
+                }
+            }
+            $costo_total += $iva + $retencion + $costo_sin_iva;
+
+            return array(
+                'Proforma_Monto_Total'=>$costo_total, 
+                'Proforma_Monto_IVA'=>$iva, 
+                'Proforma_Monto_Sin_IVA'=>$costo_sin_iva, 
+                'Proforma_Retencion'=>$retencion);
+
 	}	
 	
 	function getConfgArray()
@@ -423,8 +397,8 @@ Class proforma_m extends CI_Model
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
 		}
-		$this->db->where('Proforma_Consecutivo', mysql_real_escape_string($consecutivo));
-		$this->db->where('TB_02_Sucursal_Codigo', mysql_real_escape_string($sucursal));
+		$this->db->where('Proforma_Consecutivo', $consecutivo);
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->update('TB_10_Proforma' ,$data);		
 	}
 	
@@ -631,6 +605,9 @@ Class proforma_m extends CI_Model
 	}
 	
 	function marcarComoProformaPendiente($proforma, $sucursal){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
 		$datos = array("Proforma_Estado" => "pendiente");
 		$this->db->where('Proforma_Consecutivo', $proforma);
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);

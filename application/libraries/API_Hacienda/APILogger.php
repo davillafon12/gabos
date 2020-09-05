@@ -1,0 +1,28 @@
+<?php
+
+class APILogger{
+    
+    private $defaultPath;
+    
+    function __construct($dp = PATH_API_LOGGING){
+        $this->defaultPath = $dp;
+    }
+
+    private function writeToFile($level, $data, $from){
+        $dateLog = date("H:i:s d-m-Y", time());
+        $dateFile = date("d_m_Y", time());
+        file_put_contents($this->defaultPath."_".$dateFile.".log", $dateLog." | ".$level." | ".$from." | ".$data."\n", FILE_APPEND);
+    }
+    
+    public function debug($from, $data){
+        $this->writeToFile("DEBUG", $data, $from);
+    }
+    
+    public function info($from, $data){
+        $this->writeToFile("INFO", $data, $from);
+    }
+    
+    public function error($from, $data){
+        $this->writeToFile("ERROR", $data, $from);
+    }
+}

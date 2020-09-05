@@ -25,7 +25,7 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_consignaciones.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url("application/styles/contabilidad/contabilidad_consignaciones.css?v=$javascript_cache_version"); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
 		<?php include PATH_LOG_OUT_HEADER;?>
 		<!--CARGA DEL JQUERY-->
@@ -48,8 +48,10 @@ PARA:
 		<!--JQUERY NUMERIC-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>"></script>
 		<!--HERRAMIENTAS-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/contabilidad/facturar_consignaciones.js'); ?>"></script>
-	
+		<script type="text/javascript" src="<?php echo base_url("application/scripts/contabilidad/facturar_consignaciones.js?v=$javascript_cache_version"); ?>"></script>
+                <script>
+                    var _CONFIG = <?= json_encode($meta_config)?>;
+                </script>
 	</head>
 	<body >
 		<!--Incluir imagen de cabezera-->
@@ -108,6 +110,7 @@ PARA:
 							<th class="th_codigo">Código</th>
 							<th class="th_descripcion">Descripción</th>
 							<th class="th_cantidad">Consignado</th>
+                                                        <th class="th_bodega">Bodega</th>
 							<th class="th_bodega">Cantidad</th>
 							<th class="th_bodega">Descuento</th>
 							<th class="th_bodega">Exento</th>
@@ -116,15 +119,15 @@ PARA:
 							<th class="th_precio">Precio Total</th>
 						</thead>
 						<tbody id="cuerpo_tabla_articulos">
-						</tbody>				
+						</tbody>
 					</table>
-					
-				
+                            <div class="total-container contact">Total:<span id="total_monto"></span></div>
+
 			</div>
 			<div class="botones_final">
 				<a href="javascript:;" id="crear_factura_consignacion" class="boton_act_all">Crear Factura</a>
 			</div>
-		</div>	
+		</div>
 
 		<!--Incluir footer-->
 		<?php include PATH_FOOTER;?>

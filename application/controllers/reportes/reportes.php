@@ -7,8 +7,8 @@ class reportes extends CI_Controller {
 	//Private $ruta = "http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
 	
 	Private $ruta = "jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
-	Private $IpInterna = "http://192.168.10.28:8085/"; 
-	Private $IpExterna = "http://192.168.10.28:8085/"; 
+	Private $IpInterna = "http://192.168.10.14:8186/"; 
+	Private $IpExterna = "http://192.168.10.14:8186/"; 
 	//Private $IpExterna = "http://201.200.125.10:8085/"; 
 	Private $glCodigoSucGarotas = "2"; 
 	//Private $IpInterna = "http://localhost:8080/";	 
@@ -27,7 +27,7 @@ class reportes extends CI_Controller {
 
 	 function index()
 	 {
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion			
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);		
 		if($permisos['consulta_administradores'])
 		{
@@ -53,7 +53,7 @@ class reportes extends CI_Controller {
 	}
 	
 	function usuarios(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['consulta_administradores'])
 		{
@@ -70,7 +70,7 @@ class reportes extends CI_Controller {
 	}
 	
 	function usuariosReporte(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la session
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		
 		// parametros Obtenidos desde Interfaz 
 		$fechaInicial = $this->input->post('fecha_inicial');
@@ -149,7 +149,7 @@ class reportes extends CI_Controller {
 	}
 	
 	function clientes(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['consulta_administradores'])
 		{
@@ -168,7 +168,7 @@ class reportes extends CI_Controller {
 	}
 	
 	function clientesReportes(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la session
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		// parametros Obtenidos desde Interfaz 
 		$fechaInicial = $this->input->post('fecha_inicial');
 		$fechaFinal = $this->input->post('fecha_final');
@@ -280,7 +280,7 @@ class reportes extends CI_Controller {
 	}
 	
 	function articulos(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['consulta_administradores'])
 		{
@@ -301,7 +301,7 @@ class reportes extends CI_Controller {
 	
 	
 	function articulosReportes(){
-		include '/../get_session_data.php'; //Esto es para traer la informacion de la session
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		// parametros Obtenidos desde Interfaz 
 		$paReporte =$this->input->post('tipo_reporte');	
 		$paSucursal = $this->input->post('sucursal');
@@ -468,7 +468,7 @@ class reportes extends CI_Controller {
 		return $reportes;
 	}
 		function facturas(){
-			include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 			if($permisos['consulta_administradores'])
 			{
@@ -490,7 +490,7 @@ class reportes extends CI_Controller {
 			
 			
 		 function facturasReporte(){
-			 include '/../get_session_data.php'; //Esto es para traer la informacion de la session
+			 include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			//parametros Obtenidos desde Interfaz 
 			$fechaInicial = $this->input->post('fecha_inicial');
 			$fechaFinal = $this->input->post('fecha_final');

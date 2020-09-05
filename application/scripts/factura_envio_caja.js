@@ -85,6 +85,7 @@ function getTamañoIndexArray(){
 }
 
 function parseRowToJSON(numRow){
+	console.log(numRow);
 	codigo = document.getElementById("codigo_articulo_"+numRow).value;
 	descripcion = document.getElementById("descripcion_articulo_"+numRow).innerHTML;
 	
