@@ -38,6 +38,7 @@ class caja extends CI_Controller {
 		$fecha = date("y/m/d : H:i:s", now());
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$data['puedeEditarFacturas'] = @$permisos['editar_facturas'] == "1";
 		$this->load->view('facturas/view_caja_factura', $data);
 	}
 

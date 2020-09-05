@@ -15,7 +15,7 @@ PARA:
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="shortcut icon" href="<?php echo base_url('application/images/header_icon.png'); ?>">
 		<!--CSS ESTILO BASICO E IMAGEN HEADER DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Estilo_Basico.css'); ?>">		
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Estilo_Basico.css'); ?>">
 		<!--CSS ESTILO DEL MENU-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Menu/Default_Style.css'); ?>">
 		<!--CSS ESTILO DE LA INFO DE LOG IN-->
@@ -55,7 +55,7 @@ PARA:
 		<script>
 			var decimales = '<?php echo $this->configuracion->getDecimales();?>';
 		</script>
-		
+
 		<style>
 			.cant_total_articulos_div {
 			    margin-left: 10px;
@@ -103,7 +103,7 @@ PARA:
 			    font-size: 14px;
 			    font-family: Arial, Helvetica;
 			}
-			
+
 
 			.pop_up_administrador {
 			    display: none;
@@ -130,11 +130,11 @@ PARA:
 			    background-image: -ms-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0));
 			    background-image: -o-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0));
 			}
-			
+
 			.inputs_popup {
 			    margin-left: 10px;
 			}
-			
+
 			.boton_desall {
 			    background: #4b8df9;
 			    display: inline-block;
@@ -155,7 +155,7 @@ PARA:
 			    font-size: 14px;
 			    font-family: Verdana, Geneva, sans-serif;
 			}
-			
+
 			.boton_act_all {
 			    margin-left: 5px;
 			    margin-bottom: 5px;
@@ -178,13 +178,13 @@ PARA:
 			    font-size: 14px;
 			    font-family: Verdana, Geneva, sans-serif;
 			}
-			
+
 			.buttoms_popup {
 			    text-align: right;
 			    margin-right: 10px;
 			    margin-top: -10px;
 			}
-			
+
 			.pop_up_descuento {
 			    display: none;
 			    width: 300px;
@@ -198,7 +198,7 @@ PARA:
 			    -webkit-box-shadow: 0px 0px 8px 4px #888888;
 			    box-shadow: 0px 0px 8px 4px #888888;
 			}
-			
+
 			.pop_up_articulo {
 			    display: none;
 			    width: 300px;
@@ -235,29 +235,33 @@ PARA:
 				    position: relative;
 				    /* top: 1.4px; */
 				    display: none;
-		    }
+			}
+
+			.art-descripcion-guardado{
+				width: 100%;
+			}
 		</style>
-		
+
 		<script>
-			
+
 			<?php
 			echo "var sucursal=$Sucursal_Codigo;
 				  var tipoImpresion='t';";
 		?>
-			var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>; 
+			var puedeRepetirProducto = <?php echo $this->user->isAdministradorPorCodigo($Usuario_Codigo)?>;
 			var aplicarRetencionHacienda = <?php echo $this->configuracion->getAplicarRetencion();?>
 		</script>
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
 		<?php include PATH_HEADER_PICTURE;?>
-		
+
 		<!--Incluir menu principal-->
 		<?php include PATH_HEADER_SELECTOR_MENU;?>
 
 		<!--Incluir informacion log in-->
 		<?php include PATH_HEADER_LOG_IN_INFO;?>
-		
+
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
 			<p class="titulo_wrapper">Consulta de Proformas</p>
@@ -271,7 +275,7 @@ PARA:
 							<p class="contact">Cliente</p>
 						</td>
 						<td>
-							
+
 						</td>
 					</tr>
 					<tr>
@@ -291,10 +295,10 @@ PARA:
 						</td>
 					</tr>
 					<tr>
-						
+
 					</tr>
 					<tr>
-											</tr>					
+											</tr>
 				</table>
 				<div class="contenedor-facturas" style="top: -190px; margin-bottom: -200px;">
 					<table class="tabla-facturas">
@@ -334,100 +338,100 @@ PARA:
 						<th class="th_bodega">Inventario</th>
 						<th class="th_descuento">Descuento</th>
 						<th class="th_costo_unidad">Precio por unidad</th>
-						<th class="th_costo_total">Precio total</th>	
+						<th class="th_costo_total">Precio total</th>
 					</thead>
 					<tbody id="contenidoArticulos" class="contenidoArticulos">
-					
-					
-					</tbody>				
+
+
+					</tbody>
 				</table>
-			
+
 			<div class="cant_total_articulos_div">
 				<p class="cant_total_articulos_p">Cantidad Total de Articulos:</p>
 				<p class="cant_total_articulos_p" id="cant_total_articulos">0</p>
 			</div>
-			
-			
+
+
 			<div class="observaciones_div">
 				<p class="contact"><label for="observaciones">Observaciones:</label></p>
-				<textarea id="observaciones" autocomplete="off" class="observaciones" placeholder="" name="observaciones" cols="25" rows="5" maxlength="150" disabled></textarea> 
-    			<p class="advertencia_longitud">Máximo 150 caracteres</p>				
+				<textarea id="observaciones" autocomplete="off" class="observaciones" placeholder="" name="observaciones" cols="25" rows="5" maxlength="150" disabled></textarea>
+    			<p class="advertencia_longitud">Máximo 150 caracteres</p>
 			</div>
 			<div class="tabla_costos">
 				<table>
 					<tr>
 					<td>
-						<p class="contact"><label for="ganancia"><!--Ganancia:--></label></p> 
+						<p class="contact"><label for="ganancia"><!--Ganancia:--></label></p>
 					</td>
 					<td>
 						<div id="tipo_moneda_display" class="tipo_moneda_display" style="display:none;"><!--₡--></div>
-						<input id="ganancia" class="input_dos" autocomplete="off" name="ganancia" type="hidden" min="0" disabled> 					
+						<input id="ganancia" class="input_dos" autocomplete="off" name="ganancia" type="hidden" min="0" disabled>
 					</td>
 					</tr>
 					<tr>
 					<td>
-						<p class="contact"><label for="costo">Monto:</label></p> 
+						<p class="contact"><label for="costo">Monto:</label></p>
 					</td>
 					<td>
 						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
-						<input id="costo" class="input_dos" autocomplete="off" name="costo" type="text" disabled> 					
+						<input id="costo" class="input_dos" autocomplete="off" name="costo" type="text" disabled>
 					</td>
 					</tr>
 					<tr>
 					<td>
-						<p class="contact"><label for="iva">IVA:</label></p> 
+						<p class="contact"><label for="iva">IVA:</label></p>
 					</td>
 					<td>
 						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
-						<input id="iva" class="input_dos" autocomplete="off" name="iva" type="text" disabled> 
+						<input id="iva" class="input_dos" autocomplete="off" name="iva" type="text" disabled>
 					</td>
 					</tr>
 					<tr>
 					<td>
-						<p class="contact"><label for="retencion">Retención:</label></p> 
+						<p class="contact"><label for="retencion">Retención:</label></p>
 					</td>
 					<td>
 						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
-						<input id="retencion" class="input_dos" autocomplete="off" name="retencion" type="text" disabled> 
+						<input id="retencion" class="input_dos" autocomplete="off" name="retencion" type="text" disabled>
 					</td>
 					</tr>
 					<tr>
 					<td>
-						<p class="contact"><label for="costo_total">Monto Total:</label></p> 
+						<p class="contact"><label for="costo_total">Monto Total:</label></p>
 					</td>
 					<td>
 						<div id="tipo_moneda_display" class="tipo_moneda_display">₡</div>
-						<input id="costo_total" class="input_dos" autocomplete="off" name="costo_total" type="text" disabled> 
+						<input id="costo_total" class="input_dos" autocomplete="off" name="costo_total" type="text" disabled>
 					</td>
 					</tr>
 				</table>
 			</div>
 			</div><!--CONTENEDOR-->
-        </div>		
+        </div>
 		<div class="pop_up_administrador" id="pop_up_administrador">
 			<p class="titulo_wrapper">Administrador</p>
 			<hr class="division_wrapper_2">
-			
+
 			<div class="inputs_popup">
-				<p class="contact"><label for="pop_usuario">Usuario:</label></p> 
+				<p class="contact"><label for="pop_usuario">Usuario:</label></p>
 				<input id="pop_usuario" class="pop_usuario" autocomplete="off" name="pop_usuario" type="text" onkeyup="validateNpass(this.id, 'pop_password', event)">
-				<p class="contact"><label for="pop_password">Contraseña:</label></p> 
+				<p class="contact"><label for="pop_password">Contraseña:</label></p>
 				<input id="pop_password" class="pop_password" autocomplete="off" name="pop_password" type="password" onkeyup="validateNpass(this.id, 'boton_aceptar_popup_admin', event)">
-			</div>			
+			</div>
 			<br>
 			<div class="buttoms_popup">
 				<a href='javascript:;' onClick='closePopUp_Admin();' class='boton_desall' >Cancelar</a>
 				<a href='javascript:;' onClick='clickAceptar_Admin(event);' class='boton_act_all' id="boton_aceptar_popup_admin" onkeyup="validateNpass(this.id, 'administrador', event)">Aceptar</a>
 			</div>
-		</div>	
+		</div>
 		<div class="pop_up_descuento" id="pop_up_descuento">
 			<p class="titulo_wrapper">Descuento</p>
 			<hr class="division_wrapper_2">
-			
+
 			<div class="inputs_popup">
-				<p class="contact"><label for="pop_descuento_cambio">Ingrese el nuevo descuento:</label></p> 
-				<input id="pop_descuento_cambio" class="pop_descuento_cambio" autocomplete="off" name="pop_descuento_cambio" type="number" min='0' max='100' onkeyup="validateNpass(this.id, 'boton_aceptar_popup_desc', event)" value='0'>				
-			</div>			
+				<p class="contact"><label for="pop_descuento_cambio">Ingrese el nuevo descuento:</label></p>
+				<input id="pop_descuento_cambio" class="pop_descuento_cambio" autocomplete="off" name="pop_descuento_cambio" type="number" min='0' max='100' onkeyup="validateNpass(this.id, 'boton_aceptar_popup_desc', event)" value='0'>
+			</div>
 			<br>
 			<div class="buttoms_popup">
 				<a href='javascript:;' onClick='closePopUp_Des();' class='boton_desall' >Cancelar</a>
@@ -437,19 +441,19 @@ PARA:
 		<div class="pop_up_articulo" id="pop_up_articulo">
 			<p class="titulo_wrapper">Producto Genérico</p>
 			<hr class="division_wrapper_2">
-			
+
 			<div class="inputs_popup">
-				<p class="contact"><label for="pop_descripcion">Descripción:</label></p> 
+				<p class="contact"><label for="pop_descripcion">Descripción:</label></p>
 				<input id="pop_descripcion" class="pop_descripcion" autocomplete="off" name="pop_descripcion" type="text" value="Producto genérico" onkeyup="validateNpass(this.id, 'pop_cantidad', event)">
-				<p class="contact"><label for="pop_cantidad">Cantidad:</label></p> 
+				<p class="contact"><label for="pop_cantidad">Cantidad:</label></p>
 				<input id="pop_cantidad" class="pop_cantidad" autocomplete="off" name="pop_cantidad" type="number" value="1" onkeyup="validateNpass(this.id, 'pop_descuento', event)">
-				<p class="contact"><label for="pop_inventario">Inventario:</label></p> 
+				<p class="contact"><label for="pop_inventario">Inventario:</label></p>
 				<input id="pop_inventario" class="pop_inventario" autocomplete="off" name="pop_inventario" type="number" value="1000" disabled>
-				<p class="contact"><label for="pop_descuento">Descuento:</label></p> 
+				<p class="contact"><label for="pop_descuento">Descuento:</label></p>
 				<input id="pop_descuento" class="pop_descuento" autocomplete="off" name="pop_descuento" type="text" value="0" onkeyup="validateNpass(this.id, 'pop_costo_unidad', event)">
-				<p class="contact"><label for="pop_costo_unidad">Precio por unidad:</label></p> 
+				<p class="contact"><label for="pop_costo_unidad">Precio por unidad:</label></p>
 				<input id="pop_costo_unidad" class="pop_costo_unidad" autocomplete="off" name="pop_costo_unidad" type="text" value="0" onkeyup="validateNpass(this.id, 'boton_aceptar_popup', event)">
-			</div>			
+			</div>
 			<br>
 			<div class="buttoms_popup">
 				<a href='javascript:;' onClick='closePopUp();' class='boton_desall' >Cancelar</a>

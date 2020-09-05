@@ -4,18 +4,18 @@ class nueva extends CI_Controller {
 
 	function __construct()
 	{
-		parent::__construct(); 
+		parent::__construct();
 		$this->load->model('user','',TRUE);
 		$this->load->model('factura','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('configuracion','',TRUE);
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-			
+
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['crear_factura'])
-		{	
+		{
 		   redirect('accesoDenegado', 'location');
 		}
 	}
@@ -31,9 +31,9 @@ class nueva extends CI_Controller {
 		$data['c_array'] = $conf_array;
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
-		$this->load->view('facturas/view_nueva_factura', $data);	
+		$this->load->view('facturas/view_nueva_factura', $data);
 	}
-	
+
 	function getNombreCliente()
 	{
 		//En realidad no devuelve solo el nombre, sino devuelve mas atributos
@@ -51,7 +51,7 @@ class nueva extends CI_Controller {
 			//echo $id_request;
 		}
 	}
-	
+
 	function getArticuloXML()
 	{
 		$id_request=$_GET['codigo'];
@@ -63,7 +63,7 @@ class nueva extends CI_Controller {
 		//echo "cedula: ".$cedula."|";
 		echo $this->articulo->getArticuloXML($id_request_clean, $cedula, $data['Sucursal_Codigo']);
 	}
-	
+
 	function getArticuloJSON(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
@@ -71,7 +71,7 @@ class nueva extends CI_Controller {
 			$codigo_articulo = $_POST['codigo'];
 			$cedula = $_POST['cedula'];
 			if($this->cliente->existe_Cliente($cedula)){
-				include PATH_USER_DATA;				
+				include PATH_USER_DATA;
 				if($this->articulo->existe_Articulo($codigo_articulo,$data['Sucursal_Codigo'])){
 					if($articulo = $this->articulo->getArticuloArray($codigo_articulo, $cedula, $data['Sucursal_Codigo'])){
 						if($articulo['inventario'] > 0){
@@ -95,7 +95,7 @@ class nueva extends CI_Controller {
 		}
 		echo json_encode($retorno);
 	}
-	
+
 	function crearFacturaTemporal()
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
@@ -108,7 +108,7 @@ class nueva extends CI_Controller {
 		if($facturaTemporal){echo $facturaTemporal;}
 		else{ echo 'false';}
 	}
-	
+
 	function agregarArticuloFactura()
 	{
 		//Solo vamos a guardar articulos que esten en el sistema
@@ -124,16 +124,16 @@ class nueva extends CI_Controller {
 		//echo $articulo;
 		//echo $flag;
 	}
-	
+
 	function actualizarInventario(){
 		$codigo_articulo=$_GET['codigo'];
 		$operacion=$_GET['operacion'];
 		$tokenFactura=$_GET['token'];
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$operacionARRAY = explode(',',$operacion);
-		
+
 		//echo $operacionARRAY[0]."<br>";
-		
+
 		if($operacionARRAY[0]!='1'&&$operacionARRAY[0]!='2')//Si no es un codigo valido enviar error
 		{echo '-1';} //Numero de error para 'No es una operacion admitida'
 		else{ //Se continua la valoracion
@@ -152,7 +152,7 @@ class nueva extends CI_Controller {
 				echo $this->articulo->actualizarInventarioSUMA($codigo_articulo, $operacionARRAY[1], $data['Sucursal_Codigo']);
 			}
 		}
-		
+
 		//$factura_temp_id=$_GET['facturatmp'];
 		//echo $codigo_articulo;
 		//echo $cantidad;
@@ -160,7 +160,7 @@ class nueva extends CI_Controller {
 		/*$articuloResult = $this->getArticuloFromFacturaTemporal($factura_temp_id, $codigo_articulo);
 		if($articuloResult){ //Si el articulo ya esta en la factura
 			//echo 'Si esta';
-			$cantidad_inicial_inventario;	//Obtenemos la cantidad inicial del inventario		
+			$cantidad_inicial_inventario;	//Obtenemos la cantidad inicial del inventario
 			foreach($articuloResult as $row)
 			{
 				$cantidad_inicial_inventario = $row->Factura_Temporal_Cantidad_Bodega;
@@ -175,7 +175,7 @@ class nueva extends CI_Controller {
 		else{ //No esta en la factura
 			echo '-1'; //Numero de error para 'No esta dentro de la factura el producto'
 		}*/
-		
+
 		/*$cantidadAnterior = $this->articulo->getCantidadArticuloFromFacturaTemporal($factura_temp_id, $codigo_articulo);
 		//echo 'Cantidad anterior: '.$cantidadAnterior.' Cantidad: '.$cantidad.'<br>';
 		$flag;
@@ -203,22 +203,22 @@ class nueva extends CI_Controller {
 		//$flag = $this->articulo->actualizarInventario($codigo_articulo, $cantidad);
 		//echo $flag;*/
 	}
-	
+
 	function getArticuloFromFacturaTemporal($factura_codigo, $Codigo_articulo){
 		return $this->articulo->getArticuloFromFacturaTemporal($factura_codigo, $Codigo_articulo);
 	}
-	
+
 	function getNombresClientesBusqueda(){
 		$nombre=$_GET['term'];
 		//echo $nombre;
-		$result = $this->cliente->getNombresClientesBusqueda($nombre);	
+		$result = $this->cliente->getNombresClientesBusqueda($nombre);
 		if($result){
 			$response = '';
 			foreach($result as $row)
-			{	
+			{
 			    $results[] = array('value' => $row->Cliente_Nombre." ".$row->Cliente_Apellidos,
 								   'id' => $row->Cliente_Cedula);
-				//$response = $response."<a class='nombresBusqueda' href='javascript:;' onClick='setNombreClienteBusqueda(".$row->Cliente_Cedula.")'>".$row->Cliente_Nombre." ".$row->Cliente_Apellidos."</a><br>";				
+				//$response = $response."<a class='nombresBusqueda' href='javascript:;' onClick='setNombreClienteBusqueda(".$row->Cliente_Cedula.")'>".$row->Cliente_Nombre." ".$row->Cliente_Apellidos."</a><br>";
 			}
 			echo json_encode($results);
 		}
@@ -226,17 +226,17 @@ class nueva extends CI_Controller {
 			echo "No hay coincidencias. . .";
 		}
 	}
-	
+
 	function checkUSR(){
 		$usuario=$_GET['user'];
 		$contrasena=$_GET['pass'];
 		$tipo=$_GET['tipo'];
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-		
+
 		$repuesta = '-1';
-		
+
 		if($this->user->isAdministrador($usuario, $contrasena, $data['Sucursal_Codigo'])){
-			$repuesta = '200'; //Si se encontro	
+			$repuesta = '200'; //Si se encontro
 			$codigo_usuario = $this->user->getIdFromUserID($usuario, $data['Sucursal_Codigo']);
 			if($tipo=='1'){ //Autorizo un articulo generico
 				$this->user->guardar_transaccion($codigo_usuario, "$usuario autorizo articulo generico, sesion de: ".$data['Usuario_Codigo'], $data['Sucursal_Codigo'],'autoriza');
@@ -264,7 +264,7 @@ class nueva extends CI_Controller {
 			}
                     }
                 }
-                
+
 		echo $repuesta; //No se encontro
 	}
 
@@ -293,7 +293,7 @@ class nueva extends CI_Controller {
 								$resultadoExistencias = $this->checkExistenciaDeProductos($items_factura, $data['Sucursal_Codigo']);
 								if($resultadoExistencias["status"]){
 										if($consecutivo = $this->factura->crearfactura($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'], false)){
-												$tieneArticulos = $this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
+												$tieneArticulos = $this->agregarItemsFactura($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items
 												if($tieneArticulos === true){
 													$this->actualizarCostosFactura($consecutivo, $data['Sucursal_Codigo']);
 													$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." envio a caja la factura consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
@@ -348,41 +348,41 @@ class nueva extends CI_Controller {
 					}
 				}
 			}
-			
+
 		}
 		return $r;
 	}
-	
+
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
-		
+
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
-			if($item['co']=='00'){ //Si es generico					
-					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'','04');
-			}else{ //Si es normal					
+			if($item['co']==='00'){ //Si es generico
+					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'Default.png','04','Unid');
+			}else{ //Si es normal
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
 					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
-                                        $tipoCodigo = $this->articulo->getArticuloTipoCodigo($item['co'], $sucursal);
-                                        $unidadMedida = $this->articulo->getArticuloUnidadMedida($item['co'], $sucursal);
+					$tipoCodigo = $this->articulo->getArticuloTipoCodigo($item['co'], $sucursal);
+					$unidadMedida = $this->articulo->getArticuloUnidadMedida($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
 					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida);
 					$this->articulo->actualizarInventarioRESTA($item['co'], $item['ca'], $sucursal);
 				}
 			}
-			
+
 		}
 
                 return $this->factura->getArticulosFactura($consecutivo, $sucursal) !== false;
         }
-	
+
 	function actualizarCostosFactura($consecutivo, $sucursal){
 		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
 		$this->factura->updateCostosTotales($costosArray, $consecutivo, $sucursal);
 	}
-	
+
 	function devolverProductos(){
 		if(isset($_POST['token'])){
 			if($articulos = $this->articulo->getProductosFacturaTemporal($_POST['token'])){
@@ -396,7 +396,7 @@ class nueva extends CI_Controller {
 			}
 		}
 	}
- 
+
 }// FIN DE LA CLASE
 
 

@@ -4,7 +4,7 @@ class proforma extends CI_Controller {
 
 	function __construct()
 	{
-		parent::__construct(); 
+		parent::__construct();
 		$this->load->model('user','',TRUE);
 		$this->load->model('factura','',TRUE);
 		$this->load->model('cliente','',TRUE);
@@ -16,15 +16,15 @@ class proforma extends CI_Controller {
 	function index()
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-                
+
                 $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['crear_proforma'])
-		{	
+		{
 		   redirect('accesoDenegado', 'location');
 		}
-                
-                
+
+
 		$this->load->helper(array('form'));
 		//echo $this->factura->getConsecutivo($data['Sucursal_Codigo']);
 		//date_default_timezone_set("America/Costa_Rica");
@@ -32,16 +32,16 @@ class proforma extends CI_Controller {
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
-		$this->load->view('facturas/view_proforma', $data);	
+		$this->load->view('facturas/view_proforma', $data);
 	}
-	
+
 	function getNombreCliente()
 	{
 		$id_request=$_GET['cedula'];
 		echo $this->cliente->getNombreCliente($id_request);
 		//echo $id_request;
 	}
-	
+
 	function getArticuloXML()
 	{
 		$id_request=$_GET['codigo'];
@@ -52,19 +52,19 @@ class proforma extends CI_Controller {
 		$id_request_clean = str_replace(";","",$id_request_clean);
 		//echo "cedula: ".$cedula."|";
 		echo $this->articulo->getArticuloXML($id_request_clean, $cedula, $data['Sucursal_Codigo']);
-	}	
-	
+	}
+
 	function getNombresClientesBusqueda(){
 		$nombre=$_GET['term'];
 		//echo $nombre;
-		$result = $this->cliente->getNombresClientesBusqueda($nombre);	
+		$result = $this->cliente->getNombresClientesBusqueda($nombre);
 		if($result){
 			$response = '';
 			foreach($result as $row)
-			{	
+			{
 			    $results[] = array('value' => $row->Cliente_Nombre." ".$row->Cliente_Apellidos,
 								   'id' => $row->Cliente_Cedula);
-				//$response = $response."<a class='nombresBusqueda' href='javascript:;' onClick='setNombreClienteBusqueda(".$row->Cliente_Cedula.")'>".$row->Cliente_Nombre." ".$row->Cliente_Apellidos."</a><br>";				
+				//$response = $response."<a class='nombresBusqueda' href='javascript:;' onClick='setNombreClienteBusqueda(".$row->Cliente_Cedula.")'>".$row->Cliente_Nombre." ".$row->Cliente_Apellidos."</a><br>";
 			}
 			echo json_encode($results);
 		}
@@ -72,11 +72,11 @@ class proforma extends CI_Controller {
 			echo "No hay coincidencias. . .";
 		}
 	}
-	
+
 	function checkUSR(){
 		$usuario=$_GET['user'];
 		$contraseña=$_GET['pass'];
-		
+
 		if($this->user->isAdministrador($usuario, $contraseña)){
 			echo '200'; //Si se encontro
 		}
@@ -84,7 +84,7 @@ class proforma extends CI_Controller {
 			echo '-1'; //No se encontro
 		}
 	}
-	
+
 	function crear(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1';
@@ -93,50 +93,50 @@ class proforma extends CI_Controller {
 			$info_factura = $_POST['head'];
 			$items_factura = $_POST['items'];
 			//Decodificar el JSON del post
-			$info_factura = json_decode($info_factura, true);			
+			$info_factura = json_decode($info_factura, true);
 			$items_factura = json_decode($items_factura, true);
 			//Obtenemos la primera posicion del info_factura para obtener el array final
 			$info_factura = $info_factura[0];
 
 			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-			
+
 			if($consecutivo = $this->proforma_m->crearProforma($info_factura['ce'], $info_factura['no'], $info_factura['cu'], $info_factura['ob'], $data['Sucursal_Codigo'], $data['Usuario_Codigo'])){
-				$this->agregarItemsProforma($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items				
+				$this->agregarItemsProforma($items_factura, $consecutivo, $data['Sucursal_Codigo'], $data['Usuario_Codigo'], $info_factura['ce']); //Agregamos los items
 				$this->actualizarCostosProforma($consecutivo, $data['Sucursal_Codigo']);
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." creo la proforma consecutivo:$consecutivo", $data['Sucursal_Codigo'],'factura_envio');
-				
+
 				//Para efecto de impresion
 				$retorno['consecutivo']= $consecutivo;
 				$retorno['sucursal']= $data['Sucursal_Codigo'];
 				//Para efecto de impresion
 				$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
 				$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
-	
+
 				$retorno['status'] = 'success';
 				unset($retorno['error']);
-				
-				//echo '7'; //El ingreso fue correcto											
+
+				//echo '7'; //El ingreso fue correcto
 			}else{
 				$retorno['error'] = '11'; //Error al crear la factura
-			}			
+			}
 		}
 		else{
 			$retorno['error'] = '10';
 		} //Numero de error mal post
 		echo json_encode($retorno);
 	}
-	
+
 	function agregarItemsProforma($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
-		
+
 		foreach($items_factura as $item){
-			
+
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
-			if($item['co']=='00'){ //Si es generico					
+			if($item['co']=='00'){ //Si es generico
 					$this->proforma_m->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, '00.png', '01','Unid');
-			}else{ //Si es normal					
+			}else{ //Si es normal
 				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
-					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
+					$descripcion = $item['de'];
 					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
@@ -145,16 +145,16 @@ class proforma extends CI_Controller {
 					$this->proforma_m->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida);
 				}
 			}
-			
+
 		}
 		//$this->factura->addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $precio, $consecutivo, $sucursal, $vendedor, $cliente);
 	}
-	
+
 	function actualizarCostosProforma($consecutivo, $sucursal){
 		$costosArray = $this->proforma_m->getCostosTotalesProforma($consecutivo, $sucursal);
 		$this->proforma_m->updateCostosTotales($costosArray, $consecutivo, $sucursal);
 	}
-	
+
 	function descontarArticulosProforma(){
 			$retorno['status'] = 'error';
 			$retorno['error'] = 'No se pudo realizar el descuento de artículos.';
@@ -171,7 +171,7 @@ class proforma extends CI_Controller {
 													}
 													$this->proforma_m->marcarProformaConDescuentoProductos($consecutivo, $sucursal);
 													unset($retorno['error']);
-													$retorno['status'] = 'success'; 
+													$retorno['status'] = 'success';
 											}else{
 													$retorno['error'] = 'No hay suficiente existencia en inventario para realizar el descuento de artículos.';
 											}
@@ -186,10 +186,10 @@ class proforma extends CI_Controller {
 					}
 			}else{
 					$retorno['error'] = 'URL con formato indebido.';
-			}	
+			}
 			echo json_encode($retorno);
 	}
-	
+
 	function valorarSiHayExistenciaDeProductos($articulos, $sucursal){
 			foreach($articulos as $art){
 					if($art->Articulo_Proforma_Codigo != '00'){
@@ -206,7 +206,7 @@ class proforma extends CI_Controller {
 			}
 			return true;
 	}
-	
+
 	function convertirEnFactura(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = 'No se pudo realizar la conversión.';
@@ -245,21 +245,21 @@ class proforma extends CI_Controller {
 				}
 		}else{
 				$retorno['error'] = 'URL con formato indebido.';
-		}	
+		}
 		echo json_encode($retorno);
 	}
-	
+
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
 		foreach($items_factura as $item){
-			if($item->Articulo_Proforma_Codigo == '00'){ //Si es generico					
+			if($item->Articulo_Proforma_Codigo == '00'){ //Si es generico
 					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Unitario, $consecutivo, $sucursal, $vendedor, $cliente,'','01','Unid');
-			}else{ //Si es normal					
+			}else{ //Si es normal
 				if($this->articulo->existe_Articulo($item->Articulo_Proforma_Codigo, $sucursal)){ //Verificamos que el codigo exista
-					
+
 					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Final, $consecutivo, $sucursal, $vendedor, $cliente, $item->Articulo_Proforma_Imagen, $item->TipoCodigo, $item->UnidadMedida);
 				}
 			}
-			
+
 		}
 	}
 
@@ -267,7 +267,7 @@ class proforma extends CI_Controller {
 		$costosArray = $this->factura->getCostosTotalesFactura($consecutivo, $sucursal);
 		$this->factura->updateCostosTotales($costosArray, $consecutivo, $sucursal);
 	}
-	
+
 	function anularProforma(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = 'No se pudo realizar la conversión.';
@@ -289,10 +289,10 @@ class proforma extends CI_Controller {
 				}
 		}else{
 				$retorno['error'] = 'URL con formato indebido.';
-		}	
+		}
 		echo json_encode($retorno);
 	}
-	
+
 	function marcarComoPagada(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = 'No se pudo realizar la conversión.';
@@ -314,27 +314,27 @@ class proforma extends CI_Controller {
 				}
 		}else{
 				$retorno['error'] = 'URL con formato indebido.';
-		}	
+		}
 		echo json_encode($retorno);
 	}
-	
+
 	function fijarProforma(){
                 include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-                
+
                 $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['procesar_proformas'])
-		{	
+		{
 		   redirect('accesoDenegado', 'location');
 		}
-                
+
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
                 $data['javascript_cache_version'] = $this->javascriptCacheVersion;
-		$this->load->view('facturas/fijar_proforma', $data);	
+		$this->load->view('facturas/fijar_proforma', $data);
 	}
-	
+
 	function getFacturasSinProcesar(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1';
@@ -348,14 +348,14 @@ class proforma extends CI_Controller {
 			}else{
 				//No hay facturas
 				$retorno['error'] = '3';
-			}	
+			}
 		}else{
 			//URL MALA
 			$retorno['error'] = '2';
 		}
 		echo json_encode($retorno);
 	}
-	
+
 	function cambiarProforma(){
 			$retorno['status'] = 'error';
 			$retorno['error'] = 'cf_1';
@@ -363,35 +363,35 @@ class proforma extends CI_Controller {
 		  //Obtener las dos partes del post
 			$items_factura = $_POST['items'];
 			$consecutivo = $_POST['consecutivo'];
-			//Decodificar el JSON del post		
+			//Decodificar el JSON del post
 			$items_factura = json_decode($items_factura, true);
 			//Obtenemos la primera posicion del info_factura para obtener el array final
-			$observaciones = $_POST["observaciones"];			
+			$observaciones = $_POST["observaciones"];
 			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-			
+
 			if(sizeOf($items_factura)>0){
 					//ce:cedula_field, no:nombre_field, cu:tipo_moneda, ob:observaciones
 					//CAMBIAMOS EL ENCABEZADO
 					$datosHead = array(
 										'Proforma_Observaciones'=>$observaciones
 									);
-														
+
 					//ELIMINAMOS LOS PRODUCTOS
 					$this->proforma_m->eliminarProductosDeProforma($consecutivo, $data['Sucursal_Codigo']);
-					
+
 					$this->proforma_m->actualizarHeadProforma($datosHead, $consecutivo, $data['Sucursal_Codigo']);
-								
+
 					//LOS VOLVEMOS A AGREGAR LOS NUEVOS
 					$cliente = $this->proforma_m->getCliente($consecutivo, $data['Sucursal_Codigo']);
-					
+
 					$vendedor = $this->proforma_m->getVendedor($consecutivo, $data['Sucursal_Codigo']);
-					
-					
+
+
 					$this->agregarItemsProforma($items_factura, $consecutivo, $data['Sucursal_Codigo'], $vendedor, $cliente);
-					
-					$this->actualizarCostosProforma($consecutivo, $data['Sucursal_Codigo']);				
+
+					$this->actualizarCostosProforma($consecutivo, $data['Sucursal_Codigo']);
 					$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." edito la proforma consecutivo:$consecutivo", $data['Sucursal_Codigo'],'proforma_edicion');
-					
+
 					unset($retorno['error']);
 					$retorno['status'] = 'success';
 			}else{
@@ -399,10 +399,10 @@ class proforma extends CI_Controller {
 			}
 		}else{
 			$retorno['error'] = 'cf_2'; //URL con mal formato
-		} 
+		}
 		echo json_encode($retorno);
 	}
-	
+
 	function procesarProforma(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = 'No se pudo procesar la proforma';
@@ -412,20 +412,20 @@ class proforma extends CI_Controller {
 			if($this->proforma_m->existe_Proforma($consecutivo, $data['Sucursal_Codigo'])){
 				$this->proforma_m->marcarComoProformaPendiente($consecutivo, $data['Sucursal_Codigo']);
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ".$data['Usuario_Codigo']." procesó la proforma consecutivo:$consecutivo", $data['Sucursal_Codigo'],'proforma_procesar');
-				
+
 				unset($retorno['error']);
 				$retorno['status'] = 'success';
 			}else{
 				//No hay facturas
 				$retorno['error'] = 'No existe proforma';
-			}	
+			}
 		}else{
 			//URL MALA
 			$retorno['error'] = 'Mal formato de URL';
 		}
 		echo json_encode($retorno);
 	}
- 
+
 }// FIN DE LA CLASE
 
 

@@ -29,6 +29,7 @@
                         'editar_consignaciones' => 'Editar Consignaciones',
 						'editar_empresa' => 'Editar Empresa',
 						'editar_familias' => 'Editar Familias',
+						'editar_facturas' => 'Editar Facturas',
 						'editar_permisos' => 'Editar Permisos',
                         'editar_proformas' => 'Editar Proformas',
 						'editar_usuarios' => 'Editar Usuarios',

@@ -9,26 +9,26 @@
 	border-radius: 10px;
 	-moz-box-shadow: 0px 0px 7px 0px #888888;
 	-webkit-box-shadow: 0px 0px 7px 0px #888888;
-	box-shadow: 0px 0px 7px 0px #888888;	
+	box-shadow: 0px 0px 7px 0px #888888;
 }
 
-.contact { 
-	color: #000; 
+.contact {
+	color: #000;
 	font-weight:bold;
 	font-size: 14px;
-	font-family:Arial, Helvetica;  
+	font-family:Arial, Helvetica;
     *padding: 7px;
 	margin-top: 0px;
 	margin-bottom: 0px;
 	margin-left:5px;
 }
 
-.contact2 { 
+.contact2 {
     /*Esto es el css para el titulo de numero de transaccion*/
-	color: #000; 
+	color: #000;
 	font-weight:bold;
 	font-size: 14px;
-	font-family:Arial, Helvetica;  
+	font-family:Arial, Helvetica;
     *padding: 7px;
 	margin-top: 5px;
 	margin-bottom: 0px;
@@ -39,44 +39,44 @@
 
 .input_uno{
 	width: 250px;
-	background-color: rgba(255, 255, 255, 0.4); 
-	border: 1px solid rgba(51, 51, 51, 0.15); 
-	*padding: 7px; 
-	font-family: Keffeesatz, Arial; 
-	color: #4b4b4b; 
-	font-size: 14px; 
-	-webkit-border-radius: 5px;	
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid rgba(51, 51, 51, 0.15);
+	*padding: 7px;
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
 	*margin-top: 0px;
 	padding-left: 2px;
 }
 
 .input_dos{
 	width: 100px;
-	background-color: rgba(255, 255, 255, 0.4); 
-	border: 1px solid rgba(51, 51, 51, 0.15); 
-	*padding: 7px; 
-	font-family: Keffeesatz, Arial; 
-	color: #4b4b4b; 
-	font-size: 14px; 
-	-webkit-border-radius: 5px;	
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid rgba(51, 51, 51, 0.15);
+	*padding: 7px;
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
 	padding-left: 2px;
 }
 
 .moneda{
 	width: 105px;
-	background-color: rgba(255, 255, 255, 0.4); 
-	border: 1px solid rgba(51, 51, 51, 0.15); 
-	*padding: 7px; 
-	font-family: Keffeesatz, Arial; 
-	color: #4b4b4b; 
-	font-size: 14px; 
-	-webkit-border-radius: 5px;	
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid rgba(51, 51, 51, 0.15);
+	*padding: 7px;
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
 	padding-left: 2px;
 }
 
 .tipos_de_pago{
-	font-family: Keffeesatz, Arial; 
-	color: #4b4b4b; 
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
 	font-size: 14px;
 	display: inline-block;
 }
@@ -86,23 +86,23 @@
 }
 
 .boton_desall {
-	background: #4b8df9; 
-	display: inline-block; 
-	padding: 5px 10px 6px; 
-	color: #fbf7f7; 
-	text-decoration: none; 
-	font-weight: bold; 
-	line-height: 1; 
-	-moz-border-radius: 5px; 
-	-webkit-border-radius: 5px; 
-	border-radius: 5px; 
-	-moz-box-shadow: 0 1px 3px #999; 
+	background: #4b8df9;
+	display: inline-block;
+	padding: 5px 10px 6px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
 	-webkit-box-shadow: 0 1px 3px #999;
-	box-shadow: 0 1px 3px #999; 
-	text-shadow: 0 -1px 1px #222; 
-	border: none; 
-	cursor: pointer; 
-	font-size: 14px; 
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
 	font-family:Verdana, Geneva, sans-serif;
 }
 
@@ -118,23 +118,23 @@
 .boton_act_all {
 	margin-left: 5px;
 	margin-bottom: 5px;
-	background: #59B659; 
-	display: inline-block; 
-	padding: 5px 10px 6px; 
-	color: #fbf7f7; 
-	text-decoration: none; 
-	font-weight: bold; 
-	line-height: 1; 
-	-moz-border-radius: 5px; 
-	-webkit-border-radius: 5px; 
-	border-radius: 5px; 
-	-moz-box-shadow: 0 1px 3px #999; 
+	background: #59B659;
+	display: inline-block;
+	padding: 5px 10px 6px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
 	-webkit-box-shadow: 0 1px 3px #999;
-	box-shadow: 0 1px 3px #999; 
-	text-shadow: 0 -1px 1px #222; 
-	border: none; 
-	cursor: pointer; 
-	font-size: 14px; 
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
 	font-family:Verdana, Geneva, sans-serif;
 }
 
@@ -156,44 +156,44 @@
 .tabla_productos{
 	width: 99%;
 	margin: 0 auto;
-	border-collapse: collapse; 
+	border-collapse: collapse;
     text-align: left;
-	font: normal 12px/150% Arial, Helvetica, sans-serif; 
-	background: #fff; 
-	overflow: hidden; 
-	border: 1px solid #8C8C8C; 
+	font: normal 12px/150% Arial, Helvetica, sans-serif;
+	background: #fff;
+	overflow: hidden;
+	border: 1px solid #8C8C8C;
 	-webkit-border-radius: 5px;
-	 -moz-border-radius: 5px; 
+	 -moz-border-radius: 5px;
 	 border-radius: 5px;
 }
 
-.tabla_productos  td, .tabla_productos  th { 
-	padding: 3px 10px; 
+.tabla_productos  td, .tabla_productos  th {
+	padding: 3px 10px;
 }
 
 .tabla_productos  thead th {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #999999), color-stop(1, #DBDBDB) );
 	background:-moz-linear-gradient( center top, #999999 5%, #DBDBDB 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#DBDBDB');
-	background-color:#999999; 
-	color:#000000; 
-	font-size: 14px; 
-	font-weight: bold; 
-	border-left: 1px solid #A3A3A3; 
-}
- 
-.tabla_productos  thead th:first-child { border: none; }
- 
-.tabla_productos  tbody td {
-	color: #7D7D7D; 
-	border-left: 1px solid #DBDBDB;
-	font-size: 12px;
-	font-weight: normal; 
+	background-color:#999999;
+	color:#000000;
+	font-size: 14px;
+	font-weight: bold;
+	border-left: 1px solid #A3A3A3;
 }
 
-.tabla_productos  tbody .alt td { 
-	background: #EBEBEB; 
-	color: #7D7D7D; 
+.tabla_productos  thead th:first-child { border: none; }
+
+.tabla_productos  tbody td {
+	color: #7D7D7D;
+	border-left: 1px solid #DBDBDB;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.tabla_productos  tbody .alt td {
+	background: #EBEBEB;
+	color: #7D7D7D;
 }
 
 .tabla_productos  tbody td:first-child { border-left: none; }
@@ -201,7 +201,7 @@
 .tabla_productos  tbody tr:last-child td { border-bottom: none; }
 
 .input_codigo_articulo{
-	width: 100%; 
+	width: 100%;
 	box-sizing: border-box;
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing: border-box;
@@ -209,12 +209,12 @@
 }
 
 .cantidad_articulo{
-	width: 100%; 
+	width: 100%;
 	box-sizing: border-box;
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing: border-box;
 	text-align: center;
-	color: #000; 
+	color: #000;
 	font-weight:bold;
 	font-size: 14px;
 	font-family:Arial, Helvetica;
@@ -224,11 +224,11 @@
 	*display: block;
 	float: left;
 	margin-left: 5px;
-	margin-top: 5px;	
+	margin-top: 5px;
 }
 
 .observaciones{
-	width: 400px; 
+	width: 400px;
 	resize: none;
 	margin-left: 5px;
 }
@@ -247,23 +247,23 @@
 
 .boton_agregar {
 	margin-left: 5px;
-	background: #FF9900; 
-	display: inline-block; 
-	padding: 5px 10px 6px; 
-	color: #fbf7f7; 
-	text-decoration: none; 
-	font-weight: bold; 
-	line-height: 1; 
-	-moz-border-radius: 5px; 
-	-webkit-border-radius: 5px; 
-	border-radius: 5px; 
-	-moz-box-shadow: 0 1px 3px #999; 
+	background: #FF9900;
+	display: inline-block;
+	padding: 5px 10px 6px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
 	-webkit-box-shadow: 0 1px 3px #999;
-	box-shadow: 0 1px 3px #999; 
-	text-shadow: 0 -1px 1px #222; 
-	border: none; 
-	cursor: pointer; 
-	font-size: 14px; 
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
 	font-family:Verdana, Geneva, sans-serif;
 }
 
@@ -283,8 +283,8 @@
 
 .tipo_moneda_display {
 	float: left;
-	font-family: Keffeesatz, Arial; 
-	color: #4b4b4b; 
+	font-family: Keffeesatz, Arial;
+	color: #4b4b4b;
 	font-size: 14px;
 	margin-top: 4px;
 }
@@ -297,7 +297,7 @@
 .th_descuento{width: 50px;}
 
 .articulo_specs{
-	color: #000; 
+	color: #000;
 	font-weight:bold;
 	font-size: 14px;
 	font-family:Arial, Helvetica;
@@ -308,7 +308,7 @@
     height: 40px;
     border: 1px #888888 solid;
     background-color: #d4d4d4;
-	color: #000; 
+	color: #000;
 	font-weight:bold;
 	font-size: 14px;
 	font-family:Arial, Helvetica;
@@ -337,10 +337,10 @@
 }
 
 .cant_total_articulos_p{
-	color: #000; 
+	color: #000;
 	font-weight:bold;
 	font-size: 14px;
-	font-family:Arial, Helvetica;  
+	font-family:Arial, Helvetica;
     *padding: 7px;
 	margin-top: 0px;
 	margin-bottom: 0px;
@@ -351,7 +351,7 @@
 	display: inline;
 }
 
-.cant_total_articulos{	
+.cant_total_articulos{
 	*width: 50px;
 	*float: left;
 	*margin-right: 500px;
@@ -359,7 +359,7 @@
 
 .pop_up_articulo{
 	display:none;
-	
+
 	width: 300px;
 	height: 310px;
 	border: 1px #bfbfbf solid;
@@ -374,7 +374,7 @@
 
 .pop_up_administrador{
 	display:none;
-	
+
 	width: 300px;
 	height: 190px;
 	border: 1px #bfbfbf solid;
@@ -389,7 +389,7 @@
 
 .pop_up_descuento{
 	display:none;
-	
+
 	width: 300px;
 	height: 140px;
 	border: 1px #bfbfbf solid;
@@ -404,7 +404,7 @@
 
 .pop_up_cantidad{
 	display:none;
-	
+
 	width: 300px;
 	height: 140px;
 	border: 1px #bfbfbf solid;
@@ -418,7 +418,7 @@
 }
 
 .error_crear_factura_popup{
-	display:none;	
+	display:none;
 	width: 500px;
 	height: 130px;
 	border: 1px #bfbfbf solid;
@@ -445,12 +445,12 @@
 	display:block;
     border:none;
     color:white;
-    height:2px;	
+    height:2px;
 	width: 75%;
 	margin-left: 0px;
-    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
-    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
-    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0));
     background-image:      -o-linear-gradient(left, rgba(0,0,0,0.75), rgba(0,0,0,0.75), rgba(0,0,0,0));
 }
 
@@ -486,27 +486,27 @@
 .boton_salida_S {
 	margin-top: 5px;
 	margin-left: 5px;
-	background: #FF4719; 
-	display: inline-block; 
-	padding: 5px 10px 6px; 
-	color: #fbf7f7; 
-	text-decoration: none; 
-	font-weight: bold; 
-	line-height: 1; 
-	-moz-border-radius: 5px; 
-	-webkit-border-radius: 5px; 
-	border-radius: 5px; 
-	-moz-box-shadow: 0 1px 3px #999; 
+	background: #FF4719;
+	display: inline-block;
+	padding: 5px 10px 6px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
 	-webkit-box-shadow: 0 1px 3px #999;
-	box-shadow: 0 1px 3px #999; 
-	text-shadow: 0 -1px 1px #222; 
-	border: none;  
-	cursor: pointer; 
-	font-size: 14px; 
-	font-family:Verdana, Geneva, sans-serif;	
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
+	font-family:Verdana, Geneva, sans-serif;
 }
 
-.boton_salida_S:hover {	
+.boton_salida_S:hover {
 	background-color: #CC3914;
 }
 
@@ -518,23 +518,23 @@
 .boton_salida_N {
 	margin-top: 5px;
 	margin-right: 5px;
-	background: #4b8df9; 
-	display: inline-block; 
-	padding: 5px 10px 6px; 
-	color: #fbf7f7; 
-	text-decoration: none; 
-	font-weight: bold; 
-	line-height: 1; 
-	-moz-border-radius: 5px; 
-	-webkit-border-radius: 5px; 
-	border-radius: 5px; 
-	-moz-box-shadow: 0 1px 3px #999; 
+	background: #4b8df9;
+	display: inline-block;
+	padding: 5px 10px 6px;
+	color: #fbf7f7;
+	text-decoration: none;
+	font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
 	-webkit-box-shadow: 0 1px 3px #999;
-	box-shadow: 0 1px 3px #999; 
-	text-shadow: 0 -1px 1px #222; 
-	border: none; 
-	cursor: pointer; 
-	font-size: 14px; 
+	box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
 	font-family:Verdana, Geneva, sans-serif;
 }
 
@@ -566,7 +566,7 @@
 
 .envio_p {
 	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif;
-	font-size: 26px; 
+	font-size: 26px;
 	color: #C1C1C1;
 }
 
@@ -586,4 +586,8 @@
 
 .imagen-margen-container:hover > .tooltip_imagen_articulo{
 	display: block;
+}
+
+.art-descripcion-guardado{
+	width: 100%;
 }
