@@ -28,25 +28,25 @@ $(function() {
     $.datepicker.setDefaults($.datepicker.regional['es']);
 	$( "#fecha_desde" ).datepicker();
 	$( "#fecha_hasta" ).datepicker();
-
-
+	
+	
 	$( "#nombre" ).autocomplete({
 		  source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getNombresClientesBusqueda',
 		  minLength: 1,
 		  select: function( event, ui ) {
-			$("#cedula").val(ui.item.id);
+			$("#cedula").val(ui.item.id);				  
 		  }
 		});
-
+	
 	$("#consecutivo").numeric()
 });
 
 function llamarFacturas(){
-	if(validarFechas()){
+	if(validarFechas()){		
 		$.ajax({
 			url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/consulta/getCierresFiltrados',
-			type: "POST",
-			data: {'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val()},
+			type: "POST",	
+			data: {'desde':$("#fecha_desde").val(),'hasta':$("#fecha_hasta").val()},				
 			success: function(data, textStatus, jqXHR)
 			{
 				try{
@@ -76,8 +76,8 @@ function validarFechas(){
 			notyMsg('La fecha -desde- no tiene un formato válido', 'error');
 			return false;
 		}
-
-
+		
+		
 	}
 	if(hasta.trim()!=''){
 		//Validamos
@@ -85,25 +85,25 @@ function validarFechas(){
 			notyMsg('La fecha -hasta- no tiene un formato válido', 'error');
 			return false;
 		}
-
+		
 	}
-
+	
 	if(desde.trim()!=''&&hasta.trim()!=''){
 		//Pasar de dd/mm/yyyy a yyyy-mm-dd
-		desde = desde.split("/");
+		desde = desde.split("/");	
 		desde = desde[2]+"-"+desde[1]+"-"+desde[0];
 		desde = new Date(desde);
 		//Pasar de dd/mm/yyyy a yyyy-mm-dd
-		hasta = hasta.split("/");
+		hasta = hasta.split("/");	
 		hasta = hasta[2]+"-"+hasta[1]+"-"+hasta[0];
 		hasta = new Date(hasta);
-
+		
 		if(desde>hasta){
 			notyMsg('La fecha -desde- debe ser menor a la fecha -hasta-', 'error');
 			return false;
 		}
-
-	}
+		
+	}	
 	return true;
 }
 
@@ -165,7 +165,7 @@ function montarFacturas(facturas){
 
 /**
  * Number.prototype.format(n, x, s, c)
- *
+ * 
  * param integer n: length of decimal
  * param integer x: length of whole part
  * param mixed   s: sections delimiter
@@ -174,7 +174,7 @@ function montarFacturas(facturas){
 	123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
 	12345678.9.format(0, 3, '-');       // "12-345-679"
  */
-
+ 
 Number.prototype.format = function(n, x, s, c) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
         num = this.toFixed(Math.max(0, ~~n));
@@ -198,17 +198,17 @@ function cargarFactura(){
 
 function cargaServerFactura(consecutivo){
 	cargarEncabezado(consecutivo);
-
-	consecutivoActual = consecutivo; //Asignamos el consecutivo actual para realizar operaciones
+	
+	consecutivoActual = consecutivo; //Asignamos el consecutivo actual para realizar operaciones	
 }
 
 function cargarEncabezado(consecutivo){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/consulta/getCierreCaja",
 		type: "POST",
-		data: {'cierre':consecutivo},
+		data: {'cierre':consecutivo},		
 		success: function(data, textStatus, jqXHR)
-		{
+		{			
 			try{
 				facturaHEAD = $.parseJSON('[' + data.trim() + ']');
 				if(facturaHEAD[0].status==="error"){
@@ -216,7 +216,7 @@ function cargarEncabezado(consecutivo){
 					cleanTable();
 				}else if(facturaHEAD[0].status==="success"){
 					setEncabezadoFactura(facturaHEAD[0]);
-
+					
 					sucursal = facturaHEAD[0].sucursal;
 					servidorImpresion = facturaHEAD[0].servidor_impresion;
 					token = facturaHEAD[0].token;
@@ -225,25 +225,25 @@ function cargarEncabezado(consecutivo){
 			catch(e){
 				alert(e);
 				notyMsg("Error al cargar el cierre de caja, contacte al administrador. ERROR E0", "error");
-			}
+			}			
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{}
 	});
-}
-
+} 
+ 
 
 
 function cleanTable(){
-
+	
 }
 
-function setEncabezadoFactura(cab){
+function setEncabezadoFactura(cab){	
 	//Tipo cambio
 	$("#tipo_cambio_dolar").val(parseFloat(cab.cierre.tipo).format(2, 3, '.', ','));
 	//Total
 	$("#input_retiro_parcial").val(parseFloat(cab.cierre.conteo).format(2, 3, '.', ','));
-
+	
 	$("#fecha_cierre").html("Fecha : "+cab.cierre.fecha);
 	$("#base_caja").val(parseFloat(cab.cierre.base).format(2, 3, '.', ','));
 	$("#primera_factura").html("Primera Factura: "+cab.datos.primeraFactura);
@@ -254,32 +254,28 @@ function setEncabezadoFactura(cab){
 	$("#input_bcr_servicios_credito").val(parseFloat(cab.cierre.bcrserviciosc).format(2, 3, '.', ','));
 	cab.datos.bnserviciosc = parseFloat(cab.cierre.bnserviciosc);
 	cab.datos.bcrserviciosc = parseFloat(cab.cierre.bcrserviciosc);
-
+	
 	for(i = 0; i < cab.billetes.length; i++){
 		$("#cant_"+cab.billetes[i].denominacion).val(cab.billetes[i].cantidad);
 		total = cab.billetes[i].denominacion * cab.billetes[i].cantidad;
 		$("#total_"+cab.billetes[i].denominacion).html("₡ "+parseFloat(total).format(2, 3, '.', ','));
 	}
-
+	
 	for(i = 0; i < cab.monedas.length; i++){
 		$("#cant_"+cab.monedas[i].denominacion).val(cab.monedas[i].cantidad);
 		total = cab.monedas[i].denominacion * cab.monedas[i].cantidad;
 		$("#total_"+cab.monedas[i].denominacion).html("₡ "+parseFloat(total).format(2, 3, '.', ','));
 	}
-
+	
 	for(i = 0; i < cab.dolares.length; i++){
 		$("#cant_do_"+cab.dolares[i].denominacion).val(cab.dolares[i].cantidad);
 		total = cab.dolares[i].denominacion * cab.dolares[i].cantidad;
 		$("#total_do_"+cab.dolares[i].denominacion).html("$ "+parseFloat(total).format(2, 3, '.', ','));
 	}
-
+	
 	cargarRetiros(cab.datos);
 	cargarDatafonos(cab.datos);
-	cargarMixto(cab.datos.pagoMixto);
-	cab.datos.recibos.efectivoBK = cab.datos.recibos.efectivo;
-	cab.datos.recibos.efectivo = cab.datos.recibos.efectivo;
-	cab.datos.recibos.efectivoBK = cab.datos.recibos.efectivo;
-	cab.datos.recibos.detalleNotasCredito = cab.datos.detalleNotasCredito.credito;
+	cargarMixto(cab.datos.pagoMixto); 
 	cargarRecibosDinero(cab.datos.recibos);
 	cargarTotales(cab);
 	cargarVendedores(cab.datos.vendedores);
@@ -306,7 +302,7 @@ function cargarRetiros(datos){
 							+	"	<td class='borde-abajo'><p class='parrafo'>Fecha y Hora</p></td>"
 							+	"	<td class='borde-abajo'><p class='parrafo'>Total</p></td>"
 						+	"	</tr>";
-
+	
 	if(retiros.length==0){
 		filas = "<tr><td colspan='3'><p class='parrafo'>No hay retiros parciales. . .</p></td></tr>";
 	}else{
@@ -318,14 +314,14 @@ function cargarRetiros(datos){
 											+ "</tr>";
 		}
 	}
-
+	
 	filas = filas + "<tr>"
-								+	"<td colspan='2' class='alg-right borde-arriba'><p class='parrafo'>Total:</p></td>	"
+								+	"<td colspan='2' class='alg-right borde-arriba'><p class='parrafo'>Total:</p></td>	"								
 									+"<td class='alg-right borde-arriba'><p class='parrafo' id='total_retiros'>₡"+parseFloat(datos.totalRecibosParciales).format(2, 3, '.', ',')+"</p></td>"
 								+"</tr>";
-
-
-
+	
+	
+	
 	$("#contenido_retiros_parciales").html(filas);
 	/*
 		<?php
@@ -363,10 +359,10 @@ function cargarDatafonos(datos){
 												</tr>
 											";
 										}
-									}
+									}									
 								?>
 	*/
-
+	
 	bancos = datos.pagoDatafonos.datafonos;
 	gen = datos.pagoDatafonos;
 	//contenido_retiros_parciales
@@ -378,7 +374,7 @@ function cargarDatafonos(datos){
 							+"		<td class='borde-abajo'><p class='parrafo'>Retención</p></td>"
 							+"		<td class='borde-abajo'><p class='parrafo'>Total</p></td>"
 							+"	</tr>";
-
+	
 	if(bancos.length==0){
 		filas = filas + "<tr><td colspan='3'><p class='parrafo'>No hay pagos en datáfono. . .</p></td></tr>";
 	}else{
@@ -391,7 +387,7 @@ function cargarDatafonos(datos){
 												+"</tr> ";
 		}
 	}
-
+	
 	filas = filas + "<tr>"
 									+"<td class='alg-right borde-arriba'><p class='parrafo'>Totales:</p></td>	"
 									+"<td class='alg-right borde-arriba'><p class='parrafo'>₡"+parseFloat(gen.totalComision).format(2, 3, '.', ',')+"</p></td>"
@@ -430,7 +426,7 @@ function cargarTotales(datos){
 	totalRetiros = parseFloat(datos.totalRecibosParciales);
 	//totalEfectivo = (totalRetiros + totalRetiros) - baseCaja;
 	//console.log(datos);
-	var totalEfectivo = totalRetiros;
+	var totalEfectivo = totalRetiros; 
 	totalEfectivo -= datos.recibos.efectivo;
 	totalEfectivo -= datos.recibos.abonos;
 	totalEfectivo -= bnservicios;
@@ -438,10 +434,10 @@ function cargarTotales(datos){
 	totalEfectivo += datos.detalleNotasCredito.contado;
 	//totalEfectivo -= datos.pagoMixto.efectivo;
 	totalEfectivo -= datos.totalFacturasContado;
-
-
-
-	$("#totales_factura_contado").html("₡"+parseFloat(datos.totalFacturasContado-datos.detalleNotasCredito.contado).format(2, 3, '.', ','));
+	
+	
+	
+	$("#totales_factura_contado").html("₡"+parseFloat((datos.totalFacturasContado+datos.pagoMixto.efectivo)-datos.detalleNotasCredito.contado).format(2, 3, '.', ','));
 	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
 	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos+datos.bnserviciosc+datos.bcrserviciosc-datos.detalleNotasCredito.tarjeta).format(2, 3, '.', ','));
 	$("#totales_creditos").html("₡"+parseFloat(datos.totalCreditos.totalCredito).format(2, 3, '.', ','));
@@ -449,7 +445,7 @@ function cargarTotales(datos){
 	$("#totales_apartados").html("₡"+parseFloat(datos.totalCreditos.totalApartado-datos.detalleNotasCredito.apartado).format(2, 3, '.', ','));
 	$("#totales_notas_credito").html("₡"+parseFloat(datos.totalNotasCredito.total).format(2, 3, '.', ','));
 	$("#totales_notas_debito").html("₡"+parseFloat(datos.totalNotasDebito.total).format(2, 3, '.', ','));
-
+	
 	$("#totalVendido").html("₡"+parseFloat(datos.valoresFinales.totalFacturas).format(2, 3, '.', ','));
 	$("#totalIVA").html("₡"+parseFloat(datos.valoresFinales.totalIVA).format(2, 3, '.', ','));
 	$("#totalRetencion").html("₡"+parseFloat(datos.valoresFinales.totalRetencion-datos.totalNotasCredito.retencion).format(2, 3, '.', ','));
@@ -458,13 +454,13 @@ function cargarTotales(datos){
 function cargarVendedores(vendedores){
 	totalVendedores = vendedores.totalVendido;
 	vendedores = vendedores.vendidoVendedores;
-
+	
 	filas = "<tr><td colspan='7'><p class='titulo-2'>Vendedores</p></td></tr>"
 								+"<tr>"
 									+	"	<td class='borde-abajo'><p class='parrafo'>Vendedor</p></td>"
 									+	"	<td class='borde-abajo'><p class='parrafo'>Vendido</p></td>"
 									+	"</tr>	";
-
+	
 	for(i=0;i<vendedores.length;i++){
 		if(vendedores[i][0].usuario != null){
 				filas = filas + "<tr>"
@@ -474,12 +470,12 @@ function cargarVendedores(vendedores){
 											;
 		}
 	}
-
+	
 	filas = filas + "<tr>"
 									+ "<td colspan='7' class='alg-right borde-arriba'><p class='parrafo'>Total Vendedores: ₡"+parseFloat(totalVendedores).format(2, 3, '.', ',')+"</p></td>"
 								  + "</tr>";
-
-
+										
+	
 	$("#tabla_vendedores").html(filas);
 }
 
@@ -514,10 +510,10 @@ function imprimir(){
 		notyMsg('No puede imprimir facturas pendientes', 'error');
 		return false;
 	}
-
+	
 	if(tipoImpresion==='t'){
 		//Impresion termica
-		//window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion/termica?t='+token+'&d=nc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		//window.open(servidorImpresion+'/index.html?t='+token+'&d=nc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
 		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+token+'&d=cc&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');

@@ -51,10 +51,7 @@ class consignaciones extends CI_Controller {
 										$retorno['status'] = 'success';
 										$articulo['retencion'] = $this->getRetencionReal($clienteLiga->Cliente, $articulo['retencion']);
 										$articulo['exento'] = $this->getExentoReal($clienteLiga->Cliente, $articulo['exento']);
-										$articulo['retencion_cliente'] = $clienteLiga->informacion["retencion"];
-										$articulo['exento_cliente'] = $clienteLiga->informacion["exento"];
 										$retorno['articulo'] = $articulo;
-										
 										unset($retorno['error']);
 								}else{
 										$retorno['status'] = 'success';
@@ -239,9 +236,7 @@ class consignaciones extends CI_Controller {
                 
                 //Agregamos dicho articulo a la consignacion
                 $articuloDeSucursalEntrega = $this->articulo->existe_Articulo($art->codigo,$sucursalEntrega);
-				$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
-				$tipoCodigo = $articuloDeSucursalEntrega[0]->TipoCodigo;
-				$unidadMedida = $articuloDeSucursalEntrega[0]->UnidadMedida;
+                $imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
                 $this->contabilidad->registrarArticuloConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $consignacion, $art->precio_final);
 
                 if($aplicarConsignacion){
@@ -250,7 +245,7 @@ class consignaciones extends CI_Controller {
                         $nuevaCantidad = $larticulo->Cantidad + $art->cantidad;
                         $this->contabilidad->actualizarArticuloEnListaConsignacion($art->codigo, $nuevaCantidad, $art->precio_unidad, $sucursalEntrega, $sucursalRecibe);
                     }else{
-                        $this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $art->precio_final, $tipoCodigo, $unidadMedida);
+                        $this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $art->precio_final);
                     }
                 }
             }
@@ -313,8 +308,6 @@ class consignaciones extends CI_Controller {
 				redirect('accesoDenegado', 'location');						
 		}
 		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
-                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
-                $data['meta_config'] = $this->factura->getConfgArray();
 		$this->load->view("contabilidad/facturar_consignaciones_view", $data);
 	}
 	
@@ -330,22 +323,7 @@ class consignaciones extends CI_Controller {
 					if($articulos = $this->contabilidad->getArticulosEnListaDeConsignacion($sucursalEntrega, $sucursalRecibe)){
 						$retorno['status'] = 'success';
 						unset($retorno['error']);
-                                                
-                                                foreach($articulos as $art){
-                                                    $a = $this->articulo->existe_Articulo($art->Codigo,$sucursalRecibe);
-                                                    if($a !== false){
-                                                        $a = $a[0];
-                                                        $art->Bodega = $a->Articulo_Cantidad_Inventario;
-                                                    }
-                                                }
-                                                
 						$retorno['articulos'] = $articulos;
-                                                $clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe);
-                                                $isExento = false;
-                                                if($clienteLiga){
-                                                    $isExento = $this->cliente->clienteEsExentoDeIVA($clienteLiga->Cliente);
-                                                }
-                                                $retorno['isExento'] = $isExento;
 					}else{
 						$retorno['error'] = 'No existen artículos consignados entre las sucursales ingresadas';
 					}
@@ -366,37 +344,28 @@ class consignaciones extends CI_Controller {
 			$retorno['status'] = 'error';
 			$retorno['error'] = 'No se pudo procesar la solicitud.';
 			if(isset($_POST["sucursalRecibe"]) && isset($_POST["sucursalEntrega"]) &&
-				 isset($_POST["articulos"]) && isset($_POST["devolver"]) && isset($_POST["soloDevolver"])){
+				 isset($_POST["articulos"]) && isset($_POST["devolver"])){
 				 	try{
 						 	$sucursalEntrega = trim($_POST["sucursalEntrega"]);
 						 	$sucursalRecibe = trim($_POST["sucursalRecibe"]);
 						 	$articulos = json_decode($_POST["articulos"]);
-							$debeDevolver = trim($_POST["devolver"]) == '1' ? true : false;
-							$soloDevolver = trim($_POST["soloDevolver"]) == '1' ? true : false;
-
+						 	$debeDevolver = trim($_POST["devolver"]) == '1' ? true : false;
+						 	
 						 	if($this->empresa->getEmpresa($sucursalEntrega)){
 							 		if($this->empresa->getEmpresa($sucursalRecibe)){
-							 				if(sizeOf($articulos) > 0){
+							 				if(sizeOf($articulos) > 0){					
 			 										if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
 				 											if($this->hayProductosAProcesar($articulos, $debeDevolver)){
-																	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-																	if($soloDevolver){
-																		$this->devolverArticulosSeleccionados($articulos, $sucursalEntrega);
-																		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario realizo una devolucion de articulos sin facturar",$data['Sucursal_Codigo'],'facturar_consignacion');
+					 												include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
+					 												if($consecutivo = $this->factura->crearfactura($clienteLiga->Cliente, $clienteLiga->informacion['nombre'], 'colones', 'Factura Generada Por Consignación', $sucursalEntrega, $data['Usuario_Codigo'], false)){
+																		$this->registrarArticuloEnFactura($articulos, $debeDevolver, $sucursalEntrega, $data['Usuario_Codigo'], $clienteLiga->Cliente, $consecutivo);
+																		
+																		$this->actualizarCostosFactura($consecutivo, $sucursalEntrega);
+																		
 																		$retorno['status'] = 'success';
-																		unset($retorno['error']);
+																		unset($retorno['error']);										
 																	}else{
-																		if($consecutivo = $this->factura->crearfactura($clienteLiga->Cliente, $clienteLiga->informacion['nombre'], 'colones', 'Factura Generada Por Consignación', $sucursalEntrega, $data['Usuario_Codigo'], false)){
-																			$this->registrarArticuloEnFactura($articulos, $debeDevolver, $sucursalEntrega, $data['Usuario_Codigo'], $clienteLiga->Cliente, $consecutivo);
-
-																			$this->actualizarCostosFactura($consecutivo, $sucursalEntrega);
-
-																			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario creo una factura a partir de una consignacion, se creo la factura: $consecutivo y decidio ".($debeDevolver ? "SI" : "NO")." devolver articulos",$data['Sucursal_Codigo'],'facturar_consignacion');
-																			$retorno['status'] = 'success';
-																			unset($retorno['error']);
-																		}else{
-																			$retorno['error'] = 'No se pudo crear la factura.';
-																		}
+																		$retorno['error'] = 'No se pudo crear la factura.';
 																	}
 				 											}else{
 					 												$retorno['error'] = 'No hay artículos que facturar.';
@@ -430,17 +399,6 @@ class consignaciones extends CI_Controller {
 		}
 		return $debeDevolver ? true : false;
 	}
-
-	private function devolverArticulosSeleccionados($articulos, $sucursal){
-		foreach($articulos as $articulo){
-			if($articuloBD = $this->contabilidad->getArticuloEnListaConsignacionById($articulo->codigo)){
-				$cantidadConsignadaAFacturar = $articulo->cantidad;
-				$nuevaCantidad = $articuloBD->Cantidad - $cantidadConsignadaAFacturar;
-				$this->contabilidad->eliminarArticuloDeListaConsignacionById($articulo->codigo);
-				$this->articulo->actualizarInventarioSUMA($articuloBD->Codigo, $nuevaCantidad, $sucursal);
-			}
-		}
-	}
 	
 	private function registrarArticuloEnFactura($articulos, $debeDevolver, $sucursal, $vendedor, $cliente, $factura){
 		foreach($articulos as $articulo){
@@ -462,9 +420,7 @@ class consignaciones extends CI_Controller {
 						$sucursal, 
 						$vendedor, 
 						$cliente, 
-						$articuloBD->Imagen,
-						$articuloBD->TipoCodigo,
-						$articuloBD->UnidadMedida
+						$articuloBD->Imagen
 					);
 					
 					$nuevaCantidad = $articuloBD->Cantidad - $cantidadConsignadaAFacturar;
@@ -634,40 +590,29 @@ class consignaciones extends CI_Controller {
                 $retorno["error"] = "No hay consignaciones con los filtros seleccionados";
                 $retorno["status"] = "error";
             }
-
+            
             echo json_encode($retorno);
         }
-
+        
         function getConsignacion(){
-            include PATH_USER_DATA;
             $retorno["status"] = "error";
             $retorno["error"] = "No se pudo procesar su solicitud";
-
-			$consignacion = trim($_POST["consignacion"]);
-			$isConsulta = false; 
-			if(isset($_POST["consulta"])){
-				$isConsulta = trim($_POST["consulta"]) == 1;
-			}
-
+            
+            $consignacion = trim($_POST["consignacion"]);
+            
             if($consignacion = $this->contabilidad->getConsignacionParaImpresion($consignacion)){
-				if($consignacion->estado == "creada" || $isConsulta){
-					if($articulos = $this->contabilidad->getArticulosDeConsignacionParaEditar($consignacion->consecutivo, $consignacion->sucursal_entrega)){
-						unset($retorno["error"]);
-						$retorno["status"] = "success";
-						$consignacion->articulos = $articulos;
-						$retorno["consignacion"] = $consignacion;
-						$retorno['consecutivo'] = $consignacion->consecutivo;
-						$retorno['sucursal']= $data['Sucursal_Codigo'];
-						$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
-					}else{
-					   $retorno["error"] = "No hay artículos para esta consignación"; 
-					}
-				}else{
-					$retorno["error"] = "No se pueden editar consignaciones anuladas ni aplicadas";
-				}
+                if($articulos = $this->contabilidad->getArticulosDeConsignacionParaEditar($consignacion->consecutivo, $consignacion->sucursal_entrega)){
+                    unset($retorno["error"]);
+                    $retorno["status"] = "success";
+                    $consignacion->articulos = $articulos;
+                    $retorno["consignacion"] = $consignacion;
+                }else{
+                   $retorno["error"] = "No hay artículos para esta consignación"; 
+                }
             }else{
                 $retorno["error"] = "Número de consignación no existe";
             }
+            
             echo json_encode($retorno);
         }
 

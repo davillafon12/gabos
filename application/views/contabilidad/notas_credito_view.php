@@ -38,8 +38,6 @@ PARA:
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.js'); ?>"></script>
 		<!--CSS ESTILO DEL JQUERYUI-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
-                    <!--CARGA DEL POPUP MODAL-->
-		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery.bpopup.min.js'); ?>"></script>
 		<!--CSS ESTILO ESPECIFICO DE LA PAGINA-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_notas_credito.css?v='.$javascript_cache_version); ?>">	
 		<!--CARGA DE HERRAMIENTAS DE ESTILO-->
@@ -227,10 +225,6 @@ PARA:
 				</div>
 			</div><!-- contenedor -->			
 		</div><!-- main_wrapper -->
-                <div class="envio_nota" id="envio_nota" style="display: none; text-align: center;">
-			<img class="envio_img" src="<?php echo base_url('application/images/enviandoFactura.gif'); ?>">
-			<p class="envio_p">Creando nota de crédito... <br>Por favor, espere.</p>
-		</div>
 		<!--Incluir footer-->
 		<?php include PATH_FOOTER;?>
 	</body>

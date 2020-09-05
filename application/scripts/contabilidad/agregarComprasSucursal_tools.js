@@ -1,5 +1,4 @@
 var facturaCargada = false; //Variable guarda si la factura ya fue o no cargada
-var _IS_LOADING = false;
 
 $(function(){
 	$("#numero_factura").numeric();
@@ -106,7 +105,6 @@ Number.prototype.format = function(n, x, s, c) {
 };
 
 function setProductos(productos){
-    resetFields();
 	for(i = 0; i<productos.length; i++){
 		precioUnitario = parseFloat(productos[i].Articulo_Factura_Precio_Unitario);
 		descuento = parseInt(productos[i].Articulo_Factura_Descuento);

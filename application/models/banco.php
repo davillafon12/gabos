@@ -4,7 +4,7 @@ Class banco extends CI_Model
 	function getBancos()
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('tb_22_banco');
+		$this -> db -> from('TB_22_Banco');
 		$query = $this -> db -> get();
 
 		if($query -> num_rows() != 0)
@@ -20,12 +20,12 @@ Class banco extends CI_Model
 	function registrar($nombre, $comision, $usuario)
 	{				
 		$data = array(					
-                        'Banco_Nombre'=>$nombre, 
-						'Banco_Comision_Porcentaje'=>$comision,
-						'Banco_Creado_Por'=>$usuario
+                        'Banco_Nombre'=>mysql_real_escape_string($nombre), 
+						'Banco_Comision_Porcentaje'=>mysql_real_escape_string($comision),
+						'Banco_Creado_Por'=>mysql_real_escape_string($usuario)
                     );
 		try{
-        $this->db->insert('tb_22_banco',$data); }
+        $this->db->insert('TB_22_Banco',$data); }
 		catch(Exception $e)
 		{return false;}
 		//Verificamos y retornamos si se guardo en base de datos
@@ -34,14 +34,14 @@ Class banco extends CI_Model
 	}
 	
 	function eliminar($id){
-		$this->db->delete('tb_22_banco', array('Banco_Codigo' => $id));
+		$this->db->delete('TB_22_Banco', array('Banco_Codigo' => $id));
 	}
 	
 	function getBanco($id)
 	{
 		$this -> db -> select('*');
-		$this -> db -> from('tb_22_banco');		
-		$this -> db -> where('Banco_Codigo', $id);
+		$this -> db -> from('TB_22_Banco');		
+		$this -> db -> where('Banco_Codigo', mysql_real_escape_string($id));
 		$this -> db -> limit(1);
 		
 		$query = $this -> db -> get();
@@ -59,16 +59,16 @@ Class banco extends CI_Model
 	function actualizar($id, $data)
 	{
 		    
-			$this->db->where('Banco_Codigo', $id);
-			$this->db->update('tb_22_banco' ,$data);
+			$this->db->where('Banco_Codigo', mysql_real_escape_string($id));
+			$this->db->update('TB_22_Banco' ,$data);
 		
 	}
 	
 	function getComision($id)
 	{
 		$this -> db -> select('Banco_Comision_Porcentaje');
-		$this -> db -> from('tb_22_banco');
-		$this -> db -> where('Banco_Codigo', $id);
+		$this -> db -> from('TB_22_Banco');
+		$this -> db -> where('Banco_Codigo', mysql_real_escape_string($id));
 		$this -> db -> limit(1);
 		$query = $this -> db -> get();
 		

@@ -2,9 +2,18 @@
 var cedula = '';
 var flagReload = false; //Bandera utilizada para ver si se recarga al cliente o no segun el resultado del ajax
 
-function buscarCedula (e) {
-    cedula = $("#cedula").val();
-    getNombreCliente(cedula);	
+function buscarCedula (e) 
+{
+	cedula = $("#cedula").val();
+	if(!isNumber(cedula))
+	{ 
+		$("#nombre").val('');
+		resetFields();
+	}
+	else
+	{	
+		getNombreCliente(cedula);
+	}
 }
 
 function isNumber(n) {
@@ -114,9 +123,7 @@ function setDescuentosProductos(productos){
 	for (i = 0; i < productos.length; i++) { 
 		descripcion = productos[i].descripcion;
 		descripcion = descripcion.substring(0, 42);
-		proCodigo = productos[i].codigo.toString(); 
-		$('#tabla_des_productos').append("<tr><td><p class='tiny-font'>"+productos[i].codigo+"</p></td><td><p class='tiny-font'>"+descripcion+
-		"</p></td><td><p class='tiny-font'>"+productos[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesProducto(\""+proCodigo+"\", "+productos[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
+		$('#tabla_des_productos').append("<tr><td><p class='tiny-font'>"+productos[i].codigo+"</p></td><td><p class='tiny-font'>"+descripcion+"</p></td><td><p class='tiny-font'>"+productos[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesProducto("+productos[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
 	}
 	if(productos.length==0){$('#tabla_des_productos').append("<tr><td colspan='4'><p class='tiny-font'>No tiene descuentos</p></td></tr>");}
 	$('#tabla_des_productos').append(footerDescuentos);
@@ -126,8 +133,7 @@ function setDescuentosFamilias(familias){
 	footerFamilias = "<tr><td class='borde-arriba'><input class='input-codigo' type='text' id='codigo_familia' onkeyup='buscarFamilia()'/></td><td class='borde-arriba'><p class='tiny-font' id='descripcion_familia'></p></td><td class='borde-arriba'><input class='input-descuento' type='text' id='descuento_familia'/></td><td class='borde-arriba'><a href='javascript:;' onclick='agregarDescuentoFamilia()' class='boton-cambiar'>Agregar</a></td></tr>";
 	$("#cuerpo_familia").html('');
 	for (i = 0; i < familias.length; i++) { 
-		proCodigoFamilia = familias[i].codigo.toString(); 
-		$('#tabla_des_familias').append("<tr><td><p class='tiny-font'>"+familias[i].codigo+"</p></td><td><p class='tiny-font'>"+familias[i].descripcion+"</p></td><td><p class='tiny-font'>"+familias[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesFamilia(\""+proCodigoFamilia+"\", "+familias[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
+		$('#tabla_des_familias').append("<tr><td><p class='tiny-font'>"+familias[i].codigo+"</p></td><td><p class='tiny-font'>"+familias[i].descripcion+"</p></td><td><p class='tiny-font'>"+familias[i].porcentaje+"</p></td><td><a href='javascript:;' onclick='eliminarDesFamilia("+familias[i].id+")' class='boton-eliminar'>Eliminar</a></td></tr>");
 	}
 	if(familias.length==0){$('#tabla_des_familias').append("<tr><td colspan='4'><p class='tiny-font'>No tiene descuentos</p></td></tr>");}
 	$('#tabla_des_familias').append(footerFamilias);
@@ -170,35 +176,37 @@ function updateDescuento(){
 		descuento = parseInt(descuento);
 		if(descuento>=0&&descuento<=100){
 			cedula = $("#cedula").val();
-			
-                        $.ajax({
-                            url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarDescuento',
-                            type: "POST",		
-                            async: false,
-                            data: {'cedula':cedula, 'descuento':descuento},				
-                            success: function(data, textStatus, jqXHR)
-                            {
-                                    try{
-                                            informacion = $.parseJSON('[' + data.trim() + ']');
-                                            if(informacion[0].status==="error"){
-                                                    manejarErrores(informacion[0].error);
-                                            }else if(informacion[0].status==="success"){
-                                                    n = noty({
-                                                       layout: 'topRight',
-                                                       text: 'Se cambio el descuento con exito',
-                                                       type: 'success',
-                                                       timeout: 4000
-                                                    });										
-                                            }
-                                    }catch(e){
-                                            //alert(e);
-                                            notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-                                    }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown)
-                            {}
-                        });				
-			
+			if(isNumber(cedula)){
+				$.ajax({
+						url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarDescuento',
+						type: "POST",		
+						async: false,
+						data: {'cedula':cedula, 'descuento':descuento},				
+						success: function(data, textStatus, jqXHR)
+						{
+							try{
+								informacion = $.parseJSON('[' + data.trim() + ']');
+								if(informacion[0].status==="error"){
+									manejarErrores(informacion[0].error);
+								}else if(informacion[0].status==="success"){
+									n = noty({
+									   layout: 'topRight',
+									   text: 'Se cambio el descuento con exito',
+									   type: 'success',
+									   timeout: 4000
+									});										
+								}
+							}catch(e){
+								//alert(e);
+								notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+							}
+						},
+						error: function (jqXHR, textStatus, errorThrown)
+						{}
+					});				
+			}else{
+				notyError("¡Ingrese una cédula válida!");
+			}
 		}else{
 			notyError("¡Ingrese un descuento válido!");
 		}
@@ -227,35 +235,38 @@ function updateCredito(){
 	if(isNumber(credito)){
 		credito = parseFloat(credito);
 		if(credito>=0){
-                    cedula = $("#cedula").val();
-			
-                    $.ajax({
-                        url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarCredito',
-                        type: "POST",		
-                        async: false,
-                        data: {'cedula':cedula, 'credito':credito},				
-                        success: function(data, textStatus, jqXHR)
-                        {
-                                try{
-                                        informacion = $.parseJSON('[' + data.trim() + ']');
-                                        if(informacion[0].status==="error"){
-                                                manejarErrores(informacion[0].error);
-                                        }else if(informacion[0].status==="success"){
-                                                n = noty({
-                                                   layout: 'topRight',
-                                                   text: 'Se cambio el credito con exito',
-                                                   type: 'success',
-                                                   timeout: 4000
-                                                });	
-                                        }
-                                }catch(e){
-                                        //alert(e);
-                                        notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-                                }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown)
-                        {}
-                    });
+			cedula = $("#cedula").val();
+			if(isNumber(cedula)){
+				$.ajax({
+						url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarCredito',
+						type: "POST",		
+						async: false,
+						data: {'cedula':cedula, 'credito':credito},				
+						success: function(data, textStatus, jqXHR)
+						{
+							try{
+								informacion = $.parseJSON('[' + data.trim() + ']');
+								if(informacion[0].status==="error"){
+									manejarErrores(informacion[0].error);
+								}else if(informacion[0].status==="success"){
+									n = noty({
+									   layout: 'topRight',
+									   text: 'Se cambio el credito con exito',
+									   type: 'success',
+									   timeout: 4000
+									});	
+								}
+							}catch(e){
+								//alert(e);
+								notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+							}
+						},
+						error: function (jqXHR, textStatus, errorThrown)
+						{}
+					});				
+			}else{
+				notyError("¡Ingrese una cédula válida!");
+			}
 		}else{
 			notyError("¡Ingrese un credito válido!");
 		}
@@ -282,12 +293,12 @@ function formatCreditoField(){
 *
 */
 
-function eliminarDesProducto(codigo, idDescuento){
+function eliminarDesProducto(idDescuento){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/eliminarDescuentoProducto',
 		type: "POST",		
 		async: false,
-		data: {'cedula':$("#cedula").val(), 'id':idDescuento, 'codigo':codigo},				
+		data: {'id':idDescuento},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
@@ -424,12 +435,12 @@ function envioDescuentoProducto(codigo, descuento){
 *
 */
 
-function eliminarDesFamilia(codigo, idDescuento){
+function eliminarDesFamilia(idDescuento){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/eliminarDescuentoFamilia',
 		type: "POST",		
 		async: false,
-		data: {'id':idDescuento, 'cedula':cedula, 'codigo':codigo},		
+		data: {'id':idDescuento},				
 		success: function(data, textStatus, jqXHR)
 		{
 			try{

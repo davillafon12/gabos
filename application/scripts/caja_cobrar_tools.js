@@ -146,7 +146,7 @@ function cobrarEImprimirPostPopUp(){
 	}
 }
 
-function validarFactura(isEditar){
+function validarFactura(){
 	cedula_field = document.getElementById("cedula").value;
 	nombre_field = document.getElementById("nombre").value;
 	if(cedula_field.trim()===''){
@@ -170,34 +170,25 @@ function validarFactura(isEditar){
 	productosCantidad = document.getElementById("tabla_productos").rows.length-1;
 	//Verifica si hay productos por cantidad de filas de la tabla
 	if(productosCantidad<1){
-		if(isEditar === true){
-			agregarFila(1);
-			array_pos_rows = [1];
-		}else{
-			n = noty({
-							layout: 'topRight',
-							text: '¡No hay articulos en la factura!',
-							type: 'error',
-							timeout: 4000
-						});
-			return false;
-		}
+		n = noty({
+					   layout: 'topRight',
+					   text: '¡No hay articulos en la factura!',
+					   type: 'error',
+					   timeout: 4000
+					});
+		return false;
 	}
 	//Verifica si hay productos ingresados
 	createJSON();
 	tamJSONArray = invoiceItemsJSON.length;
 	if(tamJSONArray<1){
-		if(isEditar === true){
-
-		}else{
-			n = noty({
-						layout: 'topRight',
-						text: '¡No hay articulos en la factura!',
-						type: 'error',
-						timeout: 4000
-						});
-			return false;
-		}
+		n = noty({
+					   layout: 'topRight',
+					   text: '¡No hay articulos en la factura!',
+					   type: 'error',
+					   timeout: 4000
+					});
+		return false;
 	}
 	return true;
 }
@@ -345,16 +336,14 @@ function enviarCobro(URL){
 				displayErrors(facturaHEAD[0].error);
 				$('#envio_factura').bPopup().close();
 			}else if(facturaHEAD[0].status==="success"){
-				$('#envio_factura').bPopup().close();
-                                if(facturaHEAD[0].impresion === 1){
-                                    if(tipoImpresion==='t'){
-                                            //Impresion termica
-                                            window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion/termica?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-                                    }else if(tipoImpresion==='c'){
-                                            //Impresion carta
-                                            window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
-                                    }
-                                }
+				$('#envio_factura').bPopup().close();	
+				if(tipoImpresion==='t'){
+					//Impresion termica
+					window.open(facturaHEAD[0].servidor_impresion+'/index.html?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+				}else if(tipoImpresion==='c'){
+					//Impresion carta
+					window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+facturaHEAD[0].token+'&d=f&n='+consecutivoActual+'&s='+facturaHEAD[0].sucursal+'&i='+tipoImpresion,'Impresion de Factura','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+				}
 				window.location = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/caja';
 			}
 			}
@@ -453,16 +442,9 @@ function anularFacturaAJAX(URL){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
-		data: {'consecutivo':consecutivoActual},
-                async : true,
-                beforeSend: function(jqXHR, settings) {
-                    $('#envio_anulacion').bPopup({
-                            modalClose: false
-                    });
-                },
+		data: {'consecutivo':consecutivoActual},		
 		success: function(data, textStatus, jqXHR)
 		{
-                    $('#envio_anulacion').bPopup().close();
 			try{
 				result = $.parseJSON('[' + data.trim() + ']');
 				if(result[0].status==="error"){
@@ -528,7 +510,7 @@ function editarFactura(){
 		notyError('¡No se puede editar una proforma. Si desea modificarla debe crear una factura pendiente, a partir de esta proforma!');
 		return false;
 	}
-	if(validarFactura(true)){
+	if(validarFactura()){
 		$('#pop_up_administrador').bPopup({
 			modalClose: false
 		});

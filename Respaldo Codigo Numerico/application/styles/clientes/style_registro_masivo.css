@@ -1,0 +1,232 @@
+/*
+http://www.freshdesignweb.com/beautiful-registration-form-with-html5-and-css3.html
+*/
+
+
+.form p.contact { 
+	font-size: 12px; 
+	margin:0px 0px 10px 0;
+	line-height: 14px; 
+	font-family:Arial, Helvetica; 
+}
+
+/*.form input[type="text"] {
+ 	/*width: 200px; 
+}*/
+
+.form input[type="number"] {
+ width: 200; 
+}
+
+.form label { color: #000; font-weight:bold;font-size: 14px;font-family:Arial, Helvetica; }
+
+.form input, textarea { background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(51, 51, 51, 0.15); padding: 7px; font-family: Keffeesatz, Arial; color: #4b4b4b; font-size: 14px; -webkit-border-radius: 5px; margin-bottom: 15px; margin-top: -10px; }
+.form input:focus, textarea:focus { border: 1px solid #ff5400; background-color: rgba(255, 255, 255, 1); }
+
+.form input.buttom{ background: #4b8df9; display: inline-block; padding: 5px 10px 6px; margin-top: 60px;  color: #fbf7f7; text-decoration: none; font-weight: bold; line-height: 1; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 1px 3px #999; -webkit-box-shadow: 0 1px 3px #999; box-shadow: 0 1px 3px #999; text-shadow: 0 -1px 1px #222; border: none; position: relative; cursor: pointer; font-size: 14px; font-family:Verdana, Geneva, sans-serif; left:50px; bottom:30px;}
+.form input.butto{ background: #4b8df9; display: inline-block; padding: 5px 10px 6px; margin-top: 20px;  color: #fbf7f7; text-decoration: none; font-weight: bold; line-height: 1; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 1px 3px #999; -webkit-box-shadow: 0 1px 3px #999; box-shadow: 0 1px 3px #999; text-shadow: 0 -1px 1px #222; border: none; position: relative; cursor: pointer; font-size: 14px; font-family:Verdana, Geneva, sans-serif; width:70px; height:17px}
+.form input.buttom:hover	{ background-color: #2a78f6; }
+
+.boton_volver{ 
+	background: #4b8df9; 
+	/*display: inline-block;*/
+	padding: 5px 10px 6px; 
+	color: #fbf7f7; 
+	text-decoration: none; 
+	font-weight: bold; 
+	line-height: 1; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	border-radius: 5px; 
+	-moz-box-shadow: 0 1px 3px #999; 
+	-webkit-box-shadow: 0 1px 3px #999; 
+	box-shadow: 0 1px 3px #999; 
+	text-shadow: 0 -1px 1px #222; 
+	border: none; 
+	position: relative; 
+	cursor: pointer; 
+	font-size: 12px; 
+	font-family:Verdana, Geneva, sans-serif; 
+	left:70px;
+	bottom:30px;
+}
+
+	input[type=number]::-webkit-inner-spin-button,
+	input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.observaciones{
+	width: 430px; resize: none;
+	height: 150px; 
+	margin-top: 20px; 
+}
+
+.advertencia_longitud{
+	width: 400px;
+	height: 10px;
+	line-height: 10px;
+	font-family:Arial, Helvetica;
+	font-size: 12px;
+	position: relative;
+	top: -25px;
+}
+
+.status_2{
+position: relative;
+	
+    width: 170px;
+height: 25px;
+
+border: 1px #efbc6b solid;
+
+background-color: #fee7af;
+
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+
+-moz-box-shadow: 3px 3px 5px 0px #888888;
+-webkit-box-shadow: 3px 3px 5px 0px #888888;
+box-shadow: 3px 3px 5px 0px #888888;
+
+	color: #000; font-weight:bold;font-size: 14px;font-family:Arial, Helvetica;
+}
+
+.status_2 img{
+	position: relative;
+	top: 5px;
+	left: 5px;
+}
+
+.status_2 p{
+	position: relative;
+	top: -25px;
+	left: 27px;
+}
+
+.titulo{
+    color: #000; font-weight:bold;font-size: 16px;font-family:Arial, Helvetica;
+	margin-bottom:0px;
+}
+
+
+/*Diseñados Siviany Prendas Zamrora - David Villalobos Foncesa*/
+.formato{
+
+	font-size: 13px; 
+	margin: -10px 10px 8px 10px;
+	padding: 5px 10px 6px;
+	line-height: 14px; 
+	font-family:Arial, Helvetica; 
+	font-weight:900;
+}
+
+
+
+
+
+.div_bot_des {
+    text-align: left;
+}
+
+.permisosPersona {
+    background: none repeat scroll 0 0 #59B659;
+    border: medium none;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #999999;
+    color: #FBF7F7;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Verdana,Geneva,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    margin-left: 5px;
+    padding: 5px 10px 6px;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #222222;
+}
+
+.boton_act_all2 {
+    background: none repeat scroll 0 0 #59B659;
+    border: medium none;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #999999;
+    color: #FBF7F7;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Verdana,Geneva,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    margin-left: 5px;
+    padding: 5px 10px 6px;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #222222;
+}
+
+.estado_Ac{
+
+	margin-bottom: 0px;
+	border: 1px #92ce9c outset;
+
+	background-color: #20fd08;
+
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Verdana, Geneva, sans-serif;
+	font-style: inherit;
+	text-decoration: inherit;
+	letter-spacing: 0.075em;
+}
+
+.estado_De{
+
+	margin-bottom: 0px;
+	border: 1px #ce9293 outset;
+	background-color: #fd080a;
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Verdana, Geneva, sans-serif;
+	font-style: inherit;
+	text-decoration: inherit;
+	letter-spacing: 0.075em;
+}
+
+
+#datos	{
+	border:1px 
+	solid #ccc;
+	padding:10px; 
+	font-family:Arial, Helvetica;
+	font-size: 14px;
+	
+}
+
+#datos tr:nth-child(even) {
+	background:#ccc;
+}
+#datos td {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.tabla{
+	font-weight:900;
+	margin-top: 20px;
+	margin-left:200px; 
+	margin-right: 200px;
+	margin-bottom: 20px;
+	border:8px solid #9BC8E8;
+	display: inline-block;
+
+
+}
+
+
+

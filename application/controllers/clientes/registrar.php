@@ -3,44 +3,44 @@
 class registrar extends CI_Controller {
 
 
-	private $mensaje;
+	private $mensaje; 
 	private $ancho_Imagen= 100;
 	private $alto_Imagen=100;
 	private $direccion_Url_Imagen = " ";
-	private $calidad_Cliente = 5;
+	private $calidad_Cliente = 5; 
 	private $isSucursal = 0;
 
 
 	 function __construct()
 	 {
-	    parent::__construct();
+	    parent::__construct(); 
 		$this->load->model('user','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('configuracion','',TRUE);
-        $this->load->model('ubicacion','',TRUE);
-        $this->load->model('empresa','',TRUE);
+                $this->load->model('ubicacion','',TRUE);
+		/*$conf_array = $this->XMLParser->getConfigArray();
+		$this->monto_minimo_defecto = $conf_array['monto_minimo_compra'];
+		$this->monto_maximo_defecto = $conf_array['monto_minimo_venta'];*/
 	 }
 
 	function index(){
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-
+			
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-
+		
 		if($permisos['registrar_cliente'])
 		{
-            $provincias = $this->ubicacion->getProvincias();
-            $this->load->helper(array('form'));
-            $empresas_actuales = $this->empresa->get_empresas_ids_array();
-            $data['empresas'] = $empresas_actuales;
-            $data["provincias"] = $provincias;
-            $data['javascript_cache_version'] = $this->javascriptCacheVersion;
-            $this->load->view('clientes/clientes_registrar_view', $data);
+                    $provincias = $this->ubicacion->getProvincias();
+                    $this->load->helper(array('form'));
+                    $data["provincias"] = $provincias;
+                    $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+                    $this->load->view('clientes/clientes_registrar_view', $data);	
 		}
 		else{
-            redirect('accesoDenegado', 'location');
+                    redirect('accesoDenegado', 'location');
 		}
 	}
-
+        
 	function es_Cedula_Utilizada(){
             $id_request=$_GET['id'];
             $ruta_base_imagenes_script = base_url('application/images/scripts');
@@ -50,7 +50,7 @@ class registrar extends CI_Controller {
                 echo "false"; //echo "<img src=".$ruta_base_imagenes_script."/tick.gif />";
             }
 	}
-
+         
     function registrarClientes(){
         $tipo_Cedula = $this->input->post('tipo_Cedula');
         $cedula = $this->input->post('cedula');
@@ -65,8 +65,7 @@ class registrar extends CI_Controller {
         $email = $this->input->post('email');
         $observaciones = $this->input->post('observaciones');
         $tipo_pago_cliente = $this->input->post('tipo_pago_cliente');
-        $sucursalLiga = $this->input->post('sucursal');
-
+        
         $codptel = $this->input->post('codigo_telefono');
         $codpcel = $this->input->post('codigo_celular');
         $codpfax = $this->input->post('codigo_fax');
@@ -87,56 +86,42 @@ class registrar extends CI_Controller {
         $aplicaRetencion = 0;
         $aplicaRetencion = isset($_POST['aplicaRetencion']) && $_POST['aplicaRetencion']  ? "1" : "0";
 
-        //No receptor de factura electronica
-        $noReceptor = 0;
-        $noReceptor = isset($_POST['noReceptor']) && $_POST['noReceptor']  ? "1" : "0";
-
         $this->do_upload($cedula); // metodo encargado de cargar la imagen con la cedula del usuario
 
         include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
         $ruta_base_imagenes_script = base_url('application/images/scripts');
-        if($this->cliente->registrar(   $nombre,
-                                        $apellidos ,
-                                        $cedula,
-                                        $tipo_Cedula,
-                                        $fecha_nacimiento,
-                                        $celular,
-                                        $telefono,
-                                        $pais,
-                                        $direccion,
-                                        $observaciones,
-                                        $this->direccion_url_imagen,
-                                        $email,
-                                        $estado_Cliente,
-                                        $this->calidad_Cliente,
-                                        $tipo_pago_cliente,
-                                        $this->isSucursal,
-                                        $exento,
-                                        $aplicaRetencion,
+        if($this->cliente->registrar(   $nombre, 
+                                        $apellidos , 
+                                        $cedula, 
+                                        $tipo_Cedula, 
+                                        $fecha_nacimiento, 
+                                        $celular, 
+                                        $telefono, 
+                                        $pais, 
+                                        $direccion, 
+                                        $observaciones, 
+                                        $this->direccion_url_imagen, 
+                                        $email, 
+                                        $estado_Cliente, 
+                                        $this->calidad_Cliente, 
+                                        $tipo_pago_cliente, 
+                                        $this->isSucursal, 
+                                        $exento, 
+                                        $aplicaRetencion, 
                                         $data['Usuario_Codigo'],
                                         $data['Sucursal_Codigo'],
-                                        $codptel,
-                                        $codpcel,
-                                        $codpfax,
-                                        $fax,
-                                        $prov,
-                                        $canton,
-                                        $distr,
-                                        $barrio,
-                                        $noReceptor,
-                                        $sucursalLiga)){ //Si se ingreso bien a la BD
+                                        $codptel, 
+                                        $codpcel, 
+                                        $codpfax,   
+                                        $fax, 
+                                        $prov, 
+                                        $canton, 
+                                        $distr, 
+                                        $barrio)){ //Si se ingreso bien a la BD
                 //Titulo de la pagina
                 $data['Titulo_Pagina'] = "Transacción Exitosa";
-                $this->user->guardar_Bitacora_Cliente($cedula,
-                                                    $data['Sucursal_Codigo'],
-                                                    $data['Usuario_Codigo'],
-                                                    'Ingreso_Cliente',
-                                                    'Registro Cliente : '. $nombre.' '. $apellidos .
-                                                    ' Tipo Pago : '.$tipo_pago_cliente.
-                                                    ' Email : '.$email.
-                                                    ' Celular : '.$celular);
 
-                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el cliente ".$nombre." codigo: ".$cedula,$data['Sucursal_Codigo'],'registro');
+                $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el cliente ".mysql_real_escape_string($nombre)." codigo: ".mysql_real_escape_string($cedula),$data['Sucursal_Codigo'],'registro');
             $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso del cliente ".$nombre." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
                                          <div class='Informacion'>
                                                      <form action=".base_url('clientes/registrar').">
@@ -153,7 +138,7 @@ class registrar extends CI_Controller {
                                                                  <p class='titles'>-Dirección:</p> <p class='content'>".$direccion.".</p><br>
                                                                  <p class='titles'>-Email:</p> <p class='content'>".$email.".</p><br>
                                                                  <p class='titles'>-Tipo Pago:</p> <p class='content'>".$tipo_pago_cliente.".</p><br>
-                                                                 <p class='titles'>-Estado:</p> <p class='content'>".$estado_Cliente.".</p><br>
+                                                                 <p class='titles'>-Estado:</p> <p class='content'>".$estado_Cliente.".</p><br>								
                                                                  <p class='titles'>-Observaciones:</h3> </p><br><p class='content_ob'>
                                                                  ".$observaciones.".</p>
                                                                  <input class='buttom' tabindex='4' value='Registrar otro cliente' type='submit'>
@@ -165,7 +150,7 @@ class registrar extends CI_Controller {
         }else{ //Hubo un error  no se ingreso a la BD
                 $data['Titulo_Pagina'] = "Transacción Fallida";
                 $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>Hubo un error al ingresar el cliente ".$nombre."! <img src=".$ruta_base_imagenes_script."/error.gif /></p></div><br>
-                                         <div class='Informacion'>
+                                         <div class='Informacion'>								 
                                                      <form action=".base_url('clientes/registrar').">
                                                                          <input class='buttom' tabindex='2' value='Registrar otro cliente' type='submit' >
                                                  </form>
@@ -193,7 +178,7 @@ class registrar extends CI_Controller {
         $this->load->library('upload', $config);
         //verificamos si existe errores
         //$this->upload->do_upload($field_name);
-        //$field_name= $id_nombre;
+        //$field_name= $id_nombre; 
 
         if (!$this->upload->do_upload())
         {
@@ -201,22 +186,22 @@ class registrar extends CI_Controller {
         	//$this->redimencionarImagen(base_url("application/images/Client_Photo"),"Default.png");
             //almacenamos el error que existe
             //$this->mensaje = "Hubo un error subiendo la imagen :". $this->upload->display_errors();
-        }
+        }  
         else
         {
         	$data = array('upload_data' => $this->upload->data());
-
-            foreach ($this->upload->data() as $item => $value){
+       
+            foreach ($this->upload->data() as $item => $value){               
 				if($item=="file_path"){
-					$path=$value;
+					$path=$value; 
 				}if($item=="file_name"){
 					$name=$value;
-				}
+				}            
             }// end foreach
-        	//$this->mensaje ="Imagen subida correctamente";
-        	$this->redimencionarImagen($path,$name);
+        	//$this->mensaje ="Imagen subida correctamente"; 
+        	$this->redimencionarImagen($path,$name);	
         }
-    }
+    }  
 
     function redimencionarImagen($path,$name){
     	$config['image_library'] = 'gd2';
@@ -227,7 +212,7 @@ class registrar extends CI_Controller {
 		$config['quality'] = '100%';    // calidad de la imagen
 		$config['width']	 = $this->ancho_Imagen;
 		$config['height']	= $this->alto_Imagen;
-		$this->load->library('image_lib', $config);
+		$this->load->library('image_lib', $config);	
 		if (!$this->image_lib->resize())
 		{
 			//$this->mensaje = $this->mensaje." error -> ".$this->image_lib->display_errors();
@@ -240,10 +225,12 @@ class registrar extends CI_Controller {
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		$data["contenedor"] = "";
-		if($permisos['registrar_usuarios_masivo']){
-                    $this->load->helper(array('form'));
-                    $this->load->view('clientes/registro_masivo_clientes', $data);
-		}else{
+		if($permisos['registrar_usuarios_masivo'])
+		{
+		$this->load->helper(array('form'));
+		$this->load->view('clientes/registro_masivo_clientes', $data);	
+		}
+		else{
 		   redirect('accesoDenegado', 'location');
 		}
     }
@@ -260,7 +247,7 @@ class registrar extends CI_Controller {
 					include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 					$data["contenedor"] = $this->leer_excel();
 					$this->load->helper(array('form'));
-					$this->load->view('clientes/registro_masivo_clientes', $data);
+					$this->load->view('clientes/registro_masivo_clientes', $data);	
 				}
 				else{
 					echo "No se ha podido transferir el archivo, verifique el tamaño del archivo e intente nuevamente.";
@@ -286,10 +273,10 @@ class registrar extends CI_Controller {
 					$highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
 					$nrColumns = ord($highestColumn) - 64;
 					//echo "<br>Pagina ".$worksheetTitle." Tiene  ".$nrColumns . ' Columnas (A-' . $highestColumn . ') ';
-					//echo ' y  ' . $highestRow . ' Filas.';
-
-					for ($row = 1; $row <= $highestRow; ++ $row) {  // numero de filas
-
+					//echo ' y  ' . $highestRow . ' Filas.';	
+					
+					for ($row = 1; $row <= $highestRow; ++ $row) {  // numero de filas      
+							
 						    $cell = $worksheet->getCellByColumnAndRow(0, $row);
 						    $tipo_Cedula = $cell->getValue();
 							//echo '<td>' . $tipo_Cedula . '</td>';
@@ -333,10 +320,10 @@ class registrar extends CI_Controller {
 							//echo '<td>' . $descuento. '</td>';
 							$cell = $worksheet->getCellByColumnAndRow(12, $row);
 							$observaciones = $cell->getValue();
-							//echo '<td>' . $observaciones. '</td>';
+							//echo '<td>' . $observaciones. '</td>';	
 						    $cell = $worksheet->getCellByColumnAndRow(13, $row);
-							$tipo_pago_cliente = $cell->getValue();
-							//echo '<td>' . $tipo_pago_cliente. '</td>';
+							$tipo_pago_cliente = $cell->getValue();	
+							//echo '<td>' . $tipo_pago_cliente. '</td>';	
 							//echo '<td>' . $monto_minimo_defecto. '</td>';
 							//echo '<td>' . $monto_maximo_defecto. '</td>';
 							if($this->cliente->registrar($nombre, $apellidos , $cedula, $tipo_Cedula, $carnet, $celular, $telefono, $pais, $direccion, $observaciones, "Default.png", $email, $monto_maximo_defecto, $monto_minimo_defecto, $estado_Cliente, $this->calidad_Cliente, $descuento, $tipo_pago_cliente)){
@@ -348,23 +335,23 @@ class registrar extends CI_Controller {
 								//echo '<td> Error Agregandolo</td>';
 							}
 							$cont++;
-
-
-
+							
+							
+						
 					}
-
-					$flag = false;
-				} // fin del if $flag
-		} // fin del foreach
+					
+					$flag = false; 	
+				} // fin del if $flag 
+		} // fin del foreach 
 
 	return $contenedor;
-    }// fin metodo leer_excel
+    }// fin metodo leer_excel 
 
     public function getCantones(){
         $r["status"] = 0;
         $r["error"] = "No se pudo procesar solicitud";
         $provincia = $this->input->post('provincia');
-
+        
         if(is_numeric($provincia)){
             $cantones = $this->ubicacion->getCantones($provincia);
             unset($r["error"]);
@@ -375,7 +362,7 @@ class registrar extends CI_Controller {
         }
         echo json_encode($r);
     }
-
+    
     public function getDistritos(){
         $r["status"] = 0;
         $r["error"] = "No se pudo procesar solicitud";
@@ -391,7 +378,7 @@ class registrar extends CI_Controller {
         }
         echo json_encode($r);
     }
-
+    
     public function getBarrios(){
         $r["status"] = 0;
         $r["error"] = "No se pudo procesar solicitud";

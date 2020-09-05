@@ -459,7 +459,7 @@ function imprimir(){
 	
 	if(tipoImpresion==='t'){
 		//Impresion termica
-		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion/termica?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
+		window.open(servidorImpresion+'/index.html?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion+'&server='+document.domain+'&protocol='+location.protocol,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 	}else if(tipoImpresion==='c'){
 		//Impresion carta
 		window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+token+'&d=f&n='+consecutivoActual+'&s='+sucursal+'&i='+tipoImpresion,'Impresion de Facturas','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
@@ -601,61 +601,24 @@ function anularFacturaAJAX(URL){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL,
 		type: "POST",
-		dataType: "json",
-		data: {'consecutivo':consecutivoActual},
-		beforeSend: function(jqXHR, settings) {
-						$('#envio_anulacion').bPopup({
-								modalClose: false
-						});
-					},
-		success: function(data){
-					$('#envio_anulacion').bPopup().close();
-					if(data.status==="error"){
-						displayErrors(data.error);
-					}else if(data.status==="success"){
-						noty({
-							layout: 'topRight',
-							text: "Se anuló la factura con éxito",
-							type: 'success',
-							timeout: 4000
-						});
-					}
-				},
-		error: function (jqXHR, textStatus, errorThrown){
-					notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
-					console.log(errorThrown);
+		data: {'consecutivo':consecutivoActual},		
+		success: function(data, textStatus, jqXHR)
+		{
+			try{
+				result = $.parseJSON('[' + data.trim() + ']');
+				if(result[0].status==="error"){
+					displayErrors(result[0].error);
+				}else if(result[0].status==="success"){
+					location.reload();
 				}
+			}catch(e){
+				notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+	 
+		}
 	});
 }
 
-function notyError(Mensaje){
-	n = noty({
-					   layout: 'topRight',
-					   text: Mensaje,
-					   type: 'error',
-					   timeout: 4000
-					});
-}
-
-function displayErrors(NumError){
-	switch(NumError) {
-		case "17":
-			notyError('No se logró anular la factura, por favor contacte al administrador \nERROR: '+NumError);
-			break;
-		case "72":
-			notyError('No se logró crear la factura electrónica, por favor contacte al administrador \nERROR: '+NumError);
-			break;
-		case "71":
-			notyError('No se logró validar campos para la factura electrónica, por favor contacte al administrador \nERROR: '+NumError);
-			break;
-		case "19":
-			notyError('No se existe la factura que se desea anular, por favor contacte al administrador \nERROR: '+NumError);
-			break;
-		case "16":
-			notyError('Error al leer datos de entrada, por favor contacte al administrador \nERROR: '+NumError);
-			break;
-		case "73":
-			notyError('No existe la factura electrónica para dicha factura, por favor contacte al administrador \nERROR: '+NumError);
-			break;
-	}
-}

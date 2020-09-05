@@ -26,7 +26,6 @@ function validateNpass(currentID, nextID, e){
 				else if(numeroPopUp=='3'){anularPost(); return false;}//Pop proveniente de caja
 				else if(numeroPopUp=='4'){makeFacturaEditable(); return false;}//Pop proveniente de caja
 				else if(numeroPopUp=='5'){autorizadoClienteDescuento(); return false;}
-                                else if(numeroPopUp=='11'){proformaEditable(); return false;}
 			}
 			//if(currentID.trim=='pop_descripcion'){return false;}
 			if(nextID=='boton_aceptar_popup'||nextID=='boton_aceptar_popup_admin'||nextID=='boton_aceptar_popup_desc'||nextID=='boton_aceptar_popup_cantidad'){document.getElementById(nextID).focus();}
@@ -171,14 +170,11 @@ function clickAceptar(){
 
 function closePopUp_Admin(){
 	$('#pop_up_administrador').bPopup().close();
-        
-        if(typeof isCallByDescuento !== "undefined"){
-            if(isCallByDescuento){
-                    $("#cedula").val('');
-                    $("#nombre").val('');
-                    isCallByDescuento = false; //Proviene de facturasCall.js
-            }
-        }
+	if(isCallByDescuento){
+		$("#cedula").val('');
+		$("#nombre").val('');
+		isCallByDescuento = false; //Proviene de facturasCall.js
+	}
 	if(isCajaLoaded&&seCambioFactura){
 		$("#cedula").val('');
 		$("#nombre").val('');

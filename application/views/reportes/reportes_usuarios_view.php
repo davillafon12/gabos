@@ -26,26 +26,24 @@ PARA:
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">		
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/base/minified/jquery-ui.min.css'); ?>">		
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include PATH_LOG_OUT_HEADER;?>
+		<?php include '/../Header/log_out_from_browser_Script.php';?>
 		<!--SCRIPT DE AJAX JQUERY-->		
 		<script src="<?php echo base_url('application/scripts/reportes/jquery-2.0.3.js'); ?>" type="text/javascript"></script>
 		<script src="<?php echo base_url('application/scripts/reportes/jquery-2.0.3.min.js'); ?>" type="text/javascript"></script>
 		<script src="<?php echo base_url('application/scripts/reportes/jquery-ui-1.10.3.js'); ?>" type="text/javascript"></script>
 		<script src="<?php echo base_url('application/scripts/reportes/jquery-ui-1.10.3.min.js'); ?>" type="text/javascript"></script>
 		<script src="<?php echo base_url('application/scripts/reportes/jquery.validate.min.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('application/scripts/reportes/Utilitarios.js'); ?>" type="text/javascript"></script>
+		<script src="<?php echo base_url('application/scripts/reportes/utilitarios.js'); ?>" type="text/javascript"></script>
 		<script src="<?php echo base_url('application/scripts/reportes/reportesUsuarios.js'); ?>" type="text/javascript"></script>
 	
 	</head>
 	<body >
 		<!--Incluir imagen de cabezera-->
-		<?php include PATH_HEADER_PICTURE;?>
-		
+		<?php include '/../Header/Header_Picture.php';?>		
 		<!--Incluir menu principal-->
-		<?php include PATH_HEADER_SELECTOR_MENU;?>
-
+		<?php include '/../Header/selector_menu.php';?>
 		<!--Incluir informacion log in-->
-		<?php include PATH_HEADER_LOG_IN_INFO;?>
+		<?php include '/../Header/Log_In_Information.php';?>
 		<!--CSS ESTILO DEL FORMULARIO-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/reportes/reporte.css'); ?>">
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
@@ -148,7 +146,7 @@ PARA:
 				
 			</div>		
 		</div>
-						<!--Incluir footer-->
-		<?php include PATH_FOOTER;?>
+		<!--Incluir footer-->
+		<?php include '/../Footer/Default_Footer.php';?>
 	</body>
 </html>

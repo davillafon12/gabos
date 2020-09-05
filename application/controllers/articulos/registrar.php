@@ -18,7 +18,7 @@ class registrar extends CI_Controller {
 
  function index()
  {
-	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	
@@ -40,14 +40,14 @@ class registrar extends CI_Controller {
 	{
 		$retorno['status'] = 'error';
 		if(isset($_POST['codigo'])&&isset($_POST['sucursal'])){
-			include PATH_USER_DATA;
+			include '/../get_session_data.php';
 			if(!$this->articulo->existe_Articulo($_POST['codigo'], $_POST['sucursal'])){
 				$retorno['status'] = 'success';
 			}
 		}
 		echo json_encode($retorno);
 		/*$id_request=$_GET['id'];
-		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
 		if($this->articulo->existe_Articulo($id_request, $data['Sucursal_Codigo']))
 		{
@@ -82,7 +82,7 @@ class registrar extends CI_Controller {
 	$precio5_Articulo = $this->input->post('precio5');
 	
 
-	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+	include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 	$ruta_base_imagenes_script = base_url('application/images/scripts');
 	if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo))
 	{ //Si se ingreso bien a la BD
@@ -98,7 +98,7 @@ class registrar extends CI_Controller {
 		}
 		$data['Titulo_Pagina'] = "Transacción Exitosa";
 	
-		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el articulo ".$codigo_Articulo." cantidad: ".$cantidad_Articulos,$data['Sucursal_Codigo'],'registro');
+		$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el articulo ".mysql_real_escape_string($codigo_Articulo)." cantidad: ".mysql_real_escape_string($cantidad_Articulos),$data['Sucursal_Codigo'],'registro');
 	    $data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso del articulo ".$codigo_Articulo." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
 		                         <div class='Informacion'>
 					             <form action=".base_url('articulos/registrar').">				                 				
@@ -200,7 +200,7 @@ function do_upload($cedula)
     }
 
     function registro_masivo(){
-		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 		if($permisos['traspaso_articulos_masivo'])
 		{
@@ -217,7 +217,7 @@ function do_upload($cedula)
 
     function carga_excel(){
 		
-				include PATH_USER_DATA;
+				include '/../get_session_data.php';
 				if(isset($_FILES['archivo_excel'])&&isset($_POST['sucursal'])){
 					$sucursal = $_POST['sucursal'];
 					if($this->empresa->getEmpresa($sucursal)){	

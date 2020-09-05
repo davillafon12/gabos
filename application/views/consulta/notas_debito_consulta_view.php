@@ -25,7 +25,7 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include PATH_LOG_OUT_HEADER;?>
+		<?php include '/../Header/log_out_from_browser_Script.php';?>
 		<!--CARGA DEL JQUERY-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script>
 		<!--CARGA DEL JQUERYUI-->
@@ -52,13 +52,13 @@ PARA:
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
-		<?php include PATH_HEADER_PICTURE;?>
+		<?php include '/../Header/Header_Picture.php';?>
 		
 		<!--Incluir menu principal-->
-		<?php include PATH_HEADER_SELECTOR_MENU;?>
+		<?php include '/../Header/selector_menu.php';?>
 
 		<!--Incluir informacion log in-->
-		<?php include PATH_HEADER_LOG_IN_INFO;?>
+		<?php include '/../Header/Log_In_Information.php';?>
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
 		<div class="main_wrapper">
@@ -179,6 +179,6 @@ PARA:
         </div>		
 
 		<!--Incluir footer-->
-		<?php include PATH_FOOTER;?>
+		<?php include '/../Footer/Default_Footer.php';?>
 	</body>
 </html>

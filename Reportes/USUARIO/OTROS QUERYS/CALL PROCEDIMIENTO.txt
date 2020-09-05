@@ -1,0 +1,17 @@
+SET @p0 = '''cobrada''';
+
+SET @p1 = '2016-04-01 00:00:00';
+
+SET @p2 = '2016-06-13 23:59:59';
+
+SET @p3 = '2';
+
+SET @p4 = '0';
+
+SET @p5 = 'true';
+
+SET @p6 = 'false';
+
+CALL `PA_ListaDeFacturasPorUsuario` (
+@p0 , @p1 , @p2 , @p3 , @p4 , @p5 , @p6
+);

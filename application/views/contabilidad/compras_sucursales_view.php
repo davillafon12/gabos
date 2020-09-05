@@ -25,7 +25,7 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include PATH_LOG_OUT_HEADER;?>
+		<?php include '/../Header/log_out_from_browser_Script.php';?>
 		<!--SCRIPT DE JQUERY-->		
 		<script src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>" type="text/javascript"></script>		
 		<!--SCRIPT DE NOTY-->		
@@ -39,19 +39,19 @@ PARA:
 		<!--CSS ESTILO DEL Impromptu-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<!--CSS ESTILO ESPECIFICO DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url("application/styles/contabilidad/contabilidad_agregar_compras.css?v=$javascript_cache_version"); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/contabilidad/contabilidad_agregar_compras.css'); ?>">
 		<!--SCRIPT DE HERRAMIENTAS-->		
-		<script src="<?php echo base_url("application/scripts/contabilidad/agregarComprasSucursal_tools.js?v=$javascript_cache_version"); ?>" type="text/javascript"></script>
+		<script src="<?php echo base_url('application/scripts/contabilidad/agregarComprasSucursal_tools.js'); ?>" type="text/javascript"></script>
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
-		<?php include PATH_HEADER_PICTURE;?>
+		<?php include '/../Header/Header_Picture.php';?>
 		
 		<!--Incluir menu principal-->
-		<?php include PATH_HEADER_SELECTOR_MENU;?>
+		<?php include '/../Header/selector_menu.php';?>
 
 		<!--Incluir informacion log in-->
-		<?php include PATH_HEADER_LOG_IN_INFO;?>	
+		<?php include '/../Header/Log_In_Information.php';?>		
 	
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
@@ -114,6 +114,6 @@ PARA:
 			<img class="envio_img" src="<?php echo base_url('application/images/enviandoFactura.gif'); ?>">
 			<p class="envio_p">Traspasando compras... <br>Por favor, espere.</p>
 		</div>
-		<?php include PATH_FOOTER;?>
+		<?php include '/../Footer/Default_Footer.php';?>
 	</body>
 </html>

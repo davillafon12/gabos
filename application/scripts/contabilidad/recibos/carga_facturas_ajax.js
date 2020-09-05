@@ -1,6 +1,15 @@
-function buscarCedula (e) {
-    cedula = $("#cedula").val();
-    getNombreCliente(cedula);
+function buscarCedula (e) 
+{
+	cedula = $("#cedula").val();
+	if(!isNumber(cedula))
+	{ 
+		$("#nombre").val('');
+		resetFields();
+	}
+	else
+	{	
+		getNombreCliente(cedula);
+	}
 }
 
 function isNumber(n) {

@@ -25,7 +25,7 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include PATH_LOG_OUT_HEADER;?>
+		<?php include '/../Header/log_out_from_browser_Script.php';?>
 		<!--SCRIPT DE AJAX JQUERY-->
 		<script src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>" type="text/javascript"></script>
 		<!--SCRIPT DE NOTY-->		
@@ -41,13 +41,13 @@ PARA:
 	</head>
 	<body>
 		<!--Incluir imagen de cabezera-->
-		<?php include PATH_HEADER_PICTURE;?>
+		<?php include '/../Header/Header_Picture.php';?>
 		
 		<!--Incluir menu principal-->
-		<?php include PATH_HEADER_SELECTOR_MENU;?>
+		<?php include '/../Header/selector_menu.php';?>
 
 		<!--Incluir informacion log in-->
-		<?php include PATH_HEADER_LOG_IN_INFO;?>	
+		<?php include '/../Header/Log_In_Information.php';?>	
 	
 		
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
@@ -148,36 +148,6 @@ PARA:
 							<td>
 								<input type="checkbox" name="retencion" id="retencion"  value="1" >
 							</td>
-                                                    <td>
-                                                        <label class="contact">Tipo Código:</label>
-                                                    </td>
-                                                    <td>
-                                                        <select name="tipo_codigo" class="input_dos">
-                                                            <?php 
-                                                                foreach($tipo_codigo as $tc){
-                                                                    ?>
-                                                            <option value="<?= $tc->Codigo ?>"><?= $tc->Descripcion ?></option>
-                                                                    <?php
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </td>
-						</tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="contact">Unidad Medida:</label>
-                                                    </td>
-                                                    <td>
-                                                        <select name="unidad_medida" class="input_dos">
-                                                            <?php 
-                                                                foreach($unidades_medida as $um){
-                                                                    ?>
-                                                            <option value="<?= $um->Id ?>"><?= $um->Codigo." - ".$um->Descripcion ?></option>
-                                                                    <?php
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </td>
 						</tr>
 					</table>
 				</fieldset>
@@ -238,6 +208,6 @@ PARA:
 		</div>		
 
 		<!--Incluir footer-->
-		<?php include PATH_FOOTER;?>
+		<?php include '/../Footer/Default_Footer.php';?>
 	</body>
 </html>

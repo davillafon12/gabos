@@ -154,7 +154,7 @@ function cargarAllConsignacion(consecutivo){
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/contabilidad/consignaciones/getConsignacion",
 		type: "POST",
                 dataType: "JSON",
-		data: {'consignacion':consecutivo,consulta:1},		
+		data: {'consignacion':consecutivo},		
 		success: function(data, textStatus, jqXHR)
 		{			
                     try{
@@ -167,10 +167,6 @@ function cargarAllConsignacion(consecutivo){
                             $("#retencion").val(parseFloat(data.consignacion.retencion).format(_CANTIDAD_DECIMALES, 3, '.', ','));
                             $("#costo_total").val(parseFloat(data.consignacion.total).format(_CANTIDAD_DECIMALES, 3, '.', ','));
                             setProductosFactura(data.consignacion.articulos);
-                            
-                            _I_TOKEN = data.token;
-                            _I_CONSIGNACION = data.consecutivo;
-                            _I_SUCURSAL = data.sucursal;
                         }else{
                             notyMsg("El servidor no respondió de una manera adecuada, favor contactar al administrador.", "error");
                         }
@@ -264,13 +260,4 @@ function tiposSeleccionados(){
 		tipos.push(selec[i].value);
 	}
 	return tipos.join();
-}
-
-var _I_TOKEN = "";
-var _I_CONSIGNACION = "";
-var _I_SUCURSAL = "";
-var anchoImpresion = 1024;
-var alturaImpresion = 768;
-function imprimir(){
-    window.open(location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/impresion?t='+_I_TOKEN+'&d=con&n='+_I_CONSIGNACION+'&s='+_I_SUCURSAL+'&i=c','Impresion de Consignación','width='+anchoImpresion+',height='+alturaImpresion+',resizable=no,toolbar=no,location=no,menubar=no');
 }

@@ -11,7 +11,7 @@ class bitacora extends CI_Controller {
 
 	function index()
 	{
-		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		include '/../get_session_data.php'; //Esto es para traer la informacion de la sesion
 
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
@@ -29,7 +29,7 @@ class bitacora extends CI_Controller {
 	}
 	
 	function obtenerTransaccionesTabla(){
-		include PATH_USER_DATA;
+		include '/../get_session_data.php';
 		//Un array que contiene el nombre de las columnas que se pueden ordenar
 		$columnas = array(
 								'0' => 'Trans_Codigo',
