@@ -111,10 +111,23 @@ class CI_Controller
 
         // Evitamos que entre en el login
         if($this->preloadSessionMetadata()){
-            include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-            $this->userdata_nombre = $data['Usuario_Codigo'];
-            $this->userdata_sucursal = $data['Sucursal_Codigo'];
-            $this->userdata_wrap = $data;
+            session_start();
+            //Verificamos que el usuario haya logueado
+            if(isset($_SESSION["usuario"])){
+                $usuario = $_SESSION["usuario"];
+                $this->userdata_nombre = $usuario['Usuario_Codigo'];
+                $this->userdata_sucursal = $usuario['Sucursal_Codigo'];
+                $this->userdata_wrap = $usuario;
+            }else{
+                redirect('login', 'refresh');
+            }
+        }
+    }
+
+    public function destroyGaboSession(){
+        if(isset($_SESSION)){
+            session_unset();
+            session_destroy();
         }
     }
 

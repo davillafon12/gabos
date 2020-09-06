@@ -6,7 +6,7 @@ Class User extends CI_Model
 
  function login($username, $password, $crypto = true)
  {
-   $this -> db -> select('Usuario_Codigo, Usuario_Cedula, Usuario_Nombre_Usuario, Usuario_Password, TB_02_Sucursal_Codigo, Usuario_Imagen_URL, Usuario_Nombre, Usuario_Apellidos, Usuario_Observaciones, Usuario_Rango');
+   $this -> db -> select('Usuario_Codigo, Usuario_Cedula, Usuario_Nombre_Usuario, Usuario_Password, TB_02_Sucursal_Codigo, Usuario_Imagen_URL, Usuario_Nombre, Usuario_Apellidos, Usuario_Observaciones, Usuario_Rango, Usuario_Fecha_Cesantia');
    $this -> db -> from('tb_01_usuario');
    $this -> db -> where('Usuario_Nombre_Usuario', $username);
    $this -> db -> where('Usuario_Password', $crypto ? MD5($password) : $password);

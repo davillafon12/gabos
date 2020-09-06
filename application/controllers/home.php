@@ -2,32 +2,21 @@
 
 class Home extends CI_Controller {
 
- function __construct()
- {
-   parent::__construct();
-   $this->load->model('user','',TRUE);
- }
+   function __construct(){
+      parent::__construct();
+      $this->load->model('user','',TRUE);
+   }
 
- function index(){
-    include 'get_session_data.php'; //Esto es para traer la informacion de la sesion	
-    $this->load->view('home_view', $data);
- }
+   function index(){
+      $data = $this->userdata_wrap;
+      $this->load->view('home_view', $data);
+   }
 
- function logout()
- {
-    include 'get_session_data.php';
-    $session_data = $this->session->userdata('logged_in');
-    $Usuario_Id = $session_data['Usuario_Codigo'];
-    $Usuario_Sucursal = $session_data['Sucursal_Codigo'];
-    $this->user->guardar_transaccion($Usuario_Id, 'El usuario salio del sistema',$Usuario_Sucursal, 'login');
-    $this->session->unset_userdata('api_sessionkey');
-    $this->session->unset_userdata('api_sessionup');
-    $this->session->unset_userdata('logged_in');
-    $this->session->sess_destroy();
-    redirect('home', 'location');
- }
- 
-
+   function logout(){
+      $this->user->guardar_transaccion($this->userdata_wrap["Usuario_Codigo"], 'El usuario salio del sistema',$this->userdata_sucursal, 'logout');
+      $this->destroyGaboSession();
+      redirect('home', 'location');
+   }
 
 }
 

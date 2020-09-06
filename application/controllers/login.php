@@ -7,10 +7,10 @@ class Login extends CI_Controller {
    parent::__construct();
  }
 
- function index()
- {
-   $this->load->helper(array('form'));
-   $this->load->view('login_view');
+ function index(){
+    $this->destroyGaboSession();
+    $this->load->helper(array('form'));
+    $this->load->view('login_view');
  }
 
 }

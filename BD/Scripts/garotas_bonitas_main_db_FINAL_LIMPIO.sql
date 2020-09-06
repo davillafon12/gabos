@@ -5172,3 +5172,6 @@ CREATE TABLE IF NOT EXISTS tb_64_articulos_control_inventario (
 --
 ALTER TABLE `tb_64_articulos_control_inventario`
   ADD CONSTRAINT tb_64_articulos_control_inventario_ibfk_1 FOREIGN KEY (Control_Inventario) REFERENCES tb_64_articulos_control_inventario (id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+ALTER TABLE `tb_64_articulos_control_inventario` ADD `Costo` DOUBLE NOT NULL AFTER `Empatar`;
