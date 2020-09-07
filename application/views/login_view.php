@@ -19,37 +19,37 @@ PARA:
 		<!--CSS ESTILO DEL LOG IN FORM-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Log_In_Form_Style.css'); ?>">
 	</head>
-	
+
 	<body>
 		<!--Incluir imagen de cabezera-->
-		<?php include 'Header/Header_Picture.php';?>
+		<?php // include 'Header/Header_Picture.php';?>
 
 		<!--Formulario del login-->
 		<div id="wrapper">
-			<?php 
-				
-			    echo validation_errors(); 
+			<?php
+
+			    echo validation_errors();
 			?>
-			<?php 
+			<?php
 				$attributes = array('name' => 'login-form', 'class' => 'login-form');
-				
-				echo form_open('verifylogin', $attributes); 
-				
-			?>				
+
+				echo form_open('verifylogin', $attributes);
+
+			?>
 			<div class="header">
                             <center><h2>Ingreso GABO</h2>
                                 <h2>Factura Electrónica</h2></center>
 				<span>Ingrese sus datos de usuario y contrase&ntilde;a para ingresar al sistema GABO</span>
-			</div>		
+			</div>
 			<div class="content">
 				<input name="username" type="text" class="input username" placeholder="Usuario" id="username"/>
 				<div class="user-icon"></div>
 				<input name="password" type="password" class="input password" placeholder="Contrase&ntilde;a" id="password"/>
-				<div class="pass-icon"></div>		
+				<div class="pass-icon"></div>
 			</div>
 			<div class="footer">
-				<input type="submit" name="submit" value="Ingresar" class="button" />		
-			</div>			
+				<input type="submit" name="submit" value="Ingresar" class="button" />
+			</div>
 			</form>
 		</div>
 		<!--Termina Formulario del login-->

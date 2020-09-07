@@ -75,8 +75,9 @@ class VerifyLogin extends CI_Controller {
 				'Usuario_Apellidos' => $usuarioData->Usuario_Apellidos,
 				'Usuario_Observaciones' => $usuarioData->Usuario_Observaciones,
 				'Usuario_Rango' => $usuarioData->Usuario_Rango,
-				"sucursal" => array(
-					"imagen_logo" => $sucursalData->Logo
+				'javascript_cache_version' => $this->javascriptCacheVersion,
+				'sucursalWrap' => array(
+					'imagen_logo' => $sucursalData->Logo
 				)
 			);
 	}

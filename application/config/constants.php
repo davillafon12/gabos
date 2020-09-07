@@ -100,6 +100,7 @@ define('PATH_UTILS_LOGGING', '/var/log/gabos/utils/UTILS');
 define('PATH_DOCUMENTOS_ELECTRONICOS', FCPATH.'application/third_party/');
 define('PATH_API_CORREO', FCPATH.'application/libraries/Correo.php');
 define('CARPETA_IMAGENES', FCPATH.'application/images/articulos/');
+define('CARPETA_IMAGENES_LOGO', FCPATH.'application/images/');
 
 
 define('CODIGO_PAIS', 506);

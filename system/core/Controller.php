@@ -87,6 +87,7 @@ class CI_Controller
 
     public $userdata_nombre;
     public $userdata_sucursal;
+    public $userdata_codigo;
     public $userdata_wrap;
 
     /**
@@ -111,16 +112,24 @@ class CI_Controller
 
         // Evitamos que entre en el login
         if($this->preloadSessionMetadata()){
-            session_start();
+            if(!isset($_SESSION)){session_start();}
             //Verificamos que el usuario haya logueado
             if(isset($_SESSION["usuario"])){
                 $usuario = $_SESSION["usuario"];
                 $this->userdata_nombre = $usuario['Usuario_Codigo'];
+                $this->userdata_codigo = $usuario['Usuario_Codigo'];
                 $this->userdata_sucursal = $usuario['Sucursal_Codigo'];
                 $this->userdata_wrap = $usuario;
             }else{
                 redirect('login', 'refresh');
             }
+        }else{
+            // Datos default para paginas sin logueo
+            $this->userdata_wrap = array(
+				'sucursalWrap' => array(
+					'imagen_logo' => "header_pic.png"
+				)
+			);
         }
     }
 

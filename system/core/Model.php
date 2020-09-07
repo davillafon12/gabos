@@ -25,11 +25,11 @@
  * @link		http://codeigniter.com/user_guide/libraries/config.html
  */
 class CI_Model {
-	
+
 	/* Debido al desmadre con desampa, cuando se facturo o hace otra cosa, todos los documentos de desampa se hacen
 	con los docs de garotas*/
 	public $truequeHabilitado = true;
-	public $truequeAplicado = false; 
+	public $truequeAplicado = false;
 	public $sucursales_trueque = array(7=>2);
     public $codigosUnidadDeServivicios = array("Os","Spe","Sp","St");
 
@@ -41,7 +41,7 @@ class CI_Model {
         "05" => "Recaudado por terceros",
         "99" => "Otros"
     );
-	
+
 	public function esUsadaComoSucursaldeRespaldo($sucursal){
 		foreach($this->sucursales_trueque as $key => $content){
 			if($content == $sucursal){
@@ -50,7 +50,7 @@ class CI_Model {
 		}
 		return false;
 	}
-	
+
 	public function getSucursalesTruequeFromSucursalResponde($sucursalResponde){
 		$sucursales = array();
 		foreach($this->sucursales_trueque as $key => $content){
@@ -85,36 +85,36 @@ class CI_Model {
 		$CI =& get_instance();
 		return $CI->$key;
 	}
-        
+
         public function fn($price, $decimales = HACIENDA_DECIMALES){
             return number_format($price, $decimales, ".", "");
         }
-        
+
         public function fpad($price, $amount, $placeholder = "0", $typePad = STR_PAD_LEFT){
             return str_pad($price,$amount,$placeholder, $typePad);
         }
-        
+
         public function removeIVA($price){
             $this->load->model('configuracion','',TRUE);
             $confArray = $this->configuracion->getConfiguracionArray();
             return $price/(1+(floatval($confArray['iva'])/100));
         }
-        
+
         public function getIVA(){
             $this->load->model('configuracion','',TRUE);
             $confArray = $this->configuracion->getConfiguracionArray();
             return floatval($confArray['iva']);
         }
-        
+
         function getCondicionVenta($tipoPago){
             /*
-            Condiciones de la venta: 
+            Condiciones de la venta:
             - 01 Contado
-            - 02 Crédito 
+            - 02 Crédito
             - 03 Consignación
-            - 04 Apartado 
-            - 05 Arrendamiento con opción de compra 
-            - 06 Arrendamiento en función financiera 
+            - 04 Apartado
+            - 05 Arrendamiento con opción de compra
+            - 06 Arrendamiento en función financiera
             - 99 Otros
              */
             switch ($tipoPago['tipo']) {
@@ -133,11 +133,11 @@ class CI_Model {
 
         function getMedioPago($tipoPago){
             /*
-                Corresponde al medio de pago empleado: 
+                Corresponde al medio de pago empleado:
                 - 01 Efectivo
                 - 02 Tarjeta
                 - 03 Cheque
-                - 04 Transferencia - depósito bancario 
+                - 04 Transferencia - depósito bancario
                 - 05 - Recaudado por terceros
                 - 99 Otros
              */
@@ -158,7 +158,7 @@ class CI_Model {
                     return "99";
             }
         }
-        
+
         function getTipoIdentificacionCliente($tipo){
             switch($tipo){
                 case 'nacional':
@@ -171,10 +171,10 @@ class CI_Model {
                     return "04";
             }
         }
-        
+
         function prepararArticulosParaXML($articulos){
             $finalArray = array();
-            
+
             foreach($articulos as $art){
                 $impuesto = json_decode($art->ImpuestoObject);
                 $impuesto[0]->monto = $this->fn($impuesto[0]->monto);
@@ -203,10 +203,10 @@ class CI_Model {
                 );
                 array_push($finalArray, $artt);
             }
-            
+
             return $finalArray;
         }
-        
+
         function formatearConsecutivo($consecutivo){
             $consecutivo = $consecutivo."";
             $len = strlen($consecutivo);
@@ -215,33 +215,33 @@ class CI_Model {
             }
             return $consecutivo;
         }
-        
+
         public function getDetalleLinea($a, $aplicaRetencion = true){
             $linea = array();
-            
+
             // CANTIDAD
             $cantidad = floatval($a->Articulo_Factura_Cantidad);
             $linea["cantidad"] = $this->fn($cantidad, 3);
-            
+
             // CODIGO
             $linea["codigo"] = $a->Articulo_Factura_Codigo;
             $linea["tipoCodigo"] = $a->TipoCodigo;
-            
+
             // UNIDAD DE MEDIDA
             $linea["unidadMedida"] = $a->UnidadMedida;
-            
+
             // DETALLE
             $linea["detalleCompleto"] = $a->Articulo_Factura_Descripcion;
             $linea["detalle"] = substr($a->Articulo_Factura_Descripcion,0,159);
-            
+
             // PRECIO UNITARIO
             $precioUnitarioSinIVA = $this->fn($this->removeIVA(floatval($a->Articulo_Factura_Precio_Unitario)));
             $linea["precioUnitario"] = $precioUnitarioSinIVA;
-            
+
             // MONTO TOTAL
             $precioTotalSinIVA = $cantidad*$precioUnitarioSinIVA;
             $linea["montoTotal"] = $precioTotalSinIVA;
-            
+
             // DESCUENTO
             $descuentoPrecioSinIva = 0;
             if(floatval($a->Articulo_Factura_Descuento) > 0){
@@ -253,14 +253,14 @@ class CI_Model {
                 $linea["montoDescuento"] = 0;
                 $linea["naturalezaDescuento"] = "Ninguna";
             }
-            
+
              // SUBTOTAL
             $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
             $linea["subtotal"] = $subTotalSinIVA;
-            
+
             // BASE IMPONIBLE
             $linea["base_imponible"] = $subTotalSinIVA;
-            
+
             // IMPUESTOS
             $impuestos = array();
             $iva = $this->getIVA();
@@ -274,7 +274,7 @@ class CI_Model {
                 $linea["retencion"] = $montoDeImpuesto - $linea["iva"];
             }
             if($a->Articulo_Factura_Exento == 1){ // Es exento
-                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
+                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE
                 $exoneracion = array(
                     "tipoDocumento" => "01", // Compras Autorizadas
                     "numeroDocumento" => "01",
@@ -300,47 +300,47 @@ class CI_Model {
                 "factorIVA" => $factorIVAFinal,
                 "monto" => $montoFinalDeImpuesto
             );
-            
+
             array_push($impuestos, $impuesto);
             $linea["impuesto"] = $impuestos;
-            
+
             // MONTO TOTAL DE LA LINEA
             $linea["montoTotalLinea"] = $subTotalSinIVA + floatval($impuesto["monto"]);
-            
+
             return $linea;
         }
-        
-        
+
+
         public function getDetalleLineaNotaCredito($a, $aplicaRetencion = true){
             $linea = array();
-            
+
             // CANTIDAD
             $cantidad = floatval($a->Cantidad_Bueno) + floatval($a->Cantidad_Defectuoso);
             $linea["cantidad"] = $this->fn($cantidad, 3);
-            
+
             // CODIGO
             $linea["codigo"] = $a->Codigo;
             $linea["tipoCodigo"] = $a->TipoCodigo;
-            
+
             // UNIDAD DE MEDIDA
             $linea["unidadMedida"] = "Unid";
-            
+
             // DETALLE
             $linea["detalleCompleto"] = $a->Descripcion;
             $linea["detalle"] = substr($a->Descripcion,0,159);
-            
+
             // PRECIO UNITARIO
             // En el caso de NC los precios unitarios tienen impuesto pero tambien el descuento
             // tons debemos agregarle el descuento para que haga bien la matematica esta vara
-            // PrecioFinal / (1 - Porcentaje / 100) = PrecioUnitario 
+            // PrecioFinal / (1 - Porcentaje / 100) = PrecioUnitario
             $a->Precio_Unitario = floatval($a->Precio_Unitario) / (1 - (floatval($a->Descuento) / 100));
             $precioUnitarioSinIVA = $this->fn($this->removeIVA($a->Precio_Unitario));
             $linea["precioUnitario"] = $precioUnitarioSinIVA;
-            
+
             // MONTO TOTAL
             $precioTotalSinIVA = $cantidad*$precioUnitarioSinIVA;
             $linea["montoTotal"] = $precioTotalSinIVA;
-            
+
             // DESCUENTO
             $descuentoPrecioSinIva = 0;
             if(floatval($a->Descuento) > 0){
@@ -352,14 +352,14 @@ class CI_Model {
                 $linea["montoDescuento"] = 0;
                 $linea["naturalezaDescuento"] = "Ninguna";
             }
-            
+
              // SUBTOTAL
             $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
             $linea["subtotal"] = $subTotalSinIVA;
-            
+
             // BASE IMPONIBLE
             $linea["base_imponible"] = $subTotalSinIVA;
-            
+
             // IMPUESTOS
             $impuestos = array();
             $iva = $this->getIVA();
@@ -373,7 +373,7 @@ class CI_Model {
                 $linea["retencion"] = $montoDeImpuesto - $linea["iva"];
             }
             if($a->Exento == 1){ // Es exento
-                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
+                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE
                 $exoneracion = array(
                     "tipoDocumento" => "01", // Compras Autorizadas
                     "numeroDocumento" => "01",
@@ -400,32 +400,32 @@ class CI_Model {
                 "factorIVA" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
                 "monto" => $montoFinalDeImpuesto
             );
-            
+
             array_push($impuestos, $impuesto);
             $linea["impuesto"] = $impuestos;
-            
+
             // MONTO TOTAL DE LA LINEA
             $linea["montoTotalLinea"] = $subTotalSinIVA + floatval($impuesto["monto"]);
-            
+
             return $linea;
         }
-        
+
         public function getDetalleLineaProforma($a, $aplicaRetencion = true){
             $linea = array();
-            
+
             // CANTIDAD
             $cantidad = floatval($a->Articulo_Proforma_Cantidad);
             $linea["cantidad"] = $this->fn($cantidad, 3);
-            
-            
+
+
             // PRECIO UNITARIO
             $precioUnitarioSinIVA = $this->removeIVA(floatval($a->Articulo_Proforma_Precio_Unitario));
             $linea["precioUnitario"] = $this->fn($precioUnitarioSinIVA);
-            
+
             // MONTO TOTAL
             $precioTotalSinIVA = $cantidad*$precioUnitarioSinIVA;
             $linea["montoTotal"] = $this->fn($precioTotalSinIVA);
-            
+
             // DESCUENTO
             $descuentoPrecioSinIva = 0;
             if(floatval($a->Articulo_Proforma_Descuento) > 0){
@@ -437,11 +437,11 @@ class CI_Model {
                 $linea["montoDescuento"] = $this->fn(0);
                 $linea["naturalezaDescuento"] = "Ninguna";
             }
-            
+
              // SUBTOTAL
             $subTotalSinIVA = round($precioTotalSinIVA, 0) - $descuentoPrecioSinIva;
             $linea["subtotal"] = $this->fn(round($subTotalSinIVA, 0));
-            
+
             // IMPUESTOS
             $impuestos = array();
             $iva = $this->getIVA();
@@ -455,7 +455,7 @@ class CI_Model {
                 $linea["retencion"] = $montoDeImpuesto - $linea["iva"];
             }
             if($a->Articulo_Proforma_Exento == 1){ // Es exento
-                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE 
+                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE
                 $exoneracion = array(
                     "tipoDocumento" => "01", // Compras Autorizadas
                     "numeroDocumento" => "01",
@@ -479,20 +479,20 @@ class CI_Model {
                 "tarifa" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
                 "monto" => $this->fn(round($montoFinalDeImpuesto, 0))
             );
-            
+
             array_push($impuestos, $impuesto);
             $linea["impuesto"] = $impuestos;
-            
+
             // MONTO TOTAL DE LA LINEA
             $linea["montoTotalLinea"] = $this->fn(round($subTotalSinIVA + floatval($impuesto["monto"]), 0));
-            
+
             return $linea;
         }
-        
-        
+
+
         public function storeFile($name, $type, $file = null, $stream = null, $date = null){
             $finalPath = $this->getFinalPath($type, $date);
-            
+
             if (!file_exists($finalPath)) {
                 $oldmask = umask(0);
                 mkdir($finalPath, 0777, true);
@@ -505,12 +505,12 @@ class CI_Model {
                 rename($file, $finalPath.$name);
             }
         }
-        
+
         public function getFinalPath($type, $date = null){
             $finalPath = PATH_DOCUMENTOS_ELECTRONICOS;
-            
+
             $date = $date == null ? time() : strtotime($date);
-            
+
             switch($type){
                 case "fe":
                     $finalPath .= "factura_electronica/".date("Y_m_d", $date)."/";
@@ -530,16 +530,19 @@ class CI_Model {
                 case "fec":
                     $finalPath .= "factura_electronica_compra/".date("Y_m_d", $date)."/";
                 break;
+                case "logo":
+                    $finalPath = CARPETA_IMAGENES_LOGO;
+                break;
             }
-            
+
             return $finalPath;
         }
-        
+
         public function getFinalPathWeb($type, $da){
             $finalPath = base_url('').PATH_DOCUMENTOS_ELECTRONICOS_WEB;
-            
+
             $date = strtotime($da);
-            
+
             switch($type){
                 case "fe":
                     $finalPath .= "factura_electronica/".date("Y_m_d", $date)."/";
@@ -560,10 +563,10 @@ class CI_Model {
                     $finalPath .= "factura_electronica_compra/".date("Y_m_d", $date)."/";
                 break;
             }
-            
+
             return $finalPath;
         }
-        
+
 }
 // END Model Class
 
