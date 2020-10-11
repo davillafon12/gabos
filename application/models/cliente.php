@@ -651,11 +651,11 @@ Class cliente extends CI_Model
 	}
 
 	function getMontoCompradoClienteRangoTiempo($cliente, $inicio, $final){
-		$this->db->select("SUM('Factura_Monto_Total') AS TOTAL");
+		$this->db->select("SUM(Factura_Monto_Total) AS TOTAL");
 		$this->db->where('Factura_Estado', 'cobrada');
 		$this->db->where('TB_03_Cliente_Cliente_Cedula', $cliente);
-		$this->db->where('Factura_Fecha_Hora <', $final);
-		$this->db->where('Factura_Fecha_Hora >', $inicio);
+		$this->db->where('Factura_Fecha_Hora <', date("Y/m/d H:i:s", $final));
+		$this->db->where('Factura_Fecha_Hora >', date("Y/m/d H:i:s", $inicio));
 		$this->db->from('tb_07_factura');
 		$query = $this->db->get();
 		if($query->num_rows()==0)
