@@ -106,6 +106,20 @@ class CI_Model {
             return floatval($confArray['iva']);
         }
 
+        private function getSessionMetadata(){
+            if(!isset($_SESSION)){session_start();}
+            return isset($_SESSION) ? $_SESSION : false;
+        }
+
+        public function getSucursalDeEstaSesion(){
+            $data = $this->getSessionMetadata();
+            if($data){
+                return isset($data["usuario"]["Sucursal_Codigo"]) ? $data["usuario"]["Sucursal_Codigo"] : false;
+            }else{
+                return false;
+            }
+        }
+
         function getCondicionVenta($tipoPago){
             /*
             Condiciones de la venta:
