@@ -421,6 +421,53 @@ class external extends CI_Controller {
         }
     }
 
+    public function cargarCatalogoCabys(){
+        die;
+        $token = trim(@$_GET["t"]);
+
+
+        if($token == $this->token){
+            require_once './application/libraries/PHPExcel/IOFactory.php';
+            $objPHPExcel = PHPExcel_IOFactory::load('/home/david/Catalogo-de-bienes-servicios.xlsx');
+            $cantidadHojas = 1; //Para que solo procese la primera hoja del excel
+            foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+                $highestRow = $worksheet->getHighestRow();
+
+                //Empezamos en la fila 3 donde estan los datos
+                for ($fila = 3; $fila <= $highestRow; ++ $fila){
+                    $c1 = $worksheet->getCellByColumnAndRow(0, $fila)->getValue();
+                    $d1 = $worksheet->getCellByColumnAndRow(1, $fila)->getValue();
+                    $c2 = $worksheet->getCellByColumnAndRow(2, $fila)->getValue();
+                    $d2 = $worksheet->getCellByColumnAndRow(3, $fila)->getValue();
+                    $c3 = $worksheet->getCellByColumnAndRow(4, $fila)->getValue();
+                    $d3 = $worksheet->getCellByColumnAndRow(5, $fila)->getValue();
+                    $c4 = $worksheet->getCellByColumnAndRow(6, $fila)->getValue();
+                    $d4 = $worksheet->getCellByColumnAndRow(7, $fila)->getValue();
+                    $c5 = $worksheet->getCellByColumnAndRow(8, $fila)->getValue();
+                    $d5 = $worksheet->getCellByColumnAndRow(9, $fila)->getValue();
+                    $c6 = $worksheet->getCellByColumnAndRow(10, $fila)->getValue();
+                    $d6 = $worksheet->getCellByColumnAndRow(11, $fila)->getValue();
+                    $c7 = $worksheet->getCellByColumnAndRow(12, $fila)->getValue();
+                    $d7 = $worksheet->getCellByColumnAndRow(13, $fila)->getValue();
+                    $c8 = $worksheet->getCellByColumnAndRow(14, $fila)->getValue();
+                    $d8 = $worksheet->getCellByColumnAndRow(15, $fila)->getValue();
+                    $codigo = $worksheet->getCellByColumnAndRow(16, $fila)->getValue();
+                    $descripcion = $worksheet->getCellByColumnAndRow(17, $fila)->getValue();
+                    $impuesto = $worksheet->getCellByColumnAndRow(18, $fila)->getValue();
+                    $impuesto = intval(str_replace("%", "", $impuesto));
+
+                    echo "$codigo | $impuesto | $descripcion <br>";
+
+                    $this->contabilidad->agregarCodigoCabys($c1,$d1,$c2,$d2,$c3,$d3,$c4,$d4,$c5,$d5,$c6,$d6,$c7,$d7,$c8,$d8,$codigo,$descripcion,$impuesto);
+                }
+
+                break; //Solo vamos a bretear la primera hoja
+            }
+        }else{
+            die("You are not allowed to access here");
+        }
+    }
+
 }
 
 ?>

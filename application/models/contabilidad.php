@@ -3294,6 +3294,41 @@ Class contabilidad extends CI_Model
 			$this->db->where("Credito_Sucursal_Codigo", $sucursal);
             $this->db->delete("tb_24_credito");
 		}
+
+		function agregarCodigoCabys(
+			$codigo1,$descripcion1,
+			$codigo2,$descripcion2,
+			$codigo3,$descripcion3,
+			$codigo4,$descripcion4,
+			$codigo5,$descripcion5,
+			$codigo6,$descripcion6,
+			$codigo7,$descripcion7,
+			$codigo8,$descripcion8,
+			$codigo, $descripcion, $impuesto
+		){
+			$data = array(
+				"Categoria_1"=>$codigo1,
+				"Descripcion_1"=>$descripcion1,
+				"Categoria_2"=>$codigo2,
+				"Descripcion_2"=>$descripcion2,
+				"Categoria_3"=>$codigo3,
+				"Descripcion_3"=>$descripcion3,
+				"Categoria_4"=>$codigo4,
+				"Descripcion_4"=>$descripcion4,
+				"Categoria_5"=>$codigo5,
+				"Descripcion_5"=>$descripcion5,
+				"Categoria_6"=>$codigo6,
+				"Descripcion_6"=>$descripcion6,
+				"Categoria_7"=>$codigo7,
+				"Descripcion_7"=>$descripcion7,
+				"Categoria_8"=>$codigo8,
+				"Descripcion_8"=>$descripcion8,
+				"Codigo_Bien_Servicio"=>$codigo,
+				"Descripcion_Bien_Servicio"=>$descripcion,
+				"Impuesto"=>$impuesto
+			);
+			$this->db->insert('catalogo_cabys', $data);
+		}
 }
 
 
