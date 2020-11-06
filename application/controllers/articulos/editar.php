@@ -361,6 +361,14 @@ class editar extends CI_Controller {
 				$data['familiaId'] = $row -> TB_05_Familia_Familia_Codigo;
 				$data['familiaNombre'] = $this->familia->getNombreFamiliaSucursal($row -> TB_05_Familia_Familia_Codigo, $row -> TB_02_Sucursal_Codigo);
 
+				$infoCabys = $this->articulo->getInformacionCabysPorCodigo($row -> CodigoCabys);
+
+				$data['cabysCodigo'] = $infoCabys->codigo;
+				$data['cabysDescripcion'] = $infoCabys->descripcion;
+				$data['cabysImpuesto'] = $infoCabys->impuesto;
+
+				$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
+
 				//$empresas_actuales = $this->empresa->get_empresas_ids_array($data['Sucursal_Codigo']);
 				//$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']);
 				//$data['Familia_Empresas'] = $empresas_actuales;
@@ -398,10 +406,11 @@ class editar extends CI_Controller {
 
 
 			$tipo_codigo = $this->input->post('tipo_codigo');
+			$unidad_medida = $this->input->post('unidad_medida');
+			$unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
 
-                        $unidad_medida = $this->input->post('unidad_medida');
-
-                        $unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
+			$codigoCabys = $this->input->post('codigo_cabys');
+			$impuestoCabys = $this->input->post('impuesto_cabys');
 
 			//Si es exento
 			$exento = 0;
@@ -451,8 +460,10 @@ class editar extends CI_Controller {
 															'Articulo_Imagen_URL' => $foto,
 															'Articulo_Exento' => $exento,
 															'Articulo_No_Retencion'	 => $retencion,
-                                                                                                                        'TipoCodigo' => $tipo_codigo,
-                                                                                                                        'UnidadMedida' => $unidad_medida
+															'TipoCodigo' => $tipo_codigo,
+															'UnidadMedida' => $unidad_medida,
+															'CodigoCabys' => $codigoCabys,
+															'Impuesto' => $impuestoCabys
 														);
 										$info['precios'] = array(
 															'p0' => $costo,
@@ -985,6 +996,18 @@ class editar extends CI_Controller {
 			}
 		}
 		return true;
+	}
+
+	public function getCabysForName(){
+		$search = trim(@$_GET["term"]);
+
+		$results = array();
+
+		if(!empty($search)){
+			$results = $this->articulo->searchCodigosCabysPorNombre($search);
+		}
+
+		echo json_encode($results);
 	}
 
  }// FIN DE LA CLASE

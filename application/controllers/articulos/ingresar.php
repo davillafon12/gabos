@@ -4,7 +4,7 @@ class ingresar extends CI_Controller {
 
 	function __construct()
 	{
-		parent::__construct(); 
+		parent::__construct();
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('familia','',TRUE);
@@ -17,29 +17,29 @@ class ingresar extends CI_Controller {
 	{
 		redirect('home', 'location');
 	}
-	
+
 	function individual(){
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-		
+
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-		
-		if(!$permisos['registrar_articulo_individual'])
-		{	
+
+		if(!$permisos['registrar_articulo_individual']){
 		   redirect('accesoDenegado', 'location');
 		}
-		
+
 		$this->load->helper(array('form'));
 		$empresas_actuales = $this->empresa->get_empresas_ids_array();
-		$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']); 
-                $tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
-                $unidadesMedida = $this->catalogo->getUnidadesDeMedida();
+		$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']);
+		$tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
+		$unidadesMedida = $this->catalogo->getUnidadesDeMedida();
 		$data['Familia_Empresas'] = $empresas_actuales;
 		$data['Familias'] = $familias_actuales;
-                $data['tipo_codigo'] = $tiposCodigos;
-                $data['unidades_medida'] = $unidadesMedida;
+		$data['tipo_codigo'] = $tiposCodigos;
+		$data['unidades_medida'] = $unidadesMedida;
+		$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 		$this->load->view('articulos/articulos_ingreso_individual', $data);
 	}
-	
+
 	function registrar(){
 		//print_r($_POST);
 		//exit;
@@ -51,29 +51,32 @@ class ingresar extends CI_Controller {
 		$cantidad_Defectuosa = $this->input->post('articulos_cantidad_defectuoso');
 		$descuento_Articulo = $this->input->post('descuento');
 		$empresa_Articulo = $this->input->post('sucursal');
-		$this->do_upload($codigo_Articulo.$empresa_Articulo); // aqui jala la imagen 
+		$this->do_upload($codigo_Articulo.$empresa_Articulo); // aqui jala la imagen
 		$exento_articulo = $this->input->post('exento');
 		$retencion = $this->input->post('retencion');
-		$familia_articulo = $this->input->post('familia');			
+		$familia_articulo = $this->input->post('familia');
 		$costo_Articulo = $this->input->post('costo');
 		$precio1_Articulo = $this->input->post('precio1');
 		$precio2_Articulo = $this->input->post('precio2');
 		$precio3_Articulo = $this->input->post('precio3');
 		$precio4_Articulo = $this->input->post('precio4');
 		$precio5_Articulo = $this->input->post('precio5');
-                
-                $tipo_codigo = $this->input->post('tipo_codigo');
-                $unidad_medida = $this->input->post('unidad_medida');
-                
-                $unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
-		
+		$tipo_codigo = $this->input->post('tipo_codigo');
+		$unidad_medida = $this->input->post('unidad_medida');
+
+		$codigoCabys = $this->input->post('codigo_cabys');
+		$impuestoCabys = $this->input->post('impuesto_cabys');
+
+		$unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
+
 
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
-		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen, $exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo, $tipo_codigo, $unidad_medida))
+		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen,
+		$exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo, $tipo_codigo, $unidad_medida, $codigoCabys, $impuestoCabys))
 		{ //Si se ingreso bien a la BD
 			//$this->bodega_m->restarCantidadBodega($cantidad_Articulos, $codigoBrasil, $empresa_Articulo);
-			
+
 			//Titulo de la pagina
 			$mensajeExento = "";
 			if($codigoBarras_articulo){
@@ -83,18 +86,18 @@ class ingresar extends CI_Controller {
 				$mensajeExento = "No";
 			}
 			$data['Titulo_Pagina'] = "Transacción Exitosa";
-		
+
 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingreso el articulo ".$codigo_Articulo." cantidad: ".$cantidad_Articulos,$data['Sucursal_Codigo'],'registro');
 			$data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>El ingreso del articulo ".$codigo_Articulo." fue exitoso! <img src=".$ruta_base_imagenes_script."/tick.gif /></p></div><br>
 									 <div class='Informacion'>
-									 <form action=".base_url('articulos/ingresar/individual').">				                 				
+									 <form action=".base_url('articulos/ingresar/individual').">
 									 <p class='titles'>Datos del Articulo:</p><br><hr>
 									 <img src=".base_url('application/images/articulos/thumb/'.$this->direccion_url_imagen)." alt=\"Smiley face\" height=\"100\" width=\"100\"><br>
 									 <p class='titles'>-Codigo:</p> <p class='content'>".$codigo_Articulo.".</p><br>
 									 <p class='titles'>-Descripción:</p> <p class='content'>".$descripcion_Articulo.".</p><br>
 									 <p class='titles'>-Cantidad Existente:</p> <p class='content'>".$cantidad_Articulos.".</p><br>
 									 <p class='titles'>-Cantidad Defectuosa:</p> <p class='content'>".$cantidad_Defectuosa.".</p><br>
-									 <p class='titles'>-Articulo Exento:</p> <p class='content'>".$mensajeExento.".</p><br>								 
+									 <p class='titles'>-Articulo Exento:</p> <p class='content'>".$mensajeExento.".</p><br>
 									 <p class='titles'>-Descuento:</p> <p class='content'>".$descuento_Articulo.".</p><br>
 									 <p class='titles'>-Familia:</p> <p class='content'>".$familia_articulo.".</p><br>
 									 <p class='titles'>-Empresa:</p> <p class='content'>".$empresa_Articulo.".</p><br>
@@ -109,13 +112,13 @@ class ingresar extends CI_Controller {
 									 </form>
 									 </div>";
 			$this->load->view('articulos/view_informacion_guardado', $data);
-			
+
 		}
 		else
 		{ //Hubo un error  no se ingreso a la BD
 			$data['Titulo_Pagina'] = "Transacción Fallida";
 			$data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>Hubo un error al ingresar el articulo ".$codigo_Articulo."! <img src=".$ruta_base_imagenes_script."/error.gif /></p></div><br>
-									 <div class='Informacion'>								 
+									 <div class='Informacion'>
 									 <form action=".base_url('articulos/ingresar/individual').">
 										 <input class='buttom' tabindex='2' value='Registrar otro articulo' type='submit' >
 									 </form>
@@ -123,7 +126,7 @@ class ingresar extends CI_Controller {
 			$this->load->view('articulos/view_informacion_guardado', $data);
 		}
 	}
-	
+
 	function getFamiliasSucursal(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1';
@@ -134,7 +137,7 @@ class ingresar extends CI_Controller {
 					$fams = array();
 					foreach($familias as $familia){
 						array_push($fams, array(
-												'codigo' => $familia->Familia_Codigo,	
+												'codigo' => $familia->Familia_Codigo,
 												'nombre' => $familia->Familia_Nombre
 												));
 					}
@@ -151,9 +154,9 @@ class ingresar extends CI_Controller {
 			$retorno['error'] = '2'; //URL MALA
 		}
 		echo json_encode($retorno);
-		 
+
 	}
-	
+
 	function do_upload($cedula)
     {
 
@@ -173,26 +176,26 @@ class ingresar extends CI_Controller {
         $this->load->library('upload', $config);
         //verificamos si existe errores
         //$this->upload->do_upload($field_name);
-        //$field_name= $id_nombre; 
+        //$field_name= $id_nombre;
 
         if (!$this->upload->do_upload())
         {
         	$this->direccion_url_imagen = "Default.png";
-        }  
+        }
         else
         {
         	$data = array('upload_data' => $this->upload->data());
-       
-            foreach ($this->upload->data() as $item => $value){               
+
+            foreach ($this->upload->data() as $item => $value){
 				if($item=="file_path"){
-					$path=$value; 
+					$path=$value;
 				}if($item=="file_name"){
 					$name=$value;
-				}            
+				}
             }// end foreach
-        	$this->redimencionarImagen($path,$name);	
+        	$this->redimencionarImagen($path,$name);
         }
-    }  
+    }
 
     function redimencionarImagen($path,$name){
     	$config['image_library'] = 'gd2';
@@ -203,7 +206,7 @@ class ingresar extends CI_Controller {
 		$config['quality'] = '100%';    // calidad de la imagen
 		$config['width']	 = 200;
 		$config['height']	= 200;
-		$this->load->library('image_lib', $config);	
+		$this->load->library('image_lib', $config);
 		if (!$this->image_lib->resize())
 		{
 			//$this->mensaje = $this->mensaje." error -> ".$this->image_lib->display_errors();
@@ -211,26 +214,26 @@ class ingresar extends CI_Controller {
         $this->direccion_url_imagen = $name;
         $this->image_lib->resize();
     }
-	
+
 	function masivo(){
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-		
+
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-		
+
 		if(!$permisos['registrar_articulos_masivo'])
-		{	
+		{
 		   redirect('accesoDenegado', 'location');
 		}
-		
+
 		$this->load->helper(array('form'));
 		$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 	}
-	
-	
+
+
 	function cargaMasiva(){
-		
+
 		include PATH_USER_DATA;
-		if(isset($_FILES['archivo_excel'])){		
+		if(isset($_FILES['archivo_excel'])){
 				$resultado = $this->procesarExcel();
 				//print_r($resultado);
 				if($resultado['status']=='success'){
@@ -253,7 +256,7 @@ class ingresar extends CI_Controller {
 							/*//Filtramos que el articulo no este dentro de los articulos con errores
 							if(!in_array($articulo['cod'], $resultado['erroresCantidad']) && !in_array($articulo['cod'], $resultado['erroresCosto'])){
 								//echo "<br>".$articulo['cod'];
-								
+
 								date_default_timezone_set("America/Costa_Rica");
 								$fecha = date("y/m/d : H:i:s", now());
 								$this->bodega_m->agregarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $fecha, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -303,7 +306,7 @@ class ingresar extends CI_Controller {
 						$data['erroresExento'] = $resultado["erroresExento"];
 						$data['erroresRetencion'] = $resultado["erroresRetencion"];
 						$data['erroresDescuento'] = $resultado["erroresDescuento"];
-						
+
 						$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 					}
 				}else{
@@ -321,7 +324,7 @@ class ingresar extends CI_Controller {
 						$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 					}
 				}
-					
+
 		}else{
 			//URL Mala
 			//echo "URL mala";
@@ -331,12 +334,12 @@ class ingresar extends CI_Controller {
 			$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 		}
 	}
-	
+
 	function procesarExcel(){
 				$resultado = array('status'=>'error','error'=>'1'); //Error generico de no se pudo realizar el proceso
 				require './application/libraries/excel_reader2.php';
 				$data = new Spreadsheet_Excel_Reader($_FILES['archivo_excel']['tmp_name']);
-				
+
 				$c1 = $data->val(1,1);
 				$c2 = $data->val(1,2);
 				$c3 = $data->val(1,3);
@@ -346,28 +349,28 @@ class ingresar extends CI_Controller {
 				$c7 = $data->val(1,7);
 				$c8 = $data->val(1,8);
 				$c9 = $data->val(1,9);
-				$c10 = $data->val(1,10); 
+				$c10 = $data->val(1,10);
 				$c11 = $data->val(1,11);
 				$c12 = $data->val(1,12);
 				$c13 = $data->val(1,13);
 				$c14 = $data->val(1,14);
 				$c15 = $data->val(1,15);
-				
-				if(	trim($c1) == 'CODIGO' && 
-					trim($c2) == 'DESCRIPCION' && 
-					trim($c3) == 'COSTO' && 
+
+				if(	trim($c1) == 'CODIGO' &&
+					trim($c2) == 'DESCRIPCION' &&
+					trim($c3) == 'COSTO' &&
 					trim($c4) == 'PRECIO_1' &&
 					trim($c5) == 'PRECIO_2' &&
 					trim($c6) == 'PRECIO_3' &&
 					trim($c7) == 'PRECIO_4' &&
 					trim($c8) == 'PRECIO_5' &&
 					trim($c9) == 'SUCURSAL' &&
-					trim($c10) == 'FAMILIA' &&					
+					trim($c10) == 'FAMILIA' &&
 					trim($c11) == 'CANTIDAD' &&
 					trim($c12) == 'EXENTO_IVA' &&
 					trim($c13) == 'SIN_RETENCION' &&
 					trim($c14) == 'DESCUENTO' &&
-					trim($c15) == 'NOMBRE_IMAGEN' 
+					trim($c15) == 'NOMBRE_IMAGEN'
 					){
 								$cantidadFilas = $data->rowcount($sheet_index=0);
 								//Lleva el control de cuales productos presentaron errores
@@ -385,10 +388,10 @@ class ingresar extends CI_Controller {
 								$erroresRetencion = array();
 								$erroresDescuento = array();
 								$erroresCantidadMayor = array();
-								
+
 								$articulos = array();
-								
-								for ($row = 2; $row <= $cantidadFilas; ++ $row){ 
+
+								for ($row = 2; $row <= $cantidadFilas; ++ $row){
 									$codigo = $data->val($row,1);
 									$descripcion = $data->val($row,2);
 									$costo = $data->val($row,3);
@@ -404,7 +407,7 @@ class ingresar extends CI_Controller {
 									$retencion = $data->val($row,13);
 									$descuento = $data->val($row,14);
 									$imagen = $data->val($row,15);
-									
+
 									//Revisamos si el codigo existe
 									if($this->articulo->existe_Articulo($codigo,$sucursal)){
 										array_push($erroresCodigo, $codigo);
@@ -412,7 +415,7 @@ class ingresar extends CI_Controller {
 									//Revisamos que el costo sea numerico
 									if(!is_numeric($costo)){
 										array_push($erroresCosto, $codigo);
-									}						
+									}
 									//Revisamos que el precio 2 sea numerico
 									if(!is_numeric($p2)){
 										array_push($erroresPrecio2, $codigo);
@@ -435,9 +438,9 @@ class ingresar extends CI_Controller {
 									}
 									//Revisamos que la cantidad sea numerica y mayor a 0
 									if(!is_numeric($cantidad)||$cantidad<0){
-										array_push($erroresCantidad, $codigo);												
-									}						
-									
+										array_push($erroresCantidad, $codigo);
+									}
+
 									//Revisamos que la sucursal exista
 									if(!$this->empresa->getEmpresa($sucursal)){
 										array_push($erroresSucursal, $codigo);
@@ -458,8 +461,8 @@ class ingresar extends CI_Controller {
 									if(!is_numeric($descuento)||$descuento<0||$descuento>100){
 										array_push($erroresDescuento, $codigo);
 									}
-														
-									array_push($articulos, array(	
+
+									array_push($articulos, array(
 																	"cod"=>$codigo,
 																	"des"=>$descripcion,
 																	"cos"=>str_replace(",",".",$costo),
@@ -481,7 +484,7 @@ class ingresar extends CI_Controller {
 								$resultado["status"] = "success";
 								unset($resultado["error"]);
 								$resultado["articulos"] = $articulos;
-								
+
 								$resultado["erroresCodigo"] = $erroresCodigo;
 								$resultado["erroresCosto"] = $erroresCosto;
 								$resultado["erroresPrecio1"] = $erroresPrecio1;
@@ -501,15 +504,15 @@ class ingresar extends CI_Controller {
 				}
 				return $resultado;
 	}
-	
-	
+
+
 	/*
 				function procesarExcel(){
 		$resultado = array('status'=>'error','error'=>'1'); //Error generico de no se pudo realizar el proceso
 		require_once './application/libraries/PHPExcel/IOFactory.php';
     	$objPHPExcel = PHPExcel_IOFactory::load($_FILES['archivo_excel']['tmp_name']);
 		$cantidadHojas = 1; //Para que solo procese la primera hoja del excel
-		foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {			
+		foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
 			if($cantidadHojas == 1){
 				$cantidadHojas++;
 				//Probamos que el orden de las columnas sea el requerido
@@ -522,32 +525,32 @@ class ingresar extends CI_Controller {
 				$c7 = $worksheet->getCellByColumnAndRow(6, 1)->getValue();
 				$c8 = $worksheet->getCellByColumnAndRow(7, 1)->getValue();
 				$c9 = $worksheet->getCellByColumnAndRow(8, 1)->getValue();
-				$c10 = $worksheet->getCellByColumnAndRow(9, 1)->getValue(); 
+				$c10 = $worksheet->getCellByColumnAndRow(9, 1)->getValue();
 				$c11 = $worksheet->getCellByColumnAndRow(10, 1)->getValue();
 				$c12 = $worksheet->getCellByColumnAndRow(11, 1)->getValue();
 				$c13 = $worksheet->getCellByColumnAndRow(12, 1)->getValue();
 				$c14 = $worksheet->getCellByColumnAndRow(13, 1)->getValue();
 				$c15 = $worksheet->getCellByColumnAndRow(14, 1)->getValue();
-				
-				if(	trim($c1) == 'CODIGO' && 
-					trim($c2) == 'DESCRIPCION' && 
-					trim($c3) == 'COSTO' && 
+
+				if(	trim($c1) == 'CODIGO' &&
+					trim($c2) == 'DESCRIPCION' &&
+					trim($c3) == 'COSTO' &&
 					trim($c4) == 'PRECIO_1' &&
 					trim($c5) == 'PRECIO_2' &&
 					trim($c6) == 'PRECIO_3' &&
 					trim($c7) == 'PRECIO_4' &&
 					trim($c8) == 'PRECIO_5' &&
 					trim($c9) == 'SUCURSAL' &&
-					trim($c10) == 'FAMILIA' &&					
+					trim($c10) == 'FAMILIA' &&
 					trim($c11) == 'CANTIDAD' &&
 					trim($c12) == 'EXENTO_IVA' &&
 					trim($c13) == 'SIN_RETENCION' &&
 					trim($c14) == 'DESCUENTO' &&
-					trim($c15) == 'NOMBRE_IMAGEN' 
-					){	
-					
+					trim($c15) == 'NOMBRE_IMAGEN'
+					){
+
 					$highestRow = $worksheet->getHighestRow();
-					
+
 					//Lleva el control de cuales productos presentaron errores
 					$erroresCodigo = array();
 					$erroresCosto = array();
@@ -563,10 +566,10 @@ class ingresar extends CI_Controller {
 					$erroresRetencion = array();
 					$erroresDescuento = array();
 					$erroresCantidadMayor = array();
-					
+
 					$articulos = array();
-					
-					for ($row = 2; $row <= $highestRow; ++ $row){ 
+
+					for ($row = 2; $row <= $highestRow; ++ $row){
 						$codigo = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
 						$descripcion = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
 						$costo = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
@@ -582,7 +585,7 @@ class ingresar extends CI_Controller {
 						$retencion = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
 						$descuento = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
 						$imagen = $worksheet->getCellByColumnAndRow(14, $row)->getValue();
-						
+
 						//Revisamos si el codigo existe
 						if($this->articulo->existe_Articulo($codigo,$sucursal)){
 							array_push($erroresCodigo, $codigo);
@@ -590,7 +593,7 @@ class ingresar extends CI_Controller {
 						//Revisamos que el costo sea numerico
 						if(!is_numeric($costo)){
 							array_push($erroresCosto, $codigo);
-						}						
+						}
 						//Revisamos que el precio 2 sea numerico
 						if(!is_numeric($p2)){
 							array_push($erroresPrecio2, $codigo);
@@ -613,9 +616,9 @@ class ingresar extends CI_Controller {
 						}
 						//Revisamos que la cantidad sea numerica y mayor a 0
 						if(!is_numeric($cantidad)||$cantidad<0){
-							array_push($erroresCantidad, $codigo);												
-						}						
-						
+							array_push($erroresCantidad, $codigo);
+						}
+
 						//Revisamos que la sucursal exista
 						if(!$this->empresa->getEmpresa($sucursal)){
 							array_push($erroresSucursal, $codigo);
@@ -636,8 +639,8 @@ class ingresar extends CI_Controller {
 						if(!is_numeric($descuento)||$descuento<0||$descuento>100){
 							array_push($erroresDescuento, $codigo);
 						}
-											
-						array_push($articulos, array(	
+
+						array_push($articulos, array(
 														"cod"=>$codigo,
 														"des"=>$descripcion,
 														"cos"=>str_replace(",",".",$costo),
@@ -659,7 +662,7 @@ class ingresar extends CI_Controller {
 					$resultado["status"] = "success";
 					unset($resultado["error"]);
 					$resultado["articulos"] = $articulos;
-					
+
 					$resultado["erroresCodigo"] = $erroresCodigo;
 					$resultado["erroresCosto"] = $erroresCosto;
 					$resultado["erroresPrecio1"] = $erroresPrecio1;
@@ -673,23 +676,23 @@ class ingresar extends CI_Controller {
 					$resultado["erroresExento"] = $erroresExento;
 					$resultado["erroresRetencion"] = $erroresRetencion;
 					$resultado["erroresDescuento"] = $erroresDescuento;
-					
+
 				}else{
 					//No tiene las columnas requeridas
 					$resultado['error'] = '2';
 				}
-			}			
+			}
 		}
 		return $resultado;
 	}
-	
-	
-	
+
+
+
 	*/
-	
-	
-	
-	
+
+
+
+
 }
 
 ?>
