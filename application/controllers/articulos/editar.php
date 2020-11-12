@@ -361,11 +361,14 @@ class editar extends CI_Controller {
 				$data['familiaId'] = $row -> TB_05_Familia_Familia_Codigo;
 				$data['familiaNombre'] = $this->familia->getNombreFamiliaSucursal($row -> TB_05_Familia_Familia_Codigo, $row -> TB_02_Sucursal_Codigo);
 
-				$infoCabys = $this->articulo->getInformacionCabysPorCodigo($row -> CodigoCabys);
-
-				$data['cabysCodigo'] = $infoCabys->codigo;
-				$data['cabysDescripcion'] = $infoCabys->descripcion;
-				$data['cabysImpuesto'] = $infoCabys->impuesto;
+				$data['cabysCodigo'] = "";
+				$data['cabysDescripcion'] = "";
+				$data['cabysImpuesto'] = "";
+				if($infoCabys = $this->articulo->getInformacionCabysPorCodigo($row -> CodigoCabys)){
+					$data['cabysCodigo'] = $infoCabys->codigo;
+					$data['cabysDescripcion'] = $infoCabys->descripcion;
+					$data['cabysImpuesto'] = $infoCabys->impuesto;
+				}
 
 				$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 
