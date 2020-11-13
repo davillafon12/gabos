@@ -120,5 +120,11 @@ define('PATH_DOCUMENTOS_ELECTRONICOS_WEB', 'application/third_party/');
 define('ANULAR_FACTURA', '01');
 define('CORRIGE_FACTURA', '03');
 
+define('ART_GEN_IMAGEN', 'Default.png');
+define('ART_GEN_TIPO_CODIGO', '04');
+define('ART_GEN_UNIDAD_MEDIDA', 'Unid');
+define('ART_GEN_CODIGO_CABYS', '3899799010200');
+define('ART_GEN_IMPUESTO', 13);
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

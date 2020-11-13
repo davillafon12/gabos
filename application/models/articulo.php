@@ -90,7 +90,7 @@ Class articulo extends CI_Model
 		");
 	}
 
-	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $retencion, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5, $tipo_codigo = "01", $unidadmedida = "Unid")
+	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $retencion, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5, $tipo_codigo = "01", $unidadmedida = "Unid", $codigoCabys = "", $impuesto = "13")
 	{
 		if($this->existe_Articulo($articulo_Codigo, $TB_02_Sucursal_Codigo)){
 			return false;
@@ -108,8 +108,10 @@ Class articulo extends CI_Model
 							'Articulo_No_Retencion'=>$retencion,
 							'TB_05_Familia_Familia_Codigo'=>$TB_05_Familia_Familia_Codigo,
 							'TB_02_Sucursal_Codigo'=>$TB_02_Sucursal_Codigo,
-                                                        'TipoCodigo'=>$tipo_codigo,
-                                                        'UnidadMedida'=>  $unidadmedida
+							'TipoCodigo'=>$tipo_codigo,
+							'UnidadMedida'=>  $unidadmedida,
+							'CodigoCabys' => $codigoCabys,
+							'Impuesto' => $impuesto
 
 	                    );
 			try{
@@ -1208,6 +1210,34 @@ Class articulo extends CI_Model
 		}
 	}
 
+	public function searchCodigosCabysPorNombre($search){
+		$search = explode(" ", $search);
+		$this->db->select("Descripcion_Bien_Servicio as value, Codigo_Bien_Servicio as id, Impuesto as impuesto");
+		$this->db->from("catalogo_cabys");
+		foreach($search as $term){
+			if(!empty(trim($term))){
+				$this->db->like('Descripcion_Bien_Servicio', $term);
+			}
+		}
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return array();
+		}else{
+			return $query->result();
+		}
+	}
+
+	public function getInformacionCabysPorCodigo($codigo){
+		$this->db->select("Descripcion_Bien_Servicio as descripcion, Codigo_Bien_Servicio as codigo, Impuesto as impuesto");
+		$this->db->from("catalogo_cabys");
+		$this->db->where("Codigo_Bien_Servicio", $codigo);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
 
 
 } //FIN DE LA CLASE
