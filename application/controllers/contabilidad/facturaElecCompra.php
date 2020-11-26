@@ -6,7 +6,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class facturaElecCompra extends CI_Controller {
 
     function __construct(){
-            parent::__construct(); 
+            parent::__construct();
             $this->load->model('user','',TRUE);
             $this->load->model('cliente','',TRUE);
             $this->load->model('contabilidad','',TRUE);
@@ -17,7 +17,7 @@ class facturaElecCompra extends CI_Controller {
             $this->load->model('configuracion','',TRUE);
             $this->load->model('impresion_m','',TRUE);
     }
-    
+
     function index(){
         include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 
@@ -31,7 +31,7 @@ class facturaElecCompra extends CI_Controller {
 
             $conf_array = $this->configuracion->getConfiguracionArray();
 		    $data['c_array'] = $conf_array;
-            
+
             $tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
             $data['tipos_codigo'] = $tiposCodigos;
             $unidadesMedida = $this->catalogo->getUnidadesDeMedida();
@@ -41,7 +41,7 @@ class facturaElecCompra extends CI_Controller {
             $tiposTarifa = $this->catalogo->getTipoTarifas();
             $data['tipos_tarifa'] = $tiposTarifa;
             $data['tipo_identificacion'] = $this->tiposIdentificacion;
-            $this->load->view('contabilidad/crear_factura_elec_compra_view', $data);	
+            $this->load->view('contabilidad/crear_factura_elec_compra_view', $data);
         }else{
            redirect('accesoDenegado', 'location');
         }
@@ -69,7 +69,7 @@ class facturaElecCompra extends CI_Controller {
             $plazoCredito = trim(@$_POST["plazoCredito"]);
             $tipoPago = trim(@$_POST["tipoPago"]);
             $detalles = json_decode(trim(@$_POST["detalles"]), true);
-   
+
             if($nombre != ""){
                 if($identificacion != ""){
                     if(filter_var($email, FILTER_VALIDATE_EMAIL)){
@@ -112,7 +112,7 @@ class facturaElecCompra extends CI_Controller {
                                                 $articulosYCostos = $this->convertirArticulosALineaDetalle($detalles);
 
                                                 $r["res"] = $this->factura->crearFacturaCompraElectronica($emisor, $receptor, $factura, $articulosYCostos["costos"], $articulosYCostos["articulos"]);
-                                                
+
                                                 $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario genero la factura electronica de compra consecutivo: {$factura["consecutivo"]}",$data['Sucursal_Codigo'],'factura_electronica_compra');
                                                 $this->factura->guardarPDFFacturaCompra($factura["consecutivo"], $data['Sucursal_Codigo']);
 
@@ -168,7 +168,7 @@ class facturaElecCompra extends CI_Controller {
 
             if($linea["precio"] < 0)
                 return "Línea detalle $index: Precio no debe ser menor a cero";
-            
+
             if(!is_numeric($linea["descuento"]))
                 return "Línea detalle $index: Descuento inválido";
 
@@ -236,6 +236,7 @@ class facturaElecCompra extends CI_Controller {
             $a->Articulo_Factura_Codigo = $d["codigo"];
             $a->TipoCodigo = $d["tipoCodigo"];
             $a->UnidadMedida = $d["unidadMedida"];
+            $a->Codigo_Cabys = $d["codigoCabys"];
             $a->Articulo_Factura_Descripcion = $d["detalle"];
             $a->Articulo_Factura_Precio_Unitario = $d["precio"];
             $a->Articulo_Factura_Descuento = $d["descuento"];
@@ -245,7 +246,7 @@ class facturaElecCompra extends CI_Controller {
             array_push($nuevasLineas, $linea);
 
             $isMercancia = !in_array($a->UnidadMedida, $this->factura->codigosUnidadDeServivicios);
-                                    
+
             if($a->Articulo_Factura_Exento == 0){
                 if($isMercancia){
                     $costos["total_merc_gravada"] += $linea["montoTotal"];
@@ -265,11 +266,11 @@ class facturaElecCompra extends CI_Controller {
                 $costos["total_exonerado"] += $linea["montoTotal"];
             }
             $costos["total_ventas"] += $linea["montoTotal"];
-            
+
             if(isset($linea["montoDescuento"])){
                 $costos["total_descuentos"] += $linea["montoDescuento"];
             }
-            
+
             $impuesto = $linea["impuesto"][0]["monto"];
             $costos["total_impuestos"] += $impuesto;
         }

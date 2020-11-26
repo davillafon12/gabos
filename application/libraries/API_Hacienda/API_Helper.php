@@ -1,7 +1,7 @@
 <?php
 
 class API_Helper{
-    
+
     public function getClave($tipoDocumento = "", $tipoCedula = "", $cedula = "", $situacion = "", $codigoPais = "", $consecutivo = "", $codigoSeguridad = "", $sucursal = "", $terminal = "") {
 
         $dia = date('d');
@@ -9,7 +9,7 @@ class API_Helper{
         $ano = date('y');
 
 
-        //Validamos el parametro de cedula    
+        //Validamos el parametro de cedula
         if ($cedula == "" && strlen($cedula) == 0) {
             return "El valor cedula no debe ser vacio";
         } else if (!ctype_digit($cedula)) {
@@ -17,7 +17,7 @@ class API_Helper{
         }
 
 
-        //Validamos el parametro de cedula    
+        //Validamos el parametro de cedula
         if ($codigoPais == "" && strlen($codigoPais) == 0) {
             return "El valor codigoPais no debe ser vacio";
         } else if (!ctype_digit($codigoPais)) {
@@ -190,8 +190,8 @@ class API_Helper{
             return "No se encuentra el tipo de situacion";
         }
 
-        //-----------------------------------------------//     
-        //Crea la clave 
+        //-----------------------------------------------//
+        //Crea la clave
         $clave = $codigoPais . $dia . $mes . $ano . $identificacion . $consecutivoFinal . $situacion . $codigoSeguridad;
         $arrayResp = array(
             "clave" => "$clave",
@@ -199,24 +199,24 @@ class API_Helper{
         );
         return $arrayResp;
     }
-    
+
     public function genXMLFe($clave, $consecutivo, $fechaEmision,
-                            $emisorNombre, $emisorTipoIdentif, $emisorNumIdentif, $nombreComercial, $emisorProv, $emisorCanton, $emisorDistrito, $emisorBarrio, 
+                            $emisorNombre, $emisorTipoIdentif, $emisorNumIdentif, $nombreComercial, $emisorProv, $emisorCanton, $emisorDistrito, $emisorBarrio,
                             $emisorOtrasSenas, $emisorCodPaisTel, $emisorTel, $emisorCodPaisFax, $emisorFax, $emisorEmail,
-                            $receptorNombre, $receptorTipoIdentif, $recenprotNumIdentif, $receptorProvincia, $receptorCanton, $receptorDistrito, 
+                            $receptorNombre, $receptorTipoIdentif, $recenprotNumIdentif, $receptorProvincia, $receptorCanton, $receptorDistrito,
                             $receptorBarrio, $receptorCodPaisTel, $receptorTel, $receptorCodPaisFax, $receptorFax, $receptorEmail,
                             $condVenta,
                             $plazoCredito,
                             $medio_pago,
                             $codMoneda,
                             $tipoCambio,
-                            $totalServGravados, $totalServExentos, $totalMercGravadas, $totalMercExentas, $totalGravados, $totalExentos, $totalVentas, 
+                            $totalServGravados, $totalServExentos, $totalMercGravadas, $totalMercExentas, $totalGravados, $totalExentos, $totalVentas,
                             $totalDescuentos, $totalVentasNeta, $totalImp, $totalComprobante,
                             $otros,
                             $productos,
                             $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
                             $esFacturaCompra = false, $receptorOtrasSenas = "-") {
-        
+
         $noReceptor = (trim($receptorNombre) == "" || $receptorNombre == null || $receptorNombre == "null");
         //detalles de tiquete / factura
         $medioPago = explode(",", $medio_pago);
@@ -227,7 +227,7 @@ class API_Helper{
 
         $openTag = '<FacturaElectronica xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/facturaElectronica.xsd">';
         $closeTag = "</FacturaElectronica>";
-        
+
         if($noReceptor){
             $openTag = '<TiqueteElectronico xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/tiqueteElectronico.xsd">';
             $closeTag = "</TiqueteElectronico>";
@@ -237,7 +237,7 @@ class API_Helper{
             $openTag = '<FacturaElectronicaCompra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/facturaElectronicaCompra.xsd">';
             $closeTag = "</FacturaElectronicaCompra>";
         }
-        
+
         $xmlString = '<?xml version="1.0" encoding="utf-8"?>
             ' . $openTag . '
             <Clave>' . $clave . '</Clave>
@@ -340,12 +340,12 @@ class API_Helper{
             }
 
             $xmlString .= '<DetalleServicio>';
-   
+
         $l = 1;
         foreach ($detalles as $d) {
             $xmlString .= '<LineaDetalle>
                       <NumeroLinea>' . $l . '</NumeroLinea>
-                      <Codigo>' . $d["codigo"] . '</Codigo>
+                      <Codigo>' . $d["codigoCabys"] . '</Codigo>
                       <CodigoComercial>
                         <Tipo>' . $d["tipoCodigo"] . '</Tipo>
                         <Codigo>' . $d["codigo"] . '</Codigo>
@@ -356,7 +356,7 @@ class API_Helper{
                       <PrecioUnitario>' . $d["precioUnitario"] . '</PrecioUnitario>
                       <MontoTotal>' . $d["montoTotal"] . '</MontoTotal>';
             if (isset($d["montoDescuento"]) && $d["montoDescuento"] != "") {
-                
+
                 $xmlString .= '<Descuento>'
                         . '<MontoDescuento>' . $d["montoDescuento"] . '</MontoDescuento>'
                         . '<NaturalezaDescuento>' . $d["naturalezaDescuento"] . '</NaturalezaDescuento>'
@@ -438,7 +438,7 @@ class API_Helper{
         );
         return $arrayResp;
     }
-    
+
     function signFE($p12Url, $pinP12, $inXml, $tipoDoc) {
         require_once 'Firmador.php';
         $tipoDocumento = "";
@@ -476,9 +476,9 @@ class API_Helper{
 
 
         $fac = new Firmadocr();
-        //$inXmlUrl debe de ser en Base64 
+        //$inXmlUrl debe de ser en Base64
         //$p12Url es un downloadcode previamente suministrado al subir el certificado en el modulo fileUploader -> subir_certif
-        //Tipo es el tipo de documento 
+        //Tipo es el tipo de documento
         // 01 FE
         //02 ND
         //03 NC
@@ -491,24 +491,24 @@ class API_Helper{
 
         return $arrayResp;
     }
-    
+
     function genXMLNC($clave, $consecutivo, $fechaEmision,
-                    $emisorNombre, $emisorTipoIdentif, $emisorNumIdentif, $nombreComercial, $emisorProv, $emisorCanton, $emisorDistrito, 
+                    $emisorNombre, $emisorTipoIdentif, $emisorNumIdentif, $nombreComercial, $emisorProv, $emisorCanton, $emisorDistrito,
                     $emisorBarrio, $emisorOtrasSenas, $emisorCodPaisTel, $emisorTel, $emisorCodPaisFax, $emisorFax, $emisorEmail,
-                    $receptorNombre, $receptorTipoIdentif, $recenprotNumIdentif, $receptorProvincia, $receptorCanton, $receptorDistrito, 
+                    $receptorNombre, $receptorTipoIdentif, $recenprotNumIdentif, $receptorProvincia, $receptorCanton, $receptorDistrito,
                     $receptorBarrio, $receptorCodPaisTel, $receptorTel, $receptorCodPaisFax, $receptorFax, $receptorEmail,
                     $condVenta,
                     $plazoCredito,
                     $medioPago,
                     $codMoneda,
                     $tipoCambio,
-                    $totalServGravados, $totalServExentos, $totalMercGravadas, $totalMercExentas, $totalGravados, $totalExentos, $totalVentas, 
+                    $totalServGravados, $totalServExentos, $totalMercGravadas, $totalMercExentas, $totalGravados, $totalExentos, $totalVentas,
                     $totalDescuentos, $totalVentasNeta, $totalImp, $totalComprobante,
                     $otros,
                     $productos,
                     $infoRefeTipoDoc, $infoRefeNumero, $infoRefeRazon, $infoRefeCodigo, $infoRefeFechaEmision,
                     $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos) {
-   
+
         $receptorOtrasSenas = "";
         $noReceptor = (trim($receptorNombre) == "" || $receptorNombre == null || $receptorNombre == "null");
         $otrosType = "";
@@ -632,7 +632,7 @@ class API_Helper{
         foreach ($detalles as $d) {
             $xmlString .= '<LineaDetalle>
                       <NumeroLinea>' . $l . '</NumeroLinea>
-                      <Codigo>' . $d["codigo"] . '</Codigo>
+                      <Codigo>' . $d["codigoCabys"] . '</Codigo>
                       <CodigoComercial>
                         <Tipo>' . $d["tipoCodigo"] . '</Tipo>
                         <Codigo>' . $d["codigo"] . '</Codigo>
@@ -643,7 +643,7 @@ class API_Helper{
                       <PrecioUnitario>' . $d["precioUnitario"] . '</PrecioUnitario>
                       <MontoTotal>' . $d["montoTotal"] . '</MontoTotal>';
             if (isset($d["montoDescuento"]) && $d["montoDescuento"] != "") {
-                
+
                 $xmlString .= '<Descuento>'
                         . '<MontoDescuento>' . $d["montoDescuento"] . '</MontoDescuento>'
                         . '<NaturalezaDescuento>' . $d["naturalezaDescuento"] . '</NaturalezaDescuento>'
@@ -732,7 +732,7 @@ class API_Helper{
         );
         return $arrayResp;
     }
-    
+
     function genXMLMr($clave, $numeroConsecutivoReceptor, $fechaEmisionDoc, $emisor_num_identif, $receptor_num_identif, $mensaje, $detalleMensaje, $montoTotalImpuesto, $totalFactura) {
         $numeroCedulaEmisor = str_pad($emisor_num_identif, 12, "0", STR_PAD_LEFT);
         $numeroCedulaReceptor = str_pad($receptor_num_identif, 12, "0", STR_PAD_LEFT);
