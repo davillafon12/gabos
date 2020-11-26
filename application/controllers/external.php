@@ -421,6 +421,44 @@ class external extends CI_Controller {
         }
     }
 
+    public function actualizarMasivoCabys(){
+        //die;
+        $token = trim(@$_GET["t"]);
+        $sucursal = trim(@$_GET["s"]);
+
+
+        if($token == $this->token){
+            if($this->empresa->getEmpresa($sucursal)){
+                require_once './application/libraries/PHPExcel/IOFactory.php';
+                $objPHPExcel = PHPExcel_IOFactory::load(FCPATH.'application/upload/carga_cabys.xls');
+                $cantidadHojas = 1; //Para que solo procese la primera hoja del excel
+                foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+                    $highestRow = $worksheet->getHighestRow();
+
+                    //Empezamos en la fila 2 donde estan los datos
+                    for ($fila = 2; $fila <= $highestRow; ++ $fila){
+                        $codigo = $worksheet->getCellByColumnAndRow(0, $fila)->getValue();
+                        $cabys = $worksheet->getCellByColumnAndRow(3, $fila)->getValue();
+
+                        if($articulo = $this->articulo->existe_Articulo($codigo,$sucursal)){
+                            $this->articulo->actualizarCodigoCabys($codigo, $sucursal, $cabys);
+                            echo "Articulo $codigo se actualizo con codigo cabys $cabys <br>";
+                        }else{
+                            echo "Articulo $codigo no existe para la sucursal $sucursal <br>";
+                        }
+
+                    }
+
+                    break; //Solo vamos a bretear la primera hoja
+                }
+            }else{
+                die("Sucursal ingresada no es valida");
+            }
+        }else{
+            die("You are not allowed to access here");
+        }
+    }
+
 }
 
 ?>
