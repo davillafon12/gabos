@@ -1239,6 +1239,20 @@ Class articulo extends CI_Model
 		}
 	}
 
+	// Esto es usado para articulos de notas credito que no tienen codigo cabys, por haberse guardado antes del cambio
+	public function getCodigoCabysArticuloOriginal($codigo, $sucursal){
+		$this->db->select("CodigoCabys");
+		$this->db->from("tb_06_articulo");
+		$this->db->where("Articulo_Codigo", $codigo);
+		$this->db->where("TB_02_Sucursal_Codigo", $sucursal);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0]->CodigoCabys;
+		}
+	}
+
 
 } //FIN DE LA CLASE
 

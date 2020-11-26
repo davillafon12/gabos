@@ -212,6 +212,7 @@ class CI_Model {
                     "impuesto" =>  $impuesto,
                     "montoTotalLinea" => $this->fn($art->MontoTotalLinea),
                     "codigo" => $art->Codigo,
+                    "codigoCabys" => $art->CodigoCabys,
                     "tipoCodigo" => $art->TipoCodigo,
                     "baseImponible" => $this->fn($art->BaseImponible)
                 );
@@ -240,6 +241,7 @@ class CI_Model {
             // CODIGO
             $linea["codigo"] = $a->Articulo_Factura_Codigo;
             $linea["tipoCodigo"] = $a->TipoCodigo;
+            $linea["codigoCabys"] = $a->Codigo_Cabys;
 
             // UNIDAD DE MEDIDA
             $linea["unidadMedida"] = $a->UnidadMedida;
@@ -335,6 +337,7 @@ class CI_Model {
             // CODIGO
             $linea["codigo"] = $a->Codigo;
             $linea["tipoCodigo"] = $a->TipoCodigo;
+            $linea["codigoCabys"] = $a->CodigoCabys;
 
             // UNIDAD DE MEDIDA
             $linea["unidadMedida"] = "Unid";
