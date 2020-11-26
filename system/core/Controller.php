@@ -82,7 +82,8 @@ class CI_Controller
         "/login",
         "/verifylogin",
         "/external/actualizarComprobantes",
-        "/external/enviarComprobantesAHacienda"
+        "/external/enviarComprobantesAHacienda",
+        "/external/actualizarMasivoCabys"
     );
 
     public $userdata_nombre;
@@ -141,7 +142,8 @@ class CI_Controller
     }
 
     private function preloadSessionMetadata(){
-        return !in_array($_SERVER['REQUEST_URI'], $this->allowedURLS);
+        $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+        return !in_array($uri_parts[0], $this->allowedURLS);
     }
 
     public static function &get_instance()

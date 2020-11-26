@@ -1251,6 +1251,13 @@ Class articulo extends CI_Model
 		}else{
 			return $query->result()[0]->CodigoCabys;
 		}
+
+	public function actualizarCodigoCabys($codigo, $sucursal, $cabys){
+		$data['CodigoCabys']=$cabys;
+		$this->db->where('Articulo_Codigo', $codigo);
+		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->update('TB_06_Articulo' ,$data);
+
 	}
 
 
