@@ -163,7 +163,7 @@ Class factura extends CI_Model
 		}
 	}
 
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo = "01", $unidadMedida){
+	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo = "01", $unidadMedida, $codigoCabys, $impuesto){
 		$sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
@@ -171,20 +171,22 @@ Class factura extends CI_Model
 		$dataItem = array(
 	                        'Articulo_Factura_Codigo'=>$codigo,
 	                        'Articulo_Factura_Descripcion'=>$descripcion,
-                                'Articulo_Factura_Cantidad'=>$cantidad,
-                                'Articulo_Factura_Descuento'=>$descuento,
-                                'Articulo_Factura_Exento'=>$exento,
-                                'Articulo_Factura_No_Retencion'=>$retencion,
-                                'Articulo_Factura_Precio_Unitario'=>$precio,
-                                'Articulo_Factura_Precio_Final' => 	$precioFinal,
-                                'Articulo_Factura_Imagen'=>$imagen,
-                                'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
-                                'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
-                                'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
-                                'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursalVendedor,
-                                'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>$cliente,
-                                'TipoCodigo' => $tipoCodigo,
-                                'UnidadMedida' => $unidadMedida
+                            'Articulo_Factura_Cantidad'=>$cantidad,
+                            'Articulo_Factura_Descuento'=>$descuento,
+                            'Articulo_Factura_Exento'=>$exento,
+                            'Articulo_Factura_No_Retencion'=>$retencion,
+                            'Articulo_Factura_Precio_Unitario'=>$precio,
+                            'Articulo_Factura_Precio_Final' => 	$precioFinal,
+                            'Articulo_Factura_Imagen'=>$imagen,
+                            'TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
+                            'TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
+                            'TB_07_Factura_Factura_Vendedor_Codigo'=>$vendedor,
+                            'TB_07_Factura_Factura_Vendedor_Sucursal'=>$sucursalVendedor,
+                            'TB_07_Factura_TB_03_Cliente_Cliente_Cedula'=>$cliente,
+                            'TipoCodigo' => $tipoCodigo,
+                            'UnidadMedida' => $unidadMedida,
+                            'Codigo_Cabys' => $codigoCabys,
+                            'Impuesto' => $impuesto
 	                    );
 	        $this->db->insert('TB_08_Articulos_Factura',$dataItem);
 	}

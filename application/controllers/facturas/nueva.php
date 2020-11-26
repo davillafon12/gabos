@@ -358,21 +358,25 @@ class nueva extends CI_Controller {
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']==='00'){ //Si es generico
-					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente,'Default.png','04','Unid');
+					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, ART_GEN_IMAGEN, ART_GEN_TIPO_CODIGO, ART_GEN_UNIDAD_MEDIDA, ART_GEN_CODIGO_CABYS, ART_GEN_IMPUESTO);
 			}else{ //Si es normal
-				if($this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
+				if($articuloBD = $this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
-					$descripcion = $this->articulo->getArticuloDescripcion($item['co'], $sucursal);
-					$imagen = $this->articulo->getArticuloImagen($item['co'], $sucursal);
-					$tipoCodigo = $this->articulo->getArticuloTipoCodigo($item['co'], $sucursal);
-					$unidadMedida = $this->articulo->getArticuloUnidadMedida($item['co'], $sucursal);
+					$articuloBD = $articuloBD[0];
+					$descripcion = $articuloBD->Articulo_Descripcion;
+					$imagen = $articuloBD->Articulo_Imagen_URL;
+					$tipoCodigo = $articuloBD->TipoCodigo;
+					$unidadMedida = $articuloBD->UnidadMedida;
+					$codigoCabys = $articuloBD->CodigoCabys;
+					$impuesto = $articuloBD->Impuesto;
+
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
-					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida);
+
+					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto);
 					$this->articulo->actualizarInventarioRESTA($item['co'], $item['ca'], $sucursal);
 				}
 			}
-
 		}
 
                 return $this->factura->getArticulosFactura($consecutivo, $sucursal) !== false;

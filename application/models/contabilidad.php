@@ -1983,23 +1983,25 @@ Class contabilidad extends CI_Model
 			}
 	}
 
-	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final, $tipoCodigo, $unidadMedida){
+	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto){
 			$datos = array(
-										"Codigo"=> $codigo,
-										"Descripcion" => $descripcion,
-										"Cantidad" => $cantidad,
-										"Descuento" => $descuento,
-										"Precio_Unidad" => $precio_unidad,
-										"Precio_Total" => $precio_total,
-										"Precio_Final" => $precio_final,
-										"Exento" => $exento,
-										"Retencion" => $retencion,
-										"Imagen" => $imagen,
-										"Sucursal_Entrega" => $sucursalEntrega,
-										"Sucursal_Recibe" => $sucursalRecibe,
-										"TipoCodigo" => $tipoCodigo,
-										"UnidadMedida" => $unidadMedida
-										);
+				"Codigo"=> $codigo,
+				"Descripcion" => $descripcion,
+				"Cantidad" => $cantidad,
+				"Descuento" => $descuento,
+				"Precio_Unidad" => $precio_unidad,
+				"Precio_Total" => $precio_total,
+				"Precio_Final" => $precio_final,
+				"Exento" => $exento,
+				"Retencion" => $retencion,
+				"Imagen" => $imagen,
+				"Sucursal_Entrega" => $sucursalEntrega,
+				"Sucursal_Recibe" => $sucursalRecibe,
+				"TipoCodigo" => $tipoCodigo,
+				"UnidadMedida" => $unidadMedida,
+				"Codigo_Cabys" => $codigoCabys,
+				"Impuesto" => $impuesto
+				);
 			$this->db->insert("tb_51_lista_consignacion", $datos);
 	}
 
