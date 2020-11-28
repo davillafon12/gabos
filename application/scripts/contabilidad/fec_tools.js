@@ -3,14 +3,24 @@ var _DETALLES_FACTURA = [];
 $(window).ready(function(){
     $("#emisor_provincia").change(getCantones);
     $("#emisor_canton").change(getDistritos);
-    
+
     $("#condicion_venta_factura").change(revisarCondicionCredito);
 
     $("#boton_agregar_detalle").click(agregarDetalle);
 
     $("#boton_crear_factura").click(crearFactura);
-    
+
     revisarCondicionCredito();
+
+    $( "#busqueda_codigo_cabys" ).autocomplete({
+		source: location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/editar/getCabysForName',
+		minLength: 3,
+		select: function( event, ui ) {
+			console.log(ui);
+			$("#codigo_cabys").val(ui.item.id);
+			$("#impuesto_cabys").val(ui.item.impuesto);
+		}
+	});
 });
 
 function getCantones(e){
@@ -98,18 +108,20 @@ function validarDetalle(){
     var precio = $("#precio_unitario_detalle").val();
     var descuento = $("#descuento_detalle").val();
     var tarifaIVA = $("#tarifa_iva_detalle").val();
-    
+
     var tipoCodigo = $("#tipo_codigo_detalle").val();
     var unidadMedida = $("#unidad_medida_detalle").val();
     var tipoTarifa = $("#tipo_tarifa_detalle").val();
     var tipoImpuesto = $("#tipo_impuesto_detalle").val();
 
+    var codigoCabys = $("#codigo_cabys").val().trim();
+
     if(codigo === ""){
         notyConTipo("Debe ingresar un código válido", "error");
         return false;
     }
-        
-    
+
+
     if(!$.isNumeric(cantidad)){
         notyConTipo("La cantidad no es válida", "error");
         return false;
@@ -141,7 +153,7 @@ function validarDetalle(){
         notyConTipo("El descuento no es válido", "error");
         return false;
     }
-    
+
     descuento = parseFloat(descuento);
     if(descuento < 0 || descuento > 100){
         notyConTipo("El descuento debe estar entre 0% y 100%", "error");
@@ -159,6 +171,11 @@ function validarDetalle(){
         return false;
     }
 
+    if(!$.isNumeric(codigoCabys)){
+        notyConTipo("Debe ingresar un código Cabys válido", "error");
+        return false;
+    }
+
     return {
         codigo: codigo,
         cantidad: cantidad,
@@ -169,7 +186,8 @@ function validarDetalle(){
         tipoCodigo: tipoCodigo,
         unidadMedida: unidadMedida,
         tipoTarifa: tipoTarifa,
-        tipoImpuesto: tipoImpuesto
+        tipoImpuesto: tipoImpuesto,
+        codigoCabys: codigoCabys
     };
 }
 
@@ -241,7 +259,7 @@ function crearFactura(){
                 if(v){
                     $('#envio_factura').bPopup({
 						modalClose: false
-                    });	
+                    });
                     doAjax("/contabilidad/facturaElecCompra/crearFactura", "json", true, "POST", resultado, function(data){
                         if(data.status == 1){
                             notyConTipo("Se creó la factura electrónica de compra con éxito", "success");
@@ -256,7 +274,7 @@ function crearFactura(){
                         notyConTipo("Hubo un error en el servidor al crear la factura de compra, favor contactar al administrador", "error");
                     }, function(){
                         $('#envio_factura').bPopup().close();
-                    });					
+                    });
                 }
             }
         });

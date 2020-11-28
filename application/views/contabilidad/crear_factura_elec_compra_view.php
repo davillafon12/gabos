@@ -15,7 +15,7 @@ PARA:
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="shortcut icon" href="<?php echo base_url('application/images/header_icon.png'); ?>">
 		<!--CSS ESTILO BASICO E IMAGEN HEADER DE LA PAGINA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Estilo_Basico.css'); ?>">		
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Estilo_Basico.css'); ?>">
 		<!--CSS ESTILO DEL MENU-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Header/Menu/Default_Style.css'); ?>">
 		<!--CSS ESTILO DE LA INFO DE LOG IN-->
@@ -23,19 +23,21 @@ PARA:
 		<!--CSS ESTILO DEL FOOTER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Footer/Default_Style.css'); ?>">
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.css'); ?>">
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
-		<?php include PATH_LOG_OUT_HEADER;?>			
+		<?php include PATH_LOG_OUT_HEADER;?>
 		<!--CARGA DEL JQUERY-->
-        <script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script> 
-        <script type="text/javascript" src="<?php echo base_url('application/scripts/moment.min.js'); ?>"></script> 		
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-1.11.0.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/jqueryUI/jquery-ui.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url('application/scripts/moment.min.js'); ?>"></script>
 		<!--CARGA DE MODAL-->
 		<script type="text/javascript" src="<?php echo base_url('application/scripts/jquery-impromptu.js'); ?>"></script>
 		<!--CSS ESTILO DEL MODAL-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
-		<!--SCRIPT DE NOTY-->		
+		<!--SCRIPT DE NOTY-->
 		<script src="<?php echo base_url('application/scripts/jquery.noty.packaged.min.js'); ?>" type="text/javascript"></script>
-		<!--SCRIPT DE NUMERIC-->		
+		<!--SCRIPT DE NUMERIC-->
 		<script src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
 		<!-- DATA TABES SCRIPT -->
                 <script src="<?php echo base_url('/application/scripts/datatables/dataTablesNew.js');?>" type="text/javascript"></script>
@@ -243,7 +245,7 @@ PARA:
                                         </td>
                                         <td style="    width: 13%;">
                                             <select name="tipo_codigo_detalle" class="input_uno" id="tipo_codigo_detalle">
-                                                <?php 
+                                                <?php
                                                     foreach($tipos_codigo as $tc){
                                                         ?>
                                                             <option value="<?= $tc->Codigo ?>"><?= $tc->Descripcion ?></option>
@@ -271,7 +273,7 @@ PARA:
                                         </td>
                                         <td>
                                             <select name="unidad_medida_detalle" class="input_uno" id="unidad_medida_detalle">
-                                                <?php 
+                                                <?php
                                                     foreach($unidades_medida as $um){
                                                         ?>
                                                             <option value="<?= $um->Codigo ?>" <?= $um->Id == 85 ? "selected" : "" ?> ><?= $um->Codigo." - ".$um->Descripcion ?></option>
@@ -305,7 +307,7 @@ PARA:
                                         </td>
                                         <td>
                                             <select name="tipo_tarifa_detalle" class="input_uno" id="tipo_tarifa_detalle">
-                                                <?php 
+                                                <?php
                                                     foreach($tipos_tarifa as $tt){
                                                         ?>
                                                             <option value="<?= $tt->Id ?>" <?= $tt->Id == "08" ? "selected" : "" ?> ><?= $tt->Descripcion ?></option>
@@ -319,7 +321,7 @@ PARA:
                                         </td>
                                         <td>
                                             <select name="tipo_impuesto_detalle" class="input_uno" id="tipo_impuesto_detalle">
-                                                <?php 
+                                                <?php
                                                     foreach($tipos_impuesto as $ti){
                                                         ?>
                                                             <option value="<?= $ti->Id ?>"><?= $ti->Descripcion ?></option>
@@ -329,10 +331,21 @@ PARA:
                                             </select>
                                         </td>
                                         <td>
-                                            
+
                                         </td>
                                         <td>
                                             <button id="boton_agregar_detalle" class="boton_agregar_detalle">Agregar Detalle</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Código Cabys:</label>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="codigo_cabys" class="input_uno"  disabled/>
+                                        </td>
+                                        <td colspan="2">
+                                            <input type="text" id="busqueda_codigo_cabys" class="input_uno" placeholder="Busque aquí el código Cabys"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -346,11 +359,11 @@ PARA:
                                         <th class="th_descuento">Descuento</th>
                                         <th class="th_costo_unidad">Precio por unidad</th>
                                         <th class="th_costo_total">Precio total</th>
-                                        <th class="th_eliminar"></th>	
+                                        <th class="th_eliminar"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tabla_productos">
-                                </tbody>				
+                                </tbody>
                             </table>
                         </div>
                         <div class="send-buttom-container">

@@ -5,25 +5,25 @@ function getArticulo(codigo, id_fila, num_fila, cedula) {
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getArticuloJSON',
 		type: "POST",
 		async: true,
-		data: {'cedula':cedula, 'codigo':codigo},		
+		data: {'cedula':cedula, 'codigo':codigo},
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
 				result = $.parseJSON('[' + data.trim() + ']');
 				if(result[0].status==="error"){
 					mostrarErroresCargarArticulo(result[0].error, num_fila);
-				}else if(result[0].status==="success"){	
+				}else if(result[0].status==="success"){
 					resetRowFields(num_fila, false);
-					setArticulo(result[0].articulo, num_fila);									
+					setArticulo(result[0].articulo, num_fila);
 				}
 			}catch(e){
 				notyConTipo('¡La respuesta tiene un formato indebido, contacte al administrador!','error');
                                 console.error(e);
-			}		
+			}
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{
-	 
+
 		}
 	});
 }
@@ -44,11 +44,15 @@ function mostrarErroresCargarArticulo(error, num_fila){
 		break;
 		case '5':
 			//No existe articulo
-			resetRowFields(num_fila, false);			
+			resetRowFields(num_fila, false);
 		break;
 		case '6':
 			resetRowFields(num_fila, false);
 			notyConTipo('¡No hay más unidades en inventario!','warning');
+		break;
+		case '7':
+			resetRowFields(num_fila, false);
+			notyConTipo('¡Este artículo no tiene asignado código Cabys!','error');
 		break;
 	}
 }
@@ -159,11 +163,11 @@ function getNombreCliente(str){
 				}
 			}catch(e){
 				notyConTipo('¡La respuesta tiene un formato indebido, contacte al administrador!','error');
-			}		
+			}
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{
-	 
+
 		}
 	});
 }
@@ -182,15 +186,15 @@ function autorizadoClienteDescuento(){ //Despues de autorizado el cliente
 	$("#nombre").val(infoClientePostAutorizacion.nombre);
 	enableArticulosInputs();
 	actualizaPreciosArticulos(cedulaPostAuto);
-	
+
 	if(infoClientePostAutorizacion.estado==='semiactivo'){notyConTipo('¡Este cliente no logró la meta mensual de compra!', 'warning');}
-	
-	clienteCanBuy = true;	
-	
+
+	clienteCanBuy = true;
+
 	//Limpiamos variables
 	infoClientePostAutorizacion = false;
 	cedulaPostAuto = false;
-	
+
 	$("#codigo_articulo_1").select();
 }
 
@@ -201,7 +205,7 @@ function setFacturaTemporal(){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/crearFacturaTemporal',
 		type: "GET",
-		async: false,		
+		async: false,
 		success: function(data, textStatus, jqXHR)
 		{
 				if(datosFacturaTemporal.indexOf('fals') != -1){
@@ -224,7 +228,7 @@ function setFacturaTemporal(){
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{
-	 
+
 		}
 	});
 	/*url = '/facturas/nueva/crearFacturaTemporal';
@@ -249,7 +253,7 @@ function setFacturaTemporal(){
 }
 
 function agregarArticuloFactura(datosArticulo)
-{	
+{
 	codigo = datosArticulo[1];
 	codigo = codigo.trim();
 	if(codigo.indexOf('00')!=-1){
@@ -264,12 +268,12 @@ function agregarArticuloFactura(datosArticulo)
 }
 
 function getXMLHTTP(){
-	if (window.XMLHttpRequest) 
+	if (window.XMLHttpRequest)
 	{
 		// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
-	} 
-	else 
+	}
+	else
 	{  // code for IE6, IE5
 		xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
 	}
@@ -277,21 +281,21 @@ function getXMLHTTP(){
 }
 
 function getandmakeCall(URL){
-	/*xmlhttp = getXMLHTTP();	
-	xmlhttp.onreadystatechange=function() 
+	/*xmlhttp = getXMLHTTP();
+	xmlhttp.onreadystatechange=function()
 	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200) 
-		{				
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
 			return xmlhttp.responseText;
 		}
-	}	
+	}
 	xmlhttp.open('GET',URL,true);
 	xmlhttp.send();*/
 	AJAX = getXMLHTTP();
 	if (AJAX) {
-		AJAX.open("GET", location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL, false);                             
+		AJAX.open("GET", location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+URL, false);
 		AJAX.send(null);
-		return AJAX.responseText;                                         
+		return AJAX.responseText;
 	} else {
 		return false;
 	}

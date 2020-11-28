@@ -1,10 +1,7 @@
-UPDATE tb_06_articulo SET CodigoCabys='3899799010200', Impuesto=13;
+ALTER TABLE `tb_56_articulos_factura_electronica` ADD `CodigoCabys` VARCHAR( 14 ) NOT NULL AFTER `TipoCodigo`;
 
-ALTER TABLE `tb_08_articulos_factura` ADD `Codigo_Cabys` VARCHAR( 14 ) NOT NULL ,
-ADD `Impuesto` INT NOT NULL;
+ALTER TABLE `tb_58_articulos_nota_credito_electronica` ADD `CodigoCabys` VARCHAR( 14 ) NOT NULL AFTER `TipoCodigo`;
 
-ALTER TABLE `tb_04_articulos_proforma` ADD `Codigo_Cabys` VARCHAR( 14 ) NOT NULL ,
-ADD `Impuesto` INT NOT NULL;
+ALTER TABLE `tb_62_articulos_factura_compra_electronica` ADD `CodigoCabys` VARCHAR( 14 ) NOT NULL AFTER `TipoCodigo`;
 
-ALTER TABLE `tb_51_lista_consignacion` ADD `Codigo_Cabys` VARCHAR( 14 ) NOT NULL ,
-ADD `Impuesto` INT NOT NULL;
+ALTER TABLE `tb_28_productos_notas_credito` ADD `CodigoCabys` VARCHAR( 14 ) NOT NULL AFTER `TipoCodigo`;
