@@ -349,6 +349,7 @@ Class articulo extends CI_Model
 				$articulo['imagen'] = $URL_IMAGEN;
 				$articulo['exento'] = $row->Articulo_Exento;
 				$articulo['retencion'] = $row->Articulo_No_Retencion;
+				$articulo['cabys'] = $row->CodigoCabys;
 
 				return $articulo;
 			}
