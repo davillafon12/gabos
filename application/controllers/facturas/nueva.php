@@ -10,6 +10,7 @@ class nueva extends CI_Controller {
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('configuracion','',TRUE);
+		$this->load->model('empresa','',TRUE);
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -72,17 +73,19 @@ class nueva extends CI_Controller {
 			$cedula = $_POST['cedula'];
 			if($this->cliente->existe_Cliente($cedula)){
 				include PATH_USER_DATA;
-				if($this->articulo->existe_Articulo($codigo_articulo,$data['Sucursal_Codigo'])){
-					if($articulo = $this->articulo->getArticuloArray($codigo_articulo, $cedula, $data['Sucursal_Codigo'])){
-						if($articulo['inventario'] > 0){
+				if($articulo = $this->articulo->getArticuloArray($codigo_articulo, $cedula, $data['Sucursal_Codigo'])){
+					if($articulo['inventario'] > 0){
+						$requiereFE = $this->empresa->empresaUsaCabys($data['Sucursal_Codigo']);
+						if((is_numeric($articulo['cabys']) && $requiereFE) || $requiereFE == false){
 							$retorno['status'] = 'success';
 							$retorno['articulo'] = $articulo;
 							unset($retorno['error']);
+							//print_r($this->userdata_wrap);
 						}else{
-							$retorno['error'] = '6'; //No tiene inventario
+							$retorno['error'] = '7'; //No tiene cabys asignado
 						}
 					}else{
-						$retorno['error'] = '5'; //No existe articulo
+						$retorno['error'] = '6'; //No tiene inventario
 					}
 				}else{
 					$retorno['error'] = '5'; //No existe articulo
