@@ -461,6 +461,18 @@ class consignaciones extends CI_Controller {
 
 					$cantidadConsignadaAFacturar = $articulo->cantidad;
 
+
+					$codigoCabys = $articuloBD->Codigo_Cabys;
+					//Si el codigo cabys esta vacio, estamos cargando un articulo de una factura que no se guardo con CABYS
+					//Entonces obtenemos el cabys de la tabla de articulos original
+					if(trim($codigoCabys) == ""){
+						$codigoCabys = $this->articulo->getCodigoCabysArticuloOriginal($articuloBD->Codigo, $articuloBD->Sucursal_Entrega);
+						if($codigoCabys == false){
+							//Si ya ni existe en articulos ponemos uno generico
+							$codigoCabys = ART_GEN_CODIGO_CABYS;
+						}
+					}
+
 					//Agregamos el articulo a la factura
 					$this->factura->addItemtoInvoice(
 						$articuloBD->Codigo,
@@ -478,7 +490,7 @@ class consignaciones extends CI_Controller {
 						$articuloBD->Imagen,
 						$articuloBD->TipoCodigo,
 						$articuloBD->UnidadMedida,
-						$articuloBD->Codigo_Cabys,
+						$codigoCabys,
 						$articuloBD->Impuesto
 					);
 
