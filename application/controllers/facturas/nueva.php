@@ -74,7 +74,7 @@ class nueva extends CI_Controller {
 			if($this->cliente->existe_Cliente($cedula)){
 				include PATH_USER_DATA;
 				if($articulo = $this->articulo->getArticuloArray($codigo_articulo, $cedula, $data['Sucursal_Codigo'])){
-					if($articulo['inventario'] > 0){
+					//if($articulo['inventario'] > 0){
 						$requiereFE = $this->empresa->empresaUsaCabys($data['Sucursal_Codigo']);
 						if((is_numeric($articulo['cabys']) && $requiereFE) || $requiereFE == false){
 							$retorno['status'] = 'success';
@@ -84,9 +84,9 @@ class nueva extends CI_Controller {
 						}else{
 							$retorno['error'] = '7'; //No tiene cabys asignado
 						}
-					}else{
-						$retorno['error'] = '6'; //No tiene inventario
-					}
+					//}else{
+					//	$retorno['error'] = '6'; //No tiene inventario
+					//}
 				}else{
 					$retorno['error'] = '5'; //No existe articulo
 				}
@@ -345,7 +345,7 @@ class nueva extends CI_Controller {
 			}else{ //Si es normal
 				if($articulo = $this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					$articulo = $articulo[0];
-					if($articulo->Articulo_Cantidad_Inventario < $item['ca']){
+					if($articulo->Articulo_Cantidad_Inventario < $item['ca'] || $articulo->Articulo_Cantidad_Inventario == 0){
 						$r["status"] = false;
 						array_push($r["articulos"], array("codigo"=>$item['co'],"inventario"=>$articulo->Articulo_Cantidad_Inventario));
 					}
