@@ -349,6 +349,7 @@ Class articulo extends CI_Model
 				$articulo['imagen'] = $URL_IMAGEN;
 				$articulo['exento'] = $row->Articulo_Exento;
 				$articulo['retencion'] = $row->Articulo_No_Retencion;
+				$articulo['cabys'] = $row->CodigoCabys;
 
 				return $articulo;
 			}
@@ -1239,11 +1240,26 @@ Class articulo extends CI_Model
 		}
 	}
 
+	// Esto es usado para articulos de notas credito que no tienen codigo cabys, por haberse guardado antes del cambio
+	public function getCodigoCabysArticuloOriginal($codigo, $sucursal){
+		$this->db->select("CodigoCabys");
+		$this->db->from("tb_06_articulo");
+		$this->db->where("Articulo_Codigo", $codigo);
+		$this->db->where("TB_02_Sucursal_Codigo", $sucursal);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result()[0]->CodigoCabys;
+		}
+	}
+
 	public function actualizarCodigoCabys($codigo, $sucursal, $cabys){
 		$data['CodigoCabys']=$cabys;
 		$this->db->where('Articulo_Codigo', $codigo);
 		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->update('TB_06_Articulo' ,$data);
+
 	}
 
 

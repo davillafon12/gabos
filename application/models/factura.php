@@ -1064,7 +1064,8 @@ Class factura extends CI_Model
                     "Consecutivo" => $factura->Factura_Consecutivo,
                     "Sucursal" => $factura->TB_02_Sucursal_Codigo,
                     "Codigo" => $art["codigo"],
-                    "TipoCodigo" => $art["tipoCodigo"]
+                    "TipoCodigo" => $art["tipoCodigo"],
+                    "CodigoCabys" => $art["codigoCabys"]
                 );
 
                 $this->db->insert("tb_56_articulos_factura_electronica", $data);
@@ -1876,7 +1877,8 @@ Class factura extends CI_Model
                 "Consecutivo" => $factura["consecutivo"],
                 "Sucursal" => $factura["sucursal"],
                 "Codigo" => $art["codigo"],
-                "TipoCodigo" => $art["tipoCodigo"]
+                "TipoCodigo" => $art["tipoCodigo"],
+                "CodigoCabys" => $art["codigoCabys"]
             );
 
             $this->db->insert("tb_62_articulos_factura_compra_electronica", $data);

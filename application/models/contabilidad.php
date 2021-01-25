@@ -283,12 +283,15 @@ Class contabilidad extends CI_Model
 			$exento = 0;
 			$noRetencion = 0;
 			$precioFinal = 0;
-                        $tipoCodigo = "";
+			$tipoCodigo = "";
+			$codigoCabys = "";
+
 			if(trim($producto->c) === "00"){
 				$descripcion = trim($producto->ds);
 				$precio = trim($producto->p);
 				$precioFinal = $precio;
-                                $tipoCodigo = "99";
+				$tipoCodigo = "99";
+				$codigoCabys = ART_GEN_CODIGO_CABYS;
 			}else{
 				$descripcion = $this->articulo->getArticuloDescripcion($producto->c, $sucursal);
 				$precio = $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c);
@@ -297,12 +300,23 @@ Class contabilidad extends CI_Model
 				$exento = $articuloCompleto->Articulo_Factura_Exento;
 				$noRetencion = $articuloCompleto->Articulo_Factura_No_Retencion;
 				$precioFinal = $articuloCompleto->Articulo_Factura_Precio_Final;
-                                $tipoCodigo = $this->articulo->getArticuloTipoCodigo($producto->c, $sucursal);
+				$tipoCodigo = $this->articulo->getArticuloTipoCodigo($producto->c, $sucursal);
+				$codigoCabys = $articuloCompleto->Codigo_Cabys;
+				//Si el codigo cabys esta vacio, estamos cargando un articulo de una factura que no se guardo con CABYS
+				//Entonces obtenemos el cabys de la tabla de articulos original
+				if(trim($codigoCabys) == ""){
+					$codigoCabys = $this->articulo->getCodigoCabysArticuloOriginal($producto->c, $sucursal);
+					if($codigoCabys == false){
+						//Si ya ni existe en articulos ponemos uno generico
+						$codigoCabys = ART_GEN_CODIGO_CABYS;
+					}
+				}
 			}
 			//Agregamos los datos a un array para ser agregado a la bd
 			$pro = array(
 						'Codigo' => $producto->c,
-                                                'TipoCodigo' => $tipoCodigo,
+						'TipoCodigo' => $tipoCodigo,
+						'CodigoCabys' => $codigoCabys,
 						'Descripcion' => $descripcion,
 						'Cantidad_Bueno' => $producto->b,
 						'Cantidad_Defectuoso' => $producto->d,
@@ -2240,7 +2254,8 @@ Class contabilidad extends CI_Model
                     "Consecutivo" => $nota->Consecutivo,
                     "Sucursal" => $nota->Sucursal,
                     "Codigo" => $art["codigo"],
-                    "TipoCodigo" => $art["tipoCodigo"]
+					"TipoCodigo" => $art["tipoCodigo"],
+					"CodigoCabys" => $art["codigoCabys"]
                 );
 
                 $this->db->insert("tb_58_articulos_nota_credito_electronica", $data);

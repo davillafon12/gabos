@@ -258,8 +258,17 @@ class proforma extends CI_Controller {
 					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Unitario, $consecutivo, $sucursal, $vendedor, $cliente, ART_GEN_IMAGEN, ART_GEN_TIPO_CODIGO, ART_GEN_UNIDAD_MEDIDA, ART_GEN_CODIGO_CABYS, ART_GEN_IMPUESTO);
 			}else{ //Si es normal
 				if($this->articulo->existe_Articulo($item->Articulo_Proforma_Codigo, $sucursal)){ //Verificamos que el codigo exista
-
-					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Final, $consecutivo, $sucursal, $vendedor, $cliente, $item->Articulo_Proforma_Imagen, $item->TipoCodigo, $item->UnidadMedida, $item->Codigo_Cabys, $item->Impuesto);
+					$codigoCabys = $item->Codigo_Cabys;
+					//Si el codigo cabys esta vacio, estamos cargando un articulo de una factura que no se guardo con CABYS
+					//Entonces obtenemos el cabys de la tabla de articulos original
+					if(trim($codigoCabys) == ""){
+						$codigoCabys = $this->articulo->getCodigoCabysArticuloOriginal($item->Articulo_Proforma_Codigo, $sucursal);
+						if($codigoCabys == false){
+							//Si ya ni existe en articulos ponemos uno generico
+							$codigoCabys = ART_GEN_CODIGO_CABYS;
+						}
+					}
+					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Final, $consecutivo, $sucursal, $vendedor, $cliente, $item->Articulo_Proforma_Imagen, $item->TipoCodigo, $item->UnidadMedida, $codigoCabys, $item->Impuesto);
 				}
 			}
 
