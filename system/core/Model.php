@@ -193,6 +193,9 @@ class CI_Model {
                 $impuesto = json_decode($art->ImpuestoObject);
                 $impuesto[0]->monto = $this->fn($impuesto[0]->monto);
                 $impuesto[0]->tarifa = $this->fn($impuesto[0]->tarifa, 2);
+                if(!property_exists($impuesto[0], 'factor')){
+                    $impuesto[0]->factor = ART_GEN_IMPUESTO;
+                }
                 if(!property_exists($impuesto[0], 'factorIVA') && property_exists($impuesto[0], 'tarifa')){
                     $impuesto[0]->factorIVA = $impuesto[0]->factor;
                 }
