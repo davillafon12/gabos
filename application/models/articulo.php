@@ -155,6 +155,16 @@ Class articulo extends CI_Model
 		}
 	}
 
+	function actualizarPrecio($codigo, $sucursal, $precio, $numeroPrecio){
+		$datos = array(
+						'Precio_Monto' => $precio
+					);
+		$this->db->where('Precio_Numero', $numeroPrecio);
+		$this->db->where('TB_06_Articulo_Articulo_Codigo',$codigo);
+		$this->db->where('TB_06_Articulo_TB_02_Sucursal_Codigo',$sucursal);
+		$this->db->update('tb_11_precios', $datos);
+	}
+
 	function get_Articulos($sucursal)
 	{
 		$this -> db -> select('*');
