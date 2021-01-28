@@ -459,6 +459,28 @@ class external extends CI_Controller {
         }
     }
 
+    public function actualizarPrecios(){
+        if($empresas = $this->empresa->getEmpresas()){
+            foreach($empresas as $empresa){
+                echo "Actualizando precios de la empresa ".$empresa->Codigo." | ".$empresa->Sucursal_Nombre."<br>";
+                if($articulos = $this->articulo->obtenerArticulosParaTablaFiltrados("", "", "", "", "", $empresa->Codigo)){
+                    foreach($articulos->result() as $articulo){
+                        $precio2 = $this->articulo->getPrecioProducto($articulo->codigo, 2, $empresa->Codigo);
+                        $precio4 = $this->articulo->getPrecioProducto($articulo->codigo, 4, $empresa->Codigo);
+
+                        echo "Actualizando precio del articulo ".$articulo->codigo." | Precio 2 = $precio2 | Precio 4 = $precio4 <br>";
+                        log_message('error', "CAMBIO_PRECIO|".$empresa->Codigo."|".$articulo->codigo."|$precio2|$precio4");
+                        $this->articulo->actualizarPrecio($articulo->codigo, $empresa->Codigo, $precio2, 4);
+                    }
+                }else{
+                    echo "NO HAY ARTICULOS PARA EMPRESA ".$empresa->Codigo." | ".$empresa->Sucursal_Nombre."<br>";
+                }
+            }
+        }else{
+            die("No hay empresas");
+        }
+    }
+
 }
 
 ?>
