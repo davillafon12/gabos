@@ -231,7 +231,8 @@ class CI_Model {
             return $consecutivo;
         }
 
-        public function getDetalleLinea($a, $aplicaRetencion = true){
+        public function getDetalleLinea($a, $aplicaRetencion = false){
+            $aplicaRetencion = false; //Fix rapido para evitar aplicar retencion en toooodo el sistema 
             $linea = array();
 
             // CANTIDAD
