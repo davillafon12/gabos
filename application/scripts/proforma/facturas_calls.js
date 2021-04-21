@@ -1,5 +1,19 @@
 var isCallByDescuento = false; // Variable usada para restear campos de nombre y factura si el usuario de la cancelar al administrador
 
+var _SALTO_LINEA_HABILITADO = true;
+
+$(window).ready(function(){
+	$("#boton_salto_linea").click(function(){
+		_SALTO_LINEA_HABILITADO = !_SALTO_LINEA_HABILITADO;
+
+		if(_SALTO_LINEA_HABILITADO){
+			$("#boton_salto_linea").removeClass("off").addClass("on").html("Saltar al cargar");
+		}else{
+			$("#boton_salto_linea").removeClass("on").addClass("off").html("NO saltar al cargar");
+		}
+	});
+});
+
 function getArticulo(codigo, id_fila, num_fila, cedula) {
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/facturas/nueva/getArticuloJSON',
@@ -15,6 +29,14 @@ function getArticulo(codigo, id_fila, num_fila, cedula) {
 				}else if(result[0].status==="success"){
 					resetRowFields(num_fila, false);
 					setArticulo(result[0].articulo, num_fila);
+					//Si el salto de linea automatico esta habilitado
+					//Pasamos de una a la siguiente linea
+					if(_SALTO_LINEA_HABILITADO){
+						//console.log("Saltando a "+num_fila);
+						var id = id_fila.replace("cantidad_articulo_","codigo_articulo_");
+						tabRowORAdd(id, true);
+						//console.log("Vamos a saltar");
+					}
 				}
 			}catch(e){
 				notyConTipo('¡La respuesta tiene un formato indebido, contacte al administrador!','error');
