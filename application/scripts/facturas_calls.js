@@ -31,7 +31,7 @@ function getArticulo(codigo, id_fila, num_fila, cedula) {
 					//Si el salto de linea automatico esta habilitado
 					//Pasamos de una a la siguiente linea
 					if(_SALTO_LINEA_HABILITADO){
-						console.log("Saltando a "+num_fila);
+						//console.log("Saltando a "+num_fila);
 						var id = id_fila.replace("cantidad_articulo_","codigo_articulo_");
 						tabRowORAdd(id, true);
 						//console.log("Vamos a saltar");
