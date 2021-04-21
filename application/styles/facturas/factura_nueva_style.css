@@ -591,3 +591,21 @@
 .art-descripcion-guardado{
 	width: 100%;
 }
+
+.boton-salto-linea{
+	border: solid black 1px;
+    border-radius: 3px;
+    margin-left: 5px;
+	text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: Arial, Helvetica;
+}
+
+.boton-salto-linea.on{
+	background-color: #94ea2f;
+}
+
+.boton-salto-linea.off{
+	background-color: #ababab;
+}
