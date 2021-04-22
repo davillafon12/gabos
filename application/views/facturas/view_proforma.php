@@ -147,6 +147,9 @@ PARA:
 						<option value="t">PV</option>
 					</select>
 					</td>
+					<td colspan="2">
+						<div class="boton-salto-linea on" id="boton_salto_linea">Saltar al cargar</div>
+					</td>
 				</tr>
 			</table>
 

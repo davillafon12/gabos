@@ -261,6 +261,11 @@ PARA:
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="boton-salto-linea on" id="boton_salto_linea">Saltar al cargar</div>
+					</td>
+				</tr>
 			</table>
 
 			<table id="tabla_productos" class="tabla_productos" >
