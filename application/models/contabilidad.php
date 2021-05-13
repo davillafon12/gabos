@@ -497,6 +497,34 @@ Class contabilidad extends CI_Model
 		}
 	}
 
+	function getRecibo($recibo, $credito){
+		$this->db->where('Credito', $credito);
+		$this->db->where('Consecutivo', $recibo);
+		$this->db->from('tb_26_recibos_dinero');
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{
+			return $query->result()[0];
+		}
+	}
+
+	function reciboSePagoConTarjeta($recibo, $credito){
+		if($recibo = $this->getRecibo($recibo, $credito)){
+			if($recibo->Tipo_Pago == "tarjeta"){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+
+	}
+
 	function existeReciboBySucursal($recibo, $sucursal){
 		$this->db->where('Credito_Sucursal_Codigo', $sucursal);
 		$this->db->where('Consecutivo', $recibo);
@@ -558,6 +586,17 @@ Class contabilidad extends CI_Model
 		$this->db->where('Consecutivo', $recibo);
 		$datos = array('Anulado'=>1);
 		$this->db->update('tb_26_recibos_dinero', $datos);
+
+		//Si se pago con tarjeta, hay que anular eso tambien
+		if($this->reciboSePagoConTarjeta($recibo, $credito)){
+			$this->eliminarTransaccionBancoRecibo($recibo, $credito);
+		}
+	}
+
+	function eliminarTransaccionBancoRecibo($recibo, $credito){
+		$this->db->where("Recibo", $recibo);
+		$this->db->where("Credito", $credito);
+        $this->db->delete("tb_32_tarjeta_recibos");
 	}
 
 	function guardarDepositoRecibo($recibo, $credito, $deposito, $id_banco, $banco_nombre){
