@@ -24,11 +24,11 @@ class registrar extends CI_Controller
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 
 		/*$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-	
+
 	if($permisos['registrar_empresa'])
-	{	
+	{
 	   $this->load->helper(array('form'));
-	   $this->load->view('empresas/registrar_view_empresas', $data);	
+	   $this->load->view('empresas/registrar_view_empresas', $data);
 	}
 	else{
 	   redirect('accesoDenegado', 'location');
@@ -88,6 +88,7 @@ class registrar extends CI_Controller
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 
 		$id_empresa = $this->empresa->getCantidadEmpresas();
+		//var_dump($id_empresa); die;
 		//echo $id_empresa;
 		$nombre = $this->user->get_name($data['Usuario_Codigo']);
 		//echo $nombre;
@@ -131,7 +132,7 @@ class registrar extends CI_Controller
 		} else { //Hubo un error  no se ingreso a la BD
 			$data['Titulo_Pagina'] = "Transacción Fallida";
 			$data['Mensaje_Push'] = "<div class='sub_div'><p class='titles'>Hubo un error al ingresar la empresa " . $nombre_empresa . "! <img src=" . $ruta_base_imagenes_script . "/error.gif /></p></div><br>
-		                         <div class='Informacion'>								 
+		                         <div class='Informacion'>
 					             <form action=" . base_url('empresas/registrar') . ">
 									 <input class='buttom' tabindex='2' value='Registrar otra empresa' type='submit' >
 				                 </form>
