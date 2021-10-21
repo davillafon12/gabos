@@ -59,7 +59,7 @@
 	/* left: 150px; */
 	/* bottom: 30px; */
 	margin-top: 10px;
-	float: right; 
+	float: right;
 }
 
 .alert {
@@ -103,5 +103,5 @@
 .imagen_celdas{
 	overflow-x: scroll;
     overflow-y: hidden;
-	width: 90%;
+	width: 1000px;
 }

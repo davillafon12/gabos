@@ -234,6 +234,7 @@ class ingresar extends CI_Controller {
 		   redirect('accesoDenegado', 'location');
 		}
 
+		$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 		$this->load->helper(array('form'));
 		$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 	}
@@ -244,7 +245,7 @@ class ingresar extends CI_Controller {
 		include PATH_USER_DATA;
 		if(isset($_FILES['archivo_excel'])){
 				$resultado = $this->procesarExcel();
-				//print_r($resultado);
+				//echo "<pre>"; print_r($resultado); die;
 				if($resultado['status']=='success'){
 					//Verificamos que no hayan erroes, si los hay no procesar nada
 					if(	sizeOf($resultado["erroresCodigo"])==0 &&
@@ -259,37 +260,41 @@ class ingresar extends CI_Controller {
 						sizeOf($resultado["erroresSucursal"])==0 &&
 						sizeOf($resultado["erroresExento"])==0 &&
 						sizeOf($resultado["erroresRetencion"])==0 &&
-						sizeOf($resultado["erroresDescuento"])==0 ){
+						sizeOf($resultado["erroresDescuento"])==0 &&
+						sizeOf($resultado["erroresTipoCodigo"])==0 &&
+						sizeOf($resultado["erroresUnidadMedida"])==0 &&
+						sizeOf($resultado["erroresCodigoCabys"])==0 ){
+						//	die;
 						$articulos = $resultado['articulos'];
 						foreach($articulos as $articulo){
-							/*//Filtramos que el articulo no este dentro de los articulos con errores
-							if(!in_array($articulo['cod'], $resultado['erroresCantidad']) && !in_array($articulo['cod'], $resultado['erroresCosto'])){
-								//echo "<br>".$articulo['cod'];
+							$this->articulo->registrar($articulo['cod'],
+							$articulo['des'],
+							$articulo['cod'],
+							$articulo['can'],
+							0,
+							$articulo['desc'],
+							$articulo['ima'],
+							$articulo['exe'],
+							$articulo['ret'],
+							$articulo['fam'],
+							$articulo['suc'],
+							$articulo['cos'],
+							$articulo['p1'],
+							$articulo['p2'],
+							$articulo['p3'],
+							$articulo['p4'],
+							$articulo['p5'],
+							$articulo["tipoCodigo"],
+							$articulo["unidadMedia"],
+							$articulo["codigoCabys"],
+							$articulo["impuestoCabys"],
+							$articulo['cosD'],
+							$articulo['p1D'],
+							$articulo['p2D'],
+							$articulo['p3D'],
+							$articulo['p4D'],
+							$articulo['p5D']);
 
-								date_default_timezone_set("America/Costa_Rica");
-								$fecha = date("y/m/d : H:i:s", now());
-								$this->bodega_m->agregarArticulo($articulo['cod'], $articulo['des'], $articulo['cos'], $articulo['can'], $fecha, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-								$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario ingresó a bodega el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'nota');
-							}*/
-							/*
-								"cod"=>$codigo,
-								"des"=>$descripcion,
-								"cos"=>$costo,
-								"p1"=>$p1,
-								"p2"=>$p2,
-								"p3"=>$p3,
-								"p4"=>$p4,
-								"p5"=>$p5,
-								"fam"=>$familia,
-								"suc"=>$sucursal,
-								"can"=>$cantidad,
-								"exe"=>$exento,
-								"desc"=>$descuento,
-								"ima"=>$imagen,
-								"cbra"=>$cod_brasil
-							*/
-							$this->articulo->registrar($articulo['cod'], $articulo['des'], $articulo['cod'], $articulo['can'], 0, $articulo['desc'], $articulo['ima'], $articulo['exe'], $articulo['ret'],  $articulo['fam'], $articulo['suc'], $articulo['cos'], $articulo['p1'], $articulo['p2'], $articulo['p3'],  $articulo['p4'], $articulo['p5']);
-							//$this->bodega_m->restarCantidadBodega($articulo['can'], $articulo['cbra'], $articulo['suc']);
 							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario traspaso a inventario el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'traspaso');
 						}
 						//Todo salio bien
@@ -315,7 +320,10 @@ class ingresar extends CI_Controller {
 						$data['erroresExento'] = $resultado["erroresExento"];
 						$data['erroresRetencion'] = $resultado["erroresRetencion"];
 						$data['erroresDescuento'] = $resultado["erroresDescuento"];
-
+						$data['erroresTipoCodigo'] = $resultado["erroresTipoCodigo"];
+						$data['erroresUnidadMedida'] = $resultado["erroresUnidadMedida"];
+						$data['erroresCodigoCabys'] = $resultado["erroresCodigoCabys"];
+						$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 						$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 					}
 				}else{
@@ -364,22 +372,40 @@ class ingresar extends CI_Controller {
 				$c13 = $data->val(1,13);
 				$c14 = $data->val(1,14);
 				$c15 = $data->val(1,15);
+				$c16 = $data->val(1,16);
+				$c17 = $data->val(1,17);
+				$c18 = $data->val(1,18);
+				$c19 = $data->val(1,19);
+				$c20 = $data->val(1,20);
+				$c21 = $data->val(1,21);
+				$c22 = $data->val(1,22);
+				$c23 = $data->val(1,23);
+				$c24 = $data->val(1,24);
 
 				if(	trim($c1) == 'CODIGO' &&
 					trim($c2) == 'DESCRIPCION' &&
 					trim($c3) == 'COSTO' &&
-					trim($c4) == 'PRECIO_1' &&
-					trim($c5) == 'PRECIO_2' &&
-					trim($c6) == 'PRECIO_3' &&
-					trim($c7) == 'PRECIO_4' &&
-					trim($c8) == 'PRECIO_5' &&
-					trim($c9) == 'SUCURSAL' &&
-					trim($c10) == 'FAMILIA' &&
-					trim($c11) == 'CANTIDAD' &&
-					trim($c12) == 'EXENTO_IVA' &&
-					trim($c13) == 'SIN_RETENCION' &&
-					trim($c14) == 'DESCUENTO' &&
-					trim($c15) == 'NOMBRE_IMAGEN'
+					trim($c4) == 'COSTO_DESCUENTO' &&
+					trim($c5) == 'PRECIO_1' &&
+					trim($c6) == 'PRECIO_1_DESCUENTO' &&
+					trim($c7) == 'PRECIO_2' &&
+					trim($c8) == 'PRECIO_2_DESCUENTO' &&
+					trim($c9) == 'PRECIO_3' &&
+					trim($c10) == 'PRECIO_3_DESCUENTO' &&
+					trim($c11) == 'PRECIO_4' &&
+					trim($c12) == 'PRECIO_4_DESCUENTO' &&
+					trim($c13) == 'PRECIO_5' &&
+					trim($c14) == 'PRECIO_5_DESCUENTO' &&
+					trim($c15) == 'SUCURSAL' &&
+					trim($c16) == 'FAMILIA' &&
+					trim($c17) == 'CANTIDAD' &&
+					trim($c18) == 'EXENTO_IVA' &&
+					trim($c19) == 'SIN_RETENCION' &&
+					trim($c20) == 'DESCUENTO' &&
+					trim($c21) == 'NOMBRE_IMAGEN'&&
+					trim($c22) == 'TIPO_CODIGO'&&
+					trim($c23) == 'UNIDAD_MEDIDA'&&
+					trim($c24) == 'CODIGO_CABYS'
 					){
 								$cantidadFilas = $data->rowcount($sheet_index=0);
 								//Lleva el control de cuales productos presentaron errores
@@ -396,7 +422,9 @@ class ingresar extends CI_Controller {
 								$erroresExento = array();
 								$erroresRetencion = array();
 								$erroresDescuento = array();
-								$erroresCantidadMayor = array();
+								$erroresTipoCodigo = array();
+								$erroresUnidadMedida = array();
+								$erroresCodigoCabys = array();
 
 								$articulos = array();
 
@@ -404,18 +432,27 @@ class ingresar extends CI_Controller {
 									$codigo = $data->val($row,1);
 									$descripcion = $data->val($row,2);
 									$costo = $data->val($row,3);
-									$p1 = $data->val($row,4);
-									$p2 = $data->val($row,5);
-									$p3 = $data->val($row,6);
-									$p4 = $data->val($row,7);
-									$p5 = $data->val($row,8);
-									$sucursal = $data->val($row,9);
-									$familia = $data->val($row,10);
-									$cantidad = $data->val($row,11);
-									$exento = $data->val($row,12);
-									$retencion = $data->val($row,13);
-									$descuento = $data->val($row,14);
-									$imagen = $data->val($row,15);
+									$costoD = $data->val($row,4);
+									$p1 = $data->val($row,5);
+									$p1D = $data->val($row,6);
+									$p2 = $data->val($row,7);
+									$p2D = $data->val($row,8);
+									$p3 = $data->val($row,9);
+									$p3D = $data->val($row,10);
+									$p4 = $data->val($row,11);
+									$p4D = $data->val($row,12);
+									$p5 = $data->val($row,13);
+									$p5D = $data->val($row,14);
+									$sucursal = $data->val($row,15);
+									$familia = $data->val($row,16);
+									$cantidad = $data->val($row,17);
+									$exento = $data->val($row,18);
+									$retencion = $data->val($row,19);
+									$descuento = $data->val($row,20);
+									$imagen = $data->val($row,21);
+									$tipoCodigo = $data->val($row,22);
+									$unidadMedida = $data->val($row,23);
+									$codigoCabys = $data->val($row,24);
 
 									//Revisamos si el codigo existe
 									if($this->articulo->existe_Articulo($codigo,$sucursal)){
@@ -471,22 +508,82 @@ class ingresar extends CI_Controller {
 										array_push($erroresDescuento, $codigo);
 									}
 
+									//Revisamos que el descuento sea numerico y este entre 0 y 100
+									if(!is_numeric($costoD)||$costoD<0||$costoD>100){
+										array_push($erroresDescuento, $codigo);
+									}
+
+									//Revisamos que el descuento sea numerico y este entre 0 y 100
+									if(!is_numeric($p1D)||$p1D<0||$p1D>100){
+										array_push($erroresDescuento, $codigo);
+									}
+
+									//Revisamos que el descuento sea numerico y este entre 0 y 100
+									if(!is_numeric($p2D)||$p2D<0||$p2D>100){
+										array_push($erroresDescuento, $codigo);
+									}
+
+									//Revisamos que el descuento sea numerico y este entre 0 y 100
+									if(!is_numeric($p3D)||$p3D<0||$p3D>100){
+										array_push($erroresDescuento, $codigo);
+									}
+
+									//Revisamos que el descuento sea numerico y este entre 0 y 100
+									if(!is_numeric($p4D)||$p4D<0||$p4D>100){
+										array_push($erroresDescuento, $codigo);
+									}
+
+									//Revisamos que el descuento sea numerico y este entre 0 y 100
+									if(!is_numeric($p5D)||$p5D<0||$p5D>100){
+										array_push($erroresDescuento, $codigo);
+									}
+
+									//Revisamos el tipo de codigo
+									if($this->catalogo->getTipoCodigoByCodigo($tipoCodigo) == false){
+										array_push($erroresTipoCodigo, $codigo);
+									}
+
+									//Revisamos el unidad de medida
+									if($this->catalogo->getUnidadDeMedidaByCodigo($unidadMedida) == false){
+										array_push($erroresUnidadMedida, $codigo);
+									}
+
+									//Revisamos el codigo cabys
+									$impuestoCabys = 0;
+									if($cabysObject = $this->catalogo->getCabysFromCodigo($codigoCabys)){
+										$impuestoCabys = $cabysObject->Impuesto;
+									}else{
+										array_push($erroresCodigoCabys, $codigo);
+									}
+
+
+
 									array_push($articulos, array(
 																	"cod"=>$codigo,
 																	"des"=>$descripcion,
 																	"cos"=>str_replace(",",".",$costo),
+																	"cosD"=>str_replace(",",".",$costo),
 																	"p1"=>str_replace(",",".",$p1),
+																	"p1D"=>str_replace(",",".",$p1D),
 																	"p2"=>str_replace(",",".",$p2),
+																	"p2D"=>str_replace(",",".",$p2D),
 																	"p3"=>str_replace(",",".",$p3),
+																	"p3D"=>str_replace(",",".",$p3D),
 																	"p4"=>str_replace(",",".",$p4),
+																	"p4D"=>str_replace(",",".",$p4D),
 																	"p5"=>str_replace(",",".",$p5),
+																	"p5D"=>str_replace(",",".",$p5D),
 																	"fam"=>$familia,
 																	"suc"=>$sucursal,
 																	"can"=>$cantidad,
 																	"exe"=>$exento,
 																	"ret"=>$retencion,
 																	"desc"=>str_replace(",",".",$descuento),
-																	"ima"=>$imagen
+																	"ima"=>$imagen,
+																	"tipoCodigo"=>$tipoCodigo,
+																	"unidadMedia"=>$unidadMedida,
+																	"codigoCabys"=>$codigoCabys,
+																	"impuestoCabys"=>$impuestoCabys
 																)
 												);
 								}
@@ -507,6 +604,9 @@ class ingresar extends CI_Controller {
 								$resultado["erroresExento"] = $erroresExento;
 								$resultado["erroresRetencion"] = $erroresRetencion;
 								$resultado["erroresDescuento"] = $erroresDescuento;
+								$resultado["erroresTipoCodigo"] = $erroresTipoCodigo;
+								$resultado["erroresUnidadMedida"] = $erroresUnidadMedida;
+								$resultado["erroresCodigoCabys"] = $erroresCodigoCabys;
 				}else{
 					//No tiene las columnas requeridas
 					$resultado['error'] = '2';
