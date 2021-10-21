@@ -348,12 +348,12 @@ class editar extends CI_Controller {
 				//$data['TB_05_Familia_Familia_Codigo'] = $row -> TB_05_Familia_Familia_Codigo;
 				//$data['TB_02_Sucursal_Codigo'] = $row -> TB_02_Sucursal_Codigo;
 
-				$data['costo_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 0, $sucursal);
-				$data['precio1_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 1, $sucursal);
-				$data['precio2_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 2, $sucursal);
-				$data['precio3_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 3, $sucursal);
-				$data['precio4_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 4, $sucursal);
-				$data['precio5_Editar'] = $this->articulo->getPrecioProducto($row->Articulo_Codigo, 5, $sucursal);
+				$data['costo_Editar'] = $this->articulo->getPrecioProductoObject($row->Articulo_Codigo, 0, $sucursal);
+				$data['precio1_Editar'] = $this->articulo->getPrecioProductoObject($row->Articulo_Codigo, 1, $sucursal);
+				$data['precio2_Editar'] = $this->articulo->getPrecioProductoObject($row->Articulo_Codigo, 2, $sucursal);
+				$data['precio3_Editar'] = $this->articulo->getPrecioProductoObject($row->Articulo_Codigo, 3, $sucursal);
+				$data['precio4_Editar'] = $this->articulo->getPrecioProductoObject($row->Articulo_Codigo, 4, $sucursal);
+				$data['precio5_Editar'] = $this->articulo->getPrecioProductoObject($row->Articulo_Codigo, 5, $sucursal);
 
 				$data['empresaId'] = $row -> TB_02_Sucursal_Codigo;
 				$data['empresaNombre'] = $this->empresa->getNombreEmpresa($row -> TB_02_Sucursal_Codigo);
@@ -406,6 +406,13 @@ class editar extends CI_Controller {
 			$precio3 = $this->input->post('precio3');
 			$precio4 = $this->input->post('precio4');
 			$precio5 = $this->input->post('precio5');
+
+			$costod = is_numeric($this->input->post('costo-mascara-d')) ? $this->input->post('costo-mascara-d') : $this->input->post('costo_d');
+			$precio1d = $this->input->post('precio1_d');
+			$precio2d = $this->input->post('precio2_d');
+			$precio3d = $this->input->post('precio3_d');
+			$precio4d = $this->input->post('precio4_d');
+			$precio5d = $this->input->post('precio5_d');
 
 
 			$tipo_codigo = $this->input->post('tipo_codigo');
@@ -468,16 +475,17 @@ class editar extends CI_Controller {
 															'CodigoCabys' => $codigoCabys,
 															'Impuesto' => $impuestoCabys
 														);
-										$info['precios'] = array(
-															'p0' => $costo,
-															'p1' => $precio1,
-															'p2' => $precio2,
-															'p3' => $precio3,
-															'p4' => $precio4,
-															'p5' => $precio5
+										$precios = array(
+															0 => array("precio"=>$costo, "descuento"=>$costod),
+															1 => array("precio"=>$precio1, "descuento"=>$precio1d),
+															2 => array("precio"=>$precio2, "descuento"=>$precio2d),
+															3 => array("precio"=>$precio3, "descuento"=>$precio3d),
+															4 => array("precio"=>$precio4, "descuento"=>$precio4d),
+															5 => array("precio"=>$precio5, "descuento"=>$precio5d)
 														);
 										$this->articulo->actualizar($_POST['articulo_codigo'], $_POST['sucursal'], $info['dataBD']);
-										$this->articulo->actualizarPrecios($_POST['articulo_codigo'], $_POST['sucursal'], $info['precios']);
+										//$this->articulo->actualizarPrecios($_POST['articulo_codigo'], $_POST['sucursal'], $info['precios']);
+										$this->articulo->actualizarPreciosMasivo($precios, $_POST['sucursal'], $_POST['articulo_codigo']);
 
 										include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 										$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó el artículo código: ".$_POST['articulo_codigo'],$data['Sucursal_Codigo'],'edicion');

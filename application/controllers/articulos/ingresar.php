@@ -81,7 +81,8 @@ class ingresar extends CI_Controller {
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
 		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen,
-		$exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo, $tipo_codigo, $unidad_medida, $codigoCabys, $impuestoCabys))
+		$exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo, $tipo_codigo, $unidad_medida, $codigoCabys, $impuestoCabys,
+		$costo_d, $precio1_d, $precio2_d, $precio3_d, $precio4_d, $precio5_d))
 		{ //Si se ingreso bien a la BD
 			//$this->bodega_m->restarCantidadBodega($cantidad_Articulos, $codigoBrasil, $empresa_Articulo);
 

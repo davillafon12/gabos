@@ -157,6 +157,25 @@ Class articulo extends CI_Model
 		}
 	}
 
+	//Nueva funcion para actualizar precios con descuentos detallados 20-10-2021
+	function actualizarPreciosMasivo($precios, $sucursal, $codigoArticulo){
+		foreach($precios as $numero => $precioMetadata){
+			$this->actualizarPrecioMasivo($codigoArticulo, $sucursal, $numero, $precioMetadata["precio"], $precioMetadata["descuento"]);
+		}
+	}
+
+	//Nueva funcion para actualizar precios y descuentos de un articulo 20-10-2021
+	function actualizarPrecioMasivo($codigo, $sucursal, $numeroPrecio, $precio, $descuento){
+		$datos = array(
+			'Precio_Monto' => $precio,
+			'Precio_Descuento' => $descuento
+		);
+		$this->db->where('Precio_Numero', $numeroPrecio);
+		$this->db->where('TB_06_Articulo_Articulo_Codigo',$codigo);
+		$this->db->where('TB_06_Articulo_TB_02_Sucursal_Codigo',$sucursal);
+		$this->db->update('tb_11_precios', $datos);
+	}
+
 	function actualizarPrecio($codigo, $sucursal, $precio, $numeroPrecio){
 		$datos = array(
 						'Precio_Monto' => $precio
@@ -500,6 +519,21 @@ Class articulo extends CI_Model
 		    return "0";
 		}
 
+	}
+
+	function getPrecioProductoObject($codigo_articulo, $numero_precio, $sucursal){
+		$this -> db -> select('Precio_Monto, Precio_Descuento');
+		$this -> db -> from('TB_11_Precios');
+		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', $codigo_articulo);
+		$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Precio_Numero', $numero_precio);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0){
+			return $query->result()[0];
+		}else{
+		    return false;
+		}
 	}
 
 	function getNumeroPrecio($cedula)

@@ -222,24 +222,49 @@ PARA:
 					<legend>Precios</legend>
 					<table>
 						<tr>
+							<td style="width:70px;">
+
+							</td>
+							<td style="width:110px;">
+								<label class="contact">Monto</label>
+							</td>
+							<td>
+								<label class="contact">Descuento</label>
+							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="costo"  class="contact">Costo:</label>
 							</td>
 							<td>
 								<input class="input_uno" value="*********" name="costo-mascara">
-								<input id="costo" type="hidden" class="input_uno" autocomplete="off" name="costo" required="" value="<?php echo $costo_Editar;?>">
+								<input id="costo" type="hidden" class="input_uno" autocomplete="off" name="costo" required="" value="<?php echo $costo_Editar->Precio_Monto;?>">
 							</td>
+							<td>
+								<input class="input_uno" value="*********" name="costo-mascara-d">
+								<input id="costo_d" type="hidden" class="input_uno" autocomplete="off" name="costo_d" required="" value="<?php echo $costo_Editar->Precio_Descuento;?>">
+							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="precio1"  class="contact">Precio 1:</label>
 							</td>
 							<td>
-								<input id="precio1" class="input_uno" autocomplete="off" name="precio1" required="" value="<?php echo $precio1_Editar;?>">
+								<input id="precio1" class="input_uno" autocomplete="off" name="precio1" required="" value="<?php echo $precio1_Editar->Precio_Monto;?>">
 							</td>
+							<td>
+								<input id="precio1_d" class="input_uno" autocomplete="off" name="precio1_d" required="" value="<?php echo $precio1_Editar->Precio_Descuento;?>">
+							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="precio2"  class="contact">Precio 2:</label>
 							</td>
 							<td>
-								<input id="precio2" class="input_uno" autocomplete="off" name="precio2"  required="" value="<?php echo $precio2_Editar;?>">
+								<input id="precio2" class="input_uno" autocomplete="off" name="precio2"  required="" value="<?php echo $precio2_Editar->Precio_Monto;?>">
+							</td>
+							<td>
+								<input id="precio2_D" class="input_uno" autocomplete="off" name="precio2_d"  required="" value="<?php echo $precio2_Editar->Precio_Descuento;?>">
 							</td>
 						</tr>
 						<tr>
@@ -247,19 +272,32 @@ PARA:
 								<label for="precio3"  class="contact">Precio 3:</label>
 							</td>
 							<td>
-								<input id="precio3" class="input_uno" autocomplete="off" name="precio3" value="<?php echo $precio3_Editar;?>">
+								<input id="precio3" class="input_uno" autocomplete="off" name="precio3" value="<?php echo $precio3_Editar->Precio_Monto;?>">
 							</td>
+							<td>
+								<input id="precio3_d" class="input_uno" autocomplete="off" name="precio3_d" value="<?php echo $precio3_Editar->Precio_Descuento;?>">
+							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="precio4"  class="contact">Precio 4:</label>
 							</td>
 							<td>
-								<input id="precio4" class="input_uno" autocomplete="off" name="precio4" value="<?php echo $precio4_Editar;?>">
+								<input id="precio4" class="input_uno" autocomplete="off" name="precio4" value="<?php echo $precio4_Editar->Precio_Monto;?>">
 							</td>
+							<td>
+								<input id="precio4_d" class="input_uno" autocomplete="off" name="precio4_d" value="<?php echo $precio4_Editar->Precio_Descuento;?>">
+							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="precio5"  class="contact">Precio 5:</label>
 							</td>
 							<td>
-								<input id="precio5" class="input_uno" autocomplete="off" name="precio5" value="<?php echo $precio5_Editar;?>">
+								<input id="precio5" class="input_uno" autocomplete="off" name="precio5" value="<?php echo $precio5_Editar->Precio_Monto;?>">
+							</td>
+							<td>
+								<input id="precio5_d" class="input_uno" autocomplete="off" name="precio5_d" value="<?php echo $precio5_Editar->Precio_Descuento;?>">
 							</td>
 						</tr>
 					</table>
