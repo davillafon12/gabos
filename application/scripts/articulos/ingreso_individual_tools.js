@@ -72,6 +72,14 @@ function verificarDescuento(){
 	if(!isNumber($("#descuento").val())){return false;}
 	if($("#descuento").val()<0){return false;}
 	if($("#descuento").val()>100){return false;}
+
+	if(!isNumber($("#costo_d").val())){return false;}
+	if(!isNumber($("#precio1_d").val())){return false;}
+	if(!isNumber($("#precio2_d").val())){return false;}
+	if(!isNumber($("#precio3_d").val())){return false;}
+	if(!isNumber($("#precio4_d").val())){return false;}
+	if(!isNumber($("#precio5_d").val())){return false;}
+
 	return true;
 }
 

@@ -70,6 +70,14 @@ class ingresar extends CI_Controller {
 		$unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
 
 
+		$costo_d = $this->input->post('costo_d');
+		$precio1_d = $this->input->post('precio1_d');
+		$precio2_d = $this->input->post('precio2_d');
+		$precio3_d = $this->input->post('precio3_d');
+		$precio4_d = $this->input->post('precio4_d');
+		$precio5_d = $this->input->post('precio5_d');
+
+
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
 		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen,

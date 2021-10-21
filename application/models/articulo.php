@@ -90,7 +90,9 @@ Class articulo extends CI_Model
 		");
 	}
 
-	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $retencion, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5, $tipo_codigo = "01", $unidadmedida = "Unid", $codigoCabys = "", $impuesto = "13")
+	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $retencion,
+	$TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5, $tipo_codigo = "01", $unidadmedida = "Unid", $codigoCabys = "", $impuesto = "13", $costoD = 0, $precio1D = 0, $precio2D = 0, $precio3D = 0,
+	$precio4D = 0, $precio5D = 0)
 	{
 		if($this->existe_Articulo($articulo_Codigo, $TB_02_Sucursal_Codigo)){
 			return false;
@@ -116,12 +118,12 @@ Class articulo extends CI_Model
 	                    );
 			try{
 	        	$this->db->insert('TB_06_Articulo',$data);
-	        	$this->registrar_Precio_Articulo(0, $costo, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(1, $precio1, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(2, $precio2, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(3, $precio3, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(4, $precio4, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(5, $precio5, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
+	        	$this->registrar_Precio_Articulo(0, $costo, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costoD);
+	        	$this->registrar_Precio_Articulo(1, $precio1, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio1D);
+	        	$this->registrar_Precio_Articulo(2, $precio2, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio2D);
+	        	$this->registrar_Precio_Articulo(3, $precio3, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio3D);
+	        	$this->registrar_Precio_Articulo(4, $precio4, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio4D);
+	        	$this->registrar_Precio_Articulo(5, $precio5, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio5D);
 
 
 	    	}
@@ -246,11 +248,12 @@ Class articulo extends CI_Model
 		}
 	}
 
-	function registrar_Precio_Articulo($Precio_Numero, $Precio_Monto, $TB_06_Articulo_Articulo_Codigo, $TB_06_Articulo_TB_05_Familia_Familia_Codigo, $sucursal)
+	function registrar_Precio_Articulo($Precio_Numero, $Precio_Monto, $TB_06_Articulo_Articulo_Codigo, $TB_06_Articulo_TB_05_Familia_Familia_Codigo, $sucursal, $descuento = 0)
 	{
 		$data = array(
                         'Precio_Numero'=>$Precio_Numero,
 						'Precio_Monto'=>$Precio_Monto,
+						'Precio_Descuento'=>$descuento,
 						'TB_06_Articulo_Articulo_Codigo'=>$TB_06_Articulo_Articulo_Codigo,
 						'TB_06_Articulo_TB_05_Familia_Familia_Codigo'=>$TB_06_Articulo_TB_05_Familia_Familia_Codigo,
 						'TB_06_Articulo_TB_02_Sucursal_Codigo'=>$sucursal
