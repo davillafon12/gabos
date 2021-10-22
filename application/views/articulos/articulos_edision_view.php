@@ -264,7 +264,7 @@ PARA:
 								<input id="precio2" class="input_uno" autocomplete="off" name="precio2"  required="" value="<?php echo $precio2_Editar->Precio_Monto;?>">
 							</td>
 							<td>
-								<input id="precio2_D" class="input_uno" autocomplete="off" name="precio2_d"  required="" value="<?php echo $precio2_Editar->Precio_Descuento;?>">
+								<input id="precio2_d" class="input_uno" autocomplete="off" name="precio2_d"  required="" value="<?php echo $precio2_Editar->Precio_Descuento;?>">
 							</td>
 						</tr>
 						<tr>
