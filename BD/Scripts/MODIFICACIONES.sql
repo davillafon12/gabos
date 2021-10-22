@@ -1,7 +1,3 @@
-ALTER TABLE `tb_56_articulos_factura_electronica` ADD `CodigoCabys` VARCHAR( 14 ) NOT NULL AFTER `TipoCodigo`;
+ALTER TABLE `tb_11_precios` ADD `Precio_Descuento` DOUBLE NOT NULL AFTER `Precio_Monto`;
 
-ALTER TABLE `tb_58_articulos_nota_credito_electronica` ADD `CodigoCabys` VARCHAR( 14 ) NOT NULL AFTER `TipoCodigo`;
-
-ALTER TABLE `tb_62_articulos_factura_compra_electronica` ADD `CodigoCabys` VARCHAR( 14 ) NOT NULL AFTER `TipoCodigo`;
-
-ALTER TABLE `tb_28_productos_notas_credito` ADD `CodigoCabys` VARCHAR( 14 ) NOT NULL AFTER `TipoCodigo`;
+UPDATE  tb_11_precios SET Precio_Descuento = (select Articulo_Descuento from tb_06_articulo where tb_11_precios.`TB_06_Articulo_Articulo_Codigo`= tb_06_articulo.Articulo_Codigo and tb_11_precios.`TB_06_Articulo_TB_02_Sucursal_Codigo` = tb_06_articulo. TB_02_Sucursal_Codigo);

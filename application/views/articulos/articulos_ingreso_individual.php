@@ -199,6 +199,17 @@ PARA:
 					<legend>Precios</legend>
 					<table>
 						<tr>
+							<td style="width:70px;">
+
+							</td>
+							<td style="width:110px;">
+								<label class="contact">Monto</label>
+							</td>
+							<td>
+								<label class="contact">Descuento</label>
+							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="costo"  class="contact">Costo:</label>
 							</td>
@@ -206,16 +217,29 @@ PARA:
 								<input id="costo" class="input_uno" autocomplete="off" name="costo" required="" disabled>
 							</td>
 							<td>
+								<input id="costo_d" class="input_uno" autocomplete="off" name="costo_d" required="" disabled>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								<label for="precio1"  class="contact">Precio 1:</label>
 							</td>
 							<td>
 								<input id="precio1" class="input_uno" autocomplete="off" name="precio1" required="" disabled>
 							</td>
 							<td>
+								<input id="precio1_d" class="input_uno" autocomplete="off" name="precio1_d" required="" disabled>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								<label for="precio2"  class="contact">Precio 2:</label>
 							</td>
 							<td>
 								<input id="precio2" class="input_uno" autocomplete="off" name="precio2"  required="" disabled>
+							</td>
+							<td>
+								<input id="precio2_d" class="input_uno" autocomplete="off" name="precio2_d" required="" disabled>
 							</td>
 						</tr>
 						<tr>
@@ -226,16 +250,29 @@ PARA:
 								<input id="precio3" class="input_uno" autocomplete="off" name="precio3" disabled>
 							</td>
 							<td>
+								<input id="precio3_d" class="input_uno" autocomplete="off" name="precio3_d" required="" disabled>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								<label for="precio4"  class="contact">Precio 4:</label>
 							</td>
 							<td>
 								<input id="precio4" class="input_uno" autocomplete="off" name="precio4" disabled>
 							</td>
 							<td>
+								<input id="precio4_d" class="input_uno" autocomplete="off" name="precio4_d" required="" disabled>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								<label for="precio5"  class="contact">Precio 5:</label>
 							</td>
 							<td>
 								<input id="precio5" class="input_uno" autocomplete="off" name="precio5" disabled>
+							</td>
+							<td>
+								<input id="precio5_d" class="input_uno" autocomplete="off" name="precio5_d" required="" disabled>
 							</td>
 						</tr>
 					</table>
