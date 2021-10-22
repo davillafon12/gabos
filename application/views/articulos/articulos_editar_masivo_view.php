@@ -67,40 +67,9 @@ PARA:
 					</tr>
 					<tr>
 						<td class="pad-l">
-							<table class="titulos-excel">
-                                <tr>
-                                    <td>
-                                        CODIGO
-                                    </td>
-                                    <td>
-                                        DESCRIPCION
-                                    </td>
-                                    <td>
-                                        PRECIO 1
-                                    </td>
-                                    <td>
-                                    PRECIO 2
-                                    </td>
-                                    <td>
-                                    PRECIO 3
-                                    </td>
-                                    <td>
-                                    PRECIO 4
-                                    </td>
-                                    <td>
-                                    PRECIO 5
-                                    </td>
-									<td>
-                                    CANTIDAD
-                                    </td>
-									<td>
-                                    SUCURSAL
-                                    </td>
-									<td>
-                                    SIN RETENCION
-                                    </td>
-                                </tr>
-                            </table>
+							<div class="imagen_celdas">
+								<img src="<?php echo base_url('application/images/articulos/celdas_editar_masivo.png'); ?>"/>
+							</div>
 						</td>
 					</tr>
 					<tr>

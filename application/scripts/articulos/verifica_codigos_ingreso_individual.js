@@ -15,6 +15,13 @@ function habilitarCampos(){
 	$("#precio3").prop('disabled', false);
 	$("#precio4").prop('disabled', false);
 	$("#precio5").prop('disabled', false);
+
+	$("#costo_d").prop('disabled', false);
+	$("#precio1_d").prop('disabled', false);
+	$("#precio2_d").prop('disabled', false);
+	$("#precio3_d").prop('disabled', false);
+	$("#precio4_d").prop('disabled', false);
+	$("#precio5_d").prop('disabled', false);
 }
 
 function deshabilitarCampos(){
@@ -32,6 +39,13 @@ function deshabilitarCampos(){
 	$("#precio3").prop('disabled', true);
 	$("#precio4").prop('disabled', true);
 	$("#precio5").prop('disabled', true);
+
+	$("#costo_d").prop('disabled', true);
+	$("#precio1_d").prop('disabled', true);
+	$("#precio2_d").prop('disabled', true);
+	$("#precio3_d").prop('disabled', true);
+	$("#precio4_d").prop('disabled', true);
+	$("#precio5_d").prop('disabled', true);
 }
 
 function notyMsg(Mensaje, tipo){
@@ -50,45 +64,45 @@ function isNumber(n) {
 function verificarCodigoArticulo(){
 	codigo = $("#articulo_codigo").val();
 	sucursal = $("#sucursal").val();
-	
+
 	if(codigo.trim()==''||sucursal.trim()==''){
-		//En caso de que sea vacio		
+		//En caso de que sea vacio
 		codigoDisponible = false;
-		$("#status").html('');	
+		$("#status").html('');
 		return false;
 	}
-	
+
 	/*if(!isNumber(codigo)){
 		codigoDisponible = false;
-		$("#status").html('');	
+		$("#status").html('');
 		notyMsg('Código de Artículo no Válido', 'error');
 		deshabilitarCampos();
 		return false;
 	}*/
-	
+
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/registrar/es_Codigo_Utilizado',
-		type: "POST",		
+		type: "POST",
 		async: false,
-		data: {'codigo':codigo, 'sucursal':sucursal},				
+		data: {'codigo':codigo, 'sucursal':sucursal},
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
 				informacion = $.parseJSON('[' + data.trim() + ']');
-				if(informacion[0].status==="error"){					
+				if(informacion[0].status==="error"){
 					codigoDisponible = false;
 					$("#status").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/error.gif />");
 					$("#cod_Barras").html('');
 					deshabilitarCampos();
-				}else if(informacion[0].status==="success"){					
+				}else if(informacion[0].status==="success"){
 					codigoDisponible = true;
 					$("#status").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/images/scripts/tick.gif />");
-					
+
 					//Crear codigo barras
-					$("#cod_Barras").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/libraries/barcode.php?codetype=Code25&size=40&text="+codigo+"/>");	
+					$("#cod_Barras").html("<img src="+location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/application/libraries/barcode.php?codetype=Code25&size=40&text="+codigo+"/>");
 					habilitarCampos();
 				}
-			}catch(e){				
+			}catch(e){
 				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
 			}
 		},
@@ -122,22 +136,22 @@ function cambiosSucursal(){
 
 function cargarFamilias(){
 	sucursal = $("#sucursal").val();
-	
+
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/articulos/ingresar/getFamiliasSucursal',
-		type: "POST",		
+		type: "POST",
 		async: false,
-		data: {'sucursal':sucursal},				
+		data: {'sucursal':sucursal},
 		success: function(data, textStatus, jqXHR)
 		{
 			try{
 				informacion = $.parseJSON('[' + data.trim() + ']');
-				if(informacion[0].status==="error"){					
-					
-				}else if(informacion[0].status==="success"){					
+				if(informacion[0].status==="error"){
+
+				}else if(informacion[0].status==="success"){
 					setFamilias(informacion[0].familias);
 				}
-			}catch(e){				
+			}catch(e){
 				notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
 			}
 		},
@@ -146,7 +160,7 @@ function cargarFamilias(){
 	});
 }
 
-function setFamilias(familias){	
+function setFamilias(familias){
 	cuerpo = '';
 	for(i=0; i<familias.length; i++){
 		cuerpo += "<option value='"+familias[i].codigo+"'>"+familias[i].nombre+"</option>";

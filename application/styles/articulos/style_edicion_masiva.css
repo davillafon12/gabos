@@ -110,3 +110,9 @@
     padding: 5px 2px 2px 5px;
     font-size: 12px;
 }
+
+.imagen_celdas{
+	overflow-x: scroll;
+    overflow-y: hidden;
+	width: 760px;
+}
