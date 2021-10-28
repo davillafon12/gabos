@@ -160,7 +160,7 @@ class traspaso extends CI_Controller {
 			$articuloDeSucursalEntrega = $this->articulo->existe_Articulo($articulo->codigo,$sucursalEntrega);
 			$codigoBarras = $articuloDeSucursalEntrega[0]->Articulo_Codigo_Barras;
 			$cantidadDefectuosa = 0;
-			$descuento = $articuloDeSucursalEntrega[0]->Articulo_Descuento;
+			//$descuento = $articuloDeSucursalEntrega[0]->Articulo_Descuento;
 			$retencion = $articuloDeSucursalEntrega[0]->Articulo_No_Retencion;
 			$exento = $articuloDeSucursalEntrega[0]->Articulo_Exento;
 			$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
@@ -172,7 +172,9 @@ class traspaso extends CI_Controller {
 
 			//Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
 			$numeroPrecioCliente = $this->cliente->getNumeroPrecio($clienteLiga->Cliente);
-			$precioUnidadReal = $this->articulo->getPrecioProducto($articulo->codigo, $numeroPrecioCliente, $sucursalEntrega);
+			$precioUnidadRealObject = $this->articulo->getPrecioProductoObject($articulo->codigo, $numeroPrecioCliente, $sucursalEntrega);
+			$precioUnidadReal = $precioUnidadRealObject->Precio_Monto;
+			$descuento = $precioUnidadRealObject->Precio_Descuento;
 			$descuentoProductoReal = $this->articulo->getDescuento($articulo->codigo, $sucursalEntrega, $clienteLiga->Cliente, $familiaCodigo, $descuento);
 			$costo = $precioUnidadReal - ($precioUnidadReal * ($descuentoProductoReal / 100));
 			$costo -= $costo / (1 + $porcentajeIVA);
