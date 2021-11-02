@@ -562,7 +562,7 @@ class ingresar extends CI_Controller {
 																	"cod"=>$codigo,
 																	"des"=>$descripcion,
 																	"cos"=>str_replace(",",".",$costo),
-																	"cosD"=>str_replace(",",".",$costo),
+																	"cosD"=>str_replace(",",".",$costoD),
 																	"p1"=>str_replace(",",".",$p1),
 																	"p1D"=>str_replace(",",".",$p1D),
 																	"p2"=>str_replace(",",".",$p2),
