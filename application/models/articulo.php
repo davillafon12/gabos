@@ -368,7 +368,17 @@ Class articulo extends CI_Model
 
 				if(!file_exists($ruta_a_preguntar)){$URL_IMAGEN = '00.jpg';}
 
-				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento);
+				//Manera vieja de traer precios y descuentos
+				//$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
+				//$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 1, $sucursal);
+				//$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento);
+
+				//Manera nueva de traer precios y descuentos
+				$precioObject = $this->getPrecioDescuentoProductoCompleto($codigo, $numero_precio, $sucursal);
+				$articulo['precio_cliente'] = $precioObject[$numero_precio]->Precio_Monto;
+				$articulo['precio_no_afiliado'] = $precioObject[1]->Precio_Monto;
+				$descuentoProducto = $precioObject[$numero_precio]->Precio_Descuento;
+				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $descuentoProducto);
 
 				$articulo['codigo'] = $codigo;
 				$articulo['descripcion'] = $row->Articulo_Descripcion;
@@ -376,8 +386,6 @@ Class articulo extends CI_Model
 				$articulo['inventario'] = trim($cedula) == "2" ? $row->Articulo_Cantidad_Defectuoso : $row->Articulo_Cantidad_Inventario;
 				$articulo['descuento'] = $descuento;
 				$articulo['familia'] = $row->TB_05_Familia_Familia_Codigo;
-				$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
-				$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 1, $sucursal);
 				$articulo['imagen'] = $URL_IMAGEN;
 				$articulo['exento'] = $row->Articulo_Exento;
 				$articulo['retencion'] = $row->Articulo_No_Retencion;
@@ -494,6 +502,26 @@ Class articulo extends CI_Model
 		{
 			return $query->result()[0]->Descuento_producto_porcentaje;
 		}else{return 0;}
+	}
+
+	function getPrecioDescuentoProductoCompleto($codigo_articulo, $numero_precio, $sucursal){
+		$this -> db -> select('Precio_Numero, Precio_Monto, Precio_Descuento');
+		$this -> db -> from('TB_11_Precios');
+		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', $codigo_articulo);
+		$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where_in('Precio_Numero', array($numero_precio,1));
+
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0){
+			$result = $query->result();
+			$precios = array();
+			foreach($result as $row){
+				$precios[$row->Precio_Numero] = $row;
+			}
+			return $precios;
+		}else{
+		    return false;
+		}
 	}
 
 	function getPrecioProducto($codigo_articulo, $numero_precio, $sucursal)
