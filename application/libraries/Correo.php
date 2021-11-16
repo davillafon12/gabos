@@ -3,10 +3,10 @@ class Correo{
     
     public $host = ' smtp.gmail.com';
     public $SMTPAuth = true;
-    public $Username = 'espreza.facturaelectronica@gmail.com';
-    public $Password = 'Arepa21*';   
+    public $Username = 'facturaelectronicagbsj@gmail.com';
+    public $Password = 'XKrty371@';   
     public $Port = 465;  
-    public $From = 'espreza.facturaelectronica@gmail.com';
+    public $From = 'facturaelectronicagbsj@gmail.com';
     public $isHTML = true;
     
     
