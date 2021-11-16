@@ -68,7 +68,7 @@ PARA:
 					<tr>
 						<td class="pad-l">
 							<div class="imagen_celdas">
-								<img src="<?php echo base_url('application/images/articulos/celdas_editar_masivo.png'); ?>"/>
+								<img src="<?php echo base_url('application/images/articulos/celdas_editar_masivo.png?v='.$javascript_cache_version); ?>"/>
 							</div>
 						</td>
 					</tr>
