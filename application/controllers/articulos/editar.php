@@ -814,8 +814,6 @@ class editar extends CI_Controller {
 						//Actualizamos descripcion, retencion y cantidad
 						$update = array(
 							'Articulo_Descripcion'=>$articulo["des"],
-							'Articulo_Cantidad_Inventario'=>$articulo["can"],
-							'Articulo_Cantidad_Defectuoso'=>$articulo["cand"],
 							'Articulo_Descuento'=>$articulo["desc"],
 							'Articulo_Exento'=>$articulo["exe"],
 							'Articulo_No_Retencion'=>$articulo["ret"],
