@@ -126,5 +126,7 @@ define('ART_GEN_UNIDAD_MEDIDA', 'Unid');
 define('ART_GEN_CODIGO_CABYS', '3899799010200');
 define('ART_GEN_IMPUESTO', 13);
 
+define('CONTROL_DE_INVENTARIO', "CONTROL_DE_INVENTARIO");
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
