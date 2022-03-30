@@ -255,12 +255,12 @@ class inventario extends CI_Controller {
 		$pdf = $this->pdfgenerator->generatePDF();
 
 		//FOR TESTING
+		/*$controlArticulos = array_merge($controlArticulos, $controlArticulos);
 		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
 		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
 		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
 		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
-		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
-		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
+		$controlArticulos = array_merge($controlArticulos, $controlArticulos);*/
 
 		$articulosPorPagina = 50;
 
@@ -271,7 +271,6 @@ class inventario extends CI_Controller {
 		$datos = new stdClass();
 		$datos->empresa = $sucursal;
 		$datos->control = $controlHead;
-		$datos->paginaActual = $paginaActual;
 		$datos->cantidadPaginas = $paginasADibujar;
 		$datos->usuarioQueRealiza = $this->user->getUserById($controlHead->Creado_Por);
 		$datos->usuarioQueEmpata = $this->user->getUserById($controlHead->Empate_Autorizado_Por);
@@ -303,10 +302,12 @@ class inventario extends CI_Controller {
 		//var_dump($datos);
 		//$numeroPagina = 0;
 		$inicio = 0;
-		$final = $articulosPorPagina - 1;
+		$final = (($articulosPorPagina - 1) > sizeof($controlArticulos)) ? sizeof($controlArticulos) : $articulosPorPagina - 1;
        	while($paginasADibujar >= $paginaActual){
 			//Agregamos pag
 			$pdf->AddPage();
+
+			$datos->paginaActual = $paginaActual;
 
 			$this->pdfgenerator->drawHeader($pdf, CONTROL_DE_INVENTARIO, $datos)
 								->drawProductsContainer($pdf, $titles, 55, 204, 261)

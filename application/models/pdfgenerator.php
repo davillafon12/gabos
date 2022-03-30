@@ -32,11 +32,11 @@ Class pdfgenerator extends CI_Model{
 				$pdf->Rect(120, 10, 80, 20, 'D');
 				$pdf->SetFont('Arial','B',16);
 				$pdf->Text(122, 17, 'Control de Inventario #'.$data->control->id);
-				$pdf->SetFont('Arial','',12);
+				$pdf->SetFont('Arial','',10);
 				$pdf->Text(122, 22, 'Fecha y Hora: ');
-				$pdf->Text(122, 27, $data->control->Fecha_Creacion);
+				$pdf->Text(122, 27, date("d-m-Y h:i:s a", strtotime($data->control->Fecha_Creacion)));
 
-				$pdf->Text(172, 27, "Pag. # {$data->paginaActual} de {$data->cantidadPaginas}");
+				$pdf->Text(169, 27, "Pag. # {$data->paginaActual} de {$data->cantidadPaginas}");
 
                 $pdf->Line(10, 35, 200, 35);
                 $pdf->Text(10, 40, 'Creado Por: '.$data->usuarioQueRealiza->Usuario_Nombre." ".$data->usuarioQueRealiza->Usuario_Apellidos);
@@ -91,7 +91,22 @@ Class pdfgenerator extends CI_Model{
 
         switch($documentType){
             case CONTROL_DE_INVENTARIO:
+                $values = array(
+                    array("head"=>"E:","content"=>"Producto Empatado"),
+                    array("head"=>"F:","content"=>"Físico"),
+                    array("head"=>"S:","content"=>"Sistema"),
+                    array("head"=>"B:","content"=>"Balance")
+                );
 
+                $offSet = 2;
+                foreach($values as $v){
+                    $pdf->SetXY(10, $y + $offSet);
+                    $pdf->SetFont('Arial','B',6);
+                    $pdf->cell(5, 3, $v['head'], 0, 0,'R');
+                    $pdf->SetFont('Arial','',6);
+                    $pdf->cell(5, 3, $v['content'], 0, 0,'L');
+                    $offSet += 3;
+                }
             break;
             default: die("Document Type not supported"); break;
         }
