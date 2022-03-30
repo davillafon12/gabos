@@ -42,6 +42,15 @@ function existe_Usuario_Cedula($cedula){
 	}
 }
 
+	function getUserById($id){
+		$this -> db -> from('tb_01_usuario');
+		$this -> db -> where('Usuario_Codigo', $id);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+
+		return $query -> num_rows() > 0 ? $query->result()[0] : false;
+	}
+
 function existe_Nombre_Usuario($nombre){
 	$this -> db -> select('Usuario_Nombre_Usuario');
 	$this -> db -> from('tb_01_usuario');

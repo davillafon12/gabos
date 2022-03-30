@@ -12,6 +12,7 @@ class inventario extends CI_Controller {
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('user','',TRUE);
 		$this->load->model('configuracion','',TRUE);
+		$this->load->model('pdfgenerator','',TRUE);
 	}
 
 	function index(){}
@@ -221,5 +222,152 @@ class inventario extends CI_Controller {
 		}
 
 		echo json_encode($r);
+	}
+
+	public function descarga(){
+		$consecutivo = trim(@$_GET["c"]);
+		$sucursal = trim(@$_GET["s"]);
+		$tipo = trim(@$_GET["t"]);
+		if($empresa = $this->empresa->getEmpresa($sucursal)){
+			if($control = $this->articulo->getControlInventario($consecutivo)){
+				if($articulos = $this->articulo->getArticulosControlInventario($consecutivo)){
+					if($tipo == "excel" || $tipo == "pdf"){
+						if($tipo == "pdf"){
+							$this->createPDFControl($empresa[0], $control, $articulos);
+						}else if($tipo == "excel"){
+
+						}
+					}else{
+						die('Formato de archivo invalido');
+					}
+				}else{
+					die('Articulos no existen');
+				}
+			}else{
+				die('Control no existe');
+			}
+		}else{
+			die('Empresa no existe');
+		}
+	}
+
+	private function createPDFControl($sucursal, $controlHead, $controlArticulos){
+		$pdf = $this->pdfgenerator->generatePDF();
+
+		//FOR TESTING
+		/*$controlArticulos = array_merge($controlArticulos, $controlArticulos);
+		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
+		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
+		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
+		$controlArticulos = array_merge($controlArticulos, $controlArticulos);
+		$controlArticulos = array_merge($controlArticulos, $controlArticulos);*/
+
+		$articulosPorPagina = 50;
+
+		$cantidadProductos = sizeof($controlArticulos);
+		$paginasADibujar = $this->pdfgenerator->getAmountPagesToDraw($cantidadProductos, $articulosPorPagina);
+        $paginaActual = 1;
+
+		$datos = new stdClass();
+		$datos->empresa = $sucursal;
+		$datos->control = $controlHead;
+		$datos->cantidadPaginas = $paginasADibujar;
+		$datos->usuarioQueRealiza = $this->user->getUserById($controlHead->Creado_Por);
+		$datos->usuarioQueEmpata = $this->user->getUserById($controlHead->Empate_Autorizado_Por);
+
+		//var_dump($paginasADibujar);
+
+		$titles = array(
+			array("title"=>"Código","width"=>19),
+			array("title"=>"Descripción","width"=>76),
+			array("title"=>"E","width"=>5),
+			array("title"=>"F Bueno","width"=>15),
+			array("title"=>"S Bueno","width"=>15),
+			array("title"=>"B Bueno","width"=>15),
+			array("title"=>"F Defec","width"=>15),
+			array("title"=>"S Defec","width"=>15),
+			array("title"=>"B Defec","width"=>15)
+		);
+
+		$totales = $this->generarCostos($controlArticulos);
+
+		$values = array(
+			array("title"=>"Bueno", "content"=>$totales["bueno"]),
+			array("title"=>"Defectuoso", "content"=>$totales["defectuoso"]),
+			array("title"=>"Total", "content"=>$totales["total"])
+		);
+
+
+
+		//var_dump($datos);
+		//$numeroPagina = 0;
+		$inicio = 0;
+		$final = (($articulosPorPagina - 1) > sizeof($controlArticulos)) ? sizeof($controlArticulos) : $articulosPorPagina - 1;
+       	while($paginasADibujar >= $paginaActual){
+			//Agregamos pag
+			$pdf->AddPage();
+
+			$datos->paginaActual = $paginaActual;
+
+			$this->pdfgenerator->drawHeader($pdf, CONTROL_DE_INVENTARIO, $datos)
+								->drawProductsContainer($pdf, $titles, 55, 204, 261)
+								->drawFooter($pdf, CONTROL_DE_INVENTARIO, $values, 261);
+
+			$this->addArticulosToPDF($pdf, $controlArticulos, $inicio, $final);
+
+			$inicio +=  $articulosPorPagina - 1;
+			$final +=  $articulosPorPagina - 1;
+			$final = $final > sizeof($controlArticulos) ? sizeof($controlArticulos) : $final;
+
+			$paginaActual++;
+			//$numeroPagina++;
+        }
+
+		//Imprimimos documento
+		$pdf->Output();
+	}
+
+	private function generarCostos($articulos){
+		$totales = array("bueno"=>0,"defectuoso"=>0,"total"=>0);
+
+		foreach($articulos as $articulo){
+			$totales["bueno"] += floatval($articulo->Costo) * intval($articulo->Fisico_Bueno);
+			$totales["defectuoso"] += floatval($articulo->Costo) * intval($articulo->Fisico_Defectuoso);
+			$totales["total"] += floatval($articulo->Costo) * intval($articulo->Fisico_Bueno) + floatval($articulo->Costo) * intval($articulo->Fisico_Defectuoso);
+		}
+
+		return $totales;
+	}
+
+	private function addArticulosToPDF(&$pdf, $articulos, $inicio, $final){
+		$y = 65;
+		for($i = $inicio; $i < $final; $i++){
+			$articulo = $articulos[$i];
+			$item = array(
+				array("content"=>$articulo->Codigo, "width"=>19, "align"=>"C"),
+				array("content"=>$articulo->Descripcion, "width"=>76, "align"=>"L"),
+				array("content"=>$this->fe($articulo->Empatar), "width"=>5, "align"=>"C"),
+				array("content"=>$articulo->Fisico_Bueno, "width"=>15, "align"=>"R"),
+				array("content"=>$articulo->Sistema_Bueno, "width"=>15, "align"=>"R"),
+				array("content"=>intval($articulo->Sistema_Bueno) - intval($articulo->Fisico_Bueno), "width"=>15, "align"=>"R"),
+				array("content"=>$articulo->Fisico_Defectuoso, "width"=>15, "align"=>"R"),
+				array("content"=>$articulo->Sistema_Defectuoso, "width"=>15, "align"=>"R"),
+				array("content"=>intval($articulo->Sistema_Defectuoso) - intval($articulo->Fisico_Defectuoso), "width"=>15, "align"=>"R")
+			);
+			$this->pdfgenerator->addItemToBody($pdf, $item, $y);
+			$y += 4;
+		}
+	}
+
+	private function fni($numero){
+		return number_format($numero,$this->configuracion->getDecimales());
+	}
+
+	private function fe($valor){
+			if($valor){
+					return 'E';
+			}else{
+					return ' ';
+			}
 	}
 }
