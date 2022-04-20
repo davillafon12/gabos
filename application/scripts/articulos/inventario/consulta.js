@@ -1,4 +1,6 @@
 var _SUCURSAL_SELECCIONADA = -1;
+var _TIPO_IMPRESION  = "";
+var _CONSECUTIVO_CARGADO = -1;
 
 $(window).ready(function(){
     $("#empresa_seleccionada").change(cambiarSucursal);
@@ -88,7 +90,7 @@ function seleccionarControl(control){
 }
 
 function cargarControl(){
-	consecutivo = $("#consecutivo").val();
+	var consecutivo = $("#consecutivo").val();
 	if(consecutivo.trim()===''){
 		notyMsg('Debe ingresar un consecutivo válido', 'error');
 		return false;
@@ -101,12 +103,15 @@ function cargarControl(){
         dataType: "json",
         success: function(data, textStatus, jqXHR){
             if(data.code == 0){
+                _CONSECUTIVO_CARGADO = consecutivo;
                 setProductosControl(data.data.articulos);
             }else{
+                _CONSECUTIVO_CARGADO = -1;
                 notyMsg(data.msg, 'error');
             }
         },
         error: function (jqXHR, textStatus, errorThrown){
+            _CONSECUTIVO_CARGADO = -1;
             console.error(textStatus);
             console.error(errorThrown);
             notyMsg('Hubo un error al cargar la información del servidor', 'error');
@@ -181,3 +186,19 @@ Number.prototype.format = function(n, x, s, c) {
 
     return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
 };
+
+function descargar(){
+    if(_SUCURSAL_SELECCIONADA == -1){
+        notyMsg('Por favor escoja una sucursal', 'error');
+        return false;
+    }else if(_CONSECUTIVO_CARGADO == -1){
+        notyMsg('Debe ingresar un consecutivo válido', 'error');
+        return false;
+    }
+
+    var tipoArchivo = $("#tipo_impresion").val();
+
+    var URL = location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+"/articulos/inventario/descarga?s="+_SUCURSAL_SELECCIONADA+"&c="+_CONSECUTIVO_CARGADO+"&t="+tipoArchivo;
+    window.open(URL,'Impresion de Control de Inventarios','width=1024,height=768,resizable=no,toolbar=no,location=no,menubar=no');
+
+}

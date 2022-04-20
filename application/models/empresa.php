@@ -83,9 +83,16 @@ Class empresa extends CI_Model
 		return $this->es_codigo_usado($id_empresa);
 	}
 
-	function getCantidadEmpresas()
-	{
-		return $this->db->count_all('tb_02_sucursal');
+	function getCantidadEmpresas(){
+		$this -> db -> select('MAX(Codigo)+1 as Siguiente', false);
+		$this -> db -> from('tb_02_sucursal');
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0){
+		  return $query->result()[0]->Siguiente;
+		}else{
+		  die("Error creating new record.");
+		}
 	}
 
 	function getEmpresas()

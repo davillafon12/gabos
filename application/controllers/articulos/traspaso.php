@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class traspaso extends CI_Controller {
- 
+
 	function __construct()
 	{
-		parent::__construct(); 
+		parent::__construct();
 		$this->load->model('user','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('configuracion','',TRUE);
@@ -17,18 +17,18 @@ class traspaso extends CI_Controller {
 	function index()
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-				
+
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['realizar_traspasos'])
 		{
-				redirect('accesoDenegado', 'location');						
+				redirect('accesoDenegado', 'location');
 		}
 		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
-		$this->load->view("articulos/articulos_traspaso_tiendas", $data);		
+		$this->load->view("articulos/articulos_traspaso_tiendas", $data);
 	}
-	
-	
+
+
 	function obtenerArticulo(){
 			$retorno['status'] = 'error';
 			$retorno['error'] = 'No se pudo procesar la solicitud.';
@@ -68,8 +68,8 @@ class traspaso extends CI_Controller {
 			}
 			echo json_encode($retorno);
 	}
-	
-	
+
+
 	public function realizarTraspaso(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = 'No se pudo procesar la solicitud.';
@@ -83,20 +83,20 @@ class traspaso extends CI_Controller {
 						if($clienteLiga = $this->empresa->getClienteLigaByEmpresa($sucursalRecibe)){
 							$articulos = json_decode($articulos);
 							if(sizeof($articulos)>0){
-								
+
 								if($this->verificarExistenciaDeArticulos($articulos, $sucursal)){
 									//Cargamos informacion adicional
 									include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 									date_default_timezone_set("America/Costa_Rica");
 									$fechaHoraActual = date("Y-m-d  H:i:s", now());
 									$traspaso = $this->articulo->crearTraspasoInventario($sucursal, $sucursalRecibe, $fechaHoraActual, $data['Usuario_Codigo']);
-									
+
 									$this->traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursal, $traspaso, $clienteLiga);
-																
+
 						 			//Guardamos la transaccion
 						 			$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario creó el traspaso # $traspaso",$data['Sucursal_Codigo'],'crear_traspaso');
-									
-																												
+
+
 									$retorno['status'] = 'success';
 									unset($retorno['error']);
 									$retorno['traspaso'] = $traspaso;
@@ -127,7 +127,7 @@ class traspaso extends CI_Controller {
 		}
 		echo json_encode($retorno);
 	}
-	
+
 	private function verificarExistenciaDeArticulos($articulos, $sucursal){
 			foreach($articulos as $art){
 					if($articuloBD = $this->articulo->getArticuloArray($art->codigo, 0, $sucursal)){
@@ -142,9 +142,9 @@ class traspaso extends CI_Controller {
 			}
 			return true;
 	}
-	
-	
-	
+
+
+
 	private function registrarArticulo($articulo, $sucursalRecibe, $sucursalEntrega, $datosSesion, $clienteLiga){
 			$familiaCodigo = 0; //Usamos cero por ser familia base
 			//Si articulo no existe en la sucursal que recibe debemos registrarlo
@@ -160,42 +160,59 @@ class traspaso extends CI_Controller {
 			$articuloDeSucursalEntrega = $this->articulo->existe_Articulo($articulo->codigo,$sucursalEntrega);
 			$codigoBarras = $articuloDeSucursalEntrega[0]->Articulo_Codigo_Barras;
 			$cantidadDefectuosa = 0;
-			$descuento = $articuloDeSucursalEntrega[0]->Articulo_Descuento;
+			//$descuento = $articuloDeSucursalEntrega[0]->Articulo_Descuento;
 			$retencion = $articuloDeSucursalEntrega[0]->Articulo_No_Retencion;
 			$exento = $articuloDeSucursalEntrega[0]->Articulo_Exento;
 			$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
-			
+
+			$tipo_codigo = $articuloDeSucursalEntrega[0]->TipoCodigo;
+			$unidadmedida = $articuloDeSucursalEntrega[0]->UnidadMedida;
+			$codigoCabys = $articuloDeSucursalEntrega[0]->CodigoCabys;
+			$impuesto = $articuloDeSucursalEntrega[0]->Impuesto;
+
 			//Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
 			$numeroPrecioCliente = $this->cliente->getNumeroPrecio($clienteLiga->Cliente);
-			$precioUnidadReal = $this->articulo->getPrecioProducto($articulo->codigo, $numeroPrecioCliente, $sucursalEntrega);
-			$descuentoProductoReal = $this->articulo->getDescuento($articulo->codigo, $sucursalEntrega, $clienteLiga->Cliente, $familiaCodigo, $descuento); 
+			$precioUnidadRealObject = $this->articulo->getPrecioProductoObject($articulo->codigo, $numeroPrecioCliente, $sucursalEntrega);
+			$precioUnidadReal = $precioUnidadRealObject->Precio_Monto;
+			$descuento = $precioUnidadRealObject->Precio_Descuento;
+			$descuentoProductoReal = $this->articulo->getDescuento($articulo->codigo, $sucursalEntrega, $clienteLiga->Cliente, $familiaCodigo, $descuento);
 			$costo = $precioUnidadReal - ($precioUnidadReal * ($descuentoProductoReal / 100));
 			$costo -= $costo / (1 + $porcentajeIVA);
-			
-			$precio1 = $this->articulo->getPrecioProducto($articulo->codigo, 1, $sucursalEntrega);
-			$precio2 = $this->articulo->getPrecioProducto($articulo->codigo, 2, $sucursalEntrega);
-			$precio3 = $this->articulo->getPrecioProducto($articulo->codigo, 3, $sucursalEntrega);
-			$precio4 = $this->articulo->getPrecioProducto($articulo->codigo, 4, $sucursalEntrega);
-			$precio5 = $this->articulo->getPrecioProducto($articulo->codigo, 5, $sucursalEntrega);
-			$this->articulo->registrar(	$articulo->codigo, 
-																	$articulo->descripcion, 
-																	$codigoBarras, 
-																	$articulo->cantidad, 
-																	$cantidadDefectuosa, 
-																	$descuento, 
-																	$imagen, 
-																	$exento, 
-																	$retencion, 
-																	$familiaCodigo, 
-																	$sucursalRecibe, 
-																	$costo, 
-																	$precio1, 
-																	$precio2, 
-																	$precio3, 
-																	$precio4, 
-																	$precio5);
+
+			$precio1O = $this->articulo->getPrecioProductoObject($articulo->codigo, 1, $sucursalEntrega);
+			$precio2O = $this->articulo->getPrecioProductoObject($articulo->codigo, 2, $sucursalEntrega);
+			$precio3O = $this->articulo->getPrecioProductoObject($articulo->codigo, 3, $sucursalEntrega);
+			$precio4O = $this->articulo->getPrecioProductoObject($articulo->codigo, 4, $sucursalEntrega);
+			$precio5O = $this->articulo->getPrecioProductoObject($articulo->codigo, 5, $sucursalEntrega);
+			$this->articulo->registrar(	$articulo->codigo,
+										$articulo->descripcion,
+										$codigoBarras,
+										$articulo->cantidad,
+										$cantidadDefectuosa,
+										$descuento,
+										$imagen,
+										$exento,
+										$retencion,
+										$familiaCodigo,
+										$sucursalRecibe,
+										$costo,
+										$precio1O->Precio_Monto,
+										$precio2O->Precio_Monto,
+										$precio3O->Precio_Monto,
+										$precio4O->Precio_Monto,
+										$precio5O->Precio_Monto,
+										$tipo_codigo,
+										$unidadmedida,
+										$codigoCabys,
+										$impuesto,
+										$descuentoProductoReal,
+										$precio1O->Precio_Descuento,
+										$precio2O->Precio_Descuento,
+										$precio3O->Precio_Descuento,
+										$precio4O->Precio_Descuento,
+										$precio5O->Precio_Descuento);
 	}
-	
+
 	private function traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $traspaso, $clienteLiga){
 			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 			foreach($articulos as $art){
@@ -205,18 +222,18 @@ class traspaso extends CI_Controller {
 					}else{
 						//Actualizamos el inventario
 						$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
-						
+
 					}
-					
-					
+
+
 					//Indiferentemente de si registro o actualizo el articulo
 					//debemos restar dicha cantidad del inventario de la sucursal que entrega
 					$this->articulo->actualizarInventarioRESTA($art->codigo, $art->cantidad, $sucursalEntrega);
-					
+
 					$this->articulo->agregarArticuloTraspasoInventario($traspaso, $art->codigo, $art->cantidad, $art->descripcion);
 			}
 	}
-        
+
         public function traspasoEs(){
             $sucursalAPasar = trim(@$_GET["s"]) == "" ? 99999 : trim(@$_GET["s"]);
             $url = "http://192.168.10.27";
@@ -239,28 +256,28 @@ class traspaso extends CI_Controller {
                     $articulosConError = 0;
                     $articulosError = array();
                     foreach($datos as $art){
-                        if($this->articulo->registrar($art["Articulo_Codigo"], 
-                                                    $art["Articulo_Descripcion"], 
-                                                    $art["Articulo_Codigo_Barras"], 
-                                                    $art["Articulo_Cantidad_Inventario"], 
-                                                    $art["Articulo_Cantidad_Defectuoso"], 
-                                                    $art["Articulo_Descuento"], 
-                                                    $art["Articulo_Imagen_URL"], 
-                                                    $art["Articulo_Exento"], 
-                                                    $art["Articulo_No_Retencion"], 
-                                                    $art["TB_05_Familia_Familia_Codigo"], 
-                                                    $art["TB_02_Sucursal_Codigo"], 
-                                                    $art["precios"]["p0"], 
-                                                    $art["precios"]["p1"], 
-                                                    $art["precios"]["p2"], 
-                                                    $art["precios"]["p3"], 
-                                                    $art["precios"]["p4"], 
+                        if($this->articulo->registrar($art["Articulo_Codigo"],
+                                                    $art["Articulo_Descripcion"],
+                                                    $art["Articulo_Codigo_Barras"],
+                                                    $art["Articulo_Cantidad_Inventario"],
+                                                    $art["Articulo_Cantidad_Defectuoso"],
+                                                    $art["Articulo_Descuento"],
+                                                    $art["Articulo_Imagen_URL"],
+                                                    $art["Articulo_Exento"],
+                                                    $art["Articulo_No_Retencion"],
+                                                    $art["TB_05_Familia_Familia_Codigo"],
+                                                    $art["TB_02_Sucursal_Codigo"],
+                                                    $art["precios"]["p0"],
+                                                    $art["precios"]["p1"],
+                                                    $art["precios"]["p2"],
+                                                    $art["precios"]["p3"],
+                                                    $art["precios"]["p4"],
                                                     $art["precios"]["p5"])){
                             $articulosIngresados++;
                         }else{
                             $articulosConError++;
                             array_push($articulosError, $art["Articulo_Codigo"]);
-                        }                        
+                        }
                     }
                     echo "Insercion finalizada<br>";
                     echo "$articulosIngresados articulos insertados<br>";

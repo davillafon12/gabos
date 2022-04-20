@@ -119,7 +119,7 @@
 				<input id="consecutivo" class="input_uno" autocomplete="off" type="text" style="width: 100px;"/>
 				<input type="button" class="boton-carga" onclick="cargarControl()" value="Cargar Control"/>
 				<p class="contact" style="display:inline;"><label for="impresion">Formato:</label></p>
-				<select id="tipo_impresion" onChange="cambiarTipoImpresion(this.value)" class="impresion" name="impresion" >
+				<select id="tipo_impresion" class="impresion" name="impresion" >
 					<option value="pdf">PDF</option>
 					<option value="excel">XLS</option>
 				</select>

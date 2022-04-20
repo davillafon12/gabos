@@ -90,7 +90,9 @@ Class articulo extends CI_Model
 		");
 	}
 
-	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $retencion, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5, $tipo_codigo = "01", $unidadmedida = "Unid", $codigoCabys = "", $impuesto = "13")
+	function registrar($articulo_Codigo, $articulo_Descripcion, $articulo_Codigo_Barras, $articulo_Cantidad_Inventario, $articulo_Cantidad_Defectuoso, $articulo_Descuento, $Articulo_Imagen_URL, $Articulo_Exento, $retencion,
+	$TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costo, $precio1, $precio2, $precio3, $precio4, $precio5, $tipo_codigo = "01", $unidadmedida = "Unid", $codigoCabys = "", $impuesto = "13", $costoD = 0, $precio1D = 0, $precio2D = 0, $precio3D = 0,
+	$precio4D = 0, $precio5D = 0)
 	{
 		if($this->existe_Articulo($articulo_Codigo, $TB_02_Sucursal_Codigo)){
 			return false;
@@ -116,12 +118,12 @@ Class articulo extends CI_Model
 	                    );
 			try{
 	        	$this->db->insert('TB_06_Articulo',$data);
-	        	$this->registrar_Precio_Articulo(0, $costo, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(1, $precio1, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(2, $precio2, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(3, $precio3, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(4, $precio4, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
-	        	$this->registrar_Precio_Articulo(5, $precio5, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo);
+	        	$this->registrar_Precio_Articulo(0, $costo, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $costoD);
+	        	$this->registrar_Precio_Articulo(1, $precio1, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio1D);
+	        	$this->registrar_Precio_Articulo(2, $precio2, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio2D);
+	        	$this->registrar_Precio_Articulo(3, $precio3, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio3D);
+	        	$this->registrar_Precio_Articulo(4, $precio4, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio4D);
+	        	$this->registrar_Precio_Articulo(5, $precio5, $articulo_Codigo, $TB_05_Familia_Familia_Codigo, $TB_02_Sucursal_Codigo, $precio5D);
 
 
 	    	}
@@ -153,6 +155,25 @@ Class articulo extends CI_Model
 			$this->db->where('TB_06_Articulo_TB_02_Sucursal_Codigo',$sucursal);
 			$this->db->update('tb_11_precios', $datos);
 		}
+	}
+
+	//Nueva funcion para actualizar precios con descuentos detallados 20-10-2021
+	function actualizarPreciosMasivo($precios, $sucursal, $codigoArticulo){
+		foreach($precios as $numero => $precioMetadata){
+			$this->actualizarPrecioMasivo($codigoArticulo, $sucursal, $numero, $precioMetadata["precio"], $precioMetadata["descuento"]);
+		}
+	}
+
+	//Nueva funcion para actualizar precios y descuentos de un articulo 20-10-2021
+	function actualizarPrecioMasivo($codigo, $sucursal, $numeroPrecio, $precio, $descuento){
+		$datos = array(
+			'Precio_Monto' => $precio,
+			'Precio_Descuento' => $descuento
+		);
+		$this->db->where('Precio_Numero', $numeroPrecio);
+		$this->db->where('TB_06_Articulo_Articulo_Codigo',$codigo);
+		$this->db->where('TB_06_Articulo_TB_02_Sucursal_Codigo',$sucursal);
+		$this->db->update('tb_11_precios', $datos);
 	}
 
 	function actualizarPrecio($codigo, $sucursal, $precio, $numeroPrecio){
@@ -246,11 +267,12 @@ Class articulo extends CI_Model
 		}
 	}
 
-	function registrar_Precio_Articulo($Precio_Numero, $Precio_Monto, $TB_06_Articulo_Articulo_Codigo, $TB_06_Articulo_TB_05_Familia_Familia_Codigo, $sucursal)
+	function registrar_Precio_Articulo($Precio_Numero, $Precio_Monto, $TB_06_Articulo_Articulo_Codigo, $TB_06_Articulo_TB_05_Familia_Familia_Codigo, $sucursal, $descuento = 0)
 	{
 		$data = array(
                         'Precio_Numero'=>$Precio_Numero,
 						'Precio_Monto'=>$Precio_Monto,
+						'Precio_Descuento'=>$descuento,
 						'TB_06_Articulo_Articulo_Codigo'=>$TB_06_Articulo_Articulo_Codigo,
 						'TB_06_Articulo_TB_05_Familia_Familia_Codigo'=>$TB_06_Articulo_TB_05_Familia_Familia_Codigo,
 						'TB_06_Articulo_TB_02_Sucursal_Codigo'=>$sucursal
@@ -346,7 +368,17 @@ Class articulo extends CI_Model
 
 				if(!file_exists($ruta_a_preguntar)){$URL_IMAGEN = '00.jpg';}
 
-				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento);
+				//Manera vieja de traer precios y descuentos
+				//$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
+				//$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 1, $sucursal);
+				//$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento);
+
+				//Manera nueva de traer precios y descuentos
+				$precioObject = $this->getPrecioDescuentoProductoCompleto($codigo, $numero_precio, $sucursal);
+				$articulo['precio_cliente'] = $precioObject[$numero_precio]->Precio_Monto;
+				$articulo['precio_no_afiliado'] = $precioObject[1]->Precio_Monto;
+				$descuentoProducto = $precioObject[$numero_precio]->Precio_Descuento;
+				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $descuentoProducto);
 
 				$articulo['codigo'] = $codigo;
 				$articulo['descripcion'] = $row->Articulo_Descripcion;
@@ -354,8 +386,6 @@ Class articulo extends CI_Model
 				$articulo['inventario'] = trim($cedula) == "2" ? $row->Articulo_Cantidad_Defectuoso : $row->Articulo_Cantidad_Inventario;
 				$articulo['descuento'] = $descuento;
 				$articulo['familia'] = $row->TB_05_Familia_Familia_Codigo;
-				$articulo['precio_cliente'] = $this->getPrecioProducto($codigo, $numero_precio, $sucursal);
-				$articulo['precio_no_afiliado'] = $this->getPrecioProducto($codigo, 1, $sucursal);
 				$articulo['imagen'] = $URL_IMAGEN;
 				$articulo['exento'] = $row->Articulo_Exento;
 				$articulo['retencion'] = $row->Articulo_No_Retencion;
@@ -474,6 +504,26 @@ Class articulo extends CI_Model
 		}else{return 0;}
 	}
 
+	function getPrecioDescuentoProductoCompleto($codigo_articulo, $numero_precio, $sucursal){
+		$this -> db -> select('Precio_Numero, Precio_Monto, Precio_Descuento');
+		$this -> db -> from('TB_11_Precios');
+		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', $codigo_articulo);
+		$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where_in('Precio_Numero', array($numero_precio,1));
+
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0){
+			$result = $query->result();
+			$precios = array();
+			foreach($result as $row){
+				$precios[$row->Precio_Numero] = $row;
+			}
+			return $precios;
+		}else{
+		    return false;
+		}
+	}
+
 	function getPrecioProducto($codigo_articulo, $numero_precio, $sucursal)
 	{
 		$this -> db -> select('Precio_Monto');
@@ -497,6 +547,21 @@ Class articulo extends CI_Model
 		    return "0";
 		}
 
+	}
+
+	function getPrecioProductoObject($codigo_articulo, $numero_precio, $sucursal){
+		$this -> db -> select('Precio_Monto, Precio_Descuento');
+		$this -> db -> from('TB_11_Precios');
+		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', $codigo_articulo);
+		$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', $sucursal);
+		$this -> db -> where('Precio_Numero', $numero_precio);
+		$this -> db -> limit(1);
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0){
+			return $query->result()[0];
+		}else{
+		    return false;
+		}
 	}
 
 	function getNumeroPrecio($cedula)

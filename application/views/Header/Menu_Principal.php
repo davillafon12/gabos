@@ -35,14 +35,15 @@
 			<img class='icono' src=".$Ruta_Icono_Articulos." alt='Articulos' width='22' height='22'>
 			<a href='#' class='dir'>Articulos</a>
 			<ul>
-				<li class='first_Level_2'><a href=".$Ruta_Base."articulos/bodega>Ingreso a Bodega</a></li>
+				<li class='first_Level_2'><a href=".$Ruta_Base."articulos/traspaso>Traspaso Tiendas</a></li>
+				<!--li class='first_Level_2'><a href=".$Ruta_Base."articulos/bodega>Ingreso a Bodega</a></li>
 				<li><a href='#' class='dir'>Traspaso</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."articulos/registrar>Individual</a></li>
 						<li ><a href=".$Ruta_Base."articulos/traspaso>Tiendas</a></li>
 						<li class='last'><a href=".$Ruta_Base."articulos/registrar/registro_masivo>Masivo</a></li>
 					</ul>
-				</li>
+				</li-->
 				<li><a href='#' class='dir'>Registro</a>
 					<ul>
 						<li class='first'><a href=".$Ruta_Base."articulos/ingresar/individual>Individual</a></li>
