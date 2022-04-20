@@ -2,7 +2,7 @@
 
 class external extends CI_Controller {
 
-    private $token = "Queladilla9876!!";
+    private $token = "Queimpresionante9876!!";
     private $logger;
 
     function __construct(){
@@ -423,6 +423,55 @@ class external extends CI_Controller {
 
     public function actualizarMasivoCabys(){
         //die;
+        $token = trim(@$_GET["t"]);
+        $sucursal = trim(@$_GET["s"]);
+
+
+        if($token == $this->token){
+            if($this->empresa->getEmpresa($sucursal)){
+                require_once './application/libraries/PHPExcel/IOFactory.php';
+                $objPHPExcel = null;
+                $excep = null;
+                try{
+                    $objPHPExcel = PHPExcel_IOFactory::load(FCPATH.'application/upload/inventario_bueno.xlsx');
+                }catch(Exception $e){
+                    $excep = $e;
+                }
+
+                if($objPHPExcel != null){
+                    foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+                        $highestRow = $worksheet->getHighestRow();
+
+                        //Empezamos en la fila 2 donde estan los datos
+                        for ($fila = 2; $fila <= $highestRow; ++ $fila){
+                            $codigo = trim($worksheet->getCellByColumnAndRow(0, $fila)->getValue());
+                            $cantidad = $worksheet->getCellByColumnAndRow(1, $fila)->getValue();
+
+                            if($codigo != ""){
+                                if($articulo = $this->articulo->existe_Articulo($codigo,$sucursal)){
+                                    $this->articulo->actualizar($codigo, $sucursal, array("Articulo_Cantidad_Inventario"=>$cantidad));
+                                    echo "Articulo $codigo se actualizo con cantidad $cantidad <br>";
+                                }else{
+                                    echo "Articulo $codigo no existe para la sucursal $sucursal <br>";
+                                }
+                            }
+                        }
+
+                        break; //Solo vamos a bretear la primera hoja
+                    }
+                }else{
+                    die("Error al cargar el archivo <br><br>".$excep->getMessage());
+                }
+            }else{
+                die("Sucursal ingresada no es valida");
+            }
+        }else{
+            die("You are not allowed to access here");
+        }
+    }
+
+    public function actualizarMasivoCantidades(){
+        die;
         $token = trim(@$_GET["t"]);
         $sucursal = trim(@$_GET["s"]);
 
