@@ -28,7 +28,7 @@ PARA:
 		<?php include PATH_LOG_OUT_HEADER;?>
 		
 		<!--CSS ESTILO DE LA TABLA-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/clientes/style_editar.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/clientes/style_editar.css?v='.$javascript_cache_version); ?>">
 		<!--CSS ESTILO DEL MODAL-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/jquery-impromptu.css'); ?>">
 		<!--AJAX DE LA TABLA-->
@@ -59,6 +59,9 @@ PARA:
 			<hr class="division_wrapper">
 		    
 			<div id="contenido">
+				<? if($verClientesInactivos): ?>
+					<button class="mostrar-inactivos-toggle" id="mostrar_inactivos_toggle">Mostrar Inactivos</button>
+				<? endif; ?>
 				<center><br><br>
 					<table id='tabla_editar' class='tablaPrincipal'>
 						<thead> 

@@ -683,7 +683,9 @@ Class cliente extends CI_Model
 			$this->db->delete("tb_16_authclientes");
 	}
 
-	function obtenerClientesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad){
+	function obtenerClientesParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $soloActivos = true){
+
+		$estadoQuery = $soloActivos ? " AND Cliente_Estado = 'activo' " : "";
 
 		return $this->db->query("
 			SELECT 	Cliente_Cedula AS cedula,
@@ -693,14 +695,16 @@ Class cliente extends CI_Model
 			FROM tb_03_cliente
 			WHERE (Cliente_Cedula LIKE '%$busqueda%' OR
 				   Cliente_Nombre LIKE '%$busqueda%' OR
-				   Cliente_Apellidos LIKE '%$busqueda%' OR
-				   Cliente_Estado LIKE '%$busqueda%')
+				   Cliente_Apellidos LIKE '%$busqueda%')
+				   $estadoQuery
 			ORDER BY $columnaOrden $tipoOrden
 			LIMIT $inicio,$cantidad
 		");
 	}
 
-	function obtenerClientesFiltradosParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad){
+	function obtenerClientesFiltradosParaTabla($columnaOrden, $tipoOrden, $busqueda, $inicio, $cantidad, $soloActivos = true){
+
+		$estadoQuery = $soloActivos ? " AND Cliente_Estado = 'activo' " : "";
 
 		return $this->db->query("
 			SELECT 	Cliente_Cedula AS cedula,
@@ -710,13 +714,18 @@ Class cliente extends CI_Model
 			FROM tb_03_cliente
 			WHERE (Cliente_Cedula LIKE '%$busqueda%' OR
 				   Cliente_Nombre LIKE '%$busqueda%' OR
-				   Cliente_Apellidos LIKE '%$busqueda%' OR
-				   Cliente_Estado LIKE '%$busqueda%')
+				   Cliente_Apellidos LIKE '%$busqueda%')
+				   $estadoQuery
 		");
 	}
 
-	function getTotalClientes(){
+	function getTotalClientes($soloActivos = true){
 		$this->db->from('tb_03_cliente');
+
+		if($soloActivos){
+			$this->db->where('Cliente_Estado', 'activo');
+		}
+
 		$query = $this -> db -> get();
 		return $query -> num_rows();
 	}
