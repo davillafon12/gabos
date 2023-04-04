@@ -22,7 +22,9 @@ class editar extends CI_Controller {
 	$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 	if($permisos['editar_cliente'])
 	{
-            $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$data['verClientesInactivos'] = @$permisos['ver_clientes_inactivos'] == true;	 
+
 	    $this->load->view('clientes/clientes_editar_view', $data);
 	}
 	else{
@@ -559,11 +561,22 @@ class editar extends CI_Controller {
 								'3' => 'Cliente_Cedula',
 								'4' => 'Cliente_Estado'
 								);
-		$query = $this->cliente->obtenerClientesParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']));
+
+		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+		if($permisos['editar_cliente'])
+
+		$soloActivos = !(@$permisos['ver_clientes_inactivos'] == true && @$_POST['clientes_inactivos'] === 'true');
+
+		$query = $this->cliente->obtenerClientesParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $soloActivos);
 
 		$ruta_imagen = base_url('application/images/Icons');
 		$clientesAMostrar = array();
 		foreach($query->result() as $cli){
+			if(trim($cli->cedula)==""){
+				continue;
+			}
+
+
 			$estado = "";
 			$opciones = "";
 			if($cli->estado=="activo")
@@ -580,10 +593,16 @@ class editar extends CI_Controller {
                 "</td>
 				<td >
 					<div class='tab_opciones'>
-						<a href='".base_url('')."clientes/editar/edicion?id=".$cli->cedula."' ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>
-						<a href='javascript:;' onclick='goDesactivar(".$cli->cedula.")'><img src=".$ruta_imagen."/eliminar.png width='17' height='17' title='Desactivar'></a>
-						<a href='javascript:;' onclick='goActivar(".$cli->cedula.")'><img src=".$ruta_imagen."/activar.png width='21' height='21' title='Activar'></a>
-					</div>
+						<a href='".base_url('')."clientes/editar/edicion?id=".$cli->cedula."' ><img src=".$ruta_imagen."/editar.png width='21' height='21' title='Editar'></a>";
+
+						if($cli->estado=="activo"){
+							$opciones .= "<a href='javascript:;' onclick='goDesactivar(".$cli->cedula.")'><img src=".$ruta_imagen."/eliminar.png width='17' height='17' title='Desactivar'></a>";
+						}else{
+							$opciones .= "<a href='javascript:;' onclick='goActivar(".$cli->cedula.")'><img src=".$ruta_imagen."/activar.png width='21' height='21' title='Activar'></a>";
+						}
+						
+						
+						$opciones .= "</div>
 				</td>";
 			}else{
 				$opciones = "</td><td></td>";
@@ -601,11 +620,11 @@ class editar extends CI_Controller {
 			array_push($clientesAMostrar, $auxArray);
 		}
 
-		$filtrados = $this->cliente->obtenerClientesFiltradosParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']));
+		$filtrados = $this->cliente->obtenerClientesFiltradosParaTabla($columnas[$_POST['order'][0]['column']], $_POST['order'][0]['dir'], $_POST['search']['value'], intval($_POST['start']), intval($_POST['length']), $soloActivos);
 
 		$retorno = array(
 					'draw' => $_POST['draw'],
-					'recordsTotal' => $this->cliente->getTotalClientes(),
+					'recordsTotal' => $this->cliente->getTotalClientes($soloActivos),
 					'recordsFiltered' => $filtrados -> num_rows(),
 					'data' => $clientesAMostrar
 				);

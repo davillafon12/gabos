@@ -128,5 +128,7 @@ define('ART_GEN_IMPUESTO', 13);
 
 define('CONTROL_DE_INVENTARIO', "CONTROL_DE_INVENTARIO");
 
+define('JAVASCRIPT_CACHE_VERSION', 45);
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

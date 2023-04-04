@@ -1,4 +1,7 @@
-	//Reset todo los checkboxes
+var _MOSTRAR_CLIENTES_INACTIVOS = false;
+var _TABLA_CLIENTES = null;
+
+//Reset todo los checkboxes
 	function resetCheckBox(){
 		$('tbody tr td input[type="checkbox"]').each(function(){
             $(this).prop('checked', false);
@@ -105,15 +108,22 @@
 	
 $(document).ready(function(){
 	setTable();
+
+	$("#mostrar_inactivos_toggle").bind('click', mostrarClientesInactivos);
 });
 
 function setTable(){
-	$('#tabla_editar').dataTable({
+	_TABLA_CLIENTES = $('#tabla_editar').dataTable({
 		"processing": true,
 		"serverSide": true,
 		"ajax": {
 			"url": location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/editar/obtenerClientesTabla',
 			"type": "POST",
+			"data": function ( d ) {
+				return $.extend( {}, d, {
+				  "clientes_inactivos": _MOSTRAR_CLIENTES_INACTIVOS
+				} );
+			 },
 		},
 		'oLanguage': {
 				'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/datatables/Spanish.txt'
@@ -133,5 +143,17 @@ function setTable(){
 	});
 }
 	
+
+function mostrarClientesInactivos(){
+	_MOSTRAR_CLIENTES_INACTIVOS = !_MOSTRAR_CLIENTES_INACTIVOS;
+	
+	if(_MOSTRAR_CLIENTES_INACTIVOS){
+		$("#mostrar_inactivos_toggle").addClass("on");
+	}else{
+		$("#mostrar_inactivos_toggle").removeClass("on");
+	}
+
+	_TABLA_CLIENTES.fnDraw();
+}
 	
 	
