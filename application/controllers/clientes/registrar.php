@@ -51,6 +51,24 @@ class registrar extends CI_Controller {
             }
 	}
 
+    function verificarExistencia(){
+        $id_request=$_GET['id'];
+
+        $r["status"] = 0;
+        $r["error"] = "No se pudo procesar solicitud";
+
+        if($cliente = $this->cliente->getClientes_Cedula($id_request)){
+            $r["error"] = $cliente[0]->Cliente_Estado == "activo" ? 
+                            "Cliente ya existe con esta identificación"
+                            : "Cliente ya existe pero no esta activo";
+        }else{
+            $r["status"] = 1;
+            unset($r["error"]);
+        }
+
+        echo json_encode($r);
+}
+
     function registrarClientes(){
         $tipo_Cedula = $this->input->post('tipo_Cedula');
         $cedula = $this->input->post('cedula');
