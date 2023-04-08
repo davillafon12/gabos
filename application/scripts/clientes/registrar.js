@@ -83,15 +83,19 @@ function verify_ID(){
     var tamano = codigo.length; 
     if((valor==1 && tamano ==9) || (valor==2 && tamano == 12) || (valor==3 && tamano ==10) || (valor ==4)){
         if(!codigo==' '){
-                doAjax("/clientes/registrar/es_Cedula_Utilizada?id="+codigo, "text", true, "GET", {},function(data){
-                    data = data.trim();
+                doAjax("/clientes/registrar/verificarExistencia?id="+codigo, "json", true, "GET", {},function(data){
+                    
                     _CED_AVAILABLE = false;
-                    if(data == "true"){
-                        $("#status").html("<div class='status_2'><img src=/application/images/scripts/error.gif /><p class='text_status'>¡No esta disponible!</p></div>");							
+                    
+                    if(data.status == 0){
+
+                        $("#status").html("<div class='status_2'><img src=/application/images/scripts/error.gif /><p class='text_status'>" + data.error + "</p></div>");		
+
                     }else{
                         _CED_AVAILABLE = true;
                         $("#status").html("<div class='status_2'><img src=/application/images/scripts/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>");
                     }
+
                 }, function(){}, function(){});
         }
     }else{
