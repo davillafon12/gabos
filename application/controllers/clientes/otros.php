@@ -44,12 +44,12 @@ class otros extends CI_Controller {
 			if(trim($cedula) == '1' || trim($cedula) == '0'){
 				$retorno['error'] = '4'; //Error cliente contado y afiliado
 			}else{
-				if($clienteArray = $this->cliente->getClientes_Cedula($cedula)){
-					//$retorno['status'] = 'success';
-					foreach($clienteArray as $row){
-						$cliente['nombre'] = $row-> Cliente_Nombre;
-						$cliente['apellidos'] = $row-> Cliente_Apellidos;
-					}
+				if($clienteDB = $this->cliente->getClienteByCedula($cedula)){
+					
+					
+					$cliente['nombre'] = $clienteDB-> Cliente_Nombre;
+					$cliente['apellidos'] = $clienteDB-> Cliente_Apellidos;
+					
 					include PATH_USER_DATA;
 
 					//Descuento propio del cliente
