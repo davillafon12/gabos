@@ -48,7 +48,7 @@ PARA:
 		<!--Incluir informacion log in-->
 		<?php include PATH_HEADER_LOG_IN_INFO;?>
 		<!--CSS ESTILO DEL FORMULARIO-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/clientes/style_registrar.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/clientes/style_registrar.css?v='.$javascript_cache_version); ?>">
 
 
 		<!-- CUERPO DE LA PAGINA ACTUAL-->
