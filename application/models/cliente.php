@@ -148,6 +148,29 @@ Class cliente extends CI_Model
 		}
 	}
 
+	/**
+	 * Este metodo retorna un cliente por su cedula PERO simepre y cuando este activo
+	 */
+	function getClienteByCedula($id)
+	{
+		$this -> db -> select('*');
+		$this -> db -> from('tb_03_cliente');
+		$this -> db -> where('Cliente_Cedula', $id);
+		$this -> db -> where('Cliente_Estado', 'activo');
+		$this -> db -> limit(1);
+
+		$query = $this -> db -> get();
+
+		if($query -> num_rows() != 0)
+		{
+		  return $query->result()[0];
+		}
+		else
+		{
+		  return false;
+		}
+	}
+
 	function isActivated($id)
 	{
 		$this -> db -> select('Cliente_Estado');
