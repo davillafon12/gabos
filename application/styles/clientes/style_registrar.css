@@ -93,30 +93,26 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .status_2{
-position: relative;
-	
+	left: 160px;
+    top: -2px;
+	position: relative;	
     width: 300px;
-height: 25px;
-
-border: 1px #efbc6b solid;
-
-background-color: #fee7af;
-
--webkit-border-radius: 10px;
--moz-border-radius: 10px;
-border-radius: 10px;
-
--moz-box-shadow: 3px 3px 5px 0px #888888;
--webkit-box-shadow: 3px 3px 5px 0px #888888;
-box-shadow: 3px 3px 5px 0px #888888;
-
+	height: 25px;
+	border: 1px #efbc6b solid;
+	background-color: #fee7af;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-moz-box-shadow: 3px 3px 5px 0px #888888;
+	-webkit-box-shadow: 3px 3px 5px 0px #888888;
+	box-shadow: 3px 3px 5px 0px #888888;
 	color: #000; font-weight:bold;font-size: 14px;font-family:Arial, Helvetica;
 }
 
 .status_2 img{
 	position: relative;
 	top: 5px;
-	left: 5px;
+	left: -145px;
 }
 
 .status_2 p{
@@ -440,11 +436,6 @@ box-shadow: 3px 3px 5px 0px #888888;
 
 .input_form{
     width: 98%;
-}
-
-.status_cedula{
-    float: right;     
-    margin-bottom: -18px;
 }
 
 .check_cliente{
