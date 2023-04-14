@@ -12,19 +12,14 @@ function getNombreCliente(cedula){
 	$.ajax({
 		url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/getClienteBitacora',
 		type: "POST",		
-		//async: false,
+		dataType: "JSON",
 		data: {'cedula':cedula},				
 		success: function(data, textStatus, jqXHR)
-		{
-			try{
-				informacion = $.parseJSON('[' + data.trim() + ']');
-				if(informacion[0].status==="error"){
-					manejarErrores(informacion[0].error);
-				}else if(informacion[0].status==="success"){
-					setInformacion(informacion[0].cliente, informacion[0].cliente.bitacora);
-				}
-			}catch(e){
-				notyError('¡La respuesta tiene un formato indebido, contacte al administrador!');
+		{						
+			if(data.status==="error"){
+				manejarErrores(data.error);
+			}else if(data.status==="success"){
+				setInformacion(data.cliente, data.cliente.bitacora);
 			}
 		},
 		error: function (jqXHR, textStatus, errorThrown)

@@ -457,3 +457,28 @@
     border: 2px solid gray;
     width: 165px;
 }
+
+.mostrar-inactivos-toggle{
+	background: #cf0000;
+    padding: 5px 10px 6px;
+    color: #fbf7f7;
+    font-weight: bold;
+    line-height: 1;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px #999;
+    -webkit-box-shadow: 0 1px 3px #999;
+    box-shadow: 0 1px 3px #999;
+    text-shadow: 0 -1px 1px #222;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: Verdana, Geneva, sans-serif;
+	float: right;
+    margin-right: 2%;
+}
+
+.mostrar-inactivos-toggle.on{
+	background: #38a924;
+}
