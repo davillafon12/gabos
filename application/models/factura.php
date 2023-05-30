@@ -282,9 +282,6 @@ Class factura extends CI_Model
 
 	function getConfgArray()
 	{
-		/*$CI =& get_instance();
-		$CI->load->model('XMLParser');
-		return $CI->XMLParser->getConfigArray();*/
 		return $this->configuracion->getConfiguracionArray();
 	}
 
