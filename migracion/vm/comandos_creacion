@@ -187,3 +187,16 @@ Agregar SSL
 - sudo a2ensite gabo
 - sudo apache2ctl configtest
 - sudo systemctl reload apache2
+
+
+Instalar Apache Airflow
+- sudo apt install docker-compose
+- sudo curl -L "https://github.com/docker/compose/releases/download/v2.1.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+- cd ~
+- mkdir airflow-local
+- cd airflow-local
+- curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.1/docker-compose.yaml'
+- mkdir ./dags ./logs ./plugins
+- echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
+- sudo docker-compose up airflow-init
+- sudo docker-compose up -d
