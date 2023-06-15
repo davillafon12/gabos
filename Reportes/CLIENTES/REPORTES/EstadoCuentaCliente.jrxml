@@ -72,7 +72,7 @@
 		<band height="53" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="555" height="50" uuid="4ec4f6f5-1450-4d01-af82-bb2669794d94"/>
-				<imageExpression><![CDATA["C:\\Images\\Garotas.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["/var/user/Garotas.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</title>
