@@ -15,7 +15,7 @@ dag = DAG(
 enviar_comprobantes = SimpleHttpOperator(
     task_id="Enviar_Comprobantes_Hacienda",
     endpoint="/external/enviarComprobantesAHacienda",
-    http_conn_id="gabo_endpoint",
+    http_conn_id="gabo_app_endpoint",
     dag=dag,
 )
 

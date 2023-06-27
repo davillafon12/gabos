@@ -1,3 +1,4 @@
+from datetime import datetime
 
 from airflow import DAG
 from airflow.providers.http.operators.http import SimpleHttpOperator
@@ -14,7 +15,7 @@ dag = DAG(
 actualizar_comprobantes = SimpleHttpOperator(
     task_id="Actualizar_Comprobantes_Hacienda",
     endpoint="/external/actualizarComprobantes",
-    http_conn_id="gabo_endpoint",
+    http_conn_id="gabo_app_endpoint",
     dag=dag,
 )
 
