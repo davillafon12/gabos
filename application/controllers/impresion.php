@@ -2361,13 +2361,11 @@ class impresion extends CI_Controller
 		$vendidoVendedores = array();
 		$totalVendido = 0;
 
-		if ($vendedores = $this->user->getVendedores($sucursal)) {
-			foreach ($vendedores as $vendedor) {
-				if ($vendido = $this->contabilidad->getVendidoPorVendedor($vendedor->Factura_Vendedor_Codigo, $sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)) {
-					array_push($vendidoVendedores, $vendido);
-					$totalVendido += $vendido[0]->total_vendido;
-				}
-			}
+		if($vendedores = $this->contabilidad->getVendidoPorVendedores($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			foreach($vendedores as $vendedor){
+				array_push($vendidoVendedores, array($vendedor));
+				$totalVendido += $vendedor->total_vendido;
+			}			
 		}
 
 		return array('vendidoVendedores' => $vendidoVendedores, 'totalVendido' => $totalVendido);

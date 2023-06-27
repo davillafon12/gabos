@@ -30,7 +30,12 @@ class cierre extends CI_Controller {
 		date_default_timezone_set("America/Costa_Rica");
 		
 		//Esta fecha no va formateada, ya que se formatea cuando se trae la info de la BD
+		$starttime = microtime(true);
 		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($data['Sucursal_Codigo']);
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "contabilidad->getFechaUltimoCierreCaja<br>";
+
 		$fechaHoraActual = date("Y-m-d  H:i:s", now()); //PARA USAR CON LA BASE DE DATOS
 		
 		$data['fechaActual'] = date('d-m-Y', now()); // PARA IMPRIMIR
@@ -38,39 +43,93 @@ class cierre extends CI_Controller {
 		$data['baseCaja'] = "30000";
 		$data['tipo_cambio'] = $this->configuracion->getTipoCambioCompraDolar();
 		
+		$starttime = microtime(true);
 		$facturas = $this->getPrimeraUltimaFactura($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "getPrimeraUltimaFactura<br>";
+
 		$data['primeraFactura'] = $facturas['primera'];
 		$data['ultimaFactura'] = $facturas['ultima'];
 		
+		$starttime = microtime(true);
 		$retirosParciales = $this->getRetirosParcialesYTotal($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "getRetirosParcialesYTotal<br>";
+
 		$data['retirosParciales'] = $retirosParciales['retiros'];
 		$data['totalRecibosParciales'] = $retirosParciales['total'];
 			
+		$starttime = microtime(true);
 		$data['pagoDatafonos'] = $this->getPagosDatafonos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "getPagosDatafonos<br>";
+
+		$starttime = microtime(true);
 		$data['pagoMixto'] = $this->obtenerPagosMixtos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerPagosMixtos<br>";
+
+		$starttime = microtime(true);
 		$data['recibos'] = $this->obtenerRecibosDeDinero($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerRecibosDeDinero<br>";
+
+		$starttime = microtime(true);
 		$data['totalFacturasContado'] = $this->obtenerTotalFacturasContado($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
 		$data['totalFacturasContado'] += $data['pagoMixto']['efectivo'];
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerTotalFacturasContado<br>";
+
+		$starttime = microtime(true);
 		$data['totalCreditos'] = $this->obtenerTotalCreditos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerTotalCreditos<br>";
+
+		$starttime = microtime(true);
 		$data['totalNotasCredito'] = $this->obtenerTotalesNotasCredito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerTotalesNotasCredito<br>";
+
+		$starttime = microtime(true);
 		$data['detalleNotasCredito'] = $this->contabilidad->getInfoGeneralNotaCreditoPorRangoFecha($data['Sucursal_Codigo'], date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "getInfoGeneralNotaCreditoPorRangoFecha<br>";
+
+		$starttime = microtime(true);
 		$data['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerTotalesNotasDebito<br>";
+
+		$starttime = microtime(true);
 		$data['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerTotalFacturasDeposito<br>";
+
+		$starttime = microtime(true);
 		$data['vendedores'] = $this->obtenerVendidoPorCadaVendedor($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerVendidoPorCadaVendedor<br>";
+
+		$starttime = microtime(true);
 		$data['valoresFinales'] = $this->obtenerValoresFinales($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		
+		$endtime = microtime(true);
+		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
+		echo $elapsed . "obtenerValoresFinales<br>";
+
+		die;
+
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('contabilidad/cierre_caja_view', $data);
 	}	
@@ -360,13 +419,11 @@ class cierre extends CI_Controller {
 		$vendidoVendedores = array();
 		$totalVendido = 0;
 		
-		if($vendedores = $this->user->getVendedores($sucursal)){
+		if($vendedores = $this->contabilidad->getVendidoPorVendedores($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($vendedores as $vendedor){
-				if($vendido = $this->contabilidad->getVendidoPorVendedor($vendedor->Factura_Vendedor_Codigo, $sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
-					array_push($vendidoVendedores, $vendido);
-					$totalVendido += $vendido[0]->total_vendido;
-				}  
-			}
+				array_push($vendidoVendedores, array($vendedor));
+				$totalVendido += $vendedor->total_vendido;
+			}			
 		}
 		
 		return array('vendidoVendedores'=>$vendidoVendedores,'totalVendido'=>$totalVendido);

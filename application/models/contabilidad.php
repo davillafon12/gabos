@@ -1386,17 +1386,18 @@ Class contabilidad extends CI_Model
 		}
 	}
 
-	function getVendidoPorVendedor($vendedor, $sucursal, $inicio, $final){
+	function getVendidoPorVendedores($sucursal, $inicio, $final){
 		/*
-			SELECT 	SUM(tb_07_factura.Factura_Monto_Total) AS total_vendido,
-					CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario
+		SELECT 	SUM(tb_07_factura.Factura_Monto_Total) AS total_vendido, CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario
 			FROM tb_07_factura
 			JOIN tb_01_usuario ON tb_01_usuario.Usuario_Codigo = tb_07_factura.Factura_Vendedor_Codigo
-     JOIN tb_03_cliente ON tb_03_cliente.Cliente_Cedula = tb_07_factura.TB_03_Cliente_Cliente_Cedula
-			WHERE tb_07_factura.TB_02_Sucursal_Codigo = 0
+     		JOIN tb_03_cliente ON tb_03_cliente.Cliente_Cedula = tb_07_factura.TB_03_Cliente_Cliente_Cedula
+			WHERE tb_07_factura.TB_02_Sucursal_Codigo = 2
 			AND Factura_Estado = 'cobrada'
-			AND Factura_Vendedor_Codigo = 1
-            AND tb_03_cliente.Cliente_EsSucursal = 0;
+            AND tb_03_cliente.Cliente_EsSucursal = 0
+            AND tb_07_factura.Factura_Fecha_Hora < '2023-03-24T06:36:21.000'
+            AND tb_07_factura.Factura_Fecha_Hora > '2023-03-23T06:29:24.000'
+            GROUP BY usuario;
 		*/
 		$this->load->model("factura", "", true);
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
@@ -1411,18 +1412,18 @@ Class contabilidad extends CI_Model
 						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
 				}
 		}
-		$this->db->select("SUM(tb_07_factura.Factura_Monto_Total) AS total_vendido,
-					CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario", false);
+		$this->db->select("SUM(tb_07_factura.Factura_Monto_Total) AS total_vendido, CONCAT(tb_01_usuario.Usuario_Nombre, ' ', tb_01_usuario.Usuario_Apellidos) as usuario", false);
 		$this->db->from('tb_07_factura');
 		$this->db->join('tb_01_usuario', 'tb_01_usuario.Usuario_Codigo = tb_07_factura.Factura_Vendedor_Codigo');
 		$this->db->join('tb_03_cliente', 'tb_03_cliente.Cliente_Cedula = tb_07_factura.TB_03_Cliente_Cliente_Cedula');
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('tb_07_factura.Factura_Estado', 'cobrada');
-		$this->db->where('tb_07_factura.Factura_Vendedor_Codigo', $vendedor);
 		$this->db->where('tb_03_cliente.Cliente_EsSucursal', 0);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora >', $inicio);
 		$this->db->where('tb_07_factura.Factura_Fecha_Hora <', $final);
 		$this->db->where('tb_07_factura.TB_03_Cliente_Cliente_Cedula !=', 2);
+		$this->db->group_by('usuario');
+		$this->db->order_by('total_vendido', 'desc'); 
 		$query = $this->db->get();
 		if($query->num_rows()==0){
 			return false;
