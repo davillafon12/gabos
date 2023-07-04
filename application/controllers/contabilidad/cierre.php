@@ -29,12 +29,8 @@ class cierre extends CI_Controller {
 		}
 		date_default_timezone_set("America/Costa_Rica");
 		
-		//Esta fecha no va formateada, ya que se formatea cuando se trae la info de la BD
-		$starttime = microtime(true);
-		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($data['Sucursal_Codigo']);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "contabilidad->getFechaUltimoCierreCaja<br>";
+		//Esta fecha no va formateada, ya que se formatea cuando se trae la info de la BD		
+		$fechaUltimoCierra = $this->contabilidad->getFechaUltimoCierreCaja($data['Sucursal_Codigo']);		
 
 		$fechaHoraActual = date("Y-m-d  H:i:s", now()); //PARA USAR CON LA BASE DE DATOS
 		
@@ -42,94 +38,9 @@ class cierre extends CI_Controller {
 		$data['fechaRealActual'] = $fechaHoraActual; //Fecha que se manda a vista para procesar despues
 		$data['baseCaja'] = "30000";
 		$data['tipo_cambio'] = $this->configuracion->getTipoCambioCompraDolar();
+
+		$data['fechaUltimoCierre'] = $fechaUltimoCierra;
 		
-		$starttime = microtime(true);
-		$facturas = $this->getPrimeraUltimaFactura($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "getPrimeraUltimaFactura<br>";
-
-		$data['primeraFactura'] = $facturas['primera'];
-		$data['ultimaFactura'] = $facturas['ultima'];
-		
-		$starttime = microtime(true);
-		$retirosParciales = $this->getRetirosParcialesYTotal($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "getRetirosParcialesYTotal<br>";
-
-		$data['retirosParciales'] = $retirosParciales['retiros'];
-		$data['totalRecibosParciales'] = $retirosParciales['total'];
-			
-		$starttime = microtime(true);
-		$data['pagoDatafonos'] = $this->getPagosDatafonos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "getPagosDatafonos<br>";
-
-		$starttime = microtime(true);
-		$data['pagoMixto'] = $this->obtenerPagosMixtos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerPagosMixtos<br>";
-
-		$starttime = microtime(true);
-		$data['recibos'] = $this->obtenerRecibosDeDinero($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerRecibosDeDinero<br>";
-
-		$starttime = microtime(true);
-		$data['totalFacturasContado'] = $this->obtenerTotalFacturasContado($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$data['totalFacturasContado'] += $data['pagoMixto']['efectivo'];
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerTotalFacturasContado<br>";
-
-		$starttime = microtime(true);
-		$data['totalCreditos'] = $this->obtenerTotalCreditos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerTotalCreditos<br>";
-
-		$starttime = microtime(true);
-		$data['totalNotasCredito'] = $this->obtenerTotalesNotasCredito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerTotalesNotasCredito<br>";
-
-		$starttime = microtime(true);
-		$data['detalleNotasCredito'] = $this->contabilidad->getInfoGeneralNotaCreditoPorRangoFecha($data['Sucursal_Codigo'], date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "getInfoGeneralNotaCreditoPorRangoFecha<br>";
-
-		$starttime = microtime(true);
-		$data['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerTotalesNotasDebito<br>";
-
-		$starttime = microtime(true);
-		$data['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerTotalFacturasDeposito<br>";
-
-		$starttime = microtime(true);
-		$data['vendedores'] = $this->obtenerVendidoPorCadaVendedor($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerVendidoPorCadaVendedor<br>";
-
-		$starttime = microtime(true);
-		$data['valoresFinales'] = $this->obtenerValoresFinales($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierra);
-		$endtime = microtime(true);
-		$elapsed = intval(($endtime-$starttime) * 1000) . "ms ";
-		echo $elapsed . "obtenerValoresFinales<br>";
-
-		die;
-
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('contabilidad/cierre_caja_view', $data);
 	}	
@@ -156,14 +67,18 @@ class cierre extends CI_Controller {
 	
 	function getRetirosParcialesYTotal($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		$total = 0;
+		$retirosParseados = false;
 		
 		if($retiros = $this->contabilidad->getRetirosParcialesRangoFechas($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			$retirosParseados = array();
 			foreach($retiros as $ret){
 				$total = $total + $ret->Monto;
+				$ret->Fecha_Hora = date('d-m-Y H:i:s', strtotime($ret->Fecha_Hora));
+				array_push($retirosParseados, $ret);
 			}
 		}
 		
-		return array("retiros" => $retiros, "total" => $total);
+		return array("retiros" => $retirosParseados, "total" => $total);
 	}
 	
 	function getPagosDatafonos($sucursal, $fechaHoraActual, $fechaUltimoCierra){
@@ -486,7 +401,273 @@ class cierre extends CI_Controller {
 			}
 			echo json_encode($retorno);	
 	}
+
+	public function getPrimeraYUltimaFactura(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$facturas = $this->getPrimeraUltimaFactura($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno['primeraFactura'] = $facturas['primera'];
+			$retorno['ultimaFactura'] = $facturas['ultima'];
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getRetirosParciales(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$retirosParciales = $this->getRetirosParcialesYTotal($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno['retirosParciales'] = $retirosParciales['retiros'];
+			$retorno['totalRecibosParciales'] = $retirosParciales['total'];
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
 	
+	public function getResumenDatafonos(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$pagosDatafonos = $this->getPagosDatafonos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno['datafonos'] = $pagosDatafonos['datafonos'];
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+	
+	public function getResumenPagosMixtos(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$pagosMixtos = $this->obtenerPagosMixtos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno['cantidadFacturas'] = $pagosMixtos['cantidadFacturas'];
+			$retorno['efectivo'] = $pagosMixtos['efectivo'];
+			$retorno['tarjeta'] = $pagosMixtos['tarjeta'];
+			$retorno['total'] = $pagosMixtos['total'];
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getResumenRecibosDinero(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$recibos = $this->obtenerRecibosDeDinero($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno = array_merge($retorno, $recibos);
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getTotalFacturasContado(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$total = $this->obtenerTotalFacturasContado($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno['total_facturas_contado'] = $total;
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getTotalCreditos(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$total = $this->obtenerTotalCreditos($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno = array_merge($retorno, $total);
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getTotalNotasCredito(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$total = $this->obtenerTotalesNotasCredito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno = array_merge($retorno, $total);
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getResumeTotalesNotasCredito(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$total = $this->contabilidad->getInfoGeneralNotaCreditoPorRangoFecha($data['Sucursal_Codigo'], date('Y-m-d H:i:s', $fechaUltimoCierre), $fechaHoraActual);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno = array_merge($retorno, $total);
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getTotaleNotasDebito(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$total = $this->obtenerTotalesNotasDebito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno = array_merge($retorno, $total);
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getTotalFacturasDeposito(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$total = $this->obtenerTotalFacturasDeposito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno['total'] = $total;
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getListaVendedores(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$vendedores = $this->obtenerVendidoPorCadaVendedor($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno = array_merge($retorno, $vendedores);
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getValoresFinales(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$valoresFinales = $this->obtenerValoresFinales($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno = array_merge($retorno, $valoresFinales);
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
 }
+
 
 ?>

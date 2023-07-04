@@ -1354,7 +1354,9 @@ Class contabilidad extends CI_Model
 		}
 		else
 		{
-			return $query->result()[0]->abono;
+			$abono = $query->result()[0]->abono;
+
+			return $abono == null ? 0 : $abono;
 		}
 	}
 
