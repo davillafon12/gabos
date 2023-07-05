@@ -53,6 +53,16 @@ Crear usuario nuevo de BD
 - GRANT ALL ON *.* TO 'gabo_admin'@'%'  WITH GRANT OPTION;
 - SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))
 
+Acceso mysqldump
+- touch ~/.my.cnf
+- nano ~/.my.cnf
+[mysqldump]
+user=
+password=
+- chmod 600 ~/.my.cnf
+- sudo service mysql restart
+- mkdir ~/respaldos
+
 Instalar PHP5:
 - sudo apt install ca-certificates apt-transport-https
 - wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
@@ -70,6 +80,11 @@ Instalar PHP5:
 - sudo apt-get install php5.6-dom
 - sudo a2enmod rewrite
 - sudo a2enmod ssl
+
+Cambiar tiempo de sesion
+- sudo nano /etc/php/5.6/fpm/php.ini
+- session.gc_maxlifetime = 28800
+- sudo systemctl reload apache2
 
 Agregar gabo
 - sudo nano /etc/apache2/sites-available/gabo.conf
