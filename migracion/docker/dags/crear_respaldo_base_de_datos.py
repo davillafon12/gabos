@@ -2,8 +2,6 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.models import Variable
-from airflow.contrib.hooks.ssh_hook import SSHHook
-from airflow.operators.python_operator import PythonOperator
 from airflow.providers.ssh.operators.ssh import SSHOperator
 
 backup_name = "{{ ds }}_database_backup_file"

@@ -12,6 +12,7 @@ Instalar servidor SSH:
 - sudo apt install openssh-server
 - sudo apt install net-tools
 - sudo apt install git
+- sudo apt-get install rsync
 
 Instalar SSH Key Github
 - CREAR CUENTA DE CORREO PARA ESTO
