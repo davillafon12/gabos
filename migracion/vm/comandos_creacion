@@ -57,8 +57,8 @@ Acceso mysqldump
 - touch ~/.my.cnf
 - nano ~/.my.cnf
 [mysqldump]
-user=
-password=
+user=AGREGAR
+password=AGREGAR
 - chmod 600 ~/.my.cnf
 - sudo service mysql restart
 - mkdir ~/respaldos

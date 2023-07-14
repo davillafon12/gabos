@@ -1,0 +1,6 @@
+{
+    "dias_para_eliminar_respaldo": 7,
+    "respaldo_base_de_datos": "gabo_dev_db",
+    "respaldo_usuario": "gabo_admin",
+    "ruta_respaldos_bd": "~/respaldos/"
+}
