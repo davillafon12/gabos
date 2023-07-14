@@ -1,6 +1,10 @@
 {
     "dias_para_eliminar_respaldo": 7,
+    "maximo_dias_logs_gabo_app": 15,
     "respaldo_base_de_datos": "gabo_dev_db",
     "respaldo_usuario": "gabo_admin",
-    "ruta_respaldos_bd": "~/respaldos/"
+    "ruta_fuente_documentos_electronicos": "/var/www/gabos/application/third_party/",
+    "ruta_logs_gabo_app": "/var/log/gabos/*",
+    "ruta_respaldo_documentos_electronicos": "~/respaldos/documentos_electronicos",
+    "ruta_respaldos_bd": "~/respaldos/base_de_datos"
 }
