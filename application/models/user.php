@@ -74,7 +74,7 @@ function existe_Nombre_Usuario($nombre){
 	    date_default_timezone_set("America/Costa_Rica");
         $data = array(
                 'Trans_Descripcion' => $descripcion,
-                'Trans_Fecha_Hora' => date("y/m/d : H:i:s", now()),
+                'Trans_Fecha_Hora' => date(DB_DATETIME_FORMAT, now()),
 				'Trans_Tipo' => $tipo,
 				'Trans_IP' => $this->input->ip_address(),
                 'TB_01_Usuario_Usuario_Codigo' => $id_usuario,
@@ -144,7 +144,7 @@ function existe_Nombre_Usuario($nombre){
 	{
 		//echo $creador_empresa;
 		//date_default_timezone_set("America/Costa_Rica");
-	    //$Current_datetime = date("y/m/d : H:i:s", now());
+	    //$Current_datetime = date(DB_DATETIME_FORMAT, now());
 		$data = array(
                         'Usuario_Codigo'=>$codigo,
 						'Usuario_Nombre'=>$nombre,
@@ -517,7 +517,7 @@ function existe_Nombre_Usuario($nombre){
 				'Cliente_Cedula' => $Cliente_Cedula,
 				'Sucursal' => $Sucursal,
 				'Usuario' => $Usuario,
-                'Trans_Fecha_Hora' => date("y/m/d : H:i:s", now()),
+                'Trans_Fecha_Hora' => date(DB_DATETIME_FORMAT, now()),
 				'Trans_Tipo' => $Trans_Tipo,
 				'Trans_IP' => $this->input->ip_address(),
                 'Trans_Descripcion' => $Descripcion

@@ -46,7 +46,7 @@ Class empresa extends CI_Model
 	{
 		//echo $creador_empresa;
 		date_default_timezone_set("America/Costa_Rica");
-	    $Current_datetime = date("y/m/d : H:i:s", now());
+	    $Current_datetime = date(DB_DATETIME_FORMAT, now());
 		$data = array(
                                 'Codigo'=>$id_empresa,
                                 'Sucursal_Cedula'=>$cedula,

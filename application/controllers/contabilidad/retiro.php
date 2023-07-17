@@ -42,7 +42,7 @@ class retiro extends CI_Controller {
 				$dolares = json_decode($_POST['dolares']);
 				include PATH_USER_DATA;
 				date_default_timezone_set("America/Costa_Rica");
-				$fecha = date("y/m/d : H:i:s", now());				
+				$fecha = date(DB_DATETIME_FORMAT, now());				
 				//echo $cantidad;
 				$retiro = $this->contabilidad->crearRetiroParcial($cantidad, $fecha, $tipo_cambio, $data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 				

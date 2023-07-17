@@ -75,7 +75,7 @@ class cambio extends CI_Controller {
 							
 								include PATH_USER_DATA;
 								date_default_timezone_set("America/Costa_Rica");
-								$fecha = date("y/m/d : H:i:s", now());
+								$fecha = date(DB_DATETIME_FORMAT, now());
 								$numeroCambio = $this->articulo->crearCambioCodigo($sucursal, $fecha, $data['Usuario_Codigo']);
 								$this->procesarCambios($articulos, $sucursal, $numeroCambio);
 								$nombreSucursal = $this->empresa->getNombreEmpresa($sucursal);

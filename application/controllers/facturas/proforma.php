@@ -28,7 +28,7 @@ class proforma extends CI_Controller {
 		$this->load->helper(array('form'));
 		//echo $this->factura->getConsecutivo($data['Sucursal_Codigo']);
 		//date_default_timezone_set("America/Costa_Rica");
-		//echo date("y/m/d : H:i:s", now());
+		//echo date(DB_DATETIME_FORMAT, now());
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;

@@ -138,7 +138,7 @@ class editar extends CI_Controller {
  {
 	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 	date_default_timezone_set("America/Costa_Rica");
-	$fecha_desactivacion = date("y/m/d : H:i:s", now());
+	$fecha_desactivacion = date(DB_DATETIME_FORMAT, now());
 	$fecha_recontratacion = NULL; 
 	$data_update['Usuario_Fecha_Cesantia'] = $fecha_desactivacion;
 	$data_update['Usuario_Fecha_Recontratacion'] = $fecha_recontratacion;
@@ -159,7 +159,7 @@ class editar extends CI_Controller {
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		date_default_timezone_set("America/Costa_Rica");
 		$fecha_desactivacion = NULL; 
-		$fecha_recontratacion = date("y/m/d : H:i:s", now());
+		$fecha_recontratacion = date(DB_DATETIME_FORMAT, now());
 		$data_update['Usuario_Fecha_Cesantia'] = $fecha_desactivacion;
 		$data_update['Usuario_Fecha_Recontratacion'] = $fecha_recontratacion;
 		$user_a_activar=$_GET['array'];
@@ -252,7 +252,7 @@ class editar extends CI_Controller {
 			if($this->user->existeUsuario($codigo_usuario, $sucursal_usuario)){ //Si existe el usuario
 				//print_r($_POST);
 				date_default_timezone_set("America/Costa_Rica");
-				$Current_datetime = date("y/m/d : H:i:s", now());
+				$Current_datetime = date(DB_DATETIME_FORMAT, now());
 				
 				$nombre_usuario = $this->input->post('nombre_usuario');
 				$apellidos_usuario = $this->input->post('apellidos_usuario');

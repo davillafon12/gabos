@@ -27,7 +27,7 @@ class nueva extends CI_Controller {
 		$this->load->helper(array('form'));
 		//echo $this->factura->getConsecutivo($data['Sucursal_Codigo']);
 		date_default_timezone_set("America/Costa_Rica");
-		$fecha = date("y/m/d : H:i:s", now());
+		$fecha = date(DB_DATETIME_FORMAT, now());
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
@@ -103,7 +103,7 @@ class nueva extends CI_Controller {
 	{
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		date_default_timezone_set("America/Costa_Rica");
-	    $Current_datetime = date("y/m/d : H:i:s", now());
+	    $Current_datetime = date(DB_DATETIME_FORMAT, now());
 		//Token es una combinacion del nombre del usuario codigo sucursal y hora
 		$token = $data['Usuario_Nombre'].$data['Usuario_Codigo'].$data['Sucursal_Codigo'].$Current_datetime;
 		//echo $token;

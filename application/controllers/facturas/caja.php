@@ -35,7 +35,7 @@ class caja extends CI_Controller {
 		$bancos = $this->banco->getBancos();
 		$data['bancos'] = $bancos;
 		date_default_timezone_set("America/Costa_Rica");
-		$fecha = date("y/m/d : H:i:s", now());
+		$fecha = date(DB_DATETIME_FORMAT, now());
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$data['puedeEditarFacturas'] = @$permisos['editar_facturas'] == "1";
@@ -280,7 +280,7 @@ class caja extends CI_Controller {
                 $responseCheck['servidor_impresion']= $this->configuracion->getServidorImpresion();
                 $responseCheck['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
 
-                $Current_datetime = date("y/m/d : H:i:s", $resFacturaElectronica["data"]["fecha"]);
+                $Current_datetime = date(DB_DATETIME_FORMAT, $resFacturaElectronica["data"]["fecha"]);
                 $datos = array(
                         'Factura_Tipo_Pago'=>$tipoPago['tipo'],
                         'Factura_Fecha_Hora'=>$Current_datetime,
@@ -359,7 +359,7 @@ class caja extends CI_Controller {
                             break;
                     case 'credito':
                             date_default_timezone_set("America/Costa_Rica");
-                            $Current_datetime = date("y/m/d : H:i:s", now());
+                            $Current_datetime = date(DB_DATETIME_FORMAT, now());
                             $facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
                             foreach($facturaHead as $row){
                                     $totalFactura = $row->Factura_Monto_Total;
@@ -372,7 +372,7 @@ class caja extends CI_Controller {
                             $abono = $tipoPago['abono'];
                             if(!is_numeric($abono)){$abono=0;}
                             date_default_timezone_set("America/Costa_Rica");
-                            $Current_datetime = date("y/m/d : H:i:s", now());
+                            $Current_datetime = date(DB_DATETIME_FORMAT, now());
                             $facturaHead = $this->factura->getFacturasHeaders($consecutivo, $sucursal);
                             foreach($facturaHead as $row){
                                     $totalFactura = $row->Factura_Monto_Total;
@@ -419,7 +419,7 @@ class caja extends CI_Controller {
                             //$fueAnuladaPorRechazoDeHacienda = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
                             $existeFacturaElectronica = true;
                             $facturaYaExistia = false;
-                            $Current_datetime = date("y/m/d : H:i:s", $resFacturaElectronica["data"]["fecha"]);
+                            $Current_datetime = date(DB_DATETIME_FORMAT, $resFacturaElectronica["data"]["fecha"]);
                             $datos = array(
                                     'Factura_Fecha_Hora'=>$Current_datetime
                             );

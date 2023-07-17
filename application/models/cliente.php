@@ -49,7 +49,7 @@ Class cliente extends CI_Model
 		}
 		else{
 			date_default_timezone_set("America/Costa_Rica");
-		    $Current_datetime = date("y/m/d : H:i:s", now());
+		    $Current_datetime = date(DB_DATETIME_FORMAT, now());
 			$data = array(
 	                        'Cliente_Nombre'=>$nombre,
 	                        'Cliente_Apellidos'=>$apellidos,

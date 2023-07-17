@@ -43,7 +43,7 @@ Class proforma_m extends CI_Model
 		if($consecutivo = $this->getConsecutivo($sucursal)){
 			//return $consecutivo;
 			date_default_timezone_set("America/Costa_Rica");
-			$Current_datetime = date("y/m/d : H:i:s", now());
+			$Current_datetime = date(DB_DATETIME_FORMAT, now());
 			$this->load->model('cliente','',TRUE);
 			$clienteArray = $this->cliente->getNombreCliente($cedula);
 			$dataProforma = array(

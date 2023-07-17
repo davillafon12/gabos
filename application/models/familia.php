@@ -50,7 +50,7 @@ Class familia extends CI_Model
 		//echo $creador_empresa;
 		//echo "PASO POR AQUI";
 		date_default_timezone_set("America/Costa_Rica");
-	    $Current_datetime = date("y/m/d : H:i:s", now());
+	    $Current_datetime = date(DB_DATETIME_FORMAT, now());
 		$data = array(
                         'Familia_Codigo'=>$id_familia,
                         'Familia_Nombre'=>$nombre_familia, 

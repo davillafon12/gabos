@@ -84,7 +84,7 @@ class registrar extends CI_Controller {
 		$sucursal = $this->input->post('sucursal');
 		
 		date_default_timezone_set("America/Costa_Rica");
-	    $fecha_ingreso_usuario = date("y/m/d : H:i:s", now());
+	    $fecha_ingreso_usuario = date(DB_DATETIME_FORMAT, now());
 		//$fecha_ingreso_usuario = $this->input->post('fecha_ingreso_usuario');
 		$fecha_cesantia_usuario = "NULL"; 
 		$fecha_recontratacion_Usuario = "NULL"; 

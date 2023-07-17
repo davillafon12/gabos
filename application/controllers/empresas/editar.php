@@ -128,7 +128,7 @@ class editar extends CI_Controller {
 		}
 
 		date_default_timezone_set("America/Costa_Rica");
-		$Current_datetime = date("y/m/d : H:i:s", now());
+		$Current_datetime = date(DB_DATETIME_FORMAT, now());
 		$empresas=$_GET['array'];
 		$empresas=explode(',', $empresas);
 		$data_update['Sucursal_Fecha_Desactivacion'] = $Current_datetime;
@@ -152,7 +152,7 @@ class editar extends CI_Controller {
 		}
 
 		date_default_timezone_set("America/Costa_Rica");
-		$Current_datetime = date("y/m/d : H:i:s", now());
+		$Current_datetime = date(DB_DATETIME_FORMAT, now());
 		$empresas=$_GET['array'];
 		$empresas=explode(',', $empresas);
 		$data_update['Sucursal_Fecha_Ingreso'] = $Current_datetime;

@@ -47,7 +47,7 @@ class bodega extends CI_Controller {
 								//echo "<br>".$articulo['cod'];
 								
 								date_default_timezone_set("America/Costa_Rica");
-								$fecha = date("y/m/d : H:i:s", now());
+								$fecha = date(DB_DATETIME_FORMAT, now());
 								
 								//Se agrega a bodega para validar a la hora del traspaso
 								if($this->bodega_m->existeArticuloEnBodega($articulo['cod'], $sucursal)){

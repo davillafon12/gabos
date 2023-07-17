@@ -90,7 +90,7 @@ Class factura extends CI_Model
                 $this->load->model('cliente','',TRUE);
                 $clienteArray = $this->cliente->getNombreCliente($cedula);
                 date_default_timezone_set("America/Costa_Rica");
-                $Current_datetime = date("y/m/d : H:i:s", now());
+                $Current_datetime = date(DB_DATETIME_FORMAT, now());
                 $dataFactura = array(
                         'Factura_Consecutivo'=>$consecutivo,
                         'Factura_Observaciones'=>$observaciones,
@@ -1049,6 +1049,13 @@ Class factura extends CI_Model
 
             $this->db->insert("tb_55_factura_electronica", $data);
 
+            $dataCuerpo = array(
+                "Consecutivo" => $factura->Factura_Consecutivo,
+                "Sucursal" => $factura->TB_02_Sucursal_Codigo,
+                "XMLSinFirmar" => ''
+            );
+            $this->db->insert("tb_65_cuerpo_factura_electronica", $dataCuerpo);
+
             foreach ($articulos as $art){
                 $data = array(
                     "Cantidad" => $art["cantidad"],
@@ -1201,7 +1208,7 @@ Class factura extends CI_Model
                         );
                         $this->db->where("Consecutivo", $consecutivo);
                         $this->db->where("Sucursal", $sucursal);
-                        $this->db->insert("tb_65_cuerpo_factura_electronica", $data);
+                        $this->db->update("tb_65_cuerpo_factura_electronica", $data);
                         return $data;
                     }
                 }
@@ -1282,7 +1289,7 @@ Class factura extends CI_Model
                             if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $factura->Clave, $factura->FechaEmision, $factura->EmisorTipoIdentificacion, $factura->EmisorIdentificacion, $factura->ReceptorTipoIdentificacion, $factura->ReceptorIdentificacion, $tokenData["access_token"], $facturaCuerpo->XMLFirmado)){
                                 $data = array(
                                     "RespuestaHaciendaEstado" => "procesando",
-                                    "FechaRecibidoPorHacienda" => date("y/m/d : H:i:s")
+                                    "FechaRecibidoPorHacienda" => date(DB_DATETIME_FORMAT)
                                 );
                                 $this->db->where("Consecutivo", $consecutivo);
                                 $this->db->where("Sucursal", $sucursal);
@@ -1346,7 +1353,7 @@ Class factura extends CI_Model
                 $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
                 $data = array(
                     "RespuestaHaciendaEstado" => $estado,
-                    "RespuestaHaciendaFecha" => date("y/m/d : H:i:s")
+                    "RespuestaHaciendaFecha" => date(DB_DATETIME_FORMAT)
                 );
                 $this->db->where("Consecutivo", $consecutivo);
                 $this->db->where("Sucursal", $sucursal);
@@ -2198,7 +2205,7 @@ Class factura extends CI_Model
                     if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $factura->Clave, $factura->FechaEmision, $factura->EmisorTipoIdentificacion, $factura->EmisorIdentificacion, $factura->ReceptorTipoIdentificacion, $factura->ReceptorIdentificacion, $tokenData["access_token"], $factura->XMLFirmado)){
                         $data = array(
                             "RespuestaHaciendaEstado" => "procesando",
-                            "FechaRecibidoPorHacienda" => date("y/m/d : H:i:s")
+                            "FechaRecibidoPorHacienda" => date(DB_DATETIME_FORMAT)
                         );
                         $this->db->where("Consecutivo", $consecutivo);
                         $this->db->where("Sucursal", $sucursal);
@@ -2248,7 +2255,7 @@ Class factura extends CI_Model
             $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
             $data = array(
                 "RespuestaHaciendaEstado" => $estado,
-                "RespuestaHaciendaFecha" => date("y/m/d : H:i:s"),
+                "RespuestaHaciendaFecha" => date(DB_DATETIME_FORMAT),
                 "RespuestaHaciendaXML" => $xmlRespuesta
             );
             $this->db->where("Consecutivo", $consecutivo);

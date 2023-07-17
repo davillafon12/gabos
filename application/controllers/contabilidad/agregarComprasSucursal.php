@@ -72,7 +72,7 @@ class agregarComprasSucursal extends CI_Controller {
 							{
 								include PATH_USER_DATA;
 								date_default_timezone_set("America/Costa_Rica");
-								$fecha = date("y/m/d : H:i:s", now());
+								$fecha = date(DB_DATETIME_FORMAT, now());
 								
 								$traspaso = $this->contabilidad->crearTraspasoArticulos($this->configuracion->getEmpresaDefectoTraspasoCompras(), $sucursal, $data['Usuario_Codigo'], $fecha, $factura);
 								

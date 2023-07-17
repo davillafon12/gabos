@@ -175,7 +175,7 @@ class familias extends CI_Controller {
 		//echo "PASO AQUI";
 		
 		date_default_timezone_set("America/Costa_Rica");
-		$Current_datetime = date("y/m/d : H:i:s", now());
+		$Current_datetime = date(DB_DATETIME_FORMAT, now());
 		$familias=$_GET['array'];
 		$familias=explode(',', $familias);
 		$data_update['Familia_Fecha_Desactivacion'] = $Current_datetime;
@@ -205,7 +205,7 @@ class familias extends CI_Controller {
 		}
 		//echo "PASO AQUI";
 		date_default_timezone_set("America/Costa_Rica");
-		$Current_datetime = date("y/m/d : H:i:s", now());
+		$Current_datetime = date(DB_DATETIME_FORMAT, now());
 		$familias=$_GET['array'];
 		$familias=explode(',', $familias);
 		$data_update['Familia_Fecha_Creacion'] = $Current_datetime;

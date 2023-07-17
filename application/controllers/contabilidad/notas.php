@@ -235,7 +235,7 @@ class notas extends CI_Controller {
 				
 				$consecutivo = $this->getNextConsecutivoNotaDebito($data['Sucursal_Codigo']);
 				date_default_timezone_set("America/Costa_Rica");
-				$fecha = date("y/m/d : H:i:s", now());
+				$fecha = date(DB_DATETIME_FORMAT, now());
 				$c_array = $this->configuracion->getConfiguracionArray();				
 				
 				$this->contabilidad->crearNotaDebito($consecutivo, $fecha, $c_array['iva'], $data['Usuario_Codigo'], $data['Sucursal_Codigo'], trim($_POST['sucursalRecibe']), trim($_POST['sucursalEntrega']));

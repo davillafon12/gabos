@@ -376,7 +376,7 @@ class editar extends CI_Controller {
 	 function actualizarCliente()
 	 {
 	 	date_default_timezone_set("America/Costa_Rica");
-		$Current_datetime = date("y/m/d : H:i:s", now());
+		$Current_datetime = date(DB_DATETIME_FORMAT, now());
 
                 $cedula = $this->input->post('cedula_res');
                 $estado_Cliente = $this->input->post('estado_Cliente');

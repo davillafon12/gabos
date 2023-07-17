@@ -1192,7 +1192,7 @@ Class articulo extends CI_Model
 
 	function generarControlInventario($sucursal, $creadoPor, $autorizadoPor){
 		date_default_timezone_set("America/Costa_Rica");
-		$fecha = date("y/m/d : H:i:s", now());
+		$fecha = date(DB_DATETIME_FORMAT, now());
 		$datos = array(
 			'Fecha_Creacion' => $fecha,
 			'Creado_Por' => $creadoPor,
