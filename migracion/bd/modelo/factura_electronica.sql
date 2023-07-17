@@ -17,3 +17,5 @@ insert into tb_65_cuerpo_factura_electronica (Consecutivo, Sucursal, XMLSinFirma
 ALTER TABLE `tb_55_factura_electronica` DROP `XMLSinFirmar`;
 ALTER TABLE `tb_55_factura_electronica` DROP `XMLFirmado`;
 ALTER TABLE `tb_55_factura_electronica` DROP `RespuestaHaciendaXML`;
+
+OPTIMIZE TABLE tb_55_factura_electronica;

@@ -1,10 +1,10 @@
 {
     "dias_para_eliminar_respaldo": 7,
     "maximo_dias_logs_gabo_app": 15,
-    "respaldo_base_de_datos": "gabo_dev_db",
-    "respaldo_usuario": "gabo_admin",
+    "respaldo_base_de_datos": "gabo_app",
+    "respaldo_usuario": "gabo_respaldos",
     "ruta_fuente_documentos_electronicos": "/var/www/gabos/application/third_party/",
     "ruta_logs_gabo_app": "/var/log/gabos/*",
-    "ruta_respaldo_documentos_electronicos": "~/respaldos/documentos_electronicos",
-    "ruta_respaldos_bd": "~/respaldos/base_de_datos"
+    "ruta_respaldo_documentos_electronicos": "'/home/gabo_admin/GABOFE Dropbox/documentos_electronicos'",
+    "ruta_respaldos_bd": "'/home/gabo_admin/GABOFE Dropbox/respaldos/base_de_datos'"
 }
