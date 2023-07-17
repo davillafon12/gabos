@@ -484,9 +484,28 @@ class API_Helper{
         //03 NC
         //04 TE
         //05 06 07 Mensaje Receptor
-        $returnFile = $fac->firmar($p12Url, $pinP12, $inXml, $tipoDocumento);
+        //$returnFile = $fac->firmar($p12Url, $pinP12, $inXml, $tipoDocumento);
+
+        // set post fields
+        $post = [
+            'ruta' => $p12Url,
+            'clave' => $pinP12,
+            'xml'   => $inXml,
+            'tipoDocumento' => $tipoDocumento
+        ];
+
+        $ch = curl_init('http://localhost:88/FirmadorExterno.php');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+
+        // execute!
+        $response = curl_exec($ch);
+
+        // close the connection, release resources used
+        curl_close($ch);
+
         $arrayResp = array(
-            "xmlFirmado" => $returnFile
+            "xmlFirmado" => $response
         );
 
         return $arrayResp;

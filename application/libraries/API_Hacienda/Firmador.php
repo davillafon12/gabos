@@ -57,6 +57,7 @@ class Firmadocr {
 		$this->Modulus = base64_encode($complem['rsa']['n']);
 		$this->Exponent= base64_encode($complem['rsa']['e']);
 	} else {
+		echo openssl_error_string();
 		echo "Error: No se puede leer el almacén de certificados o la clave no es la correcta.\n";
 		exit;
 	}
