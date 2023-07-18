@@ -7,3 +7,14 @@ ALTER TABLE `tb_16_authclientes` CHANGE `AuthClientes_Id` `AuthClientes_Id` INT 
 ALTER TABLE `tb_12_transacciones` CHANGE `Trans_Tipo` `Trans_Tipo` VARCHAR(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;
 ALTER TABLE `tb_19_deposito` CHANGE `Deposito_Id` `Deposito_Id` INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE `tb_30_notas_debito` CHANGE `Observaciones` `Observaciones` VARCHAR(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;
+
+OPTIMIZE TABLE tb_55_factura_electronica;
+
+ALTER TABLE `tb_56_articulos_factura_electronica` CHANGE `NaturalezaDescuento` `NaturalezaDescuento` VARCHAR(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `tb_58_articulos_nota_credito_electronica` CHANGE `NaturalezaDescuento` `NaturalezaDescuento` VARCHAR(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `tb_55_factura_electronica`
+  ADD KEY `idx_fe_head_clave` (`Clave`) USING BTREE,
+  ADD KEY `idx_fe_head_consecutivo_hacienda` (`ConsecutivoHacienda`) USING BTREE,
+  ADD KEY `idx_fe_head_emisor_identificacion` (`EmisorIdentificacion`) USING BTREE,
+  ADD KEY `idx_fe_head_emisor_nombre` (`EmisorNombre`) USING BTREE;

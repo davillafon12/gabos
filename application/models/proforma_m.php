@@ -49,7 +49,7 @@ Class proforma_m extends CI_Model
 			$dataProforma = array(
 	                        'Proforma_Consecutivo'=>$consecutivo,
 	                        'Proforma_Observaciones'=>$observaciones,
-													'Proforma_Estado'=>'sin_procesar',
+													'Proforma_Estado'=>'sin_proces',
 													'Proforma_Moneda'=>$currency,
 													'Proforma_Porcentaje_IVA'=>$c_array['iva'],
 													'Proforma_Tipo_Cambio'=>$c_array['dolar_venta'],
