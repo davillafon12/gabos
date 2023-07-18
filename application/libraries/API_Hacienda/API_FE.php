@@ -385,7 +385,7 @@ class API_FE{
         // Execute the request
         $response = curl_exec($ch);
         
-        if(strpos($response, 'HTTP/1.1 202 Accepted') !== false 
+        if(strpos($response, 'HTTP/1.1 202 Accepted') !== false || strpos($response, 'HTTP/2 202') !== false
         || strpos($response, "El comprobante [$clave] ya fue recibido anteriormente.") !== false 
         || strpos($response, "El comprobante [$clave-$consecutivoReceptor] ya fue recibido anteriormente.") !== false){
             $ms = (round(microtime(true) * 1000)) - $bm;

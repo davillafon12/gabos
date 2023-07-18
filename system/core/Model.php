@@ -518,10 +518,12 @@ class CI_Model {
             }
             // Si es un archivo lo movemos, pero si no lo creamos
             if($file == null){
-                file_put_contents($finalPath.$name, $stream);
+                file_put_contents($finalPath.$name, $stream);                
             }else{
                 rename($file, $finalPath.$name);
             }
+
+            chmod($finalPath.$name, 0770);
         }
 
         public function getFinalPath($type, $date = null){
