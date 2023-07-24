@@ -9,7 +9,7 @@ dag = DAG(
     tags=["Garotas Bonitas", "Hacienda"],
     start_date=datetime(2023, 6, 7),
     catchup=False,
-    schedule_interval="*/10 * * * *"
+    schedule_interval="*/10 9-19 * * 1-6"
 )
 
 enviar_comprobantes = SimpleHttpOperator(

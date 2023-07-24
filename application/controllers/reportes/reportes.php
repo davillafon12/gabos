@@ -7,14 +7,14 @@ class reportes extends CI_Controller {
 	//Private $ruta = "http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
 	
 	Private $ruta = "jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
-	Private $IpInterna = "http://192.168.10.14:8186/"; 
-	Private $IpExterna = "http://192.168.10.14:8186/"; 
+	Private $IpInterna = "http://192.168.10.37:8181/"; 
+	Private $IpExterna = "http://192.168.10.37:8181/"; 
 	//Private $IpExterna = "http://201.200.125.10:8085/"; 
 	Private $glCodigoSucGarotas = "2"; 
 	//Private $IpInterna = "http://localhost:8080/";	 
 	//Private $IpExterna = "http://localhost:8080/";
-	Private $usuario = "j_username=avanzado"; 
-	Private $password = "j_password=avanzado"; 	
+	Private $usuario = "j_username=gabo_vista_reportes"; 	
+	Private $password = "j_password=f8SUOYv97Jh%5E*3gYk85B"; 	//Password codificado
 	/*----------------------------------------------------------------------*/
 	
 	 function __construct()
