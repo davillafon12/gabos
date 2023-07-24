@@ -15,8 +15,8 @@ dag = DAG(
 
 sincronizar_archivos = SSHOperator(ssh_conn_id='gabo_ssh',
     task_id='sincronizar_archivos',
-    conn_timeout=60,
-    cmd_timeout=60,
+    conn_timeout=1200,
+    cmd_timeout=1200,
     command='rsync -a {{var.value.ruta_fuente_documentos_electronicos}} {{var.value.ruta_respaldo_documentos_electronicos}}',
     dag=dag)
 
