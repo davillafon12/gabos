@@ -7,8 +7,8 @@ class reportes extends CI_Controller {
 	//Private $ruta = "http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
 	
 	Private $ruta = "jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
-	Private $IpInterna = "http://192.168.10.37:8181/"; 
-	Private $IpExterna = "http://192.168.10.37:8181/"; 
+	Private $IpInterna = "http://192.168.10.37:8282/"; 
+	Private $IpExterna = "http://192.168.10.37:8282/"; 
 	//Private $IpExterna = "http://201.200.125.10:8085/"; 
 	Private $glCodigoSucGarotas = "2"; 
 	//Private $IpInterna = "http://localhost:8080/";	 
