@@ -18,3 +18,7 @@ ALTER TABLE `tb_55_factura_electronica`
   ADD KEY `idx_fe_head_consecutivo_hacienda` (`ConsecutivoHacienda`) USING BTREE,
   ADD KEY `idx_fe_head_emisor_identificacion` (`EmisorIdentificacion`) USING BTREE,
   ADD KEY `idx_fe_head_emisor_nombre` (`EmisorNombre`) USING BTREE;
+
+
+ALTER TABLE `tb_08_articulos_factura` CHANGE `Articulo_Factura_Descripcion` `Articulo_Factura_Descripcion` VARCHAR(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;
+ALTER TABLE `tb_04_articulos_proforma` CHANGE `Articulo_Proforma_Descripcion` `Articulo_Proforma_Descripcion` VARCHAR(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;

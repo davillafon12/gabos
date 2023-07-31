@@ -1,12 +1,12 @@
 <?php
 class Correo{
     
-    public $host = ' smtp.gmail.com';
+    public $host = '';
     public $SMTPAuth = true;
-    public $Username = 'facturaelectronicagbsj@gmail.com';
-    public $Password = 'XKrty371@';   
-    public $Port = 465;  
-    public $From = 'facturaelectronicagbsj@gmail.com';
+    public $Username = '';
+    public $Password = '';   
+    public $Port = '';  
+    public $From = '';
     public $isHTML = true;
     
     
