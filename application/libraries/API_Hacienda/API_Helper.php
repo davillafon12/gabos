@@ -504,6 +504,12 @@ class API_Helper{
         // close the connection, release resources used
         curl_close($ch);
 
+        if (base64_encode(base64_decode($response, true)) === $response){
+           
+        } else {
+            throw new Exception('Respuesta del firmador externo es incorrecta: ' . $response);
+        }
+
         $arrayResp = array(
             "xmlFirmado" => $response
         );
