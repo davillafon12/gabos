@@ -1,0 +1,1336 @@
+[2023-08-17T14:39:48.353-0600] {manager.py:487} INFO - Processing files using up to 2 processes at a time 
+[2023-08-17T14:39:48.353-0600] {manager.py:488} INFO - Process each file at most once every 30 seconds
+[2023-08-17T14:39:48.353-0600] {manager.py:490} INFO - Checking for new files in /opt/airflow/dags every 300 seconds
+[2023-08-17T14:39:48.354-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T14:39:48.418-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T14:39:48.775-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                                               0           1  0.22s           2023-08-17T20:39:48
+/opt/airflow/dags/enviar_comprobantes_hacienda.py         170  0.04s             0           0
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         173  0.01s             0           0
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            0           0
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           0           0
+================================================================================
+[2023-08-17T14:40:19.057-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        196  0.01s             0           1  0.22s           2023-08-17T20:39:48
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         199  0.00s             0           1  0.12s           2023-08-17T20:39:48
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  1.51s           2023-08-17T20:39:50
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  1.32s           2023-08-17T20:39:50
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.73s           2023-08-17T20:39:50
+================================================================================
+[2023-08-17T14:40:49.445-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        228  0.03s             0           1  0.08s           2023-08-17T20:40:19
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         231  0.02s             0           1  0.07s           2023-08-17T20:40:19
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T20:40:21
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.20s           2023-08-17T20:40:21
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:40:21
+================================================================================
+[2023-08-17T14:41:19.894-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        260  0.01s             0           1  0.10s           2023-08-17T20:40:49
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         263  0.01s             0           1  0.12s           2023-08-17T20:40:49
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.21s           2023-08-17T20:40:51
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.19s           2023-08-17T20:40:51
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:40:51
+================================================================================
+[2023-08-17T14:41:50.344-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        292  0.01s             0           1  0.09s           2023-08-17T20:41:19
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         295  0.01s             0           1  0.09s           2023-08-17T20:41:19
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.28s           2023-08-17T20:41:22
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.23s           2023-08-17T20:41:22
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.23s           2023-08-17T20:41:22
+================================================================================
+[2023-08-17T14:42:20.739-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        324  0.01s             0           1  0.07s           2023-08-17T20:41:50
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         327  0.01s             0           1  0.07s           2023-08-17T20:41:50
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.21s           2023-08-17T20:41:52
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.21s           2023-08-17T20:41:52
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:41:52
+================================================================================
+[2023-08-17T14:42:50.951-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        356  0.01s             0           1  0.07s           2023-08-17T20:42:20
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         359  0.01s             0           1  0.08s           2023-08-17T20:42:20
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.63s           2023-08-17T20:42:23
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.65s           2023-08-17T20:42:23
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.34s           2023-08-17T20:42:23
+================================================================================
+[2023-08-17T14:43:21.484-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        388  0.02s             0           1  0.07s           2023-08-17T20:42:51
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         391  0.01s             0           1  0.07s           2023-08-17T20:42:51
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.36s           2023-08-17T20:42:54
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.34s           2023-08-17T20:42:54
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.32s           2023-08-17T20:42:54
+================================================================================
+[2023-08-17T14:43:52.007-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        421  0.01s             0           1  0.08s           2023-08-17T20:43:21
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         424  0.01s             0           1  0.08s           2023-08-17T20:43:21
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.34s           2023-08-17T20:43:24
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.34s           2023-08-17T20:43:24
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.31s           2023-08-17T20:43:25
+================================================================================
+[2023-08-17T14:44:22.500-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        453  0.01s             0           1  0.08s           2023-08-17T20:43:52
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         456  0.01s             0           1  0.08s           2023-08-17T20:43:52
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.34s           2023-08-17T20:43:55
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.32s           2023-08-17T20:43:55
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.33s           2023-08-17T20:43:55
+================================================================================
+[2023-08-17T14:44:48.354-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T14:44:48.360-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T14:44:53.234-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        485  0.02s             0           1  0.23s           2023-08-17T20:44:22
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         488  0.01s             0           1  0.23s           2023-08-17T20:44:22
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.39s           2023-08-17T20:44:25
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.41s           2023-08-17T20:44:25
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.34s           2023-08-17T20:44:26
+================================================================================
+[2023-08-17T14:45:23.936-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        517  0.02s             1           0  0.37s           2023-08-17T20:44:53
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T20:44:56
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         520  0.01s             1           0  0.37s           2023-08-17T20:44:53
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.16s           2023-08-17T20:44:56
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T20:44:56
+================================================================================
+[2023-08-17T14:45:54.411-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        549  0.01s             1           0  0.19s           2023-08-17T20:45:24
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:45:27
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         552  0.01s             1           0  0.18s           2023-08-17T20:45:24
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:45:27
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:45:27
+================================================================================
+[2023-08-17T14:46:24.935-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        581  0.03s             1           0  0.17s           2023-08-17T20:45:54
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:45:57
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         584  0.01s             1           0  0.17s           2023-08-17T20:45:54
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:45:57
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T20:45:57
+================================================================================
+[2023-08-17T14:46:55.637-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        613  0.04s             1           0  0.32s           2023-08-17T20:46:25
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T20:46:28
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         616  0.01s             1           0  0.43s           2023-08-17T20:46:25
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.19s           2023-08-17T20:46:28
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.18s           2023-08-17T20:46:28
+================================================================================
+[2023-08-17T14:47:26.279-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        645  0.02s             1           0  0.32s           2023-08-17T20:46:55
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T20:46:59
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         648  0.01s             1           0  0.41s           2023-08-17T20:46:56
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:46:59
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.20s           2023-08-17T20:46:59
+================================================================================
+[2023-08-17T14:47:56.832-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        677  0.02s             1           0  0.19s           2023-08-17T20:47:26
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T20:47:29
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         680  0.01s             1           0  0.19s           2023-08-17T20:47:26
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:47:29
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:47:29
+================================================================================
+[2023-08-17T14:48:27.351-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        709  0.02s             1           0  0.18s           2023-08-17T20:47:56
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:48:00
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         712  0.01s             1           0  0.19s           2023-08-17T20:47:57
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:48:00
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:48:00
+================================================================================
+[2023-08-17T14:48:57.891-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        740  0.01s             1           0  0.19s           2023-08-17T20:48:27
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T20:48:30
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         743  0.01s             1           0  0.18s           2023-08-17T20:48:27
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T20:48:30
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T20:48:30
+================================================================================
+[2023-08-17T14:49:28.411-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        772  0.02s             1           0  0.17s           2023-08-17T20:48:58
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:49:01
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         775  0.01s             1           0  0.18s           2023-08-17T20:48:58
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:49:01
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:49:01
+================================================================================
+[2023-08-17T14:49:48.851-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T14:49:48.855-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T14:49:58.949-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        804  0.02s             1           0  0.17s           2023-08-17T20:49:28
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:49:31
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         807  0.01s             1           0  0.17s           2023-08-17T20:49:28
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:49:31
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:49:31
+================================================================================
+[2023-08-17T14:50:29.478-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        836  0.02s             1           0  0.18s           2023-08-17T20:49:59
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T20:50:02
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         839  0.01s             1           0  0.19s           2023-08-17T20:49:59
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.16s           2023-08-17T20:50:02
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:50:02
+================================================================================
+[2023-08-17T14:51:00.011-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        870  0.02s             1           0  0.18s           2023-08-17T20:50:29
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:50:32
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         872  0.01s             1           0  0.17s           2023-08-17T20:50:29
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:50:32
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:50:32
+================================================================================
+[2023-08-17T14:51:30.554-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        903  0.01s             1           0  0.21s           2023-08-17T20:51:00
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:51:03
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         906  0.01s             1           0  0.22s           2023-08-17T20:51:00
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:51:03
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:51:03
+================================================================================
+[2023-08-17T14:52:01.168-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        936  0.02s             1           0  0.26s           2023-08-17T20:51:30
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.22s           2023-08-17T20:51:33
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         939  0.01s             1           0  0.21s           2023-08-17T20:51:30
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.20s           2023-08-17T20:51:33
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T20:51:34
+================================================================================
+[2023-08-17T14:52:31.691-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                        968  0.01s             1           0  0.18s           2023-08-17T20:52:01
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:52:04
+/opt/airflow/dags/crear_respaldo_base_de_datos.py         970  0.01s             1           0  0.18s           2023-08-17T20:52:01
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:52:04
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:52:04
+================================================================================
+[2023-08-17T14:53:02.250-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1001  0.01s             1           0  0.20s           2023-08-17T20:52:31
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T20:52:35
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1004  0.01s             1           0  0.22s           2023-08-17T20:52:31
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:52:35
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.18s           2023-08-17T20:52:35
+================================================================================
+[2023-08-17T14:53:32.996-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1032  0.02s             1           0  0.23s           2023-08-17T20:53:02
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.41s           2023-08-17T20:53:05
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1035  0.01s             1           0  0.18s           2023-08-17T20:53:02
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.38s           2023-08-17T20:53:05
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.24s           2023-08-17T20:53:06
+================================================================================
+[2023-08-17T14:54:03.505-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1068  0.02s             1           0  0.17s           2023-08-17T20:53:33
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T20:53:36
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1071  0.01s             1           0  0.17s           2023-08-17T20:53:33
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:53:36
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T20:53:36
+================================================================================
+[2023-08-17T14:54:34.119-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1112  0.01s             1           0  0.17s           2023-08-17T20:54:03
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.24s           2023-08-17T20:54:06
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1115  0.01s             1           0  0.17s           2023-08-17T20:54:03
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.26s           2023-08-17T20:54:06
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.18s           2023-08-17T20:54:07
+================================================================================
+[2023-08-17T14:54:49.002-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T14:54:49.006-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T14:55:04.926-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1144  0.01s             1           0  0.24s           2023-08-17T20:54:34
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.41s           2023-08-17T20:54:37
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1147  0.01s             1           0  0.30s           2023-08-17T20:54:34
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.35s           2023-08-17T20:54:37
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.22s           2023-08-17T20:54:37
+================================================================================
+[2023-08-17T14:55:35.509-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1176  0.01s             1           0  0.21s           2023-08-17T20:55:05
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T20:55:08
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1179  0.01s             1           0  0.21s           2023-08-17T20:55:05
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.23s           2023-08-17T20:55:08
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.20s           2023-08-17T20:55:08
+================================================================================
+[2023-08-17T14:56:06.079-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1208  0.02s             1           0  0.28s           2023-08-17T20:55:35
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T20:55:38
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1211  0.01s             1           0  0.29s           2023-08-17T20:55:35
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.20s           2023-08-17T20:55:38
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T20:55:39
+================================================================================
+[2023-08-17T14:56:36.806-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1246  0.02s             1           0  0.25s           2023-08-17T20:56:06
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.33s           2023-08-17T20:56:09
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1249  0.01s             1           0  0.30s           2023-08-17T20:56:06
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.28s           2023-08-17T20:56:09
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.20s           2023-08-17T20:56:09
+================================================================================
+[2023-08-17T14:57:07.506-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1280  0.01s             1           0  0.28s           2023-08-17T20:56:37
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.27s           2023-08-17T20:56:40
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1283  0.01s             1           0  0.29s           2023-08-17T20:56:37
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.22s           2023-08-17T20:56:40
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.22s           2023-08-17T20:56:40
+================================================================================
+[2023-08-17T14:57:38.022-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1316  0.02s             1           0  0.18s           2023-08-17T20:57:07
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T20:57:10
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1319  0.01s             1           0  0.20s           2023-08-17T20:57:07
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T20:57:10
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T20:57:11
+================================================================================
+[2023-08-17T14:58:08.636-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1349  0.04s             1           0  0.21s           2023-08-17T20:57:38
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T20:57:41
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1352  0.03s             1           0  0.21s           2023-08-17T20:57:38
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.23s           2023-08-17T20:57:41
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.19s           2023-08-17T20:57:41
+================================================================================
+[2023-08-17T14:58:39.258-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1380  0.01s             1           0  0.27s           2023-08-17T20:58:08
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.24s           2023-08-17T20:58:12
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1383  0.01s             1           0  0.32s           2023-08-17T20:58:08
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.22s           2023-08-17T20:58:12
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.21s           2023-08-17T20:58:12
+================================================================================
+[2023-08-17T14:59:09.856-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1416  0.02s             1           0  0.18s           2023-08-17T20:58:39
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.22s           2023-08-17T20:58:42
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1417  0.01s             1           0  0.18s           2023-08-17T20:58:39
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.24s           2023-08-17T20:58:42
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.20s           2023-08-17T20:58:42
+================================================================================
+[2023-08-17T14:59:40.405-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1448  0.01s             1           0  0.19s           2023-08-17T20:59:10
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.23s           2023-08-17T20:59:13
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1451  0.01s             1           0  0.18s           2023-08-17T20:59:10
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.22s           2023-08-17T20:59:13
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.23s           2023-08-17T20:59:13
+================================================================================
+[2023-08-17T14:59:49.691-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T14:59:49.699-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T15:00:10.818-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1480  0.01s             1           0  0.19s           2023-08-17T20:59:40
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.24s           2023-08-17T20:59:43
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1483  0.01s             1           0  0.18s           2023-08-17T20:59:40
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.20s           2023-08-17T20:59:43
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.19s           2023-08-17T20:59:43
+================================================================================
+[2023-08-17T15:00:41.390-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1512  0.02s             1           0  0.22s           2023-08-17T21:00:11
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:00:14
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1515  0.01s             1           0  0.22s           2023-08-17T21:00:11
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.20s           2023-08-17T21:00:14
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.18s           2023-08-17T21:00:14
+================================================================================
+[2023-08-17T15:01:11.968-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1552  0.01s             1           0  0.18s           2023-08-17T21:00:41
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.22s           2023-08-17T21:00:44
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1555  0.01s             1           0  0.20s           2023-08-17T21:00:41
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.24s           2023-08-17T21:00:44
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.18s           2023-08-17T21:00:44
+================================================================================
+[2023-08-17T15:01:42.498-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1584  0.02s             1           0  0.17s           2023-08-17T21:01:12
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:01:15
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1587  0.01s             1           0  0.18s           2023-08-17T21:01:12
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:01:15
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:01:15
+================================================================================
+[2023-08-17T15:02:13.031-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1616  0.02s             1           0  0.18s           2023-08-17T21:01:42
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T21:01:45
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1619  0.01s             1           0  0.18s           2023-08-17T21:01:42
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:01:45
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:01:46
+================================================================================
+[2023-08-17T15:02:43.563-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1649  0.02s             1           0  0.18s           2023-08-17T21:02:13
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T21:02:16
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1652  0.01s             1           0  0.19s           2023-08-17T21:02:13
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.19s           2023-08-17T21:02:16
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:02:16
+================================================================================
+[2023-08-17T15:03:14.094-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1681  0.01s             1           0  0.18s           2023-08-17T21:02:43
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:02:46
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1684  0.01s             1           0  0.18s           2023-08-17T21:02:43
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:02:46
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:02:47
+================================================================================
+[2023-08-17T15:03:44.635-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1713  0.01s             1           0  0.18s           2023-08-17T21:03:14
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:03:17
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1716  0.01s             1           0  0.18s           2023-08-17T21:03:14
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:03:17
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.20s           2023-08-17T21:03:17
+================================================================================
+[2023-08-17T15:04:15.198-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1745  0.02s             1           0  0.18s           2023-08-17T21:03:44
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T21:03:48
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1748  0.01s             1           0  0.18s           2023-08-17T21:03:44
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.19s           2023-08-17T21:03:48
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:03:48
+================================================================================
+[2023-08-17T15:04:45.721-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1781  0.01s             1           0  0.18s           2023-08-17T21:04:15
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:04:18
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1784  0.01s             1           0  0.18s           2023-08-17T21:04:15
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:04:18
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:04:18
+================================================================================
+[2023-08-17T15:04:50.269-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T15:04:50.273-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T15:05:16.442-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1820  0.01s             1           0  0.24s           2023-08-17T21:04:45
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T21:04:49
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1823  0.01s             1           0  0.21s           2023-08-17T21:04:45
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.30s           2023-08-17T21:04:49
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.21s           2023-08-17T21:04:49
+================================================================================
+[2023-08-17T15:05:46.846-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1852  0.02s             1           0  0.19s           2023-08-17T21:05:16
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:05:19
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1855  0.01s             1           0  0.18s           2023-08-17T21:05:16
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:05:19
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:05:19
+================================================================================
+[2023-08-17T15:06:17.392-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1884  0.01s             1           0  0.19s           2023-08-17T21:05:47
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T21:05:50
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1887  0.01s             1           0  0.19s           2023-08-17T21:05:47
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:05:50
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.18s           2023-08-17T21:05:50
+================================================================================
+[2023-08-17T15:06:47.913-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1916  0.01s             1           0  0.17s           2023-08-17T21:06:17
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:06:20
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1919  0.01s             1           0  0.17s           2023-08-17T21:06:17
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:06:20
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:06:20
+================================================================================
+[2023-08-17T15:07:18.444-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1948  0.02s             1           0  0.17s           2023-08-17T21:06:48
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:06:51
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1951  0.01s             1           0  0.18s           2023-08-17T21:06:48
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:06:51
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:06:51
+================================================================================
+[2023-08-17T15:07:48.987-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       1980  0.02s             1           0  0.18s           2023-08-17T21:07:18
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:07:21
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        1983  0.01s             1           0  0.18s           2023-08-17T21:07:18
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:07:21
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:07:21
+================================================================================
+[2023-08-17T15:08:19.539-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2013  0.02s             1           0  0.19s           2023-08-17T21:07:49
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:07:52
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2016  0.01s             1           0  0.18s           2023-08-17T21:07:49
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:07:52
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:07:52
+================================================================================
+[2023-08-17T15:08:50.075-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2045  0.02s             1           0  0.18s           2023-08-17T21:08:19
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:08:22
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2048  0.01s             1           0  0.18s           2023-08-17T21:08:19
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:08:22
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:08:23
+================================================================================
+[2023-08-17T15:09:20.608-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2078  0.01s             1           0  0.18s           2023-08-17T21:08:50
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:08:53
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2081  0.01s             1           0  0.18s           2023-08-17T21:08:50
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:08:53
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:08:53
+================================================================================
+[2023-08-17T15:09:50.269-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T15:09:50.273-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T15:09:51.153-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2109  0.01s             1           0  0.17s           2023-08-17T21:09:20
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:09:23
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2112  0.01s             1           0  0.19s           2023-08-17T21:09:20
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.19s           2023-08-17T21:09:23
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:09:24
+================================================================================
+[2023-08-17T15:10:21.723-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2145  0.02s             1           0  0.23s           2023-08-17T21:09:51
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:09:54
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2148  0.01s             1           0  0.20s           2023-08-17T21:09:51
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:09:54
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:09:54
+================================================================================
+[2023-08-17T15:10:52.254-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2177  0.02s             1           0  0.18s           2023-08-17T21:10:21
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:10:25
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2180  0.01s             1           0  0.18s           2023-08-17T21:10:21
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:10:25
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:10:25
+================================================================================
+[2023-08-17T15:11:22.776-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2209  0.02s             1           0  0.17s           2023-08-17T21:10:52
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:10:55
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2212  0.01s             1           0  0.17s           2023-08-17T21:10:52
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:10:55
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:10:55
+================================================================================
+[2023-08-17T15:11:53.300-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2241  0.01s             1           0  0.18s           2023-08-17T21:11:22
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:11:26
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2244  0.01s             1           0  0.18s           2023-08-17T21:11:22
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:11:26
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:11:26
+================================================================================
+[2023-08-17T15:12:23.821-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2273  0.02s             1           0  0.18s           2023-08-17T21:11:53
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:11:56
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2276  0.01s             1           0  0.18s           2023-08-17T21:11:53
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:11:56
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:11:56
+================================================================================
+[2023-08-17T15:12:54.349-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2305  0.01s             1           0  0.18s           2023-08-17T21:12:23
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:12:27
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2308  0.01s             1           0  0.18s           2023-08-17T21:12:23
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:12:27
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:12:27
+================================================================================
+[2023-08-17T15:13:24.868-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2337  0.02s             1           0  0.17s           2023-08-17T21:12:54
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:12:57
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2340  0.01s             1           0  0.18s           2023-08-17T21:12:54
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.16s           2023-08-17T21:12:57
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:12:57
+================================================================================
+[2023-08-17T15:13:55.402-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2369  0.01s             1           0  0.19s           2023-08-17T21:13:25
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:13:28
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2372  0.01s             1           0  0.18s           2023-08-17T21:13:25
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:13:28
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:13:28
+================================================================================
+[2023-08-17T15:14:25.943-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2401  0.01s             1           0  0.17s           2023-08-17T21:13:55
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:13:58
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2404  0.01s             1           0  0.18s           2023-08-17T21:13:55
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:13:58
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:13:58
+================================================================================
+[2023-08-17T15:14:50.439-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T15:14:50.447-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T15:14:56.529-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2433  0.02s             1           0  0.17s           2023-08-17T21:14:26
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:14:29
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2436  0.01s             1           0  0.17s           2023-08-17T21:14:26
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.19s           2023-08-17T21:14:29
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:14:29
+================================================================================
+[2023-08-17T15:15:27.082-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2465  0.02s             1           0  0.18s           2023-08-17T21:14:56
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:14:59
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2468  0.01s             1           0  0.18s           2023-08-17T21:14:56
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:14:59
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:15:00
+================================================================================
+[2023-08-17T15:15:57.626-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2497  0.02s             1           0  0.18s           2023-08-17T21:15:27
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:15:30
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2500  0.01s             1           0  0.18s           2023-08-17T21:15:27
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:15:30
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:15:30
+================================================================================
+[2023-08-17T15:16:28.181-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2529  0.02s             1           0  0.18s           2023-08-17T21:15:57
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:16:00
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2532  0.01s             1           0  0.18s           2023-08-17T21:15:57
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.19s           2023-08-17T21:16:01
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:16:01
+================================================================================
+[2023-08-17T15:16:58.711-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2562  0.02s             1           0  0.18s           2023-08-17T21:16:28
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:16:31
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2565  0.01s             1           0  0.17s           2023-08-17T21:16:28
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:16:31
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:16:31
+================================================================================
+[2023-08-17T15:17:29.243-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2593  0.02s             1           0  0.18s           2023-08-17T21:16:58
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:17:02
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2596  0.01s             1           0  0.18s           2023-08-17T21:16:58
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:17:02
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:17:02
+================================================================================
+[2023-08-17T15:17:59.765-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2625  0.01s             1           0  0.18s           2023-08-17T21:17:29
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:17:32
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2628  0.01s             1           0  0.18s           2023-08-17T21:17:29
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:17:32
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:17:32
+================================================================================
+[2023-08-17T15:18:30.255-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2657  0.02s             1           0  0.18s           2023-08-17T21:17:59
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:18:03
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2660  0.01s             1           0  0.18s           2023-08-17T21:17:59
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:18:03
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:18:03
+================================================================================
+[2023-08-17T15:19:00.774-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2690  0.01s             1           0  0.18s           2023-08-17T21:18:30
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:18:33
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2693  0.01s             1           0  0.18s           2023-08-17T21:18:30
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:18:33
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:18:33
+================================================================================
+[2023-08-17T15:19:31.328-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2722  0.01s             1           0  0.18s           2023-08-17T21:19:00
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T21:19:04
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2725  0.01s             1           0  0.20s           2023-08-17T21:19:00
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:19:04
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.18s           2023-08-17T21:19:04
+================================================================================
+[2023-08-17T15:19:50.831-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T15:19:50.835-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T15:20:01.927-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2754  0.01s             1           0  0.19s           2023-08-17T21:19:31
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:19:34
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2757  0.01s             1           0  0.19s           2023-08-17T21:19:31
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.21s           2023-08-17T21:19:34
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:19:34
+================================================================================
+[2023-08-17T15:20:32.461-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2786  0.02s             1           0  0.17s           2023-08-17T21:20:02
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:20:05
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2789  0.01s             1           0  0.17s           2023-08-17T21:20:02
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:20:05
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:20:05
+================================================================================
+[2023-08-17T15:21:02.999-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2818  0.02s             1           0  0.19s           2023-08-17T21:20:32
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:20:35
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2821  0.01s             1           0  0.19s           2023-08-17T21:20:32
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:20:35
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:20:35
+================================================================================
+[2023-08-17T15:21:33.522-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2850  0.02s             1           0  0.19s           2023-08-17T21:21:03
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:21:06
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2853  0.01s             1           0  0.19s           2023-08-17T21:21:03
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:21:06
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:21:06
+================================================================================
+[2023-08-17T15:22:04.065-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2886  0.01s             1           0  0.19s           2023-08-17T21:21:33
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.20s           2023-08-17T21:21:36
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2889  0.01s             1           0  0.21s           2023-08-17T21:21:33
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.20s           2023-08-17T21:21:36
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:21:37
+================================================================================
+[2023-08-17T15:22:34.592-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2918  0.01s             1           0  0.17s           2023-08-17T21:22:04
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:22:07
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2921  0.01s             1           0  0.18s           2023-08-17T21:22:04
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:22:07
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:22:07
+================================================================================
+[2023-08-17T15:23:05.122-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2951  0.01s             1           0  0.17s           2023-08-17T21:22:34
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:22:37
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2954  0.01s             1           0  0.17s           2023-08-17T21:22:34
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:22:37
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:22:38
+================================================================================
+[2023-08-17T15:23:35.643-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       2984  0.01s             1           0  0.17s           2023-08-17T21:23:05
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:23:08
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        2987  0.01s             1           0  0.17s           2023-08-17T21:23:05
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:23:08
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:23:08
+================================================================================
+[2023-08-17T15:24:06.177-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3016  0.01s             1           0  0.17s           2023-08-17T21:23:35
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:23:38
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3019  0.01s             1           0  0.18s           2023-08-17T21:23:35
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:23:39
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:23:39
+================================================================================
+[2023-08-17T15:24:36.714-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3048  0.01s             1           0  0.18s           2023-08-17T21:24:06
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:24:09
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3051  0.01s             1           0  0.19s           2023-08-17T21:24:06
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:24:09
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:24:09
+================================================================================
+[2023-08-17T15:24:51.133-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T15:24:51.137-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T15:25:07.249-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3080  0.01s             1           0  0.17s           2023-08-17T21:24:36
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:24:40
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3083  0.01s             1           0  0.17s           2023-08-17T21:24:36
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:24:40
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:24:40
+================================================================================
+[2023-08-17T15:25:37.772-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3112  0.01s             1           0  0.18s           2023-08-17T21:25:07
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:25:10
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3115  0.00s             1           0  0.18s           2023-08-17T21:25:07
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.16s           2023-08-17T21:25:10
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:25:10
+================================================================================
+[2023-08-17T15:26:08.302-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3145  0.02s             1           0  0.17s           2023-08-17T21:25:37
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:25:41
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3148  0.01s             1           0  0.18s           2023-08-17T21:25:37
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:25:41
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:25:41
+================================================================================
+[2023-08-17T15:26:38.831-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3177  0.02s             1           0  0.18s           2023-08-17T21:26:08
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:26:11
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3180  0.01s             1           0  0.18s           2023-08-17T21:26:08
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:26:11
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:26:11
+================================================================================
+[2023-08-17T15:27:09.354-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3209  0.01s             1           0  0.18s           2023-08-17T21:26:38
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:26:42
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3212  0.01s             1           0  0.17s           2023-08-17T21:26:38
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:26:42
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:26:42
+================================================================================
+[2023-08-17T15:27:39.882-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3241  0.02s             1           0  0.18s           2023-08-17T21:27:09
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:27:12
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3244  0.01s             1           0  0.17s           2023-08-17T21:27:09
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.16s           2023-08-17T21:27:12
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:27:12
+================================================================================
+[2023-08-17T15:28:10.394-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3273  0.01s             1           0  0.19s           2023-08-17T21:27:40
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:27:43
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3276  0.01s             1           0  0.18s           2023-08-17T21:27:40
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:27:43
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:27:43
+================================================================================
+[2023-08-17T15:28:40.928-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3305  0.02s             1           0  0.18s           2023-08-17T21:28:10
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:28:13
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3308  0.02s             1           0  0.18s           2023-08-17T21:28:10
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:28:13
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:28:13
+================================================================================
+[2023-08-17T15:29:11.444-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3337  0.01s             1           0  0.17s           2023-08-17T21:28:41
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:28:44
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3340  0.00s             1           0  0.21s           2023-08-17T21:28:41
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:28:44
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:28:44
+================================================================================
+[2023-08-17T15:29:41.974-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3369  0.02s             1           0  0.18s           2023-08-17T21:29:11
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.19s           2023-08-17T21:29:14
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3372  0.01s             1           0  0.17s           2023-08-17T21:29:11
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.19s           2023-08-17T21:29:14
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:29:14
+================================================================================
+[2023-08-17T15:29:51.352-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T15:29:51.360-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T15:30:12.526-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3401  0.02s             1           0  0.19s           2023-08-17T21:29:42
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:29:45
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3404  0.01s             1           0  0.18s           2023-08-17T21:29:42
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.22s           2023-08-17T21:29:45
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:29:45
+================================================================================
+[2023-08-17T15:30:43.066-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3433  0.02s             1           0  0.18s           2023-08-17T21:30:12
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:30:15
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3436  0.01s             1           0  0.18s           2023-08-17T21:30:12
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:30:15
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:30:16
+================================================================================
+[2023-08-17T15:31:13.613-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3465  0.02s             1           0  0.18s           2023-08-17T21:30:43
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:30:46
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3468  0.01s             1           0  0.18s           2023-08-17T21:30:43
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:30:46
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:30:46
+================================================================================
+[2023-08-17T15:31:44.165-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3497  0.02s             1           0  0.19s           2023-08-17T21:31:13
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:31:16
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3500  0.01s             1           0  0.19s           2023-08-17T21:31:13
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:31:16
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:31:17
+================================================================================
+[2023-08-17T15:32:14.707-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3528  0.02s             1           0  0.19s           2023-08-17T21:31:44
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:31:47
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3531  0.01s             1           0  0.18s           2023-08-17T21:31:44
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:31:47
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:31:47
+================================================================================
+[2023-08-17T15:32:45.256-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3560  0.02s             1           0  0.18s           2023-08-17T21:32:14
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:32:18
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3563  0.01s             1           0  0.18s           2023-08-17T21:32:14
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:32:18
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:32:18
+================================================================================
+[2023-08-17T15:33:15.789-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3592  0.01s             1           0  0.18s           2023-08-17T21:32:45
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:32:48
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3595  0.00s             1           0  0.18s           2023-08-17T21:32:45
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:32:48
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:32:48
+================================================================================
+[2023-08-17T15:33:46.330-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3624  0.01s             1           0  0.17s           2023-08-17T21:33:15
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.18s           2023-08-17T21:33:19
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3625  0.01s             1           0  0.17s           2023-08-17T21:33:15
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:33:19
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:33:19
+================================================================================
+[2023-08-17T15:34:16.889-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3663  0.01s             1           0  0.20s           2023-08-17T21:33:46
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:33:49
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3666  0.01s             1           0  0.21s           2023-08-17T21:33:46
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.18s           2023-08-17T21:33:49
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.17s           2023-08-17T21:33:49
+================================================================================
+[2023-08-17T15:34:47.410-0600] {manager.py:889} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                                 PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+------------------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/limpieza_logs.py                       3696  0.01s             1           0  0.17s           2023-08-17T21:34:17
+/opt/airflow/dags/enviar_comprobantes_hacienda.py                                1           0  0.17s           2023-08-17T21:34:20
+/opt/airflow/dags/crear_respaldo_base_de_datos.py        3699  0.01s             1           0  0.18s           2023-08-17T21:34:17
+/opt/airflow/dags/actualizar_comprobantes_hacienda.py                            1           0  0.17s           2023-08-17T21:34:20
+/opt/airflow/dags/respaldar_documentos_electronicos.py                           1           0  0.16s           2023-08-17T21:34:20
+================================================================================
+[2023-08-17T15:34:51.756-0600] {manager.py:758} INFO - Searching for files in /opt/airflow/dags
+[2023-08-17T15:34:51.761-0600] {manager.py:761} INFO - There are 5 files in /opt/airflow/dags
+[2023-08-17T15:35:15.369-0600] {manager.py:470} INFO - Exiting gracefully upon receiving signal 15

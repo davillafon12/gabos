@@ -1,0 +1,767 @@
+[2023-08-17T14:39:48.911-0600] {processor.py:157} INFO - Started process (PID=178) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:39:48.923-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:39:48.924-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:48.924-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:39:48.974-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:39:49.410-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:49.409-0600] {manager.py:504} INFO - Created Permission View: can edit on DAG:Actualizar_Comprobantes_Hacienda
+[2023-08-17T14:39:49.444-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:49.444-0600] {manager.py:504} INFO - Created Permission View: can read on DAG:Actualizar_Comprobantes_Hacienda
+[2023-08-17T14:39:49.468-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:49.467-0600] {manager.py:504} INFO - Created Permission View: can delete on DAG:Actualizar_Comprobantes_Hacienda
+[2023-08-17T14:39:49.468-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:49.468-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:39:50.048-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.048-0600] {dag.py:2747} INFO - Creating ORM DAG for Actualizar_Comprobantes_Hacienda
+[2023-08-17T14:39:50.094-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.094-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:20:00+00:00, run_after=2023-08-17T20:30:00+00:00
+[2023-08-17T14:39:50.162-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 1.260 seconds
+[2023-08-17T14:40:21.100-0600] {processor.py:157} INFO - Started process (PID=209) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:40:21.101-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:40:21.102-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:21.102-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:40:21.123-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:40:21.159-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:21.158-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:40:21.230-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:21.229-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:40:21.265-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.170 seconds
+[2023-08-17T14:40:51.555-0600] {processor.py:157} INFO - Started process (PID=240) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:40:51.556-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:40:51.557-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:51.557-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:40:51.579-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:40:51.616-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:51.616-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:40:51.677-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:51.677-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:40:51.715-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.164 seconds
+[2023-08-17T14:41:21.933-0600] {processor.py:157} INFO - Started process (PID=271) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:41:21.937-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:41:21.947-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:21.938-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:41:21.975-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:41:22.024-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:22.023-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:41:22.079-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:22.079-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:41:22.124-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.196 seconds
+[2023-08-17T14:41:52.383-0600] {processor.py:157} INFO - Started process (PID=303) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:41:52.384-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:41:52.385-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:52.384-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:41:52.408-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:41:52.455-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:52.455-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:41:52.513-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:52.513-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:41:52.553-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.175 seconds
+[2023-08-17T14:42:22.858-0600] {processor.py:157} INFO - Started process (PID=335) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:42:22.860-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:42:22.861-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:22.861-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:42:22.889-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:42:22.938-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:22.938-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:42:23.010-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:23.010-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:42:23.434-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.580 seconds
+[2023-08-17T14:42:53.997-0600] {processor.py:157} INFO - Started process (PID=369) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:42:53.999-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:42:54.000-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:54.000-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:42:54.020-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:42:54.061-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:54.061-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:42:54.270-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:54.270-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:42:54.300-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.310 seconds
+[2023-08-17T14:43:24.535-0600] {processor.py:157} INFO - Started process (PID=401) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:43:24.536-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:43:24.537-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:24.537-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:43:24.558-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:43:24.594-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:24.594-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:43:24.796-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:24.796-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:43:24.827-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.298 seconds
+[2023-08-17T14:43:55.044-0600] {processor.py:157} INFO - Started process (PID=434) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:43:55.045-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:43:55.046-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:55.046-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:43:55.067-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:43:55.245-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:55.245-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:43:55.298-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:55.297-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:43:55.331-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.291 seconds
+[2023-08-17T14:44:25.543-0600] {processor.py:157} INFO - Started process (PID=464) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:44:25.546-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:44:25.549-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:25.548-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:44:25.778-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:44:25.822-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:25.822-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:44:25.874-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:25.873-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:44:25.905-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.367 seconds
+[2023-08-17T14:44:56.632-0600] {processor.py:157} INFO - Started process (PID=498) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:44:56.633-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:44:56.634-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:56.634-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:44:56.654-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:44:56.688-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:56.688-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:44:56.738-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:56.738-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:44:56.770-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.142 seconds
+[2023-08-17T14:45:27.108-0600] {processor.py:157} INFO - Started process (PID=530) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:45:27.109-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:45:27.110-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:27.110-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:45:27.130-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:45:27.164-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:27.163-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:45:27.216-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:27.216-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:45:27.248-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T14:45:57.608-0600] {processor.py:157} INFO - Started process (PID=562) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:45:57.609-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:45:57.610-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:57.610-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:45:57.631-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:45:57.666-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:57.665-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:45:57.716-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:57.716-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:45:57.746-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T14:46:28.269-0600] {processor.py:157} INFO - Started process (PID=593) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:46:28.272-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:46:28.273-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:28.273-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:46:28.298-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:46:28.336-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:28.335-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:46:28.389-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:28.389-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:46:28.420-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.156 seconds
+[2023-08-17T14:46:58.950-0600] {processor.py:157} INFO - Started process (PID=626) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:46:58.951-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:46:58.952-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:58.952-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:46:58.972-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:46:59.010-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:59.010-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:46:59.063-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:59.063-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:46:59.093-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.149 seconds
+[2023-08-17T14:47:29.495-0600] {processor.py:157} INFO - Started process (PID=656) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:47:29.496-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:47:29.497-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:29.497-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:47:29.518-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:47:29.554-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:29.554-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:47:29.605-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:29.604-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:47:29.637-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.147 seconds
+[2023-08-17T14:48:00.040-0600] {processor.py:157} INFO - Started process (PID=690) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:48:00.041-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:48:00.042-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:00.042-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:48:00.062-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:48:00.096-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:00.095-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:48:00.147-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:00.147-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:48:00.178-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T14:48:30.577-0600] {processor.py:157} INFO - Started process (PID=722) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:48:30.578-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:48:30.579-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:30.579-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:48:30.603-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:48:30.639-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:30.639-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:48:30.690-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:30.689-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:48:30.719-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.148 seconds
+[2023-08-17T14:49:01.087-0600] {processor.py:157} INFO - Started process (PID=753) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:49:01.088-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:49:01.089-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:01.088-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:49:01.109-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:49:01.144-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:01.143-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:49:01.196-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:01.196-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:49:01.226-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.144 seconds
+[2023-08-17T14:49:31.608-0600] {processor.py:157} INFO - Started process (PID=785) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:49:31.609-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:49:31.610-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:31.610-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:49:31.630-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:49:31.664-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:31.664-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:49:31.714-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:31.714-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:30:00+00:00, run_after=2023-08-17T20:40:00+00:00
+[2023-08-17T14:49:31.743-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.140 seconds
+[2023-08-17T14:50:02.155-0600] {processor.py:157} INFO - Started process (PID=817) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:50:02.156-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:50:02.157-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:02.156-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:50:02.177-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:50:02.209-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:02.209-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:50:02.260-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:02.259-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:40:00+00:00, run_after=2023-08-17T20:50:00+00:00
+[2023-08-17T14:50:02.294-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T14:50:32.685-0600] {processor.py:157} INFO - Started process (PID=849) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:50:32.686-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:50:32.687-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:32.687-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:50:32.707-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:50:32.740-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:32.740-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:50:32.794-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:32.793-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:40:00+00:00, run_after=2023-08-17T20:50:00+00:00
+[2023-08-17T14:50:32.825-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.144 seconds
+[2023-08-17T14:51:03.236-0600] {processor.py:157} INFO - Started process (PID=884) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:51:03.237-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:51:03.238-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:03.238-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:51:03.258-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:51:03.291-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:03.291-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:51:03.343-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:03.343-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:40:00+00:00, run_after=2023-08-17T20:50:00+00:00
+[2023-08-17T14:51:03.375-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T14:51:33.808-0600] {processor.py:157} INFO - Started process (PID=916) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:51:33.810-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:51:33.811-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:33.810-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:51:33.849-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:51:33.884-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:33.884-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:51:33.939-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:33.938-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:40:00+00:00, run_after=2023-08-17T20:50:00+00:00
+[2023-08-17T14:51:33.972-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.170 seconds
+[2023-08-17T14:52:04.369-0600] {processor.py:157} INFO - Started process (PID=949) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:52:04.370-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:52:04.371-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:04.371-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:52:04.392-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:52:04.427-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:04.427-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:52:04.480-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:04.480-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:40:00+00:00, run_after=2023-08-17T20:50:00+00:00
+[2023-08-17T14:52:04.511-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.146 seconds
+[2023-08-17T14:52:34.914-0600] {processor.py:157} INFO - Started process (PID=981) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:52:34.915-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:52:34.917-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:34.917-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:52:34.940-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:52:34.974-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:34.974-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:52:35.026-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:35.026-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:40:00+00:00, run_after=2023-08-17T20:50:00+00:00
+[2023-08-17T14:52:35.056-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.147 seconds
+[2023-08-17T14:53:05.507-0600] {processor.py:157} INFO - Started process (PID=1014) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:53:05.510-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:53:05.512-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:05.511-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:53:05.545-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:53:05.600-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:05.600-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:53:05.692-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:05.692-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:53:05.763-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.267 seconds
+[2023-08-17T14:53:36.196-0600] {processor.py:157} INFO - Started process (PID=1052) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:53:36.197-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:53:36.198-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:36.198-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:53:36.218-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:53:36.251-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:36.250-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:53:36.305-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:36.304-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:53:36.335-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T14:54:06.711-0600] {processor.py:157} INFO - Started process (PID=1088) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:54:06.713-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:54:06.715-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:06.714-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:54:06.746-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:54:06.823-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:06.823-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:54:06.902-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:06.901-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:54:06.935-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.228 seconds
+[2023-08-17T14:54:37.413-0600] {processor.py:157} INFO - Started process (PID=1131) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:54:37.442-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:54:37.444-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:37.443-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:54:37.473-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:54:37.570-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:37.570-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:54:37.665-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:37.665-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:54:37.707-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.306 seconds
+[2023-08-17T14:55:08.160-0600] {processor.py:157} INFO - Started process (PID=1164) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:55:08.167-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:55:08.168-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:08.167-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:55:08.187-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:55:08.227-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:08.226-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:55:08.291-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:08.291-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:55:08.361-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.205 seconds
+[2023-08-17T14:55:38.735-0600] {processor.py:157} INFO - Started process (PID=1195) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:55:38.738-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:55:38.740-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:38.740-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:55:38.776-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:55:38.817-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:38.817-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:55:38.873-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:38.873-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:55:38.907-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.179 seconds
+[2023-08-17T14:56:09.366-0600] {processor.py:157} INFO - Started process (PID=1226) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:56:09.368-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:56:09.371-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:09.370-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:56:09.411-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:56:09.447-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:09.446-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:56:09.561-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:09.561-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:56:09.597-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.236 seconds
+[2023-08-17T14:56:40.113-0600] {processor.py:157} INFO - Started process (PID=1259) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:56:40.114-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:56:40.115-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:40.115-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:56:40.144-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:56:40.191-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:40.190-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:56:40.252-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:40.251-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:56:40.285-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.177 seconds
+[2023-08-17T14:57:10.714-0600] {processor.py:157} INFO - Started process (PID=1293) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:57:10.716-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:57:10.717-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:10.716-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:57:10.735-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:57:10.770-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:10.770-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:57:10.825-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:10.825-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:57:10.857-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.149 seconds
+[2023-08-17T14:57:41.255-0600] {processor.py:157} INFO - Started process (PID=1330) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:57:41.257-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:57:41.258-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:41.258-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:57:41.280-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:57:41.317-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:41.316-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:57:41.376-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:41.376-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:57:41.454-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.203 seconds
+[2023-08-17T14:58:11.920-0600] {processor.py:157} INFO - Started process (PID=1360) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:58:11.924-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:58:11.926-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:11.925-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:58:11.948-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:58:11.987-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:11.987-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:58:12.050-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:12.049-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:58:12.094-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.179 seconds
+[2023-08-17T14:58:42.478-0600] {processor.py:157} INFO - Started process (PID=1393) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:58:42.488-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:58:42.489-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:42.489-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:58:42.510-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:58:42.545-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:42.545-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:58:42.606-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:42.606-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:58:42.665-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.192 seconds
+[2023-08-17T14:59:13.067-0600] {processor.py:157} INFO - Started process (PID=1429) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:59:13.077-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:59:13.078-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:13.078-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:59:13.106-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:59:13.147-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:13.146-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:59:13.209-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:13.208-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:59:13.250-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.187 seconds
+[2023-08-17T14:59:43.449-0600] {processor.py:157} INFO - Started process (PID=1461) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:59:43.451-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T14:59:43.452-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:43.452-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:59:43.473-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T14:59:43.516-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:43.515-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:59:43.579-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:43.579-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T14:59:43.614-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.171 seconds
+[2023-08-17T15:00:14.060-0600] {processor.py:157} INFO - Started process (PID=1493) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:00:14.062-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:00:14.063-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:14.062-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:00:14.089-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:00:14.126-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:14.126-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:00:14.184-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:14.184-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:00:14.221-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.165 seconds
+[2023-08-17T15:00:44.606-0600] {processor.py:157} INFO - Started process (PID=1525) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:00:44.607-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:00:44.608-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:44.608-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:00:44.665-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:00:44.700-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:44.700-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:00:44.757-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:44.757-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:00:44.794-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.205 seconds
+[2023-08-17T15:01:15.168-0600] {processor.py:157} INFO - Started process (PID=1565) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:01:15.170-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:01:15.171-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:15.171-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:01:15.191-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:01:15.224-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:15.224-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:01:15.277-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:15.277-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:01:15.308-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.144 seconds
+[2023-08-17T15:01:45.704-0600] {processor.py:157} INFO - Started process (PID=1597) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:01:45.705-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:01:45.706-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:45.706-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:01:45.728-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:01:45.763-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:45.763-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:01:45.820-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:45.820-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:01:45.854-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.154 seconds
+[2023-08-17T15:02:16.237-0600] {processor.py:157} INFO - Started process (PID=1629) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:02:16.239-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:02:16.240-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:16.240-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:02:16.260-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:02:16.295-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:16.294-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:02:16.354-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:16.354-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:02:16.398-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.166 seconds
+[2023-08-17T15:02:46.771-0600] {processor.py:157} INFO - Started process (PID=1662) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:02:46.772-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:02:46.773-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:46.772-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:02:46.793-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:02:46.827-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:46.827-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:02:46.881-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:46.881-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:02:46.914-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.148 seconds
+[2023-08-17T15:03:17.307-0600] {processor.py:157} INFO - Started process (PID=1694) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:03:17.308-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:03:17.309-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:17.309-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:03:17.331-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:03:17.364-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:17.364-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:03:17.419-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:17.419-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:03:17.448-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.146 seconds
+[2023-08-17T15:03:47.850-0600] {processor.py:157} INFO - Started process (PID=1726) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:03:47.851-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:03:47.853-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:47.852-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:03:47.875-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:03:47.909-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:47.909-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:03:47.965-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:47.964-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:03:48.003-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.159 seconds
+[2023-08-17T15:04:18.407-0600] {processor.py:157} INFO - Started process (PID=1758) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:04:18.408-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:04:18.409-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:18.409-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:04:18.429-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:04:18.462-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:18.462-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:04:18.516-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:18.516-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:04:18.547-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.144 seconds
+[2023-08-17T15:04:49.028-0600] {processor.py:157} INFO - Started process (PID=1798) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:04:49.029-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:04:49.030-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:49.029-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:04:49.050-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:04:49.088-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:49.088-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:04:49.151-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:49.150-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:04:49.223-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.206 seconds
+[2023-08-17T15:05:19.520-0600] {processor.py:157} INFO - Started process (PID=1833) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:05:19.522-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:05:19.523-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:19.523-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:05:19.543-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:05:19.580-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:19.580-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:05:19.636-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:19.635-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:05:19.665-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.150 seconds
+[2023-08-17T15:05:50.060-0600] {processor.py:157} INFO - Started process (PID=1865) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:05:50.061-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:05:50.062-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:50.062-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:05:50.083-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:05:50.117-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:50.117-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:05:50.173-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:50.173-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:05:50.207-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.151 seconds
+[2023-08-17T15:06:20.599-0600] {processor.py:157} INFO - Started process (PID=1897) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:06:20.600-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:06:20.601-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:20.601-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:06:20.621-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:06:20.654-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:20.654-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:06:20.707-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:20.707-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:06:20.737-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T15:06:51.116-0600] {processor.py:157} INFO - Started process (PID=1929) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:06:51.117-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:06:51.118-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:51.118-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:06:51.138-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:06:51.172-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:51.171-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:06:51.225-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:51.225-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:06:51.257-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.146 seconds
+[2023-08-17T15:07:21.656-0600] {processor.py:157} INFO - Started process (PID=1961) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:07:21.657-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:07:21.658-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:21.658-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:07:21.679-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:07:21.714-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:21.714-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:07:21.770-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:21.769-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:07:21.801-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.151 seconds
+[2023-08-17T15:07:52.204-0600] {processor.py:157} INFO - Started process (PID=1993) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:07:52.205-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:07:52.207-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:52.207-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:07:52.230-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:07:52.264-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:52.264-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:07:52.319-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:52.319-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:07:52.351-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.152 seconds
+[2023-08-17T15:08:22.752-0600] {processor.py:157} INFO - Started process (PID=2026) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:08:22.753-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:08:22.755-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:22.754-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:08:22.779-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:08:22.813-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:22.813-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:08:22.866-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:22.866-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:08:22.896-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.150 seconds
+[2023-08-17T15:08:53.277-0600] {processor.py:157} INFO - Started process (PID=2058) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:08:53.278-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:08:53.279-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:53.279-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:08:53.301-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:08:53.335-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:53.335-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:08:53.392-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:53.392-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:08:53.426-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.154 seconds
+[2023-08-17T15:09:23.811-0600] {processor.py:157} INFO - Started process (PID=2091) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:09:23.812-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:09:23.814-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:23.813-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:09:23.841-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:09:23.879-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:23.879-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:09:23.936-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:23.936-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:09:23.971-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.165 seconds
+[2023-08-17T15:09:54.394-0600] {processor.py:157} INFO - Started process (PID=2122) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:09:54.396-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:09:54.397-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:54.396-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:09:54.417-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:09:54.452-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:54.452-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:09:54.508-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:54.508-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T20:50:00+00:00, run_after=2023-08-17T21:00:00+00:00
+[2023-08-17T15:09:54.540-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.151 seconds
+[2023-08-17T15:10:24.923-0600] {processor.py:157} INFO - Started process (PID=2158) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:10:24.924-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:10:24.925-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:24.925-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:10:24.947-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:10:24.981-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:24.981-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:10:25.038-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:25.037-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:10:25.073-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.154 seconds
+[2023-08-17T15:10:55.461-0600] {processor.py:157} INFO - Started process (PID=2190) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:10:55.462-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:10:55.463-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:55.463-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:10:55.485-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:10:55.519-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:55.519-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:10:55.573-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:55.573-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:10:55.604-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.149 seconds
+[2023-08-17T15:11:25.982-0600] {processor.py:157} INFO - Started process (PID=2222) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:11:25.983-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:11:25.984-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:25.984-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:11:26.004-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:11:26.037-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:26.037-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:11:26.091-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:26.091-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:11:26.122-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:11:56.509-0600] {processor.py:157} INFO - Started process (PID=2254) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:11:56.510-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:11:56.511-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:56.511-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:11:56.532-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:11:56.565-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:56.565-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:11:56.618-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:56.618-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:11:56.649-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:12:27.031-0600] {processor.py:157} INFO - Started process (PID=2286) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:12:27.033-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:12:27.034-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:27.033-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:12:27.054-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:12:27.087-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:27.087-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:12:27.142-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:27.141-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:12:27.171-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.144 seconds
+[2023-08-17T15:12:57.546-0600] {processor.py:157} INFO - Started process (PID=2318) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:12:57.547-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:12:57.548-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:57.548-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:12:57.568-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:12:57.601-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:57.601-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:12:57.655-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:57.655-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:12:57.683-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.142 seconds
+[2023-08-17T15:13:28.084-0600] {processor.py:157} INFO - Started process (PID=2350) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:13:28.085-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:13:28.087-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:28.086-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:13:28.110-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:13:28.144-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:28.144-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:13:28.197-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:28.197-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:13:28.228-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.150 seconds
+[2023-08-17T15:13:58.613-0600] {processor.py:157} INFO - Started process (PID=2382) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:13:58.615-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:13:58.616-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:58.616-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:13:58.638-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:13:58.671-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:58.671-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:13:58.724-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:58.724-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:13:58.754-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.147 seconds
+[2023-08-17T15:14:29.151-0600] {processor.py:157} INFO - Started process (PID=2414) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:14:29.153-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:14:29.154-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:29.154-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:14:29.178-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:14:29.211-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:29.211-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:14:29.264-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:29.264-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:14:29.293-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.147 seconds
+[2023-08-17T15:14:59.729-0600] {processor.py:157} INFO - Started process (PID=2446) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:14:59.730-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:14:59.731-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:59.730-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:14:59.754-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:14:59.789-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:59.789-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:14:59.845-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:59.845-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:14:59.882-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.158 seconds
+[2023-08-17T15:15:30.289-0600] {processor.py:157} INFO - Started process (PID=2478) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:15:30.290-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:15:30.291-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:30.291-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:15:30.312-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:15:30.344-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:30.344-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:15:30.398-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:30.398-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:15:30.429-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:16:00.838-0600] {processor.py:157} INFO - Started process (PID=2510) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:16:00.839-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:16:00.840-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:00.840-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:16:00.860-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:16:00.895-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:00.895-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:16:00.952-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:00.951-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:16:00.988-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.155 seconds
+[2023-08-17T15:16:31.382-0600] {processor.py:157} INFO - Started process (PID=2542) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:16:31.383-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:16:31.384-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:31.384-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:16:31.404-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:16:31.440-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:31.439-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:16:31.494-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:31.494-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:16:31.524-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.147 seconds
+[2023-08-17T15:17:01.915-0600] {processor.py:157} INFO - Started process (PID=2575) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:17:01.916-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:17:01.917-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:01.917-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:17:01.937-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:17:01.970-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:01.970-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:17:02.025-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:02.025-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:17:02.055-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:17:32.447-0600] {processor.py:157} INFO - Started process (PID=2606) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:17:32.448-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:17:32.449-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:32.449-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:17:32.469-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:17:32.503-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:32.503-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:17:32.556-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:32.556-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:17:32.589-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.147 seconds
+[2023-08-17T15:18:02.934-0600] {processor.py:157} INFO - Started process (PID=2638) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:18:02.935-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:18:02.936-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:02.936-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:18:02.959-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:18:02.992-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:02.992-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:18:03.046-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:03.046-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:18:03.075-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.146 seconds
+[2023-08-17T15:18:33.456-0600] {processor.py:157} INFO - Started process (PID=2670) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:18:33.457-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:18:33.459-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:33.459-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:18:33.478-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:18:33.511-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:33.511-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:18:33.565-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:33.565-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:18:33.597-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.146 seconds
+[2023-08-17T15:19:03.986-0600] {processor.py:157} INFO - Started process (PID=2703) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:19:03.987-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:19:03.988-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:03.988-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:19:04.012-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:19:04.051-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:04.051-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:19:04.106-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:04.106-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:19:04.140-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.159 seconds
+[2023-08-17T15:19:34.552-0600] {processor.py:157} INFO - Started process (PID=2735) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:19:34.553-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:19:34.554-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:34.554-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:19:34.576-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:19:34.610-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:34.610-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:19:34.675-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:34.675-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:00:00+00:00, run_after=2023-08-17T21:10:00+00:00
+[2023-08-17T15:19:34.724-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.176 seconds
+[2023-08-17T15:20:05.135-0600] {processor.py:157} INFO - Started process (PID=2767) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:20:05.137-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:20:05.139-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:05.138-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:20:05.158-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:20:05.191-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:05.191-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:20:05.244-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:05.244-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:20:05.276-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:20:35.666-0600] {processor.py:157} INFO - Started process (PID=2799) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:20:35.667-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:20:35.668-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:35.668-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:20:35.689-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:20:35.722-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:35.722-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:20:35.775-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:35.775-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:20:35.809-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.148 seconds
+[2023-08-17T15:21:06.207-0600] {processor.py:157} INFO - Started process (PID=2831) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:21:06.208-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:21:06.209-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:06.209-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:21:06.229-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:21:06.263-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:06.263-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:21:06.317-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:06.317-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:21:06.347-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:21:36.738-0600] {processor.py:157} INFO - Started process (PID=2861) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:21:36.739-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:21:36.740-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:36.740-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:21:36.761-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:21:36.798-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:36.798-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:21:36.861-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:36.861-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:21:36.905-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.172 seconds
+[2023-08-17T15:22:07.269-0600] {processor.py:157} INFO - Started process (PID=2899) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:22:07.270-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:22:07.271-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:07.271-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:22:07.292-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:22:07.325-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:07.325-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:22:07.379-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:07.379-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:22:07.412-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.147 seconds
+[2023-08-17T15:22:37.802-0600] {processor.py:157} INFO - Started process (PID=2931) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:22:37.803-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:22:37.804-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:37.804-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:22:37.824-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:22:37.858-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:37.858-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:22:37.911-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:37.911-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:22:37.942-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:23:08.329-0600] {processor.py:157} INFO - Started process (PID=2964) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:23:08.330-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:23:08.331-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:08.331-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:23:08.351-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:23:08.384-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:08.384-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:23:08.437-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:08.437-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:23:08.468-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.144 seconds
+[2023-08-17T15:23:38.852-0600] {processor.py:157} INFO - Started process (PID=2997) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:23:38.852-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:23:38.853-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:38.853-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:23:38.873-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:23:38.907-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:38.906-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:23:38.960-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:38.960-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:23:38.991-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T15:24:09.388-0600] {processor.py:157} INFO - Started process (PID=3029) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:24:09.390-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:24:09.391-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:09.391-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:24:09.411-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:24:09.444-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:09.444-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:24:09.497-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:09.497-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:24:09.527-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T15:24:39.915-0600] {processor.py:157} INFO - Started process (PID=3061) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:24:39.916-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:24:39.917-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:39.917-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:24:39.938-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:24:39.972-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:39.972-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:24:40.025-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:40.025-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:24:40.055-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.144 seconds
+[2023-08-17T15:25:10.452-0600] {processor.py:157} INFO - Started process (PID=3093) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:25:10.454-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:25:10.455-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:10.454-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:25:10.474-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:25:10.507-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:10.507-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:25:10.560-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:10.560-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:25:10.590-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.142 seconds
+[2023-08-17T15:25:40.974-0600] {processor.py:157} INFO - Started process (PID=3125) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:25:40.976-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:25:40.977-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:40.976-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:25:40.998-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:25:41.032-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:41.032-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:25:41.087-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:41.086-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:25:41.119-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.150 seconds
+[2023-08-17T15:26:11.504-0600] {processor.py:157} INFO - Started process (PID=3158) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:26:11.505-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:26:11.506-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:11.506-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:26:11.526-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:26:11.560-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:11.559-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:26:11.613-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:11.613-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:26:11.642-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T15:26:42.037-0600] {processor.py:157} INFO - Started process (PID=3190) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:26:42.038-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:26:42.039-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:42.039-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:26:42.060-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:26:42.101-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:42.101-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:26:42.156-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:42.155-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:26:42.187-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.154 seconds
+[2023-08-17T15:27:12.563-0600] {processor.py:157} INFO - Started process (PID=3222) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:27:12.564-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:27:12.566-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:12.566-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:27:12.585-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:27:12.619-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:12.619-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:27:12.671-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:12.671-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:27:12.701-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.142 seconds
+[2023-08-17T15:27:43.077-0600] {processor.py:157} INFO - Started process (PID=3254) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:27:43.079-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:27:43.080-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:43.080-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:27:43.102-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:27:43.137-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:43.136-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:27:43.189-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:43.189-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:27:43.221-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.149 seconds
+[2023-08-17T15:28:13.600-0600] {processor.py:157} INFO - Started process (PID=3286) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:28:13.601-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:28:13.603-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:13.602-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:28:13.625-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:28:13.657-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:13.657-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:28:13.710-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:13.710-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:28:13.740-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:28:44.122-0600] {processor.py:157} INFO - Started process (PID=3318) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:28:44.123-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:28:44.124-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:44.124-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:28:44.144-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:28:44.178-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:44.178-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:28:44.230-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:44.230-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:28:44.261-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.145 seconds
+[2023-08-17T15:29:14.632-0600] {processor.py:157} INFO - Started process (PID=3350) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:29:14.634-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:29:14.635-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:14.635-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:29:14.657-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:29:14.692-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:14.692-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:29:14.750-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:14.750-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:29:14.782-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.154 seconds
+[2023-08-17T15:29:45.154-0600] {processor.py:157} INFO - Started process (PID=3382) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:29:45.156-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:29:45.158-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:45.157-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:29:45.179-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:29:45.215-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:45.215-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:29:45.271-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:45.270-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:10:00+00:00, run_after=2023-08-17T21:20:00+00:00
+[2023-08-17T15:29:45.304-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.155 seconds
+[2023-08-17T15:30:15.729-0600] {processor.py:157} INFO - Started process (PID=3421) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:30:15.731-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:30:15.732-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:15.731-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:30:15.753-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:30:15.787-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:15.787-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:30:15.841-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:15.841-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:30:15.877-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.153 seconds
+[2023-08-17T15:30:46.279-0600] {processor.py:157} INFO - Started process (PID=3453) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:30:46.280-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:30:46.282-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:46.281-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:30:46.304-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:30:46.337-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:46.337-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:30:46.391-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:46.391-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:30:46.422-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.148 seconds
+[2023-08-17T15:31:16.834-0600] {processor.py:157} INFO - Started process (PID=3485) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:31:16.835-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:31:16.837-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:16.836-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:31:16.860-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:31:16.893-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:16.893-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:31:16.946-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:16.946-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:31:16.978-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.149 seconds
+[2023-08-17T15:31:47.380-0600] {processor.py:157} INFO - Started process (PID=3516) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:31:47.381-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:31:47.382-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:47.382-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:31:47.403-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:31:47.437-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:47.437-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:31:47.492-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:47.492-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:31:47.521-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.146 seconds
+[2023-08-17T15:32:17.925-0600] {processor.py:157} INFO - Started process (PID=3548) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:32:17.926-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:32:17.928-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:17.927-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:32:17.950-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:32:17.984-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:17.984-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:32:18.038-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:18.037-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:32:18.068-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.150 seconds
+[2023-08-17T15:32:48.465-0600] {processor.py:157} INFO - Started process (PID=3580) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:32:48.466-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:32:48.467-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:48.467-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:32:48.486-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:32:48.521-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:48.520-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:32:48.574-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:48.574-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:32:48.604-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.143 seconds
+[2023-08-17T15:33:19.001-0600] {processor.py:157} INFO - Started process (PID=3612) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:33:19.002-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:33:19.003-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:19.003-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:33:19.025-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:33:19.059-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:19.058-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:33:19.111-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:19.111-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:33:19.142-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.147 seconds
+[2023-08-17T15:33:49.552-0600] {processor.py:157} INFO - Started process (PID=3644) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:33:49.553-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:33:49.554-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:49.553-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:33:49.575-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:33:49.609-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:49.609-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:33:49.665-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:49.664-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:33:49.701-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.153 seconds
+[2023-08-17T15:34:20.091-0600] {processor.py:157} INFO - Started process (PID=3676) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:34:20.092-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:34:20.093-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:20.093-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:34:20.114-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:34:20.147-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:20.147-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:34:20.200-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:20.200-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:34:20.233-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.146 seconds
+[2023-08-17T15:34:50.587-0600] {processor.py:157} INFO - Started process (PID=3709) to work on /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:34:50.588-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/actualizar_comprobantes_hacienda.py for tasks to queue
+[2023-08-17T15:34:50.589-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:50.589-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:34:50.609-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Actualizar_Comprobantes_Hacienda']) retrieved from /opt/airflow/dags/actualizar_comprobantes_hacienda.py
+[2023-08-17T15:34:50.643-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:50.643-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:34:50.700-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:50.700-0600] {dag.py:3490} INFO - Setting next_dagrun for Actualizar_Comprobantes_Hacienda to 2023-08-17T21:20:00+00:00, run_after=2023-08-17T21:30:00+00:00
+[2023-08-17T15:34:50.731-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/actualizar_comprobantes_hacienda.py took 0.151 seconds
