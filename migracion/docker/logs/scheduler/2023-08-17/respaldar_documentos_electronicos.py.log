@@ -1,0 +1,767 @@
+[2023-08-17T14:39:50.272-0600] {processor.py:157} INFO - Started process (PID=185) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:39:50.273-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:39:50.274-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.274-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:39:50.294-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:39:50.540-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.540-0600] {manager.py:504} INFO - Created Permission View: can edit on DAG:Respaldar_Documentos_Electronicos
+[2023-08-17T14:39:50.558-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.557-0600] {manager.py:504} INFO - Created Permission View: can read on DAG:Respaldar_Documentos_Electronicos
+[2023-08-17T14:39:50.568-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.568-0600] {manager.py:504} INFO - Created Permission View: can delete on DAG:Respaldar_Documentos_Electronicos
+[2023-08-17T14:39:50.569-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.568-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:39:50.858-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.858-0600] {dag.py:2747} INFO - Creating ORM DAG for Respaldar_Documentos_Electronicos
+[2023-08-17T14:39:50.889-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:50.888-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:39:50.933-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.666 seconds
+[2023-08-17T14:40:21.291-0600] {processor.py:157} INFO - Started process (PID=216) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:40:21.292-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:40:21.293-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:21.293-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:40:21.311-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:40:21.345-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:21.345-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:40:21.394-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:21.394-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:40:21.425-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.139 seconds
+[2023-08-17T14:40:51.744-0600] {processor.py:157} INFO - Started process (PID=248) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:40:51.745-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:40:51.746-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:51.746-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:40:51.764-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:40:51.800-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:51.800-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:40:51.848-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:51.848-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:40:51.881-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T14:41:22.197-0600] {processor.py:157} INFO - Started process (PID=280) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:41:22.200-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:41:22.201-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:22.201-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:41:22.234-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:41:22.278-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:22.278-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:41:22.327-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:22.327-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:41:22.365-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.177 seconds
+[2023-08-17T14:41:52.585-0600] {processor.py:157} INFO - Started process (PID=312) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:41:52.586-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:41:52.587-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:52.587-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:41:52.606-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:41:52.642-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:52.642-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:41:52.691-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:52.691-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:41:52.725-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.144 seconds
+[2023-08-17T14:42:23.481-0600] {processor.py:157} INFO - Started process (PID=344) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:42:23.485-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:42:23.486-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:23.486-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:42:23.505-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:42:23.547-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:23.547-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:42:23.597-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:23.597-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:42:23.780-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.304 seconds
+[2023-08-17T14:42:54.340-0600] {processor.py:157} INFO - Started process (PID=376) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:42:54.342-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:42:54.343-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:54.343-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:42:54.362-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:42:54.399-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:54.399-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:42:54.594-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:54.594-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:42:54.624-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.288 seconds
+[2023-08-17T14:43:24.869-0600] {processor.py:157} INFO - Started process (PID=408) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:43:24.871-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:43:24.872-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:24.872-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:43:24.891-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:43:24.928-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:24.928-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:43:25.118-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:25.118-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:43:25.149-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.285 seconds
+[2023-08-17T14:43:55.371-0600] {processor.py:157} INFO - Started process (PID=441) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:43:55.372-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:43:55.373-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:55.373-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:43:55.394-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:43:55.588-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:55.587-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:43:55.634-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:55.633-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:43:55.667-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.301 seconds
+[2023-08-17T14:44:25.930-0600] {processor.py:157} INFO - Started process (PID=473) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:44:25.953-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:44:25.954-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:25.954-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:44:26.140-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:44:26.168-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:26.168-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:44:26.211-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:26.210-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:44:26.241-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.316 seconds
+[2023-08-17T14:44:56.800-0600] {processor.py:157} INFO - Started process (PID=505) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:44:56.801-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:44:56.802-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:56.802-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:44:56.821-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:44:56.857-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:56.857-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:44:56.905-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:56.904-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:44:56.939-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.144 seconds
+[2023-08-17T14:45:27.269-0600] {processor.py:157} INFO - Started process (PID=537) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:45:27.271-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:45:27.272-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:27.271-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:45:27.290-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:45:27.324-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:27.324-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:45:27.372-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:27.371-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:45:27.403-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.138 seconds
+[2023-08-17T14:45:57.771-0600] {processor.py:157} INFO - Started process (PID=569) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:45:57.772-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:45:57.773-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:57.773-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:45:57.792-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:45:57.828-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:57.828-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:45:57.875-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:57.875-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:45:57.910-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T14:46:28.452-0600] {processor.py:157} INFO - Started process (PID=601) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:46:28.453-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:46:28.455-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:28.454-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:46:28.475-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:46:28.511-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:28.511-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:46:28.563-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:28.563-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:46:28.598-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.152 seconds
+[2023-08-17T14:46:59.133-0600] {processor.py:157} INFO - Started process (PID=633) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:46:59.134-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:46:59.135-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:59.135-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:46:59.154-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:46:59.199-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:59.199-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:46:59.258-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:59.258-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:46:59.292-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.164 seconds
+[2023-08-17T14:47:29.667-0600] {processor.py:157} INFO - Started process (PID=665) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:47:29.668-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:47:29.669-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:29.669-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:47:29.687-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:47:29.722-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:29.722-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:47:29.769-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:29.769-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:47:29.803-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.140 seconds
+[2023-08-17T14:48:00.204-0600] {processor.py:157} INFO - Started process (PID=697) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:48:00.205-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:48:00.206-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:00.206-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:48:00.225-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:48:00.260-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:00.260-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:48:00.308-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:00.307-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:48:00.339-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.140 seconds
+[2023-08-17T14:48:30.751-0600] {processor.py:157} INFO - Started process (PID=729) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:48:30.753-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:48:30.754-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:30.754-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:48:30.772-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:48:30.809-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:30.808-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:48:30.856-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:30.856-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:48:30.890-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T14:49:01.255-0600] {processor.py:157} INFO - Started process (PID=760) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:49:01.256-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:49:01.257-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:01.256-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:49:01.275-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:49:01.310-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:01.310-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:49:01.357-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:01.357-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:49:01.390-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T14:49:31.772-0600] {processor.py:157} INFO - Started process (PID=792) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:49:31.773-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:49:31.774-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:31.774-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:49:31.793-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:49:31.827-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:31.827-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:49:31.875-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:31.875-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:49:31.905-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.138 seconds
+[2023-08-17T14:50:02.323-0600] {processor.py:157} INFO - Started process (PID=824) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:50:02.324-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:50:02.325-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:02.325-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:50:02.344-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:50:02.379-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:02.379-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:50:02.428-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:02.428-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:50:02.460-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T14:50:32.850-0600] {processor.py:157} INFO - Started process (PID=856) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:50:32.852-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:50:32.852-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:32.852-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:50:32.870-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:50:32.905-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:32.905-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:50:32.952-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:32.952-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:50:32.984-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.139 seconds
+[2023-08-17T14:51:03.406-0600] {processor.py:157} INFO - Started process (PID=891) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:51:03.407-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:51:03.408-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:03.408-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:51:03.426-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:51:03.461-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:03.461-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:51:03.509-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:03.509-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:51:03.542-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T14:51:34.004-0600] {processor.py:157} INFO - Started process (PID=923) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:51:34.006-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:51:34.007-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:34.006-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:51:34.026-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:51:34.062-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:34.062-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:51:34.110-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:34.109-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:51:34.143-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.144 seconds
+[2023-08-17T14:52:04.537-0600] {processor.py:157} INFO - Started process (PID=956) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:52:04.538-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:52:04.539-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:04.539-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:52:04.559-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:52:04.594-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:04.594-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:52:04.644-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:04.644-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:52:04.674-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T14:52:35.088-0600] {processor.py:157} INFO - Started process (PID=988) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:52:35.089-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:52:35.090-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:35.090-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:52:35.109-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:52:35.146-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:35.145-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:52:35.193-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:35.193-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:52:35.225-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T14:53:05.871-0600] {processor.py:157} INFO - Started process (PID=1027) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:53:05.874-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:53:05.878-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:05.877-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:53:05.905-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:53:05.953-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:05.952-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:53:06.003-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:06.003-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:53:06.055-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.197 seconds
+[2023-08-17T14:53:36.360-0600] {processor.py:157} INFO - Started process (PID=1059) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:53:36.361-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:53:36.362-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:36.362-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:53:36.381-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:53:36.417-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:36.416-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:53:36.466-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:36.466-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-16T08:00:00+00:00, run_after=2023-08-17T08:00:00+00:00
+[2023-08-17T14:53:36.499-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.144 seconds
+[2023-08-17T14:54:06.945-0600] {processor.py:157} INFO - Started process (PID=1097) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:54:06.948-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:54:06.949-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:06.949-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:54:06.968-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:54:07.003-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:07.003-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:54:07.053-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:07.053-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:54:07.085-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.147 seconds
+[2023-08-17T14:54:37.763-0600] {processor.py:157} INFO - Started process (PID=1137) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:54:37.765-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:54:37.766-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:37.766-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:54:37.796-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:54:37.837-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:37.837-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:54:37.887-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:37.887-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:54:37.926-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.168 seconds
+[2023-08-17T14:55:08.359-0600] {processor.py:157} INFO - Started process (PID=1169) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:55:08.361-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:55:08.363-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:08.362-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:55:08.382-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:55:08.415-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:08.415-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:55:08.464-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:08.464-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:55:08.518-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.164 seconds
+[2023-08-17T14:55:38.919-0600] {processor.py:157} INFO - Started process (PID=1201) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:55:38.921-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:55:38.922-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:38.922-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:55:38.943-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:55:38.977-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:38.977-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:55:39.027-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:39.027-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:55:39.059-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.146 seconds
+[2023-08-17T14:56:09.640-0600] {processor.py:157} INFO - Started process (PID=1233) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:56:09.641-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:56:09.642-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:09.642-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:56:09.667-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:56:09.701-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:09.700-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:56:09.754-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:09.754-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:56:09.812-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.177 seconds
+[2023-08-17T14:56:40.331-0600] {processor.py:157} INFO - Started process (PID=1265) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:56:40.333-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:56:40.335-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:40.335-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:56:40.377-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:56:40.443-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:40.443-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:56:40.493-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:40.493-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:56:40.526-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.200 seconds
+[2023-08-17T14:57:10.889-0600] {processor.py:157} INFO - Started process (PID=1300) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:57:10.890-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:57:10.891-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:10.891-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:57:10.910-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:57:10.945-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:10.945-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:57:10.994-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:10.994-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:57:11.028-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.144 seconds
+[2023-08-17T14:57:41.448-0600] {processor.py:157} INFO - Started process (PID=1335) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:57:41.472-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:57:41.473-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:41.472-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:57:41.491-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:57:41.526-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:41.525-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:57:41.575-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:41.575-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:57:41.608-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.165 seconds
+[2023-08-17T14:58:12.161-0600] {processor.py:157} INFO - Started process (PID=1369) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:58:12.162-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:58:12.163-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:12.163-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:58:12.183-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:58:12.221-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:12.221-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:58:12.273-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:12.273-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:58:12.314-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.158 seconds
+[2023-08-17T14:58:42.693-0600] {processor.py:157} INFO - Started process (PID=1398) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:58:42.696-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:58:42.697-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:42.697-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:58:42.719-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:58:42.756-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:42.756-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:58:42.813-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:42.813-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:58:42.851-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.175 seconds
+[2023-08-17T14:59:13.287-0600] {processor.py:157} INFO - Started process (PID=1436) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:59:13.288-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:59:13.289-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:13.289-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:59:13.310-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:59:13.346-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:13.346-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:59:13.447-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:13.446-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:59:13.484-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.203 seconds
+[2023-08-17T14:59:43.654-0600] {processor.py:157} INFO - Started process (PID=1466) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:59:43.656-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T14:59:43.657-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:43.657-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:59:43.679-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T14:59:43.714-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:43.714-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:59:43.770-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:43.769-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T14:59:43.807-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.159 seconds
+[2023-08-17T15:00:14.251-0600] {processor.py:157} INFO - Started process (PID=1500) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:00:14.265-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:00:14.266-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:14.265-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:00:14.285-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:00:14.319-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:14.319-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:00:14.369-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:14.368-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:00:14.398-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.152 seconds
+[2023-08-17T15:00:44.811-0600] {processor.py:157} INFO - Started process (PID=1531) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:00:44.812-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:00:44.821-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:44.820-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:00:44.840-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:00:44.874-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:44.874-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:00:44.926-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:44.926-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:00:44.959-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.153 seconds
+[2023-08-17T15:01:15.340-0600] {processor.py:157} INFO - Started process (PID=1572) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:01:15.341-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:01:15.342-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:15.342-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:01:15.361-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:01:15.397-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:15.396-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:01:15.446-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:15.446-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:01:15.481-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.146 seconds
+[2023-08-17T15:01:45.892-0600] {processor.py:157} INFO - Started process (PID=1604) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:01:45.894-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:01:45.895-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:45.894-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:01:45.913-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:01:45.949-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:45.948-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:01:45.998-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:45.998-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:01:46.029-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:02:16.422-0600] {processor.py:157} INFO - Started process (PID=1636) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:02:16.424-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:02:16.425-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:16.424-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:02:16.444-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:02:16.481-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:16.480-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:02:16.530-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:16.530-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:02:16.563-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.145 seconds
+[2023-08-17T15:02:46.941-0600] {processor.py:157} INFO - Started process (PID=1669) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:02:46.942-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:02:46.943-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:46.943-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:02:46.962-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:02:46.997-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:46.997-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:02:47.046-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:47.046-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:02:47.079-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:03:17.486-0600] {processor.py:157} INFO - Started process (PID=1701) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:03:17.510-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:03:17.511-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:17.511-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:03:17.530-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:03:17.568-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:17.568-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:03:17.618-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:17.618-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:03:17.651-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.170 seconds
+[2023-08-17T15:03:48.036-0600] {processor.py:157} INFO - Started process (PID=1733) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:03:48.037-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:03:48.038-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:48.038-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:03:48.058-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:03:48.093-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:48.093-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:03:48.142-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:48.142-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:03:48.181-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.150 seconds
+[2023-08-17T15:04:18.579-0600] {processor.py:157} INFO - Started process (PID=1765) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:04:18.580-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:04:18.581-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:18.581-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:04:18.600-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:04:18.635-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:18.635-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:04:18.686-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:18.686-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:04:18.717-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:04:49.171-0600] {processor.py:157} INFO - Started process (PID=1803) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:04:49.172-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:04:49.173-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:49.173-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:04:49.192-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:04:49.231-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:49.230-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:04:49.295-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:49.294-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:04:49.326-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.160 seconds
+[2023-08-17T15:05:19.698-0600] {processor.py:157} INFO - Started process (PID=1840) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:05:19.699-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:05:19.700-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:19.700-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:05:19.719-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:05:19.754-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:19.754-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:05:19.803-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:19.802-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:05:19.833-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.140 seconds
+[2023-08-17T15:05:50.240-0600] {processor.py:157} INFO - Started process (PID=1872) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:05:50.241-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:05:50.242-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:50.241-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:05:50.261-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:05:50.298-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:50.298-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:05:50.349-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:50.348-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:05:50.382-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.148 seconds
+[2023-08-17T15:06:20.767-0600] {processor.py:157} INFO - Started process (PID=1904) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:06:20.769-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:06:20.770-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:20.769-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:06:20.788-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:06:20.823-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:20.822-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:06:20.871-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:20.871-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:06:20.904-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T15:06:51.284-0600] {processor.py:157} INFO - Started process (PID=1936) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:06:51.285-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:06:51.286-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:51.286-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:06:51.304-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:06:51.338-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:51.338-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:06:51.388-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:51.387-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:06:51.421-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:07:21.829-0600] {processor.py:157} INFO - Started process (PID=1968) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:07:21.830-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:07:21.831-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:21.831-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:07:21.850-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:07:21.886-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:21.885-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:07:21.936-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:21.935-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:07:21.969-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.145 seconds
+[2023-08-17T15:07:52.375-0600] {processor.py:157} INFO - Started process (PID=2000) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:07:52.376-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:07:52.377-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:52.377-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:07:52.396-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:07:52.432-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:52.432-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:07:52.481-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:52.481-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:07:52.513-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:08:22.925-0600] {processor.py:157} INFO - Started process (PID=2033) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:08:22.926-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:08:22.927-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:22.927-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:08:22.946-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:08:22.981-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:22.981-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:08:23.029-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:23.029-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:08:23.060-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.140 seconds
+[2023-08-17T15:08:53.444-0600] {processor.py:157} INFO - Started process (PID=2064) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:08:53.445-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:08:53.446-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:53.446-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:08:53.464-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:08:53.497-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:53.496-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:08:53.545-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:53.545-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:08:53.578-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T15:09:23.989-0600] {processor.py:157} INFO - Started process (PID=2098) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:09:23.991-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:09:23.992-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:23.991-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:09:24.012-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:09:24.047-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:24.047-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:09:24.097-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:24.097-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:09:24.132-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.147 seconds
+[2023-08-17T15:09:54.566-0600] {processor.py:157} INFO - Started process (PID=2129) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:09:54.568-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:09:54.569-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:54.568-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:09:54.587-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:09:54.623-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:54.623-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:09:54.673-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:54.673-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:09:54.706-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.145 seconds
+[2023-08-17T15:10:25.100-0600] {processor.py:157} INFO - Started process (PID=2165) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:10:25.101-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:10:25.102-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:25.102-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:10:25.121-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:10:25.156-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:25.156-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:10:25.206-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:25.206-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:10:25.238-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.144 seconds
+[2023-08-17T15:10:55.631-0600] {processor.py:157} INFO - Started process (PID=2197) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:10:55.632-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:10:55.633-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:55.633-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:10:55.652-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:10:55.688-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:55.688-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:10:55.736-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:55.736-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:10:55.768-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T15:11:26.158-0600] {processor.py:157} INFO - Started process (PID=2229) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:11:26.160-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:11:26.161-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:26.161-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:11:26.180-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:11:26.217-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:26.217-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:11:26.268-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:26.267-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:11:26.301-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.149 seconds
+[2023-08-17T15:11:56.678-0600] {processor.py:157} INFO - Started process (PID=2261) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:11:56.679-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:11:56.680-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:56.680-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:11:56.698-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:11:56.734-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:56.734-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:11:56.782-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:56.782-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:11:56.816-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:12:27.198-0600] {processor.py:157} INFO - Started process (PID=2293) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:12:27.200-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:12:27.201-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:27.201-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:12:27.219-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:12:27.254-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:27.254-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:12:27.303-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:27.303-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:12:27.345-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.152 seconds
+[2023-08-17T15:12:57.713-0600] {processor.py:157} INFO - Started process (PID=2325) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:12:57.714-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:12:57.715-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:57.715-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:12:57.734-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:12:57.768-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:57.768-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:12:57.817-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:57.816-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:12:57.847-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.138 seconds
+[2023-08-17T15:13:28.256-0600] {processor.py:157} INFO - Started process (PID=2357) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:13:28.258-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:13:28.259-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:28.258-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:13:28.277-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:13:28.313-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:28.312-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:13:28.360-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:28.360-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:13:28.391-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.139 seconds
+[2023-08-17T15:13:58.784-0600] {processor.py:157} INFO - Started process (PID=2389) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:13:58.785-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:13:58.786-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:58.786-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:13:58.804-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:13:58.839-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:58.839-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:13:58.887-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:58.887-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:13:58.918-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.139 seconds
+[2023-08-17T15:14:29.330-0600] {processor.py:157} INFO - Started process (PID=2421) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:14:29.332-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:14:29.333-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:29.333-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:14:29.352-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:14:29.386-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:29.386-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:14:29.434-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:29.434-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:14:29.465-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.140 seconds
+[2023-08-17T15:14:59.904-0600] {processor.py:157} INFO - Started process (PID=2453) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:14:59.905-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:14:59.906-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:59.906-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:14:59.928-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:14:59.962-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:59.962-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:15:00.010-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:00.010-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:15:00.041-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T15:15:30.462-0600] {processor.py:157} INFO - Started process (PID=2485) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:15:30.463-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:15:30.464-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:30.464-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:15:30.482-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:15:30.517-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:30.516-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:15:30.566-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:30.566-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:15:30.598-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T15:16:01.008-0600] {processor.py:157} INFO - Started process (PID=2516) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:16:01.009-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:16:01.010-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:01.010-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:16:01.028-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:16:01.062-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:01.062-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:16:01.110-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:01.110-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:16:01.140-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.137 seconds
+[2023-08-17T15:16:31.550-0600] {processor.py:157} INFO - Started process (PID=2549) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:16:31.551-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:16:31.552-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:31.552-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:16:31.571-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:16:31.606-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:31.605-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:16:31.654-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:31.653-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:16:31.685-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.140 seconds
+[2023-08-17T15:17:02.083-0600] {processor.py:157} INFO - Started process (PID=2582) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:17:02.084-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:17:02.086-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:02.085-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:17:02.104-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:17:02.139-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:02.139-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:17:02.187-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:02.187-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:17:02.217-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.139 seconds
+[2023-08-17T15:17:32.612-0600] {processor.py:157} INFO - Started process (PID=2613) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:17:32.613-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:17:32.614-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:32.614-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:17:32.633-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:17:32.668-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:32.667-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:17:32.716-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:32.716-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:17:32.751-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:18:03.099-0600] {processor.py:157} INFO - Started process (PID=2645) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:18:03.100-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:18:03.101-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:03.101-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:18:03.120-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:18:03.155-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:03.155-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:18:03.204-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:03.204-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:18:03.240-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.145 seconds
+[2023-08-17T15:18:33.627-0600] {processor.py:157} INFO - Started process (PID=2677) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:18:33.628-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:18:33.629-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:33.629-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:18:33.647-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:18:33.681-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:33.681-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:18:33.730-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:33.730-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:18:33.762-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T15:19:04.172-0600] {processor.py:157} INFO - Started process (PID=2710) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:19:04.173-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:19:04.174-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:04.174-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:19:04.193-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:19:04.228-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:04.228-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:19:04.277-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:04.277-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:19:04.324-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.156 seconds
+[2023-08-17T15:19:34.730-0600] {processor.py:157} INFO - Started process (PID=2740) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:19:34.732-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:19:34.733-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:34.733-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:19:34.757-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:19:34.790-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:34.790-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:19:34.838-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:34.838-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:19:34.870-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.145 seconds
+[2023-08-17T15:20:05.300-0600] {processor.py:157} INFO - Started process (PID=2774) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:20:05.301-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:20:05.302-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:05.302-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:20:05.320-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:20:05.354-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:05.354-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:20:05.403-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:05.403-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:20:05.438-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:20:35.836-0600] {processor.py:157} INFO - Started process (PID=2806) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:20:35.838-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:20:35.839-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:35.838-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:20:35.857-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:20:35.891-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:35.891-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:20:35.939-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:35.939-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:20:35.974-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:21:06.372-0600] {processor.py:157} INFO - Started process (PID=2838) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:21:06.373-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:21:06.374-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:06.374-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:21:06.393-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:21:06.428-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:06.428-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:21:06.477-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:06.477-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:21:06.507-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.140 seconds
+[2023-08-17T15:21:36.937-0600] {processor.py:157} INFO - Started process (PID=2870) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:21:36.939-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:21:36.940-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:36.940-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:21:36.960-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:21:36.995-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:36.995-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:21:37.045-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:37.045-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:21:37.082-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.152 seconds
+[2023-08-17T15:22:07.445-0600] {processor.py:157} INFO - Started process (PID=2906) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:22:07.446-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:22:07.447-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:07.446-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:22:07.465-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:22:07.501-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:07.501-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:22:07.550-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:07.549-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:22:07.580-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T15:22:37.974-0600] {processor.py:157} INFO - Started process (PID=2938) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:22:37.975-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:22:37.976-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:37.976-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:22:37.995-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:22:38.029-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:38.029-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:22:38.077-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:38.077-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:22:38.111-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T15:23:08.497-0600] {processor.py:157} INFO - Started process (PID=2971) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:23:08.498-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:23:08.499-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:08.499-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:23:08.518-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:23:08.554-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:08.553-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:23:08.602-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:08.602-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:23:08.636-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.144 seconds
+[2023-08-17T15:23:39.019-0600] {processor.py:157} INFO - Started process (PID=3004) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:23:39.020-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:23:39.021-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:39.021-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:23:39.040-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:23:39.076-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:39.076-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:23:39.125-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:39.125-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:23:39.155-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T15:24:09.561-0600] {processor.py:157} INFO - Started process (PID=3036) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:24:09.562-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:24:09.563-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:09.563-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:24:09.581-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:24:09.618-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:09.617-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:24:09.667-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:09.667-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:24:09.699-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T15:24:40.089-0600] {processor.py:157} INFO - Started process (PID=3068) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:24:40.091-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:24:40.091-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:40.091-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:24:40.109-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:24:40.144-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:40.144-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:24:40.192-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:40.192-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:24:40.226-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:25:10.619-0600] {processor.py:157} INFO - Started process (PID=3100) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:25:10.620-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:25:10.621-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:10.621-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:25:10.639-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:25:10.675-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:10.674-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:25:10.722-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:10.722-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:25:10.753-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.139 seconds
+[2023-08-17T15:25:41.143-0600] {processor.py:157} INFO - Started process (PID=3132) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:25:41.145-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:25:41.146-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:41.145-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:25:41.164-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:25:41.200-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:41.200-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:25:41.248-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:41.248-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:25:41.282-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:26:11.672-0600] {processor.py:157} INFO - Started process (PID=3165) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:26:11.673-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:26:11.674-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:11.674-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:26:11.693-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:26:11.727-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:11.727-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:26:11.776-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:11.776-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:26:11.807-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.140 seconds
+[2023-08-17T15:26:42.208-0600] {processor.py:157} INFO - Started process (PID=3197) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:26:42.210-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:26:42.211-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:42.210-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:26:42.230-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:26:42.265-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:42.265-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:26:42.314-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:42.314-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:26:42.345-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T15:27:12.735-0600] {processor.py:157} INFO - Started process (PID=3229) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:27:12.736-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:27:12.738-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:12.737-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:27:12.759-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:27:12.799-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:12.799-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:27:12.848-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:12.848-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:27:12.879-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.152 seconds
+[2023-08-17T15:27:43.244-0600] {processor.py:157} INFO - Started process (PID=3261) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:27:43.245-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:27:43.246-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:43.246-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:27:43.264-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:27:43.301-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:43.301-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:27:43.349-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:43.349-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:27:43.382-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:28:13.768-0600] {processor.py:157} INFO - Started process (PID=3293) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:28:13.769-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:28:13.770-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:13.770-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:28:13.790-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:28:13.825-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:13.825-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:28:13.874-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:13.874-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:28:13.907-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.145 seconds
+[2023-08-17T15:28:44.289-0600] {processor.py:157} INFO - Started process (PID=3325) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:28:44.290-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:28:44.291-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:44.291-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:28:44.310-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:28:44.346-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:44.345-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:28:44.394-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:44.394-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:28:44.428-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.145 seconds
+[2023-08-17T15:29:14.796-0600] {processor.py:157} INFO - Started process (PID=3355) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:29:14.797-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:29:14.798-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:14.798-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:29:14.817-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:29:14.850-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:14.850-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:29:14.899-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:14.899-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:29:14.930-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.139 seconds
+[2023-08-17T15:29:45.285-0600] {processor.py:157} INFO - Started process (PID=3387) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:29:45.287-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:29:45.288-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:45.287-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:29:45.307-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:29:45.342-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:45.342-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:29:45.392-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:45.392-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:29:45.427-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.147 seconds
+[2023-08-17T15:30:15.901-0600] {processor.py:157} INFO - Started process (PID=3428) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:30:15.902-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:30:15.903-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:15.903-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:30:15.922-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:30:15.957-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:15.957-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:30:16.005-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:16.005-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:30:16.035-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.139 seconds
+[2023-08-17T15:30:46.448-0600] {processor.py:157} INFO - Started process (PID=3460) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:30:46.449-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:30:46.450-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:46.450-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:30:46.469-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:30:46.503-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:46.503-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:30:46.551-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:46.551-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:30:46.581-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.137 seconds
+[2023-08-17T15:31:17.005-0600] {processor.py:157} INFO - Started process (PID=3492) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:31:17.006-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:31:17.007-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:17.007-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:31:17.026-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:31:17.060-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:17.060-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:31:17.108-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:17.108-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:31:17.141-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T15:31:47.547-0600] {processor.py:157} INFO - Started process (PID=3523) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:31:47.548-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:31:47.549-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:47.549-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:31:47.568-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:31:47.605-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:47.604-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:31:47.654-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:47.654-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:31:47.685-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:32:18.096-0600] {processor.py:157} INFO - Started process (PID=3555) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:32:18.098-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:32:18.098-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:18.098-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:32:18.117-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:32:18.152-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:18.152-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:32:18.202-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:18.202-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:32:18.234-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.143 seconds
+[2023-08-17T15:32:48.633-0600] {processor.py:157} INFO - Started process (PID=3587) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:32:48.634-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:32:48.635-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:48.635-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:32:48.654-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:32:48.690-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:48.689-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:32:48.738-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:48.737-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:32:48.771-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.144 seconds
+[2023-08-17T15:33:19.169-0600] {processor.py:157} INFO - Started process (PID=3619) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:33:19.170-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:33:19.171-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:19.171-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:33:19.190-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:33:19.226-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:19.226-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:33:19.274-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:19.274-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:33:19.306-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.142 seconds
+[2023-08-17T15:33:49.722-0600] {processor.py:157} INFO - Started process (PID=3651) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:33:49.723-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:33:49.724-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:49.724-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:33:49.744-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:33:49.779-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:49.779-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:33:49.831-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:49.830-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:33:49.865-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.147 seconds
+[2023-08-17T15:34:20.257-0600] {processor.py:157} INFO - Started process (PID=3683) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:34:20.258-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:34:20.259-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:20.259-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:34:20.278-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:34:20.313-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:20.312-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:34:20.361-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:20.361-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:34:20.393-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.141 seconds
+[2023-08-17T15:34:50.753-0600] {processor.py:157} INFO - Started process (PID=3716) to work on /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:34:50.755-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/respaldar_documentos_electronicos.py for tasks to queue
+[2023-08-17T15:34:50.756-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:50.755-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:34:50.773-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Documentos_Electronicos']) retrieved from /opt/airflow/dags/respaldar_documentos_electronicos.py
+[2023-08-17T15:34:50.812-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:50.812-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:34:50.862-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:50.862-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Documentos_Electronicos to 2023-08-17T08:00:00+00:00, run_after=2023-08-18T08:00:00+00:00
+[2023-08-17T15:34:50.895-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/respaldar_documentos_electronicos.py took 0.147 seconds

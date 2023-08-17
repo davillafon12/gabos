@@ -1,0 +1,857 @@
+[2023-08-17T14:39:48.543-0600] {processor.py:157} INFO - Started process (PID=165) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:39:48.544-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:39:48.545-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:48.545-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:39:48.626-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:48.616-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:39:48.628-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:39:48.667-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.129 seconds
+[2023-08-17T14:40:19.057-0600] {processor.py:157} INFO - Started process (PID=196) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:40:19.058-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:40:19.059-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:19.059-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:40:19.086-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:19.084-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:40:19.087-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:40:19.105-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.054 seconds
+[2023-08-17T14:40:49.426-0600] {processor.py:157} INFO - Started process (PID=228) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:40:49.427-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:40:49.428-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:49.428-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:40:49.465-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:49.463-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:40:49.466-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:40:49.490-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.070 seconds
+[2023-08-17T14:41:19.894-0600] {processor.py:157} INFO - Started process (PID=260) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:41:19.896-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:41:19.904-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:19.903-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:41:19.936-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:19.935-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:41:19.937-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:41:19.959-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.070 seconds
+[2023-08-17T14:41:50.344-0600] {processor.py:157} INFO - Started process (PID=292) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:41:50.345-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:41:50.346-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:50.346-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:41:50.373-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:50.371-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:41:50.374-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:41:50.391-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.053 seconds
+[2023-08-17T14:42:20.738-0600] {processor.py:157} INFO - Started process (PID=324) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:42:20.740-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:42:20.741-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:20.741-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:42:20.770-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:20.768-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:42:20.770-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:42:20.788-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.055 seconds
+[2023-08-17T14:42:50.951-0600] {processor.py:157} INFO - Started process (PID=356) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:42:50.952-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:42:50.953-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:50.953-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:42:50.982-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:50.980-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:42:50.982-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:42:51.000-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.054 seconds
+[2023-08-17T14:43:21.483-0600] {processor.py:157} INFO - Started process (PID=388) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:43:21.485-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:43:21.486-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:21.486-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:43:21.517-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:21.515-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:43:21.518-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:43:21.535-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.058 seconds
+[2023-08-17T14:43:52.008-0600] {processor.py:157} INFO - Started process (PID=421) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:43:52.009-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:43:52.010-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:52.010-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:43:52.036-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:52.034-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:43:52.038-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:43:52.062-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.059 seconds
+[2023-08-17T14:44:22.501-0600] {processor.py:157} INFO - Started process (PID=453) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:44:22.504-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:44:22.505-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:22.505-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:44:22.683-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:22.682-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/limpieza_logs.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/limpieza_logs.py", line 16, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:44:22.683-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:44:22.698-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.203 seconds
+[2023-08-17T14:44:53.233-0600] {processor.py:157} INFO - Started process (PID=485) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:44:53.234-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:44:53.236-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.235-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:44:53.273-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:44:53.462-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.462-0600] {manager.py:504} INFO - Created Permission View: can edit on DAG:Limpieza_De_Logs
+[2023-08-17T14:44:53.476-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.476-0600] {manager.py:504} INFO - Created Permission View: can read on DAG:Limpieza_De_Logs
+[2023-08-17T14:44:53.486-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.486-0600] {manager.py:504} INFO - Created Permission View: can delete on DAG:Limpieza_De_Logs
+[2023-08-17T14:44:53.487-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.487-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:44:53.510-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.509-0600] {dag.py:2747} INFO - Creating ORM DAG for Limpieza_De_Logs
+[2023-08-17T14:44:53.533-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.533-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:44:53.567-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.339 seconds
+[2023-08-17T14:45:23.935-0600] {processor.py:157} INFO - Started process (PID=517) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:45:23.937-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:45:23.938-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:23.938-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:45:23.975-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:45:24.001-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:24.001-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:45:24.062-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:24.062-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:45:24.094-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.164 seconds
+[2023-08-17T14:45:54.410-0600] {processor.py:157} INFO - Started process (PID=549) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:45:54.411-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:45:54.412-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:54.412-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:45:54.449-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:45:54.476-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:54.476-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:45:54.522-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:54.522-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:45:54.554-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.148 seconds
+[2023-08-17T14:46:24.916-0600] {processor.py:157} INFO - Started process (PID=581) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:46:24.921-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:46:24.922-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:24.922-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:46:25.020-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:46:25.055-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:25.055-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:46:25.130-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:25.130-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:46:25.182-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.272 seconds
+[2023-08-17T14:46:55.607-0600] {processor.py:157} INFO - Started process (PID=613) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:46:55.608-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:46:55.620-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:55.620-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:46:55.712-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:46:55.739-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:55.738-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:46:55.790-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:55.790-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:46:55.856-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.254 seconds
+[2023-08-17T14:47:26.283-0600] {processor.py:157} INFO - Started process (PID=645) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:47:26.284-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:47:26.285-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:26.285-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:47:26.325-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:47:26.352-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:26.352-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:47:26.400-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:26.399-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:47:26.435-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T14:47:56.831-0600] {processor.py:157} INFO - Started process (PID=677) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:47:56.832-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:47:56.833-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:56.833-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:47:56.871-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:47:56.898-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:56.897-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:47:56.948-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:56.947-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:47:56.979-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T14:48:27.351-0600] {processor.py:157} INFO - Started process (PID=709) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:48:27.352-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:48:27.353-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:27.353-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:48:27.391-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:48:27.418-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:27.417-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:48:27.475-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:27.475-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:48:27.507-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.161 seconds
+[2023-08-17T14:48:57.891-0600] {processor.py:157} INFO - Started process (PID=740) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:48:57.892-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:48:57.893-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:57.893-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:48:57.930-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:48:57.956-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:57.956-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:48:58.003-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:58.002-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:48:58.034-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.149 seconds
+[2023-08-17T14:49:28.410-0600] {processor.py:157} INFO - Started process (PID=772) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:49:28.411-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:49:28.412-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:28.412-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:49:28.450-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:49:28.476-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:28.476-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:49:28.522-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:28.522-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:49:28.552-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.148 seconds
+[2023-08-17T14:49:58.949-0600] {processor.py:157} INFO - Started process (PID=804) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:49:58.950-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:49:58.951-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:58.951-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:49:58.989-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:49:59.015-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:59.015-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:49:59.063-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:59.063-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:49:59.101-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T14:50:29.477-0600] {processor.py:157} INFO - Started process (PID=836) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:50:29.479-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:50:29.480-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:29.479-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:50:29.517-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:50:29.543-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:29.543-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:50:29.591-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:29.591-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:50:29.622-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.151 seconds
+[2023-08-17T14:51:00.009-0600] {processor.py:157} INFO - Started process (PID=870) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:51:00.012-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:51:00.013-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:00.013-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:51:00.056-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:51:00.084-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:00.084-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:51:00.140-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:00.139-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:51:00.173-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.170 seconds
+[2023-08-17T14:51:30.554-0600] {processor.py:157} INFO - Started process (PID=903) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:51:30.556-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:51:30.557-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:30.556-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:51:30.618-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:51:30.653-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:30.653-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:51:30.715-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:30.715-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:51:30.761-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.212 seconds
+[2023-08-17T14:52:01.168-0600] {processor.py:157} INFO - Started process (PID=936) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:52:01.169-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:52:01.170-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:01.170-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:52:01.212-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:52:01.238-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:01.238-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:52:01.284-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:01.284-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:52:01.316-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.155 seconds
+[2023-08-17T14:52:31.702-0600] {processor.py:157} INFO - Started process (PID=968) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:52:31.704-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:52:31.705-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:31.704-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:52:31.741-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:52:31.769-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:31.768-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:52:31.824-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:31.823-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:52:31.857-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.161 seconds
+[2023-08-17T14:53:02.254-0600] {processor.py:157} INFO - Started process (PID=1001) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:53:02.256-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:53:02.257-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:02.257-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:53:02.319-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:53:02.357-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:02.357-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:53:02.419-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:02.418-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:53:02.455-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.208 seconds
+[2023-08-17T14:53:32.995-0600] {processor.py:157} INFO - Started process (PID=1032) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:53:32.997-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:53:32.998-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:32.998-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:53:33.035-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:53:33.061-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:33.061-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:53:33.109-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:33.109-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-16T10:00:00+00:00, run_after=2023-08-17T10:00:00+00:00
+[2023-08-17T14:53:33.140-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.150 seconds
+[2023-08-17T14:54:03.504-0600] {processor.py:157} INFO - Started process (PID=1068) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:54:03.506-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:54:03.507-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:03.507-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:54:03.544-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:54:03.570-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:03.570-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:54:03.618-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:03.618-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:54:03.650-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.150 seconds
+[2023-08-17T14:54:34.121-0600] {processor.py:157} INFO - Started process (PID=1112) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:54:34.123-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:54:34.124-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:34.123-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:54:34.168-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:54:34.202-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:34.202-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:54:34.260-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:34.259-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:54:34.326-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.210 seconds
+[2023-08-17T14:55:04.925-0600] {processor.py:157} INFO - Started process (PID=1144) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:55:04.928-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:55:04.929-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:04.929-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:55:04.971-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:55:05.004-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:05.003-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:55:05.067-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:05.067-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:55:05.104-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.185 seconds
+[2023-08-17T14:55:35.519-0600] {processor.py:157} INFO - Started process (PID=1176) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:55:35.525-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:55:35.526-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:35.526-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:55:35.590-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:55:35.624-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:35.624-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:55:35.695-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:35.694-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:55:35.754-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.246 seconds
+[2023-08-17T14:56:06.075-0600] {processor.py:157} INFO - Started process (PID=1208) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:56:06.077-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:56:06.080-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:06.079-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:56:06.128-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:56:06.193-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:06.193-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:56:06.257-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:06.257-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:56:06.295-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.226 seconds
+[2023-08-17T14:56:36.808-0600] {processor.py:157} INFO - Started process (PID=1246) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:56:36.821-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:56:36.822-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:36.821-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:56:36.873-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:56:36.909-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:36.909-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:56:36.997-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:36.997-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:56:37.053-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.252 seconds
+[2023-08-17T14:57:07.504-0600] {processor.py:157} INFO - Started process (PID=1280) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:57:07.509-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:57:07.510-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:07.510-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:57:07.546-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:57:07.573-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:07.573-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:57:07.627-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:07.627-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:57:07.659-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.161 seconds
+[2023-08-17T14:57:38.020-0600] {processor.py:157} INFO - Started process (PID=1316) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:57:38.022-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:57:38.023-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:38.022-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:57:38.070-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:57:38.103-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:38.103-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:57:38.161-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:38.161-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:57:38.195-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.178 seconds
+[2023-08-17T14:58:08.610-0600] {processor.py:157} INFO - Started process (PID=1349) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:58:08.611-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:58:08.612-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:08.612-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:58:08.681-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:58:08.716-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:08.716-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:58:08.791-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:08.790-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:58:08.836-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.231 seconds
+[2023-08-17T14:58:39.265-0600] {processor.py:157} INFO - Started process (PID=1380) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:58:39.266-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:58:39.267-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:39.267-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:58:39.303-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:58:39.330-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:39.330-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:58:39.382-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:39.381-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:58:39.412-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.159 seconds
+[2023-08-17T14:59:09.868-0600] {processor.py:157} INFO - Started process (PID=1416) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:59:09.869-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:59:09.870-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:09.870-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:59:09.906-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:59:09.931-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:09.931-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:59:09.981-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:09.980-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:59:10.011-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.149 seconds
+[2023-08-17T14:59:40.405-0600] {processor.py:157} INFO - Started process (PID=1448) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:59:40.406-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T14:59:40.407-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:40.407-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:59:40.444-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T14:59:40.471-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:40.471-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:59:40.520-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:40.520-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T14:59:40.552-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T15:00:10.822-0600] {processor.py:157} INFO - Started process (PID=1480) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:00:10.823-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:00:10.824-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:10.824-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:00:10.868-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:00:10.893-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:10.893-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:00:10.954-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:10.954-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:00:10.993-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.181 seconds
+[2023-08-17T15:00:41.385-0600] {processor.py:157} INFO - Started process (PID=1512) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:00:41.387-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:00:41.388-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:41.388-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:00:41.428-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:00:41.455-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:41.455-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:00:41.505-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:41.505-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:00:41.537-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T15:01:11.968-0600] {processor.py:157} INFO - Started process (PID=1552) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:01:11.969-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:01:11.970-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:11.970-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:01:12.008-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:01:12.034-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:12.034-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:01:12.082-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:12.082-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:01:12.114-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.151 seconds
+[2023-08-17T15:01:42.498-0600] {processor.py:157} INFO - Started process (PID=1584) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:01:42.499-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:01:42.500-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:42.500-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:01:42.539-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:01:42.565-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:42.565-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:01:42.615-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:42.614-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:01:42.645-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T15:02:13.026-0600] {processor.py:157} INFO - Started process (PID=1616) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:02:13.028-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:02:13.029-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:13.028-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:02:13.068-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:02:13.094-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:13.094-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:02:13.144-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:13.144-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:02:13.175-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.154 seconds
+[2023-08-17T15:02:43.561-0600] {processor.py:157} INFO - Started process (PID=1649) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:02:43.562-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:02:43.564-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:43.564-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:02:43.602-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:02:43.628-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:43.628-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:02:43.677-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:43.677-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:02:43.709-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T15:03:14.094-0600] {processor.py:157} INFO - Started process (PID=1681) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:03:14.095-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:03:14.096-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:14.096-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:03:14.137-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:03:14.164-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:14.163-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:03:14.212-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:14.212-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:03:14.244-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.155 seconds
+[2023-08-17T15:03:44.635-0600] {processor.py:157} INFO - Started process (PID=1713) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:03:44.636-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:03:44.637-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:44.637-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:03:44.676-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:03:44.702-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:44.702-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:03:44.751-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:44.750-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:03:44.784-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.155 seconds
+[2023-08-17T15:04:15.197-0600] {processor.py:157} INFO - Started process (PID=1745) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:04:15.199-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:04:15.200-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:15.199-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:04:15.238-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:04:15.264-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:15.264-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:04:15.314-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:15.314-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:04:15.345-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.154 seconds
+[2023-08-17T15:04:45.720-0600] {processor.py:157} INFO - Started process (PID=1781) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:04:45.721-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:04:45.722-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:45.722-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:04:45.787-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:04:45.816-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:45.816-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:04:45.872-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:45.872-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:04:45.930-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.214 seconds
+[2023-08-17T15:05:16.441-0600] {processor.py:157} INFO - Started process (PID=1820) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:05:16.444-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:05:16.445-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:16.445-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:05:16.489-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:05:16.518-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:16.518-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:05:16.571-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:16.571-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:05:16.602-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.166 seconds
+[2023-08-17T15:05:46.841-0600] {processor.py:157} INFO - Started process (PID=1852) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:05:46.842-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:05:46.843-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:46.843-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:05:46.884-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:05:46.917-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:46.916-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:05:46.966-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:46.965-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:05:47.000-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.164 seconds
+[2023-08-17T15:06:17.391-0600] {processor.py:157} INFO - Started process (PID=1884) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:06:17.393-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:06:17.394-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:17.394-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:06:17.431-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:06:17.457-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:17.457-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:06:17.505-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:17.505-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:06:17.536-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.149 seconds
+[2023-08-17T15:06:47.913-0600] {processor.py:157} INFO - Started process (PID=1916) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:06:47.914-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:06:47.915-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:47.915-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:06:47.951-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:06:47.977-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:47.977-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:06:48.025-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:48.025-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:06:48.057-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.149 seconds
+[2023-08-17T15:07:18.442-0600] {processor.py:157} INFO - Started process (PID=1948) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:07:18.444-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:07:18.445-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:18.444-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:07:18.484-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:07:18.510-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:18.510-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:07:18.560-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:18.560-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:07:18.592-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.154 seconds
+[2023-08-17T15:07:48.987-0600] {processor.py:157} INFO - Started process (PID=1980) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:07:48.989-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:07:48.990-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:48.990-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:07:49.033-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:07:49.060-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:49.060-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:07:49.109-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:49.108-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:07:49.141-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.160 seconds
+[2023-08-17T15:08:19.539-0600] {processor.py:157} INFO - Started process (PID=2013) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:08:19.541-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:08:19.542-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:19.542-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:08:19.581-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:08:19.608-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:19.608-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:08:19.656-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:19.656-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:08:19.687-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.154 seconds
+[2023-08-17T15:08:50.075-0600] {processor.py:157} INFO - Started process (PID=2045) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:08:50.076-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:08:50.077-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:50.077-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:08:50.114-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:08:50.140-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:50.140-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:08:50.188-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:50.188-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:08:50.221-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.152 seconds
+[2023-08-17T15:09:20.606-0600] {processor.py:157} INFO - Started process (PID=2078) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:09:20.608-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:09:20.609-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:20.609-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:09:20.646-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:09:20.672-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:20.672-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:09:20.721-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:20.721-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:09:20.754-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T15:09:51.152-0600] {processor.py:157} INFO - Started process (PID=2109) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:09:51.154-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:09:51.155-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:51.154-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:09:51.204-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:09:51.268-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:51.267-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:09:51.322-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:51.322-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:09:51.353-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.206 seconds
+[2023-08-17T15:10:21.723-0600] {processor.py:157} INFO - Started process (PID=2145) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:10:21.724-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:10:21.725-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:21.725-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:10:21.764-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:10:21.789-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:21.789-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:10:21.839-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:21.838-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:10:21.870-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.155 seconds
+[2023-08-17T15:10:52.254-0600] {processor.py:157} INFO - Started process (PID=2177) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:10:52.255-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:10:52.256-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:52.256-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:10:52.293-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:10:52.320-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:52.320-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:10:52.367-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:52.367-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:10:52.397-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.148 seconds
+[2023-08-17T15:11:22.776-0600] {processor.py:157} INFO - Started process (PID=2209) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:11:22.777-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:11:22.778-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:22.778-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:11:22.821-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:11:22.847-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:22.847-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:11:22.896-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:22.895-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:11:22.927-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T15:11:53.298-0600] {processor.py:157} INFO - Started process (PID=2241) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:11:53.299-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:11:53.300-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:53.300-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:11:53.338-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:11:53.365-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:53.364-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:11:53.415-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:53.414-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:11:53.451-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T15:12:23.822-0600] {processor.py:157} INFO - Started process (PID=2273) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:12:23.824-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:12:23.825-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:23.825-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:12:23.861-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:12:23.887-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:23.887-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:12:23.937-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:23.937-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:12:23.969-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.151 seconds
+[2023-08-17T15:12:54.349-0600] {processor.py:157} INFO - Started process (PID=2305) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:12:54.350-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:12:54.351-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:54.351-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:12:54.388-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:12:54.413-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:54.413-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:12:54.462-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:54.462-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:12:54.492-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.148 seconds
+[2023-08-17T15:13:24.867-0600] {processor.py:157} INFO - Started process (PID=2337) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:13:24.869-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:13:24.870-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:24.870-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:13:24.913-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:13:24.940-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:24.940-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:13:24.988-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:24.988-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:13:25.020-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.159 seconds
+[2023-08-17T15:13:55.402-0600] {processor.py:157} INFO - Started process (PID=2369) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:13:55.403-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:13:55.404-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:55.403-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:13:55.444-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:13:55.470-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:55.470-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:13:55.518-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:55.518-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:13:55.548-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.152 seconds
+[2023-08-17T15:14:25.941-0600] {processor.py:157} INFO - Started process (PID=2401) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:14:25.943-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:14:25.944-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:25.944-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:14:25.981-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:14:26.007-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:26.007-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:14:26.055-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:26.055-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:14:26.086-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.150 seconds
+[2023-08-17T15:14:56.529-0600] {processor.py:157} INFO - Started process (PID=2433) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:14:56.530-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:14:56.531-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:56.531-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:14:56.569-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:14:56.595-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:56.595-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:14:56.643-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:56.642-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:14:56.675-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.152 seconds
+[2023-08-17T15:15:27.081-0600] {processor.py:157} INFO - Started process (PID=2465) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:15:27.083-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:15:27.084-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:27.084-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:15:27.122-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:15:27.148-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:27.147-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:15:27.196-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:27.196-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:15:27.227-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.152 seconds
+[2023-08-17T15:15:57.625-0600] {processor.py:157} INFO - Started process (PID=2497) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:15:57.627-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:15:57.628-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:57.628-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:15:57.669-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:15:57.695-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:57.695-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:15:57.744-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:57.744-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:15:57.776-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T15:16:28.180-0600] {processor.py:157} INFO - Started process (PID=2529) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:16:28.182-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:16:28.183-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:28.182-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:16:28.220-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:16:28.246-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:28.246-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:16:28.294-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:28.294-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:16:28.326-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.152 seconds
+[2023-08-17T15:16:58.711-0600] {processor.py:157} INFO - Started process (PID=2562) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:16:58.712-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:16:58.713-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:58.713-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:16:58.753-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:16:58.780-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:58.780-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:16:58.829-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:58.829-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:16:58.859-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.155 seconds
+[2023-08-17T15:17:29.243-0600] {processor.py:157} INFO - Started process (PID=2593) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:17:29.244-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:17:29.246-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:29.245-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:17:29.284-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:17:29.310-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:29.310-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:17:29.357-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:29.357-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:17:29.388-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.152 seconds
+[2023-08-17T15:17:59.764-0600] {processor.py:157} INFO - Started process (PID=2625) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:17:59.765-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:17:59.766-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:59.766-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:17:59.803-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:17:59.829-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:59.829-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:17:59.878-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:59.878-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:17:59.916-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T15:18:30.254-0600] {processor.py:157} INFO - Started process (PID=2657) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:18:30.256-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:18:30.257-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:30.257-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:18:30.294-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:18:30.320-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:30.319-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:18:30.368-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:30.368-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:18:30.401-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T15:19:00.773-0600] {processor.py:157} INFO - Started process (PID=2690) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:19:00.774-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:19:00.775-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:00.775-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:19:00.811-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:19:00.838-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:00.837-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:19:00.888-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:00.887-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:19:00.924-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.156 seconds
+[2023-08-17T15:19:31.328-0600] {processor.py:157} INFO - Started process (PID=2722) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:19:31.329-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:19:31.330-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:31.330-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:19:31.368-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:19:31.394-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:31.394-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:19:31.442-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:31.442-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:19:31.484-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.161 seconds
+[2023-08-17T15:20:01.926-0600] {processor.py:157} INFO - Started process (PID=2754) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:20:01.928-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:20:01.929-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:01.929-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:20:01.965-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:20:01.991-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:01.991-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:20:02.039-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:02.038-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:20:02.072-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.151 seconds
+[2023-08-17T15:20:32.459-0600] {processor.py:157} INFO - Started process (PID=2786) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:20:32.461-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:20:32.462-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:32.462-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:20:32.505-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:20:32.532-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:32.532-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:20:32.580-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:32.579-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:20:32.611-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.159 seconds
+[2023-08-17T15:21:02.999-0600] {processor.py:157} INFO - Started process (PID=2818) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:21:03.000-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:21:03.002-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:03.001-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:21:03.046-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:21:03.073-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:03.073-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:21:03.122-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:03.122-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:21:03.153-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.161 seconds
+[2023-08-17T15:21:33.520-0600] {processor.py:157} INFO - Started process (PID=2850) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:21:33.521-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:21:33.522-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:33.522-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:21:33.560-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:21:33.586-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:33.586-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:21:33.639-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:33.639-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:21:33.673-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.158 seconds
+[2023-08-17T15:22:04.064-0600] {processor.py:157} INFO - Started process (PID=2886) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:22:04.065-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:22:04.066-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:04.066-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:22:04.104-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:22:04.130-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:04.130-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:22:04.180-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:04.180-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:22:04.211-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.152 seconds
+[2023-08-17T15:22:34.592-0600] {processor.py:157} INFO - Started process (PID=2918) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:22:34.593-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:22:34.594-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:34.594-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:22:34.634-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:22:34.660-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:34.660-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:22:34.708-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:34.708-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:22:34.740-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.154 seconds
+[2023-08-17T15:23:05.122-0600] {processor.py:157} INFO - Started process (PID=2951) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:23:05.123-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:23:05.124-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:05.124-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:23:05.161-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:23:05.188-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:05.188-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:23:05.237-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:05.237-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:23:05.270-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.154 seconds
+[2023-08-17T15:23:35.642-0600] {processor.py:157} INFO - Started process (PID=2984) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:23:35.645-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:23:35.646-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:35.646-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:23:35.683-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:23:35.709-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:35.709-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:23:35.758-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:35.758-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:23:35.790-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T15:24:06.176-0600] {processor.py:157} INFO - Started process (PID=3016) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:24:06.177-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:24:06.178-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:06.178-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:24:06.217-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:24:06.245-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:06.245-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:24:06.298-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:06.298-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:24:06.331-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.160 seconds
+[2023-08-17T15:24:36.714-0600] {processor.py:157} INFO - Started process (PID=3048) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:24:36.716-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:24:36.717-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:36.717-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:24:36.754-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:24:36.780-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:36.780-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:24:36.827-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:36.827-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:24:36.859-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.150 seconds
+[2023-08-17T15:25:07.249-0600] {processor.py:157} INFO - Started process (PID=3080) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:25:07.250-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:25:07.251-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:07.251-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:25:07.287-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:25:07.313-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:07.313-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:25:07.361-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:07.361-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:25:07.392-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.149 seconds
+[2023-08-17T15:25:37.772-0600] {processor.py:157} INFO - Started process (PID=3112) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:25:37.773-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:25:37.774-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:37.774-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:25:37.811-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:25:37.837-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:37.837-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:25:37.886-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:37.886-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:25:37.917-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.150 seconds
+[2023-08-17T15:26:08.302-0600] {processor.py:157} INFO - Started process (PID=3145) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:26:08.303-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:26:08.304-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:08.304-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:26:08.341-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:26:08.367-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:08.367-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:26:08.416-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:08.416-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:26:08.447-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.151 seconds
+[2023-08-17T15:26:38.831-0600] {processor.py:157} INFO - Started process (PID=3177) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:26:38.833-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:26:38.834-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:38.834-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:26:38.871-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:26:38.896-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:38.896-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:26:38.945-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:38.945-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:26:38.977-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.152 seconds
+[2023-08-17T15:27:09.353-0600] {processor.py:157} INFO - Started process (PID=3209) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:27:09.354-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:27:09.355-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:09.355-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:27:09.393-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:27:09.419-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:09.419-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:27:09.467-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:09.467-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:27:09.504-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.156 seconds
+[2023-08-17T15:27:39.881-0600] {processor.py:157} INFO - Started process (PID=3241) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:27:39.883-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:27:39.884-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:39.884-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:27:39.925-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:27:39.951-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:39.951-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:27:39.999-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:39.999-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:27:40.033-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.159 seconds
+[2023-08-17T15:28:10.395-0600] {processor.py:157} INFO - Started process (PID=3273) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:28:10.396-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:28:10.397-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:10.397-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:28:10.435-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:28:10.462-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:10.462-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:28:10.511-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:10.510-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:28:10.547-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T15:28:40.917-0600] {processor.py:157} INFO - Started process (PID=3305) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:28:40.918-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:28:40.919-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:40.919-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:28:40.956-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:28:40.982-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:40.981-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:28:41.030-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:41.029-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:28:41.060-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.149 seconds
+[2023-08-17T15:29:11.444-0600] {processor.py:157} INFO - Started process (PID=3337) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:29:11.445-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:29:11.446-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:11.445-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:29:11.484-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:29:11.511-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:11.511-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:29:11.561-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:11.561-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:29:11.595-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T15:29:41.974-0600] {processor.py:157} INFO - Started process (PID=3369) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:29:41.975-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:29:41.976-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:41.976-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:29:42.016-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:29:42.042-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:42.042-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:29:42.093-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:42.093-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:29:42.126-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.159 seconds
+[2023-08-17T15:30:12.525-0600] {processor.py:157} INFO - Started process (PID=3401) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:30:12.527-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:30:12.528-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:12.527-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:30:12.567-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:30:12.593-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:12.593-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:30:12.641-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:12.641-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:30:12.673-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.155 seconds
+[2023-08-17T15:30:43.066-0600] {processor.py:157} INFO - Started process (PID=3433) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:30:43.067-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:30:43.069-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:43.068-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:30:43.110-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:30:43.136-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:43.136-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:30:43.184-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:43.184-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:30:43.215-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.156 seconds
+[2023-08-17T15:31:13.613-0600] {processor.py:157} INFO - Started process (PID=3465) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:31:13.614-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:31:13.616-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:13.615-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:31:13.662-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:31:13.690-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:13.690-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:31:13.738-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:13.737-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:31:13.770-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.164 seconds
+[2023-08-17T15:31:44.165-0600] {processor.py:157} INFO - Started process (PID=3497) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:31:44.167-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:31:44.168-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:44.168-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:31:44.210-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:31:44.236-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:44.235-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:31:44.286-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:44.286-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:31:44.318-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.160 seconds
+[2023-08-17T15:32:14.707-0600] {processor.py:157} INFO - Started process (PID=3528) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:32:14.708-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:32:14.709-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:14.709-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:32:14.752-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:32:14.780-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:14.780-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:32:14.829-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:14.828-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:32:14.861-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.160 seconds
+[2023-08-17T15:32:45.255-0600] {processor.py:157} INFO - Started process (PID=3560) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:32:45.256-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:32:45.257-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:45.257-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:32:45.298-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:32:45.325-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:45.324-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:32:45.373-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:45.372-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:32:45.405-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.157 seconds
+[2023-08-17T15:33:15.789-0600] {processor.py:157} INFO - Started process (PID=3592) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:33:15.791-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:33:15.792-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:15.792-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:33:15.831-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:33:15.857-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:15.857-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:33:15.905-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:15.905-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:33:15.937-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T15:33:46.343-0600] {processor.py:157} INFO - Started process (PID=3624) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:33:46.344-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:33:46.346-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:46.345-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:33:46.386-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:33:46.418-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:46.418-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:33:46.469-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:46.468-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:33:46.503-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.165 seconds
+[2023-08-17T15:34:16.889-0600] {processor.py:157} INFO - Started process (PID=3663) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:34:16.891-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:34:16.892-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:16.891-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:34:16.930-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:34:16.956-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:16.956-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:34:17.004-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:17.004-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:34:17.037-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.153 seconds
+[2023-08-17T15:34:47.410-0600] {processor.py:157} INFO - Started process (PID=3696) to work on /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:34:47.411-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/limpieza_logs.py for tasks to queue
+[2023-08-17T15:34:47.412-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:47.412-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:34:47.449-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Limpieza_De_Logs']) retrieved from /opt/airflow/dags/limpieza_logs.py
+[2023-08-17T15:34:47.475-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:47.474-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:34:47.529-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:47.529-0600] {dag.py:3490} INFO - Setting next_dagrun for Limpieza_De_Logs to 2023-08-17T10:00:00+00:00, run_after=2023-08-18T10:00:00+00:00
+[2023-08-17T15:34:47.570-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/limpieza_logs.py took 0.167 seconds
