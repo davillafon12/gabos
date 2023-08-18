@@ -98,5 +98,12 @@ define('CONTROL_DE_INVENTARIO', "CONTROL_DE_INVENTARIO");
 define('JAVASCRIPT_CACHE_VERSION', 45);
 define('DB_DATETIME_FORMAT', 'y-m-d H:i:s'); //y/m/d : H:i:s
 
+define('REPORTES_HOST_INTERNO', 'http://192.168.10.13:8186/');
+define('REPORTES_HOST_EXTERNO', 'http://201.205.54.213:8186/');
+define('REPORTES_JASPER_USUARIO', '');
+define('REPORTES_JASPER_PASSWORD', ''); //Este password debe estar codificado para URL
+define('REPORTES_SUCURSAL_GAROTAS', 2);
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

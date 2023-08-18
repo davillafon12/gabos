@@ -55,14 +55,47 @@ Instalar PHP:
 - sudo systemctl status php5.6-fpm
 - sudo systemctl status php8.2-fpm
 - sudo apt install php5.6-mysql php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-dom php5.6-zip
+- sudo apt install php8.2-dom
 - sudo systemctl reload apache2
 
-Cambiar tiempo de sesion
+Fix SSL legacy:
+- sudo nano /usr/lib/ssl/openssl.cnf
+[openssl_init]
+providers = provider_sect
+
+# List of providers to load
+[provider_sect]
+default = default_sect
+legacy = legacy_sect
+# The fips section name should match the section name inside the
+# included fipsmodule.cnf.
+# fips = fips_sect
+
+# If no providers are activated explicitly, the default one is activated implicitly.
+# See man 7 OSSL_PROVIDER-default for more details.
+#
+# If you add a section explicitly activating any other provider(s), you most
+# probably need to explicitly activate the default provider, otherwise it
+# becomes unavailable in openssl.  As a consequence applications depending on
+# OpenSSL may not work correctly which could lead to significant system
+# problems including inability to remotely access the system.
+[default_sect]
+activate = 1
+
+[legacy_sect]
+activate = 1
+
+- sudo service php8.2-fpm stop
+- sudo service php8.2-fpm start
+- sudo service apache2 stop
+- sudo service apache2 start
+
+Cambiar tiempo de sesion:
 - sudo nano /etc/php/5.6/fpm/php.ini
 - session.gc_maxlifetime = 1800
 - sudo systemctl reload apache2
 
-Agregar gabo
+Agregar gabo:
 - sudo nano /etc/apache2/sites-available/gabo.conf
 Listen 8181
 <VirtualHost *:8181>
@@ -138,7 +171,9 @@ Correr todo docker-compose:
 - agregar variables de airflow
 - agregar conexiones de airflow
 - asegurarse que las carpetas de dropbox existan
-- hacer nuevo usaurio de airflow
+- hacer nuevo usuario de airflow
+- exportar/importar jaspereports
+- cambiar datasource settings
 
 
 
