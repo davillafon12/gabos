@@ -9,3 +9,5 @@ Reportes/FACTURA/Reportes/Cartelera.jasper
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
+migracion/docker/logs/*
+migracion/docker/dags/__pycache__/*
