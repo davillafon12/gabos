@@ -7,14 +7,11 @@ class reportes extends CI_Controller {
 	//Private $ruta = "http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
 	
 	Private $ruta = "jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
-	Private $IpInterna = "http://192.168.10.13:8282/"; 
-	Private $IpExterna = "http://192.168.10.13:8282/"; 
-	//Private $IpExterna = "http://201.200.125.10:8085/"; 
-	Private $glCodigoSucGarotas = "2"; 
-	//Private $IpInterna = "http://localhost:8080/";	 
-	//Private $IpExterna = "http://localhost:8080/";
-	Private $usuario = "j_username=gabo_vista_reportes"; 	
-	Private $password = "j_password=f8SUOYv97Jh%5E*3gYk85B"; 	//Password codificado
+	Private $IpInterna = REPORTES_HOST_INTERNO; 
+	Private $IpExterna = REPORTES_HOST_EXTERNO; 
+	Private $glCodigoSucGarotas = REPORTES_SUCURSAL_GAROTAS; 
+	Private $usuario = "j_username=" . REPORTES_JASPER_USUARIO; 	
+	Private $password = "j_password=" . REPORTES_JASPER_PASSWORD; 	//Password codificado
 	/*----------------------------------------------------------------------*/
 	
 	 function __construct()
@@ -522,7 +519,7 @@ class reportes extends CI_Controller {
 			$direccion = "/reports/Gabo/Facturas/";
 			$txtRutaFinal = "";
 			$ip = ""; 
-			if($data['Sucursal_Codigo'] == 0){
+			if($data['Sucursal_Codigo'] == $this->glCodigoSucGarotas){
 				$ip = $this->IpInterna; 
 			}
 			else {
