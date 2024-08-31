@@ -1,0 +1,1 @@
+update tb_01_usuario set Usuario_Password = '81dc9bdb52d04dc20036dbd8313ed055' where Usuario_Codigo = 20;
