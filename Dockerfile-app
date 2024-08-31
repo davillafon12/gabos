@@ -1,0 +1,38 @@
+FROM debian:12
+
+# docker build -t gabos . -f Dockerfile-app
+# docker run -dit -p 80:80 -p 2222:22 gabos
+
+RUN apt update
+RUN apt -y install wget gnupg2 ca-certificates apt-transport-https openssh-server net-tools
+
+RUN wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
+RUN echo "deb https://packages.sury.org/php/ bookworm main" | tee /etc/apt/sources.list.d/php.list
+RUN apt update
+
+RUN apt install -y php5.6 php5.6-fpm apache2 libapache2-mod-fcgid
+RUN a2enmod actions fcgid alias proxy_fcgi rewrite ssl
+
+RUN apt install -y php5.6-mysql php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-dom
+
+COPY migracion/docker/dev/gabo.conf /etc/apache2/sites-available/gabo.conf
+RUN chmod 777 -R /var/www
+COPY . /var/www/gabos
+RUN chown -R www-data:www-data /var/www/gabos
+RUN a2ensite gabo
+RUN chmod 755 /var/www/gabos/createFolders.sh
+
+COPY migracion/docker/dev/database.php /var/www/gabos/application/config/database.php
+COPY migracion/docker/dev/php.ini /etc/php/5.6/fpm/php.ini
+
+COPY migracion/docker/dev/entry.sh /usr/entry.sh
+RUN chmod 755 /usr/entry.sh
+
+RUN mkdir /var/run/sshd
+RUN echo 'root:root' | chpasswd
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+EXPOSE 80
+EXPOSE 22
+ENTRYPOINT ["bash", "/usr/entry.sh"]

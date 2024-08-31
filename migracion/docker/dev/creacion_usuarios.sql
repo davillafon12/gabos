@@ -1,0 +1,6 @@
+CREATE USER 'gabo_admin'@'%' IDENTIFIED BY 'Q2vu3CB1Am0LxrD0&H4v';
+GRANT ALL ON *.* TO 'gabo_admin'@'%'  WITH GRANT OPTION;
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+
+CREATE DATABASE IF NOT EXISTS gabo_app;
