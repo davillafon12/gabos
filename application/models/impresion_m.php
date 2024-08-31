@@ -94,21 +94,23 @@ Class impresion_m extends CI_Model{
             //$pdf->Line(10, 60, 10, 240); //Borde lado izquierdo tabla
             $pdf->Line(40, 67, 40, 225); //Divisor de codigo y descripcion
             $pdf->Line(110, 67, 110, 225); //Divisor de descripcion y cantidad
-            $pdf->Line(125, 67, 125, 225); //Divisor de cantidad y exento
-            $pdf->Line(131, 67, 131, 225); //Divisor de exento y descuento
-            $pdf->Line(145, 67, 145, 225); //Divisor de descuento y precio unitario
-            $pdf->Line(172, 67, 172, 225); //Divisor de precio unitario y precio total		
+            $pdf->Line(122, 67, 122, 225); //Divisor de cantidad y exento
+            $pdf->Line(128, 67, 128, 225); //Divisor de exento y descuento
+            $pdf->Line(148, 67, 148, 225); //Divisor de descuento y precio unitario
+            $pdf->Line(159, 67, 159, 225); //Divisor de precio unitario y IVA	
+			$pdf->Line(179, 67, 179, 225); //IVA y precio total		
             //$pdf->Line(200, 60, 200, 240); //Borde lado derecho tabla
             //$pdf->Line(10, 240, 200, 240); //Borde abajo productos
             //Encabezado de productos
             $pdf->SetFont('Arial','',10);
             $pdf->Text(13, 72, 'Código');
             $pdf->Text(58, 72, 'Descripción');
-            $pdf->Text(112, 72, 'Cant.');
-            $pdf->Text(126.5, 72, 'E');
-            $pdf->Text(133, 72, 'Desc.');
-            $pdf->Text(149, 72, 'P/Unitario');
-            $pdf->Text(179, 72, 'P/Total');
+            $pdf->Text(111, 72, 'Cant.');
+            $pdf->Text(124, 72, 'E');            
+            $pdf->Text(130.5, 72, 'P/Unitario');
+			$pdf->Text(149, 72, 'Desc.');
+			$pdf->Text(166, 72, 'IVA');
+            $pdf->Text(183, 72, 'P/Total');
             //Agregamos Productos
             $pdf->SetFont('Arial','',9);
 
@@ -121,19 +123,28 @@ Class impresion_m extends CI_Model{
                     //Calculamos precio total con descuento
                     $total = $productos[$cc]->cantidad * ($productos[$cc]->precio - ($productos[$cc]->precio * ($productos[$cc]->descuento/100))); 
                     $precio = $productos[$cc]->precio;
+
+					//$precioFinal = $precio + $precio * 100 / $piva;
+					//$precioFinal = $precio (1 + 100/$piva);
+					//$precioFinal / (1 + 100/$piva) = $precio
+
+					$ivaArticulo = $precio / (1 + 100/$fhead->porcentaje_iva);
+					$precioUnitarioSinIva = $precio - $ivaArticulo;
+					$ivaArticuloTotal = $productos[$cc]->cantidad * $ivaArticulo;
                     //Valoramos si es en dolares
                     if($fhead->moneda=='dolares'){
                             $total = $total/$fhead->cambio;
                             $precio = $precio/$fhead->cambio;
                     }
 
-                    $pdf->Text(11, $pl, $productos[$cc]->codigo);
-                    $pdf->Text(41, $pl, substr($productos[$cc]->descripcion,0,33));
-                    $pdf->cell(15,5,$productos[$cc]->cantidad,0,0,'C');
+                    $pdf->Text(11, $pl, substr($productos[$cc]->codigo,0,15));
+                    $pdf->Text(41, $pl, substr($productos[$cc]->descripcion,0,35));
+                    $pdf->cell(12,5,$productos[$cc]->cantidad,0,0,'C');
                     $pdf->cell(6,5,$this->fe($productos[$cc]->exento),0,0,'C');
-                    $pdf->cell(14,5,$this->fni($productos[$cc]->descuento));
-                    $pdf->cell(27.5,5,$this->fni($precio),0,0,'R');
-                    $pdf->cell(28,5,$this->fni($total),0,0,'R');			
+					$pdf->cell(20,5,$this->fni($precioUnitarioSinIva),0,0,'R');
+                    $pdf->cell(11,5,$this->fni($productos[$cc]->descuento));                    
+					$pdf->cell(20,5,$this->fni($ivaArticuloTotal),0,0,'R');
+                    $pdf->cell(21.5,5,$this->fni($total),0,0,'R');			
                     $pdf->ln($sl);
                     $pdf->SetX(110);
                     $pl += $sl;
@@ -833,7 +844,7 @@ Class impresion_m extends CI_Model{
 				$final = $cantidadProductos;
 			}
 			
-			$cantidadTotalArticulos += $this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf);
+			$cantidadTotalArticulos += $this->printProductsNotaCredito($productos, $inicio, $final-1, $pdf, $head);
 			//Definimos el pie de pagina
 			$this->pieDocumentoPDF('nc', $head, $empresa, $pdf, $cantidadTotalArticulos);
 			$this->numPagina++;
@@ -848,7 +859,7 @@ Class impresion_m extends CI_Model{
                 }
 	}
         
-        private function printProductsNotaCredito($productos, $inicio, $fin, &$pdf){
+        private function printProductsNotaCredito($productos, $inicio, $fin, &$pdf, $head){
 		//Agregamos el apartado de productos
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Text(90, 65, 'Productos');
@@ -857,18 +868,20 @@ Class impresion_m extends CI_Model{
 		//Divisores verticales de productos
 		$pdf->Line(10, 74, 200, 74);		
 		$pdf->Line(30, 67, 30, 240); //Divisor de codigo y descripcion
-		$pdf->Line(110, 67, 110, 240); //Divisor de descripcion y cantidad
-		$pdf->Line(125, 67, 125, 240); //Divisor de cantidad y exento
-		$pdf->Line(145, 67, 145, 240); //Divisor de descuento y precio unitario
-		$pdf->Line(172, 67, 172, 240); //Divisor de precio unitario y precio total	
+		$pdf->Line(110, 67, 110, 240); //Divisor de descripcion y bueno
+		$pdf->Line(125, 67, 125, 240); //Divisor de bueno y defectuoso
+		$pdf->Line(140, 67, 140, 240); //Divisor de defectuoso y precio
+		$pdf->Line(160, 67, 160, 240); //Divisor de precio y iva
+		$pdf->Line(180, 67, 180, 240); //Divisor de iva y precio total	
 		//Encabezado de productos
 		$pdf->SetFont('Arial','',10);
 		$pdf->Text(13, 72, 'Código');
 		$pdf->Text(58, 72, 'Descripción');
 		$pdf->Text(112, 72, 'Bueno');
-		$pdf->Text(126.5, 72, 'Defectuoso');
-		$pdf->Text(151, 72, 'P/Unitario');
-		$pdf->Text(179, 72, 'P/Total');
+		$pdf->Text(126.5, 72, 'Defect.');
+		$pdf->Text(142, 72, 'P/Unitario');
+		$pdf->Text(168, 72, 'IVA');
+		$pdf->Text(184, 72, 'P/Total');
 		//Agregamos Productos
 		$pdf->SetFont('Arial','',9);
 		
@@ -883,13 +896,24 @@ Class impresion_m extends CI_Model{
 			
 			//Calculamos precio total con descuento
 			$total = $cantidad * $productos[$cc]->precio; 
+
+			//$precioFinal = $precio + $precio * 100 / $piva;
+			//$precioFinal = $precio (1 + 100/$piva);
+			//$precioFinal / (1 + 100/$piva) = $precio
+
+			$ivaArticulo = $productos[$cc]->precio / (1 + 100/$head->iva);
+			$precioSinIva = $productos[$cc]->precio - $ivaArticulo;
+			$totalIvaLinea = $cantidad * $ivaArticulo;
+			
+
 			
 			$pdf->Text(11, $pl, $productos[$cc]->codigo);
 			$pdf->Text(31, $pl, substr($productos[$cc]->descripcion,0,33));
 			$pdf->cell(15,5,$productos[$cc]->bueno,0,0,'C');
-			$pdf->cell(20,5,$productos[$cc]->defectuoso,0,0,'C');
-			$pdf->cell(27.5,5,$this->fni($productos[$cc]->precio),0,0,'R');
-			$pdf->cell(28,5,$this->fni($total),0,0,'R');			
+			$pdf->cell(15,5,$productos[$cc]->defectuoso,0,0,'C');
+			$pdf->cell(20,5,$this->fni($precioSinIva),0,0,'R');
+			$pdf->cell(20,5,$this->fni($totalIvaLinea),0,0,'R');
+			$pdf->cell(20.5,5,$this->fni($total),0,0,'R');			
 			$pdf->ln($sl);
 			$pdf->SetX(110);
 			$pl += $sl;

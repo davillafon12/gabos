@@ -391,6 +391,7 @@ Class factura extends CI_Model
 				Factura_Tipo_Pago AS tipo,
 				Factura_Moneda AS moneda,
 				Factura_tipo_cambio AS cambio,
+                Factura_porcentaje_iva AS porcentaje_iva,
 				CONCAT_WS(' ', Usuario_Nombre, Usuario_Apellidos) AS vendedor,
 				Factura_Observaciones AS observaciones,
 				Factura_Entregado_Vuelto AS entregado_vuelto,
