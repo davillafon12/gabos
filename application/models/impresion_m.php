@@ -128,7 +128,7 @@ Class impresion_m extends CI_Model{
 					//$precioFinal = $precio (1 + 100/$piva);
 					//$precioFinal / (1 + 100/$piva) = $precio
 
-					$ivaArticulo = $precio / (1 + 100/$fhead->porcentaje_iva);
+					$ivaArticulo = $fhead->porcentaje_iva == 0 ? 0 : ($precio / (1 + 100/$fhead->porcentaje_iva));
 					$precioUnitarioSinIva = $precio - $ivaArticulo;
 					$ivaArticuloTotal = $productos[$cc]->cantidad * $ivaArticulo;
                     //Valoramos si es en dolares
@@ -901,7 +901,7 @@ Class impresion_m extends CI_Model{
 			//$precioFinal = $precio (1 + 100/$piva);
 			//$precioFinal / (1 + 100/$piva) = $precio
 
-			$ivaArticulo = $productos[$cc]->precio / (1 + 100/$head->iva);
+			$ivaArticulo = $head->iva == 0 ? 0 : ($productos[$cc]->precio / (1 + 100/$head->iva));
 			$precioSinIva = $productos[$cc]->precio - $ivaArticulo;
 			$totalIvaLinea = $cantidad * $ivaArticulo;
 			
