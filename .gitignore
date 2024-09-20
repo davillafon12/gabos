@@ -9,3 +9,11 @@ Reportes/FACTURA/Reportes/Cartelera.jasper
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
 Reportes/ARTICULO/REPORTE/CantArtVentaCliente.jrxml
+
+restaurar/database/respaldo-airflow.sql
+restaurar/database/respaldo-gabo.sql
+restaurar/database/respaldo-jasperreports.sql
+restaurar/app/certificados
+restaurar/airflow/logs
+restaurar/airflow/dags/__pycache__
+restaurar/dummy_debian
