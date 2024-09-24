@@ -1,12 +1,12 @@
 <?php
 class Correo{
     
-    public $host = '';
+    public $host = 'CORREO_SMTP_URL';
     public $SMTPAuth = true;
-    public $Username = '';
-    public $Password = '';   
-    public $Port = '';  
-    public $From = '';
+    public $Username = 'CORREO_EMAIL_USER';
+    public $Password = 'CORREO_EMAIL_USER_PASSWORD';   
+    public $Port = 'CORREO_SMTP_PORT';  
+    public $From = 'CORREO_EMAIL_USER';
     public $isHTML = true;
     
     

@@ -1,0 +1,313 @@
+x-database-common:
+  &database-common
+  build: restaurar/database
+  volumes:
+    - database-data:/var/lib/mysql
+
+x-airflow-common:
+  &airflow-common
+  # In order to add custom dependencies or upgrade provider packages you can use your extended image.
+  # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
+  # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
+  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.1}
+  # build: .
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASSWORD}@gabo-database:3306/${AIRFLOW_DB_NAME}
+    # For backward compatibility, with Airflow <2.3
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: mysql://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASSWORD}@gabo-database:3306/${AIRFLOW_DB_NAME}
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
+    _AIRFLOW_WWW_USER_USERNAME: ${AIRFLOW_WEB_USER}
+    _AIRFLOW_WWW_USER_PASSWORD: ${AIRFLOW_WEB_PASS}
+    # yamllint disable rule:line-length
+    # Use simple http server on scheduler for health checks
+    # See https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/check-health.html#scheduler-health-check-server
+    # yamllint enable rule:line-length
+    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
+    # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
+    # for other purpose (development, test and especially production usage) build/extend Airflow image.
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+    TZ: 'America/Costa_Rica'
+    AIRFLOW__CORE__DEFAULT_TIMEZONE: America/Costa_Rica
+    AIRFLOW_CONN_GABO_APP_HTTP: ${AIRFLOW_CONN_GABO_APP_HTTP}
+    AIRFLOW_CONN_GABO_APP_SSH: ${AIRFLOW_CONN_GABO_APP_SSH}
+    AIRFLOW_CONN_GABO_DB_SSH: ${AIRFLOW_CONN_GABO_DB_SSH}
+    AIRFLOW_CONN_GABO_DOCKER_HOST_SSH: ${AIRFLOW_CONN_GABO_DOCKER_HOST_SSH}
+    AIRFLOW_VAR_DIAS_PARA_ELIMINAR_RESPALDO: ${AIRFLOW_VAR_DIAS_PARA_ELIMINAR_RESPALDO}
+    AIRFLOW_VAR_MAXIMO_DIAS_LOGS_GABO_APP: ${AIRFLOW_VAR_MAXIMO_DIAS_LOGS_GABO_APP}
+    AIRFLOW_VAR_RESPALDO_BASE_DE_DATOS: ${AIRFLOW_VAR_RESPALDO_BASE_DE_DATOS}
+    AIRFLOW_VAR_RESPALDO_USUARIO: ${AIRFLOW_VAR_RESPALDO_USUARIO}
+    AIRFLOW_VAR_RUTA_FUENTE_DOCUMENTOS_ELECTRONICOS: ${AIRFLOW_VAR_RUTA_FUENTE_DOCUMENTOS_ELECTRONICOS}
+    AIRFLOW_VAR_RUTA_LOGS_GABO_APP: ${AIRFLOW_VAR_RUTA_LOGS_GABO_APP}
+    AIRFLOW_VAR_RUTA_RESPALDO_DOCUMENTOS_ELECTRONICOS: ${AIRFLOW_VAR_RUTA_RESPALDO_DOCUMENTOS_ELECTRONICOS}
+    AIRFLOW_VAR_RUTA_RESPALDOS_BD: ${AIRFLOW_VAR_RUTA_RESPALDOS_BD}
+    AIRFLOW_VAR_SSH_DOCKER_HOST_USER: ${AIRFLOW_VAR_SSH_DOCKER_HOST_USER}
+    AIRFLOW_VAR_SSH_DOCKER_HOST_USER_PASSWORD: ${AIRFLOW_VAR_SSH_DOCKER_HOST_USER_PASSWORD}
+    AIRFLOW_VAR_SSH_DOCKER_HOST_URL: ${AIRFLOW_VAR_SSH_DOCKER_HOST_URL}
+    AIRFLOW_VAR_SSH_DOCKER_HOST_PORT: ${AIRFLOW_VAR_SSH_DOCKER_HOST_PORT} 
+  volumes:
+    - ${AIRFLOW_PROJ_DIR:-.}/restaurar/airflow/dags:/opt/airflow/dags
+    - ${AIRFLOW_PROJ_DIR:-.}/restaurar/airflow/logs:/opt/airflow/logs
+    - ${AIRFLOW_PROJ_DIR:-.}/restaurar/airflow/config:/opt/airflow/config
+    - ${AIRFLOW_PROJ_DIR:-.}/restaurar/airflow/plugins:/opt/airflow/plugins
+  user: "${AIRFLOW_UID:-50000}:0"
+
+
+services:  
+  init-database:
+    <<: *database-common
+    entrypoint: /bin/bash
+    command: /usr/db-init.sh
+    environment:
+      - "GABO_APP_DB_NAME=${GABO_APP_DB_NAME}"
+      - "GABO_APP_DB_USER=${GABO_APP_DB_USER}"
+      - "GABO_APP_DB_PASSWORD=${GABO_APP_DB_PASSWORD}"
+      - "AIRFLOW_DB_NAME=${AIRFLOW_DB_NAME}"
+      - "AIRFLOW_DB_USER=${AIRFLOW_DB_USER}"
+      - "AIRFLOW_DB_PASSWORD=${AIRFLOW_DB_PASSWORD}"
+      - "JASPERREPORT_DB_NAME=${JASPERREPORT_DB_NAME}"
+      - "JASPERREPORT_DB_USER=${JASPERREPORT_DB_USER}"
+      - "JASPERREPORT_DB_PASSWORD=${JASPERREPORT_DB_PASSWORD}"
+      - "JASPERREPORT_DB_CONSULTA_USER=${JASPERREPORT_DB_CONSULTA_USER}"
+      - "JASPERREPORT_DB_CONSULTA_PASSWORD=${JASPERREPORT_DB_CONSULTA_PASSWORD}"
+      - "DB_GABO_ADMIN_USER=${DB_GABO_ADMIN_USER}"
+      - "DB_GABO_ADMIN_PASSWORD=${DB_GABO_ADMIN_PASSWORD}"
+      - "DB_GABO_RESPALDO_USER=${DB_GABO_RESPALDO_USER}"
+      - "DB_GABO_RESPALDO_PASSWORD=${DB_GABO_RESPALDO_PASSWORD}"
+  database:
+    <<: *database-common
+    restart: always
+    environment:
+      - "AIRFLOW_SSH_USER=${AIRFLOW_SSH_USER}"
+      - "AIRFLOW_SSH_USER_PASSWORD=${AIRFLOW_SSH_USER_PASSWORD}"
+      - "DB_GABO_RESPALDO_USER=${DB_GABO_RESPALDO_USER}"
+      - "DB_GABO_RESPALDO_PASSWORD=${DB_GABO_RESPALDO_PASSWORD}"
+    ports:
+      - "3306:3306"
+    depends_on:
+      init-database:
+        condition: service_completed_successfully
+
+  web-app:
+    restart: always
+    build: .
+    ports:
+      - "8181:8181"
+      - "2222:22"
+    links:
+      - "database:gabo-database"
+    environment:
+      - "GABO_APP_DB_NAME=${GABO_APP_DB_NAME}"
+      - "GABO_APP_DB_USER=${GABO_APP_DB_USER}"
+      - "GABO_APP_DB_PASSWORD=${GABO_APP_DB_PASSWORD}"
+      - "CORREO_SMTP_URL=${CORREO_SMTP_URL}"
+      - "CORREO_EMAIL_USER_PASSWORD=${CORREO_EMAIL_USER_PASSWORD}"
+      - "CORREO_EMAIL_USER=${CORREO_EMAIL_USER}"
+      - "CORREO_SMTP_PORT=${CORREO_SMTP_PORT}"
+      - "REPORTES_URL_INTERNA=${REPORTES_URL_INTERNA}"
+      - "REPORTES_URL_EXTERNA=${REPORTES_URL_EXTERNA}"
+      - "REPORTES_SUCURSAL_GAROTAS_NUMERO=${REPORTES_SUCURSAL_GAROTAS_NUMERO}"
+      - "REPORTES_USUARIO_JASPERREPORTS_PASSWORD_CODIFICADO=${REPORTES_USUARIO_JASPERREPORTS_PASSWORD_CODIFICADO}"
+      - "JASPERREPORT_DB_CONSULTA_USER=${JASPERREPORT_DB_CONSULTA_USER}"
+      - "USUARIO_DEBIAN_SSH_PASSWORD=${USUARIO_DEBIAN_SSH_PASSWORD}"
+      - "USUARIO_DEBIAN_SSH=${USUARIO_DEBIAN_SSH}"
+      - "AIRFLOW_SSH_USER=${AIRFLOW_SSH_USER}"
+      - "AIRFLOW_SSH_USER_PASSWORD=${AIRFLOW_SSH_USER_PASSWORD}"
+    volumes:
+      - web-app-data:/var/www/gabos/application/third_party
+      - web-app-images:/var/www/gabos/application/images
+    depends_on:
+      init-database:
+        condition: service_completed_successfully
+
+  php-my-admin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: gabo-database
+    links:
+      - "database:gabo-database"
+    depends_on:
+      init-database:
+        condition: service_completed_successfully
+
+  jasper-reports-server:
+    restart: always
+    image: gabo_jasper_reports:latest
+    ports:
+      - '8186:8080'
+    volumes:
+      - 'jasperreports-data:/bitnami/jasperreports'
+    environment:
+      - JASPERREPORTS_DATABASE_HOST=gabo-database
+      - JASPERREPORTS_DATABASE_PORT_NUMBER=3306
+      - JASPERREPORTS_DATABASE_USER=${JASPERREPORT_DB_USER}
+      - JASPERREPORTS_DATABASE_NAME=${JASPERREPORT_DB_NAME}
+      - JASPERREPORTS_DATABASE_PASSWORD=${JASPERREPORT_DB_PASSWORD}
+      - JASPERREPORTS_USERNAME=${JASPERREPORTS_ADMIN_USERNAME}
+      - JASPERREPORTS_PASSWORD=${JASPERREPORTS_ADMIN_PASSWORD}
+    links:
+      - "database:gabo-database"
+    depends_on:
+      init-database:
+        condition: service_completed_successfully
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    links:
+      - "database:gabo-database"
+      - "web-app:gabo-web-app"
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+      init-database:
+        condition: service_completed_successfully
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    links:
+      - "database:gabo-database"
+      - "web-app:gabo-web-app"
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+      init-database:
+        condition: service_completed_successfully
+
+  airflow-triggerer:
+    <<: *airflow-common
+    command: triggerer
+    healthcheck:
+      test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    links:
+      - "database:gabo-database"
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+      init-database:
+        condition: service_completed_successfully
+
+
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    # yamllint disable rule:line-length
+    command:
+      - -c
+      - |
+        function ver() {
+          printf "%04d%04d%04d%04d" $${1//./ }
+        }
+        airflow_version=$$(AIRFLOW__LOGGING__LOGGING_LEVEL=INFO && gosu airflow airflow version)
+        airflow_version_comparable=$$(ver $${airflow_version})
+        min_airflow_version=2.2.0
+        min_airflow_version_comparable=$$(ver $${min_airflow_version})
+        if (( airflow_version_comparable < min_airflow_version_comparable )); then
+          echo
+          echo -e "\033[1;31mERROR!!!: Too old Airflow version $${airflow_version}!\e[0m"
+          echo "The minimum Airflow version supported: $${min_airflow_version}. Only use this or higher!"
+          echo
+          exit 1
+        fi
+        if [[ -z "${AIRFLOW_UID}" ]]; then
+          echo
+          echo -e "\033[1;33mWARNING!!!: AIRFLOW_UID not set!\e[0m"
+          echo "If you are on Linux, you SHOULD follow the instructions below to set "
+          echo "AIRFLOW_UID environment variable, otherwise files will be owned by root."
+          echo "For other operating systems you can get rid of the warning with manually created .env file:"
+          echo "    See: https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#setting-the-right-airflow-user"
+          echo
+        fi
+        one_meg=1048576
+        mem_available=$$(($$(getconf _PHYS_PAGES) * $$(getconf PAGE_SIZE) / one_meg))
+        cpus_available=$$(grep -cE 'cpu[0-9]+' /proc/stat)
+        disk_available=$$(df / | tail -1 | awk '{print $$4}')
+        warning_resources="false"
+        if (( mem_available < 4000 )) ; then
+          echo
+          echo -e "\033[1;33mWARNING!!!: Not enough memory available for Docker.\e[0m"
+          echo "At least 4GB of memory required. You have $$(numfmt --to iec $$((mem_available * one_meg)))"
+          echo
+          warning_resources="true"
+        fi
+        if (( cpus_available < 2 )); then
+          echo
+          echo -e "\033[1;33mWARNING!!!: Not enough CPUS available for Docker.\e[0m"
+          echo "At least 2 CPUs recommended. You have $${cpus_available}"
+          echo
+          warning_resources="true"
+        fi
+        if (( disk_available < one_meg * 10 )); then
+          echo
+          echo -e "\033[1;33mWARNING!!!: Not enough Disk space available for Docker.\e[0m"
+          echo "At least 10 GBs recommended. You have $$(numfmt --to iec $$((disk_available * 1024 )))"
+          echo
+          warning_resources="true"
+        fi
+        if [[ $${warning_resources} == "true" ]]; then
+          echo
+          echo -e "\033[1;33mWARNING!!!: You have not enough resources to run Airflow (see above)!\e[0m"
+          echo "Please follow the instructions to increase amount of resources available:"
+          echo "   https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#before-you-begin"
+          echo
+        fi
+        mkdir -p /sources/logs /sources/dags /sources/plugins
+        chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins}
+        exec /entrypoint airflow version
+    # yamllint enable rule:line-length
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${AIRFLOW_WEB_USER}
+      _AIRFLOW_WWW_USER_PASSWORD: ${AIRFLOW_WEB_PASS}
+      _PIP_ADDITIONAL_REQUIREMENTS: ''
+    user: "0:0"
+    links:
+      - "database:gabo-database"
+    volumes:
+      - ${AIRFLOW_PROJ_DIR:-.}:/restaurar/airflow/sources
+    depends_on:
+      init-database:
+        condition: service_completed_successfully
+
+
+volumes:
+  database-data:
+    driver: local
+  web-app-data:
+    driver: local
+  web-app-images:
+    driver: local
+  jasperreports-data:
+    driver: local
