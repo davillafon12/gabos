@@ -49,9 +49,11 @@ x-airflow-common:
     AIRFLOW_VAR_SSH_DOCKER_HOST_USER_PASSWORD: ${AIRFLOW_VAR_SSH_DOCKER_HOST_USER_PASSWORD}
     AIRFLOW_VAR_SSH_DOCKER_HOST_URL: ${AIRFLOW_VAR_SSH_DOCKER_HOST_URL}
     AIRFLOW_VAR_SSH_DOCKER_HOST_PORT: ${AIRFLOW_VAR_SSH_DOCKER_HOST_PORT} 
+    AIRFLOW_VAR_RUTA_FUENTE_IMAGENES_GABO_APP: ${AIRFLOW_VAR_RUTA_FUENTE_IMAGENES_GABO_APP}
+    AIRFLOW_VAR_RUTA_RESPALDO_IMAGENES_ARTICULOS: ${AIRFLOW_VAR_RUTA_RESPALDO_IMAGENES_ARTICULOS}
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/restaurar/airflow/dags:/opt/airflow/dags
-    - ${AIRFLOW_PROJ_DIR:-.}/restaurar/airflow/logs:/opt/airflow/logs
+    - airflow-logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/restaurar/airflow/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/restaurar/airflow/plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
@@ -310,4 +312,6 @@ volumes:
   web-app-images:
     driver: local
   jasperreports-data:
+    driver: local
+  airflow-logs:
     driver: local

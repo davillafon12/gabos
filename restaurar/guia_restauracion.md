@@ -7,13 +7,14 @@
 5) Correr esto en terminal: `wget https://github.com/davillafon12/gabos/raw/refs/heads/produccion/restaurar/instalar.sh -v -O instalar.sh && chmod 755 instalar.sh && ./instalar.sh;`.
 6) Al terminar esta parte se requiere reiniciar el servidor. Una vez reiniciado ejecutar esto en la terminal `cd ~ && ./instalar.sh` para continuar con la instalacion.
 7) Al terminar se va a abrir una ventana con el archivo de texto `.env`, aqui debe agregar todos los usuarios y contraseñas.
-8) Descargar el ultimo respaldo de gabo de Dropbox, descomprimirlo, renombrarlo a `respaldo-gabo.sql` y colocarlo en la carpeta `gabos/restaurar/database/`.
-9) Descargar el contenido de la carpeta de certificados de Dropbox (Documentos electronicos) y colocar los certificados en la carpeta `gabos/restaurar/app/certificados` (Si la carpeta no existe, crearla).
-10) Descargar el contenido de la carpeta de imagenes de Dropbox y colocar las imagenes en la carpeta `gabos/restaurar/app/imagenes` (Si la carpeta no existe, crearla).
-11) Correr el siguiente comando en la terminal `./instalar.sh`
-12) Esperar unos 5 minutos a que todo corra y luego vayase a `localhost:8186/jasperserver` y acceda con el usuario y contraseña que ingreso en `.env`
-13) Una vez dentro del servidor de jasper, vayase a `Administrar` -> `Ajustes del servidor` -> `Importar`, una vez ahi seleccione el archivo `export.zip` que esta en `gabos/restaurar/jasper`; luego seleccionar la opcion que dice `Clave Heredada` y por ultimo darle al boton de `Importar`. Con este paso se cargaran todos los reportes y configuracion al jasper report server.
-14) Hay que actualizar la informacion de la base de datos en el jasper report server, para eso dele click al boton que es como una casita (En la parte de arriba-izquierda), en la barra del lado izquierdo dele click a `Data Sources` y se lo mostrara una que se llama `GaboProduccion`, dele click derecho y luego `Editar`. Una vez ahi ingrese los datos de la siguiente manera:
+8) Correr de nuevo la instalacion corriendo el comando: `~./instalar.sh`. En este punto se va a pedir que reinicie el servidor.
+9) Descargar el ultimo respaldo de gabo de Dropbox, descomprimirlo, renombrarlo a `respaldo-gabo.sql` y colocarlo en la carpeta `gabos/restaurar/database/`.
+10) Descargar el contenido de la carpeta de certificados de Dropbox (Documentos electronicos) y colocar los certificados en la carpeta `gabos/restaurar/app/certificados` (Si la carpeta no existe, crearla).
+11) Descargar el contenido de la carpeta de imagenes de Dropbox y colocar las imagenes en la carpeta `gabos/restaurar/app/imagenes` (Si la carpeta no existe, crearla).
+12) Correr el siguiente comando en la terminal `./instalar.sh`
+13) Esperar unos 5 minutos a que todo corra y luego vayase a `localhost:8186/jasperserver` y acceda con el usuario y contraseña que ingreso en `.env`
+14) Una vez dentro del servidor de jasper, vayase a `Administrar` -> `Ajustes del servidor` -> `Importar`, una vez ahi seleccione el archivo `export.zip` que esta en `gabos/restaurar/jasper`; luego seleccionar la opcion que dice `Clave Heredada` y por ultimo darle al boton de `Importar`. Con este paso se cargaran todos los reportes y configuracion al jasper report server.
+15) Hay que actualizar la informacion de la base de datos en el jasper report server, para eso dele click al boton que es como una casita (En la parte de arriba-izquierda), en la barra del lado izquierdo dele click a `Data Sources` y se lo mostrara una que se llama `GaboProduccion`, dele click derecho y luego `Editar`. Una vez ahi ingrese los datos de la siguiente manera:
 ```
 Anfitrión (obligatorio): gabo-database
 Puerto (obligatorio): 3306
@@ -23,7 +24,8 @@ Nombre de usuario: PONER AQUI EL USUARIO DE REPORTES QUE SE USO EN .env (JASPERR
 Contraseña: PONER AQUI LA CONTRASEÑA DE REPORTES QUE SE USO EN .env (JASPERREPORT_DB_CONSULTA_PASSWORD)
 ```
 Una vez ingreso esos datos puede darle al boton `Guardar`, luego darle `Guardar` de nuevo.
-15) Asegurarse que el usuario creado para rsync tenga membresia al grupo que trabaja con dropbox en la maquina host, si no rsync falla al sincronizar documentos electronicos
+
+16) Asegurarse que el usuario creado para rsync tenga membresia al grupo que trabaja con dropbox en la maquina host, si no rsync falla al sincronizar documentos electronicos
 
 ## Guia agregar sudoer
 1) Ingresar como root corriendo lo siguiente `su`. Usar password de root.

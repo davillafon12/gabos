@@ -62,6 +62,13 @@ if ! id "${AIRFLOW_VAR_SSH_DOCKER_HOST_USER}" >/dev/null 2>&1; then
     sudo useradd "${AIRFLOW_VAR_SSH_DOCKER_HOST_USER}"
     sudo usermod -aG sudo "${AIRFLOW_VAR_SSH_DOCKER_HOST_USER}"
     sudo echo "${AIRFLOW_VAR_SSH_DOCKER_HOST_USER}:${AIRFLOW_VAR_SSH_DOCKER_HOST_USER_PASSWORD}" | sudo chpasswd
+    sudo getent group dropbox || sudo groupadd dropbox 
+    sudo usermod -aG dropbox gabo_admin 
+    sudo usermod -aG dropbox "${AIRFLOW_VAR_SSH_DOCKER_HOST_USER}" 
+    sudo chgrp -R dropbox "${RUTA_RESPALDOS_DROPBOX}" 
+    sudo chmod 775 -R "${RUTA_RESPALDOS_DROPBOX}" 
+    echo "POR FAVOR REINICIAR SERVIDOR!!!"
+    exit 1
 else
     echo "User ${AIRFLOW_VAR_SSH_DOCKER_HOST_USER} already created. Skipping."
 fi
