@@ -3,6 +3,15 @@
 sudo apt update
 sudo apt -y install rsync openssh-server sshpass ca-certificates curl git
 
+if mount | grep /gabo/docker > /dev/null; then
+    sudo mkdir /etc/docker
+    sudo cat '{ "data-root":"/gabo/docker" }' > /etc/docker/daemon.json
+    chmod 777 -R /etc/docker
+else
+    echo "El punto de montaje /gabo/docker no se encuentra, debe realizarlo antes de proceder con la instalacion"
+    exit 1
+fi
+
 #Docker
 if [ ! -x "$(command -v docker)" ]; then
     for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -19,19 +28,23 @@ if [ ! -x "$(command -v docker)" ]; then
     sudo apt-get update
 
     sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-fi
 
+    sudo getent group docker || sudo groupadd docker 
+    sudo usermod -aG docker gabo_admin 
+    echo "POR FAVOR REINICIAR SERVIDOR!!!"
+    exit 1
+fi
 
 #Repositorio
 if ! test -d ~/gabos; then
   git clone https://github.com/davillafon12/gabos.git
 fi
 
-cd gabos
+cd ~/gabos
 
 if ! test -f restaurar/jasper/gabo_jasper_reports_image.tar.gz; then
     wget -O restaurar/jasper/gabo_jasper_reports_image.tar.gz "https://www.dropbox.com/scl/fi/ug3pkqwkxgbwtubvcnts2/gabo_jasper_reports_image.tar.gz?rlkey=yzf1pln08l9584mc90qdwvhka&st=y5t605zq&dl=0"
-    sudo docker load -i restaurar/jasper/gabo_jasper_reports_image.tar.gz    
+    docker load -i restaurar/jasper/gabo_jasper_reports_image.tar.gz    
 fi
 
 set -a
@@ -88,15 +101,8 @@ if ! test -d restaurar/app/imagenes; then
     exit 1
 fi
 
-cd ..
-
-if ! test -f dropbox_2024.04.17_amd64.deb; then
-    wget -O dropbox_2024.04.17_amd64.deb "https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2024.04.17_amd64.deb"
-    sudo apt install ~/dropbox_2024.04.17_amd64.deb    
-fi
-
 cd ~/gabos
-sudo docker compose up -d
+docker compose up -d
 
 
 echo "------------------------------------>>> El sistema se esta creando, por favor dar unos 5mins antes de seguir con la instalacion"
