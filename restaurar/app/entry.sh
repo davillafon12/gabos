@@ -34,7 +34,7 @@ sed -i "s#REPORTES_URL_INTERNA#${REPORTES_URL_INTERNA}#g" /var/www/gabos/applica
 sed -i "s#REPORTES_URL_EXTERNA#${REPORTES_URL_EXTERNA}#g" /var/www/gabos/application/controllers/reportes/reportes.php
 sed -i "s/REPORTES_SUCURSAL_GAROTAS_NUMERO/${REPORTES_SUCURSAL_GAROTAS_NUMERO}/g" /var/www/gabos/application/controllers/reportes/reportes.php
 sed -i "s/REPORTES_USUARIO_JASPERREPORTS_PASSWORD_CODIFICADO/${REPORTES_USUARIO_JASPERREPORTS_PASSWORD_CODIFICADO}/g" /var/www/gabos/application/controllers/reportes/reportes.php
-sed -i "s/REPORTES_USUARIO_JASPERREPORTS/${JASPERREPORT_DB_CONSULTA_USER}/g" /var/www/gabos/application/controllers/reportes/reportes.php
+sed -i "s/REPORTES_USUARIO_JASPERREPORTS/${REPORTES_USUARIO_JASPERREPORTS}/g" /var/www/gabos/application/controllers/reportes/reportes.php
 
 #usuario general para ssh
 useradd -m ${USUARIO_DEBIAN_SSH}
