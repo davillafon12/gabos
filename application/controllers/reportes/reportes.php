@@ -9,7 +9,7 @@ class reportes extends CI_Controller {
 	Private $ruta = "jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=";	
 	Private $IpInterna = "REPORTES_URL_INTERNA"; 
 	Private $IpExterna = "REPORTES_URL_EXTERNA"; 
-	Private $glCodigoSucGarotas = "REPORTES_SUCURSAL_GAROTAS_NUMERO"; 
+	Private $glCodigoSucGarotas = REPORTES_SUCURSAL_GAROTAS_NUMERO; 
 	Private $usuario = "j_username=REPORTES_USUARIO_JASPERREPORTS"; 	
 	Private $password = "j_password=REPORTES_USUARIO_JASPERREPORTS_PASSWORD_CODIFICADO"; 	//Password codificado
 	/*----------------------------------------------------------------------*/
