@@ -519,7 +519,7 @@ class reportes extends CI_Controller {
 			$direccion = "/reports/Gabo/Facturas/";
 			$txtRutaFinal = "";
 			$ip = ""; 
-			if($data['Sucursal_Codigo'] == 0){
+			if($data['Sucursal_Codigo'] == $this->glCodigoSucGarotas){
 				$ip = $this->IpInterna; 
 			}
 			else {
