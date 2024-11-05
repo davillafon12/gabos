@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#cd ~/gabos
+cd ~/gabos
 
 echo "Bajando sistema..."
 docker compose down
