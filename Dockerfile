@@ -4,16 +4,17 @@ FROM debian:12
 # docker run -dit -p 80:80 -p 2222:22 gabos
 
 RUN apt update
-RUN apt -y install wget gnupg2 ca-certificates apt-transport-https openssh-server net-tools sshpass rsync
+RUN apt -y install wget gnupg2 ca-certificates apt-transport-https openssh-server net-tools sshpass rsync lsb-release curl
 
-RUN wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
-RUN echo "deb https://packages.sury.org/php/ bookworm main" | tee /etc/apt/sources.list.d/php.list
-RUN apt update
+RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
+RUN dpkg -i /tmp/debsuryorg-archive-keyring.deb
+RUN sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
+RUN apt-get update
 
 RUN apt install -y php5.6 php5.6-fpm apache2 libapache2-mod-fcgid
 RUN a2enmod actions fcgid alias proxy_fcgi rewrite ssl
 
-RUN apt install -y php5.6-mysql php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-dom
+RUN apt install -y php5.6-mysql php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-dom php5.6-zip
 
 RUN apt install -y php8.2 php8.2-fpm php8.2-mcrypt php8.2-mbstring php8.2-curl php8.2-dom
 
