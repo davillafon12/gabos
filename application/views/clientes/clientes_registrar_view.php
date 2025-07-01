@@ -148,8 +148,12 @@ PARA:
 
                             </tr>
                             <tr>
-                            <td></td>
-                            <td></td>
+                                <td>
+                                    <label for="codigo_actividad"  class="label_form">Código de Actividad:</label>
+                                </td>
+                                <td>
+                                    <input id="codigo_actividad" class="input_form" autocomplete="off" name="codigo_actividad" type="text" value="<?= CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO ?>">
+                                </td>
                                 <td>
                                     <label for="sucursal"  class="contact">Empresa:</label>
                                 </td>

@@ -13,8 +13,8 @@ class caja extends CI_Controller {
 		$this->load->model('banco','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
-                $this->load->model('impresion_m','',TRUE);
-                $this->load->model('contabilidad','',TRUE);
+		$this->load->model('impresion_m','',TRUE);
+		$this->load->model('contabilidad','',TRUE);
 
 	}
 
@@ -262,6 +262,10 @@ class caja extends CI_Controller {
             $vuelto = filter_input(INPUT_POST, "vuelto");
             include PATH_USER_DATA;
 
+			//Agregamos tipo de pago
+			//Tarjeta, Deposito, Cheque, Mixto, Apartado
+			$this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+
 			$resFacturaElectronica = array();
 			if($requiereFE){
 				$resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
@@ -291,9 +295,7 @@ class caja extends CI_Controller {
 
                 $this->factura->actualizarFacturaHead($datos, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
 
-                //Agregamos tipo de pago
-                //Tarjeta, Deposito, Cheque, Mixto, Apartado
-                $this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+                
 
 
                 $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: {$responseCheck["factura"]->Factura_Consecutivo}",$data['Sucursal_Codigo'],'cobro');

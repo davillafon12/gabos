@@ -41,7 +41,7 @@ Class cliente extends CI_Model
 	}
 
 
-	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $fecha_nacimiento, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento, $aplicaRetencion, $usuarioID, $sucursalID, $codptel, $codpcel, $codpfax, $fax, $prov, $canton, $distr, $barrio, $noReceptor, $sucursalLiga = 2)
+	function registrar($nombre, $apellidos, $cedula, $tipo_cedula, $fecha_nacimiento, $celular, $telefono, $pais, $direccion, $observaciones, $direccion_url_imagen, $correo, $estado_Cliente, $calidad_Cliente, $tipo_pago_Cliente, $isSucursal, $exento, $aplicaRetencion, $usuarioID, $sucursalID, $codptel, $codpcel, $codpfax, $fax, $prov, $canton, $distr, $barrio, $noReceptor, $sucursalLiga = 2, $codigo_actividad)
 	{
 
 		if($this->existe_Cliente($cedula)){
@@ -81,34 +81,13 @@ Class cliente extends CI_Model
 							'Distrito' => $distr,
 							'Barrio' => $barrio,
 							'NoReceptor' => $noReceptor,
-							'Empresa_Liga' => $sucursalLiga
-
+							'Empresa_Liga' => $sucursalLiga,
+							'Codigo_Actividad' => $codigo_actividad
 	                    );
 			try{
 	        $this->db->insert('TB_03_Cliente',$data); }
 			catch(Exception $e)
 			{return false;}
-
-			/*$data=array(); //Limpiamos el array data
-
-			//Agregamos el descuento por separado a su tabla
-			include '/../controllers/get_session_data.php';
-			$arrayDescuento = array(
-								'Descuento_cliente_porcentaje' =>$descuento,
-								'TB_03_Cliente_Cliente_Cedula'=>$cedula,
-								'TB_02_Sucursal_Codigo'=>$data['Sucursal_Codigo']
-							);
-			$this->db->insert('TB_21_Descuento_Cliente',$arrayDescuento);
-			//Verificamos y retornamos si se guardo en base de datos
-
-
-			//AGREGAMOS TOPE CREDITO
-			$arrayCredito = array(
-								'Credito_Cliente_Cantidad_Maxima' => $maxCredito,
-								'TB_03_Cliente_Cliente_Cedula'=>$cedula,
-								'TB_02_Sucursal_Codigo'=>$data['Sucursal_Codigo']
-							);
-			$this->db->insert('TB_25_Maximo_Credito_Cliente',$arrayCredito);*/
 
 		}
 		return $this->existe_Cliente($cedula);
@@ -140,13 +119,25 @@ Class cliente extends CI_Model
 
 		if($query -> num_rows() != 0)
 		{
-		  return $query->result();
+			$cliente = $query->result()[0];
+
+			if($ubicacion = $this->getUbicacionCliente($cliente)){
+				$cliente->NombreBarrio = $ubicacion->BarrioNombre;
+			}
+
+		  	return array($cliente);
 		}
 		else
 		{
 		  return false;
 		}
 	}
+
+	function getUbicacionCliente($cliente){
+		$this->load->model('ubicacion','',TRUE);
+		return $this->ubicacion->getUbicacion($cliente->Provincia, $cliente->Canton, $cliente->Distrito, $cliente->Barrio);
+	}
+	
 
 	/**
 	 * Este metodo retorna un cliente por su cedula PERO simepre y cuando este activo

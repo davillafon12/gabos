@@ -65,16 +65,16 @@ class API_FE{
 
     public function crearXMLFactura($clave, $consecutivo, $fecha_emision,
                                     $emisor_nombre, $emisor_tipo_indetif, $emisor_num_identif, $nombre_comercial, $emisor_provincia, $emisor_canton, $emisor_distrito, $emisor_barrio, $emisor_otras_senas, $emisor_cod_pais_tel, $emisor_tel, $emisor_cod_pais_fax, $emisor_fax, $emisor_email,
-                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, $receptor_canton, $receptor_distrito, $receptor_barrio, $receptor_cod_pais_tel, $receptor_tel, $receptor_cod_pais_fax, $receptor_fax, $receptor_email,
+                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, $receptor_canton, $receptor_distrito, $receptor_barrio, $receptor_cod_pais_tel, $receptor_tel, $receptor_cod_pais_fax, $receptor_fax, $receptor_email, $receptorCodigoActividad,
                                     $condicion_venta,
                                     $plazo_credito,
                                     $medio_pago,
                                     $cod_moneda,
                                     $tipo_cambio,
-                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
+                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $totalDesgloseImpuestos, $total_comprobante,
                                     $otros,
                                     $productos,
-                                    $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
+                                    $emisorCodigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
                                     $esFacturaCompra = false){
         $bm = round(microtime(true) * 1000);
         $params = array(
@@ -107,6 +107,7 @@ class API_FE{
             "receptor_cod_pais_fax" => $esFacturaCompra ? "" : $receptor_cod_pais_fax, 
             "receptor_fax" => $esFacturaCompra ? "" : str_replace("-", "", $receptor_fax), 
             "receptor_email" => $receptor_email,
+            "receptor_codigo_actividad" => $receptorCodigoActividad,
             "condicion_venta" => $condicion_venta,
             "plazo_credito" => $plazo_credito,
             "medio_pago" => $medio_pago,
@@ -124,28 +125,29 @@ class API_FE{
             "total_descuentos" => $total_descuentos, 
             "total_ventas_neta" => $total_ventas_neta, 
             "total_impuestos" => $total_impuestos, 
+            "total_desglose_impuestos" => $totalDesgloseImpuestos,
             "total_exonerado" => $totalExonerado,
             "total_iva_devuelto" => $totalIVADevuelto,
             "total_otros_cargos" => $totalOtrosCargos,
             "total_comprobante" => $total_comprobante,
             "otros" => $esFacturaCompra ? "" : $otros,
-            "codigo_actividad" => $codigoActividad,
+            "emisor_codigo_actividad" => $emisorCodigoActividad,
             "detalles" => $productos
         );
         $this->logger->info("crearXMLFactura", "Creating factura XML into API with params: ".json_encode($params));
         $result = $this->helper->genXMLFe($clave, $consecutivo, $fecha_emision,
                                     $emisor_nombre, $emisor_tipo_indetif, $emisor_num_identif, $nombre_comercial, $emisor_provincia, str_pad($emisor_canton,2,"0", STR_PAD_LEFT), str_pad($emisor_distrito,2,"0", STR_PAD_LEFT), $esFacturaCompra ? null : str_pad($emisor_barrio,2,"0", STR_PAD_LEFT), $emisor_otras_senas, $emisor_cod_pais_tel, str_replace("-", "", $emisor_tel), $emisor_cod_pais_fax, str_replace("-", "", $emisor_fax), $emisor_email,
-                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, str_pad($receptor_canton,2,"0", STR_PAD_LEFT), str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), $esFacturaCompra ? null : str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), $receptor_cod_pais_tel, str_replace("-", "", $receptor_tel), $receptor_cod_pais_fax, str_replace("-", "", $receptor_fax), $receptor_email,
+                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, str_pad($receptor_canton,2,"0", STR_PAD_LEFT), str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), $esFacturaCompra ? null : str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), $receptor_cod_pais_tel, str_replace("-", "", $receptor_tel), $receptor_cod_pais_fax, str_replace("-", "", $receptor_fax), $receptor_email, $receptorCodigoActividad,
                                     $condicion_venta,
                                     $plazo_credito,
                                     $medio_pago,
                                     $cod_moneda,
                                     $tipo_cambio,
-                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
+                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $totalDesgloseImpuestos, $total_comprobante,
                                     $otros,
                                     $productos,
-                                    $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
-                                    $esFacturaCompra);
+                                    $emisorCodigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
+                                    $esFacturaCompra, $receptorCodigoActividad);
         
         if(is_array($result)){
             if(isset($result["clave"]) && isset($result["xml"])){
@@ -434,7 +436,7 @@ class API_FE{
     
     public function crearXMLNotaCredito($clave, $consecutivo, $fecha_emision,
                                     $emisor_nombre, $emisor_tipo_indetif, $emisor_num_identif, $nombre_comercial, $emisor_provincia, $emisor_canton, $emisor_distrito, $emisor_barrio, $emisor_otras_senas, $emisor_cod_pais_tel, $emisor_tel, $emisor_cod_pais_fax, $emisor_fax, $emisor_email,
-                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, $receptor_canton, $receptor_distrito, $receptor_barrio, $receptor_cod_pais_tel, $receptor_tel, $receptor_cod_pais_fax, $receptor_fax, $receptor_email,
+                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, $receptor_canton, $receptor_distrito, $receptor_barrio, $receptor_cod_pais_tel, $receptor_tel, $receptor_cod_pais_fax, $receptor_fax, $receptor_email, $codigoActividadReceptor,
                                     $condicion_venta,
                                     $plazo_credito,
                                     $medio_pago,
@@ -444,11 +446,11 @@ class API_FE{
                                     $otros,
                                     $productos,
                                     $tipoDocumento, $numeroDocumento, $razonDocumento, $codigoDocumento, $fechaEmisionDocumento,
-                                    $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos){
+                                    $codigoActividadEmisor, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos){
         $bm = round(microtime(true) * 1000);
         $params = array(
             "clave" => $clave, 
-            "codigoActividad" => $codigoActividad,
+            "codigoActividad" => $codigoActividadEmisor,
             "consecutivo" => $consecutivo, 
             "fecha_emision" => $fecha_emision,
             "emisor_nombre" => $emisor_nombre, 
@@ -477,6 +479,7 @@ class API_FE{
             "receptor_cod_pais_fax" => $receptor_cod_pais_fax, 
             "receptor_fax" => str_replace("-", "", $receptor_fax), 
             "receptor_email" => $receptor_email,
+            "receptor_codigo_activad" => $codigoActividadReceptor,
             "condicion_venta" => $condicion_venta,
             "plazo_credito" => $plazo_credito,
             "medio_pago" => $medio_pago,
@@ -510,7 +513,7 @@ class API_FE{
         
         $result = $this->helper->genXMLNC($clave, $consecutivo, $fecha_emision,
                                     $emisor_nombre, $emisor_tipo_indetif, $emisor_num_identif, $nombre_comercial, $emisor_provincia, str_pad($emisor_canton,2,"0", STR_PAD_LEFT), str_pad($emisor_distrito,2,"0", STR_PAD_LEFT), str_pad($emisor_barrio,2,"0", STR_PAD_LEFT), $emisor_otras_senas, $emisor_cod_pais_tel, str_replace("-", "", $emisor_tel), $emisor_cod_pais_fax, str_replace("-", "", $emisor_fax), $emisor_email,
-                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, str_pad($receptor_canton,2,"0", STR_PAD_LEFT), str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), $receptor_cod_pais_tel, str_replace("-", "", $receptor_tel), $receptor_cod_pais_fax, str_replace("-", "", $receptor_fax), $receptor_email,
+                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, str_pad($receptor_canton,2,"0", STR_PAD_LEFT), str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), $receptor_cod_pais_tel, str_replace("-", "", $receptor_tel), $receptor_cod_pais_fax, str_replace("-", "", $receptor_fax), $receptor_email, $codigoActividadReceptor, 
                                     $condicion_venta,
                                     $plazo_credito,
                                     $medio_pago,
@@ -520,7 +523,7 @@ class API_FE{
                                     $otros,
                                     $productos,
                                     $tipoDocumento, $numeroDocumento, $razonDocumento, $codigoDocumento, $fechaEmisionDocumento,
-                                    $codigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos);
+                                    $codigoActividadEmisor, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos);
         
         if(is_array($result)){
             if(isset($result["clave"]) && isset($result["xml"])){

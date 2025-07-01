@@ -38,31 +38,6 @@ Class factura extends CI_Model
             return $query->num_rows() > 0;
         }
 
-//	function getConsecutivoUltimaFactura($sucursal)
-//	{
-//		$this -> db -> select('Factura_Consecutivo');
-//		$this -> db -> from('TB_07_Factura');
-//		$this -> db -> where('TB_02_Sucursal_Codigo', $sucursal);
-//		$this -> db -> order_by("Factura_Consecutivo", "desc");
-//		$this -> db -> limit(1);
-//		$query = $this -> db -> get();
-//		/*$query ="select Factura_Consecutivo from TB_07_Factura order by Factura_Consecutivo DESC limit 1";
-//        $res = $this->db->query($query);*/
-//
-//		if($query->num_rows()==0)
-//		{
-//			return false;
-//		}
-//		else
-//		{
-//			$consecutivo;
-//			$result = $query->result();
-//			foreach($result as $row)
-//			{$consecutivo=$row->Factura_Consecutivo;}
-//			return $consecutivo;
-//		}
-//	}
-
 	function crearfactura($cedula, $nombre, $currency, $observaciones, $sucursal, $vendedor, $isProforma){
 		$c_array = $this->getConfgArray();
 		if($isProforma){ //Si es proforma agarramos el iva y el cambio de la proforma, no el actual
@@ -977,9 +952,9 @@ Class factura extends CI_Model
             if(isset($tipoPago['canDias'])){
                 $plazoCredito = $tipoPago['canDias'];
             }
-            $medioPago = $this->getMedioPago($tipoPago);
+            $medioPago = $this->getMedioPago($tipoPago, $factura->Factura_Monto_Total, $this->getMontoPagoTarjetaMixto($factura->TB_02_Sucursal_Codigo, $factura->Factura_Consecutivo));
             $codigoMoneda = $factura->Factura_Moneda == "colones" ? "CRC" : "USD";
-            $tipoCambio = $factura->Factura_tipo_cambio;
+            $tipoCambio = $factura->Factura_Moneda == "colones" ? "1" : $factura->Factura_tipo_cambio;
             $otros = $factura->Factura_Observaciones;
 
             // Agregamos la info nueva
@@ -994,7 +969,7 @@ Class factura extends CI_Model
                 "EmisorProvincia" => $emisor->Provincia,
                 "EmisorCanton" => str_pad($emisor->Canton,2,"0", STR_PAD_LEFT),
                 "EmisorDistrito" => str_pad($emisor->Distrito,2,"0", STR_PAD_LEFT),
-                "EmisorBarrio" => str_pad($emisor->Barrio,2,"0", STR_PAD_LEFT),
+                "EmisorBarrio" => str_pad($emisor->NombreBarrio,5,"_", STR_PAD_RIGHT),
                 "EmisorOtrasSennas" => $emisor->Sucursal_Direccion,
                 "EmisorCodigoPaisTelefono" => $emisor->Codigo_Pais_Telefono,
                 "EmisorTelefono" => str_replace("-", "", $emisor->Sucursal_Telefono),
@@ -1003,7 +978,8 @@ Class factura extends CI_Model
                 "EmisorEmail" => $emisor->Sucursal_Email,
                 "CondicionVenta" => $condicionVenta,
                 "PlazoCredito" => $plazoCredito,
-                "MedioPago" => $medioPago,
+                "MedioPago" => '',
+                "MedioPagoObject" => json_encode($medioPago),
                 "CodigoMoneda" => $codigoMoneda,
                 "TipoCambio" => $tipoCambio,
                 "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
@@ -1019,6 +995,7 @@ Class factura extends CI_Model
                 "TotalDescuentos" => $this->fn($costos['total_descuentos']),
                 "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
                 "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+                "DesgloseTotalImpuestosObject" => json_encode($costos['desglose_impuestos']),
                 "TotalIVADevuelto" => $this->fn($costos['total_iva_devuelto']),
                 "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
                 "TotalComprobante" => $this->fn($costos['total_comprobante']),
@@ -1040,12 +1017,13 @@ Class factura extends CI_Model
                 $data["ReceptorProvincia"] = $receptor->Provincia;
                 $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
                 $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
-                $data["ReceptorBarrio"] = str_pad($receptor->Barrio,2,"0", STR_PAD_LEFT);
+                $data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
                 $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
                 $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
                 $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
                 $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
                 $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+                $data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
             }
 
             $this->db->insert("tb_55_factura_electronica", $data);
@@ -1065,6 +1043,7 @@ Class factura extends CI_Model
                     "PrecioUnitario" => $art["precioUnitario"],
                     "MontoTotal" => $art["montoTotal"],
                     "MontoDescuento" => $art["montoDescuento"],
+                    "TipoDescuento" => '07', //Descuento Comercial | TODO: SE DEBE ACTUALIZAR ESTO, CUAL CODIGO SE DEBE USAR?
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
                     "Subtotal" => $art["subtotal"],
                     "BaseImponible" => $art["base_imponible"],
@@ -1141,6 +1120,13 @@ Class factura extends CI_Model
                 $this->db->where("Sucursal", $sucursal);
                 $query = $this->db->get();
                 if($query->num_rows()>0){
+
+                    $desgloseImpuestos = json_decode($factura->DesgloseTotalImpuestosObject, true);
+
+                    foreach($desgloseImpuestos as $key => $desgloseImpuesto){
+                        $desgloseImpuestos[$key]["monto"] = $this->fn($desgloseImpuesto["monto"]);
+                    }
+
                     $articulos = $query->result();
                     $xmlRes = $api->crearXMLFactura($factura->Clave,
                                                     $factura->ConsecutivoHacienda,
@@ -1173,10 +1159,11 @@ Class factura extends CI_Model
                                                     $factura->ReceptorCodigoPaisFax,
                                                     $factura->ReceptorFax,
                                                     $factura->ReceptorEmail,
+                                                    $factura->ReceptorCodigoActividad,
 
                                                     $factura->CondicionVenta,
                                                     $factura->PlazoCredito,
-                                                    $factura->MedioPago,
+                                                    json_decode($factura->MedioPagoObject),
                                                     $factura->CodigoMoneda,
                                                     $factura->TipoCambio,
 
@@ -1190,6 +1177,7 @@ Class factura extends CI_Model
                                                     $this->fn($factura->TotalDescuentos),
                                                     $this->fn($factura->TotalVentasNeta),
                                                     $this->fn($factura->TotalImpuestos),
+                                                    $desgloseImpuestos,
                                                     $this->fn($factura->TotalComprobante),
 
                                                     $factura->Otros,
@@ -1571,7 +1559,8 @@ Class factura extends CI_Model
                                     "total_impuestos" => 0,
                                     "total_iva_devuelto" => 0,
                                     "total_otros_cargos" => 0,
-                                    "total_comprobante" => 0
+                                    "total_comprobante" => 0,
+                                    "desglose_impuestos" => array()
                                 );
                                 $artFinales = array();
                                 foreach($articulosFactura as $a){
@@ -1606,6 +1595,8 @@ Class factura extends CI_Model
 
                                     $impuesto = $linea["impuesto"][0]["monto"];
                                     $costos["total_impuestos"] += $impuesto;
+
+                                    $this->agregarImpuestoADesgloseDeImpuestos($costos["desglose_impuestos"], $linea["impuesto"][0]);
                                 }
                                 $costos["total_exonerado"] =  $costos["total_serv_exonerados"] + $costos["total_merc_exonerada"];
                                 $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
@@ -1638,6 +1629,14 @@ Class factura extends CI_Model
             // No existe empresa
             $facturaBODY['error']='26';
         }
+    }
+
+    private function agregarImpuestoADesgloseDeImpuestos(&$desgloseImpuestos, $impuestoArticulo){
+        $key = $impuestoArticulo["codigo"]."_".$impuestoArticulo["codigoTarifa"];
+        if(!isset($desgloseImpuestos[$key])){
+            $desgloseImpuestos[$key] = array("codigo" => $impuestoArticulo["codigo"], "tarifaCodigo" => $impuestoArticulo["codigoTarifa"], "monto" => 0);
+        }
+        $desgloseImpuestos[$key]["monto"] += $impuestoArticulo["monto"];
     }
 
     public function envioHacienda($resFacturaElectronica, $responseCheck){

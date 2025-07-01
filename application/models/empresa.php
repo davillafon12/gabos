@@ -122,12 +122,23 @@ Class empresa extends CI_Model
 
 		if($query -> num_rows() != 0)
 		{
-		  return $query->result();
+			$empresa = $query->result()[0];
+
+			if($ubicacion = $this->getUbicacionEmpresa($empresa)){
+				$empresa->NombreBarrio = $ubicacion->BarrioNombre;
+			}
+
+		  	return array($empresa);
 		}
 		else
 		{
 		  return false;
 		}
+	}
+
+	function getUbicacionEmpresa($empresa){
+		$this->load->model('ubicacion','',TRUE);
+		return $this->ubicacion->getUbicacion($empresa->Provincia, $empresa->Canton, $empresa->Distrito, $empresa->Barrio);
 	}
 
 	function getLeyendaEmpresa($id)

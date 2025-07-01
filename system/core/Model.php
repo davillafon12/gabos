@@ -145,7 +145,7 @@ class CI_Model {
             }
         }
 
-        function getMedioPago($tipoPago){
+        function getMedioPago($tipoPago, $montoTotalFactura, $montoPagadoConTarjetaEnMixto){
             /*
                 Corresponde al medio de pago empleado:
                 - 01 Efectivo
@@ -155,21 +155,26 @@ class CI_Model {
                 - 05 - Recaudado por terceros
                 - 99 Otros
              */
+            $totalFormateado = $this->fn($montoTotalFactura);
+            $totalEfectivoEnMixto = $montoTotalFactura - $montoPagadoConTarjetaEnMixto;
             switch ($tipoPago['tipo']) {
                 case 'contado':
-                    return "01";
+                    return array(array("tipo" => '01', "total" => $totalFormateado, "otros" => ''));
                 case 'tarjeta':
-                    return "02";
+                    return array(array("tipo" => '02', "total" => $totalFormateado, "otros" => ''));
                 case 'deposito':
-                    return "04";
+                    return array(array("tipo" => '04', "total" => $totalFormateado, "otros" => ''));
                 case 'cheque':
-                    return "03";
+                    return array(array("tipo" => '03', "total" => $totalFormateado, "otros" => ''));
                 case 'mixto':
-                    return "01,02";
+                    return array(
+                        array("tipo" => '01', "total" => $this->fn($totalEfectivoEnMixto), "otros" => ''),
+                        array("tipo" => '02', "total" => $this->fn($montoPagadoConTarjetaEnMixto), "otros" => '')
+                    );
                 case 'credito':
-                    return "99";
+                    return array(array("tipo" => '99', "otros" => 'Credito', "total" => $totalFormateado));
                 case 'apartado':
-                    return "99";
+                    return array(array("tipo" => '99', "otros" => 'Apartado', "total" => $totalFormateado));
             }
         }
 
@@ -207,6 +212,7 @@ class CI_Model {
                     "precioUnitario" => $this->fn($art->PrecioUnitario),
                     "montoTotal" => $this->fn($art->MontoTotal),
                     "montoDescuento" => $this->fn($art->MontoDescuento),
+                    "tipoDescuento" => $art->TipoDescuento,
                     "naturalezaDescuento" => $art->NaturalezaDescuento,
                     "subtotal" => $this->fn($art->Subtotal),
                     "impuesto" =>  $impuesto,

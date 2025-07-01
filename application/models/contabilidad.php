@@ -2237,6 +2237,7 @@ Class contabilidad extends CI_Model
                 $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
                 $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
                 $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+				$data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
             }
 
             $this->db->insert("tb_57_nota_credito_electronica", $data);
@@ -2357,6 +2358,7 @@ Class contabilidad extends CI_Model
                                                     $nota->ReceptorCodigoPaisFax,
                                                     $nota->ReceptorFax,
                                                     $nota->ReceptorEmail,
+													$nota->ReceptorCodigoActividad,
 
                                                     $nota->CondicionVenta,
                                                     $nota->PlazoCredito,

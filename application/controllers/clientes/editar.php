@@ -388,6 +388,7 @@ class editar extends CI_Controller {
                 $pais = $this->input->post('pais');
                 $direccion = $this->input->post('direccion');
                 $email = $this->input->post('email');
+				$codigoActividad = $this->input->post('codigo_actividad');
                 $observaciones = $this->input->post('observaciones');
 				$tipo_pago_cliente = $this->input->post('tipo_pago_cliente');
 				$sucursalLiga = $this->input->post('sucursal');
@@ -461,6 +462,7 @@ class editar extends CI_Controller {
 		$data_update['Distrito'] = $distr;
 		$data_update['Barrio'] = $barrio;
 		$data_update['Empresa_Liga'] = $sucursalLiga;
+		$data_update['Codigo_Actividad'] = $codigoActividad;
 
 
 		$this->cliente->actualizar($cedula, $data_update);
