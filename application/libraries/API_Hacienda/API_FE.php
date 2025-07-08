@@ -442,15 +442,14 @@ class API_FE{
                                     $medio_pago,
                                     $cod_moneda,
                                     $tipo_cambio,
-                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
+                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $totalDesgloseImpuestos, $total_comprobante,
                                     $otros,
                                     $productos,
                                     $tipoDocumento, $numeroDocumento, $razonDocumento, $codigoDocumento, $fechaEmisionDocumento,
-                                    $codigoActividadEmisor, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos){
+                                    $emisorCodigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos){
         $bm = round(microtime(true) * 1000);
         $params = array(
             "clave" => $clave, 
-            "codigoActividad" => $codigoActividadEmisor,
             "consecutivo" => $consecutivo, 
             "fecha_emision" => $fecha_emision,
             "emisor_nombre" => $emisor_nombre, 
@@ -467,6 +466,7 @@ class API_FE{
             "emisor_cod_pais_fax" => $emisor_cod_pais_fax, 
             "emisor_fax" => str_replace("-", "", $emisor_fax), 
             "emisor_email" => $emisor_email,
+            "emisor_codigo_actividad" => $emisorCodigoActividad,
             "receptor_nombre" => $receptor_nombre, 
             "receptor_tipo_identif" => $receptor_tipo_identif, 
             "receptor_num_identif" => $receptor_num_identif, 
@@ -479,7 +479,7 @@ class API_FE{
             "receptor_cod_pais_fax" => $receptor_cod_pais_fax, 
             "receptor_fax" => str_replace("-", "", $receptor_fax), 
             "receptor_email" => $receptor_email,
-            "receptor_codigo_activad" => $codigoActividadReceptor,
+            "receptor_codigo_actividad" => $codigoActividadReceptor,
             "condicion_venta" => $condicion_venta,
             "plazo_credito" => $plazo_credito,
             "medio_pago" => $medio_pago,
@@ -497,6 +497,7 @@ class API_FE{
             "total_descuentos" => $total_descuentos, 
             "total_ventas_neta" => $total_ventas_neta, 
             "total_impuestos" => $total_impuestos, 
+            "total_desglose_impuestos" => $totalDesgloseImpuestos,
             "total_exonerado" => $totalExonerado,
             "total_iva_devuelto" => $totalIVADevuelto,
             "total_otros_cargos" => $totalOtrosCargos,
@@ -519,11 +520,11 @@ class API_FE{
                                     $medio_pago,
                                     $cod_moneda,
                                     $tipo_cambio,
-                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $total_comprobante,
+                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $totalDesgloseImpuestos, $total_comprobante,
                                     $otros,
                                     $productos,
                                     $tipoDocumento, $numeroDocumento, $razonDocumento, $codigoDocumento, $fechaEmisionDocumento,
-                                    $codigoActividadEmisor, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos);
+                                    $emisorCodigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos);
         
         if(is_array($result)){
             if(isset($result["clave"]) && isset($result["xml"])){

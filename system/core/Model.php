@@ -532,6 +532,14 @@ class CI_Model {
             chmod($finalPath.$name, 0770);
         }
 
+        public function agregarImpuestoADesgloseDeImpuestos(&$desgloseImpuestos, $impuestoArticulo){
+            $key = $impuestoArticulo["codigo"]."_".$impuestoArticulo["codigoTarifa"];
+            if(!isset($desgloseImpuestos[$key])){
+                $desgloseImpuestos[$key] = array("codigo" => $impuestoArticulo["codigo"], "tarifaCodigo" => $impuestoArticulo["codigoTarifa"], "monto" => 0);
+            }
+            $desgloseImpuestos[$key]["monto"] += $impuestoArticulo["monto"];
+        }
+
         public function getFinalPath($type, $date = null){
             $finalPath = PATH_DOCUMENTOS_ELECTRONICOS;
 

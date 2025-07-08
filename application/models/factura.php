@@ -1631,14 +1631,6 @@ Class factura extends CI_Model
         }
     }
 
-    private function agregarImpuestoADesgloseDeImpuestos(&$desgloseImpuestos, $impuestoArticulo){
-        $key = $impuestoArticulo["codigo"]."_".$impuestoArticulo["codigoTarifa"];
-        if(!isset($desgloseImpuestos[$key])){
-            $desgloseImpuestos[$key] = array("codigo" => $impuestoArticulo["codigo"], "tarifaCodigo" => $impuestoArticulo["codigoTarifa"], "monto" => 0);
-        }
-        $desgloseImpuestos[$key]["monto"] += $impuestoArticulo["monto"];
-    }
-
     public function envioHacienda($resFacturaElectronica, $responseCheck){
         $feStatus = array("status"=>false, "message" => "", "estado"=>"");
         // Si hay conexion por lo tanto enviar FE a Hacienda de una

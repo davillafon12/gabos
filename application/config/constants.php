@@ -87,7 +87,7 @@ define('CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO', '513910');
 define('PROVEEDOR_DE_SISTEMAS', '3101350785');
 
 define('ANULAR_FACTURA', '01');
-define('CORRIGE_FACTURA', '03');
+define('CORRIGE_FACTURA', '06');
 
 define('ART_GEN_IMAGEN', 'Default.png');
 define('ART_GEN_TIPO_CODIGO', '04');

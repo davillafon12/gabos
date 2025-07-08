@@ -2163,9 +2163,9 @@ Class contabilidad extends CI_Model
             $fechaEmision = date(DATE_ATOM, $fechaFacturaActual);
             $condicionVenta = $this->getCondicionVenta($tipoPago);
             $plazoCredito = "0";
-            $medioPago = $this->getMedioPago($tipoPago);
+            $medioPago = array(array("tipo" => '01', "total" => $this->fn($costos['total_comprobante']), "otros" => ''));
             $codigoMoneda = $nota->Moneda == "colones" ? "CRC" : "USD";
-            $tipoCambio = $nota->Tipo_Cambio;
+            $tipoCambio = $nota->Moneda == "colones" ? "1" : $nota->Tipo_Cambio;
             $otros = "";
 
             // Agregamos la info nueva
@@ -2180,7 +2180,7 @@ Class contabilidad extends CI_Model
                 "EmisorProvincia" => $emisor->Provincia,
                 "EmisorCanton" => str_pad($emisor->Canton,2,"0", STR_PAD_LEFT),
                 "EmisorDistrito" => str_pad($emisor->Distrito,2,"0", STR_PAD_LEFT),
-                "EmisorBarrio" => str_pad($emisor->Barrio,2,"0", STR_PAD_LEFT),
+                "EmisorBarrio" => str_pad($emisor->NombreBarrio,5,"_", STR_PAD_RIGHT),
                 "EmisorOtrasSennas" => $emisor->Sucursal_Direccion,
                 "EmisorCodigoPaisTelefono" => $emisor->Codigo_Pais_Telefono,
                 "EmisorTelefono" => str_replace("-", "", $emisor->Sucursal_Telefono),
@@ -2189,7 +2189,8 @@ Class contabilidad extends CI_Model
                 "EmisorEmail" => $emisor->Sucursal_Email,
                 "CondicionVenta" => $condicionVenta,
                 "PlazoCredito" => $plazoCredito,
-                "MedioPago" => $medioPago,
+                "MedioPago" => '',
+				"MedioPagoObject" => json_encode($medioPago),
                 "CodigoMoneda" => $codigoMoneda,
                 "TipoCambio" => $tipoCambio,
                 "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
@@ -2205,6 +2206,7 @@ Class contabilidad extends CI_Model
                 "TotalDescuentos" => $this->fn($costos['total_descuentos']),
                 "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
                 "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+				"DesgloseTotalImpuestosObject" => json_encode($costos['desglose_impuestos']),
                 "TotalIVADevuelto" => $this->fn($costos['total_iva_devuelto']),
                 "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
                 "TotalComprobante" => $this->fn($costos['total_comprobante']),
@@ -2231,7 +2233,7 @@ Class contabilidad extends CI_Model
                 $data["ReceptorProvincia"] = $receptor->Provincia;
                 $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
                 $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
-                $data["ReceptorBarrio"] = str_pad($receptor->Barrio,2,"0", STR_PAD_LEFT);
+                $data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
                 $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
                 $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
                 $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
@@ -2250,6 +2252,7 @@ Class contabilidad extends CI_Model
                     "PrecioUnitario" => $art["precioUnitario"],
                     "MontoTotal" => $art["montoTotal"],
                     "MontoDescuento" => $art["montoDescuento"],
+					"TipoDescuento" => '07', //Descuento Comercial | TODO: SE DEBE ACTUALIZAR ESTO, CUAL CODIGO SE DEBE USAR?
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
                     "BaseImponible" => $art["base_imponible"],
                     "Subtotal" => $art["subtotal"],
@@ -2327,6 +2330,13 @@ Class contabilidad extends CI_Model
                 $query = $this->db->get();
                 if($query->num_rows()>0){
                     $articulos = $query->result();
+
+					$desgloseImpuestos = json_decode($nota->DesgloseTotalImpuestosObject, true);
+
+                    foreach($desgloseImpuestos as $key => $desgloseImpuesto){
+                        $desgloseImpuestos[$key]["monto"] = $this->fn($desgloseImpuesto["monto"]);
+                    }
+
                     $xmlRes = $api->crearXMLNotaCredito($nota->Clave,
                                                     $nota->ConsecutivoHacienda,
                                                     $nota->FechaEmision,
@@ -2362,7 +2372,7 @@ Class contabilidad extends CI_Model
 
                                                     $nota->CondicionVenta,
                                                     $nota->PlazoCredito,
-                                                    $nota->MedioPago,
+                                                    json_decode($nota->MedioPagoObject),
                                                     $nota->CodigoMoneda,
                                                     $nota->TipoCambio,
 
@@ -2376,6 +2386,7 @@ Class contabilidad extends CI_Model
                                                     $nota->TotalDescuentos,
                                                     $nota->TotalVentasNeta,
                                                     $nota->TotalImpuestos,
+													$desgloseImpuestos,
                                                     $nota->TotalComprobante,
 
                                                     $nota->Otros,
@@ -2443,57 +2454,7 @@ Class contabilidad extends CI_Model
         function generarNotaCreditoElectronica($consecutivo, $sucursal, $codigo, $razon, $numero, $tipoDoc, $fechaEmision){
             $responseFetch = $this->getDatosParaNotaCreditoElectronica($consecutivo, $sucursal);
             if($responseFetch["status"]){
-//                    $r["notaCreditoHead"] = $notaCreditoHead;
-//                    $r["facturaElectronica"] = $facturaElectronicaHead;
-//                    $r["costos"] = $costos;
-//                    $r["articulos"] = $artFinales;
-//                    $r["cliente"] = $cliente;
-//                    $r["empresa"] = $sucursal;
-                $responseCreacion = $this->crearNotaCreditoElectronica($responseFetch["empresa"], $responseFetch["cliente"], $responseFetch["notaCreditoHead"], $responseFetch["costos"], $responseFetch["articulos"], $codigo, $razon, $numero, $tipoDoc, $fechaEmision);
-
-                /*if($responseCreacion["status"]){
-                    if($responseCreacion["data"]["situacion"] == "normal"){
-                        if($resEnvio = $this->enviarNotaCreditoElectronicaAHacienda($consecutivo, $sucursal)){
-                            if($resEnvio["estado_hacienda"] == "rechazado"){
-                                log_message('error', "Nota credito fue RECHAZADA por Hacienda. | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                                $responseFetch["status"] = false;
-                                $responseFetch['error'] = 903;
-                                $responseFetch["error_msg"] = "Nota credito fue RECHAZADA por Hacienda, favor marcarla para su revisión";
-                            }else if($resEnvio["estado_hacienda"] == "aceptado"){
-                                $responseFetch["message"] = "Nota credito fue ACEPTADA por Hacienda";
-                                $responseFetch["status"] = true;
-                                $responseFetch["clave"] = $responseCreacion["data"]["clave"];
-                                log_message('error', "Nota credito fue ACEPTADA por Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            }else{
-                                $responseFetch["status"] = false;
-                                $responseFetch['error'] = 903;
-                                $responseFetch["error_msg"] = "Nota credito se envió a Hacienda pero no fue rechazada, ni aceptada";
-                                log_message('error', "Hacienda envio otro estado {$resEnvio["estado_hacienda"]} | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            }
-                        }else{
-                            log_message('error', "No se pudo enviar la nota credito a Hacienda, debemos marcarla como contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            // Realizar documento de contingencia, porque al enviar a Hacienda algo fallo
-                            // Pasos a seguir
-                            //    1) Cambiar estado a contingencia
-                            //    2) Regenerar y actualizar clave
-                            //    3) Regenerar y actualizar XML
-                            //    5) Regenerar y actualizar XML Firmado
-                            //$this->factura->regenerarFacturaElectronicaPorContingencia($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
-
-                            $responseFetch["status"] = false;
-                            $responseFetch['error'] = 902;
-                            $responseFetch["error_msg"] = "Nota credito no se pudo enviar a Hacienda por fallo no reconocido";
-                        }
-                    }else{
-                        $responseFetch["status"] = false;
-                        $responseFetch['error'] = 901;
-                        $responseFetch["error_msg"] = "Nota credito no se pudo enviar a Hacienda por falta de internet";
-                    }
-                }else{
-                    $responseFetch["status"] = false;
-                    $responseFetch['error'] = $responseCreacion["error"];
-                    $responseFetch["error_msg"] = $responseCreacion["error_msg"];
-                }*/
+                $this->crearNotaCreditoElectronica($responseFetch["empresa"], $responseFetch["cliente"], $responseFetch["notaCreditoHead"], $responseFetch["costos"], $responseFetch["articulos"], $codigo, $razon, $numero, $tipoDoc, $fechaEmision);
             }
             return $responseFetch;
         }
@@ -2531,7 +2492,8 @@ Class contabilidad extends CI_Model
                                 "total_impuestos" => 0,
                                 "total_iva_devuelto" => 0,
                                 "total_otros_cargos" => 0,
-                                "total_comprobante" => 0
+                                "total_comprobante" => 0,
+								"desglose_impuestos" => array()
                             );
                             $artFinales = array();
                             foreach($notaCreditoArticulos as $a){
@@ -2555,6 +2517,8 @@ Class contabilidad extends CI_Model
 
                                 $impuesto = $linea["impuesto"][0]["monto"];
                                 $costos["total_impuestos"] += $impuesto;
+
+								$this->agregarImpuestoADesgloseDeImpuestos($costos["desglose_impuestos"], $linea["impuesto"][0]);
                             }
                             $costos["total_exonerado"] =  $costos["total_serv_exonerados"] + $costos["total_merc_exonerada"];
                             $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
