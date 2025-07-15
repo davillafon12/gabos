@@ -294,6 +294,7 @@ function cargarDetalleNotasCredito(detalle){
 	$("#nota_credito_deposito").html("₡"+parseFloat(detalle.deposito).format(2, 3, '.', ','));
 	$("#nota_credito_mixto").html("₡"+parseFloat(detalle.mixto).format(2, 3, '.', ','));
 	$("#nota_credito_apartado").html("₡"+parseFloat(detalle.apartado).format(2, 3, '.', ','));
+	$("#nota_credito_sinpe_movil").html("₡"+parseFloat(detalle.sinpeMovil).format(2, 3, '.', ','));
 }
 
 function cargarRetiros(datos){

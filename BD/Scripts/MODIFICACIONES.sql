@@ -16,6 +16,9 @@ ALTER TABLE `tb_58_articulos_nota_credito_electronica` ADD `TipoDescuento` VARCH
 -- Cambios medio de pago
 ALTER TABLE `tb_55_factura_electronica` ADD `MedioPagoObject` TEXT NOT NULL AFTER `MedioPago`;
 ALTER TABLE `tb_57_nota_credito_electronica` ADD `MedioPagoObject` TEXT NOT NULL AFTER `MedioPago`;
+ALTER TABLE `tb_07_factura` CHANGE `Factura_Tipo_Pago` `Factura_Tipo_Pago` VARCHAR(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;
+ALTER TABLE `tb_27_notas_credito` CHANGE `Tipo_Pago` `Tipo_Pago` VARCHAR(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;
+
 
 -- Cambios para desglose total de impuestos
 ALTER TABLE `tb_55_factura_electronica` ADD `DesgloseTotalImpuestosObject` TEXT NOT NULL AFTER `TotalImpuestos`;

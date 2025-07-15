@@ -333,6 +333,7 @@ function cargarResumenTotalesNotasCredito(){
                 $("#total_nota_credito_deposito_p").html(f(data.deposito, true));
                 $("#total_nota_credito_mixto_p").html(f(data.mixto, true));
                 $("#total_nota_credito_tarjeta_p").html(f(data.tarjeta, true));
+                $("#total_nota_credito_sinpe_movil_p").html(f(data.sinpeMovil, true));
 
                 _TOTAL_NOTAS_CREDITO_APARTADO = data.apartado;
                 _TOTAL_NOTAS_CREDITO_CONTADO = data.contado;

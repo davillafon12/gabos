@@ -325,6 +325,10 @@ function tipoPagoJSON(){
 		return [{'tipo':'apartado','abono':$('#cantidad_abono').val()}];
 	}else if(tipoPago.trim()==='contado'){
 		return [{'tipo':'contado'}];
+	}else if(tipoPago.trim()==='sinpe_movil'){
+		return [{'tipo':'sinpe_movil'}];
+	}else if(tipoPago.trim()==='plataforma_digital'){
+		return [{'tipo':'plataforma_digital'}];
 	}
 }
 

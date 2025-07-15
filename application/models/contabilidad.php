@@ -1079,6 +1079,8 @@ Class contabilidad extends CI_Model
 		$mixto = 0;
 		$credito = 0;
 		$apartado = 0;
+		$sinpeMovil = 0;
+		$plataformaDigital = 0;
 		$totalNotas = 0;
 
 		if($query->num_rows()!=0){
@@ -1173,11 +1175,17 @@ Class contabilidad extends CI_Model
 						case 'apartado':
 							$apartado += $costo_total;
 						break;
+						case 'sinpe_movil':
+							$sinpeMovil += $costo_total;
+						break;
+						case 'plataforma_digital':
+							$plataformaDigital += $costo_total;
+						break;
 					}
 				}
 			}
 		}
-		return array("contado"=>$contado, "tarjeta"=>$tarjeta, "cheque"=>$cheque, "deposito"=>$deposito, "mixto"=>$mixto, "credito"=>$credito, "apartado"=>$apartado, "total"=>$totalNotas);
+		return array("contado"=>$contado, "tarjeta"=>$tarjeta, "cheque"=>$cheque, "deposito"=>$deposito, "mixto"=>$mixto, "credito"=>$credito, "apartado"=>$apartado, "sinpeMovil"=>$sinpeMovil, "plataformaDigital"=>$plataformaDigital, "total"=>$totalNotas);
 
 
 	}
@@ -1202,7 +1210,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora >', $inicio);
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
-		$this->db->where('Factura_Tipo_Pago','contado');
+		$this->db->where_in('Factura_Tipo_Pago', array('contado'));
 		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
 
 		$query = $this->db->get();

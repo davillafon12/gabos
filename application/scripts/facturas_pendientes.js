@@ -330,7 +330,7 @@ function numTransaccion(tipo)
 	mxtContado = $("#monto_efectivo_mixto");
 	
 	
-	if(tipo.indexOf('contad') != -1)
+	if(tipo.indexOf('contad') != -1 || tipo.indexOf('sinpe') != -1 || tipo.indexOf('plataforma') != -1)
 	{
 		vend.html('');
 		inyectado.html('');

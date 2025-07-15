@@ -306,18 +306,24 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
 									<td class="borde-abajo"><p class="parrafo">Cheque</p></td>
 									<td class="borde-abajo"><p class="parrafo">Depósito</p></td>
-									<td class="borde-abajo"><p class="parrafo">Mixto</p></td>
-									<td class="borde-abajo"><p class="parrafo">Crédito</p></td>
-									<td class="borde-abajo"><p class="parrafo">Apartado</p></td>
 								</tr>
 								<tr>
 									<td class=''><p class='parrafo' id="total_nota_credito_contado_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_tarjeta_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_cheque_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_deposito_p"></p></td>
+								</tr>	
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Mixto</p></td>
+									<td class="borde-abajo"><p class="parrafo">Crédito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Apartado</p></td>
+									<td class="borde-abajo"><p class="parrafo">Sinpe Móvil</p></td>
+								</tr>
+								<tr>
 									<td class=''><p class='parrafo' id="total_nota_credito_mixto_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_credito_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_apartado_p"></p></td>
+									<td class=''><p class='parrafo' id="total_nota_credito_sinpe_movil_p"></p></td>
 								</tr>	
 							</table>
 						</td>						

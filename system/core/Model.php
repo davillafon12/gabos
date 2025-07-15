@@ -137,6 +137,8 @@ class CI_Model {
                 case 'deposito':
                 case 'cheque':
                 case 'mixto':
+                case 'sinpe_movil':
+                case 'plataforma_digital':
                     return "01";
                 case 'credito':
                     return "02";
@@ -175,6 +177,10 @@ class CI_Model {
                     return array(array("tipo" => '99', "otros" => 'Credito', "total" => $totalFormateado));
                 case 'apartado':
                     return array(array("tipo" => '99', "otros" => 'Apartado', "total" => $totalFormateado));
+                case 'sinpe_movil':
+                    return array(array("tipo" => '06', "total" => $totalFormateado, "otros" => ''));
+                case 'plataforma_digital':
+                    return array(array("tipo" => '06', "total" => $totalFormateado, "otros" => ''));
             }
         }
 
