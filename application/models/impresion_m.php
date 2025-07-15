@@ -671,7 +671,7 @@ Class impresion_m extends CI_Model{
 				$pdf->SetFont('Arial','',8);
 				$pdf->SetXY(10, 257);
 				if($encabezado->clave !== false){
-					$pdf->MultiCell(190,3,"Versión: 4.3",0,'C');
+					$pdf->MultiCell(190,3,"Versión: 4.4",0,'C');
                     $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
 				}
                                 
@@ -728,7 +728,7 @@ Class impresion_m extends CI_Model{
                                 $pdf->SetFont('Arial','',8);
 				$pdf->SetXY(10, 260);
 				if($encabezado->clave !== false){
-					$pdf->MultiCell(190,3,"Versión: 4.3",0,'C');
+					$pdf->MultiCell(190,3,"Versión: 4.4",0,'C');
                     $pdf->MultiCell(190,3,"Clave: ".$encabezado->clave,0,'C');
 				}
                                 
