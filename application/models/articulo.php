@@ -1337,6 +1337,41 @@ Class articulo extends CI_Model
 
 	}
 
+	function getArticulosCombo($codigo, $sucursal){
+		$this->db->select("tb_66_articulos_combo.codigo_articulo as codigo, tb_66_articulos_combo.cantidad as cantidad, tb_06_articulo.Articulo_Descripcion as descripcion");
+		$this->db->from('tb_66_articulos_combo');
+		$this->db->join("tb_06_articulo", "tb_66_articulos_combo.codigo_articulo = tb_06_articulo.Articulo_Codigo AND tb_66_articulos_combo.sucursal = tb_06_articulo.TB_02_Sucursal_Codigo");
+		$this->db->where("codigo_articulo_padre", $codigo);
+		$this->db->where("sucursal", $sucursal);
+		$query = $this->db->get();
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			return $query->result();
+		}
+	}
+
+	function eliminarArticulosCombo($articuloCodigo, $articuloSucursal){
+		$this->db->where('sucursal', $articuloSucursal);
+		$this->db->where('codigo_articulo_padre', $articuloCodigo);
+		$this->db->delete('tb_66_articulos_combo');
+	}
+
+	function agregarArticuloCombo($articuloComboCodigo, $articuloComboCantidad, $articuloCodigo, $articuloSucursal)
+	{
+		$data = array(
+			'cantidad'=>$articuloComboCantidad,
+			'codigo_articulo'=>$articuloComboCodigo,
+			'sucursal'=>$articuloSucursal,
+			'codigo_articulo_padre'=>$articuloCodigo
+		);
+		try{
+        	$this->db->insert('tb_66_articulos_combo',$data);
+    	}
+		catch(Exception $e)
+		{return false;}
+	}
+
 
 } //FIN DE LA CLASE
 

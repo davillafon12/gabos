@@ -65,35 +65,26 @@ table{
 }
 
 .field_precios{
-	width: 650px;
   display: inline;
-  /* position: relative; */
-  /* top: -58px; */
-  /* margin-bottom: -100px; */
 }
 
 .field_foto{
-	  width: 77px;
-	  height: 77px;
-	  /* display: inline; */
-	  padding: 3px;
-	  text-align: center;
-	  /* float: right; */
-	  position: relative;
-	  top: -87px;
-	  left: 680px;
-	  margin-bottom: -170px;
+	width: 77px;
+    height: 183px;
+    position: relative;
+    top: -203px;
+    left: 330px;
+    margin-bottom: -290px;
 }
 
 .field_barras{
-	  width: 200px;
-  height: 77px;
-  /* display: inline; */
-  padding: 3px;
-  text-align: center;
-  position: relative;
-  top: -4px;
-  left: 770px;
+	width: 200px;
+    height: 77px;
+    padding: 3px;
+    text-align: center;
+    position: relative;
+    top: -115px;
+    left: 557px;
 }
 
 .divButton{
@@ -212,4 +203,96 @@ table{
 	color: #000000;
 	background-color: #FF8C8C;
 	border-color: #BD707B;
+}
+
+.tabla_productos{	
+	width: 99%;
+	margin: auto;
+	margin-top: 10px;
+	border-collapse: collapse; 
+    text-align: left;
+	font: normal 12px/150% Arial, Helvetica, sans-serif; 
+	background: #fff; 
+	overflow: hidden; 
+	border: 1px solid #8C8C8C; 
+	-webkit-border-radius: 5px;
+	 -moz-border-radius: 5px; 
+	 border-radius: 5px;
+}
+
+.tabla_productos  td, .tabla_productos  th { 
+	padding: 3px 10px; 
+}
+
+.tabla_productos  thead th {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #999999), color-stop(1, #DBDBDB) );
+	background:-moz-linear-gradient( center top, #999999 5%, #DBDBDB 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#DBDBDB');
+	background-color:#999999; 
+	color:#000000; 
+	font-size: 14px; 
+	font-weight: bold; 
+	border-left: 1px solid #A3A3A3; 
+}
+ 
+.tabla_productos  thead th:first-child { border: none; }
+ 
+.tabla_productos  tbody td {
+	color: #7D7D7D; 
+	border-left: 1px solid #DBDBDB;
+	font-size: 12px;
+	font-weight: normal; 
+}
+
+.tabla_productos  tbody .alt td { 
+	background: #EBEBEB; 
+	color: #7D7D7D; 
+}
+
+.tabla_productos  tbody td:first-child { border-left: none; }
+
+.tabla_productos  tbody tr:last-child td { border-bottom: none; }
+
+.th_codigo {width: 100px;}
+.th_bodega {width: 50px;}
+.th_cantidad {width: 50px;}
+
+.input_codigo_articulo{
+	width: 100%; 
+	box-sizing: border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing: border-box;
+	z-index:2;
+}
+
+.articulo_specs, .precio_articulo{
+	color: #000; 
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica;
+}
+
+.tooltip_imagen_articulo{
+	display: none;
+	position: absolute;
+	z-index: 2;
+	margin-top: -10px;
+	margin-left: 30px;
+}
+
+.cantidad_articulo{
+	width: 100%; 
+	box-sizing: border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing: border-box;
+	text-align: center;
+	color: #000; 
+	font-weight:bold;
+	font-size: 14px;
+	font-family:Arial, Helvetica;
+}
+
+.th_precio{
+	    width: 110px;
+	    text-align:center;	
 }

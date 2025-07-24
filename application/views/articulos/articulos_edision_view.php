@@ -35,7 +35,7 @@ PARA:
 		<!--SCRIPT DE NUMERIC-->
 		<script src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_edicion_articulo.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_edicion_articulo.css?v='.$javascriptCacheVersion); ?>">
 		<!--SCRIPT DE HERRAMIENTAS-->
 		<script src="<?php echo base_url('application/scripts/articulos/edicion_articulo_tools.js?v='.$javascriptCacheVersion); ?>" type="text/javascript"></script>
 
@@ -98,8 +98,6 @@ PARA:
 				echo form_open_multipart('articulos/editar/actualizarArticulos', $attributes);
 			?>
 
-
-
 			<div class="contenedor">
 				<fieldset>
 					<legend>Información Básica</legend>
@@ -108,14 +106,34 @@ PARA:
 							<td>
 								<label for="articulo_codigo" class="contact">Código:</label>
 							</td>
-							<td>
+							<td colspan="3">
 								<p class="contact"><?php echo $Articulo_Codigo;?></p>
-								<input name="articulo_codigo" type="hidden" value="<?php echo $Articulo_Codigo;?>">
+								<input name="articulo_codigo" id="articulo_codigo" type="hidden" value="<?php echo $Articulo_Codigo;?>">
 							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="sucursal"  class="contact">Empresa:</label>
+							</td>
+							<td colspan="4">
+								<p class="contact"><?php echo "$empresaId - $empresaNombre";?></p>
+								<input type="hidden" name="sucursal" value="<?php echo $empresaId;?>">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="familia"  class="contact">Familia:</label>
+							</td>
+							<td colspan="4">
+								<p class="contact"><?php echo "$familiaId - $familiaNombre";?></p>
+								<input type="hidden" name="familia" value="<?php echo $familiaId;?>">
+							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="articulo_descripcion" class="contact">Descripción:</label>
 							</td>
-							<td colspan="3">
+							<td colspan="4">
 								<input id="articulo_descripcion" class="input_descripcion" autocomplete="off"  name="articulo_descripcion" required="" type="text" value="<?php echo $Articulo_Descripcion;?>">
 							</td>
 						</tr>
@@ -132,89 +150,84 @@ PARA:
 							<td>
 								<input id="articulos_cantidad_defectuoso" class="input_uno" autocomplete="off" name="articulos_cantidad_defectuoso" required="" value="<?php echo $Articulo_Cantidad_Defectuoso;?>" onclick="this.select()">
 							</td>
+							
+						</tr>
+						<tr>
 							<td>
-								<label class="contact" > Exento de IVI</label>
+								<label class="contact" > Exento de IV:</label>
 							</td>
 							<td>
 								<input type="checkbox" name="exento" id="exento"  value="1" <?php if($Articulo_Exento){echo "checked";} ?>>
 							</td>
-						</tr>
-						<tr>
 							<td>
-								<label for="sucursal"  class="contact">Empresa:</label>
-							</td>
-							<td>
-								<p class="contact"><?php echo "$empresaId - $empresaNombre";?></p>
-								<input type="hidden" name="sucursal" value="<?php echo $empresaId;?>">
-							</td>
-							<td>
-								<label for="familia"  class="contact">Familia:</label>
-							</td>
-							<td>
-								<p class="contact"><?php echo "$familiaId - $familiaNombre";?></p>
-								<input type="hidden" name="familia" value="<?php echo $familiaId;?>">
-							</td>
-							<td>
-								<label for="descuento"  class="contact">Descuento:</label>
-							</td>
-							<td>
-								<input id="descuento" class="input_uno" autocomplete="off" name="descuento" value="<?php echo $Articulo_Descuento;?>" onclick="this.select()">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="foto_articulo"  class="contact">Foto:</label>
-							</td>
-							<td>
-								<input type="file" id="foto_articulo" class="input_dos" name="userfile" size="10" accept=".jpg,.png,.ico,.bmp" >
-							</td>
-							<td>
-								<label class="contact" > Sin Retención</label>
+								<label class="contact" > Sin Retención:</label>
 							</td>
 							<td>
 								<input type="checkbox" name="retencion" id="retencion"  value="1" <?php if($retencion){echo "checked";}?> >
 							</td>
-                                                    <td>
-                                                        <label class="contact">Tipo Código:</label>
-                                                    </td>
-                                                    <td>
-                                                        <select name="tipo_codigo" class="input_dos">
-                                                            <?php
-                                                                foreach($tipos_codigo as $tc){
-                                                                    ?>
-                                                            <option value="<?= $tc->Codigo ?>" <?= $tc->Codigo == $tipoCodigo ? "selected" : "" ?>><?= $tc->Descripcion ?></option>
-                                                                    <?php
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </td>
+							<td>
+								<label class="contact" > Es combo:</label>
+							</td>
+							<td>
+								<input type="checkbox" name="esCombo" id="esCombo"  value="1" <?php if($esCombo){echo "checked";}?> >
+							</td>
 						</tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="contact">Unidad Medida:</label>
-                                                    </td>
-                                                    <td>
-                                                        <select name="unidad_medida" class="input_dos">
-                                                            <?php
-                                                                foreach($unidades_medida as $um){
-                                                                    ?>
-                                                            <option value="<?= $um->Id ?>" <?= $unidadMedida == $um->Codigo ? "selected" : "" ?>><?= $um->Codigo." - ".$um->Descripcion ?></option>
-                                                                    <?php
-                                                                }
-                                                            ?>
-                                                        </select>
-													</td>
-													<td>
-                                                        <label class="contact">Código Cabys:</label>
-                                                    </td>
-                                                    <td>
-														<input type="text" id="codigo_cabys_display" class="input_dos" value="<?= $cabysCodigo ?>" disabled/>
-														<input type="text" name="codigo_cabys" id="codigo_cabys" value="<?= $cabysCodigo ?>" style="display:none;"/>
-														<input type="text" name="impuesto_cabys" id="impuesto_cabys" value="<?= $cabysImpuesto ?>" style="display:none;"/>
-													</td>
-													<td colspan="2">
-                                                        <input type="text" id="busqueda_codigo_cabys" class="input_dos" placeholder="Busque aquí el código Cabys" value="<?= $cabysDescripcion ?>"/>
-                                                    </td>
+						<tr>
+							<td>
+								<label for="descuento"  class="contact">Descuento:</label>
+							</td>
+							<td colspan="2">
+								<input id="descuento" class="input_uno" autocomplete="off" name="descuento" value="<?php echo $Articulo_Descuento;?>" onclick="this.select()">
+							</td>
+							<td>
+								<label for="foto_articulo"  class="contact">Foto:</label>
+							</td>
+							<td colspan="2">
+								<input type="file" id="foto_articulo" class="input_dos" name="userfile" size="10" accept=".jpg,.png,.ico,.bmp" >
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="contact">Tipo Código:</label>
+							</td>
+							<td colspan="2">
+								<select name="tipo_codigo" class="input_dos">
+									<?php
+										foreach($tipos_codigo as $tc){
+											?>
+									<option value="<?= $tc->Codigo ?>" <?= $tc->Codigo == $tipoCodigo ? "selected" : "" ?>><?= $tc->Descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
+							<td>
+								<label class="contact">Unidad Medida:</label>
+							</td>
+							<td colspan="2">
+								<select name="unidad_medida" class="input_dos">
+									<?php
+										foreach($unidades_medida as $um){
+											?>
+									<option value="<?= $um->Id ?>" <?= $unidadMedida == $um->Codigo ? "selected" : "" ?>><?= $um->Codigo." - ".$um->Descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>							
+							<td>
+								<label class="contact">Código Cabys:</label>
+							</td>
+							<td colspan="2">
+								<input type="text" id="codigo_cabys_display" class="input_dos" value="<?= $cabysCodigo ?>" disabled/>
+								<input type="text" name="codigo_cabys" id="codigo_cabys" value="<?= $cabysCodigo ?>" style="display:none;"/>
+								<input type="text" name="impuesto_cabys" id="impuesto_cabys" value="<?= $cabysImpuesto ?>" style="display:none;"/>
+							</td>
+							<td colspan="3">
+								<input type="text" id="busqueda_codigo_cabys" class="input_dos" placeholder="Busque aquí el código Cabys" value="<?= $cabysDescripcion ?>"/>
+							</td>
 						</tr>
 					</table>
 				</fieldset>
@@ -304,16 +317,57 @@ PARA:
 				</fieldset>
 				<fieldset class="field_foto">
 					<legend>Foto</legend>
-					<img class="foto_articulo" id="foto_thumb" src="<?php echo base_url("application/images/articulos/$Articulo_Imagen_URL");?>" height="55"/>
-					<div class="imagen-grande" ><img src="<?php echo base_url("application/images/articulos/$Articulo_Imagen_URL");?>" width="200" height="200"/></div>
-
+					<img class="foto_articulo" id="foto_thumb" src="<?php echo base_url("application/images/articulos/$Articulo_Imagen_URL");?>"/>
 				</fieldset>
 				<fieldset class="field_barras">
-					<legend>Codigo de Barras</legend>
+					<legend>Código de Barras</legend>
 					<img src="<?php echo base_url("application/libraries/barcode.php?codetype=Code25&size=55&text=$Articulo_Codigo_Barras");?>"  height="50" width="180"/>
 				</fieldset>
+				<fieldset class="field_combo">
+					<legend>Artículos del combo</legend>
+					<table id="tabla_productos" class="tabla_productos" >
+						<thead>
+							<th class="th_codigo">Código</th>
+							<th class="th_descripcion">Descripción</th>
+							<th class="th_cantidad">Cantidad</th>
+						</thead>
+						<tbody id="cuerpo_tabla_articulos">
+						
+						<?php		
+							function addFilaArticuloCombo($contador, $isDisabled, $codigo, $descripcion, $cantidad){
+								$numero_id = $contador+1;
+								$numero_tab = $contador+2;
+								return "<tr>
+									<td>									
+										<input id='articulo_".$numero_id."' tabindex='".$numero_tab."'  class='input_codigo_articulo' autocomplete='off' name='combo_codigo_articulo_".$numero_id."[]' type='text' " . ($isDisabled ? "disabled" : "") . " " . ($codigo == "" ? "" : "value='" . $codigo . "'") . " />		
+									</td>
+									<td>
+										<div class='articulo_specs' id='descripcion_articulo_".$numero_id."'>" . $descripcion . "</div>
+										<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_".$numero_id."'></div>
+									</td>
+									<td>
+										<input id='cantidad_articulo_".$numero_id."' class='cantidad_articulo' autocomplete='off' type='number' min='1' name='combo_cantidad_articulo_".$numero_id."[]' " . ($isDisabled ? "disabled" : "") . " " . ($cantidad == "" ? "" : "value='" . $cantidad . "'") . " />									
+									</td>									
+								</tr>";
+							}
+						
+							$contador=0;
+							//Creamos las filas de la tabla
+							foreach($articulosCombo as $articuloCombo){
+								echo addFilaArticuloCombo($contador, $esCombo == "0", $articuloCombo->codigo, $articuloCombo->descripcion, $articuloCombo->cantidad);
+								$contador++;
+							}			 
+
+							for($contador=$contador;$contador<10;$contador++)
+							{
+								echo addFilaArticuloCombo($contador, $esCombo == "0", '', '', '');
+							}					
+						?>
+						</tbody>				
+					</table>
+				</fieldset>
 				<div class="divButton">
-					<input class="boton" name="submit" value="Actualizar" type="submit">
+					<input class="boton" name="submitButton" value="Actualizar" type="button" onclick="verificarFormulario()">
 					<a class="boton_a" href='<?php echo base_url('articulos/editar')?>' class='boton_volver'>Volver</a>
 				</div>
 			</form>

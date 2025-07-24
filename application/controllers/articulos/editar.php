@@ -335,9 +335,10 @@ class editar extends CI_Controller {
 				//$data['Articulo_Imagen_URL'] = $row -> Articulo_Imagen_URL;
 				$data['Articulo_Exento'] = $row -> Articulo_Exento;
 				$data['retencion'] = $row -> Articulo_No_Retencion;
-                                $data['tipoCodigo'] = $row -> TipoCodigo;
-                                $data['unidadMedida'] = $row -> UnidadMedida;
-
+				$data['tipoCodigo'] = $row -> TipoCodigo;
+				$data['unidadMedida'] = $row -> UnidadMedida;
+				$data['esCombo'] = $row->esCombo;
+				$data['articulosCombo'] = $row->esCombo ? $this->articulo->getArticulosCombo($row -> Articulo_Codigo, $sucursal) : array();
 
 				$URL_IMAGEN = $row->Articulo_Imagen_URL;
 				$ruta_a_preguntar = FCPATH.'application\\images\\articulos\\'.$URL_IMAGEN;
@@ -421,6 +422,7 @@ class editar extends CI_Controller {
 
 			$codigoCabys = $this->input->post('codigo_cabys');
 			$impuestoCabys = $this->input->post('impuesto_cabys');
+			$esCombo = $this->input->post('esCombo');
 
 			//Si es exento
 			$exento = 0;
@@ -430,7 +432,9 @@ class editar extends CI_Controller {
 			$retencion = 0;
 			$retencion = isset($_POST['retencion']) && $_POST['retencion']  ? "1" : "0";
 
-
+			if($esCombo == 1){
+				$this->agregarArticulosCombo($_POST['sucursal'], $_POST['articulo_codigo']);
+			}
 
 			$foto = $this->articulo->getArticuloImagen($_POST['articulo_codigo'], $_POST['sucursal']);
 			if(isset($_FILES['userfile']['name'])){
@@ -473,7 +477,8 @@ class editar extends CI_Controller {
 															'TipoCodigo' => $tipo_codigo,
 															'UnidadMedida' => $unidad_medida,
 															'CodigoCabys' => $codigoCabys,
-															'Impuesto' => $impuestoCabys
+															'Impuesto' => $impuestoCabys,
+															'esCombo' => $esCombo
 														);
 										$precios = array(
 															0 => array("precio"=>$costo, "descuento"=>$costod),
@@ -484,7 +489,6 @@ class editar extends CI_Controller {
 															5 => array("precio"=>$precio5, "descuento"=>$precio5d)
 														);
 										$this->articulo->actualizar($_POST['articulo_codigo'], $_POST['sucursal'], $info['dataBD']);
-										//$this->articulo->actualizarPrecios($_POST['articulo_codigo'], $_POST['sucursal'], $info['precios']);
 										$this->articulo->actualizarPreciosMasivo($precios, $_POST['sucursal'], $_POST['articulo_codigo']);
 
 										include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
@@ -523,30 +527,36 @@ class editar extends CI_Controller {
 		//echo "URL Mala";
 		redirect('articulos/editar/edicion?id='.$_POST['articulo_codigo'].'&s=e&e=1', 'location');
 	}
-
- 	//echo"en construccion";
-	/*$id_empresa = $this->input->post('codigo');
-	$nombre_empresa = $this->input->post('name');
-	$telefono_empresa = $this->input->post('telefono');
-	$observaciones_empresa = $this->input->post('observaciones');
-	$direccion_empresa = $this->input->post('direccion');
-
-	$data_update['Sucursal_Nombre'] = $nombre_empresa);
-	$data_update['Sucursal_Telefono'] = $telefono_empresa);
-	$data_update['Sucursal_Direccion'] = $direccion_empresa);
-	$data_update['Sucursal_Observaciones'] = $observaciones_empresa);
-
-	//echo $id_empresa;
-	//echo $nombre_empresa;
-
-	$this->empresa->actualizar($id_empresa), $data_update);
-
-	include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-	$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario editó la empresa codigo: ".$id_empresa),$data['Sucursal_Codigo'],'edicion');
-
-	redirect('empresas/editar', 'location');
-	*/
  }
+
+	function agregarArticulosCombo($sucursal, $codigo){
+		$articulosCombo = $this->getArticulosComboFromPost();
+		$this->articulo->eliminarArticulosCombo($codigo, $sucursal);
+
+		foreach($articulosCombo as $articuloCombo){
+			$this->articulo->agregarArticuloCombo($articuloCombo["codigo"], $articuloCombo["cantidad"], $codigo, $sucursal);
+		}
+	} 	
+
+	function getArticulosComboFromPost(){
+		$articulosCombo = array();
+		$contador = 1;
+
+		while(true){
+			$codigo = trim(@$_POST["combo_codigo_articulo_" . $contador][0]);
+			$cantidad = trim(@$_POST["combo_cantidad_articulo_" . $contador][0]);
+
+			if($codigo != "" && $cantidad != ""){
+				array_push($articulosCombo, array("codigo" => $codigo, "cantidad" => $cantidad));
+			}else{
+				break;
+			}
+
+			$contador++;
+		}
+
+		return $articulosCombo;
+	}
 
  function do_upload($cedula)
     {

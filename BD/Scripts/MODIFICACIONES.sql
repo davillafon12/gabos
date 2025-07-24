@@ -30,3 +30,15 @@ ALTER TABLE `tb_57_nota_credito_electronica` CHANGE `PlazoCredito` `PlazoCredito
 
 -- Actualizar leyenda FE 4.4
 UPDATE tb_02_sucursal set Sucursal_leyenda_tributacion = 'Emitida conforme los lineamientos técnicos y normativos establecidos en la resolución N°  MH-DGT-RES-0027-2024 de las ocho horas veinte minutos del trece de noviembre de dos mil veinticuatro' where Codigo in (0,1,2,3,4,7);
+
+-- Cambios combos de articulos
+ALTER TABLE `tb_06_articulo` ADD `esCombo` BOOLEAN NOT NULL DEFAULT FALSE AFTER `Impuesto`;
+CREATE TABLE `tb_66_articulos_combo` (
+  `id` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `codigo_articulo` int(11) NOT NULL,
+  `sucursal` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ALTER TABLE `tb_66_articulos_combo` CHANGE `codigo_articulo` `codigo_articulo` VARCHAR(30) NOT NULL;
+ALTER TABLE `tb_66_articulos_combo` ADD `codigo_articulo_padre` VARCHAR(30) NOT NULL AFTER `sucursal`;
+ALTER TABLE `tb_66_articulos_combo` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
