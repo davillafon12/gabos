@@ -32,10 +32,12 @@ class ingresar extends CI_Controller {
 		$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']);
 		$tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
 		$unidadesMedida = $this->catalogo->getUnidadesDeMedida();
+		$tipoDescuentos = $this->catalogo->getTipoDescuentos();
 		$data['Familia_Empresas'] = $empresas_actuales;
 		$data['Familias'] = $familias_actuales;
 		$data['tipo_codigo'] = $tiposCodigos;
 		$data['unidades_medida'] = $unidadesMedida;
+		$data['tipoDescuentos'] = $tipoDescuentos;
 		$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 		$this->load->view('articulos/articulos_ingreso_individual', $data);
 	}
@@ -66,6 +68,7 @@ class ingresar extends CI_Controller {
 
 		$codigoCabys = $this->input->post('codigo_cabys');
 		$impuestoCabys = $this->input->post('impuesto_cabys');
+		$codigoDescuento = $this->input->post('tipo_codigo_descuento');
 
 		$unidad_medida = $this->catalogo->getUnidadDeMedidaById($unidad_medida)->Codigo;
 
@@ -77,12 +80,51 @@ class ingresar extends CI_Controller {
 		$precio4_d = $this->input->post('precio4_d');
 		$precio5_d = $this->input->post('precio5_d');
 
+		$costo_codigo_d = $this->input->post('costo_codigo_d');
+		$precio1_codigo_d = $this->input->post('precio1_codigo_d');
+		$precio2_codigo_d = $this->input->post('precio2_codigo_d');
+		$precio3_codigo_d = $this->input->post('precio3_codigo_d');
+		$precio4_codigo_d = $this->input->post('precio4_codigo_d');
+		$precio5_codigo_d = $this->input->post('precio5_codigo_d');
+
 
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 		$ruta_base_imagenes_script = base_url('application/images/scripts');
-		if($this->articulo->registrar($codigo_Articulo, $descripcion_Articulo, $codigoBarras_articulo, $cantidad_Articulos, $cantidad_Defectuosa, $descuento_Articulo, $this->direccion_url_imagen,
-		$exento_articulo, $retencion, $familia_articulo, $empresa_Articulo, $costo_Articulo, $precio1_Articulo, $precio2_Articulo, $precio3_Articulo,  $precio4_Articulo, $precio5_Articulo, $tipo_codigo, $unidad_medida, $codigoCabys, $impuestoCabys,
-		$costo_d, $precio1_d, $precio2_d, $precio3_d, $precio4_d, $precio5_d))
+		if($this->articulo->registrar(
+			$codigo_Articulo, 
+			$descripcion_Articulo, 
+			$codigoBarras_articulo, 
+			$cantidad_Articulos, 
+			$cantidad_Defectuosa, 
+			$descuento_Articulo, 
+			$this->direccion_url_imagen,
+			$exento_articulo, 
+			$retencion, 
+			$familia_articulo, 
+			$empresa_Articulo, 
+			$costo_Articulo, 
+			$precio1_Articulo, 
+			$precio2_Articulo, 
+			$precio3_Articulo,  
+			$precio4_Articulo, 
+			$precio5_Articulo, 
+			$tipo_codigo, 
+			$unidad_medida, 
+			$codigoCabys, 
+			$impuestoCabys,
+			$costo_d, 
+			$precio1_d, 
+			$precio2_d, 
+			$precio3_d, 
+			$precio4_d, 
+			$precio5_d,
+			$codigoDescuento,
+			$costo_codigo_d,
+			$precio1_codigo_d,
+			$precio2_codigo_d,
+			$precio3_codigo_d,
+			$precio4_codigo_d,
+			$precio5_codigo_d))
 		{ //Si se ingreso bien a la BD
 			//$this->bodega_m->restarCantidadBodega($cantidad_Articulos, $codigoBrasil, $empresa_Articulo);
 
@@ -263,7 +305,8 @@ class ingresar extends CI_Controller {
 						sizeOf($resultado["erroresDescuento"])==0 &&
 						sizeOf($resultado["erroresTipoCodigo"])==0 &&
 						sizeOf($resultado["erroresUnidadMedida"])==0 &&
-						sizeOf($resultado["erroresCodigoCabys"])==0 ){
+						sizeOf($resultado["erroresCodigoCabys"])==0 &&
+						sizeOf($resultado["erroresCodigoDescuento"])==0 ){
 						//	die;
 						$articulos = $resultado['articulos'];
 						foreach($articulos as $articulo){
@@ -293,7 +336,15 @@ class ingresar extends CI_Controller {
 							$articulo['p2D'],
 							$articulo['p3D'],
 							$articulo['p4D'],
-							$articulo['p5D']);
+							$articulo['p5D'],
+							$articulo['codigoDescuento'],
+							$articulo['cosCD'],
+							$articulo['p1CD'],
+							$articulo['p2CD'],
+							$articulo['p3CD'],
+							$articulo['p4CD'],
+							$articulo['p5CD']
+						);
 
 							$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario traspaso a inventario el articulo: ".$articulo['cod'],$data['Sucursal_Codigo'],'traspaso');
 						}
@@ -323,6 +374,7 @@ class ingresar extends CI_Controller {
 						$data['erroresTipoCodigo'] = $resultado["erroresTipoCodigo"];
 						$data['erroresUnidadMedida'] = $resultado["erroresUnidadMedida"];
 						$data['erroresCodigoCabys'] = $resultado["erroresCodigoCabys"];
+						$data['erroresCodigoDescuento'] = $resultado["erroresCodigoDescuento"];
 						$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 						$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 					}
@@ -332,12 +384,14 @@ class ingresar extends CI_Controller {
 						$this->load->helper(array('form'));
 						$data['error'] = '4';
 						$data['msj'] = 'No se pudo procesar el archivo excel';
+						$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 						$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 					}else if($resultado['error']=='2'){
 						//echo "Columnas requeridas no vienen o estan en mal formato";
 						$this->load->helper(array('form'));
 						$data['error'] = '3';
 						$data['msj'] = 'Columnas no válidas, o no están en orden';
+						$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 						$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 					}
 				}
@@ -348,459 +402,310 @@ class ingresar extends CI_Controller {
 			$this->load->helper(array('form'));
 			$data['error'] = '1';
 			$data['msj'] = 'La URL está incompleta, contacte al administrador';
+			$data['javascriptCacheVersion'] = $this->javascriptCacheVersion;
 			$this->load->view('articulos/ingreso_masivo_articulos_view', $data);
 		}
 	}
 
 	function procesarExcel(){
-				$resultado = array('status'=>'error','error'=>'1'); //Error generico de no se pudo realizar el proceso
-				require './application/libraries/excel_reader2.php';
-				$data = new Spreadsheet_Excel_Reader($_FILES['archivo_excel']['tmp_name']);
-
-				$c1 = $data->val(1,1);
-				$c2 = $data->val(1,2);
-				$c3 = $data->val(1,3);
-				$c4 = $data->val(1,4);
-				$c5 = $data->val(1,5);
-				$c6 = $data->val(1,6);
-				$c7 = $data->val(1,7);
-				$c8 = $data->val(1,8);
-				$c9 = $data->val(1,9);
-				$c10 = $data->val(1,10);
-				$c11 = $data->val(1,11);
-				$c12 = $data->val(1,12);
-				$c13 = $data->val(1,13);
-				$c14 = $data->val(1,14);
-				$c15 = $data->val(1,15);
-				$c16 = $data->val(1,16);
-				$c17 = $data->val(1,17);
-				$c18 = $data->val(1,18);
-				$c19 = $data->val(1,19);
-				$c20 = $data->val(1,20);
-				$c21 = $data->val(1,21);
-				$c22 = $data->val(1,22);
-				$c23 = $data->val(1,23);
-				$c24 = $data->val(1,24);
-
-				if(	trim($c1) == 'CODIGO' &&
-					trim($c2) == 'DESCRIPCION' &&
-					trim($c3) == 'COSTO' &&
-					trim($c4) == 'COSTO_DESCUENTO' &&
-					trim($c5) == 'PRECIO_1' &&
-					trim($c6) == 'PRECIO_1_DESCUENTO' &&
-					trim($c7) == 'PRECIO_2' &&
-					trim($c8) == 'PRECIO_2_DESCUENTO' &&
-					trim($c9) == 'PRECIO_3' &&
-					trim($c10) == 'PRECIO_3_DESCUENTO' &&
-					trim($c11) == 'PRECIO_4' &&
-					trim($c12) == 'PRECIO_4_DESCUENTO' &&
-					trim($c13) == 'PRECIO_5' &&
-					trim($c14) == 'PRECIO_5_DESCUENTO' &&
-					trim($c15) == 'SUCURSAL' &&
-					trim($c16) == 'FAMILIA' &&
-					trim($c17) == 'CANTIDAD' &&
-					trim($c18) == 'EXENTO_IVA' &&
-					trim($c19) == 'SIN_RETENCION' &&
-					trim($c20) == 'DESCUENTO' &&
-					trim($c21) == 'NOMBRE_IMAGEN'&&
-					trim($c22) == 'TIPO_CODIGO'&&
-					trim($c23) == 'UNIDAD_MEDIDA'&&
-					trim($c24) == 'CODIGO_CABYS'
-					){
-								$cantidadFilas = $data->rowcount($sheet_index=0);
-								//Lleva el control de cuales productos presentaron errores
-								$erroresCodigo = array();
-								$erroresCosto = array();
-								$erroresPrecio1 = array();
-								$erroresPrecio2 = array();
-								$erroresPrecio3 = array();
-								$erroresPrecio4 = array();
-								$erroresPrecio5 = array();
-								$erroresCantidad = array();
-								$erroresFamilia = array();
-								$erroresSucursal = array();
-								$erroresExento = array();
-								$erroresRetencion = array();
-								$erroresDescuento = array();
-								$erroresTipoCodigo = array();
-								$erroresUnidadMedida = array();
-								$erroresCodigoCabys = array();
-
-								$articulos = array();
-
-								for ($row = 2; $row <= $cantidadFilas; ++ $row){
-									$codigo = $data->val($row,1);
-									$descripcion = $data->val($row,2);
-									$costo = $data->val($row,3);
-									$costoD = $data->val($row,4);
-									$p1 = $data->val($row,5);
-									$p1D = $data->val($row,6);
-									$p2 = $data->val($row,7);
-									$p2D = $data->val($row,8);
-									$p3 = $data->val($row,9);
-									$p3D = $data->val($row,10);
-									$p4 = $data->val($row,11);
-									$p4D = $data->val($row,12);
-									$p5 = $data->val($row,13);
-									$p5D = $data->val($row,14);
-									$sucursal = $data->val($row,15);
-									$familia = $data->val($row,16);
-									$cantidad = $data->val($row,17);
-									$exento = $data->val($row,18);
-									$retencion = $data->val($row,19);
-									$descuento = $data->val($row,20);
-									$imagen = $data->val($row,21);
-									$tipoCodigo = $data->val($row,22);
-									$unidadMedida = $data->val($row,23);
-									$codigoCabys = $data->val($row,24);
-
-									//Revisamos si el codigo existe
-									if($this->articulo->existe_Articulo($codigo,$sucursal)){
-										array_push($erroresCodigo, $codigo);
-									}
-									//Revisamos que el costo sea numerico
-									if(!is_numeric($costo)){
-										array_push($erroresCosto, $codigo);
-									}
-									//Revisamos que el precio 2 sea numerico
-									if(!is_numeric($p2)){
-										array_push($erroresPrecio2, $codigo);
-									}
-									//Revisamos que el precio 3 sea numerico
-									if(!is_numeric($p3)){
-										array_push($erroresPrecio3, $codigo);
-									}
-									//Revisamos que el precio 3 sea numerico
-									if(!is_numeric($p3)){
-										array_push($erroresPrecio3, $codigo);
-									}
-									//Revisamos que el precio 4 sea numerico
-									if(!is_numeric($p4)){
-										array_push($erroresPrecio4, $codigo);
-									}
-									//Revisamos que el precio 5 sea numerico
-									if(!is_numeric($p5)){
-										array_push($erroresPrecio5, $codigo);
-									}
-									//Revisamos que la cantidad sea numerica y mayor a 0
-									if(!is_numeric($cantidad)||$cantidad<0){
-										array_push($erroresCantidad, $codigo);
-									}
-
-									//Revisamos que la sucursal exista
-									if(!$this->empresa->getEmpresa($sucursal)){
-										array_push($erroresSucursal, $codigo);
-									}
-									//Revisamos que la familia exista
-									if(!$this->familia->existeFamilia($familia, $sucursal)){
-										array_push($erroresFamilia, $codigo);
-									}
-									//Revisamos que el exento sea valido
-									if(trim($exento)!='0'&&trim($exento)!='1'){
-										array_push($erroresExento, $codigo);
-									}
-									//Revisamos que la retencion sea valida
-									if(trim($retencion)!='0'&&trim($retencion)!='1'){
-										array_push($erroresRetencion, $codigo);
-									}
-									//Revisamos que el descuento sea numerico y este entre 0 y 100
-									if(!is_numeric($descuento)||$descuento<0||$descuento>100){
-										array_push($erroresDescuento, $codigo);
-									}
-
-									//Revisamos que el descuento sea numerico y este entre 0 y 100
-									if(!is_numeric($costoD)||$costoD<0||$costoD>100){
-										array_push($erroresDescuento, $codigo);
-									}
-
-									//Revisamos que el descuento sea numerico y este entre 0 y 100
-									if(!is_numeric($p1D)||$p1D<0||$p1D>100){
-										array_push($erroresDescuento, $codigo);
-									}
-
-									//Revisamos que el descuento sea numerico y este entre 0 y 100
-									if(!is_numeric($p2D)||$p2D<0||$p2D>100){
-										array_push($erroresDescuento, $codigo);
-									}
-
-									//Revisamos que el descuento sea numerico y este entre 0 y 100
-									if(!is_numeric($p3D)||$p3D<0||$p3D>100){
-										array_push($erroresDescuento, $codigo);
-									}
-
-									//Revisamos que el descuento sea numerico y este entre 0 y 100
-									if(!is_numeric($p4D)||$p4D<0||$p4D>100){
-										array_push($erroresDescuento, $codigo);
-									}
-
-									//Revisamos que el descuento sea numerico y este entre 0 y 100
-									if(!is_numeric($p5D)||$p5D<0||$p5D>100){
-										array_push($erroresDescuento, $codigo);
-									}
-
-									//Revisamos el tipo de codigo
-									if($this->catalogo->getTipoCodigoByCodigo($tipoCodigo) == false){
-										array_push($erroresTipoCodigo, $codigo);
-									}
-
-									//Revisamos el unidad de medida
-									if($this->catalogo->getUnidadDeMedidaByCodigo($unidadMedida) == false){
-										array_push($erroresUnidadMedida, $codigo);
-									}
-
-									//Revisamos el codigo cabys
-									$impuestoCabys = 0;
-									if($cabysObject = $this->catalogo->getCabysFromCodigo($codigoCabys)){
-										$impuestoCabys = $cabysObject->Impuesto;
-									}else{
-										array_push($erroresCodigoCabys, $codigo);
-									}
-
-
-
-									array_push($articulos, array(
-																	"cod"=>$codigo,
-																	"des"=>$descripcion,
-																	"cos"=>str_replace(",",".",$costo),
-																	"cosD"=>str_replace(",",".",$costoD),
-																	"p1"=>str_replace(",",".",$p1),
-																	"p1D"=>str_replace(",",".",$p1D),
-																	"p2"=>str_replace(",",".",$p2),
-																	"p2D"=>str_replace(",",".",$p2D),
-																	"p3"=>str_replace(",",".",$p3),
-																	"p3D"=>str_replace(",",".",$p3D),
-																	"p4"=>str_replace(",",".",$p4),
-																	"p4D"=>str_replace(",",".",$p4D),
-																	"p5"=>str_replace(",",".",$p5),
-																	"p5D"=>str_replace(",",".",$p5D),
-																	"fam"=>$familia,
-																	"suc"=>$sucursal,
-																	"can"=>$cantidad,
-																	"exe"=>$exento,
-																	"ret"=>$retencion,
-																	"desc"=>str_replace(",",".",$descuento),
-																	"ima"=>$imagen,
-																	"tipoCodigo"=>$tipoCodigo,
-																	"unidadMedia"=>$unidadMedida,
-																	"codigoCabys"=>$codigoCabys,
-																	"impuestoCabys"=>$impuestoCabys
-																)
-												);
-								}
-								$resultado["status"] = "success";
-								unset($resultado["error"]);
-								$resultado["articulos"] = $articulos;
-
-								$resultado["erroresCodigo"] = $erroresCodigo;
-								$resultado["erroresCosto"] = $erroresCosto;
-								$resultado["erroresPrecio1"] = $erroresPrecio1;
-								$resultado["erroresPrecio2"] = $erroresPrecio2;
-								$resultado["erroresPrecio3"] = $erroresPrecio3;
-								$resultado["erroresPrecio4"] = $erroresPrecio4;
-								$resultado["erroresPrecio5"] = $erroresPrecio5;
-								$resultado["erroresCantidad"] = $erroresCantidad;
-								$resultado["erroresFamilia"] = $erroresFamilia;
-								$resultado["erroresSucursal"] = $erroresSucursal;
-								$resultado["erroresExento"] = $erroresExento;
-								$resultado["erroresRetencion"] = $erroresRetencion;
-								$resultado["erroresDescuento"] = $erroresDescuento;
-								$resultado["erroresTipoCodigo"] = $erroresTipoCodigo;
-								$resultado["erroresUnidadMedida"] = $erroresUnidadMedida;
-								$resultado["erroresCodigoCabys"] = $erroresCodigoCabys;
-				}else{
-					//No tiene las columnas requeridas
-					$resultado['error'] = '2';
-				}
-				return $resultado;
-	}
-
-
-	/*
-				function procesarExcel(){
 		$resultado = array('status'=>'error','error'=>'1'); //Error generico de no se pudo realizar el proceso
-		require_once './application/libraries/PHPExcel/IOFactory.php';
-    	$objPHPExcel = PHPExcel_IOFactory::load($_FILES['archivo_excel']['tmp_name']);
-		$cantidadHojas = 1; //Para que solo procese la primera hoja del excel
-		foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
-			if($cantidadHojas == 1){
-				$cantidadHojas++;
-				//Probamos que el orden de las columnas sea el requerido
-				$c1 = $worksheet->getCellByColumnAndRow(0, 1)->getValue();
-				$c2 = $worksheet->getCellByColumnAndRow(1, 1)->getValue();
-				$c3 = $worksheet->getCellByColumnAndRow(2, 1)->getValue();
-				$c4 = $worksheet->getCellByColumnAndRow(3, 1)->getValue();
-				$c5 = $worksheet->getCellByColumnAndRow(4, 1)->getValue();
-				$c6 = $worksheet->getCellByColumnAndRow(5, 1)->getValue();
-				$c7 = $worksheet->getCellByColumnAndRow(6, 1)->getValue();
-				$c8 = $worksheet->getCellByColumnAndRow(7, 1)->getValue();
-				$c9 = $worksheet->getCellByColumnAndRow(8, 1)->getValue();
-				$c10 = $worksheet->getCellByColumnAndRow(9, 1)->getValue();
-				$c11 = $worksheet->getCellByColumnAndRow(10, 1)->getValue();
-				$c12 = $worksheet->getCellByColumnAndRow(11, 1)->getValue();
-				$c13 = $worksheet->getCellByColumnAndRow(12, 1)->getValue();
-				$c14 = $worksheet->getCellByColumnAndRow(13, 1)->getValue();
-				$c15 = $worksheet->getCellByColumnAndRow(14, 1)->getValue();
+		require './application/libraries/excel_reader2.php';
+		$data = new Spreadsheet_Excel_Reader($_FILES['archivo_excel']['tmp_name']);
 
-				if(	trim($c1) == 'CODIGO' &&
-					trim($c2) == 'DESCRIPCION' &&
-					trim($c3) == 'COSTO' &&
-					trim($c4) == 'PRECIO_1' &&
-					trim($c5) == 'PRECIO_2' &&
-					trim($c6) == 'PRECIO_3' &&
-					trim($c7) == 'PRECIO_4' &&
-					trim($c8) == 'PRECIO_5' &&
-					trim($c9) == 'SUCURSAL' &&
-					trim($c10) == 'FAMILIA' &&
-					trim($c11) == 'CANTIDAD' &&
-					trim($c12) == 'EXENTO_IVA' &&
-					trim($c13) == 'SIN_RETENCION' &&
-					trim($c14) == 'DESCUENTO' &&
-					trim($c15) == 'NOMBRE_IMAGEN'
-					){
+		$c1 = $data->val(1,1);
+		$c2 = $data->val(1,2);
+		$c3 = $data->val(1,3);
+		$c4 = $data->val(1,4);
+		$c5 = $data->val(1,5);
+		$c6 = $data->val(1,6);
+		$c7 = $data->val(1,7);
+		$c8 = $data->val(1,8);
+		$c9 = $data->val(1,9);
+		$c10 = $data->val(1,10);
+		$c11 = $data->val(1,11);
+		$c12 = $data->val(1,12);
+		$c13 = $data->val(1,13);
+		$c14 = $data->val(1,14);
+		$c15 = $data->val(1,15);
+		$c16 = $data->val(1,16);
+		$c17 = $data->val(1,17);
+		$c18 = $data->val(1,18);
+		$c19 = $data->val(1,19);
+		$c20 = $data->val(1,20);
+		$c21 = $data->val(1,21);
+		$c22 = $data->val(1,22);
+		$c23 = $data->val(1,23);
+		$c24 = $data->val(1,24);
+		$c25 = $data->val(1,25);
+		$c26 = $data->val(1,26);
+		$c27 = $data->val(1,27);
+		$c28 = $data->val(1,28);
+		$c29 = $data->val(1,29);
+		$c30 = $data->val(1,30);
+		$c31 = $data->val(1,31);
 
-					$highestRow = $worksheet->getHighestRow();
+		if(	trim($c1) == 'CODIGO' &&
+			trim($c2) == 'DESCRIPCION' &&
+			trim($c3) == 'COSTO' &&
+			trim($c4) == 'COSTO_DESCUENTO' &&
+			trim($c5) == 'COSTO_CODIGO_DESCUENTO' &&
+			trim($c6) == 'PRECIO_1' &&
+			trim($c7) == 'PRECIO_1_DESCUENTO' &&
+			trim($c8) == 'PRECIO_1_CODIGO_DESCUENTO' &&
+			trim($c9) == 'PRECIO_2' &&
+			trim($c10) == 'PRECIO_2_DESCUENTO' &&
+			trim($c11) == 'PRECIO_2_CODIGO_DESCUENTO' &&
+			trim($c12) == 'PRECIO_3' &&
+			trim($c13) == 'PRECIO_3_DESCUENTO' &&
+			trim($c14) == 'PRECIO_3_CODIGO_DESCUENTO' &&
+			trim($c15) == 'PRECIO_4' &&
+			trim($c16) == 'PRECIO_4_DESCUENTO' &&
+			trim($c17) == 'PRECIO_4_CODIGO_DESCUENTO' &&
+			trim($c18) == 'PRECIO_5' &&
+			trim($c19) == 'PRECIO_5_DESCUENTO' &&
+			trim($c20) == 'PRECIO_5_CODIGO_DESCUENTO' &&
+			trim($c21) == 'SUCURSAL' &&
+			trim($c22) == 'FAMILIA' &&
+			trim($c23) == 'CANTIDAD' &&
+			trim($c24) == 'EXENTO_IVA' &&
+			trim($c25) == 'SIN_RETENCION' &&
+			trim($c26) == 'DESCUENTO' &&
+			trim($c27) == 'CODIGO_DESCUENTO' &&
+			trim($c28) == 'NOMBRE_IMAGEN'&&
+			trim($c29) == 'TIPO_CODIGO'&&
+			trim($c30) == 'UNIDAD_MEDIDA'&&
+			trim($c31) == 'CODIGO_CABYS'
+			){
+			$cantidadFilas = $data->rowcount($sheet_index=0);
+			//Lleva el control de cuales productos presentaron errores
+			$erroresCodigo = array();
+			$erroresCosto = array();
+			$erroresPrecio1 = array();
+			$erroresPrecio2 = array();
+			$erroresPrecio3 = array();
+			$erroresPrecio4 = array();
+			$erroresPrecio5 = array();
+			$erroresCantidad = array();
+			$erroresFamilia = array();
+			$erroresSucursal = array();
+			$erroresExento = array();
+			$erroresRetencion = array();
+			$erroresDescuento = array();
+			$erroresTipoCodigo = array();
+			$erroresUnidadMedida = array();
+			$erroresCodigoCabys = array();
+			$erroresCodigoDescuento = array();
 
-					//Lleva el control de cuales productos presentaron errores
-					$erroresCodigo = array();
-					$erroresCosto = array();
-					$erroresPrecio1 = array();
-					$erroresPrecio2 = array();
-					$erroresPrecio3 = array();
-					$erroresPrecio4 = array();
-					$erroresPrecio5 = array();
-					$erroresCantidad = array();
-					$erroresFamilia = array();
-					$erroresSucursal = array();
-					$erroresExento = array();
-					$erroresRetencion = array();
-					$erroresDescuento = array();
-					$erroresCantidadMayor = array();
+			$articulos = array();
 
-					$articulos = array();
+			for ($row = 2; $row <= $cantidadFilas; ++ $row)
+			{
+				$codigo = $data->val($row,1);
+				$descripcion = $data->val($row,2);
+				$costo = $data->val($row,3);
+				$costoD = $data->val($row,4);
+				$costoCD = $data->val($row,5);
+				$p1 = $data->val($row,6);
+				$p1D = $data->val($row,7);
+				$p1CD = $data->val($row,8);
+				$p2 = $data->val($row,9);
+				$p2D = $data->val($row,10);
+				$p2CD = $data->val($row,11);
+				$p3 = $data->val($row,12);
+				$p3D = $data->val($row,13);
+				$p3CD = $data->val($row,14);
+				$p4 = $data->val($row,15);
+				$p4D = $data->val($row,16);
+				$p4CD = $data->val($row,17);
+				$p5 = $data->val($row,18);
+				$p5D = $data->val($row,19);
+				$p5CD = $data->val($row,20);
+				$sucursal = $data->val($row,21);
+				$familia = $data->val($row,22);
+				$cantidad = $data->val($row,23);
+				$exento = $data->val($row,24);
+				$retencion = $data->val($row,25);
+				$descuento = $data->val($row,26);
+				$codigoDescuento = $data->val($row,27);
+				$imagen = $data->val($row,28);
+				$tipoCodigo = $data->val($row,29);
+				$unidadMedida = $data->val($row,30);
+				$codigoCabys = $data->val($row,31);
 
-					for ($row = 2; $row <= $highestRow; ++ $row){
-						$codigo = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
-						$descripcion = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
-						$costo = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
-						$p1 = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
-						$p2 = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
-						$p3 = $worksheet->getCellByColumnAndRow(5, $row)->getValue();
-						$p4 = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
-						$p5 = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
-						$sucursal = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
-						$familia = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
-						$cantidad = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
-						$exento = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
-						$retencion = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
-						$descuento = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
-						$imagen = $worksheet->getCellByColumnAndRow(14, $row)->getValue();
-
-						//Revisamos si el codigo existe
-						if($this->articulo->existe_Articulo($codigo,$sucursal)){
-							array_push($erroresCodigo, $codigo);
-						}
-						//Revisamos que el costo sea numerico
-						if(!is_numeric($costo)){
-							array_push($erroresCosto, $codigo);
-						}
-						//Revisamos que el precio 2 sea numerico
-						if(!is_numeric($p2)){
-							array_push($erroresPrecio2, $codigo);
-						}
-						//Revisamos que el precio 3 sea numerico
-						if(!is_numeric($p3)){
-							array_push($erroresPrecio3, $codigo);
-						}
-						//Revisamos que el precio 3 sea numerico
-						if(!is_numeric($p3)){
-							array_push($erroresPrecio3, $codigo);
-						}
-						//Revisamos que el precio 4 sea numerico
-						if(!is_numeric($p4)){
-							array_push($erroresPrecio4, $codigo);
-						}
-						//Revisamos que el precio 5 sea numerico
-						if(!is_numeric($p5)){
-							array_push($erroresPrecio5, $codigo);
-						}
-						//Revisamos que la cantidad sea numerica y mayor a 0
-						if(!is_numeric($cantidad)||$cantidad<0){
-							array_push($erroresCantidad, $codigo);
-						}
-
-						//Revisamos que la sucursal exista
-						if(!$this->empresa->getEmpresa($sucursal)){
-							array_push($erroresSucursal, $codigo);
-						}
-						//Revisamos que la familia exista
-						if(!$this->familia->existeFamilia($familia, $sucursal)){
-							array_push($erroresFamilia, $codigo);
-						}
-						//Revisamos que el exento sea valido
-						if(trim($exento)!='0'&&trim($exento)!='1'){
-							array_push($erroresExento, $codigo);
-						}
-						//Revisamos que la retencion sea valida
-						if(trim($retencion)!='0'&&trim($retencion)!='1'){
-							array_push($erroresRetencion, $codigo);
-						}
-						//Revisamos que el descuento sea numerico y este entre 0 y 100
-						if(!is_numeric($descuento)||$descuento<0||$descuento>100){
-							array_push($erroresDescuento, $codigo);
-						}
-
-						array_push($articulos, array(
-														"cod"=>$codigo,
-														"des"=>$descripcion,
-														"cos"=>str_replace(",",".",$costo),
-														"p1"=>str_replace(",",".",$p1),
-														"p2"=>str_replace(",",".",$p2),
-														"p3"=>str_replace(",",".",$p3),
-														"p4"=>str_replace(",",".",$p4),
-														"p5"=>str_replace(",",".",$p5),
-														"fam"=>$familia,
-														"suc"=>$sucursal,
-														"can"=>$cantidad,
-														"exe"=>$exento,
-														"ret"=>$retencion,
-														"desc"=>str_replace(",",".",$descuento),
-														"ima"=>$imagen
-													)
-									);
-					}
-					$resultado["status"] = "success";
-					unset($resultado["error"]);
-					$resultado["articulos"] = $articulos;
-
-					$resultado["erroresCodigo"] = $erroresCodigo;
-					$resultado["erroresCosto"] = $erroresCosto;
-					$resultado["erroresPrecio1"] = $erroresPrecio1;
-					$resultado["erroresPrecio2"] = $erroresPrecio2;
-					$resultado["erroresPrecio3"] = $erroresPrecio3;
-					$resultado["erroresPrecio4"] = $erroresPrecio4;
-					$resultado["erroresPrecio5"] = $erroresPrecio5;
-					$resultado["erroresCantidad"] = $erroresCantidad;
-					$resultado["erroresFamilia"] = $erroresFamilia;
-					$resultado["erroresSucursal"] = $erroresSucursal;
-					$resultado["erroresExento"] = $erroresExento;
-					$resultado["erroresRetencion"] = $erroresRetencion;
-					$resultado["erroresDescuento"] = $erroresDescuento;
-
-				}else{
-					//No tiene las columnas requeridas
-					$resultado['error'] = '2';
+				//Revisamos si el codigo existe
+				if($this->articulo->existe_Articulo($codigo,$sucursal)){
+					array_push($erroresCodigo, $codigo);
 				}
+				//Revisamos que el costo sea numerico
+				if(!is_numeric($costo)){
+					array_push($erroresCosto, $codigo);
+				}
+				//Revisamos que el precio 2 sea numerico
+				if(!is_numeric($p2)){
+					array_push($erroresPrecio2, $codigo);
+				}
+				//Revisamos que el precio 3 sea numerico
+				if(!is_numeric($p3)){
+					array_push($erroresPrecio3, $codigo);
+				}
+				//Revisamos que el precio 3 sea numerico
+				if(!is_numeric($p3)){
+					array_push($erroresPrecio3, $codigo);
+				}
+				//Revisamos que el precio 4 sea numerico
+				if(!is_numeric($p4)){
+					array_push($erroresPrecio4, $codigo);
+				}
+				//Revisamos que el precio 5 sea numerico
+				if(!is_numeric($p5)){
+					array_push($erroresPrecio5, $codigo);
+				}
+				//Revisamos que la cantidad sea numerica y mayor a 0
+				if(!is_numeric($cantidad)||$cantidad<0){
+					array_push($erroresCantidad, $codigo);
+				}
+
+				//Revisamos que la sucursal exista
+				if(!$this->empresa->getEmpresa($sucursal)){
+					array_push($erroresSucursal, $codigo);
+				}
+				//Revisamos que la familia exista
+				if(!$this->familia->existeFamilia($familia, $sucursal)){
+					array_push($erroresFamilia, $codigo);
+				}
+				//Revisamos que el exento sea valido
+				if(trim($exento)!='0'&&trim($exento)!='1'){
+					array_push($erroresExento, $codigo);
+				}
+				//Revisamos que la retencion sea valida
+				if(trim($retencion)!='0'&&trim($retencion)!='1'){
+					array_push($erroresRetencion, $codigo);
+				}
+				//Revisamos que el descuento sea numerico y este entre 0 y 100
+				if(!is_numeric($descuento)||$descuento<0||$descuento>100){
+					array_push($erroresDescuento, $codigo);
+				}
+
+				//Revisamos que el descuento sea numerico y este entre 0 y 100
+				if(!is_numeric($costoD)||$costoD<0||$costoD>100){
+					array_push($erroresDescuento, $codigo);
+				}
+
+				//Revisamos que el descuento sea numerico y este entre 0 y 100
+				if(!is_numeric($p1D)||$p1D<0||$p1D>100){
+					array_push($erroresDescuento, $codigo);
+				}
+
+				//Revisamos que el descuento sea numerico y este entre 0 y 100
+				if(!is_numeric($p2D)||$p2D<0||$p2D>100){
+					array_push($erroresDescuento, $codigo);
+				}
+
+				//Revisamos que el descuento sea numerico y este entre 0 y 100
+				if(!is_numeric($p3D)||$p3D<0||$p3D>100){
+					array_push($erroresDescuento, $codigo);
+				}
+
+				//Revisamos que el descuento sea numerico y este entre 0 y 100
+				if(!is_numeric($p4D)||$p4D<0||$p4D>100){
+					array_push($erroresDescuento, $codigo);
+				}
+
+				//Revisamos que el descuento sea numerico y este entre 0 y 100
+				if(!is_numeric($p5D)||$p5D<0||$p5D>100){
+					array_push($erroresDescuento, $codigo);
+				}
+
+				//Revisamos el tipo de codigo
+				if($this->catalogo->getTipoCodigoByCodigo($tipoCodigo) == false){
+					array_push($erroresTipoCodigo, $codigo);
+				}
+
+				//Revisamos el unidad de medida
+				if($this->catalogo->getUnidadDeMedidaByCodigo($unidadMedida) == false){
+					array_push($erroresUnidadMedida, $codigo);
+				}
+
+				//Revisamos el codigo cabys
+				$impuestoCabys = 0;
+				if($cabysObject = $this->catalogo->getCabysFromCodigo($codigoCabys)){
+					$impuestoCabys = $cabysObject->Impuesto;
+				}else{
+					array_push($erroresCodigoCabys, $codigo);
+				}
+
+				//Revisamos el codigo de descuento
+				$codigosDeDescuento = array($costoCD, $p1CD, $p2CD, $p3CD, $p4CD, $p5CD, $codigoDescuento);
+				foreach($codigosDeDescuento as $key => $cd){
+					if($this->catalogo->getTipoDescuentoByCodigo($cd) == false){
+						array_push($erroresCodigoDescuento, $codigo);
+					}
+				}
+				
+
+				array_push($articulos, array(
+						"cod"=>$codigo,
+						"des"=>$descripcion,
+						"cos"=>str_replace(",",".",$costo),
+						"cosD"=>str_replace(",",".",$costoD),
+						"cosCD"=>$costoCD,
+						"p1"=>str_replace(",",".",$p1),
+						"p1D"=>str_replace(",",".",$p1D),
+						"p1CD"=>$p1CD,
+						"p2"=>str_replace(",",".",$p2),
+						"p2D"=>str_replace(",",".",$p2D),
+						"p2CD"=>$p2CD,
+						"p3"=>str_replace(",",".",$p3),
+						"p3D"=>str_replace(",",".",$p3D),
+						"p3CD"=>$p3CD,
+						"p4"=>str_replace(",",".",$p4),
+						"p4D"=>str_replace(",",".",$p4D),
+						"p4CD"=>$p4CD,
+						"p5"=>str_replace(",",".",$p5),
+						"p5D"=>str_replace(",",".",$p5D),
+						"p5CD"=>$p5CD,
+						"fam"=>$familia,
+						"suc"=>$sucursal,
+						"can"=>$cantidad,
+						"exe"=>$exento,
+						"ret"=>$retencion,
+						"desc"=>str_replace(",",".",$descuento),
+						"codigoDescuento"=>$codigoDescuento,
+						"ima"=>$imagen,
+						"tipoCodigo"=>$tipoCodigo,
+						"unidadMedia"=>$unidadMedida,
+						"codigoCabys"=>$codigoCabys,
+						"impuestoCabys"=>$impuestoCabys
+					)
+				);
 			}
+			$resultado["status"] = "success";
+			unset($resultado["error"]);
+			$resultado["articulos"] = $articulos;
+
+			$resultado["erroresCodigo"] = $erroresCodigo;
+			$resultado["erroresCosto"] = $erroresCosto;
+			$resultado["erroresPrecio1"] = $erroresPrecio1;
+			$resultado["erroresPrecio2"] = $erroresPrecio2;
+			$resultado["erroresPrecio3"] = $erroresPrecio3;
+			$resultado["erroresPrecio4"] = $erroresPrecio4;
+			$resultado["erroresPrecio5"] = $erroresPrecio5;
+			$resultado["erroresCantidad"] = $erroresCantidad;
+			$resultado["erroresFamilia"] = $erroresFamilia;
+			$resultado["erroresSucursal"] = $erroresSucursal;
+			$resultado["erroresExento"] = $erroresExento;
+			$resultado["erroresRetencion"] = $erroresRetencion;
+			$resultado["erroresDescuento"] = $erroresDescuento;
+			$resultado["erroresTipoCodigo"] = $erroresTipoCodigo;
+			$resultado["erroresUnidadMedida"] = $erroresUnidadMedida;
+			$resultado["erroresCodigoCabys"] = $erroresCodigoCabys;
+			$resultado["erroresCodigoDescuento"] = $erroresCodigoDescuento;
+		}else{
+			//No tiene las columnas requeridas
+			$resultado['error'] = '2';
 		}
 		return $resultado;
 	}
-
-
-
-	*/
-
-
-
 
 }
 

@@ -205,17 +205,17 @@ Class cliente extends CI_Model
 			$result = $query->result();
 			foreach($result as $row)
 			{
-                            $actualizar = ($row->Provincia < 1 || $row->Canton < 1 || $row->Distrito < 1 || $row->Barrio < 1);
-                            $actualizar = !filter_var($row->Cliente_Correo_Electronico, FILTER_VALIDATE_EMAIL) || $actualizar;
-                            $actualizar = $row->NoReceptor ? false : $actualizar;
-                            return array('nombre'=>$row->Cliente_Nombre." ".$row->Cliente_Apellidos,
-							 'estado'=>$row->Cliente_Estado,
-							 'descuento'=>$this->getClienteDescuento($id, $data['Sucursal_Codigo']),
-							 'exento' => $row->Cliente_EsExento,
-							 'sucursal' => $row->Cliente_EsSucursal,
-							 'retencion' => $row->Aplica_Retencion,
-                                                         'actualizar' => $actualizar
-							);
+				$actualizar = ($row->Provincia < 1 || $row->Canton < 1 || $row->Distrito < 1 || $row->Barrio < 1);
+				$actualizar = !filter_var($row->Cliente_Correo_Electronico, FILTER_VALIDATE_EMAIL) || $actualizar;
+				$actualizar = $row->NoReceptor ? false : $actualizar;
+				return array('nombre'=>$row->Cliente_Nombre." ".$row->Cliente_Apellidos,
+					'estado'=>$row->Cliente_Estado,
+					'descuento'=>$this->getClienteDescuento($id, $data['Sucursal_Codigo'])["descuento"],
+					'exento' => $row->Cliente_EsExento,
+					'sucursal' => $row->Cliente_EsSucursal,
+					'retencion' => $row->Aplica_Retencion,
+												'actualizar' => $actualizar
+				);
 			}
 		}
 	}
@@ -251,7 +251,7 @@ Class cliente extends CI_Model
 			{
 				$descuento = $row->Descuento_cliente_porcentaje;
 				if($descuento<='0'){return false;}
-				else{return $descuento;}
+				else{return array("descuento"=>$descuento, "codigo"=>$row->TipoDescuento);}
 			}
 		}
 	}
@@ -407,21 +407,23 @@ Class cliente extends CI_Model
 
 	//CIERRE//////////////////////////////////////////////////////////
 
-	function agregarDescuentoCliente($descuento, $sucursal, $cedula){
+	function agregarDescuentoCliente($descuento, $codigo, $sucursal, $cedula){
 		$arrayDescuento = array(
 							'Descuento_cliente_porcentaje' =>$descuento,
+							'TipoDescuento' => $codigo,
 							'TB_03_Cliente_Cliente_Cedula'=>$cedula,
 							'TB_02_Sucursal_Codigo'=>$sucursal
 						);
 		$this->db->insert('TB_21_Descuento_Cliente',$arrayDescuento);
 	}
 
-	function actualizarDescuentoCliente($descuento, $sucursal, $cedula){
+	function actualizarDescuentoCliente($descuento, $codigo, $sucursal, $cedula){
 		$this->db->where('TB_03_Cliente_Cliente_Cedula', $cedula);
 		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
 
 		$arrayDescuento = array(
-							'Descuento_cliente_porcentaje' =>$descuento
+							'Descuento_cliente_porcentaje' => $descuento,
+							'TipoDescuento' => $codigo
 						);
 
 		$this->db->update('TB_21_Descuento_Cliente' ,$arrayDescuento);

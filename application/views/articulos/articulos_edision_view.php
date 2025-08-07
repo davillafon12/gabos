@@ -35,7 +35,7 @@ PARA:
 		<!--SCRIPT DE NUMERIC-->
 		<script src="<?php echo base_url('application/scripts/jquery.numeric.js'); ?>" type="text/javascript"></script>
 		<!--CSS ESTILO ESPECIFICO DE LA PAG-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_edicion_articulo.css'); ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/articulos/style_edicion_articulo.css?v='.$javascriptCacheVersion); ?>">
 		<!--SCRIPT DE HERRAMIENTAS-->
 		<script src="<?php echo base_url('application/scripts/articulos/edicion_articulo_tools.js?v='.$javascriptCacheVersion); ?>" type="text/javascript"></script>
 
@@ -98,8 +98,6 @@ PARA:
 				echo form_open_multipart('articulos/editar/actualizarArticulos', $attributes);
 			?>
 
-
-
 			<div class="contenedor">
 				<fieldset>
 					<legend>Información Básica</legend>
@@ -110,33 +108,7 @@ PARA:
 							</td>
 							<td>
 								<p class="contact"><?php echo $Articulo_Codigo;?></p>
-								<input name="articulo_codigo" type="hidden" value="<?php echo $Articulo_Codigo;?>">
-							</td>
-							<td>
-								<label for="articulo_descripcion" class="contact">Descripción:</label>
-							</td>
-							<td colspan="3">
-								<input id="articulo_descripcion" class="input_descripcion" autocomplete="off"  name="articulo_descripcion" required="" type="text" value="<?php echo $Articulo_Descripcion;?>">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="articulos_cantidad"  class="contact">Cantidad:</label>
-							</td>
-							<td>
-								<input id="articulos_cantidad" class="input_uno" autocomplete="off" name="articulos_cantidad" required="" value="<?php echo $Articulo_Cantidad_Inventario;?>" onclick="this.select()">
-							</td>
-							<td>
-								<label for="articulos_cantidad_defectuoso"  class="contact">Cantidad Defectuosa:</label>
-							</td>
-							<td>
-								<input id="articulos_cantidad_defectuoso" class="input_uno" autocomplete="off" name="articulos_cantidad_defectuoso" required="" value="<?php echo $Articulo_Cantidad_Defectuoso;?>" onclick="this.select()">
-							</td>
-							<td>
-								<label class="contact" > Exento de IVI</label>
-							</td>
-							<td>
-								<input type="checkbox" name="exento" id="exento"  value="1" <?php if($Articulo_Exento){echo "checked";} ?>>
+								<input name="articulo_codigo" id="articulo_codigo" type="hidden" value="<?php echo $Articulo_Codigo;?>">
 							</td>
 						</tr>
 						<tr>
@@ -147,6 +119,8 @@ PARA:
 								<p class="contact"><?php echo "$empresaId - $empresaNombre";?></p>
 								<input type="hidden" name="sucursal" value="<?php echo $empresaId;?>">
 							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="familia"  class="contact">Familia:</label>
 							</td>
@@ -154,6 +128,48 @@ PARA:
 								<p class="contact"><?php echo "$familiaId - $familiaNombre";?></p>
 								<input type="hidden" name="familia" value="<?php echo $familiaId;?>">
 							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="articulo_descripcion" class="contact">Descripción:</label>
+							</td>
+							<td>
+								<input id="articulo_descripcion" class="input_descripcion" autocomplete="off"  name="articulo_descripcion" required="" type="text" value="<?php echo $Articulo_Descripcion;?>">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="articulos_cantidad"  class="contact">Cantidad:</label>
+							</td>
+							<td>
+								<input id="articulos_cantidad" class="input_uno" autocomplete="off" name="articulos_cantidad" required="" value="<?php echo $Articulo_Cantidad_Inventario;?>" onclick="this.select()">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="articulos_cantidad_defectuoso"  class="contact">Cantidad Defectuosa:</label>
+							</td>
+							<td>
+								<input id="articulos_cantidad_defectuoso" class="input_uno" autocomplete="off" name="articulos_cantidad_defectuoso" required="" value="<?php echo $Articulo_Cantidad_Defectuoso;?>" onclick="this.select()">
+							</td>							
+						</tr>
+						<tr>
+							<td>
+								<label class="contact" > Exento de IV:</label>
+							</td>
+							<td>
+								<input type="checkbox" name="exento" id="exento"  value="1" <?php if($Articulo_Exento){echo "checked";} ?>>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="contact" > Sin Retención:</label>
+							</td>
+							<td>
+								<input type="checkbox" name="retencion" id="retencion"  value="1" <?php if($retencion){echo "checked";}?> >
+							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="descuento"  class="contact">Descuento:</label>
 							</td>
@@ -163,58 +179,74 @@ PARA:
 						</tr>
 						<tr>
 							<td>
+								<label class="contact">Código de descuento:</label>
+							</td>
+							<td>
+								<select id="tipo_codigo_descuento" name="tipo_codigo_descuento" class="input_dos" required>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>" <?= $CodigoDescuento == $td->codigo ? 'selected' : '' ?>><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="contact">Tipo Código:</label>
+							</td>
+							<td>
+								<select name="tipo_codigo" class="input_dos">
+									<?php
+										foreach($tipos_codigo as $tc){
+											?>
+									<option value="<?= $tc->Codigo ?>" <?= $tc->Codigo == $tipoCodigo ? "selected" : "" ?>><?= $tc->Descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="contact">Unidad Medida:</label>
+							</td>
+							<td>
+								<select name="unidad_medida" class="input_dos">
+									<?php
+										foreach($unidades_medida as $um){
+											?>
+									<option value="<?= $um->Id ?>" <?= $unidadMedida == $um->Codigo ? "selected" : "" ?>><?= $um->Codigo." - ".$um->Descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>							
+							<td>
+								<label class="contact">Código Cabys:</label>
+							</td>
+							<td>
+								<input type="text" id="codigo_cabys_display" class="input_dos" value="<?= $cabysCodigo ?>" disabled/>
+								<input type="text" name="codigo_cabys" id="codigo_cabys" value="<?= $cabysCodigo ?>" style="display:none;"/>
+								<input type="text" name="impuesto_cabys" id="impuesto_cabys" value="<?= $cabysImpuesto ?>" style="display:none;"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="text" id="busqueda_codigo_cabys" class="input_dos" placeholder="Busque aquí el código Cabys" value="<?= $cabysDescripcion ?>" style="width:100%"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								<label for="foto_articulo"  class="contact">Foto:</label>
 							</td>
 							<td>
 								<input type="file" id="foto_articulo" class="input_dos" name="userfile" size="10" accept=".jpg,.png,.ico,.bmp" >
 							</td>
-							<td>
-								<label class="contact" > Sin Retención</label>
-							</td>
-							<td>
-								<input type="checkbox" name="retencion" id="retencion"  value="1" <?php if($retencion){echo "checked";}?> >
-							</td>
-                                                    <td>
-                                                        <label class="contact">Tipo Código:</label>
-                                                    </td>
-                                                    <td>
-                                                        <select name="tipo_codigo" class="input_dos">
-                                                            <?php
-                                                                foreach($tipos_codigo as $tc){
-                                                                    ?>
-                                                            <option value="<?= $tc->Codigo ?>" <?= $tc->Codigo == $tipoCodigo ? "selected" : "" ?>><?= $tc->Descripcion ?></option>
-                                                                    <?php
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </td>
-						</tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="contact">Unidad Medida:</label>
-                                                    </td>
-                                                    <td>
-                                                        <select name="unidad_medida" class="input_dos">
-                                                            <?php
-                                                                foreach($unidades_medida as $um){
-                                                                    ?>
-                                                            <option value="<?= $um->Id ?>" <?= $unidadMedida == $um->Codigo ? "selected" : "" ?>><?= $um->Codigo." - ".$um->Descripcion ?></option>
-                                                                    <?php
-                                                                }
-                                                            ?>
-                                                        </select>
-													</td>
-													<td>
-                                                        <label class="contact">Código Cabys:</label>
-                                                    </td>
-                                                    <td>
-														<input type="text" id="codigo_cabys_display" class="input_dos" value="<?= $cabysCodigo ?>" disabled/>
-														<input type="text" name="codigo_cabys" id="codigo_cabys" value="<?= $cabysCodigo ?>" style="display:none;"/>
-														<input type="text" name="impuesto_cabys" id="impuesto_cabys" value="<?= $cabysImpuesto ?>" style="display:none;"/>
-													</td>
-													<td colspan="2">
-                                                        <input type="text" id="busqueda_codigo_cabys" class="input_dos" placeholder="Busque aquí el código Cabys" value="<?= $cabysDescripcion ?>"/>
-                                                    </td>
 						</tr>
 					</table>
 				</fieldset>
@@ -228,8 +260,11 @@ PARA:
 							<td style="width:110px;">
 								<label class="contact">Monto</label>
 							</td>
-							<td>
+							<td style="width:110px;">
 								<label class="contact">Descuento</label>
+							</td>
+							<td>
+								<label class="contact">Código de descuento</label>
 							</td>
 						</tr>
 						<tr>
@@ -244,6 +279,17 @@ PARA:
 								<input class="input_uno" value="*********" name="costo-mascara-d">
 								<input id="costo_d" type="hidden" class="input_uno" autocomplete="off" name="costo_d" required="" value="<?php echo $costo_Editar->Precio_Descuento;?>">
 							</td>
+							<td>
+								<select id="costo_codigo_d"  name="costo_codigo_d" class="input_dos" required>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>" <?= $costo_Editar->Precio_Codigo_Descuento == $td->codigo ? 'selected' : '' ?>><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td>
@@ -254,6 +300,17 @@ PARA:
 							</td>
 							<td>
 								<input id="precio1_d" class="input_uno" autocomplete="off" name="precio1_d" required="" value="<?php echo $precio1_Editar->Precio_Descuento;?>">
+							</td>
+							<td>
+								<select id="precio1_codigo_d"  name="precio1_codigo_d" class="input_dos" required>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>" <?= $precio1_Editar->Precio_Codigo_Descuento == $td->codigo ? 'selected' : '' ?>><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -266,6 +323,17 @@ PARA:
 							<td>
 								<input id="precio2_d" class="input_uno" autocomplete="off" name="precio2_d"  required="" value="<?php echo $precio2_Editar->Precio_Descuento;?>">
 							</td>
+							<td>
+								<select id="precio2_codigo_d"  name="precio2_codigo_d" class="input_dos" required>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>" <?= $precio2_Editar->Precio_Codigo_Descuento == $td->codigo ? 'selected' : '' ?>><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td>
@@ -276,6 +344,17 @@ PARA:
 							</td>
 							<td>
 								<input id="precio3_d" class="input_uno" autocomplete="off" name="precio3_d" value="<?php echo $precio3_Editar->Precio_Descuento;?>">
+							</td>
+							<td>
+								<select id="precio3_codigo_d"  name="precio3_codigo_d" class="input_dos" required>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>" <?= $precio3_Editar->Precio_Codigo_Descuento == $td->codigo ? 'selected' : '' ?>><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -288,6 +367,17 @@ PARA:
 							<td>
 								<input id="precio4_d" class="input_uno" autocomplete="off" name="precio4_d" value="<?php echo $precio4_Editar->Precio_Descuento;?>">
 							</td>
+							<td>
+								<select id="precio4_codigo_d"  name="precio4_codigo_d" class="input_dos" required>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>" <?= $precio4_Editar->Precio_Codigo_Descuento == $td->codigo ? 'selected' : '' ?>><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td>
@@ -299,17 +389,26 @@ PARA:
 							<td>
 								<input id="precio5_d" class="input_uno" autocomplete="off" name="precio5_d" value="<?php echo $precio5_Editar->Precio_Descuento;?>">
 							</td>
+							<td>
+								<select id="precio5_codigo_d"  name="precio5_codigo_d" class="input_dos" required>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>" <?= $precio5_Editar->Precio_Codigo_Descuento == $td->codigo ? 'selected' : '' ?>><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
 						</tr>
 					</table>
 				</fieldset>
 				<fieldset class="field_foto">
 					<legend>Foto</legend>
-					<img class="foto_articulo" id="foto_thumb" src="<?php echo base_url("application/images/articulos/$Articulo_Imagen_URL");?>" height="55"/>
-					<div class="imagen-grande" ><img src="<?php echo base_url("application/images/articulos/$Articulo_Imagen_URL");?>" width="200" height="200"/></div>
-
+					<img class="foto_articulo" id="foto_thumb" src="<?php echo base_url("application/images/articulos/$Articulo_Imagen_URL");?>"/>
 				</fieldset>
 				<fieldset class="field_barras">
-					<legend>Codigo de Barras</legend>
+					<legend>Código de Barras</legend>
 					<img src="<?php echo base_url("application/libraries/barcode.php?codetype=Code25&size=55&text=$Articulo_Codigo_Barras");?>"  height="50" width="180"/>
 				</fieldset>
 				<div class="divButton">

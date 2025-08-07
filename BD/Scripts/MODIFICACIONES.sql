@@ -30,3 +30,38 @@ ALTER TABLE `tb_57_nota_credito_electronica` CHANGE `PlazoCredito` `PlazoCredito
 
 -- Actualizar leyenda FE 4.4
 UPDATE tb_02_sucursal set Sucursal_leyenda_tributacion = 'Emitida conforme los lineamientos técnicos y normativos establecidos en la resolución N°  MH-DGT-RES-0027-2024 de las ocho horas veinte minutos del trece de noviembre de dos mil veinticuatro' where Codigo in (0,1,2,3,4,7);
+
+-- Descuentos
+CREATE TABLE `catalogo_tipo_descuento` (
+  `id` int(11) NOT NULL,
+  `codigo` varchar(2) NOT NULL,
+  `descripcion` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `catalogo_tipo_descuento`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `catalogo_tipo_descuento`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+INSERT INTO catalogo_tipo_descuento (codigo, descripcion) VALUES 
+('01', 'Por Regalía'),
+('02', 'Por Regalía o Bonificaciones IVA Cobrado al Cliente'),
+('03', 'Por Bonificación'),
+('04', 'Por volumen'),
+('05', 'Por Temporada'),
+('06', 'Promocional'),
+('07', 'Comercial'),
+('08', 'Por frecuencia'),
+('09', 'Sostenido '),
+('99', 'Otros');
+
+ALTER TABLE `tb_06_articulo` ADD `CodigoDescuento` VARCHAR(2) NOT NULL AFTER `Impuesto`;
+ALTER TABLE `tb_06_articulo` CHANGE `CodigoDescuento` `CodigoDescuento` VARCHAR(2) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;
+ALTER TABLE `tb_11_precios` ADD `Precio_Codigo_Descuento` VARCHAR(2) NULL DEFAULT NULL AFTER `Precio_Descuento`;
+ALTER TABLE `tb_21_descuento_cliente` ADD `TipoDescuento` VARCHAR(2) NOT NULL DEFAULT '07' AFTER `Descuento_cliente_porcentaje`;
+
+UPDATE tb_11_precios SET Precio_Codigo_Descuento = '07';
+UPDATE tb_06_articulo SET CodigoDescuento = '07';
+
