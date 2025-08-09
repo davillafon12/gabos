@@ -953,6 +953,7 @@ class caja extends CI_Controller {
 					$articulo['descripcion']=$row->Articulo_Proforma_Descripcion;
 					$articulo['cantidad']=$row->Articulo_Proforma_Cantidad;
 					$articulo['descuento']=$row->Articulo_Proforma_Descuento;
+					$articulo['tipoDescuento']=$row->TipoDescuento;
 					$articulo['exento']=$row->Articulo_Proforma_Exento;
 					$articulo['precio']=$row->Articulo_Proforma_Precio_Unitario;
 					$articulo['retencion']=$row->Articulo_Proforma_No_Retencion;
