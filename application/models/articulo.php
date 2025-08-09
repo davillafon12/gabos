@@ -360,7 +360,7 @@ Class articulo extends CI_Model
 				//return $ruta_a_preguntar;
 				if(!file_exists($ruta_a_preguntar)){$URL_IMAGEN = '00';}
 				//HAY QUE VALIDAR EL DESCUENTO POR FAMILIA, ARTICULO Y CLIENTE
-				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento);
+				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $row->Articulo_Descuento, $row->CodigoDescuento);
 				//SE ENVIA EL DESCUENTO DEL ARTICULO
 				$articuloXML = "1,$codigo,".$row->Articulo_Descripcion.",".$row->Articulo_Cantidad_Inventario.",$descuento,".$row->TB_05_Familia_Familia_Codigo.",".$this->getPrecioProducto($codigo, $numero_precio, $sucursal).",".$this->getPrecioProducto($codigo, 1, $sucursal).",".$URL_IMAGEN.",".$row->Articulo_Exento;
 
@@ -408,13 +408,14 @@ Class articulo extends CI_Model
 				$articulo['precio_cliente'] = $precioObject[$numero_precio]->Precio_Monto;
 				$articulo['precio_no_afiliado'] = $precioObject[1]->Precio_Monto;
 				$descuentoProducto = $precioObject[$numero_precio]->Precio_Descuento;
-				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $descuentoProducto);
+				$descuento = $this->getDescuento($codigo, $sucursal, $cedula, $row->TB_05_Familia_Familia_Codigo, $descuentoProducto, $precioObject[$numero_precio]->Precio_Codigo_Descuento);
 
 				$articulo['codigo'] = $codigo;
 				$articulo['descripcion'] = $row->Articulo_Descripcion;
 				//Si es cliente defectuoso
 				$articulo['inventario'] = trim($cedula) == "2" ? $row->Articulo_Cantidad_Defectuoso : $row->Articulo_Cantidad_Inventario;
-				$articulo['descuento'] = $descuento;
+				$articulo['descuento'] = $descuento["descuento"];
+				$articulo['descuentoCodigo'] = $descuento["codigo"];
 				$articulo['familia'] = $row->TB_05_Familia_Familia_Codigo;
 				$articulo['imagen'] = $URL_IMAGEN;
 				$articulo['exento'] = $row->Articulo_Exento;
@@ -430,7 +431,7 @@ Class articulo extends CI_Model
 		}
 	}
 
-	function getDescuento($codigo, $sucursal, $cedula, $familia, $descuento_producto){
+	function getDescuento($codigo, $sucursal, $cedula, $familia, $descuento_producto, $codigoDescuentoDelProducto){
 		$desCliente = $this->getDescuentoCliente($sucursal, $cedula);
 		$desClienteFamilia = $this->getDescuentoClienteFamilia($sucursal, $cedula, $familia);
 		$desClienteProducto = $this->getDescuentoClienteProducto($codigo, $sucursal, $cedula);
@@ -439,29 +440,30 @@ Class articulo extends CI_Model
 		if($desClienteProducto){ //Prioridad 1
 			if($desClienteProducto<$descuento_producto){//Si el descuento del producto es mayor que al descuento del producto con ese cliente
 				if(!$esSucursal){ //Si no es sucursal si ejecuta la condicion
-					return $descuento_producto;
+					return array("descuento" => $descuento_producto, "codigo"=> $codigoDescuentoDelProducto);
 				}
 			}
-			return $desClienteProducto;
+			return array("descuento" => $desClienteProducto, "codigo"=> $desCliente->TipoDescuento);
 		}elseif($desClienteFamilia){  //Prioridad 2
 			if($desClienteFamilia == -1){
-					return 0;
+					return array("descuento" => 0, "codigo"=> $codigoDescuentoDelProducto);
 			}
 			if($desClienteFamilia<$descuento_producto){//Si el descuento del producto es mayor que al descuento de la familia con ese cliente
 				if(!$esSucursal){ //Si no es sucursal si ejecuta la condicion
-					return $descuento_producto;
+					return array("descuento" => $descuento_producto, "codigo"=> $codigoDescuentoDelProducto);
 				}
 			}
-			return $desClienteFamilia;
-		}elseif($desCliente){ //Prioridad 3
-			if($desCliente<$descuento_producto){//Si el descuento del producto es mayor que al descuento del cliente
+			return array("descuento" => $desClienteFamilia, "codigo"=> $desCliente->TipoDescuento);
+		}elseif($desCliente->Descuento_cliente_porcentaje){ //Prioridad 3
+			if($desCliente->Descuento_cliente_porcentaje<$descuento_producto){//Si el descuento del producto es mayor que al descuento del cliente
 				if(!$esSucursal){ //Si no es sucursal si ejecuta la condicion
-					return $descuento_producto;
+					return array("descuento" => $descuento_producto, "codigo"=> $codigoDescuentoDelProducto);
 				}
 			}
-			return $desCliente;
+			return array("descuento" => $desCliente->Descuento_cliente_porcentaje, "codigo"=> $desCliente->TipoDescuento);
 		}
-		return $descuento_producto; //Prioridad 4
+		//Prioridad 4
+		return array("descuento" => $descuento_producto, "codigo"=> $codigoDescuentoDelProducto);
 	}
 
 	function esClienteTipoSucursal($cedula){
@@ -515,9 +517,11 @@ Class articulo extends CI_Model
 			$result = $query->result();
 			foreach($result as $row)
 			{
-				return $row->Descuento_cliente_porcentaje;
+				return $row;
 			}
-		}else{return 0;}
+		}else{
+			return (object) array("TipoDescuento" => '07', 'Descuento_cliente_porcentaje' => 0);
+		}
 	}
 
 	function getDescuentoClienteProducto($codigo, $sucursal, $cedula){
@@ -535,7 +539,7 @@ Class articulo extends CI_Model
 	}
 
 	function getPrecioDescuentoProductoCompleto($codigo_articulo, $numero_precio, $sucursal){
-		$this -> db -> select('Precio_Numero, Precio_Monto, Precio_Descuento');
+		$this -> db -> select('Precio_Numero, Precio_Monto, Precio_Descuento, Precio_Codigo_Descuento');
 		$this -> db -> from('TB_11_Precios');
 		$this -> db -> where('TB_06_Articulo_Articulo_Codigo', $codigo_articulo);
 		$this -> db -> where('TB_06_Articulo_TB_02_Sucursal_Codigo', $sucursal);

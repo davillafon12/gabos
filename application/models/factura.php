@@ -138,7 +138,26 @@ Class factura extends CI_Model
 		}
 	}
 
-	function addItemtoInvoice($codigo, $descripcion, $cantidad, $descuento, $exento, $retencion, $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo = "01", $unidadMedida, $codigoCabys, $impuesto){
+	function addItemtoInvoice(
+        $codigo, 
+        $descripcion, 
+        $cantidad, 
+        $descuento, 
+        $exento, 
+        $retencion, 
+        $precio,
+        $precioFinal, 
+        $consecutivo, 
+        $sucursal, 
+        $vendedor, 
+        $cliente, 
+        $imagen, 
+        $tipoCodigo = "01", 
+        $unidadMedida, 
+        $codigoCabys, 
+        $impuesto,
+        $tipoDescuento = "07"){
+
 		$sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
@@ -161,7 +180,8 @@ Class factura extends CI_Model
                             'TipoCodigo' => $tipoCodigo,
                             'UnidadMedida' => $unidadMedida,
                             'Codigo_Cabys' => $codigoCabys,
-                            'Impuesto' => $impuesto
+                            'Impuesto' => $impuesto,
+                            'TipoDescuento' => $tipoDescuento
 	                    );
 	        $this->db->insert('TB_08_Articulos_Factura',$dataItem);
 	}
@@ -1043,7 +1063,7 @@ Class factura extends CI_Model
                     "PrecioUnitario" => $art["precioUnitario"],
                     "MontoTotal" => $art["montoTotal"],
                     "MontoDescuento" => $art["montoDescuento"],
-                    "TipoDescuento" => '07', //Descuento Comercial | TODO: SE DEBE ACTUALIZAR ESTO, CUAL CODIGO SE DEBE USAR?
+                    "TipoDescuento" => $art["tipoDescuento"],
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
                     "Subtotal" => $art["subtotal"],
                     "BaseImponible" => $art["base_imponible"],

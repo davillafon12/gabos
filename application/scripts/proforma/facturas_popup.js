@@ -262,33 +262,10 @@ function clickAceptar_Des(){
 
 function setDescuento(){
 	descuento = document.getElementById("pop_descuento_cambio").value;	
+	tipoDescuento = $("#pop_tipo_descuento_cambio").val();
 	document.getElementById("descuento_articulo_"+rowIDpopup).innerHTML=descuento;
+	$("#codigo_descuento_articulo_"+rowIDpopup).val(tipoDescuento);
 	
-	//Cambiamos el costo del articulo
-	/*costo_unidad = document.getElementById("costo_unidad_articulo_ORIGINAL_"+rowIDpopup).value;
-	descuento = parseInt(descuento);
-	costo_unidad = parseFloat(costo_unidad);	
-	costo_unidad -= costo_unidad*(descuento/100);
-	
-	tipo_moneda = document.getElementById("tipo_moneda").value;
-	factor_tipo_moneda_float = 1.00; //Cualquier cosa entre 1 es igual
-	if(tipo_moneda.indexOf('colone') != -1)
-	{//No pasa nada, el factor de tipo de moneda sigue igual
-	}
-	else if(tipo_moneda.indexOf('dolare') != -1)
-	{
-		tipo_cambio_venta = document.getElementById("tipo_cambio_venta").value;
-		factor_tipo_moneda_float = parseFloat(tipo_cambio_venta);
-		//alert(tipo_cambio_venta);
-	}
-	
-	decimales = document.getElementById("cantidad_decimales").value;
-	decimales_int = parseInt(decimales);
-	
-	costo_unidad = costo_unidad/factor_tipo_moneda_float;
-	
-	document.getElementById("costo_unidad_articulo_"+rowIDpopup).innerHTML=costo_unidad.toFixed(decimales_int);	
-	*/
 	actualizaCostoTotalArticulo("cantidad_articulo_"+rowIDpopup);	
 	tabRowORAdd("codigo_articulo_"+rowIDpopup, true);
 }

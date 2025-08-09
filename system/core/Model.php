@@ -276,10 +276,12 @@ class CI_Model {
             if(floatval($a->Articulo_Factura_Descuento) > 0){
                 $descuentoPrecioSinIva = $this->fn($precioTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100));
                 $linea["montoDescuento"] = $descuentoPrecioSinIva;
+                $linea["tipoDescuento"] = $a->TipoDescuento;
                 $naturalezaDescuento = "Otorgado a cliente por empresa";
                 $linea["naturalezaDescuento"] = $naturalezaDescuento;
             }else{
                 $linea["montoDescuento"] = 0;
+                $linea["tipoDescuento"] = '07'; // Descuento genérico
                 $linea["naturalezaDescuento"] = "Ninguna";
             }
 

@@ -48,7 +48,8 @@ function agregarFila(index){
 	cell2.innerHTML = "<div class='articulo_specs' id='descripcion_articulo_"+siguienteFila+"'></div>"
 					 +"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+siguienteFila+"'></div>";
 	cell4.innerHTML = "<div class='articulo_specs' id='bodega_articulo_"+siguienteFila+"'></div>";
-	cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+siguienteFila+"' ondblclick='changeDiscount("+siguienteFila+")'></div>";
+	cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+siguienteFila+"' ondblclick='changeDiscount("+siguienteFila+")'></div>"
+						+ "<input type='hidden' id='codigo_descuento_articulo_"+siguienteFila+"'/>";
 	cell6.innerHTML = "<div class='articulo_specs unitario' id='costo_unidad_articulo_"+siguienteFila+"'>"
 					 +"</div><input id='costo_unidad_articulo_ORIGINAL_"+siguienteFila+"' type='hidden' >"
 					 +"<input id='costo_unidad_articulo_FINAL_"+siguienteFila+"' type='hidden' >"
@@ -358,6 +359,7 @@ function setArticulo(articulo, num_fila){
 	$("#cantidad_articulo_"+num_fila).attr( "max", articulo.inventario );
 	//Seteamos el descuento
 	$("#descuento_articulo_"+num_fila).html(articulo.descuento);
+	$("#codigo_descuento_articulo_"+num_fila).val(articulo.descuentoCodigo);
 
 	//Tipo de moneda y factor
 	tipo_moneda = $("#tipo_moneda").val();
