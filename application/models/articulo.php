@@ -116,13 +116,13 @@ Class articulo extends CI_Model
 					$precio3D = 0,
 					$precio4D = 0, 
 					$precio5D = 0, 
-					$codigoDescuento = null, 
-					$codigoDescuentoCosto = null, 
-					$codigoDescuentoPrecio1 = null, 
-					$codigoDescuentoPrecio2 = null, 
-					$codigoDescuentoPrecio3 = null, 
-					$codigoDescuentoPrecio4 = null, 
-					$codigoDescuentoPrecio5 = null)
+					$codigoDescuento = CODIGO_DESCUENTO_DEFECTO, 
+					$codigoDescuentoCosto = CODIGO_DESCUENTO_DEFECTO, 
+					$codigoDescuentoPrecio1 = CODIGO_DESCUENTO_DEFECTO, 
+					$codigoDescuentoPrecio2 = CODIGO_DESCUENTO_DEFECTO, 
+					$codigoDescuentoPrecio3 = CODIGO_DESCUENTO_DEFECTO, 
+					$codigoDescuentoPrecio4 = CODIGO_DESCUENTO_DEFECTO, 
+					$codigoDescuentoPrecio5 = CODIGO_DESCUENTO_DEFECTO)
 	{
 		if($this->existe_Articulo($articulo_Codigo, $TB_02_Sucursal_Codigo)){
 			return false;
@@ -520,7 +520,7 @@ Class articulo extends CI_Model
 				return $row;
 			}
 		}else{
-			return (object) array("TipoDescuento" => '07', 'Descuento_cliente_porcentaje' => 0);
+			return (object) array("TipoDescuento" => CODIGO_DESCUENTO_DEFECTO, 'Descuento_cliente_porcentaje' => 0);
 		}
 	}
 

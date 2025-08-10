@@ -156,7 +156,7 @@ Class factura extends CI_Model
         $unidadMedida, 
         $codigoCabys, 
         $impuesto,
-        $tipoDescuento = "07"){
+        $tipoDescuento = CODIGO_DESCUENTO_DEFECTO){
 
 		$sucursalVendedor = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde

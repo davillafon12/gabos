@@ -85,6 +85,7 @@ define('HACIENDA_RECEPCION_API_PROD', "https://api.comprobanteselectronicos.go.c
 define('PATH_DOCUMENTOS_ELECTRONICOS_WEB', 'application/third_party/');
 define('CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO', '513910');
 define('PROVEEDOR_DE_SISTEMAS', '3101350785');
+define('CODIGO_DESCUENTO_DEFECTO', '07');
 
 define('ANULAR_FACTURA', '01');
 define('CORRIGE_FACTURA', '06');

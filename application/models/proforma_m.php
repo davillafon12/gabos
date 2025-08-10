@@ -119,7 +119,7 @@ Class proforma_m extends CI_Model
 		$unidadMedida, 
 		$codigoCabys, 
 		$impuesto,
-		$codigoDescuento = '07'){
+		$codigoDescuento = CODIGO_DESCUENTO_DEFECTO){
 		$sucursalVendedor =  $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
 				$sucursal = $this->sucursales_trueque[$sucursal];
