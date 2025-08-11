@@ -87,6 +87,7 @@ class notas extends CI_Controller {
 			if($productosFactura = $this->factura->getArticulosFactura($factura, $data['Sucursal_Codigo'])){
 				$productosDevolver = array();
 				foreach($productosFactura as $producto){
+					$aux['id'] = $producto->Articulo_Factura_id;
 					$aux['codigo'] = $producto->Articulo_Factura_Codigo;
 					$aux['descripcion'] = $producto->Articulo_Factura_Descripcion;
 					$aux['cantidad'] = $producto->Articulo_Factura_Cantidad;

@@ -262,13 +262,10 @@ Class contabilidad extends CI_Model
 	}
 
 	function agregarProductosNotaCredito($consecutivo, $sucursal, $productos, $cliente, $facturaAcreditar){
-
-            $sucursalOriginal = $sucursal;
+        $sucursalOriginal = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
+			$sucursal = $this->sucursales_trueque[$sucursal];
 		}
-
-
 
 		$datos = array();
 
@@ -280,28 +277,26 @@ Class contabilidad extends CI_Model
 			$descripcion = "";
 			$precio = "";
 			$descuento = 0;
+			$codigoDescuento = CODIGO_DESCUENTO_DEFECTO;
 			$exento = 0;
 			$noRetencion = 0;
 			$precioFinal = 0;
-			$tipoCodigo = "";
-			$codigoCabys = "";
+			$tipoCodigo = "99";
+			$codigoCabys = ART_GEN_CODIGO_CABYS;
 
-			if(trim($producto->c) === "00"){
-				$descripcion = trim($producto->ds);
-				$precio = trim($producto->p);
-				$precioFinal = $precio;
-				$tipoCodigo = "99";
-				$codigoCabys = ART_GEN_CODIGO_CABYS;
-			}else{
-				$descripcion = $this->articulo->getArticuloDescripcion($producto->c, $sucursal);
-				$precio = $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c);
-				$articuloCompleto = $this->factura->getArticuloFactura($facturaAcreditar, $sucursal, $producto->c);
-				$descuento = $articuloCompleto->Articulo_Factura_Descuento;
-				$exento = $articuloCompleto->Articulo_Factura_Exento;
-				$noRetencion = $articuloCompleto->Articulo_Factura_No_Retencion;
-				$precioFinal = $articuloCompleto->Articulo_Factura_Precio_Final;
-				$tipoCodigo = $this->articulo->getArticuloTipoCodigo($producto->c, $sucursal);
-				$codigoCabys = $articuloCompleto->Codigo_Cabys;
+			if($articuloDeFactura = $this->factura->getArticuloFacturaById($producto->id)){
+				//Si el articulo existe en la factura
+
+				$descripcion = $articuloDeFactura->Articulo_Factura_Descripcion;
+				$precio = ($articuloDeFactura->Articulo_Factura_Precio_Unitario - ($articuloDeFactura->Articulo_Factura_Precio_Unitario * ($articuloDeFactura->Articulo_Factura_Descuento/100)));
+				$descuento = $articuloDeFactura->Articulo_Factura_Descuento;
+				$codigoDescuento = $articuloDeFactura->TipoDescuento;
+				$exento = $articuloDeFactura->Articulo_Factura_Exento;
+				$noRetencion = $articuloDeFactura->Articulo_Factura_No_Retencion;
+				$precioFinal = $articuloDeFactura->Articulo_Factura_Precio_Final;
+				$tipoCodigo = $articuloDeFactura->TipoCodigo;
+				$codigoCabys = $articuloDeFactura->Codigo_Cabys;
+
 				//Si el codigo cabys esta vacio, estamos cargando un articulo de una factura que no se guardo con CABYS
 				//Entonces obtenemos el cabys de la tabla de articulos original
 				if(trim($codigoCabys) == ""){
@@ -311,7 +306,13 @@ Class contabilidad extends CI_Model
 						$codigoCabys = ART_GEN_CODIGO_CABYS;
 					}
 				}
+			}else{
+				//Si el articulo no existe en la factura, entonces lo tratamos como generico ingresado por el usuario al crear NC
+				$descripcion = trim($producto->ds);
+				$precio = trim($producto->p);
+				$precioFinal = $precio;
 			}
+
 			//Agregamos los datos a un array para ser agregado a la bd
 			$pro = array(
 						'Codigo' => $producto->c,
@@ -323,6 +324,7 @@ Class contabilidad extends CI_Model
 						'Precio_Unitario' => $precio,
 						'Precio_Final' => $precioFinal,
 						'Descuento' => $descuento,
+						'TipoDescuento' => $codigoDescuento,
 						'Exento' => $exento,
 						'No_Retencion' => $noRetencion,
 						'Nota_Credito_Consecutivo' => $consecutivo,
@@ -337,21 +339,6 @@ Class contabilidad extends CI_Model
 			$this->articulo->actualizarInventarioSUMADefectuoso($producto->c, $producto->d, $sucursalOriginal);
 		}
 		$this->db->insert_batch('tb_28_productos_notas_credito', $datos);
-	}
-
-	function precioArticuloEnFacturaDeterminada($factura, $sucursal, $articulo){
-		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
-		}
-		$this->db->select('Articulo_Factura_Descuento as descuento, Articulo_Factura_Precio_Unitario as precio');
-		$this->db->from('tb_08_articulos_factura');
-		$this->db->where('TB_07_Factura_Factura_Consecutivo',$factura);
-		$this->db->where('TB_07_Factura_TB_02_Sucursal_Codigo',$sucursal);
-		$this->db->where('Articulo_Factura_Codigo',$articulo);
-		$query = $this->db->get();
-		$art = $query->result()[0];
-		//Calculamos el precio con el descuento
-		return ($art->precio - ($art->precio * ($art->descuento/100)));
 	}
 
 	function getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal){
@@ -2260,7 +2247,7 @@ Class contabilidad extends CI_Model
                     "PrecioUnitario" => $art["precioUnitario"],
                     "MontoTotal" => $art["montoTotal"],
                     "MontoDescuento" => $art["montoDescuento"],
-					"TipoDescuento" => '07', //Descuento Comercial | TODO: SE DEBE ACTUALIZAR ESTO, CUAL CODIGO SE DEBE USAR?
+					"TipoDescuento" => $art["codigoDescuento"], 
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
                     "BaseImponible" => $art["base_imponible"],
                     "Subtotal" => $art["subtotal"],

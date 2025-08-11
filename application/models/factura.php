@@ -275,6 +275,22 @@ Class factura extends CI_Model
 		}
 	}
 
+    function getArticuloFacturaById($id){
+		$this -> db -> from('TB_08_Articulos_Factura');
+		$this -> db -> where('Articulo_Factura_id', $id);
+
+		$query = $this -> db -> get();  
+
+		if($query -> num_rows() != 0)
+		{
+		   return $query->result()[0];
+		}
+		else
+		{
+		   return false;
+		}
+	}
+
 	function getConfgArray()
 	{
 		return $this->configuracion->getConfiguracionArray();

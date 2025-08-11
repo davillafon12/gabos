@@ -113,12 +113,14 @@ function obtenerJSON(){
 		codigo = $("#codigo_producto_"+productosCreditar[i]).html();
 		defectuoso = parseFloat($("#celda_cantidad_defectuoso_"+productosCreditar[i]).val());
 		bueno = parseFloat($("#celda_cantidad_buena_"+productosCreditar[i]).val());
+		idArticulo = $("#id_producto_"+productosCreditar[i]).val();
 		if(codigo === "00"){
 			var precio = $("#precio_"+productosCreditar[i]).val();
 			var descripcion = $("#descripcion_"+productosCreditar[i]).html();
-			productos.push({c:codigo, d:defectuoso, b:bueno, p:precio, ds:descripcion});
+			
+			productos.push({c:codigo, d:defectuoso, b:bueno, p:precio, ds:descripcion, id:idArticulo});
 		}else{
-			productos.push({c:codigo, d:defectuoso, b:bueno});
+			productos.push({c:codigo, d:defectuoso, b:bueno, id:idArticulo});
 		}
 	}
 	

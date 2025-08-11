@@ -380,9 +380,11 @@ class CI_Model {
                 $linea["montoDescuento"] = $descuentoPrecioSinIva;
                 $naturalezaDescuento = "Otorgado a cliente por empresa";
                 $linea["naturalezaDescuento"] = $naturalezaDescuento;
+                $linea["codigoDescuento"] = $a->TipoDescuento; 
             }else{
                 $linea["montoDescuento"] = 0;
                 $linea["naturalezaDescuento"] = "Ninguna";
+                $linea["codigoDescuento"] = CODIGO_DESCUENTO_DEFECTO;
             }
 
              // SUBTOTAL
