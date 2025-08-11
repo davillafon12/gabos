@@ -68,6 +68,9 @@ UPDATE tb_06_articulo SET CodigoDescuento = '07';
 ALTER TABLE `tb_08_articulos_factura` ADD `TipoDescuento` VARCHAR(2) NOT NULL DEFAULT '07' AFTER `Impuesto`;
 ALTER TABLE `tb_04_articulos_proforma` ADD `TipoDescuento` VARCHAR(2) NOT NULL DEFAULT '07' AFTER `Impuesto`;
 ALTER TABLE `tb_28_productos_notas_credito` ADD `TipoDescuento` VARCHAR(2) NOT NULL DEFAULT '07' AFTER `Descuento`;
+ALTER TABLE `tb_50_articulos_consignacion` ADD `Codigo_Descuento` VARCHAR(2) NOT NULL DEFAULT '07' AFTER `Descuento`;
+ALTER TABLE `tb_51_lista_consignacion` ADD `Codigo_Descuento` VARCHAR(2) NOT NULL DEFAULT '07' AFTER `Descuento`;
+
 
 
 

@@ -206,44 +206,84 @@ class consignaciones extends CI_Controller {
 	}
 
 	private function consignarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $consignacion, $aplicarConsignacion){
-            include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-            foreach($articulos as $art){
-                //Primero verificamos que exista en la sucursal que recibe, si no lo creamos
-                if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
-                    $this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data);
-                }
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		foreach($articulos as $art){
+			//Primero verificamos que exista en la sucursal que recibe, si no lo creamos
+			if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
+				$this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data);
+			}
 
-				//Obtenemos la ruta de la imagen desde la sucursal que entrega
-                $articuloDeSucursalEntrega = $this->articulo->existe_Articulo($art->codigo,$sucursalEntrega);
-				$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
+			//Obtenemos la ruta de la imagen desde la sucursal que entrega
+			$articuloDeSucursalEntrega = $this->articulo->existe_Articulo($art->codigo,$sucursalEntrega);
+			$imagen = $articuloDeSucursalEntrega[0]->Articulo_Imagen_URL;
 
-				//Agregamos dicho articulo a la consignacion
-                $this->contabilidad->registrarArticuloConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $consignacion, $art->precio_final);
+			//Agregamos dicho articulo a la consignacion
+			$this->contabilidad->registrarArticuloConsignacion(
+				$art->codigo, 
+				$art->descripcion, 
+				$art->cantidad, 
+				$art->descuento, 
+				$art->precio_unidad, 
+				$art->precio_total, 
+				$art->exento, 
+				$art->retencion, 
+				$imagen, 
+				$consignacion, 
+				$art->precio_final,
+				$art->codigoDescuento
+			);
 
-                if($aplicarConsignacion){
-					//Actualizamos el inventario
-                    $this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
+			if($aplicarConsignacion){
+				//Actualizamos el inventario
+				$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
 
-					//Actualizamos precios
-					$this->actualizarPreciosArticulo($art, $sucursalEntrega, $sucursalRecibe);
+				//Actualizamos precios
+				$this->actualizarPreciosArticulo($art, $sucursalEntrega, $sucursalRecibe);
 
-                    //Indiferentemente de si registro o actualizo el articulo
-                    //debemos restar dicha cantidad del inventario de la sucursal que entrega
-                    $this->articulo->actualizarInventarioRESTA($art->codigo, $art->cantidad, $sucursalEntrega);
+				//Indiferentemente de si registro o actualizo el articulo
+				//debemos restar dicha cantidad del inventario de la sucursal que entrega
+				$this->articulo->actualizarInventarioRESTA($art->codigo, $art->cantidad, $sucursalEntrega);
 
-                    // Agregamos el articulo a la lista de consignaciones
-                    if($larticulo = $this->contabilidad->getArticuloEnListaConsignacion($art->codigo, $sucursalEntrega, $sucursalRecibe, $art->precio_unidad, $art->descuento, $art->exento, $art->retencion, $art->precio_final)){
-                        $nuevaCantidad = $larticulo->Cantidad + $art->cantidad;
-                        $this->contabilidad->actualizarArticuloEnListaConsignacion($art->codigo, $nuevaCantidad, $art->precio_unidad, $sucursalEntrega, $sucursalRecibe);
-                    }else{
-						$tipoCodigo = $articuloDeSucursalEntrega[0]->TipoCodigo;
-						$unidadMedida = $articuloDeSucursalEntrega[0]->UnidadMedida;
-						$codigoCabys = $articuloDeSucursalEntrega[0]->CodigoCabys;
-						$impuesto = $articuloDeSucursalEntrega[0]->Impuesto;
-                        $this->contabilidad->registrarArticuloEnListaConsignacion($art->codigo, $art->descripcion, $art->cantidad, $art->descuento, $art->precio_unidad, $art->precio_total, $art->exento, $art->retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $art->precio_final, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto);
-                    }
-                }
-            }
+				// Agregamos el articulo a la lista de consignaciones
+				if($larticulo = $this->contabilidad->getArticuloEnListaConsignacion(
+					$art->codigo, 
+					$sucursalEntrega, 
+					$sucursalRecibe, 
+					$art->precio_unidad, 
+					$art->descuento, 
+					$art->exento, 
+					$art->retencion, 
+					$art->precio_final)
+					){
+					$nuevaCantidad = $larticulo->Cantidad + $art->cantidad;
+					$this->contabilidad->actualizarArticuloEnListaConsignacion($art->codigo, $nuevaCantidad, $art->precio_unidad, $sucursalEntrega, $sucursalRecibe);
+				}else{
+					$tipoCodigo = $articuloDeSucursalEntrega[0]->TipoCodigo;
+					$unidadMedida = $articuloDeSucursalEntrega[0]->UnidadMedida;
+					$codigoCabys = $articuloDeSucursalEntrega[0]->CodigoCabys;
+					$impuesto = $articuloDeSucursalEntrega[0]->Impuesto;
+					$this->contabilidad->registrarArticuloEnListaConsignacion(
+						$art->codigo, 
+						$art->descripcion, 
+						$art->cantidad, 
+						$art->descuento, 
+						$art->precio_unidad, 
+						$art->precio_total, 
+						$art->exento, 
+						$art->retencion, 
+						$imagen, 
+						$sucursalEntrega, 
+						$sucursalRecibe, 
+						$art->precio_final, 
+						$tipoCodigo, 
+						$unidadMedida, 
+						$codigoCabys, 
+						$impuesto,
+						$art->codigoDescuento
+					);
+				}
+			}
+		}
 	}
 
 	private function actualizarPreciosArticulo($articulo, $sucursalEntrega, $sucursalRecibe){
@@ -254,11 +294,13 @@ class consignaciones extends CI_Controller {
 		$precioUnidadReal = $articulo->precio_total / $articulo->cantidad; //El precio unidad que viene no cuenta con el descuento, tons el precio por unidad lo sacamos de esta manera
 		$precios[0]["precio"] = $precioUnidadReal - ($precioUnidadReal / (1 + $porcentajeIVA));
 		$precios[0]["descuento"] = $articulo->descuento;
+		$precios[0]["codigoDescuento"] = $articulo->codigoDescuento;
 
 		for($i = 1; $i < 6; $i++){
 			$precioO = $this->articulo->getPrecioProductoObject($articulo->codigo, $i, $sucursalEntrega);
 			$precios[$i]["precio"] = $precioO->Precio_Monto;
 			$precios[$i]["descuento"] = $precioO->Precio_Descuento;
+			$precios[$i]["codigoDescuento"] = $precioO->Precio_Codigo_Descuento;
 		}
 
 		$this->articulo->actualizarPreciosMasivo($precios, $sucursalRecibe, $articulo->codigo);
@@ -287,6 +329,7 @@ class consignaciones extends CI_Controller {
 			$unidadMedida = $articuloDeSucursalEntrega[0]->UnidadMedida;
 			$codigoCabys = $articuloDeSucursalEntrega[0]->CodigoCabys;
 			$impuesto = $articuloDeSucursalEntrega[0]->Impuesto;
+			$codigoDescuento = $articuloDeSucursalEntrega[0]->CodigoDescuento;
 
 			//El impuesto ahora se obtiene de la tabla de articulos, de los codigos CABYS, ya no se usa IVA general del sistema
 			$porcentajeIVA = $impuesto;
@@ -325,7 +368,13 @@ class consignaciones extends CI_Controller {
 										$precio2O->Precio_Descuento,
 										$precio3O->Precio_Descuento,
 										$precio4O->Precio_Descuento,
-										$precio5O->Precio_Descuento);
+										$precio5O->Precio_Descuento,
+										$codigoDescuento,
+										$precio1O->Precio_Codigo_Descuento,
+										$precio2O->Precio_Codigo_Descuento,
+										$precio3O->Precio_Codigo_Descuento,
+										$precio4O->Precio_Codigo_Descuento,
+										$precio5O->Precio_Codigo_Descuento);
 	}
 
 	public function facturar(){
@@ -503,7 +552,8 @@ class consignaciones extends CI_Controller {
 						$articuloBD->TipoCodigo,
 						$articuloBD->UnidadMedida,
 						$codigoCabys,
-						$articuloBD->Impuesto
+						$articuloBD->Impuesto,
+						$articuloBD->Codigo_Descuento
 					);
 
 					$nuevaCantidad = $articuloBD->Cantidad - $cantidadConsignadaAFacturar;

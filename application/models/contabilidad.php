@@ -1859,20 +1859,34 @@ Class contabilidad extends CI_Model
             $this->db->delete("tb_50_articulos_consignacion");
         }
 
-	function registrarArticuloConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $consignacion, $precio_final){
+	function registrarArticuloConsignacion(
+		$codigo, 
+		$descripcion, 
+		$cantidad, 
+		$descuento, 
+		$precio_unidad, 
+		$precio_total, 
+		$exento, 
+		$retencion, 
+		$imagen, 
+		$consignacion, 
+		$precio_final,
+		$codigoDescuento
+	){
 			$datos = array(
-										"Codigo"=> $codigo,
-										"Descripcion" => $descripcion,
-										"Cantidad" => $cantidad,
-										"Descuento" => $descuento,
-										"Precio_Unidad" => $precio_unidad,
-										"Precio_Total" => $precio_total,
-										"Precio_Final" => $precio_final,
-										"Exento" => $exento,
-										"Retencion" => $retencion,
-										"Imagen" => $imagen,
-										"Consignacion" => $consignacion
-										);
+				"Codigo"=> $codigo,
+				"Descripcion" => $descripcion,
+				"Cantidad" => $cantidad,
+				"Descuento" => $descuento,
+				"Codigo_Descuento" => $codigoDescuento,
+				"Precio_Unidad" => $precio_unidad,
+				"Precio_Total" => $precio_total,
+				"Precio_Final" => $precio_final,
+				"Exento" => $exento,
+				"Retencion" => $retencion,
+				"Imagen" => $imagen,
+				"Consignacion" => $consignacion
+				);
 			$this->db->insert("tb_50_articulos_consignacion", $datos);
 	}
 
@@ -1947,6 +1961,7 @@ Class contabilidad extends CI_Model
                                            tb_06_articulo.Articulo_Cantidad_Inventario as inventario,
                                            tb_50_articulos_consignacion.Descripcion as descripcion,
                                            tb_50_articulos_consignacion.Descuento as descuento,
+										   tb_50_articulos_consignacion.Codigo_Descuento as codigo_descuento,
                                            tb_50_articulos_consignacion.Exento as exento,
                                            tb_50_articulos_consignacion.Cantidad as cantidad,
                                            tb_50_articulos_consignacion.Imagen as imagen,
@@ -1995,12 +2010,31 @@ Class contabilidad extends CI_Model
 			}
 	}
 
-	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto){
+	function registrarArticuloEnListaConsignacion(
+		$codigo, 
+		$descripcion, 
+		$cantidad, 
+		$descuento, 
+		$precio_unidad, 
+		$precio_total, 
+		$exento, 
+		$retencion, 
+		$imagen, 
+		$sucursalEntrega, 
+		$sucursalRecibe, 
+		$precio_final, 
+		$tipoCodigo, 
+		$unidadMedida, 
+		$codigoCabys, 
+		$impuesto,
+		$codigoDescuento
+		){
 			$datos = array(
 				"Codigo"=> $codigo,
 				"Descripcion" => $descripcion,
 				"Cantidad" => $cantidad,
 				"Descuento" => $descuento,
+				"Codigo_Descuento" => $codigoDescuento,
 				"Precio_Unidad" => $precio_unidad,
 				"Precio_Total" => $precio_total,
 				"Precio_Final" => $precio_final,

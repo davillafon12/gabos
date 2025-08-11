@@ -158,6 +158,7 @@ function cargarInfoArticulo(articulo, fila){
 		$("#bodega_articulo_"+fila).html(articulo.inventario);
 		$("#descuento_articulo_muestra_"+fila).html(parseFloat(articulo.descuento).format(_CANTIDAD_DECIMALES, 3, '.', ','));
 		$("#descuento_articulo_"+fila).val(articulo.descuento);
+		$("#codigo_descuento_articulo_"+fila).val(articulo.descuentoCodigo);
 		$("#articulo_precio_unidad_muestra_"+fila).html(parseFloat(articulo.precio_cliente).format(_CANTIDAD_DECIMALES, 3, '.', ','));
 		$("#articulo_precio_unidad_"+fila).val(articulo.precio_cliente);
 		$("#articulo_precio_unidad_final_"+fila).val(articulo.precio_no_afiliado);
@@ -206,35 +207,35 @@ function validarCantidad(event){
 /************************************  VALIDACION Y CREACION DE CONSIGNACION  ***************************************************/
 
 function realizarConsignacion(){
-		cargarArrayArticulos();
-		if(validarExistenciaProductosEnTabla()){
-				if(validarSucursales()){
-						$.prompt("¡Esto dará en consignación los artículos ingresados!", {
-							title: "¿Esta seguro que desea realizar la consignación?",
-							buttons: { "Si, estoy seguro": true, "Cancelar": false },
-							submit:function(e,v,m,f){
-													if(v){			
-														$('#envio_consignacion').bPopup({
-															modalClose: false
-														});											
-															var parametros = {
-																									sucursalRecibe :  $("#sucursal_recibe").val().trim(),
-																									sucursalEntrega:  $("#sucursal_entrega").val().trim(),
-																									articulos      :	JSON.stringify(_ARRAY_ARTICULOS),
-																									costo 				 :  $("#costo").val(), 
-																									iva 					 :  $("#iva").val(),
-																									retencion			 :  $("#retencion").val(),
-																									total          :  $("#costo_total").val(),
-																									porcentaje_iva :	_PORCENTAJE_IVA																					
-																							};
-															doAjax("/contabilidad/consignaciones/consignarArticulos", "POST", true, parametros, "JSON", resultadoConsignacion, function(){
-																	notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
-															});
-													}
-											}
+	cargarArrayArticulos();
+	if(validarExistenciaProductosEnTabla()){
+		if(validarSucursales()){
+			$.prompt("¡Esto dará en consignación los artículos ingresados!", {
+				title: "¿Esta seguro que desea realizar la consignación?",
+				buttons: { "Si, estoy seguro": true, "Cancelar": false },
+				submit:function(e,v,m,f){
+					if(v){			
+						$('#envio_consignacion').bPopup({
+							modalClose: false
+						});											
+						var parametros = {
+							sucursalRecibe :  $("#sucursal_recibe").val().trim(),
+							sucursalEntrega:  $("#sucursal_entrega").val().trim(),
+							articulos      :  JSON.stringify(_ARRAY_ARTICULOS),
+							costo 		   :  $("#costo").val(), 
+							iva 		   :  $("#iva").val(),
+							retencion	   :  $("#retencion").val(),
+							total          :  $("#costo_total").val(),
+							porcentaje_iva :  _PORCENTAJE_IVA																					
+						};
+						doAjax("/contabilidad/consignaciones/consignarArticulos", "POST", true, parametros, "JSON", resultadoConsignacion, function(){
+							notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
 						});
+					}
 				}
+			});
 		}
+	}
 }
 
 function resultadoConsignacion(data){
@@ -283,24 +284,35 @@ function validarSucursales(){
 }
 
 function cargarArrayArticulos(){
-		_ARRAY_ARTICULOS = [];
-		var cantidadFilas = $("#tabla_productos tr").length - 1;
-		for(var i=1; i <= cantidadFilas; i++){
-				var codigo = $("#articulo_"+i).val().trim();
-				var descripcion = $("#descripcion_articulo_"+i).html().trim();
-				var cantidad = $("#cantidad_articulo_"+i).val().trim();
-				var descuento = $("#descuento_articulo_"+i).val().trim();
-				var precio_unidad = $("#articulo_precio_unidad_"+i).val().trim();
-				var precio_total = $("#articulo_precio_total_"+i).val().trim();
-				var precio_final = $("#articulo_precio_unidad_final_"+i).val().trim();
-				var exento = $("#exento_articulo_"+i).val().trim();
-				var retencion = $("#retencion_articulo_"+i).val().trim();
-				
-				if(codigo !== "" && descripcion !== ""){
-						_ARRAY_ARTICULOS.push({codigo:codigo, descripcion:descripcion, cantidad:cantidad, descuento:descuento, exento:exento, retencion:retencion, precio_unidad:precio_unidad, precio_total:precio_total, precio_final:precio_final});
-				}
-				
-		}
+	_ARRAY_ARTICULOS = [];
+	var cantidadFilas = $("#tabla_productos tr").length - 1;
+	for(var i=1; i <= cantidadFilas; i++){
+		var codigo = $("#articulo_"+i).val().trim();
+		var descripcion = $("#descripcion_articulo_"+i).html().trim();
+		var cantidad = $("#cantidad_articulo_"+i).val().trim();
+		var descuento = $("#descuento_articulo_"+i).val().trim();
+		var codigoDescuento = $("#codigo_descuento_articulo_"+i).val().trim();
+		var precio_unidad = $("#articulo_precio_unidad_"+i).val().trim();
+		var precio_total = $("#articulo_precio_total_"+i).val().trim();
+		var precio_final = $("#articulo_precio_unidad_final_"+i).val().trim();
+		var exento = $("#exento_articulo_"+i).val().trim();
+		var retencion = $("#retencion_articulo_"+i).val().trim();
+		
+		if(codigo !== "" && descripcion !== ""){
+			_ARRAY_ARTICULOS.push({
+				codigo:codigo, 
+				descripcion:descripcion, 
+				cantidad:cantidad, 
+				descuento:descuento, 
+				codigoDescuento:codigoDescuento,
+				exento:exento, 
+				retencion:retencion, 
+				precio_unidad:precio_unidad, 
+				precio_total:precio_total, 
+				precio_final:precio_final
+			});
+		}			
+	}
 }
 
 
@@ -351,24 +363,25 @@ function resetAllFields(){
 }
 
 function resetFila(fila, resetCodigo){
-		if(resetCodigo){
-				$("#articulo_"+fila).val("");
-		}
-		$("#descripcion_articulo_"+fila).html("");
-		$("#tooltip_imagen_articulo_"+fila).html("");
-		$("#cantidad_articulo_"+fila).val("");
-		$("#bodega_articulo_"+fila).html("");
-		$("#descuento_articulo_muestra_"+fila).html("");
-		$("#descuento_articulo_"+fila).val("");
-		$("#articulo_precio_unidad_muestra_"+fila).html("");
-		$("#articulo_precio_unidad_"+fila).val("");
-		$("#articulo_precio_unidad_final_"+fila).val("");
-		$("#articulo_precio_total_muestra_"+fila).html("");
-		$("#articulo_precio_total_"+fila).val("");
-		$("#articulo_precio_total_sin_descuento_"+fila).val("");
-		$("#exento_articulo_"+fila).val("");
-		$("#retencion_articulo_"+fila).val("");
-		actualizarPrecioTotalFila(fila);
+	if(resetCodigo){
+		$("#articulo_"+fila).val("");
+	}
+	$("#descripcion_articulo_"+fila).html("");
+	$("#tooltip_imagen_articulo_"+fila).html("");
+	$("#cantidad_articulo_"+fila).val("");
+	$("#bodega_articulo_"+fila).html("");
+	$("#descuento_articulo_muestra_"+fila).html("");
+	$("#descuento_articulo_"+fila).val("");
+	$("#codigo_descuento_articulo_"+fila).val("");
+	$("#articulo_precio_unidad_muestra_"+fila).html("");
+	$("#articulo_precio_unidad_"+fila).val("");
+	$("#articulo_precio_unidad_final_"+fila).val("");
+	$("#articulo_precio_total_muestra_"+fila).html("");
+	$("#articulo_precio_total_"+fila).val("");
+	$("#articulo_precio_total_sin_descuento_"+fila).val("");
+	$("#exento_articulo_"+fila).val("");
+	$("#retencion_articulo_"+fila).val("");
+	actualizarPrecioTotalFila(fila);
 }
 
 function actualizarPrecioTotalFila(fila){
@@ -538,6 +551,7 @@ function agregarFila(siguienteFila){
                                         +"<td>"
                                                 +"<div class='articulo_specs' id='descuento_articulo_muestra_"+siguienteFila+"'></div>"
                                                 +"<input id='descuento_articulo_"+siguienteFila+"' type='hidden'/>"
+												+"<input id='codigo_descuento_articulo_"+siguienteFila+"' type='hidden'/>"
                                         +"</td>"
                                         +"<td>"
                                                 +"<div class='precio_articulo' id='articulo_precio_unidad_muestra_"+siguienteFila+"'></div>"
