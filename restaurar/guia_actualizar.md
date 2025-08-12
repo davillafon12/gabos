@@ -49,3 +49,6 @@ Actualizando el sistema...
  ✔ Container gabos-airflow-init-1           Exited                                                                           
 Actualizacion lista!!!!
 ```
+
+### Corriendo las modificaciones SQL
+Para ejecutar las modificaciones de SQL, correr el contenido del archivo en el PhpMyAdmin para la base de datos de Gabo.
