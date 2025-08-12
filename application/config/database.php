@@ -48,16 +48,16 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '';
-$db['default']['username'] = '';
-$db['default']['password'] = '';
-$db['default']['database'] = '';
+$db['default']['hostname'] = 'gabo-database';
+$db['default']['username'] = 'DATABASE_USER';
+$db['default']['password'] = 'DATABASE_USER_PASS';
+$db['default']['database'] = 'DATABASE_NAME';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
-$db['default']['cache_on'] = FALSE;
-$db['default']['cachedir'] = '';
+$db['default']['cache_on'] = TRUE;
+$db['default']['cachedir'] = '/var/www/gabos/db_cache';
 $db['default']['char_set'] = 'utf8';
 $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
