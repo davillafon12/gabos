@@ -313,10 +313,12 @@ class editar extends CI_Controller {
 
 	if(isset($_GET['id'])){ //Verifica que traiga esa variable
 		$sucursal = $data['Sucursal_Codigo'];
-                $tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
-                $data['tipos_codigo'] = $tiposCodigos;
-                $unidadesMedida = $this->catalogo->getUnidadesDeMedida();
-                $data['unidades_medida'] = $unidadesMedida;
+		$tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
+		$data['tipos_codigo'] = $tiposCodigos;
+		$unidadesMedida = $this->catalogo->getUnidadesDeMedida();
+		$data['unidades_medida'] = $unidadesMedida;
+		$tipoDescuentos = $this->catalogo->getTipoDescuentos();
+		$data['tipoDescuentos'] = $tipoDescuentos;
 		//Si viene sucursal usamos la que viene, sino deja la del log del usuario
 		if(isset($_GET['suc'])){
 			if($this->empresa->getEmpresa($_GET['suc'])){
@@ -332,6 +334,7 @@ class editar extends CI_Controller {
 				$data['Articulo_Cantidad_Inventario'] = $row -> Articulo_Cantidad_Inventario;
 				$data['Articulo_Cantidad_Defectuoso'] = $row -> Articulo_Cantidad_Defectuoso;
 				$data['Articulo_Descuento'] = $row -> Articulo_Descuento;
+				$data['CodigoDescuento'] = $row->CodigoDescuento;
 				//$data['Articulo_Imagen_URL'] = $row -> Articulo_Imagen_URL;
 				$data['Articulo_Exento'] = $row -> Articulo_Exento;
 				$data['retencion'] = $row -> Articulo_No_Retencion;
@@ -413,6 +416,12 @@ class editar extends CI_Controller {
 			$precio3d = $this->input->post('precio3_d');
 			$precio4d = $this->input->post('precio4_d');
 			$precio5d = $this->input->post('precio5_d');
+			$costo_codigo_d = $this->input->post('costo_codigo_d');
+			$precio1_codigo_d = $this->input->post('precio1_codigo_d');
+			$precio2_codigo_d = $this->input->post('precio2_codigo_d');
+			$precio3_codigo_d = $this->input->post('precio3_codigo_d');
+			$precio4_codigo_d = $this->input->post('precio4_codigo_d');
+			$precio5_codigo_d = $this->input->post('precio5_codigo_d');
 
 
 			$tipo_codigo = $this->input->post('tipo_codigo');
@@ -421,6 +430,7 @@ class editar extends CI_Controller {
 
 			$codigoCabys = $this->input->post('codigo_cabys');
 			$impuestoCabys = $this->input->post('impuesto_cabys');
+			$codigoDescuento = $this->input->post('tipo_codigo_descuento');
 
 			//Si es exento
 			$exento = 0;
@@ -473,15 +483,16 @@ class editar extends CI_Controller {
 															'TipoCodigo' => $tipo_codigo,
 															'UnidadMedida' => $unidad_medida,
 															'CodigoCabys' => $codigoCabys,
-															'Impuesto' => $impuestoCabys
+															'Impuesto' => $impuestoCabys,
+															'CodigoDescuento' => $codigoDescuento
 														);
 										$precios = array(
-															0 => array("precio"=>$costo, "descuento"=>$costod),
-															1 => array("precio"=>$precio1, "descuento"=>$precio1d),
-															2 => array("precio"=>$precio2, "descuento"=>$precio2d),
-															3 => array("precio"=>$precio3, "descuento"=>$precio3d),
-															4 => array("precio"=>$precio4, "descuento"=>$precio4d),
-															5 => array("precio"=>$precio5, "descuento"=>$precio5d)
+															0 => array("precio"=>$costo, "descuento"=>$costod, "codigoDescuento"=> $costo_codigo_d),
+															1 => array("precio"=>$precio1, "descuento"=>$precio1d, "codigoDescuento"=> $precio1_codigo_d),
+															2 => array("precio"=>$precio2, "descuento"=>$precio2d, "codigoDescuento"=> $precio2_codigo_d),
+															3 => array("precio"=>$precio3, "descuento"=>$precio3d, "codigoDescuento"=> $precio3_codigo_d),
+															4 => array("precio"=>$precio4, "descuento"=>$precio4d, "codigoDescuento"=> $precio4_codigo_d),
+															5 => array("precio"=>$precio5, "descuento"=>$precio5d, "codigoDescuento"=> $precio5_codigo_d)
 														);
 										$this->articulo->actualizar($_POST['articulo_codigo'], $_POST['sucursal'], $info['dataBD']);
 										//$this->articulo->actualizarPrecios($_POST['articulo_codigo'], $_POST['sucursal'], $info['precios']);
@@ -781,39 +792,10 @@ class editar extends CI_Controller {
 						$codigo = $articulo["cod"];
 						$sucursal = $articulo["suc"];
 
-						/*
-
-						$art = array(
-							"cod"=>$codigo,
-							"des"=>$descripcion,
-							"cos"=>str_replace(",",".",$costo),
-							"cosD"=>str_replace(",",".",$costoD),
-							"p1"=>str_replace(",",".",$precio1),
-							"p1D"=>str_replace(",",".",$precio1D),
-							"p2"=>str_replace(",",".",$precio2),
-							"p2D"=>str_replace(",",".",$precio2D),
-							"p3"=>str_replace(",",".",$precio3),
-							"p3D"=>str_replace(",",".",$precio3D),
-							"p4"=>str_replace(",",".",$precio4),
-							"p4D"=>str_replace(",",".",$precio4D),
-							"p5"=>str_replace(",",".",$precio5),
-							"p5D"=>str_replace(",",".",$precio5D),
-							"suc"=>$sucursal,
-							"can"=>$cantidad,
-							"cand"=>$cantidadDefectuosa,
-							"exe"=>$exentoIVA,
-							"ret"=>$sinRetencion,
-							"desc"=>str_replace(",",".",$descuento),
-							"tipoCodigo"=>$tipoCodigo,
-							"unidadMedia"=>$unidadMedida,
-							"codigoCabys"=>$codigoCabys,
-							"impuestoCabys"=>$impuestoCabys
-						);
-
-						*/
 						//Actualizamos descripcion, retencion y cantidad
 						$update = array(
 							'Articulo_Descripcion'=>$articulo["des"],
+							'CodigoDescuento'=>$articulo["codigoDescuento"],
 							'Articulo_Descuento'=>$articulo["desc"],
 							'Articulo_Exento'=>$articulo["exe"],
 							'Articulo_No_Retencion'=>$articulo["ret"],
@@ -893,26 +875,38 @@ class editar extends CI_Controller {
 				$c17 = $worksheet->getCellByColumnAndRow(16, 1)->getValue();
 				$c18 = $worksheet->getCellByColumnAndRow(17, 1)->getValue();
 				$c19 = $worksheet->getCellByColumnAndRow(18, 1)->getValue();
+				$c20 = $worksheet->getCellByColumnAndRow(19, 1)->getValue();
+				$c21 = $worksheet->getCellByColumnAndRow(20, 1)->getValue();
+				$c22 = $worksheet->getCellByColumnAndRow(21, 1)->getValue();
+				$c23 = $worksheet->getCellByColumnAndRow(22, 1)->getValue();
+				$c24 = $worksheet->getCellByColumnAndRow(23, 1)->getValue();
+				$c25 = $worksheet->getCellByColumnAndRow(24, 1)->getValue();
 
 				if(trim($c1) == 'CODIGO' &&
 					trim($c2) == 'DESCRIPCION' &&
 					trim($c3) == 'PRECIO_1' &&
 					trim($c4) == 'PRECIO_1_DESCUENTO' &&
-					trim($c5) == 'PRECIO_2' &&
-					trim($c6) == 'PRECIO_2_DESCUENTO' &&
-					trim($c7) == 'PRECIO_3' &&
-					trim($c8) == 'PRECIO_3_DESCUENTO' &&
-					trim($c9) == 'PRECIO_4' &&
-					trim($c10) == 'PRECIO_4_DESCUENTO' &&
-					trim($c11) == 'PRECIO_5' &&
-					trim($c12) == 'PRECIO_5_DESCUENTO' &&
-					trim($c13) == 'SUCURSAL' &&
-					trim($c14) == 'EXENTO_IVA' &&
-					trim($c15) == 'SIN_RETENCION' &&
-					trim($c16) == 'DESCUENTO' &&
-					trim($c17) == 'TIPO_CODIGO'&&
-					trim($c18) == 'UNIDAD_MEDIDA'&&
-					trim($c19) == 'CODIGO_CABYS'){
+					trim($c5) == 'PRECIO_1_CODIGO_DESCUENTO' &&
+					trim($c6) == 'PRECIO_2' &&
+					trim($c7) == 'PRECIO_2_DESCUENTO' &&
+					trim($c8) == 'PRECIO_2_CODIGO_DESCUENTO' &&
+					trim($c9) == 'PRECIO_3' &&
+					trim($c10) == 'PRECIO_3_DESCUENTO' &&
+					trim($c11) == 'PRECIO_3_CODIGO_DESCUENTO' &&
+					trim($c12) == 'PRECIO_4' &&
+					trim($c13) == 'PRECIO_4_DESCUENTO' &&
+					trim($c14) == 'PRECIO_4_CODIGO_DESCUENTO' &&
+					trim($c15) == 'PRECIO_5' &&
+					trim($c16) == 'PRECIO_5_DESCUENTO' &&
+					trim($c17) == 'PRECIO_5_CODIGO_DESCUENTO' &&
+					trim($c18) == 'SUCURSAL' &&
+					trim($c19) == 'EXENTO_IVA' &&
+					trim($c20) == 'SIN_RETENCION' &&
+					trim($c21) == 'DESCUENTO' &&
+					trim($c22) == 'CODIGO_DESCUENTO' &&
+					trim($c23) == 'TIPO_CODIGO'&&
+					trim($c24) == 'UNIDAD_MEDIDA'&&
+					trim($c25) == 'CODIGO_CABYS'){
 					$highestRow = $worksheet->getHighestRow();
 					//Lleva el control de cuales productos presentaron errores
 					$errores = array();
@@ -922,21 +916,27 @@ class editar extends CI_Controller {
 						$descripcion = trim($worksheet->getCellByColumnAndRow(1, $row)->getValue());
 						$precio1 = trim($worksheet->getCellByColumnAndRow(2, $row)->getValue());
 						$precio1D = trim($worksheet->getCellByColumnAndRow(3, $row)->getValue());
-						$precio2 = trim($worksheet->getCellByColumnAndRow(4, $row)->getValue());
-						$precio2D = trim($worksheet->getCellByColumnAndRow(5, $row)->getValue());
-						$precio3 = trim($worksheet->getCellByColumnAndRow(6, $row)->getValue());
-						$precio3D = trim($worksheet->getCellByColumnAndRow(7, $row)->getValue());
-						$precio4 = trim($worksheet->getCellByColumnAndRow(8, $row)->getValue());
-						$precio4D = trim($worksheet->getCellByColumnAndRow(9, $row)->getValue());
-						$precio5 = trim($worksheet->getCellByColumnAndRow(10, $row)->getValue());
-						$precio5D = trim($worksheet->getCellByColumnAndRow(11, $row)->getValue());
-						$sucursal = trim($worksheet->getCellByColumnAndRow(12, $row)->getValue());
-						$exentoIVA = trim($worksheet->getCellByColumnAndRow(13, $row)->getValue());
-						$sinRetencion = trim($worksheet->getCellByColumnAndRow(14, $row)->getValue());
-						$descuento = trim($worksheet->getCellByColumnAndRow(15, $row)->getValue());
-						$tipoCodigo = trim($worksheet->getCellByColumnAndRow(16, $row)->getValue());
-						$unidadMedida = trim($worksheet->getCellByColumnAndRow(17, $row)->getValue());
-						$codigoCabys = trim($worksheet->getCellByColumnAndRow(18, $row)->getValue());
+						$precio1CD = trim($worksheet->getCellByColumnAndRow(4, $row)->getValue());
+						$precio2 = trim($worksheet->getCellByColumnAndRow(5, $row)->getValue());
+						$precio2D = trim($worksheet->getCellByColumnAndRow(6, $row)->getValue());
+						$precio2CD = trim($worksheet->getCellByColumnAndRow(7, $row)->getValue());
+						$precio3 = trim($worksheet->getCellByColumnAndRow(8, $row)->getValue());
+						$precio3D = trim($worksheet->getCellByColumnAndRow(9, $row)->getValue());
+						$precio3CD = trim($worksheet->getCellByColumnAndRow(10, $row)->getValue());
+						$precio4 = trim($worksheet->getCellByColumnAndRow(11, $row)->getValue());
+						$precio4D = trim($worksheet->getCellByColumnAndRow(12, $row)->getValue());
+						$precio4CD = trim($worksheet->getCellByColumnAndRow(13, $row)->getValue());
+						$precio5 = trim($worksheet->getCellByColumnAndRow(14, $row)->getValue());
+						$precio5D = trim($worksheet->getCellByColumnAndRow(15, $row)->getValue());
+						$precio5CD = trim($worksheet->getCellByColumnAndRow(16, $row)->getValue());
+						$sucursal = trim($worksheet->getCellByColumnAndRow(17, $row)->getValue());
+						$exentoIVA = trim($worksheet->getCellByColumnAndRow(18, $row)->getValue());
+						$sinRetencion = trim($worksheet->getCellByColumnAndRow(19, $row)->getValue());
+						$descuento = trim($worksheet->getCellByColumnAndRow(20, $row)->getValue());
+						$codigoDescuento = trim($worksheet->getCellByColumnAndRow(21, $row)->getValue());
+						$tipoCodigo = trim($worksheet->getCellByColumnAndRow(22, $row)->getValue());
+						$unidadMedida = trim($worksheet->getCellByColumnAndRow(23, $row)->getValue());
+						$codigoCabys = trim($worksheet->getCellByColumnAndRow(24, $row)->getValue());
 
 
 						// Revisamos sucursal
@@ -1046,6 +1046,20 @@ class editar extends CI_Controller {
 							continue;
 						}
 
+						//Revisamos el codigo de descuento
+						$codigosDeDescuento = array($precio1CD, $precio2CD, $precio3CD, $precio4CD, $precio5CD, $codigoDescuento);
+						$seEncontroCodigoDescuetoInvalido = false;
+						foreach($codigosDeDescuento as $key => $cd){
+							if($this->catalogo->getTipoDescuentoByCodigo($cd) == false){
+								array_push($errores, "Fila #$row tiene un [Codigo de Descuento] no válido.");
+								$seEncontroCodigoDescuetoInvalido = true;
+								break;
+							}
+						}
+
+						if($seEncontroCodigoDescuetoInvalido){
+							continue;
+						}
 
 						// Creamos los articulos
 						$art = array(
@@ -1053,28 +1067,34 @@ class editar extends CI_Controller {
 							"des"=>$descripcion,
 							"p1"=>str_replace(",",".",$precio1),
 							"p1D"=>str_replace(",",".",$precio1D),
+							"p1CD"=>$precio1CD,
 							"p2"=>str_replace(",",".",$precio2),
 							"p2D"=>str_replace(",",".",$precio2D),
+							"p2CD"=>$precio2CD,
 							"p3"=>str_replace(",",".",$precio3),
 							"p3D"=>str_replace(",",".",$precio3D),
+							"p3CD"=>$precio3CD,
 							"p4"=>str_replace(",",".",$precio4),
 							"p4D"=>str_replace(",",".",$precio4D),
+							"p4CD"=>$precio4CD,
 							"p5"=>str_replace(",",".",$precio5),
 							"p5D"=>str_replace(",",".",$precio5D),
+							"p5CD"=>$precio5CD,
 							"suc"=>$sucursal,
 							"exe"=>$exentoIVA,
 							"ret"=>$sinRetencion,
 							"desc"=>str_replace(",",".",$descuento),
+							"codigoDescuento"=>$codigoDescuento,
 							"tipoCodigo"=>$tipoCodigo,
 							"unidadMedia"=>$unidadMedida,
 							"codigoCabys"=>$codigoCabys,
 							"impuestoCabys"=>$impuestoCabys,
 							"precios" => array(
-								1 => array("precio"=>str_replace(",",".",$precio1),"descuento"=>str_replace(",",".",$precio1D)),
-								2 => array("precio"=>str_replace(",",".",$precio2),"descuento"=>str_replace(",",".",$precio2D)),
-								3 => array("precio"=>str_replace(",",".",$precio3),"descuento"=>str_replace(",",".",$precio3D)),
-								4 => array("precio"=>str_replace(",",".",$precio4),"descuento"=>str_replace(",",".",$precio4D)),
-								5 => array("precio"=>str_replace(",",".",$precio5),"descuento"=>str_replace(",",".",$precio5D))
+								1 => array("precio"=>str_replace(",",".",$precio1),"descuento"=>str_replace(",",".",$precio1D),"codigoDescuento"=>$precio1CD),
+								2 => array("precio"=>str_replace(",",".",$precio2),"descuento"=>str_replace(",",".",$precio2D),"codigoDescuento"=>$precio2CD),
+								3 => array("precio"=>str_replace(",",".",$precio3),"descuento"=>str_replace(",",".",$precio3D),"codigoDescuento"=>$precio3CD),
+								4 => array("precio"=>str_replace(",",".",$precio4),"descuento"=>str_replace(",",".",$precio4D),"codigoDescuento"=>$precio4CD),
+								5 => array("precio"=>str_replace(",",".",$precio5),"descuento"=>str_replace(",",".",$precio5D),"codigoDescuento"=>$precio5CD)
 							)
 						);
 

@@ -13,9 +13,9 @@ class caja extends CI_Controller {
 		$this->load->model('banco','',TRUE);
 		$this->load->model('empresa','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
-                $this->load->model('impresion_m','',TRUE);
-                $this->load->model('contabilidad','',TRUE);
-
+		$this->load->model('impresion_m','',TRUE);
+		$this->load->model('contabilidad','',TRUE);
+		$this->load->model('catalogo','',TRUE);
 	}
 
 	function index()
@@ -39,6 +39,7 @@ class caja extends CI_Controller {
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$data['puedeEditarFacturas'] = @$permisos['editar_facturas'] == "1";
+		$data['tiposDeDescuento'] = $this->catalogo->getTipoDescuentos();
 		$this->load->view('facturas/view_caja_factura', $data);
 	}
 
@@ -209,6 +210,7 @@ class caja extends CI_Controller {
 					$articulo['descripcion']=$row->Articulo_Factura_Descripcion;
 					$articulo['cantidad']=$row->Articulo_Factura_Cantidad;
 					$articulo['descuento']=$row->Articulo_Factura_Descuento;
+					$articulo['tipoDescuento']=$row->TipoDescuento;
 					$articulo['exento']=$row->Articulo_Factura_Exento;
 					$articulo['retencion']=$row->Articulo_Factura_No_Retencion;
 					$articulo['precio']=$row->Articulo_Factura_Precio_Unitario;
@@ -262,6 +264,10 @@ class caja extends CI_Controller {
             $vuelto = filter_input(INPUT_POST, "vuelto");
             include PATH_USER_DATA;
 
+			//Agregamos tipo de pago
+			//Tarjeta, Deposito, Cheque, Mixto, Apartado
+			$this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+
 			$resFacturaElectronica = array();
 			if($requiereFE){
 				$resFacturaElectronica = $this->factura->crearFacturaElectronica($responseCheck["empresa"], $responseCheck["cliente"], $responseCheck["factura"], $responseCheck["costos"], $responseCheck["articulos"], $tipoPago);
@@ -291,9 +297,7 @@ class caja extends CI_Controller {
 
                 $this->factura->actualizarFacturaHead($datos, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
 
-                //Agregamos tipo de pago
-                //Tarjeta, Deposito, Cheque, Mixto, Apartado
-                $this->guardarTipoPago($tipoPago, $responseCheck["factura"]->Factura_Consecutivo, $data['Sucursal_Codigo']);
+                
 
 
                 $this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario cobro la factura consecutivo: {$responseCheck["factura"]->Factura_Consecutivo}",$data['Sucursal_Codigo'],'cobro');
@@ -724,7 +728,7 @@ class caja extends CI_Controller {
 		foreach($items_factura as $item){
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico
-					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, ART_GEN_IMAGEN, ART_GEN_TIPO_CODIGO, ART_GEN_UNIDAD_MEDIDA, ART_GEN_CODIGO_CABYS, ART_GEN_IMPUESTO);
+					$this->factura->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, ART_GEN_IMAGEN, ART_GEN_TIPO_CODIGO, ART_GEN_UNIDAD_MEDIDA, ART_GEN_CODIGO_CABYS, ART_GEN_IMPUESTO, $item['cds']);
 			}else{ //Si es normal
 				if($articuloBD = $this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
@@ -739,7 +743,7 @@ class caja extends CI_Controller {
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
 
-					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto);
+					$this->factura->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto, $item['cds']);
 					$this->articulo->actualizarInventarioRESTA($item['co'], $item['ca'], $sucursal);
 				}
 			}
@@ -949,6 +953,7 @@ class caja extends CI_Controller {
 					$articulo['descripcion']=$row->Articulo_Proforma_Descripcion;
 					$articulo['cantidad']=$row->Articulo_Proforma_Cantidad;
 					$articulo['descuento']=$row->Articulo_Proforma_Descuento;
+					$articulo['tipoDescuento']=$row->TipoDescuento;
 					$articulo['exento']=$row->Articulo_Proforma_Exento;
 					$articulo['precio']=$row->Articulo_Proforma_Precio_Unitario;
 					$articulo['retencion']=$row->Articulo_Proforma_No_Retencion;

@@ -51,7 +51,8 @@ function agregarFila(index){
 					+ "<div class='articulo_specs' id='descripcion_articulo_"+siguienteFila+"'></div>"
 					 +"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+siguienteFila+"'></div>";
 	cell4.innerHTML = "<div class='articulo_specs' id='bodega_articulo_"+siguienteFila+"'></div>";
-	cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+siguienteFila+"' ondblclick='changeDiscount("+siguienteFila+")'></div>";
+	cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+siguienteFila+"' ondblclick='changeDiscount("+siguienteFila+")'></div>"
+					+ "<input type='hidden' id='codigo_descuento_articulo_"+siguienteFila+"'/>";
 	cell6.innerHTML = "<div class='articulo_specs' id='costo_unidad_articulo_"+siguienteFila+"'>"
 					 +"</div><input id='costo_unidad_articulo_ORIGINAL_"+siguienteFila+"' type='hidden' >"
 					 +"<input id='costo_unidad_articulo_FINAL_"+siguienteFila+"' type='hidden' >"
@@ -388,6 +389,7 @@ function setArticulo(articulo, num_fila){
 	$("#cantidad_articulo_"+num_fila).attr( "max", articulo.inventario );
 	//Seteamos el descuento
 	$("#descuento_articulo_"+num_fila).html(articulo.descuento);
+	$("#codigo_descuento_articulo_"+num_fila).val(articulo.descuentoCodigo);
 
 	//Tipo de moneda y factor
 	tipo_moneda = $("#tipo_moneda").val();
@@ -536,8 +538,9 @@ function setDatosArticulo(articuloARRAY, id_input, num_row, cantidadArticulos){
 		//Calculamos el descuento para rebajarlo al costo de unidad
 		descuento = parseInt(articuloARRAY[4]);
 		document.getElementById("descuento_articulo_"+num_row).innerHTML=descuento;
+		document.getElementById("codigo_descuento_articulo_"+num_row).value=articuloARRAY[5];
 		//Calculamos el precio con descuento
-		precio_unidad_float = parseFloat(articuloARRAY[6]);
+		precio_unidad_float = parseFloat(articuloARRAY[7]);
 
 		//precio_unidad_float -= precio_unidad_float*(descuento/100);
 		precio_unidad_FACTOR_float = precio_unidad_float/factor_tipo_moneda_float;
@@ -556,11 +559,11 @@ function setDatosArticulo(articuloARRAY, id_input, num_row, cantidadArticulos){
 
 
 		//Precio para cliente final para calcular ganancia
-		document.getElementById("costo_unidad_articulo_FINAL_"+num_row).value=parseFloat(articuloARRAY[7]).toFixed(decimales_int);
+		document.getElementById("costo_unidad_articulo_FINAL_"+num_row).value=parseFloat(articuloARRAY[8]).toFixed(decimales_int);
 
 		//alert(articuloARRAY[9]);
-		document.getElementById("producto_exento_"+num_row).value=articuloARRAY[9];
-		document.getElementById("producto_retencion_"+num_row).value=articuloARRAY[10];
+		document.getElementById("producto_exento_"+num_row).value=articuloARRAY[10];
+		document.getElementById("producto_retencion_"+num_row).value=articuloARRAY[11];
 
 
 		//actualizamos info

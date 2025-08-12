@@ -20,6 +20,7 @@ function resetFields(){
 	
 	$("#cuerpo_productos").html(cuerpoProductos);
 	$("#cuerpo_familia").html(cuerpoFamilias);
+	$("#costo_codigo_d").val('01').change();
 }
 
 function getNombreCliente(cedula){
@@ -86,6 +87,9 @@ function manejarErrores(error){
 		case '10':
 			notyError('¡El precio de descuento es mayor al precio actual del cliente!');
 		break;
+		case '11':
+			notyError('¡El código de descuento no es válido!');
+		break;
 	}
 }
 
@@ -100,7 +104,8 @@ function notyError(Mensaje){
 
 function setInformacion(informacionArray){
 	$("#nombre").val(informacionArray.nombre+" "+informacionArray.apellidos);
-	$("#descuento").val(informacionArray.descuento);
+	$("#descuento").val(informacionArray.descuento.descuento);
+	$("#costo_codigo_d").val(informacionArray.descuento.codigo).change();
 	credito = parseFloat(informacionArray.maxCredito);
 	credito = credito.format(2, 3, '.', ',');
 	$("#credito").val(credito);
@@ -166,6 +171,7 @@ function setUpLiveSearch(){
 
 function updateDescuento(){
 	descuento = $("#descuento").val();
+	codigo = $("#costo_codigo_d").val();
 	if(isNumber(descuento)){
 		descuento = parseInt(descuento);
 		if(descuento>=0&&descuento<=100){
@@ -175,7 +181,7 @@ function updateDescuento(){
                             url : location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/clientes/otros/actualizarDescuento',
                             type: "POST",		
                             async: false,
-                            data: {'cedula':cedula, 'descuento':descuento},				
+                            data: {'cedula':cedula, 'descuento':descuento, 'codigo':codigo},				
                             success: function(data, textStatus, jqXHR)
                             {
                                     try{

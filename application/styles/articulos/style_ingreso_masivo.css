@@ -105,3 +105,30 @@
     overflow-y: hidden;
 	width: 1000px;
 }
+
+.tabla-encabezado thead{
+	background: black;
+    color: white;
+    font-size: 11px;
+    text-align: center;
+}
+
+.tabla-encabezado tbody{
+	background: white;
+    font-size: 11px;
+}
+
+.tabla-encabezado tbody td{
+	padding-left: 2px;
+    padding-right: 2px;
+}
+
+.tabla-encabezado-td{
+	padding-left: 20px;
+    padding-right: 20px;
+}
+
+.tabla-encabezado-td div{
+	max-width: 1000px;
+    overflow: auto;
+}

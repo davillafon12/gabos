@@ -11,6 +11,7 @@ class proforma extends CI_Controller {
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('configuracion','',TRUE);
 		$this->load->model('proforma_m','',TRUE);
+		$this->load->model('catalogo','',TRUE);
 	}
 
 	function index()
@@ -32,6 +33,7 @@ class proforma extends CI_Controller {
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$data['tiposDeDescuento'] = $this->catalogo->getTipoDescuentos(); 
 		$this->load->view('facturas/view_proforma', $data);
 	}
 
@@ -132,7 +134,7 @@ class proforma extends CI_Controller {
 
 		//{co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento}
 			if($item['co']=='00'){ //Si es generico
-					$this->proforma_m->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, ART_GEN_IMAGEN, ART_GEN_TIPO_CODIGO, ART_GEN_UNIDAD_MEDIDA, ART_GEN_CODIGO_CABYS, ART_GEN_IMPUESTO);
+					$this->proforma_m->addItemtoInvoice($item['co'], $item['de'], $item['ca'], $item['ds'], $item['ex'], $item['re'], $item['pu'], $item['pu'], $consecutivo, $sucursal, $vendedor, $cliente, ART_GEN_IMAGEN, ART_GEN_TIPO_CODIGO, ART_GEN_UNIDAD_MEDIDA, ART_GEN_CODIGO_CABYS, ART_GEN_IMPUESTO, $item['cds']);
 			}else{ //Si es normal
 				if($articuloBD = $this->articulo->existe_Articulo($item['co'], $sucursal)){ //Verificamos que el codigo exista
 					//Obtenemos los datos que no vienen en el JSON
@@ -147,7 +149,7 @@ class proforma extends CI_Controller {
 					$precio = $this->articulo->getPrecioProducto($item['co'], $this->articulo->getNumeroPrecio($cliente), $sucursal);
 					$precioFinal = $this->articulo->getPrecioProducto($item['co'], 1, $sucursal);
 
-					$this->proforma_m->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto);
+					$this->proforma_m->addItemtoInvoice($item['co'], $descripcion, $item['ca'], $item['ds'], $item['ex'], $item['re'], $precio, $precioFinal, $consecutivo, $sucursal, $vendedor, $cliente, $imagen, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto, $item['cds']);
 				}
 			}
 		}
@@ -255,7 +257,7 @@ class proforma extends CI_Controller {
 	function agregarItemsFactura($items_factura, $consecutivo, $sucursal, $vendedor, $cliente){
 		foreach($items_factura as $item){
 			if($item->Articulo_Proforma_Codigo == '00'){ //Si es generico
-					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Unitario, $consecutivo, $sucursal, $vendedor, $cliente, ART_GEN_IMAGEN, ART_GEN_TIPO_CODIGO, ART_GEN_UNIDAD_MEDIDA, ART_GEN_CODIGO_CABYS, ART_GEN_IMPUESTO);
+					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Unitario, $consecutivo, $sucursal, $vendedor, $cliente, ART_GEN_IMAGEN, ART_GEN_TIPO_CODIGO, ART_GEN_UNIDAD_MEDIDA, ART_GEN_CODIGO_CABYS, ART_GEN_IMPUESTO, $item->TipoDescuento);
 			}else{ //Si es normal
 				if($this->articulo->existe_Articulo($item->Articulo_Proforma_Codigo, $sucursal)){ //Verificamos que el codigo exista
 					$codigoCabys = $item->Codigo_Cabys;
@@ -268,7 +270,7 @@ class proforma extends CI_Controller {
 							$codigoCabys = ART_GEN_CODIGO_CABYS;
 						}
 					}
-					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Final, $consecutivo, $sucursal, $vendedor, $cliente, $item->Articulo_Proforma_Imagen, $item->TipoCodigo, $item->UnidadMedida, $codigoCabys, $item->Impuesto);
+					$this->factura->addItemtoInvoice($item->Articulo_Proforma_Codigo, $item->Articulo_Proforma_Descripcion, $item->Articulo_Proforma_Cantidad, $item->Articulo_Proforma_Descuento, $item->Articulo_Proforma_Exento, $item->Articulo_Proforma_No_Retencion, $item->Articulo_Proforma_Precio_Unitario, $item->Articulo_Proforma_Precio_Final, $consecutivo, $sucursal, $vendedor, $cliente, $item->Articulo_Proforma_Imagen, $item->TipoCodigo, $item->UnidadMedida, $codigoCabys, $item->Impuesto, $item->TipoDescuento);
 				}
 			}
 
@@ -331,9 +333,9 @@ class proforma extends CI_Controller {
 	}
 
 	function fijarProforma(){
-                include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 
-                $permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
+		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
 
 		if(!$permisos['procesar_proformas'])
 		{
@@ -343,7 +345,9 @@ class proforma extends CI_Controller {
 		$this->load->helper(array('form'));
 		$conf_array = $this->configuracion->getConfiguracionArray();
 		$data['c_array'] = $conf_array;
-                $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$data['tiposDeDescuento'] = $this->catalogo->getTipoDescuentos(); 
+		
 		$this->load->view('facturas/fijar_proforma', $data);
 	}
 

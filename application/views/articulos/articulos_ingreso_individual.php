@@ -131,11 +131,27 @@ PARA:
 									?>
 								</select>
 							</td>
+						</tr>
+						<tr>
 							<td>
 								<label for="descuento"  class="contact">Descuento:</label>
 							</td>
 							<td>
 								<input id="descuento" class="input_uno" autocomplete="off" name="descuento" disabled>
+							</td>
+							<td>
+								<label class="contact">Código de descuento:</label>
+							</td>
+							<td>
+								<select id="tipo_codigo_descuento" name="tipo_codigo_descuento" class="input_dos" required disabled>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -205,8 +221,11 @@ PARA:
 							<td style="width:110px;">
 								<label class="contact">Monto</label>
 							</td>
-							<td>
+							<td style="width:110px;">
 								<label class="contact">Descuento</label>
+							</td>
+							<td>
+								<label class="contact">Código de descuento</label>
 							</td>
 						</tr>
 						<tr>
@@ -219,6 +238,17 @@ PARA:
 							<td>
 								<input id="costo_d" class="input_uno" autocomplete="off" name="costo_d" required="" disabled>
 							</td>
+							<td>
+								<select id="costo_codigo_d"  name="costo_codigo_d" class="input_dos" required disabled>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>							
 						</tr>
 						<tr>
 							<td>
@@ -229,6 +259,17 @@ PARA:
 							</td>
 							<td>
 								<input id="precio1_d" class="input_uno" autocomplete="off" name="precio1_d" required="" disabled>
+							</td>
+							<td>
+								<select id="precio1_codigo_d" name="precio1_codigo_d" class="input_dos" required disabled>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -241,6 +282,17 @@ PARA:
 							<td>
 								<input id="precio2_d" class="input_uno" autocomplete="off" name="precio2_d" required="" disabled>
 							</td>
+							<td>
+								<select id="precio2_codigo_d" name="precio2_codigo_d" class="input_dos" required disabled>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td>
@@ -251,6 +303,17 @@ PARA:
 							</td>
 							<td>
 								<input id="precio3_d" class="input_uno" autocomplete="off" name="precio3_d" required="" disabled>
+							</td>
+							<td>
+								<select id="precio3_codigo_d" name="precio3_codigo_d" class="input_dos" required disabled>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -263,6 +326,17 @@ PARA:
 							<td>
 								<input id="precio4_d" class="input_uno" autocomplete="off" name="precio4_d" required="" disabled>
 							</td>
+							<td>
+								<select id="precio4_codigo_d" name="precio4_codigo_d" class="input_dos" required disabled>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td>
@@ -273,6 +347,17 @@ PARA:
 							</td>
 							<td>
 								<input id="precio5_d" class="input_uno" autocomplete="off" name="precio5_d" required="" disabled>
+							</td>
+							<td>
+								<select id="precio5_codigo_d" name="precio5_codigo_d" class="input_dos" required disabled>
+									<?php
+										foreach($tipoDescuentos as $td){
+											?>
+												<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+											<?php
+										}
+									?>
+								</select>
 							</td>
 						</tr>
 					</table>

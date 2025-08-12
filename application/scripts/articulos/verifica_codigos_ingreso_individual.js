@@ -22,6 +22,15 @@ function habilitarCampos(){
 	$("#precio3_d").prop('disabled', false);
 	$("#precio4_d").prop('disabled', false);
 	$("#precio5_d").prop('disabled', false);
+
+
+	$("#tipo_codigo_descuento").prop('disabled', false);
+	$("#costo_codigo_d").prop('disabled', false);
+	$("#precio1_codigo_d").prop('disabled', false);
+	$("#precio2_codigo_d").prop('disabled', false);
+	$("#precio3_codigo_d").prop('disabled', false);
+	$("#precio4_codigo_d").prop('disabled', false);
+	$("#precio5_codigo_d").prop('disabled', false);
 }
 
 function deshabilitarCampos(){
@@ -46,6 +55,14 @@ function deshabilitarCampos(){
 	$("#precio3_d").prop('disabled', true);
 	$("#precio4_d").prop('disabled', true);
 	$("#precio5_d").prop('disabled', true);
+
+	$("#tipo_codigo_descuento").prop('disabled', true);
+	$("#costo_codigo_d").prop('disabled', true);
+	$("#precio1_codigo_d").prop('disabled', true);
+	$("#precio2_codigo_d").prop('disabled', true);
+	$("#precio3_codigo_d").prop('disabled', true);
+	$("#precio4_codigo_d").prop('disabled', true);
+	$("#precio5_codigo_d").prop('disabled', true);
 }
 
 function notyMsg(Mensaje, tipo){

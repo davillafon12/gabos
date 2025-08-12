@@ -262,13 +262,10 @@ Class contabilidad extends CI_Model
 	}
 
 	function agregarProductosNotaCredito($consecutivo, $sucursal, $productos, $cliente, $facturaAcreditar){
-
-            $sucursalOriginal = $sucursal;
+        $sucursalOriginal = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
+			$sucursal = $this->sucursales_trueque[$sucursal];
 		}
-
-
 
 		$datos = array();
 
@@ -280,28 +277,26 @@ Class contabilidad extends CI_Model
 			$descripcion = "";
 			$precio = "";
 			$descuento = 0;
+			$codigoDescuento = CODIGO_DESCUENTO_DEFECTO;
 			$exento = 0;
 			$noRetencion = 0;
 			$precioFinal = 0;
-			$tipoCodigo = "";
-			$codigoCabys = "";
+			$tipoCodigo = "99";
+			$codigoCabys = ART_GEN_CODIGO_CABYS;
 
-			if(trim($producto->c) === "00"){
-				$descripcion = trim($producto->ds);
-				$precio = trim($producto->p);
-				$precioFinal = $precio;
-				$tipoCodigo = "99";
-				$codigoCabys = ART_GEN_CODIGO_CABYS;
-			}else{
-				$descripcion = $this->articulo->getArticuloDescripcion($producto->c, $sucursal);
-				$precio = $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c);
-				$articuloCompleto = $this->factura->getArticuloFactura($facturaAcreditar, $sucursal, $producto->c);
-				$descuento = $articuloCompleto->Articulo_Factura_Descuento;
-				$exento = $articuloCompleto->Articulo_Factura_Exento;
-				$noRetencion = $articuloCompleto->Articulo_Factura_No_Retencion;
-				$precioFinal = $articuloCompleto->Articulo_Factura_Precio_Final;
-				$tipoCodigo = $this->articulo->getArticuloTipoCodigo($producto->c, $sucursal);
-				$codigoCabys = $articuloCompleto->Codigo_Cabys;
+			if($articuloDeFactura = $this->factura->getArticuloFacturaById($producto->id)){
+				//Si el articulo existe en la factura
+
+				$descripcion = $articuloDeFactura->Articulo_Factura_Descripcion;
+				$precio = ($articuloDeFactura->Articulo_Factura_Precio_Unitario - ($articuloDeFactura->Articulo_Factura_Precio_Unitario * ($articuloDeFactura->Articulo_Factura_Descuento/100)));
+				$descuento = $articuloDeFactura->Articulo_Factura_Descuento;
+				$codigoDescuento = $articuloDeFactura->TipoDescuento;
+				$exento = $articuloDeFactura->Articulo_Factura_Exento;
+				$noRetencion = $articuloDeFactura->Articulo_Factura_No_Retencion;
+				$precioFinal = $articuloDeFactura->Articulo_Factura_Precio_Final;
+				$tipoCodigo = $articuloDeFactura->TipoCodigo;
+				$codigoCabys = $articuloDeFactura->Codigo_Cabys;
+
 				//Si el codigo cabys esta vacio, estamos cargando un articulo de una factura que no se guardo con CABYS
 				//Entonces obtenemos el cabys de la tabla de articulos original
 				if(trim($codigoCabys) == ""){
@@ -311,7 +306,13 @@ Class contabilidad extends CI_Model
 						$codigoCabys = ART_GEN_CODIGO_CABYS;
 					}
 				}
+			}else{
+				//Si el articulo no existe en la factura, entonces lo tratamos como generico ingresado por el usuario al crear NC
+				$descripcion = trim($producto->ds);
+				$precio = trim($producto->p);
+				$precioFinal = $precio;
 			}
+
 			//Agregamos los datos a un array para ser agregado a la bd
 			$pro = array(
 						'Codigo' => $producto->c,
@@ -323,6 +324,7 @@ Class contabilidad extends CI_Model
 						'Precio_Unitario' => $precio,
 						'Precio_Final' => $precioFinal,
 						'Descuento' => $descuento,
+						'TipoDescuento' => $codigoDescuento,
 						'Exento' => $exento,
 						'No_Retencion' => $noRetencion,
 						'Nota_Credito_Consecutivo' => $consecutivo,
@@ -337,21 +339,6 @@ Class contabilidad extends CI_Model
 			$this->articulo->actualizarInventarioSUMADefectuoso($producto->c, $producto->d, $sucursalOriginal);
 		}
 		$this->db->insert_batch('tb_28_productos_notas_credito', $datos);
-	}
-
-	function precioArticuloEnFacturaDeterminada($factura, $sucursal, $articulo){
-		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
-		}
-		$this->db->select('Articulo_Factura_Descuento as descuento, Articulo_Factura_Precio_Unitario as precio');
-		$this->db->from('tb_08_articulos_factura');
-		$this->db->where('TB_07_Factura_Factura_Consecutivo',$factura);
-		$this->db->where('TB_07_Factura_TB_02_Sucursal_Codigo',$sucursal);
-		$this->db->where('Articulo_Factura_Codigo',$articulo);
-		$query = $this->db->get();
-		$art = $query->result()[0];
-		//Calculamos el precio con el descuento
-		return ($art->precio - ($art->precio * ($art->descuento/100)));
 	}
 
 	function getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal){
@@ -1079,6 +1066,8 @@ Class contabilidad extends CI_Model
 		$mixto = 0;
 		$credito = 0;
 		$apartado = 0;
+		$sinpeMovil = 0;
+		$plataformaDigital = 0;
 		$totalNotas = 0;
 
 		if($query->num_rows()!=0){
@@ -1173,11 +1162,17 @@ Class contabilidad extends CI_Model
 						case 'apartado':
 							$apartado += $costo_total;
 						break;
+						case 'sinpe_movil':
+							$sinpeMovil += $costo_total;
+						break;
+						case 'plataforma_digital':
+							$plataformaDigital += $costo_total;
+						break;
 					}
 				}
 			}
 		}
-		return array("contado"=>$contado, "tarjeta"=>$tarjeta, "cheque"=>$cheque, "deposito"=>$deposito, "mixto"=>$mixto, "credito"=>$credito, "apartado"=>$apartado, "total"=>$totalNotas);
+		return array("contado"=>$contado, "tarjeta"=>$tarjeta, "cheque"=>$cheque, "deposito"=>$deposito, "mixto"=>$mixto, "credito"=>$credito, "apartado"=>$apartado, "sinpeMovil"=>$sinpeMovil, "plataformaDigital"=>$plataformaDigital, "total"=>$totalNotas);
 
 
 	}
@@ -1202,7 +1197,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora >', $inicio);
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
-		$this->db->where('Factura_Tipo_Pago','contado');
+		$this->db->where_in('Factura_Tipo_Pago', array('contado'));
 		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
 
 		$query = $this->db->get();
@@ -1864,20 +1859,34 @@ Class contabilidad extends CI_Model
             $this->db->delete("tb_50_articulos_consignacion");
         }
 
-	function registrarArticuloConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $consignacion, $precio_final){
+	function registrarArticuloConsignacion(
+		$codigo, 
+		$descripcion, 
+		$cantidad, 
+		$descuento, 
+		$precio_unidad, 
+		$precio_total, 
+		$exento, 
+		$retencion, 
+		$imagen, 
+		$consignacion, 
+		$precio_final,
+		$codigoDescuento
+	){
 			$datos = array(
-										"Codigo"=> $codigo,
-										"Descripcion" => $descripcion,
-										"Cantidad" => $cantidad,
-										"Descuento" => $descuento,
-										"Precio_Unidad" => $precio_unidad,
-										"Precio_Total" => $precio_total,
-										"Precio_Final" => $precio_final,
-										"Exento" => $exento,
-										"Retencion" => $retencion,
-										"Imagen" => $imagen,
-										"Consignacion" => $consignacion
-										);
+				"Codigo"=> $codigo,
+				"Descripcion" => $descripcion,
+				"Cantidad" => $cantidad,
+				"Descuento" => $descuento,
+				"Codigo_Descuento" => $codigoDescuento,
+				"Precio_Unidad" => $precio_unidad,
+				"Precio_Total" => $precio_total,
+				"Precio_Final" => $precio_final,
+				"Exento" => $exento,
+				"Retencion" => $retencion,
+				"Imagen" => $imagen,
+				"Consignacion" => $consignacion
+				);
 			$this->db->insert("tb_50_articulos_consignacion", $datos);
 	}
 
@@ -1952,6 +1961,7 @@ Class contabilidad extends CI_Model
                                            tb_06_articulo.Articulo_Cantidad_Inventario as inventario,
                                            tb_50_articulos_consignacion.Descripcion as descripcion,
                                            tb_50_articulos_consignacion.Descuento as descuento,
+										   tb_50_articulos_consignacion.Codigo_Descuento as codigo_descuento,
                                            tb_50_articulos_consignacion.Exento as exento,
                                            tb_50_articulos_consignacion.Cantidad as cantidad,
                                            tb_50_articulos_consignacion.Imagen as imagen,
@@ -2000,12 +2010,31 @@ Class contabilidad extends CI_Model
 			}
 	}
 
-	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto){
+	function registrarArticuloEnListaConsignacion(
+		$codigo, 
+		$descripcion, 
+		$cantidad, 
+		$descuento, 
+		$precio_unidad, 
+		$precio_total, 
+		$exento, 
+		$retencion, 
+		$imagen, 
+		$sucursalEntrega, 
+		$sucursalRecibe, 
+		$precio_final, 
+		$tipoCodigo, 
+		$unidadMedida, 
+		$codigoCabys, 
+		$impuesto,
+		$codigoDescuento
+		){
 			$datos = array(
 				"Codigo"=> $codigo,
 				"Descripcion" => $descripcion,
 				"Cantidad" => $cantidad,
 				"Descuento" => $descuento,
+				"Codigo_Descuento" => $codigoDescuento,
 				"Precio_Unidad" => $precio_unidad,
 				"Precio_Total" => $precio_total,
 				"Precio_Final" => $precio_final,
@@ -2163,9 +2192,9 @@ Class contabilidad extends CI_Model
             $fechaEmision = date(DATE_ATOM, $fechaFacturaActual);
             $condicionVenta = $this->getCondicionVenta($tipoPago);
             $plazoCredito = "0";
-            $medioPago = $this->getMedioPago($tipoPago);
+            $medioPago = array(array("tipo" => '01', "total" => $this->fn($costos['total_comprobante']), "otros" => ''));
             $codigoMoneda = $nota->Moneda == "colones" ? "CRC" : "USD";
-            $tipoCambio = $nota->Tipo_Cambio;
+            $tipoCambio = $nota->Moneda == "colones" ? "1" : $nota->Tipo_Cambio;
             $otros = "";
 
             // Agregamos la info nueva
@@ -2180,7 +2209,7 @@ Class contabilidad extends CI_Model
                 "EmisorProvincia" => $emisor->Provincia,
                 "EmisorCanton" => str_pad($emisor->Canton,2,"0", STR_PAD_LEFT),
                 "EmisorDistrito" => str_pad($emisor->Distrito,2,"0", STR_PAD_LEFT),
-                "EmisorBarrio" => str_pad($emisor->Barrio,2,"0", STR_PAD_LEFT),
+                "EmisorBarrio" => str_pad($emisor->NombreBarrio,5,"_", STR_PAD_RIGHT),
                 "EmisorOtrasSennas" => $emisor->Sucursal_Direccion,
                 "EmisorCodigoPaisTelefono" => $emisor->Codigo_Pais_Telefono,
                 "EmisorTelefono" => str_replace("-", "", $emisor->Sucursal_Telefono),
@@ -2189,7 +2218,8 @@ Class contabilidad extends CI_Model
                 "EmisorEmail" => $emisor->Sucursal_Email,
                 "CondicionVenta" => $condicionVenta,
                 "PlazoCredito" => $plazoCredito,
-                "MedioPago" => $medioPago,
+                "MedioPago" => '',
+				"MedioPagoObject" => json_encode($medioPago),
                 "CodigoMoneda" => $codigoMoneda,
                 "TipoCambio" => $tipoCambio,
                 "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
@@ -2205,6 +2235,7 @@ Class contabilidad extends CI_Model
                 "TotalDescuentos" => $this->fn($costos['total_descuentos']),
                 "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
                 "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+				"DesgloseTotalImpuestosObject" => json_encode($costos['desglose_impuestos']),
                 "TotalIVADevuelto" => $this->fn($costos['total_iva_devuelto']),
                 "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
                 "TotalComprobante" => $this->fn($costos['total_comprobante']),
@@ -2231,12 +2262,13 @@ Class contabilidad extends CI_Model
                 $data["ReceptorProvincia"] = $receptor->Provincia;
                 $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
                 $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
-                $data["ReceptorBarrio"] = str_pad($receptor->Barrio,2,"0", STR_PAD_LEFT);
+                $data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
                 $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
                 $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
                 $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
                 $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
                 $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+				$data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
             }
 
             $this->db->insert("tb_57_nota_credito_electronica", $data);
@@ -2249,6 +2281,7 @@ Class contabilidad extends CI_Model
                     "PrecioUnitario" => $art["precioUnitario"],
                     "MontoTotal" => $art["montoTotal"],
                     "MontoDescuento" => $art["montoDescuento"],
+					"TipoDescuento" => $art["codigoDescuento"], 
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
                     "BaseImponible" => $art["base_imponible"],
                     "Subtotal" => $art["subtotal"],
@@ -2326,6 +2359,13 @@ Class contabilidad extends CI_Model
                 $query = $this->db->get();
                 if($query->num_rows()>0){
                     $articulos = $query->result();
+
+					$desgloseImpuestos = json_decode($nota->DesgloseTotalImpuestosObject, true);
+
+                    foreach($desgloseImpuestos as $key => $desgloseImpuesto){
+                        $desgloseImpuestos[$key]["monto"] = $this->fn($desgloseImpuesto["monto"]);
+                    }
+
                     $xmlRes = $api->crearXMLNotaCredito($nota->Clave,
                                                     $nota->ConsecutivoHacienda,
                                                     $nota->FechaEmision,
@@ -2357,10 +2397,11 @@ Class contabilidad extends CI_Model
                                                     $nota->ReceptorCodigoPaisFax,
                                                     $nota->ReceptorFax,
                                                     $nota->ReceptorEmail,
+													$nota->ReceptorCodigoActividad,
 
                                                     $nota->CondicionVenta,
                                                     $nota->PlazoCredito,
-                                                    $nota->MedioPago,
+                                                    json_decode($nota->MedioPagoObject),
                                                     $nota->CodigoMoneda,
                                                     $nota->TipoCambio,
 
@@ -2374,6 +2415,7 @@ Class contabilidad extends CI_Model
                                                     $nota->TotalDescuentos,
                                                     $nota->TotalVentasNeta,
                                                     $nota->TotalImpuestos,
+													$desgloseImpuestos,
                                                     $nota->TotalComprobante,
 
                                                     $nota->Otros,
@@ -2441,57 +2483,7 @@ Class contabilidad extends CI_Model
         function generarNotaCreditoElectronica($consecutivo, $sucursal, $codigo, $razon, $numero, $tipoDoc, $fechaEmision){
             $responseFetch = $this->getDatosParaNotaCreditoElectronica($consecutivo, $sucursal);
             if($responseFetch["status"]){
-//                    $r["notaCreditoHead"] = $notaCreditoHead;
-//                    $r["facturaElectronica"] = $facturaElectronicaHead;
-//                    $r["costos"] = $costos;
-//                    $r["articulos"] = $artFinales;
-//                    $r["cliente"] = $cliente;
-//                    $r["empresa"] = $sucursal;
-                $responseCreacion = $this->crearNotaCreditoElectronica($responseFetch["empresa"], $responseFetch["cliente"], $responseFetch["notaCreditoHead"], $responseFetch["costos"], $responseFetch["articulos"], $codigo, $razon, $numero, $tipoDoc, $fechaEmision);
-
-                /*if($responseCreacion["status"]){
-                    if($responseCreacion["data"]["situacion"] == "normal"){
-                        if($resEnvio = $this->enviarNotaCreditoElectronicaAHacienda($consecutivo, $sucursal)){
-                            if($resEnvio["estado_hacienda"] == "rechazado"){
-                                log_message('error', "Nota credito fue RECHAZADA por Hacienda. | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                                $responseFetch["status"] = false;
-                                $responseFetch['error'] = 903;
-                                $responseFetch["error_msg"] = "Nota credito fue RECHAZADA por Hacienda, favor marcarla para su revisión";
-                            }else if($resEnvio["estado_hacienda"] == "aceptado"){
-                                $responseFetch["message"] = "Nota credito fue ACEPTADA por Hacienda";
-                                $responseFetch["status"] = true;
-                                $responseFetch["clave"] = $responseCreacion["data"]["clave"];
-                                log_message('error', "Nota credito fue ACEPTADA por Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            }else{
-                                $responseFetch["status"] = false;
-                                $responseFetch['error'] = 903;
-                                $responseFetch["error_msg"] = "Nota credito se envió a Hacienda pero no fue rechazada, ni aceptada";
-                                log_message('error', "Hacienda envio otro estado {$resEnvio["estado_hacienda"]} | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            }
-                        }else{
-                            log_message('error', "No se pudo enviar la nota credito a Hacienda, debemos marcarla como contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            // Realizar documento de contingencia, porque al enviar a Hacienda algo fallo
-                            // Pasos a seguir
-                            //    1) Cambiar estado a contingencia
-                            //    2) Regenerar y actualizar clave
-                            //    3) Regenerar y actualizar XML
-                            //    5) Regenerar y actualizar XML Firmado
-                            //$this->factura->regenerarFacturaElectronicaPorContingencia($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
-
-                            $responseFetch["status"] = false;
-                            $responseFetch['error'] = 902;
-                            $responseFetch["error_msg"] = "Nota credito no se pudo enviar a Hacienda por fallo no reconocido";
-                        }
-                    }else{
-                        $responseFetch["status"] = false;
-                        $responseFetch['error'] = 901;
-                        $responseFetch["error_msg"] = "Nota credito no se pudo enviar a Hacienda por falta de internet";
-                    }
-                }else{
-                    $responseFetch["status"] = false;
-                    $responseFetch['error'] = $responseCreacion["error"];
-                    $responseFetch["error_msg"] = $responseCreacion["error_msg"];
-                }*/
+                $this->crearNotaCreditoElectronica($responseFetch["empresa"], $responseFetch["cliente"], $responseFetch["notaCreditoHead"], $responseFetch["costos"], $responseFetch["articulos"], $codigo, $razon, $numero, $tipoDoc, $fechaEmision);
             }
             return $responseFetch;
         }
@@ -2529,7 +2521,8 @@ Class contabilidad extends CI_Model
                                 "total_impuestos" => 0,
                                 "total_iva_devuelto" => 0,
                                 "total_otros_cargos" => 0,
-                                "total_comprobante" => 0
+                                "total_comprobante" => 0,
+								"desglose_impuestos" => array()
                             );
                             $artFinales = array();
                             foreach($notaCreditoArticulos as $a){
@@ -2553,6 +2546,8 @@ Class contabilidad extends CI_Model
 
                                 $impuesto = $linea["impuesto"][0]["monto"];
                                 $costos["total_impuestos"] += $impuesto;
+
+								$this->agregarImpuestoADesgloseDeImpuestos($costos["desglose_impuestos"], $linea["impuesto"][0]);
                             }
                             $costos["total_exonerado"] =  $costos["total_serv_exonerados"] + $costos["total_merc_exonerada"];
                             $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];

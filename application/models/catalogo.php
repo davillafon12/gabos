@@ -61,6 +61,20 @@ Class catalogo extends CI_Model
         }
     }
 
+    public function getTipoDescuentos(){
+        $this->db->from("catalogo_tipo_descuento");
+        $query = $this -> db -> get();
+
+        if($query -> num_rows() != 0)
+        {
+          return $query->result();
+        }
+        else
+        {
+          return array();
+        }
+    }
+
     public function getTipoTarifas(){
         $this->db->from("catalogo_tipo_tarifa");
         $query = $this -> db -> get();
@@ -87,6 +101,22 @@ Class catalogo extends CI_Model
         else
         {
           return false;
+        }
+    }
+
+    public function getTipoDescuentoByCodigo($codigo){
+        $this->db->from("catalogo_tipo_descuento");
+        $this->db->where("Codigo", $codigo);
+        
+        $query = $this -> db -> get();
+
+        if($query -> num_rows() != 0)
+        {
+          return $query->result()[0];
+        }
+        else
+        {
+          return array();
         }
     }
 

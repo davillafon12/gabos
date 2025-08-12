@@ -200,7 +200,7 @@ function imprimirFactura(data){
 	if(factura.clave !== false){
 		qz.append(" Este comprobante provisional no puede ser utilizado para respaldo de creditos fiscales ni como gastos deducibles\r\n");
         qz.append(" \r\n");
-		qz.append(" Version 4.3\r\n");
+		qz.append(" Version 4.4\r\n");
 		qz.append(empresa.leyenda+"\r\n");
         qz.append("\r\n Comprobante Provisional \r\n");
 	}else{
@@ -455,7 +455,7 @@ function imprimirNotaCredito(data){
 	qz.append(" \r\n");
 	if(nota.clave !== false){
 		console.log("Pie de NCE");
-		qz.append(" Version 4.3\r\n");
+		qz.append(" Version 4.4\r\n");
 		qz.append(empresa.leyenda+"\r\n");
 	}
 	//Damos espacio al final

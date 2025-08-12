@@ -241,7 +241,8 @@ function setProductosFactura(productos){
 		cell3.innerHTML = "<input id='cantidad_articulo_"+(i+1)+"' class='cantidad_articulo' autocomplete='off' name='cantidad_articulo' type='number' min='1' max='"+bodegaINT+"' onchange='cambiarCantidad(this.id, event, this.value);' onkeyup='cambiarCantidad(this.id, event, this.value);' value='"+productos[i].cantidad+"' disabled>"
 				+"<input id='cantidad_articulo_anterior_"+(i+1)+"' type='hidden' value='"+productos[i].cantidad+"'>";
 		cell4.innerHTML = "<div class='articulo_specs' id='bodega_articulo_"+(i+1)+"'>"+bodegaINT+"</div>";
-		cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+(i+1)+"' ondblclick='changeDiscount("+(i+1)+")'>"+productos[i].descuento+"</div>";
+		cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+(i+1)+"' ondblclick='changeDiscount("+(i+1)+")'>"+productos[i].descuento+"</div>"
+						+ "<input type='hidden' id='codigo_descuento_articulo_"+(i+1)+"' value='"+productos[i].tipoDescuento+"'/>";
 		
 		precioUI = parseFloat(precio);
 		precioUI = precioUI.format(decimales, 3, '.', ',');
@@ -330,7 +331,7 @@ function numTransaccion(tipo)
 	mxtContado = $("#monto_efectivo_mixto");
 	
 	
-	if(tipo.indexOf('contad') != -1)
+	if(tipo.indexOf('contad') != -1 || tipo.indexOf('sinpe') != -1 || tipo.indexOf('plataforma') != -1)
 	{
 		vend.html('');
 		inyectado.html('');

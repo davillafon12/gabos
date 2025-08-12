@@ -137,6 +137,8 @@ class CI_Model {
                 case 'deposito':
                 case 'cheque':
                 case 'mixto':
+                case 'sinpe_movil':
+                case 'plataforma_digital':
                     return "01";
                 case 'credito':
                     return "02";
@@ -145,7 +147,7 @@ class CI_Model {
             }
         }
 
-        function getMedioPago($tipoPago){
+        function getMedioPago($tipoPago, $montoTotalFactura, $montoPagadoConTarjetaEnMixto){
             /*
                 Corresponde al medio de pago empleado:
                 - 01 Efectivo
@@ -155,21 +157,30 @@ class CI_Model {
                 - 05 - Recaudado por terceros
                 - 99 Otros
              */
+            $totalFormateado = $this->fn($montoTotalFactura);
+            $totalEfectivoEnMixto = $montoTotalFactura - $montoPagadoConTarjetaEnMixto;
             switch ($tipoPago['tipo']) {
                 case 'contado':
-                    return "01";
+                    return array(array("tipo" => '01', "total" => $totalFormateado, "otros" => ''));
                 case 'tarjeta':
-                    return "02";
+                    return array(array("tipo" => '02', "total" => $totalFormateado, "otros" => ''));
                 case 'deposito':
-                    return "04";
+                    return array(array("tipo" => '04', "total" => $totalFormateado, "otros" => ''));
                 case 'cheque':
-                    return "03";
+                    return array(array("tipo" => '03', "total" => $totalFormateado, "otros" => ''));
                 case 'mixto':
-                    return "01,02";
+                    return array(
+                        array("tipo" => '01', "total" => $this->fn($totalEfectivoEnMixto), "otros" => ''),
+                        array("tipo" => '02', "total" => $this->fn($montoPagadoConTarjetaEnMixto), "otros" => '')
+                    );
                 case 'credito':
-                    return "99";
+                    return array(array("tipo" => '99', "otros" => 'Credito', "total" => $totalFormateado));
                 case 'apartado':
-                    return "99";
+                    return array(array("tipo" => '99', "otros" => 'Apartado', "total" => $totalFormateado));
+                case 'sinpe_movil':
+                    return array(array("tipo" => '06', "total" => $totalFormateado, "otros" => ''));
+                case 'plataforma_digital':
+                    return array(array("tipo" => '06', "total" => $totalFormateado, "otros" => ''));
             }
         }
 
@@ -207,6 +218,7 @@ class CI_Model {
                     "precioUnitario" => $this->fn($art->PrecioUnitario),
                     "montoTotal" => $this->fn($art->MontoTotal),
                     "montoDescuento" => $this->fn($art->MontoDescuento),
+                    "tipoDescuento" => $art->TipoDescuento,
                     "naturalezaDescuento" => $art->NaturalezaDescuento,
                     "subtotal" => $this->fn($art->Subtotal),
                     "impuesto" =>  $impuesto,
@@ -264,10 +276,12 @@ class CI_Model {
             if(floatval($a->Articulo_Factura_Descuento) > 0){
                 $descuentoPrecioSinIva = $this->fn($precioTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100));
                 $linea["montoDescuento"] = $descuentoPrecioSinIva;
+                $linea["tipoDescuento"] = $a->TipoDescuento;
                 $naturalezaDescuento = "Otorgado a cliente por empresa";
                 $linea["naturalezaDescuento"] = $naturalezaDescuento;
             }else{
                 $linea["montoDescuento"] = 0;
+                $linea["tipoDescuento"] = '07'; // Descuento genérico
                 $linea["naturalezaDescuento"] = "Ninguna";
             }
 
@@ -366,9 +380,11 @@ class CI_Model {
                 $linea["montoDescuento"] = $descuentoPrecioSinIva;
                 $naturalezaDescuento = "Otorgado a cliente por empresa";
                 $linea["naturalezaDescuento"] = $naturalezaDescuento;
+                $linea["codigoDescuento"] = $a->TipoDescuento; 
             }else{
                 $linea["montoDescuento"] = 0;
                 $linea["naturalezaDescuento"] = "Ninguna";
+                $linea["codigoDescuento"] = CODIGO_DESCUENTO_DEFECTO;
             }
 
              // SUBTOTAL
@@ -524,6 +540,14 @@ class CI_Model {
             }
 
             chmod($finalPath.$name, 0770);
+        }
+
+        public function agregarImpuestoADesgloseDeImpuestos(&$desgloseImpuestos, $impuestoArticulo){
+            $key = $impuestoArticulo["codigo"]."_".$impuestoArticulo["codigoTarifa"];
+            if(!isset($desgloseImpuestos[$key])){
+                $desgloseImpuestos[$key] = array("codigo" => $impuestoArticulo["codigo"], "tarifaCodigo" => $impuestoArticulo["codigoTarifa"], "monto" => 0);
+            }
+            $desgloseImpuestos[$key]["monto"] += $impuestoArticulo["monto"];
         }
 
         public function getFinalPath($type, $date = null){

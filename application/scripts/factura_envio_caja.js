@@ -95,6 +95,7 @@ function parseRowToJSON(numRow){
 	else{
 		cantidad = document.getElementById("cantidad_articulo_"+numRow).value;
 		descuento = document.getElementById("descuento_articulo_"+numRow).innerHTML;
+		codigoDescuento = $("#codigo_descuento_articulo_"+numRow).val();
 	}
 	
 	precio_unitario = ''; //Por defecto es vacio
@@ -109,7 +110,7 @@ function parseRowToJSON(numRow){
 	exento = document.getElementById("producto_exento_"+numRow).value;
 	retencion = $("#producto_retencion_"+numRow).val();
 	
-	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento, re:retencion};
+	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, cds:codigoDescuento, pu:precio_unitario, ex:exento, re:retencion};
 	
 	return JSONRow;
 	

@@ -83,6 +83,7 @@ class registrar extends CI_Controller {
         $email = $this->input->post('email');
         $observaciones = $this->input->post('observaciones');
         $tipo_pago_cliente = $this->input->post('tipo_pago_cliente');
+        $codigoActividad = $this->input->post('codigo_actividad');
         $sucursalLiga = $this->input->post('sucursal');
 
         $codptel = $this->input->post('codigo_telefono');
@@ -93,6 +94,7 @@ class registrar extends CI_Controller {
         $canton = $this->input->post('canton');
         $distr = $this->input->post('distrito');
         $barrio = $this->input->post('barrio');
+        
 
         //Si es sucursal
         $this->isSucursal = isset($_POST['issucursal']) && $_POST['issucursal']  ? "1" : "0";
@@ -142,7 +144,8 @@ class registrar extends CI_Controller {
                                         $distr,
                                         $barrio,
                                         $noReceptor,
-                                        $sucursalLiga)){ //Si se ingreso bien a la BD
+                                        $sucursalLiga,
+                                        $codigoActividad)){ //Si se ingreso bien a la BD
                 //Titulo de la pagina
                 $data['Titulo_Pagina'] = "Transacción Exitosa";
                 $this->user->guardar_Bitacora_Cliente($cedula,

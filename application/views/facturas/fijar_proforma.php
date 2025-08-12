@@ -431,6 +431,15 @@ PARA:
 			<div class="inputs_popup">
 				<p class="contact"><label for="pop_descuento_cambio">Ingrese el nuevo descuento:</label></p>
 				<input id="pop_descuento_cambio" class="pop_descuento_cambio" autocomplete="off" name="pop_descuento_cambio" type="number" min='0' max='100' onkeyup="validateNpass(this.id, 'boton_aceptar_popup_desc', event)" value='0'>
+				<select id="pop_tipo_descuento_cambio" class="input_dos" style="width: 200px;">
+					<?php
+						foreach($tiposDeDescuento as $td){
+							?>
+								<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+							<?php
+						}
+					?>
+				</select>
 			</div>
 			<br>
 			<div class="buttoms_popup">
@@ -451,6 +460,15 @@ PARA:
 				<input id="pop_inventario" class="pop_inventario" autocomplete="off" name="pop_inventario" type="number" value="1000" disabled>
 				<p class="contact"><label for="pop_descuento">Descuento:</label></p>
 				<input id="pop_descuento" class="pop_descuento" autocomplete="off" name="pop_descuento" type="text" value="0" onkeyup="validateNpass(this.id, 'pop_costo_unidad', event)">
+				<select id="pop_tipo_descuento_generico" style="width: 200px;">
+					<?php
+						foreach($tiposDeDescuento as $td){
+							?>
+								<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+							<?php
+						}
+					?>
+				</select>
 				<p class="contact"><label for="pop_costo_unidad">Precio por unidad:</label></p>
 				<input id="pop_costo_unidad" class="pop_costo_unidad" autocomplete="off" name="pop_costo_unidad" type="text" value="0" onkeyup="validateNpass(this.id, 'boton_aceptar_popup', event)">
 			</div>

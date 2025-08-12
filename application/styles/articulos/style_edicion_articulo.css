@@ -65,35 +65,27 @@ table{
 }
 
 .field_precios{
-	width: 650px;
   display: inline;
-  /* position: relative; */
-  /* top: -58px; */
-  /* margin-bottom: -100px; */
 }
 
+
 .field_foto{
-	  width: 77px;
-	  height: 77px;
-	  /* display: inline; */
-	  padding: 3px;
-	  text-align: center;
-	  /* float: right; */
-	  position: relative;
-	  top: -87px;
-	  left: 680px;
-	  margin-bottom: -170px;
+	width: 77px;
+    height: 183px;
+    position: relative;
+    top: -203px;
+    left: 540px;
+    margin-bottom: -290px;
 }
 
 .field_barras{
-	  width: 200px;
-  height: 77px;
-  /* display: inline; */
-  padding: 3px;
-  text-align: center;
-  position: relative;
-  top: -4px;
-  left: 770px;
+	width: 200px;
+    height: 77px;
+    padding: 3px;
+    text-align: center;
+    position: relative;
+    top: -115px;
+    left: 770px;
 }
 
 .divButton{

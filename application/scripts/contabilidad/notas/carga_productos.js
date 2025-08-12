@@ -46,7 +46,11 @@ function cargarProductos(){
 function setProductosOnTable(productos){	
 	cuerpo = '';
 	for(i=0; i<productos.length; i++){
-		cuerpo += "<tr class='bordes_tabla' onclick='marcarArticulo("+i+")' id='producto_row_"+i+"'><td class='celdas_tabla'><p class='contact' id='codigo_producto_"+i+"'>"+productos[i].codigo+"</p></td><td class='celdas_tabla'><p class='contact'>"+productos[i].descripcion+"</p></td><td class='celdas_tabla'><p class='contact' id='p_cantidad_original_"+i+"'>"+productos[i].cantidad+"</p></td></tr>"; 
+		cuerpo += "<tr class='bordes_tabla' onclick='marcarArticulo("+i+")' id='producto_row_"+i+"'>"
+		cuerpo += "<td class='celdas_tabla'><input type='hidden' id='id_producto_"+i+"' value='"+productos[i].id+"'><p class='contact' id='codigo_producto_"+i+"'>"+productos[i].codigo+"</p></td>"
+		cuerpo += "<td class='celdas_tabla'><p class='contact'>"+productos[i].descripcion+"</p></td>"
+		cuerpo += "<td class='celdas_tabla'><p class='contact' id='p_cantidad_original_"+i+"'>"+productos[i].cantidad+"</p></td>"
+		cuerpo += "</tr>"; 
 	}
 	$("#tbody_productos").html(cuerpo);
 }
