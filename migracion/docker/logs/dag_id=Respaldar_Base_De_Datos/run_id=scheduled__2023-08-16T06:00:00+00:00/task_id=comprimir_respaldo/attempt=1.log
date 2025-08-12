@@ -1,0 +1,21 @@
+[2023-08-17T14:57:37.689-0600] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: Respaldar_Base_De_Datos.comprimir_respaldo scheduled__2023-08-16T06:00:00+00:00 [queued]>
+[2023-08-17T14:57:37.704-0600] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: Respaldar_Base_De_Datos.comprimir_respaldo scheduled__2023-08-16T06:00:00+00:00 [queued]>
+[2023-08-17T14:57:37.704-0600] {taskinstance.py:1308} INFO - Starting attempt 1 of 2
+[2023-08-17T14:57:37.730-0600] {taskinstance.py:1327} INFO - Executing <Task(SSHOperator): comprimir_respaldo> on 2023-08-16 06:00:00+00:00
+[2023-08-17T14:57:37.736-0600] {standard_task_runner.py:57} INFO - Started process 1314 to run task
+[2023-08-17T14:57:37.740-0600] {standard_task_runner.py:84} INFO - Running: ['airflow', 'tasks', 'run', 'Respaldar_Base_De_Datos', 'comprimir_respaldo', 'scheduled__2023-08-16T06:00:00+00:00', '--job-id', '9', '--raw', '--subdir', 'DAGS_FOLDER/crear_respaldo_base_de_datos.py', '--cfg-path', '/tmp/tmpxqwb9nr3']
+[2023-08-17T14:57:37.742-0600] {standard_task_runner.py:85} INFO - Job 9: Subtask comprimir_respaldo
+[2023-08-17T14:57:37.808-0600] {task_command.py:410} INFO - Running <TaskInstance: Respaldar_Base_De_Datos.comprimir_respaldo scheduled__2023-08-16T06:00:00+00:00 [running]> on host f001d94713ae
+[2023-08-17T14:57:37.934-0600] {taskinstance.py:1547} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='Respaldar_Base_De_Datos' AIRFLOW_CTX_TASK_ID='comprimir_respaldo' AIRFLOW_CTX_EXECUTION_DATE='2023-08-16T06:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2023-08-16T06:00:00+00:00'
+[2023-08-17T14:57:37.935-0600] {ssh.py:135} INFO - Creating ssh_client
+[2023-08-17T14:57:37.988-0600] {ssh.py:112} INFO - ssh_hook is not provided or invalid. Trying ssh_conn_id to create SSHHook.
+[2023-08-17T14:57:37.999-0600] {base.py:73} INFO - Using connection ID 'gabo_ssh' for task execution.
+[2023-08-17T14:57:38.000-0600] {ssh.py:299} WARNING - No Host Key Verification. This won't protect against Man-In-The-Middle attacks
+[2023-08-17T14:57:38.037-0600] {transport.py:1873} INFO - Connected (version 2.0, client OpenSSH_9.2p1)
+[2023-08-17T14:57:38.193-0600] {transport.py:1873} INFO - Authentication (password) successful!
+[2023-08-17T14:57:38.194-0600] {ssh.py:476} INFO - Running command: tar -czvf /tmp/2023-08-16_database_backup_file.tar.gz /tmp/2023-08-16_database_backup_file.sql
+[2023-08-17T14:57:38.331-0600] {ssh.py:527} WARNING - tar: Eliminando la `/' inicial de los nombres
+[2023-08-17T14:57:38.332-0600] {ssh.py:522} INFO - /tmp/2023-08-16_database_backup_file.sql
+[2023-08-17T15:00:54.859-0600] {taskinstance.py:1350} INFO - Marking task as SUCCESS. dag_id=Respaldar_Base_De_Datos, task_id=comprimir_respaldo, execution_date=20230816T060000, start_date=20230817T205737, end_date=20230817T210054
+[2023-08-17T15:00:54.917-0600] {local_task_job_runner.py:225} INFO - Task exited with return code 0
+[2023-08-17T15:00:54.963-0600] {taskinstance.py:2651} INFO - 2 downstream tasks scheduled from follow-on schedule check

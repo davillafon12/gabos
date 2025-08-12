@@ -1,0 +1,14 @@
+[2023-08-17T14:51:00.211-0600] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: Enviar_Comprobantes_Hacienda.Enviar_Comprobantes_Hacienda scheduled__2023-08-17T20:40:00+00:00 [queued]>
+[2023-08-17T14:51:00.226-0600] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: Enviar_Comprobantes_Hacienda.Enviar_Comprobantes_Hacienda scheduled__2023-08-17T20:40:00+00:00 [queued]>
+[2023-08-17T14:51:00.226-0600] {taskinstance.py:1308} INFO - Starting attempt 1 of 2
+[2023-08-17T14:51:00.252-0600] {taskinstance.py:1327} INFO - Executing <Task(SimpleHttpOperator): Enviar_Comprobantes_Hacienda> on 2023-08-17 20:40:00+00:00
+[2023-08-17T14:51:00.258-0600] {standard_task_runner.py:57} INFO - Started process 880 to run task
+[2023-08-17T14:51:00.263-0600] {standard_task_runner.py:84} INFO - Running: ['airflow', 'tasks', 'run', 'Enviar_Comprobantes_Hacienda', 'Enviar_Comprobantes_Hacienda', 'scheduled__2023-08-17T20:40:00+00:00', '--job-id', '3', '--raw', '--subdir', 'DAGS_FOLDER/enviar_comprobantes_hacienda.py', '--cfg-path', '/tmp/tmp2o1zm23g']
+[2023-08-17T14:51:00.266-0600] {standard_task_runner.py:85} INFO - Job 3: Subtask Enviar_Comprobantes_Hacienda
+[2023-08-17T14:51:00.334-0600] {task_command.py:410} INFO - Running <TaskInstance: Enviar_Comprobantes_Hacienda.Enviar_Comprobantes_Hacienda scheduled__2023-08-17T20:40:00+00:00 [running]> on host f001d94713ae
+[2023-08-17T14:51:00.476-0600] {taskinstance.py:1547} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='Enviar_Comprobantes_Hacienda' AIRFLOW_CTX_TASK_ID='Enviar_Comprobantes_Hacienda' AIRFLOW_CTX_EXECUTION_DATE='2023-08-17T20:40:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2023-08-17T20:40:00+00:00'
+[2023-08-17T14:51:00.477-0600] {http.py:123} INFO - Calling HTTP method
+[2023-08-17T14:51:00.488-0600] {base.py:73} INFO - Using connection ID 'gabo_app_endpoint' for task execution.
+[2023-08-17T14:51:11.117-0600] {taskinstance.py:1350} INFO - Marking task as SUCCESS. dag_id=Enviar_Comprobantes_Hacienda, task_id=Enviar_Comprobantes_Hacienda, execution_date=20230817T204000, start_date=20230817T205100, end_date=20230817T205111
+[2023-08-17T14:51:11.163-0600] {local_task_job_runner.py:225} INFO - Task exited with return code 0
+[2023-08-17T14:51:11.186-0600] {taskinstance.py:2651} INFO - 0 downstream tasks scheduled from follow-on schedule check

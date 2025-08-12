@@ -1,0 +1,857 @@
+[2023-08-17T14:39:48.788-0600] {processor.py:157} INFO - Started process (PID=173) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:39:48.789-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:39:48.790-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:48.790-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:39:48.840-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:39:48.838-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:39:48.841-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:39:48.861-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.078 seconds
+[2023-08-17T14:40:19.065-0600] {processor.py:157} INFO - Started process (PID=199) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:40:19.066-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:40:19.067-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:19.067-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:40:19.086-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:19.084-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:40:19.087-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:40:19.105-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.045 seconds
+[2023-08-17T14:40:49.480-0600] {processor.py:157} INFO - Started process (PID=231) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:40:49.481-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:40:49.482-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:49.482-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:40:49.501-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:40:49.500-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:40:49.502-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:40:49.526-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.057 seconds
+[2023-08-17T14:41:19.919-0600] {processor.py:157} INFO - Started process (PID=263) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:41:19.920-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:41:19.921-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:19.921-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:41:19.942-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:19.941-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:41:19.943-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:41:19.962-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.049 seconds
+[2023-08-17T14:41:50.354-0600] {processor.py:157} INFO - Started process (PID=295) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:41:50.355-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:41:50.356-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:50.355-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:41:50.375-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:41:50.373-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:41:50.375-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:41:50.393-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.045 seconds
+[2023-08-17T14:42:20.758-0600] {processor.py:157} INFO - Started process (PID=327) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:42:20.759-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:42:20.761-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:20.761-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:42:20.782-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:20.780-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:42:20.782-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:42:20.801-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.051 seconds
+[2023-08-17T14:42:50.962-0600] {processor.py:157} INFO - Started process (PID=359) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:42:50.963-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:42:50.964-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:50.964-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:42:50.987-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:42:50.985-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:42:50.987-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:42:51.004-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.048 seconds
+[2023-08-17T14:43:21.494-0600] {processor.py:157} INFO - Started process (PID=391) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:43:21.495-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:43:21.496-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:21.496-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:43:21.517-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:21.515-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:43:21.518-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:43:21.537-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.049 seconds
+[2023-08-17T14:43:52.020-0600] {processor.py:157} INFO - Started process (PID=424) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:43:52.021-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:43:52.022-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:52.022-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:43:52.042-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:43:52.040-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:43:52.043-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:43:52.064-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.048 seconds
+[2023-08-17T14:44:22.508-0600] {processor.py:157} INFO - Started process (PID=456) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:44:22.509-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:44:22.510-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:22.510-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:44:22.680-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:22.679-0600] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/crear_respaldo_base_de_datos.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/crear_respaldo_base_de_datos.py", line 8, in <module>
+    backup_directory = Variable.get("ruta_respaldos_bd")
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/variable.py", line 142, in get
+    raise KeyError(f"Variable {key} does not exist")
+KeyError: 'Variable ruta_respaldos_bd does not exist'
+[2023-08-17T14:44:22.681-0600] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:44:22.697-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.193 seconds
+[2023-08-17T14:44:53.242-0600] {processor.py:157} INFO - Started process (PID=488) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:44:53.243-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:44:53.244-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.243-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:44:53.280-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:44:53.471-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.471-0600] {manager.py:504} INFO - Created Permission View: can edit on DAG:Respaldar_Base_De_Datos
+[2023-08-17T14:44:53.485-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.485-0600] {manager.py:504} INFO - Created Permission View: can read on DAG:Respaldar_Base_De_Datos
+[2023-08-17T14:44:53.495-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.495-0600] {manager.py:504} INFO - Created Permission View: can delete on DAG:Respaldar_Base_De_Datos
+[2023-08-17T14:44:53.495-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.495-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:44:53.519-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.519-0600] {dag.py:2747} INFO - Creating ORM DAG for Respaldar_Base_De_Datos
+[2023-08-17T14:44:53.544-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:44:53.544-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:44:53.578-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.341 seconds
+[2023-08-17T14:45:23.944-0600] {processor.py:157} INFO - Started process (PID=520) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:45:23.945-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:45:23.946-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:23.946-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:45:23.983-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:45:24.012-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:24.012-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:45:24.062-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:24.061-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:45:24.094-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T14:45:54.419-0600] {processor.py:157} INFO - Started process (PID=552) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:45:54.419-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:45:54.420-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:54.420-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:45:54.458-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:45:54.488-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:54.487-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:45:54.533-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:45:54.533-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:45:54.564-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.150 seconds
+[2023-08-17T14:46:24.972-0600] {processor.py:157} INFO - Started process (PID=584) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:46:24.988-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:46:24.989-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:24.989-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:46:25.149-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:46:25.215-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:25.212-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:46:25.271-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:25.271-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:46:25.328-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.360 seconds
+[2023-08-17T14:46:55.658-0600] {processor.py:157} INFO - Started process (PID=616) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:46:55.659-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:46:55.660-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:55.659-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:46:55.781-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:46:55.846-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:55.845-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:46:55.946-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:46:55.946-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:46:56.010-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.357 seconds
+[2023-08-17T14:47:26.291-0600] {processor.py:157} INFO - Started process (PID=648) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:47:26.292-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:47:26.293-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:26.293-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:47:26.333-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:47:26.363-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:26.363-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:47:26.411-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:26.411-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:47:26.446-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.161 seconds
+[2023-08-17T14:47:56.842-0600] {processor.py:157} INFO - Started process (PID=680) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:47:56.843-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:47:56.844-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:56.844-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:47:56.884-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:47:56.914-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:56.913-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:47:56.965-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:47:56.965-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:47:56.998-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.161 seconds
+[2023-08-17T14:48:27.359-0600] {processor.py:157} INFO - Started process (PID=712) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:48:27.360-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:48:27.361-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:27.361-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:48:27.399-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:48:27.433-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:27.433-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:48:27.483-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:27.483-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:48:27.515-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.160 seconds
+[2023-08-17T14:48:57.901-0600] {processor.py:157} INFO - Started process (PID=743) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:48:57.902-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:48:57.903-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:57.903-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:48:57.942-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:48:57.971-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:57.971-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:48:58.017-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:48:58.017-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:48:58.048-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.152 seconds
+[2023-08-17T14:49:28.420-0600] {processor.py:157} INFO - Started process (PID=775) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:49:28.421-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:49:28.422-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:28.421-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:49:28.459-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:49:28.488-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:28.488-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:49:28.534-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:28.534-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:49:28.565-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.150 seconds
+[2023-08-17T14:49:58.967-0600] {processor.py:157} INFO - Started process (PID=807) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:49:58.969-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:49:58.970-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:58.969-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:49:59.008-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:49:59.037-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:59.037-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:49:59.085-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:49:59.085-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:49:59.118-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.164 seconds
+[2023-08-17T14:50:29.486-0600] {processor.py:157} INFO - Started process (PID=839) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:50:29.487-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:50:29.488-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:29.488-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:50:29.526-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:50:29.555-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:29.554-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:50:29.602-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:50:29.601-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:50:29.632-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.151 seconds
+[2023-08-17T14:51:00.025-0600] {processor.py:157} INFO - Started process (PID=872) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:51:00.026-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:51:00.028-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:00.027-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:51:00.075-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:51:00.104-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:00.104-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:51:00.160-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:00.160-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:51:00.192-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.173 seconds
+[2023-08-17T14:51:30.564-0600] {processor.py:157} INFO - Started process (PID=906) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:51:30.565-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:51:30.566-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:30.566-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:51:30.611-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:51:30.643-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:30.643-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:51:30.701-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:51:30.700-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:51:30.735-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.176 seconds
+[2023-08-17T14:52:01.177-0600] {processor.py:157} INFO - Started process (PID=939) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:52:01.178-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:52:01.179-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:01.179-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:52:01.221-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:52:01.250-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:01.250-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:52:01.296-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:01.296-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:52:01.326-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.155 seconds
+[2023-08-17T14:52:31.708-0600] {processor.py:157} INFO - Started process (PID=970) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:52:31.709-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:52:31.710-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:31.710-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:52:31.750-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:52:31.784-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:31.784-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:52:31.840-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:52:31.840-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:52:31.887-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.183 seconds
+[2023-08-17T14:53:02.258-0600] {processor.py:157} INFO - Started process (PID=1004) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:53:02.259-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:53:02.260-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:02.259-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:53:02.298-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:53:02.327-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:02.327-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:53:02.378-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:02.378-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:53:02.411-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.158 seconds
+[2023-08-17T14:53:33.004-0600] {processor.py:157} INFO - Started process (PID=1035) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:53:33.005-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:53:33.006-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:33.006-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:53:33.044-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:53:33.072-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:33.072-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:53:33.120-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:53:33.120-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:53:33.150-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.150 seconds
+[2023-08-17T14:54:03.513-0600] {processor.py:157} INFO - Started process (PID=1071) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:54:03.514-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:54:03.515-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:03.515-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:54:03.552-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:54:03.582-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:03.582-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:54:03.628-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:03.628-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-16T06:00:00+00:00, run_after=2023-08-17T06:00:00+00:00
+[2023-08-17T14:54:03.659-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.152 seconds
+[2023-08-17T14:54:34.148-0600] {processor.py:157} INFO - Started process (PID=1115) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:54:34.156-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:54:34.158-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:34.158-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:54:34.206-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:54:34.240-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:34.240-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:54:34.302-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:54:34.301-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:54:34.397-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.262 seconds
+[2023-08-17T14:55:04.935-0600] {processor.py:157} INFO - Started process (PID=1147) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:55:04.937-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:55:04.940-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:04.939-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:55:04.980-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:55:05.009-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:05.009-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:55:05.062-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:05.062-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:55:05.121-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.191 seconds
+[2023-08-17T14:55:35.545-0600] {processor.py:157} INFO - Started process (PID=1179) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:55:35.547-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:55:35.549-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:35.548-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:55:35.613-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:55:35.643-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:35.643-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:55:35.692-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:55:35.692-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:55:35.760-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.223 seconds
+[2023-08-17T14:56:06.094-0600] {processor.py:157} INFO - Started process (PID=1211) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:56:06.095-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:56:06.096-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:06.096-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:56:06.172-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:56:06.225-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:06.225-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:56:06.295-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:06.295-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:56:06.348-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.259 seconds
+[2023-08-17T14:56:36.817-0600] {processor.py:157} INFO - Started process (PID=1249) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:56:36.823-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:56:36.824-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:36.824-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:56:36.874-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:56:36.918-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:36.917-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:56:37.001-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:56:37.001-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:56:37.074-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.261 seconds
+[2023-08-17T14:57:07.512-0600] {processor.py:157} INFO - Started process (PID=1283) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:57:07.513-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:57:07.514-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:07.514-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:57:07.554-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:57:07.592-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:07.592-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:57:07.654-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:07.654-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:57:07.686-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.179 seconds
+[2023-08-17T14:57:38.032-0600] {processor.py:157} INFO - Started process (PID=1319) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:57:38.034-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:57:38.035-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:38.035-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:57:38.083-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:57:38.114-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:38.114-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:57:38.166-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:57:38.165-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:57:38.205-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.179 seconds
+[2023-08-17T14:58:08.635-0600] {processor.py:157} INFO - Started process (PID=1352) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:58:08.640-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:58:08.641-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:08.641-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:58:08.714-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:58:08.778-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:08.777-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:58:08.849-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:08.849-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:58:08.895-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.265 seconds
+[2023-08-17T14:58:39.266-0600] {processor.py:157} INFO - Started process (PID=1383) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:58:39.267-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:58:39.268-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:39.267-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:58:39.307-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:58:39.338-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:39.337-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:58:39.391-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:58:39.390-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:58:39.423-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.162 seconds
+[2023-08-17T14:59:09.863-0600] {processor.py:157} INFO - Started process (PID=1417) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:59:09.865-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:59:09.866-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:09.866-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:59:09.907-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:59:09.936-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:09.936-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:59:09.987-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:09.986-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:59:10.016-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.159 seconds
+[2023-08-17T14:59:40.413-0600] {processor.py:157} INFO - Started process (PID=1451) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:59:40.415-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T14:59:40.416-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:40.415-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:59:40.452-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T14:59:40.482-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:40.482-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T14:59:40.530-0600] {logging_mixin.py:149} INFO - [2023-08-17T14:59:40.530-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T14:59:40.559-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.150 seconds
+[2023-08-17T15:00:10.832-0600] {processor.py:157} INFO - Started process (PID=1483) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:00:10.833-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:00:10.834-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:10.834-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:00:10.875-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:00:10.905-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:10.905-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:00:10.958-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:10.957-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:00:10.992-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.165 seconds
+[2023-08-17T15:00:41.398-0600] {processor.py:157} INFO - Started process (PID=1515) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:00:41.400-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:00:41.402-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:41.401-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:00:41.442-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:00:41.475-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:41.475-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:00:41.531-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:00:41.531-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:00:41.569-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.176 seconds
+[2023-08-17T15:01:11.976-0600] {processor.py:157} INFO - Started process (PID=1555) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:01:11.978-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:01:11.979-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:11.978-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:01:12.017-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:01:12.046-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:12.046-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:01:12.094-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:12.094-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:01:12.129-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.157 seconds
+[2023-08-17T15:01:42.507-0600] {processor.py:157} INFO - Started process (PID=1587) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:01:42.508-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:01:42.509-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:42.509-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:01:42.547-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:01:42.576-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:42.575-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:01:42.624-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:01:42.624-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:01:42.655-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:02:13.046-0600] {processor.py:157} INFO - Started process (PID=1619) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:02:13.048-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:02:13.049-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:13.048-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:02:13.088-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:02:13.117-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:13.117-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:02:13.167-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:13.166-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:02:13.197-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.156 seconds
+[2023-08-17T15:02:43.571-0600] {processor.py:157} INFO - Started process (PID=1652) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:02:43.571-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:02:43.572-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:43.572-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:02:43.612-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:02:43.642-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:43.642-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:02:43.690-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:02:43.690-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:02:43.721-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.155 seconds
+[2023-08-17T15:03:14.103-0600] {processor.py:157} INFO - Started process (PID=1684) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:03:14.104-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:03:14.106-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:14.105-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:03:14.146-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:03:14.175-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:14.175-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:03:14.223-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:14.222-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:03:14.253-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.155 seconds
+[2023-08-17T15:03:44.643-0600] {processor.py:157} INFO - Started process (PID=1716) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:03:44.644-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:03:44.645-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:44.645-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:03:44.684-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:03:44.714-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:44.713-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:03:44.761-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:03:44.761-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:03:44.794-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.155 seconds
+[2023-08-17T15:04:15.205-0600] {processor.py:157} INFO - Started process (PID=1748) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:04:15.207-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:04:15.208-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:15.207-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:04:15.246-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:04:15.275-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:15.275-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:04:15.324-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:15.324-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:04:15.357-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.156 seconds
+[2023-08-17T15:04:45.737-0600] {processor.py:157} INFO - Started process (PID=1784) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:04:45.738-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:04:45.739-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:45.739-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:04:45.780-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:04:45.811-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:45.811-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:04:45.872-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:04:45.872-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:04:45.911-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.180 seconds
+[2023-08-17T15:05:16.454-0600] {processor.py:157} INFO - Started process (PID=1823) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:05:16.455-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:05:16.456-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:16.456-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:05:16.494-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:05:16.524-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:16.524-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:05:16.574-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:16.574-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:05:16.606-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.157 seconds
+[2023-08-17T15:05:46.854-0600] {processor.py:157} INFO - Started process (PID=1855) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:05:46.855-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:05:46.856-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:46.856-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:05:46.895-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:05:46.926-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:46.926-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:05:46.979-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:05:46.979-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:05:47.016-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.166 seconds
+[2023-08-17T15:06:17.400-0600] {processor.py:157} INFO - Started process (PID=1887) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:06:17.401-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:06:17.402-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:17.402-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:06:17.439-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:06:17.469-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:17.468-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:06:17.517-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:17.516-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:06:17.548-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:06:47.922-0600] {processor.py:157} INFO - Started process (PID=1919) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:06:47.923-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:06:47.924-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:47.924-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:06:47.961-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:06:47.989-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:47.989-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:06:48.037-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:06:48.037-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:06:48.070-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:07:18.452-0600] {processor.py:157} INFO - Started process (PID=1951) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:07:18.453-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:07:18.454-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:18.454-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:07:18.494-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:07:18.523-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:18.522-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:07:18.572-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:18.572-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:07:18.603-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.156 seconds
+[2023-08-17T15:07:48.998-0600] {processor.py:157} INFO - Started process (PID=1983) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:07:48.999-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:07:49.000-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:49.000-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:07:49.041-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:07:49.071-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:49.071-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:07:49.119-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:07:49.119-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:07:49.151-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.159 seconds
+[2023-08-17T15:08:19.547-0600] {processor.py:157} INFO - Started process (PID=2016) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:08:19.549-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:08:19.550-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:19.549-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:08:19.590-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:08:19.619-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:19.619-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:08:19.667-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:19.667-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:08:19.699-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.156 seconds
+[2023-08-17T15:08:50.083-0600] {processor.py:157} INFO - Started process (PID=2048) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:08:50.084-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:08:50.085-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:50.085-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:08:50.123-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:08:50.152-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:50.152-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:08:50.201-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:08:50.201-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:08:50.232-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:09:20.623-0600] {processor.py:157} INFO - Started process (PID=2081) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:09:20.624-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:09:20.625-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:20.624-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:09:20.665-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:09:20.694-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:20.694-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:09:20.744-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:20.744-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:09:20.778-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.162 seconds
+[2023-08-17T15:09:51.167-0600] {processor.py:157} INFO - Started process (PID=2112) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:09:51.169-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:09:51.170-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:51.170-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:09:51.211-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:09:51.241-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:51.241-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:09:51.304-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:09:51.304-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:09:51.337-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.174 seconds
+[2023-08-17T15:10:21.731-0600] {processor.py:157} INFO - Started process (PID=2148) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:10:21.732-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:10:21.733-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:21.733-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:10:21.772-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:10:21.801-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:21.801-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:10:21.850-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:21.849-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:10:21.880-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:10:52.262-0600] {processor.py:157} INFO - Started process (PID=2180) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:10:52.263-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:10:52.264-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:52.264-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:10:52.302-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:10:52.331-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:52.331-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:10:52.378-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:10:52.378-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:10:52.409-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.152 seconds
+[2023-08-17T15:11:22.785-0600] {processor.py:157} INFO - Started process (PID=2212) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:11:22.786-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:11:22.788-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:22.787-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:11:22.830-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:11:22.859-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:22.858-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:11:22.907-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:22.907-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:11:22.938-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.158 seconds
+[2023-08-17T15:11:53.308-0600] {processor.py:157} INFO - Started process (PID=2244) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:11:53.309-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:11:53.310-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:53.310-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:11:53.348-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:11:53.379-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:53.378-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:11:53.426-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:11:53.426-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:11:53.460-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.157 seconds
+[2023-08-17T15:12:23.830-0600] {processor.py:157} INFO - Started process (PID=2276) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:12:23.831-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:12:23.832-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:23.832-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:12:23.872-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:12:23.900-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:23.900-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:12:23.950-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:23.950-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:12:23.982-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.158 seconds
+[2023-08-17T15:12:54.357-0600] {processor.py:157} INFO - Started process (PID=2308) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:12:54.358-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:12:54.360-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:54.359-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:12:54.398-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:12:54.427-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:54.427-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:12:54.475-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:12:54.475-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:12:54.507-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:13:24.876-0600] {processor.py:157} INFO - Started process (PID=2340) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:13:24.878-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:13:24.879-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:24.879-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:13:24.922-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:13:24.952-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:24.951-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:13:24.999-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:24.998-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:13:25.030-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.159 seconds
+[2023-08-17T15:13:55.411-0600] {processor.py:157} INFO - Started process (PID=2372) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:13:55.412-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:13:55.414-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:55.413-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:13:55.453-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:13:55.482-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:55.481-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:13:55.529-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:13:55.529-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:13:55.561-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.155 seconds
+[2023-08-17T15:14:25.951-0600] {processor.py:157} INFO - Started process (PID=2404) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:14:25.952-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:14:25.953-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:25.953-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:14:25.990-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:14:26.019-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:26.018-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:14:26.069-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:26.068-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:14:26.099-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:14:56.537-0600] {processor.py:157} INFO - Started process (PID=2436) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:14:56.538-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:14:56.539-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:56.539-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:14:56.577-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:14:56.606-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:56.606-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:14:56.653-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:14:56.653-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:14:56.686-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:15:27.089-0600] {processor.py:157} INFO - Started process (PID=2468) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:15:27.091-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:15:27.092-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:27.091-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:15:27.130-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:15:27.159-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:27.159-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:15:27.207-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:27.207-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:15:27.239-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:15:57.636-0600] {processor.py:157} INFO - Started process (PID=2500) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:15:57.637-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:15:57.638-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:57.638-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:15:57.678-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:15:57.707-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:57.707-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:15:57.755-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:15:57.754-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:15:57.788-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.158 seconds
+[2023-08-17T15:16:28.189-0600] {processor.py:157} INFO - Started process (PID=2532) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:16:28.190-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:16:28.191-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:28.191-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:16:28.228-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:16:28.258-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:28.257-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:16:28.305-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:28.304-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:16:28.335-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.151 seconds
+[2023-08-17T15:16:58.719-0600] {processor.py:157} INFO - Started process (PID=2565) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:16:58.720-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:16:58.721-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:58.721-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:16:58.761-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:16:58.797-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:58.796-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:16:58.844-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:16:58.844-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:16:58.875-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.161 seconds
+[2023-08-17T15:17:29.253-0600] {processor.py:157} INFO - Started process (PID=2596) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:17:29.254-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:17:29.255-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:29.255-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:17:29.295-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:17:29.325-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:29.324-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:17:29.374-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:29.374-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:17:29.407-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.160 seconds
+[2023-08-17T15:17:59.772-0600] {processor.py:157} INFO - Started process (PID=2628) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:17:59.773-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:17:59.774-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:59.774-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:17:59.811-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:17:59.840-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:59.840-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:17:59.889-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:17:59.889-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:17:59.919-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.151 seconds
+[2023-08-17T15:18:30.262-0600] {processor.py:157} INFO - Started process (PID=2660) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:18:30.264-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:18:30.265-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:30.264-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:18:30.302-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:18:30.330-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:30.330-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:18:30.379-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:18:30.378-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:18:30.409-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.152 seconds
+[2023-08-17T15:19:00.783-0600] {processor.py:157} INFO - Started process (PID=2693) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:19:00.784-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:19:00.785-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:00.785-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:19:00.823-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:19:00.853-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:00.853-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:19:00.909-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:00.907-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:19:00.952-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.174 seconds
+[2023-08-17T15:19:31.336-0600] {processor.py:157} INFO - Started process (PID=2725) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:19:31.337-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:19:31.338-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:31.338-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:19:31.377-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:19:31.406-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:31.406-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:19:31.454-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:19:31.453-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:19:31.500-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.168 seconds
+[2023-08-17T15:20:01.935-0600] {processor.py:157} INFO - Started process (PID=2757) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:20:01.936-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:20:01.937-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:01.937-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:20:01.974-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:20:02.003-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:02.003-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:20:02.051-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:02.051-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:20:02.082-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.152 seconds
+[2023-08-17T15:20:32.471-0600] {processor.py:157} INFO - Started process (PID=2789) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:20:32.472-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:20:32.473-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:32.473-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:20:32.516-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:20:32.545-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:32.545-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:20:32.597-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:20:32.597-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:20:32.627-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.162 seconds
+[2023-08-17T15:21:03.009-0600] {processor.py:157} INFO - Started process (PID=2821) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:21:03.010-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:21:03.011-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:03.011-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:21:03.055-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:21:03.085-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:03.085-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:21:03.134-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:03.133-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:21:03.165-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.162 seconds
+[2023-08-17T15:21:33.540-0600] {processor.py:157} INFO - Started process (PID=2853) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:21:33.541-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:21:33.542-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:33.542-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:21:33.582-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:21:33.620-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:33.620-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:21:33.674-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:21:33.673-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:21:33.712-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.178 seconds
+[2023-08-17T15:22:04.073-0600] {processor.py:157} INFO - Started process (PID=2889) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:22:04.074-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:22:04.074-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:04.074-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:22:04.113-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:22:04.143-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:04.143-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:22:04.196-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:04.196-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:22:04.228-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.160 seconds
+[2023-08-17T15:22:34.599-0600] {processor.py:157} INFO - Started process (PID=2921) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:22:34.601-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:22:34.602-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:34.601-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:22:34.642-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:22:34.671-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:34.671-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:22:34.718-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:22:34.718-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:22:34.748-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:23:05.130-0600] {processor.py:157} INFO - Started process (PID=2954) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:23:05.131-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:23:05.132-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:05.132-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:23:05.170-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:23:05.199-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:05.199-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:23:05.246-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:05.246-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:23:05.279-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:23:35.658-0600] {processor.py:157} INFO - Started process (PID=2987) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:23:35.659-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:23:35.660-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:35.660-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:23:35.699-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:23:35.728-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:35.727-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:23:35.776-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:23:35.776-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:23:35.806-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:24:06.198-0600] {processor.py:157} INFO - Started process (PID=3019) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:24:06.199-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:24:06.200-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:06.200-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:24:06.240-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:24:06.269-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:06.269-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:24:06.321-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:06.321-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:24:06.351-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.157 seconds
+[2023-08-17T15:24:36.722-0600] {processor.py:157} INFO - Started process (PID=3051) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:24:36.723-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:24:36.724-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:36.724-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:24:36.762-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:24:36.791-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:36.791-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:24:36.838-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:24:36.838-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:24:36.870-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:25:07.258-0600] {processor.py:157} INFO - Started process (PID=3083) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:25:07.259-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:25:07.260-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:07.260-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:25:07.298-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:25:07.327-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:07.327-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:25:07.376-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:07.376-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:25:07.414-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.162 seconds
+[2023-08-17T15:25:37.780-0600] {processor.py:157} INFO - Started process (PID=3115) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:25:37.781-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:25:37.782-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:37.782-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:25:37.820-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:25:37.849-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:37.849-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:25:37.896-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:25:37.896-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:25:37.928-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:26:08.310-0600] {processor.py:157} INFO - Started process (PID=3148) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:26:08.311-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:26:08.312-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:08.312-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:26:08.351-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:26:08.380-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:08.380-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:26:08.429-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:08.428-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:26:08.458-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:26:38.839-0600] {processor.py:157} INFO - Started process (PID=3180) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:26:38.840-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:26:38.841-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:38.841-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:26:38.879-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:26:38.908-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:38.907-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:26:38.956-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:26:38.956-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:26:38.986-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.152 seconds
+[2023-08-17T15:27:09.362-0600] {processor.py:157} INFO - Started process (PID=3212) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:27:09.363-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:27:09.364-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:09.364-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:27:09.402-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:27:09.431-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:09.431-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:27:09.479-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:09.478-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:27:09.510-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:27:39.892-0600] {processor.py:157} INFO - Started process (PID=3244) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:27:39.893-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:27:39.894-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:39.894-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:27:39.934-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:27:39.963-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:39.963-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:27:40.010-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:27:40.010-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:27:40.040-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:28:10.404-0600] {processor.py:157} INFO - Started process (PID=3276) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:28:10.405-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:28:10.406-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:10.406-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:28:10.444-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:28:10.473-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:10.473-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:28:10.522-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:10.521-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:28:10.552-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:28:40.945-0600] {processor.py:157} INFO - Started process (PID=3308) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:28:40.946-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:28:40.947-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:40.947-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:28:40.987-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:28:41.017-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:41.016-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:28:41.075-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:28:41.075-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:28:41.109-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.170 seconds
+[2023-08-17T15:29:11.452-0600] {processor.py:157} INFO - Started process (PID=3340) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:29:11.453-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:29:11.454-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:11.454-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:29:11.492-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:29:11.521-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:11.520-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:29:11.569-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:11.569-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:29:11.598-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.151 seconds
+[2023-08-17T15:29:41.982-0600] {processor.py:157} INFO - Started process (PID=3372) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:29:41.983-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:29:41.984-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:41.984-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:29:42.024-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:29:42.053-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:42.053-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:29:42.101-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:29:42.101-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:29:42.130-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.153 seconds
+[2023-08-17T15:30:12.535-0600] {processor.py:157} INFO - Started process (PID=3404) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:30:12.536-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:30:12.537-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:12.537-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:30:12.576-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:30:12.605-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:12.605-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:30:12.652-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:12.652-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:30:12.683-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.154 seconds
+[2023-08-17T15:30:43.076-0600] {processor.py:157} INFO - Started process (PID=3436) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:30:43.077-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:30:43.078-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:43.078-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:30:43.119-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:30:43.148-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:43.148-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:30:43.195-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:30:43.195-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:30:43.225-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.155 seconds
+[2023-08-17T15:31:13.623-0600] {processor.py:157} INFO - Started process (PID=3468) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:31:13.624-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:31:13.625-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:13.625-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:31:13.671-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:31:13.701-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:13.701-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:31:13.749-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:13.749-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:31:13.782-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.165 seconds
+[2023-08-17T15:31:44.175-0600] {processor.py:157} INFO - Started process (PID=3500) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:31:44.176-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:31:44.177-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:44.177-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:31:44.218-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:31:44.247-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:44.246-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:31:44.296-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:31:44.296-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:31:44.326-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.157 seconds
+[2023-08-17T15:32:14.717-0600] {processor.py:157} INFO - Started process (PID=3531) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:32:14.718-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:32:14.719-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:14.719-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:32:14.762-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:32:14.791-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:14.791-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:32:14.840-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:14.840-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:32:14.871-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.160 seconds
+[2023-08-17T15:32:45.266-0600] {processor.py:157} INFO - Started process (PID=3563) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:32:45.267-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:32:45.268-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:45.268-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:32:45.308-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:32:45.337-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:45.337-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:32:45.384-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:32:45.384-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:32:45.415-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.155 seconds
+[2023-08-17T15:33:15.797-0600] {processor.py:157} INFO - Started process (PID=3595) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:33:15.798-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:33:15.799-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:15.799-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:33:15.839-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:33:15.868-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:15.867-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:33:15.915-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:15.915-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:33:15.944-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.152 seconds
+[2023-08-17T15:33:46.354-0600] {processor.py:157} INFO - Started process (PID=3625) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:33:46.355-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:33:46.356-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:46.356-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:33:46.397-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:33:46.430-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:46.429-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:33:46.482-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:33:46.481-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:33:46.518-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.170 seconds
+[2023-08-17T15:34:16.903-0600] {processor.py:157} INFO - Started process (PID=3666) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:34:16.905-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:34:16.906-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:16.905-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:34:16.945-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:34:16.974-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:16.974-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:34:17.024-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:17.023-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:34:17.056-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.158 seconds
+[2023-08-17T15:34:47.416-0600] {processor.py:157} INFO - Started process (PID=3699) to work on /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:34:47.417-0600] {processor.py:826} INFO - Processing file /opt/airflow/dags/crear_respaldo_base_de_datos.py for tasks to queue
+[2023-08-17T15:34:47.418-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:47.418-0600] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:34:47.457-0600] {processor.py:836} INFO - DAG(s) dict_keys(['Respaldar_Base_De_Datos']) retrieved from /opt/airflow/dags/crear_respaldo_base_de_datos.py
+[2023-08-17T15:34:47.486-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:47.486-0600] {dag.py:2726} INFO - Sync 1 DAGs
+[2023-08-17T15:34:47.536-0600] {logging_mixin.py:149} INFO - [2023-08-17T15:34:47.535-0600] {dag.py:3490} INFO - Setting next_dagrun for Respaldar_Base_De_Datos to 2023-08-17T06:00:00+00:00, run_after=2023-08-18T06:00:00+00:00
+[2023-08-17T15:34:47.572-0600] {processor.py:179} INFO - Processing /opt/airflow/dags/crear_respaldo_base_de_datos.py took 0.160 seconds
