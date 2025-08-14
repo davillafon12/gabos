@@ -133,7 +133,7 @@ function eliminarTodasASaldar(){
 
 function numTransaccion(tipo)
 {	
-	if(tipo.indexOf('contad') != -1)
+	if(tipo.indexOf('contad') != -1 || tipo.indexOf('sinpe_mov') != -1)
 	{
 		$("#num_transaccion_field").css('display', 'none');
 		$("#datafono_field").css('display', 'none');

@@ -55,14 +55,14 @@
 }
 
 .tabla-pagos-mixtos{
-	width: 350px;
+	width: 100%;
 	text-align:center;
 	border-collapse: collapse;
 	margin-left: 10px;
 }
 
 .tabla-recibos-dinero{
-	width: 350px;
+	width: 100%;
 	text-align:center;
 	border-collapse: collapse;
 	margin-left: 10px;

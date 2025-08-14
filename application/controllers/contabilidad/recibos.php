@@ -90,7 +90,7 @@ class recibos extends CI_Controller {
 					$tipoPago = json_decode($tipoPago, true);
 					$tipoPago = $tipoPago[0]; //Sacamos el array con los datos
 					//Verificamos que sea el tipo de pago autorizado
-					if($tipoPago['tipo']=='contado'||$tipoPago['tipo']=='tarjeta'||$tipoPago['tipo']=='deposito'){
+					if($tipoPago['tipo']=='contado'||$tipoPago['tipo']=='tarjeta'||$tipoPago['tipo']=='deposito'||$tipoPago['tipo']=='sinpe_movil'){
 						//Estas facturas son los creditos realizados					
 						$facturas = json_decode($_POST['facturas'], true);
 						$comentarios = trim($_POST['comentarios']);

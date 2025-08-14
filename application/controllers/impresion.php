@@ -1100,36 +1100,38 @@ class impresion extends CI_Controller
 		//Pagos Mixtos y Recibos por dinero
 		$pdf->SetFont('Arial', 'B', 14);
 		$pdf->SetXY(10, 112);
-		$pdf->Cell(95, 5, 'Pagos Mixtos', 0, 0, 'C');
-		$pdf->Cell(95, 5, 'Recibos Por Dinero', 0, 0, 'C');
+		$pdf->Cell(81, 5, 'Pagos Mixtos', 0, 0, 'C');
+		$pdf->Cell(109, 5, 'Recibos Por Dinero', 0, 0, 'C');
 		$pdf->ln(5);
-		$pdf->SetFont('Arial', '', 11);
-		$pdf->Cell(20, 5, 'Cant. Fact', 1, 0, 'C');
-		$pdf->Cell(23, 5, 'Efectivo', 1, 0, 'C');
-		$pdf->Cell(23, 5, 'Sinpe Móvil', 1, 0, 'C');
-		$pdf->Cell(24, 5, 'Tarjeta', 1, 0, 'C');
-		$pdf->Cell(10, 5, '', 0, 0, 'C');
-		$pdf->Cell(23, 5, 'Contado', 1, 0, 'C');
-		$pdf->Cell(23, 5, 'Tarjeta', 1, 0, 'C');
-		$pdf->Cell(23, 5, 'Depósito', 1, 0, 'C');
+		$pdf->SetFont('Arial', '', 9);
+		$pdf->Cell(18, 5, 'Cant. Fact', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Efectivo', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Sinpe Móvil', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Tarjeta', 1, 0, 'C');
+		$pdf->Cell(4, 5, '', 0, 0, 'C');
+		$pdf->Cell(21, 5, 'Contado', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Tarjeta', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Depósito', 1, 0, 'C');
 		$pdf->Cell(21, 5, 'Abonos', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Sinpe Móvil', 1, 0, 'C');
 		$pdf->ln(5);
-		$pdf->SetFont('Arial', '', 10);
-		$pdf->Cell(20, 5, $cierre->datos['pagoMixto']['cantidadFacturas'], 1, 0, 'C');
-		$pdf->Cell(23, 5, $this->fni($cierre->datos['pagoMixto']['efectivo']), 1, 0, 'R');
-		$pdf->Cell(23, 5, $this->fni($cierre->datos['pagoMixto']['sinpeMovil']), 1, 0, 'R');
-		$pdf->Cell(24, 5, $this->fni($cierre->datos['pagoMixto']['tarjeta']), 1, 0, 'R');
-		$pdf->Cell(10, 5, '', 0, 0, 'C');
-		$pdf->Cell(23, 5, $this->fni($cierre->datos['recibos']['efectivo']), 1, 0, 'R');
-		$pdf->Cell(23, 5, $this->fni($cierre->datos['recibos']['tarjeta']), 1, 0, 'R');
-		$pdf->Cell(23, 5, $this->fni($cierre->datos['recibos']['deposito']), 1, 0, 'R');
+		$pdf->SetFont('Arial', '', 9);
+		$pdf->Cell(18, 5, $cierre->datos['pagoMixto']['cantidadFacturas'], 1, 0, 'C');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['pagoMixto']['efectivo']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['pagoMixto']['sinpeMovil']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['pagoMixto']['tarjeta']), 1, 0, 'R');
+		$pdf->Cell(4, 5, '', 0, 0, 'C');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['efectivo']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['tarjeta']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['deposito']), 1, 0, 'R');
 		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['abonos']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['sinpeMovil']), 1, 0, 'R');
 		$pdf->ln(5);
-		$pdf->Cell(65, 5, 'Total:', 1, 0, 'R');
-		$pdf->Cell(25, 5, $this->fni($cierre->datos['pagoMixto']['total']), 1, 0, 'R');
-		$pdf->Cell(10, 5, '', 0, 0, 'C');
-		$pdf->Cell(65, 5, 'Total:', 1, 0, 'R');
-		$pdf->Cell(25, 5, $this->fni($cierre->datos['recibos']['total']), 1, 0, 'R');
+		$pdf->Cell(60, 5, 'Total:', 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['pagoMixto']['total']), 1, 0, 'R');
+		$pdf->Cell(4, 5, '', 0, 0, 'C');
+		$pdf->Cell(84, 5, 'Total:', 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['total']), 1, 0, 'R');
 
 		$pdf->SetFont('Arial', 'B', 14);
 		$pdf->ln(6);
@@ -1189,6 +1191,7 @@ class impresion extends CI_Controller
 		$efectivoTotal -= $cierre->bnservicios;
 		$efectivoTotal -= $cierre->bcrservicios;
 		$efectivoTotal -= $cierre->datos['recibos']['abonos'];
+		$efectivoTotal -= $cierre->datos['recibos']['sinpeMovil'];
 		$efectivoTotal += $cierre->datos['detalleNotasCredito']['contado'];
 		//$efectivoTotal -= $cierre->datos['pagoMixto']['efectivo'];
 		$efectivoTotal -= $cierre->datos['totalFacturasContado'];
@@ -2224,6 +2227,7 @@ class impresion extends CI_Controller
 		$efectivo = 0;
 		$tarjeta = 0;
 		$deposito = 0;
+		$sinpeMovil = 0;
 		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
 		if ($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)) {
 			foreach ($recibos as $recibo) {
@@ -2238,11 +2242,14 @@ class impresion extends CI_Controller
 					case 'tarjeta':
 						$tarjeta += $recibo->Recibo_Cantidad;
 						break;
+					case 'sinpe_movil':
+						$sinpeMovil += $recibo->Recibo_Cantidad;
+						break;
 				}
 			}
 		}
 		$total += $totalAbonoApartado;
-		return array('total' => $total, 'efectivo' => $efectivo, 'tarjeta' => $tarjeta, 'deposito' => $deposito, 'abonos' => $totalAbonoApartado);
+		return array('total' => $total, 'efectivo' => $efectivo, 'tarjeta' => $tarjeta, 'deposito' => $deposito, 'sinpeMovil' => $sinpeMovil, 'abonos' => $totalAbonoApartado);
 	}
 
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra)

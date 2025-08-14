@@ -7,8 +7,10 @@ var _TOTAL_PAGO_MIXTO_EFECTIVO = 0;
 var _TOTAL_FACTURAS_EFECTIVO = 0;
 var _TOTAL_RECIBOS_EFECTIVO = 0;
 var _TOTAL_RECIBOS_ABONO= 0;
+var _TOTAL_RECIBOS_SINPE_MOVIL = 0;
 var _TOTAL_NOTAS_CREDITO_CONTADO = 0;
 var _TOTAL_NOTAS_CREDITO_APARTADO = 0;
+var _TOTAL_NOTAS_CREDITO_SINPE_MOVIL = 0;
 var _TOTAL_CREDITO = 0;
 var _TOTAL_APARTADO = 0;
 var _TOTAL_NOTAS_CREDITO = 0;
@@ -67,7 +69,7 @@ function actualizarTotales(){
 
     var totalFacturasEfectivoFinal = _TOTAL_FACTURAS_EFECTIVO + _TOTAL_PAGO_MIXTO_EFECTIVO;
 
-    var totalFaltante = _TOTAL_RETIROS_PARCIALES - _TOTAL_RECIBOS_EFECTIVO - _TOTAL_RECIBOS_ABONO + _TOTAL_NOTAS_CREDITO_CONTADO - totalFacturasEfectivoFinal;
+    var totalFaltante = _TOTAL_RETIROS_PARCIALES - _TOTAL_RECIBOS_EFECTIVO - _TOTAL_RECIBOS_ABONO - _TOTAL_RECIBOS_SINPE_MOVIL + _TOTAL_NOTAS_CREDITO_CONTADO - totalFacturasEfectivoFinal;
 
     var totalFacturasContado = totalFacturasEfectivoFinal -_TOTAL_NOTAS_CREDITO_CONTADO;
 
@@ -247,10 +249,12 @@ function cargarRecibosDeDinero(){
                 $("#recibos_dinero_tarjeta").html(f(data.tarjeta, true));
                 $("#recibos_dinero_deposito").html(f(data.deposito, true));
                 $("#recibos_dinero_abonos").html(f(data.abonos, true));
+                $("#recibos_dinero_sinpe_movil").html(f(data.sinpeMovil, true));
                 $("#recibos_dinero_total").html(f(data.total, true));
 
                 _TOTAL_RECIBOS_EFECTIVO = data.efectivo;
                 _TOTAL_RECIBOS_ABONO = data.abonos;
+                _TOTAL_RECIBOS_SINPE_MOVIL = data.sinpeMovil;
 
                 actualizarTotales();
             }else{

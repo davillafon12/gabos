@@ -164,6 +164,7 @@ class cierre extends CI_Controller {
 		$efectivo = 0;
 		$tarjeta = 0;
 		$deposito = 0;
+		$sinpeMovil = 0;
 		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
 		if($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($recibos as $recibo){
@@ -178,11 +179,14 @@ class cierre extends CI_Controller {
 					case 'tarjeta':
 						$tarjeta += $recibo->Recibo_Cantidad;
 					break;
+					case 'sinpe_movil':
+						$sinpeMovil += $recibo->Recibo_Cantidad;
+					break;
 				}
 			}
 		}
 		$total += $totalAbonoApartado;
-		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito, 'abonos'=>$totalAbonoApartado);
+		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito, 'sinpeMovil'=>$sinpeMovil, 'abonos'=>$totalAbonoApartado);
 	}
 	
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){

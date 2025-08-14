@@ -255,11 +255,11 @@ PARA:
 					</tr>
 					<tr><td colspan="2"><hr></td></tr>
 					<tr>
-						<td>
+						<td colspan="2">
 							<table class="tabla-pagos-mixtos">
-								<tr><td colspan="3"><p class="titulo-2">Pago Mixtos</p></td></tr>
+								<tr><td colspan="4"><p class="titulo-2">Pago Mixtos</p></td></tr>
 								<tr>
-									<td class="borde-abajo"><p class="parrafo">Cant. Fact.</p></td>
+									<td class="borde-abajo"><p class="parrafo">Cantidad de Facturas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
 									<td class="borde-abajo"><p class="parrafo">Sinpe Móvil</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
@@ -275,24 +275,28 @@ PARA:
 									<td class="alg-right borde-arriba"><p class="parrafo" id="total_pago_mixto"></p></td>
 								</tr>
 							</table>
-						</td>
-						<td>
+						</td>						
+					</tr>
+					<tr>
+						<td colspan="2">
 							<table class="tabla-recibos-dinero">
-								<tr><td colspan="4"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
+								<tr><td colspan="5"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Contado</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
 									<td class="borde-abajo"><p class="parrafo">Deposito</p></td>
 									<td class="borde-abajo"><p class="parrafo">Abonos</p></td>
+									<td class="borde-abajo"><p class="parrafo">Sinpe Móvil</p></td>
 								</tr>
 								<tr>
 									<td class='alg-right'><p class='parrafo' id="recibos_dinero_efectivo"></p></td>
 									<td class='alg-right'><p class='parrafo' id="recibos_dinero_tarjeta"></p></td>
 									<td class='alg-right'><p class='parrafo' id="recibos_dinero_deposito"></p></td>
 									<td class='alg-right'><p class='parrafo' id="recibos_dinero_abonos"></p></td>
+									<td class='alg-right'><p class='parrafo' id="recibos_dinero_sinpe_movil"></p></td>
 								</tr>								
 								<tr>
-									<td colspan="3" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
+									<td colspan="4" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
 									<td class="alg-right borde-arriba"><p class="parrafo"  id="recibos_dinero_total"></p></td>
 								</tr>
 							</table>

@@ -418,6 +418,7 @@ function cargarRecibosDinero(recibos){
 	$("#recibo_contado").html("₡"+parseFloat(recibos.efectivo).format(2, 3, '.', ','));
 	$("#recibo_tarjeta").html("₡"+parseFloat(recibos.tarjeta).format(2, 3, '.', ','));
 	$("#recibo_deposito").html("₡"+parseFloat(recibos.deposito).format(2, 3, '.', ','));
+	$("#recibo_sinpe_movil").html("₡"+parseFloat(recibos.sinpeMovil).format(2, 3, '.', ','));
 	var abonos = $.isNumeric(recibos.abonos) ? parseFloat(recibos.abonos).format(2, 3, '.', ',') : "0.00";
 	$("#recibo_abono").html("₡"+abonos);
 	$("#total_recibos_dinero").html("₡"+parseFloat(recibos.total).format(2, 3, '.', ','));
@@ -435,6 +436,7 @@ function cargarTotales(datos){
 	var totalEfectivo = totalRetiros; 
 	totalEfectivo -= datos.recibos.efectivo;
 	totalEfectivo -= datos.recibos.abonos;
+	totalEfectivo -= datos.recibos.sinpeMovil;
 	totalEfectivo -= bnservicios;
         totalEfectivo -= bcrservicios;
 	totalEfectivo += datos.detalleNotasCredito.contado;
