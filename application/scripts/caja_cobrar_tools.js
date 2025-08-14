@@ -318,7 +318,7 @@ function tipoPagoJSON(){
 	}else if(tipoPago.trim()==='cheque'){
 		return [{'tipo':'cheque','cheque':$('#numero_cheque').val(),'banco':$('#banco_sel').val()}];
 	}else if(tipoPago.trim()==='mixto'){
-		return [{'tipo':'mixto','transaccion':$('#numero_transaccion').val(),'cantidad':$('#cantidad_mixto').val(),'banco':$('#banco_sel').val()}];
+		return [{'tipo':'mixto','transaccion':$('#numero_transaccion').val(),'cantidad':$('#cantidad_mixto').val(),'banco':$('#banco_sel').val(),'tipoPago':$("#tipo_pago_mixto_select").val()}];
 	}else if(tipoPago.trim()==='credito'){
 		return [{'tipo':'credito','canDias':$('#cant_dias_credito').val()}];
 	}else if(tipoPago.trim()==='apartado'){

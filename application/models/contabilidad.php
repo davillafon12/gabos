@@ -229,7 +229,7 @@ Class contabilidad extends CI_Model
 						'Moneda' => $moneda,
 						'Por_IVA' => $por_iva,
 						'Tipo_Cambio' => $tipo_cambio,
-                                                'Es_Anulacion' => $esAnulacion,
+                        'Es_Anulacion' => $esAnulacion,
 						'Sucursal' => $sucursal,
 						'Cliente' => $cliente
 						);
@@ -958,7 +958,7 @@ Class contabilidad extends CI_Model
 						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
 				}
 		}
-		$this->db->select('tb_07_factura.Factura_Monto_Total AS monto, tb_07_factura.Factura_Fecha_Hora AS fecha, tb_23_mixto.Mixto_Cantidad_Paga AS pago_tarjeta');
+		$this->db->select('tb_07_factura.Factura_Monto_Total AS monto, tb_07_factura.Factura_Fecha_Hora AS fecha, tb_23_mixto.Mixto_Cantidad_Paga AS pago_tarjeta, tb_23_mixto.Tipo_Pago AS tipo_pago');
 		$this->db->from('tb_07_factura');
 		$this->db->join('tb_23_mixto', 'tb_23_mixto.TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo = tb_07_factura.Factura_Consecutivo');
 		$this->db->where('tb_07_factura.Factura_Tipo_Pago', 'mixto');
@@ -1050,7 +1050,7 @@ Class contabilidad extends CI_Model
 		$this->db->from('tb_27_notas_credito');
 		$this->db->join('tb_07_factura', 'tb_07_factura.Factura_Consecutivo = tb_27_notas_credito.Factura_Aplicar');
 		$this->db->where('tb_27_notas_credito.Sucursal', $sucursal);
-                $this->db->where('tb_27_notas_credito.Es_Anulacion', "0");
+        $this->db->where('tb_27_notas_credito.Es_Anulacion', "0");
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('tb_27_notas_credito.Fecha_Creacion >', $inicio);
 		$this->db->where('tb_27_notas_credito.Fecha_Creacion <', $final);
@@ -1233,6 +1233,39 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
 		$this->db->where('Factura_Tipo_Pago','deposito');
+		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{
+			return $query->result();
+		}
+	}
+
+	function getFacturasSinpeMovilPorRangoFecha($sucursal, $inicio, $final){
+		$this->load->model("factura", "", true);
+
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				if(!empty($facturas_trueque)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
+				}
+		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				if(!empty($facturas_trueque)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
+				}
+		}
+		$this->db->from('tb_07_factura');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('Factura_Fecha_Hora >', $inicio);
+		$this->db->where('Factura_Fecha_Hora <', $final);
+		$this->db->where('Factura_Estado','cobrada');
+		$this->db->where('Factura_Tipo_Pago','sinpe_movil');
 		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
 		$query = $this->db->get();
 		if($query->num_rows()==0)
@@ -2732,7 +2765,7 @@ Class contabilidad extends CI_Model
                                                 date_default_timezone_set("America/Costa_Rica");
                                                 $fecha = date(DB_DATETIME_FORMAT, now());
 
-                                                $tipoPago = 'contado'; //Por defetco guarda este
+                                                $tipoPago = $facturaAcreditarHeader->Factura_Tipo_Pago; //Por defetco guarda este
                                                 $moneda = 'colones'; //Por defecto guarda este
 
 

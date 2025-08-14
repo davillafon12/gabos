@@ -16,6 +16,8 @@ var _TOTAL_RETENCION_NOTAS_CREDITO = 0;
 var _TOTAL_RETENCION = 0;
 var _TOTAL_FACTURAS_DEPOSITO = 0;
 var _TOTAL_NOTAS_CREDITO_DEPOSITO = 0;
+var _TOTAL_FACTURAS_SINPE_MOVIL = 0;
+var _TOTAL_PAGO_MIXTO_SINPE_MOVIL = 0;
 
 $(document).ready(function(){
     cargarPrimeraYUltimaFactura();
@@ -29,6 +31,7 @@ $(document).ready(function(){
     cargarResumenTotalesNotasCredito();
     cargarTotaleNotasDebito();
     cargarTotalFacturasDeposito();
+    cargarTotalFacturasSinpeMovil();
     cargarListaVendedores();
     cargarValoresFinales();
 });
@@ -76,6 +79,7 @@ function actualizarTotales(){
 
     var totalDeposito = _TOTAL_FACTURAS_DEPOSITO - _TOTAL_NOTAS_CREDITO_DEPOSITO;
 
+    var totalSinpeMovil = _TOTAL_FACTURAS_SINPE_MOVIL - _TOTAL_NOTAS_CREDITO_SINPE_MOVIL + _TOTAL_PAGO_MIXTO_SINPE_MOVIL;
 
     $("#total_facturas_contado_p").html(f(totalFacturasContado, true));
     $("#totalRetirosParciales").val(totalFaltante);
@@ -87,6 +91,7 @@ function actualizarTotales(){
     $("#total_notas_credito_p").html(f(_TOTAL_NOTAS_CREDITO, true));
     $("#total_general_retencion_p").html(f(totalRetencionFinal, true));
     $("#total_deposito_p").html(f(totalDeposito, true));
+    $("#total_sinpe_movil_p").html(f(totalSinpeMovil, true));
 }
 
 function cargarPrimeraYUltimaFactura(){
@@ -213,10 +218,12 @@ function cargarPagosMixtos(){
             if(data.status == "success"){
                 $("#cantidad_facturas_pago_mixto").html(data.cantidadFacturas);
                 $("#total_efectivo_pago_mixto").html(f(data.efectivo, true));
+                $("#total_sinpe_movil_pago_mixto").html(f(data.sinpeMovil, true));
                 $("#total_tarjetas_pago_mixto").html(f(data.tarjeta, true));
                 $("#total_pago_mixto").html(f(data.total,true));
 
                 _TOTAL_PAGO_MIXTO_EFECTIVO = data.efectivo;
+                _TOTAL_PAGO_MIXTO_SINPE_MOVIL = data.sinpeMovil;
                 actualizarTotales();
             }else{
                 notyMsg("Error al cargar el resumen de pagos mixtos, contacte al administrador. ERROR# " + data.error, "error");             
@@ -339,6 +346,7 @@ function cargarResumenTotalesNotasCredito(){
                 _TOTAL_NOTAS_CREDITO_CONTADO = data.contado;
                 _TOTAL_NOTAS_CREDITO_TARJETA = data.tarjeta;
                 _TOTAL_NOTAS_CREDITO_DEPOSITO = data.deposito;
+                _TOTAL_NOTAS_CREDITO_SINPE_MOVIL = data.sinpeMovil;
 
                 actualizarTotales();
             }else{
@@ -389,6 +397,27 @@ function cargarTotalFacturasDeposito(){
         },
         function(){
             notyMsg("Error al cargar el total de facturas de depósito, contacte al administrador.", "error");
+        }, function(){}
+    );
+}
+
+function cargarTotalFacturasSinpeMovil(){
+    doAjax(
+        "/contabilidad/cierre/getTotalFacturasSinpeMovil",
+        "GET",
+        {fechaHoraActual: _FECHA_ACTUAL, fechaUltimoCierre: _FECHA_ULTIMO_CIERRE},
+        function(data){
+            
+            if(data.status == "success"){
+                _TOTAL_FACTURAS_SINPE_MOVIL = data.total;
+
+                actualizarTotales();
+            }else{
+                notyMsg("Error al cargar el total de facturas de Sinpe Móvil, contacte al administrador. ERROR# " + data.error, "error");
+            }
+        },
+        function(){
+            notyMsg("Error al cargar el total de facturas de Sinpe Móvil, contacte al administrador.", "error");
         }, function(){}
     );
 }

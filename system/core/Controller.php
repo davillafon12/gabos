@@ -265,6 +265,7 @@ class CI_Controller
         $newArticulos = array();
         foreach ($articulos as $art) {
             $a = new stdClass();
+            $a->id = $art->Articulo_Factura_id;
             $a->c = $art->Articulo_Factura_Codigo;
             $a->d = 0;
             $a->b = $art->Articulo_Factura_Cantidad;

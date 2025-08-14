@@ -147,7 +147,7 @@ class CI_Model {
             }
         }
 
-        function getMedioPago($tipoPago, $montoTotalFactura, $montoPagadoConTarjetaEnMixto){
+        function getMedioPago($tipoPago, $montoTotalFactura, $pagoMixtoObject){
             /*
                 Corresponde al medio de pago empleado:
                 - 01 Efectivo
@@ -157,8 +157,7 @@ class CI_Model {
                 - 05 - Recaudado por terceros
                 - 99 Otros
              */
-            $totalFormateado = $this->fn($montoTotalFactura);
-            $totalEfectivoEnMixto = $montoTotalFactura - $montoPagadoConTarjetaEnMixto;
+            $totalFormateado = $this->fn($montoTotalFactura);            
             switch ($tipoPago['tipo']) {
                 case 'contado':
                     return array(array("tipo" => '01', "total" => $totalFormateado, "otros" => ''));
@@ -169,9 +168,11 @@ class CI_Model {
                 case 'cheque':
                     return array(array("tipo" => '03', "total" => $totalFormateado, "otros" => ''));
                 case 'mixto':
+                    $totalEfectivoEnMixto = $montoTotalFactura - $pagoMixtoObject->Mixto_Cantidad_Paga;
+                    $codigoDePagoMixto = $pagoMixtoObject->Tipo_Pago == 'sinpe_movil' ? '06' : '01';
                     return array(
-                        array("tipo" => '01', "total" => $this->fn($totalEfectivoEnMixto), "otros" => ''),
-                        array("tipo" => '02', "total" => $this->fn($montoPagadoConTarjetaEnMixto), "otros" => '')
+                        array("tipo" => $codigoDePagoMixto, "total" => $this->fn($totalEfectivoEnMixto), "otros" => ''),
+                        array("tipo" => '02', "total" => $this->fn($pagoMixtoObject->Mixto_Cantidad_Paga), "otros" => '')
                     );
                 case 'credito':
                     return array(array("tipo" => '99', "otros" => 'Credito', "total" => $totalFormateado));

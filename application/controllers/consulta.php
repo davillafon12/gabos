@@ -503,6 +503,8 @@ class consulta extends CI_Controller {
 					$datos['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
 					$datos['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($sucursal, $fechaCierre, $fechaCierreAnterior);
+
+					$datos['totalFacturasSinpeMovil'] = $this->getTotalFacturasSinpeMovil($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
 					$datos['vendedores'] = $this->obtenerVendidoPorCadaVendedor($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
@@ -637,16 +639,22 @@ class consulta extends CI_Controller {
 		$total = 0;
 		$tarjeta = 0;
 		$efectivo = 0;			
+		$sinpeMovil = 0;
 		if($pagos->num_rows()!=0){
 			$cantidadFacturas = $pagos->num_rows();
 			$pagos = $pagos->result();			
 			foreach($pagos as $pago){
 				$total += $pago->monto;
 				$tarjeta += $pago->pago_tarjeta;
-			}			
-			$efectivo = $total - $tarjeta;
-		}		
-		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo);
+
+				if($pago->tipo_pago == 'sinpe_movil'){
+					$sinpeMovil += $pago->monto - $pago->pago_tarjeta;
+				}else if($pago->tipo_pago == 'contado'){
+					$efectivo += $pago->monto - $pago->pago_tarjeta;
+				}
+			}
+		}
+		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo,'sinpeMovil'=>$sinpeMovil);
 	}
 	
 	function obtenerRecibosDeDinero($sucursal, $fechaHoraActual, $fechaUltimoCierra){
@@ -790,6 +798,17 @@ class consulta extends CI_Controller {
 	function obtenerTotalFacturasDeposito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		$total = 0;
 		if($facturas = $this->contabilidad->getFacturasDepositoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
+	}
+
+	function getTotalFacturasSinpeMovil($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasSinpeMovilPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			
 			foreach($facturas as $factura){
 				$total += $factura->Factura_Monto_Total;

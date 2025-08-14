@@ -71,6 +71,8 @@ ALTER TABLE `tb_28_productos_notas_credito` ADD `TipoDescuento` VARCHAR(2) NOT N
 ALTER TABLE `tb_50_articulos_consignacion` ADD `Codigo_Descuento` VARCHAR(2) NOT NULL DEFAULT '07' AFTER `Descuento`;
 ALTER TABLE `tb_51_lista_consignacion` ADD `Codigo_Descuento` VARCHAR(2) NOT NULL DEFAULT '07' AFTER `Descuento`;
 
+-- Cambios para tipo de pago mixto
+ALTER TABLE `tb_23_mixto` ADD `Tipo_Pago` VARCHAR(20) NOT NULL DEFAULT 'contado' AFTER `Mixto_Cantidad_Paga`;
 
 
 

@@ -223,7 +223,7 @@ PARA:
 						<p class="contact"><label for="banco" id="banco"></label></p>
 					</td>
 					<td>
-
+						<p class="contact"><label for="tipo-pago-mixto" id="tipo_pago_mixto_titulo">Tipo pago mixto:</label></p>
 					</td>
 				</tr>
 				<tr>
@@ -262,6 +262,12 @@ PARA:
 									echo "<option value='".$banco->Banco_Codigo."'>".$banco->Banco_Nombre."</option>";
 								}
 							?>
+						</select>
+					</td>
+					<td>
+						<select id="tipo_pago_mixto_select" class="moneda" name="tipo_pago_mixto_select" style="width: 250px; display: none;">
+							<option value="contado">Efectivo</option>
+							<option value="sinpe_movil">Sinpe Móvil</option>
 						</select>
 					</td>
 				</tr>

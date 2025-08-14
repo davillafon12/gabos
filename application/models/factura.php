@@ -627,7 +627,7 @@ Class factura extends CI_Model
 		$this->db->insert('TB_19_Deposito',$dataFactura);
 	}
 
-	function guardarPagoMixto($consecutivo, $sucursal, $transaccion, $comision, $vendedor, $cliente, $banco, $cantidadPagoTarjeta){
+	function guardarPagoMixto($consecutivo, $sucursal, $transaccion, $comision, $vendedor, $cliente, $banco, $cantidadPagoTarjeta, $tipoDePagoRestante){
 
 		//Creamos el pago con tarjeta primero
 		$tarjeta = $this->guardarPagoTarjeta($consecutivo, $sucursal, $transaccion, $comision, $vendedor, $cliente, $banco);
@@ -638,6 +638,7 @@ Class factura extends CI_Model
 		//Creamos el pago mixto
 		$dataFactura = array(
 						'Mixto_Cantidad_Paga'=>$cantidadPagoTarjeta,
+                        'Tipo_Pago'=>$tipoDePagoRestante,
 						'TB_18_Tarjeta_Tarjeta_Id'=>$tarjeta,
 						'TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo'=>$consecutivo,
 						'TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo'=>$sucursal,
@@ -783,6 +784,25 @@ Class factura extends CI_Model
 		else
 		{
 			return 0;
+		}
+	}
+
+    function getPagoMixto($sucursal, $consecutivo){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
+				$sucursal = $this->sucursales_trueque[$sucursal];
+		}
+		$this->db->where('TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo', $consecutivo);
+		$this->db->where('TB_18_Tarjeta_TB_07_Factura_TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->from('tb_23_mixto');
+		$query = $this -> db -> get();
+		if($query -> num_rows() != 0)
+		{
+		    $query = $query->result();
+			return $query[0];
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -988,7 +1008,7 @@ Class factura extends CI_Model
             if(isset($tipoPago['canDias'])){
                 $plazoCredito = $tipoPago['canDias'];
             }
-            $medioPago = $this->getMedioPago($tipoPago, $factura->Factura_Monto_Total, $this->getMontoPagoTarjetaMixto($factura->TB_02_Sucursal_Codigo, $factura->Factura_Consecutivo));
+            $medioPago = $this->getMedioPago($tipoPago, $factura->Factura_Monto_Total, $this->getPagoMixto($factura->TB_02_Sucursal_Codigo, $factura->Factura_Consecutivo));
             $codigoMoneda = $factura->Factura_Moneda == "colones" ? "CRC" : "USD";
             $tipoCambio = $factura->Factura_Moneda == "colones" ? "1" : $factura->Factura_tipo_cambio;
             $otros = $factura->Factura_Observaciones;

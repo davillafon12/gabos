@@ -409,6 +409,7 @@ function cargarDatafonos(datos){
 function cargarMixto(mixto){
 	$("#cant_facturas_mixto").html(mixto.cantidadFacturas);
 	$("#total_efectivo_mixto").html("₡"+parseFloat(mixto.efectivo).format(2, 3, '.', ','));
+	$("#total_sinpe_movil_mixto").html("₡"+parseFloat(mixto.sinpeMovil).format(2, 3, '.', ','));
 	$("#total_tarjeta_mixto").html("₡"+parseFloat(mixto.tarjeta).format(2, 3, '.', ','));
 	$("#total_mixto").html("₡"+parseFloat(mixto.total).format(2, 3, '.', ','));
 }
@@ -439,9 +440,8 @@ function cargarTotales(datos){
 	totalEfectivo += datos.detalleNotasCredito.contado;
 	//totalEfectivo -= datos.pagoMixto.efectivo;
 	totalEfectivo -= datos.totalFacturasContado;
-	
-	
-	
+	totalFacturasSinpeMovil = datos.totalFacturasSinpeMovil + datos.pagoMixto.sinpeMovil - datos.detalleNotasCredito.sinpeMovil;
+
 	$("#totales_factura_contado").html("₡"+parseFloat(datos.totalFacturasContado-datos.detalleNotasCredito.contado).format(2, 3, '.', ','));
 	$("#totales_efectivo").html("₡"+totalEfectivo.format(2, 3, '.', ','));
 	$("#totales_tarjetas").html("₡"+parseFloat(datos.pagoDatafonos.totalDatafonos+datos.bnserviciosc+datos.bcrserviciosc-datos.detalleNotasCredito.tarjeta).format(2, 3, '.', ','));
@@ -450,6 +450,7 @@ function cargarTotales(datos){
 	$("#totales_apartados").html("₡"+parseFloat(datos.totalCreditos.totalApartado-datos.detalleNotasCredito.apartado).format(2, 3, '.', ','));
 	$("#totales_notas_credito").html("₡"+parseFloat(datos.totalNotasCredito.total).format(2, 3, '.', ','));
 	$("#totales_notas_debito").html("₡"+parseFloat(datos.totalNotasDebito.total).format(2, 3, '.', ','));
+	$("#totales_sinpe_movil").html("₡"+totalFacturasSinpeMovil.format(2, 3, '.', ','));
 	
 	$("#totalVendido").html("₡"+parseFloat(datos.valoresFinales.totalFacturas).format(2, 3, '.', ','));
 	$("#totalIVA").html("₡"+parseFloat(datos.valoresFinales.totalIVA).format(2, 3, '.', ','));
