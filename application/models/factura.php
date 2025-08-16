@@ -950,7 +950,7 @@ Class factura extends CI_Model
             }
 
             // No vamos a aceptar receptores de pasaporte para FE
-            if($cliente->NoReceptor || $cliente->Cliente_Tipo_Cedula == "pasaporte"){
+            if($cliente->Cliente_Tipo_Cedula == "pasaporte"){
                 $cliente = null;
             }
 
@@ -1026,7 +1026,7 @@ Class factura extends CI_Model
                 "EmisorCanton" => str_pad($emisor->Canton,2,"0", STR_PAD_LEFT),
                 "EmisorDistrito" => str_pad($emisor->Distrito,2,"0", STR_PAD_LEFT),
                 "EmisorBarrio" => str_pad($emisor->NombreBarrio,5,"_", STR_PAD_RIGHT),
-                "EmisorOtrasSennas" => $emisor->Sucursal_Direccion,
+                "EmisorOtrasSennas" => str_pad($emisor->Sucursal_Direccion,5,"_", STR_PAD_RIGHT),
                 "EmisorCodigoPaisTelefono" => $emisor->Codigo_Pais_Telefono,
                 "EmisorTelefono" => str_replace("-", "", $emisor->Sucursal_Telefono),
                 "EmisorCodigoPaisFax" => $emisor->Codigo_Pais_Fax,
@@ -1056,7 +1056,7 @@ Class factura extends CI_Model
                 "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
                 "TotalComprobante" => $this->fn($costos['total_comprobante']),
                 "Otros" => trim($otros) == "" ? "-" : trim($otros),
-                "TipoDocumento" => $receptor == null ? TIQUETE_ELECTRONICO : FACTURA_ELECTRONICA,
+                "TipoDocumento" => ($receptor == null || $receptor->NoReceptor == "1" ) ? TIQUETE_ELECTRONICO : FACTURA_ELECTRONICA,
                 "CodigoPais" => CODIGO_PAIS,
                 "ConsecutivoFormateado" => $this->formatearConsecutivo($factura->Factura_Consecutivo),
                 "Situacion" => $situacion,
@@ -1067,19 +1067,22 @@ Class factura extends CI_Model
             );
 
             if($receptor != NULL){
-                $data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
-                $data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
-                $data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
-                $data["ReceptorProvincia"] = $receptor->Provincia;
-                $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
-                $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
-                $data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
-                $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
-                $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
-                $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
-                $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
-                $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
-                $data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
+                if($receptor->Cliente_Cedula != "1" && $receptor->Cliente_Cedula != "0"){
+                    $data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
+                    $data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
+                    $data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
+                    $data["ReceptorProvincia"] = $receptor->Provincia;
+                    $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
+                    $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
+                    $data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
+                    $data["ReceptorOtrasSennas"] = str_pad($receptor->Cliente_Direccion,5,"_", STR_PAD_RIGHT);
+                    $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
+                    $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
+                    $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
+                    $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
+                    $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+                    $data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
+                }                
             }
 
             $this->db->insert("tb_55_factura_electronica", $data);
@@ -1192,6 +1195,7 @@ Class factura extends CI_Model
                                                     $factura->EmisorTipoIdentificacion,
                                                     $factura->EmisorIdentificacion,
                                                     $factura->EmisorNombreComercial,
+                                                    $factura->CodigoActividad,
                                                     $factura->EmisorProvincia,
                                                     $factura->EmisorCanton,
                                                     $factura->EmisorDistrito,
@@ -1210,6 +1214,7 @@ Class factura extends CI_Model
                                                     $factura->ReceptorCanton,
                                                     $factura->ReceptorDistrito,
                                                     $factura->ReceptorBarrio,
+                                                    $factura->ReceptorOtrasSennas,
                                                     $factura->ReceptorCodigoPaisTelefono,
                                                     $factura->ReceptorTelefono,
                                                     $factura->ReceptorCodigoPaisFax,
@@ -1238,13 +1243,15 @@ Class factura extends CI_Model
 
                                                     $factura->Otros,
                                                     $this->prepararArticulosParaXML($articulos),
-
-                                                    $factura->CodigoActividad,
+                                                    
                                                     $factura->TotalServiciosExonerados,
                                                     $factura->TotalMercanciaExonerada,
                                                     $factura->TotalExonerado,
                                                     $factura->TotalIVADevuelto,
-                                                    $factura->TotalOtrosCargos);
+                                                    $factura->TotalOtrosCargos,
+                                                
+                                                    $factura->TipoDocumento == 'FEC',
+                                                    $factura->TipoDocumento == 'FE');
                     if($xmlRes){
                         $data = array(
                             "Consecutivo" => $consecutivo,

@@ -200,24 +200,67 @@ class API_Helper{
         return $arrayResp;
     }
 
-    public function genXMLFe($clave, $consecutivo, $fechaEmision,
-                            $emisorNombre, $emisorTipoIdentif, $emisorNumIdentif, $nombreComercial, $emisorProv, $emisorCanton, $emisorDistrito, $emisorBarrio,
-                            $emisorOtrasSenas, $emisorCodPaisTel, $emisorTel, $emisorCodPaisFax, $emisorFax, $emisorEmail,
-                            $receptorNombre, $receptorTipoIdentif, $recenprotNumIdentif, $receptorProvincia, $receptorCanton, $receptorDistrito,
-                            $receptorBarrio, $receptorCodPaisTel, $receptorTel, $receptorCodPaisFax, $receptorFax, $receptorEmail, $receptorCodigoActividad,
-                            $condVenta,
-                            $plazoCredito,
-                            $medio_pago,
-                            $codMoneda,
-                            $tipoCambio,
-                            $totalServGravados, $totalServExentos, $totalMercGravadas, $totalMercExentas, $totalGravados, $totalExentos, $totalVentas,
-                            $totalDescuentos, $totalVentasNeta, $totalImp, $totalDesgloseImpuestos, $totalComprobante,
-                            $otros,
-                            $productos,
-                            $emisorCodigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
-                            $esFacturaCompra = false, $receptorOtrasSenas = "-") {
+    public function genXMLFe(
+        $clave,
+        $consecutivo,
+        $fechaEmision,
+        $emisorNombre,
+        $emisorTipoIdentif,
+        $emisorNumIdentif,
+        $nombreComercial,
+        $emisorCodigoActividad,
+        $emisorProv,
+        $emisorCanton,
+        $emisorDistrito,
+        $emisorBarrio,
+        $emisorOtrasSenas,
+        $emisorCodPaisTel,
+        $emisorTel,
+        $emisorCodPaisFax,
+        $emisorFax,
+        $emisorEmail,
+        $receptorNombre,
+        $receptorTipoIdentif,
+        $recenprotNumIdentif,
+        $receptorProvincia,
+        $receptorCanton,
+        $receptorDistrito,
+        $receptorBarrio,
+        $receptorOtrasSenas,
+        $receptorCodPaisTel,
+        $receptorTel,
+        $receptorCodPaisFax,
+        $receptorFax,
+        $receptorEmail,
+        $receptorCodigoActividad,
+        $condVenta,
+        $plazoCredito,
+        $medio_pago,
+        $codMoneda,
+        $tipoCambio,
+        $totalServGravados,
+        $totalServExentos,
+        $totalMercGravadas,
+        $totalMercExentas,
+        $totalGravados,
+        $totalExentos,
+        $totalVentas,
+        $totalDescuentos,
+        $totalVentasNeta,
+        $totalImp,
+        $totalDesgloseImpuestos,
+        $totalComprobante,
+        $otros,
+        $productos,
+        $totalServiciosExonerados,
+        $totalMercanciaExonerada,
+        $totalExonerado,
+        $totalIVADevuelto,
+        $totalOtrosCargos,
+        $esFacturaCompra = false,        
+        $esFacturaElectronica = false
+        ) {
 
-        $noReceptor = (trim($receptorNombre) == "" || $receptorNombre == null || $receptorNombre == "null");
         //detalles de tiquete / factura
         $otrosType = "";
         //detalles de la compra
@@ -227,7 +270,7 @@ class API_Helper{
         $openTag = '<FacturaElectronica xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica https://tribunet.hacienda.go.cr/docs/esquemas/2025/v4.4/facturaElectronica.xsd">';
         $closeTag = "</FacturaElectronica>";
 
-        if($noReceptor){
+        if(!$esFacturaElectronica){
             $openTag = '<TiqueteElectronico xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/tiqueteElectronico" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/tiqueteElectronico https://tribunet.hacienda.go.cr/docs/esquemas/2025/v4.4/tiqueteElectronico.xsd">';
             $closeTag = "</TiqueteElectronico>";
         }
@@ -279,7 +322,7 @@ class API_Helper{
                $xmlString .= '<CorreoElectronico>' . $emisorEmail . '</CorreoElectronico>
             </Emisor>';
 
-            if(!$noReceptor){
+            if($receptorNombre != null && trim($receptorNombre) != "" && $receptorNombre != "null"){
                 $xmlString .= '<Receptor>
                     <Nombre>' . $receptorNombre . '</Nombre>
                     <Identificacion>
@@ -291,8 +334,8 @@ class API_Helper{
 
                     } else {
 
-                       $xmlString .= '<Ubicacion>
-                                             <Provincia>' . $receptorProvincia . '</Provincia>
+                        $xmlString .= '<Ubicacion>
+                                                <Provincia>' . $receptorProvincia . '</Provincia>
                                             <Canton>' . $receptorCanton . '</Canton>
                                             <Distrito>' . $receptorDistrito . '</Distrito>'
                                             .($receptorBarrio == null ? '' : '<Barrio>' . $receptorBarrio . '</Barrio>').
@@ -305,15 +348,17 @@ class API_Helper{
                     } else {
 
 
-                     $xmlString .= '<Telefono>
-                                              <CodigoPais>' . $receptorCodPaisTel . '</CodigoPais>
-                                              <NumTelefono>' . $receptorTel . '</NumTelefono>
+                        $xmlString .= '<Telefono>
+                                                <CodigoPais>' . $receptorCodPaisTel . '</CodigoPais>
+                                                <NumTelefono>' . $receptorTel . '</NumTelefono>
                                     </Telefono>';
                     }
 
                     $xmlString .= '<CorreoElectronico>' . $receptorEmail . '</CorreoElectronico>
                 </Receptor>';
             }
+            
+            
             $xmlString .= '<CondicionVenta>' . $condVenta . '</CondicionVenta>';
 
             if($plazoCredito > 0){

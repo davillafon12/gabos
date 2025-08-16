@@ -75,5 +75,8 @@ ALTER TABLE `tb_51_lista_consignacion` ADD `Codigo_Descuento` VARCHAR(2) NOT NUL
 ALTER TABLE `tb_23_mixto` ADD `Tipo_Pago` VARCHAR(20) NOT NULL DEFAULT 'contado' AFTER `Mixto_Cantidad_Paga`;
 
 
+-- Cambios para otras señas del emisor y receptor
+ALTER TABLE `tb_55_factura_electronica` ADD `ReceptorOtrasSennas` VARCHAR(200) NOT NULL AFTER `ReceptorBarrio`;
+ALTER TABLE `tb_55_factura_electronica` CHANGE `ReceptorOtrasSennas` `ReceptorOtrasSennas` VARCHAR(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
 
 
