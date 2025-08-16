@@ -762,13 +762,13 @@ class API_Helper{
     }
 
     function genXMLMr($clave, $numeroConsecutivoReceptor, $fechaEmisionDoc, $emisor_num_identif, $receptor_num_identif, $mensaje, $detalleMensaje, $montoTotalImpuesto, $totalFactura) {
-        $numeroCedulaEmisor = str_pad($emisor_num_identif, 12, "0", STR_PAD_LEFT);
-        $numeroCedulaReceptor = str_pad($receptor_num_identif, 12, "0", STR_PAD_LEFT);
+        //$numeroCedulaEmisor = str_pad($emisor_num_identif, 12, "0", STR_PAD_LEFT);
+        //$numeroCedulaReceptor = str_pad($receptor_num_identif, 12, "0", STR_PAD_LEFT);
 
         $xmlString = '<?xml version="1.0" encoding="utf-8"?>
-        <MensajeReceptor  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/mensajeReceptor.xsd">
+        <MensajeReceptor  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/mensajeReceptor" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/mensajeReceptor https://tribunet.hacienda.go.cr/docs/esquemas/2025/v4.4/mensajeReceptor.xsd">
         <Clave>' . $clave . '</Clave>
-        <NumeroCedulaEmisor>' . $numeroCedulaEmisor . '</NumeroCedulaEmisor>
+        <NumeroCedulaEmisor>' . $emisor_num_identif . '</NumeroCedulaEmisor>
         <FechaEmisionDoc>' . $fechaEmisionDoc . '</FechaEmisionDoc>
         <Mensaje>' . $mensaje . '</Mensaje>';
         if (!empty($detalleMensaje)) {
@@ -778,7 +778,7 @@ class API_Helper{
             $xmlString .= '<MontoTotalImpuesto>' . $montoTotalImpuesto . '</MontoTotalImpuesto>';
         }
         $xmlString .= '<TotalFactura>' . $totalFactura . '</TotalFactura>
-        <NumeroCedulaReceptor>' . $numeroCedulaReceptor . '</NumeroCedulaReceptor>
+        <NumeroCedulaReceptor>' . $receptor_num_identif . '</NumeroCedulaReceptor>
         <NumeroConsecutivoReceptor>' . $numeroConsecutivoReceptor . '</NumeroConsecutivoReceptor>';
 
         $xmlString .= '</MensajeReceptor>';

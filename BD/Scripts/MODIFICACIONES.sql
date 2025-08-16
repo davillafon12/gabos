@@ -79,4 +79,6 @@ ALTER TABLE `tb_23_mixto` ADD `Tipo_Pago` VARCHAR(20) NOT NULL DEFAULT 'contado'
 ALTER TABLE `tb_55_factura_electronica` ADD `ReceptorOtrasSennas` VARCHAR(200) NOT NULL AFTER `ReceptorBarrio`;
 ALTER TABLE `tb_55_factura_electronica` CHANGE `ReceptorOtrasSennas` `ReceptorOtrasSennas` VARCHAR(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
 
+-- Mensaje receptor
+ALTER TABLE `tb_59_mensaje_receptor` ADD `Mensaje` VARCHAR(160) NOT NULL DEFAULT '_____' AFTER `Situacion`;
 

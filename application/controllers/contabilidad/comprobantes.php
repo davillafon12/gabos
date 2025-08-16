@@ -119,6 +119,7 @@ class comprobantes extends CI_Controller {
                                 foreach($facturas as $f){
                                     if($f["clave"] == $comprobantes[$counter]["clave"]){
                                         $comprobantes[$counter]["tipoDocumento"] = $f["estado"];
+                                        $comprobantes[$counter]["mensaje"] = $f["mensaje"];
                                     }
                                 }
                             }
@@ -130,6 +131,7 @@ class comprobantes extends CI_Controller {
                                                                                     $c["receptorCedula"], 
                                                                                     $empresa->Codigo_Pais_Fax, 
                                                                                     "normal", 
+                                                                                    $c["mensaje"],
                                                                                     rand(10000000,99999999), 
                                                                                     $c["tipoDocumento"], 
                                                                                     $c["clave"], 

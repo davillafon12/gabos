@@ -3058,7 +3058,24 @@ Class contabilidad extends CI_Model
             }
         }
 
-        function agregarInfoBasicaMensajeReceptor($sucursal, $consecutivo, $receptorTipoIdentificacion, $receptorIdentificacion, $receptorCodigoPais, $situacion, $codigoSeguridad, $tipoDocumento, $clave, $emisorNombre, $emisorIdentificacion, $emisorTipoIdentificacion, $fechaEmision, $totalImpuestos, $totalComprobante, $fechaEmisionComprobante){
+        function agregarInfoBasicaMensajeReceptor(
+			$sucursal, 
+			$consecutivo, 
+			$receptorTipoIdentificacion, 
+			$receptorIdentificacion, 
+			$receptorCodigoPais, 
+			$situacion, 
+			$mensaje,
+			$codigoSeguridad, 
+			$tipoDocumento, 
+			$clave, 
+			$emisorNombre, 
+			$emisorIdentificacion, 
+			$emisorTipoIdentificacion, 
+			$fechaEmision, 
+			$totalImpuestos, 
+			$totalComprobante, 
+			$fechaEmisionComprobante){
             //array("fisico", "juridico", "dimex", "nite")
             $tipoIdentificacion = "";
             switch($receptorTipoIdentificacion){
@@ -3085,6 +3102,7 @@ Class contabilidad extends CI_Model
                 "ReceptorIdentificacion" => $receptorIdentificacion,
                 "ReceptorCodigoPais" => $receptorCodigoPais,
                 "Situacion" => $situacion,
+				"Mensaje" => $mensaje,
                 "CodigoSeguridad" => $codigoSeguridad,
                 "TipoDocumento" => $tipoDocumento,
                 "Clave" => $clave,
@@ -3149,7 +3167,16 @@ Class contabilidad extends CI_Model
                     break;
                 }
 
-                if($xmlRes = $api->crearXMLMensajeReceptor($comprobante->Clave, $comprobante->ConsecutivoHacienda, $comprobante->FechaEmision, $comprobante->EmisorIdentificacion, $comprobante->ReceptorIdentificacion, $tipoMensaje, "", $comprobante->TotalImpuestos, $comprobante->TotalComprobante)){
+                if($xmlRes = $api->crearXMLMensajeReceptor(
+					$comprobante->Clave, 
+					$comprobante->ConsecutivoHacienda, 
+					$comprobante->FechaEmision, 
+					$comprobante->EmisorIdentificacion, 
+					$comprobante->ReceptorIdentificacion, 
+					$tipoMensaje, 
+					str_pad($comprobante->Mensaje, 5, '_', STR_PAD_RIGHT), 
+					$comprobante->TotalImpuestos, 
+					$comprobante->TotalComprobante)){
                     $data = array(
                         "XMLSinFirmar" => $xmlRes["xml"]
                     );
@@ -3271,6 +3298,9 @@ Class contabilidad extends CI_Model
                 $this->db->where("Sucursal", $sucursal);
                 $this->db->update("tb_59_mensaje_receptor", $data);
                 log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+
+				$this->storeFile($comprobante->Clave."-respuesta.xml", "mr", null, base64_decode($xmlRespuesta), $comprobante->FechaEmision);
+
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
                 log_message('error', "Error al revisar el estado del mensaje receptor en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
