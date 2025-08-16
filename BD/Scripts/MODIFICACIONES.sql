@@ -82,3 +82,16 @@ ALTER TABLE `tb_55_factura_electronica` CHANGE `ReceptorOtrasSennas` `ReceptorOt
 -- Mensaje receptor
 ALTER TABLE `tb_59_mensaje_receptor` ADD `Mensaje` VARCHAR(160) NOT NULL DEFAULT '_____' AFTER `Situacion`;
 
+-- Factura electronica de compra
+ALTER TABLE `tb_61_factura_compra_electronica` ADD `ReceptorOtrasSennas` VARCHAR(200) NOT NULL DEFAULT '_____' AFTER `ReceptorDistrito`;
+ALTER TABLE `tb_61_factura_compra_electronica` ADD `ReceptorCodigoActividad` VARCHAR(6) NOT NULL AFTER `ReceptorEmail`;
+ALTER TABLE `tb_61_factura_compra_electronica` ADD `MedioPagoObject` TEXT NOT NULL AFTER `MedioPago`;
+ALTER TABLE `tb_61_factura_compra_electronica` ADD `DesgloseTotalImpuestosObject` TEXT NOT NULL AFTER `TotalImpuestos`;
+ALTER TABLE `tb_61_factura_compra_electronica` CHANGE `PlazoCredito` `PlazoCredito` INT(5) NULL DEFAULT NULL;
+
+ALTER TABLE `tb_62_articulos_factura_compra_electronica` ADD `TipoDescuento` VARCHAR(2) NULL AFTER `MontoDescuento`;
+ALTER TABLE `tb_62_articulos_factura_compra_electronica` CHANGE `NaturalezaDescuento` `NaturalezaDescuento` VARCHAR(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `tb_61_factura_compra_electronica` ADD `TipoDocIR` VARCHAR(2) NOT NULL DEFAULT '14' AFTER `CodigoActividad`;
+ALTER TABLE `tb_61_factura_compra_electronica` ADD `FechaEmisionIR` VARCHAR(50) NOT NULL AFTER `TipoDocIR`;
+ALTER TABLE `tb_61_factura_compra_electronica` ADD `NumeroFacturaID` VARCHAR(50) NOT NULL AFTER `FechaEmisionIR`, ADD `CodigoIR` VARCHAR(100) NOT NULL DEFAULT '04' AFTER `NumeroFacturaID`, ADD `RazonIR` VARCHAR(180) NOT NULL AFTER `CodigoIR`;

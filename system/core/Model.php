@@ -39,6 +39,8 @@ class CI_Model {
         "03" => "Cheque",
         "04" => "Transferencia - depósito bancario",
         "05" => "Recaudado por terceros",
+        "06" => "Sinpe Móvil",
+        "07" => "Plataforma Digital",
         "99" => "Otros"
     );
 

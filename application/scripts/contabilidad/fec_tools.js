@@ -107,6 +107,7 @@ function validarDetalle(){
     var detalle = $("#detalle_detalle").val().trim();
     var precio = $("#precio_unitario_detalle").val();
     var descuento = $("#descuento_detalle").val();
+    var tipoDescuento = $("#tipo_codigo_descuento").val();
     var tarifaIVA = $("#tarifa_iva_detalle").val();
 
     var tipoCodigo = $("#tipo_codigo_detalle").val();
@@ -182,6 +183,7 @@ function validarDetalle(){
         detalle: detalle,
         precio: precio.toFixed(_CANTIDAD_DECIMALES),
         descuento: descuento.toFixed(_CANTIDAD_DECIMALES),
+        tipoDescuento: tipoDescuento,
         tarifaIVA: tarifaIVA.toFixed(_CANTIDAD_DECIMALES),
         tipoCodigo: tipoCodigo,
         unidadMedida: unidadMedida,
@@ -291,10 +293,12 @@ function validarCrearFactura(){
     var cantonEmisor = $("#emisor_canton").val();
     var distritoEmisor = $("#emisor_distrito").val();
     var codigoActividadEmisor = $("#codigo_actividad_factura").val().trim();
-    var fechaFactura = $("#fecha_factura").val().trim();
+    var fechaEmision = $("#fecha_emision").val().trim();
     var condicionVenta = $("#condicion_venta_factura").val();
     var tipoPago = $("#tipo_pago_factura").val();
     var plazoCredito = $("#plazo_factura").val().trim();
+    var consecutivoFactura = $("#consecutivo_factura").val().trim();
+    var razonReferencia = $("#razon_referencia").val().trim();
 
     if(nombreEmisor == ""){
         notyConTipo("Debe ingresar el nombre del emisor", "error");
@@ -346,12 +350,12 @@ function validarCrearFactura(){
         return false;
     }
 
-    if(fechaFactura == ""){
-        notyConTipo("Debe ingresar la fecha y hora de la factura", "error");
+    if(fechaEmision == ""){
+        notyConTipo("Debe ingresar la fecha y hora de la emisón de la factura original", "error");
         return false;
     }
 
-    if(!moment(fechaFactura,"DD-MM-YYYY HH:mm:ss", true).isValid()){
+    if(!moment(fechaEmision,"DD-MM-YYYY HH:mm:ss", true).isValid()){
         notyConTipo("Debe ingresar una fecha con formato válido", "error");
         return false;
     }
@@ -379,6 +383,16 @@ function validarCrearFactura(){
         return false;
     }
 
+    if(razonReferencia == ""){
+        notyConTipo("Debe ingresar la razón de referencia", "error");
+        return false;
+    }
+
+    if(consecutivoFactura == ""){
+        notyConTipo("Debe ingresar el consecutivo de la factura original", "error");
+        return false;
+    }
+
     if(_DETALLES_FACTURA.length <= 0){
         notyConTipo("Debe ingresar al menos un artículo o servicio a la factura", "error");
         return false;
@@ -394,10 +408,12 @@ function validarCrearFactura(){
         cantonEmisor: cantonEmisor,
         distritoEmisor: distritoEmisor,
         codigoActividadEmisor: codigoActividadEmisor,
-        fechaFactura: fechaFactura,
+        fechaEmisionIr: fechaEmision,
         condicionVenta: condicionVenta,
         plazoCredito: plazoCredito,
         tipoPago: tipoPago,
+        consecutivoFactura: consecutivoFactura,
+        razonReferencia: razonReferencia,
         detalles: JSON.stringify(_DETALLES_FACTURA)
     };
 }
