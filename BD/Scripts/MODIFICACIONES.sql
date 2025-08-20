@@ -95,3 +95,67 @@ ALTER TABLE `tb_62_articulos_factura_compra_electronica` CHANGE `NaturalezaDescu
 ALTER TABLE `tb_61_factura_compra_electronica` ADD `TipoDocIR` VARCHAR(2) NOT NULL DEFAULT '14' AFTER `CodigoActividad`;
 ALTER TABLE `tb_61_factura_compra_electronica` ADD `FechaEmisionIR` VARCHAR(50) NOT NULL AFTER `TipoDocIR`;
 ALTER TABLE `tb_61_factura_compra_electronica` ADD `NumeroFacturaID` VARCHAR(50) NOT NULL AFTER `FechaEmisionIR`, ADD `CodigoIR` VARCHAR(100) NOT NULL DEFAULT '04' AFTER `NumeroFacturaID`, ADD `RazonIR` VARCHAR(180) NOT NULL AFTER `CodigoIR`;
+
+-- Recibos electronicos por dinero
+
+CREATE TABLE `tb_66_recibo_electronico_pago` (
+  `Consecutivo` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL,
+  `Clave` varchar(100) DEFAULT NULL,
+  `ConsecutivoHacienda` varchar(30) DEFAULT NULL,
+  `FechaEmision` varchar(50) DEFAULT NULL,
+  `EmisorNombre` varchar(200) DEFAULT NULL,
+  `EmisorTipoIdentificacion` varchar(20) DEFAULT NULL,
+  `EmisorIdentificacion` varchar(50) DEFAULT NULL,
+  `EmisorEmail` varchar(200) DEFAULT NULL,
+  `ReceptorNombre` varchar(200) DEFAULT NULL,
+  `ReceptorTipoIdentificacion` varchar(20) DEFAULT NULL,
+  `ReceptorIdentificacion` varchar(50) DEFAULT NULL,
+  `ReceptorEmail` varchar(200) DEFAULT NULL,
+  `CondicionVenta` varchar(30) DEFAULT NULL,
+  `MedioPago` text NOT NULL,
+  `CodigoMoneda` varchar(5) DEFAULT NULL,
+  `TipoCambio` varchar(20) DEFAULT NULL,
+  `TotalVentas` varchar(20) DEFAULT NULL,
+  `TotalVentasNeta` varchar(20) DEFAULT NULL,
+  `TotalComprobante` varchar(20) DEFAULT NULL,
+  `XMLSinFirmar` longtext DEFAULT NULL,
+  `XMLFirmado` longtext DEFAULT NULL,
+  `FechaRecibidoPorHacienda` timestamp NULL DEFAULT NULL,
+  `RespuestaHaciendaXML` longtext DEFAULT NULL,
+  `RespuestaHaciendaFecha` timestamp NULL DEFAULT NULL,
+  `RespuestaHaciendaEstado` varchar(20) DEFAULT NULL,
+  `CorreoEnviadoReceptor` int(11) DEFAULT NULL,
+  `TipoDocumento` varchar(4) DEFAULT NULL,
+  `CodigoPais` varchar(4) DEFAULT NULL,
+  `ConsecutivoFormateado` varchar(11) DEFAULT NULL,
+  `Situacion` varchar(15) DEFAULT NULL,
+  `CodigoSeguridad` varchar(8) DEFAULT NULL,
+  `TipoDocIR` varchar(2) NOT NULL,
+  `FechaEmisionIR` varchar(50) NOT NULL,
+  `NumeroFacturaID` varchar(50) NOT NULL,
+  `CodigoIR` varchar(100) NOT NULL,
+  `RazonIR` varchar(180) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+ALTER TABLE `tb_66_recibo_electronico_pago`
+  ADD PRIMARY KEY (`Consecutivo`,`Sucursal`,`TipoDocIR`) USING BTREE;
+
+
+CREATE TABLE `tb_67_articulos_recibo_electronico_pago` (
+  `Id` int(11) NOT NULL,
+  `Detalle` varchar(150) DEFAULT NULL,
+  `MontoTotal` varchar(20) DEFAULT NULL,
+  `Subtotal` varchar(20) DEFAULT NULL,
+  `MontoTotalLinea` varchar(20) DEFAULT NULL,
+  `Consecutivo` int(11) NOT NULL,
+  `Sucursal` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+ALTER TABLE `tb_67_articulos_recibo_electronico_pago`
+  ADD PRIMARY KEY (`Id`);
+
+ALTER TABLE `tb_67_articulos_recibo_electronico_pago`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `tb_67_articulos_recibo_electronico_pago` ADD `TipoDocIR` VARCHAR(2) NOT NULL DEFAULT '01' AFTER `Sucursal`;

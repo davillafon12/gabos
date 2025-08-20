@@ -9,6 +9,9 @@ class recibos extends CI_Controller {
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('contabilidad','',TRUE);	
 		$this->load->model('banco','',TRUE);
+		$this->load->model('factura','',TRUE);
+		$this->load->model('empresa','',TRUE);
+		$this->load->model('impresion_m','',TRUE);
 	}
 
 	function index()
@@ -102,6 +105,8 @@ class recibos extends CI_Controller {
 							$retorno['sucursal']= $data['Sucursal_Codigo'];
 							$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
 							$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");
+
+							$this->crearRecibosElectronicos($recibos, $data['Sucursal_Codigo']);
 							//La transaccion se guarda en $this->procesarFacturas
 						}else{
 							$retorno['error'] = '9'; //Error pagando facturas
@@ -216,6 +221,22 @@ class recibos extends CI_Controller {
 				break;
 		}
 	}
+
+	private function crearRecibosElectronicos($recibos, $sucursal){
+		foreach($recibos as $recibo){
+			$this->crearReciboElectronicoDePago($recibo, $sucursal);
+		}
+	}
+
+	private function crearReciboElectronicoDePago($reciboId, $sucursal){
+		if($recibo = $this->contabilidad->getReciboParaImpresion($reciboId, $sucursal)){
+			$data = $this->contabilidad->generarObjectosParaComprobante($recibo[0], $sucursal);
+			$this->contabilidad->crearReciboElectronicoDePago($data['empresa'], $data['cliente'], $data['recibo'], $data['costos'], $data['articulos']);
+			$this->contabilidad->guardarPDFRecibo($reciboId, $sucursal);
+		}
+	}
+
+	
 	
 }
 

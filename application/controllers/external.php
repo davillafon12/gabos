@@ -334,6 +334,47 @@ class external extends CI_Controller {
             $this->logger->info("enviarComprobantesAHacienda", "No hay facturas electrónicas de compra que enviar a Hacienda");
         }
 
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de recibos electronicos de pago");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        
+        if($recibosElectronicosDePago = $this->contabilidad->getRecibosElectronicosDePagoSinEnviarAHacienda()){
+            foreach($recibosElectronicosDePago as $reciboElectronicoDePago){
+                if(!isset($empresas[$reciboElectronicoDePago->Sucursal])){
+                    $empresas[$reciboElectronicoDePago->Sucursal] = $this->empresa->getEmpresa($reciboElectronicoDePago->Sucursal)[0];
+                }
+                $empresa = $empresas[$reciboElectronicoDePago->Sucursal];
+
+                $this->logger->info("enviarComprobantesAHacienda", " Enviando el recibo electrónico de pago {$reciboElectronicoDePago->Consecutivo} de la sucursal {$reciboElectronicoDePago->Sucursal}");
+
+                $respuesta = $this->contabilidad->enviarReciboElectronicoDePagoAHacienda($reciboElectronicoDePago->Consecutivo, $reciboElectronicoDePago->Sucursal, $reciboElectronicoDePago->TipoDocIR);
+
+                if($respuesta){
+                    if(isset($respuesta["status"])){
+                        $this->logger->info("enviarComprobantesAHacienda", "Se envió recibo electrónico de pago con estado <{$respuesta["estado_hacienda"]}>");
+
+                        if($respuesta["estado_hacienda"] == "aceptado"){
+                            if(filter_var($reciboElectronicoDePago->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                require_once PATH_API_CORREO;
+                                $apiCorreo = new Correo();
+                                $attachs = array(
+                                    $this->contabilidad->getFinalPath("rep", $reciboElectronicoDePago->FechaEmision).$reciboElectronicoDePago->Clave.".xml",
+                                    $this->contabilidad->getFinalPath("rep", $reciboElectronicoDePago->FechaEmision).$reciboElectronicoDePago->Clave.".pdf",
+                                    $this->contabilidad->getFinalPath("rep", $reciboElectronicoDePago->FechaEmision).$reciboElectronicoDePago->Clave."-respuesta.xml");
+                                if($apiCorreo->enviarCorreo($reciboElectronicoDePago->ReceptorEmail, "Recibo #{$reciboElectronicoDePago->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar un recibo bajo su nombre.", "Recibo Electrónico - ".$empresa->Sucursal_Nombre, $attachs)){
+                                    $this->contabilidad->marcarEnvioCorreoReciboElectronicoDePago($reciboElectronicoDePago->Sucursal, $reciboElectronicoDePago->Consecutivo, $reciboElectronicoDePago->TipoDocIR);
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    $this->logger->info("enviarComprobantesAHacienda", "No se pudo enviar recibo electrónico de pago");
+                }
+            }
+        }else{
+            $this->logger->info("enviarComprobantesAHacienda", "No hay recibos electrónicos de pago que enviar a Hacienda");
+        }
+
 
         // Al final destruimos todas las sesiones con el API de Hacienda
         $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");

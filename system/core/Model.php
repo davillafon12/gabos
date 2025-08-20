@@ -577,6 +577,9 @@ class CI_Model {
                 case "fec":
                     $finalPath .= "factura_electronica_compra/".date("Y_m_d", $date)."/";
                 break;
+                case "rep":
+                    $finalPath .= "recibo_electronico_pago/".date("Y_m_d", $date)."/";
+                break;
                 case "logo":
                     $finalPath = CARPETA_IMAGENES_LOGO;
                 break;
@@ -608,6 +611,9 @@ class CI_Model {
                 break;
                 case "fec":
                     $finalPath .= "factura_electronica_compra/".date("Y_m_d", $date)."/";
+                break;
+                case "rep":
+                    $finalPath .= "recibo_electronico_pago/".date("Y_m_d", $date)."/";
                 break;
             }
 

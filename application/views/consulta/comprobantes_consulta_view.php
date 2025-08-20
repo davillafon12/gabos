@@ -69,6 +69,7 @@ PARA:
                                 <option value="NC" <?= $documentoSeleccionado == "nc" ? "selected" : "" ?>>Nota Crédito</option>
 								<option value="MR" <?= $documentoSeleccionado == "mr" ? "selected" : "" ?>>Mensaje Receptor</option>
 								<option value="FEC" <?= $documentoSeleccionado == "fec" ? "selected" : "" ?>>Factura Electrónica de Compras</option>
+								<option value="REP" <?= $documentoSeleccionado == "rep" ? "selected" : "" ?>>Recibo Electrónico de Pago</option>
                             </select>
 				<table id='tabla_editar' class='tablaPrincipal' data-order='[[ 3, "asc" ]]'>
 					<thead> 

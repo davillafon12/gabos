@@ -103,7 +103,7 @@ class API_Helper{
 
         $tipoDoc = $tipoDocumento;
 
-        $tipos = array("FE", "ND", "NC", "TE", "CCE", "CPCE", "RCE", "FEC");
+        $tipos = array("FE", "ND", "NC", "TE", "CCE", "CPCE", "RCE", "FEC", "REP");
 
         if (in_array($tipoDoc, $tipos)) {
             switch ($tipoDoc) {
@@ -130,6 +130,9 @@ class API_Helper{
                     break;
                 case 'FEC': // Factura Elctronica de Compra
                     $tipoDocumento = "08";
+                    break;
+                case 'REP': // Recibo Electronico de Pago
+                    $tipoDocumento = "10";
                     break;
             }
         } else {
@@ -766,6 +769,126 @@ class API_Helper{
         }
 
 
+        $xmlString .= "<InformacionReferencia>
+            <TipoDocIR>" . $tipoDocIr . "</TipoDocIR>
+            <Numero>" . $numeroIr . "</Numero>
+            <FechaEmisionIR>" . $fechaEmisionIr . "</FechaEmisionIR>
+            <Codigo>" . $codigoIr . "</Codigo>
+            <Razon>" . $razonIr . "</Razon>            
+        </InformacionReferencia>
+        ";
+
+
+        $xmlString .= "
+                $closeTag";
+        $arrayResp = array(
+            "clave" => $clave,
+            "xml" => base64_encode($xmlString)
+        );
+        return $arrayResp;
+    }
+
+    public function genXMLReciboElectronicoDePago(
+        $clave,
+        $consecutivo,
+        $fechaEmision,
+        $emisorNombre,
+        $emisorTipoIdentif,
+        $emisorNumIdentif,
+        $emisorEmail,
+        $receptorNombre,
+        $receptorTipoIdentif,
+        $recenprotNumIdentif,
+        $receptorEmail,
+        $condVenta,
+        $medio_pago,
+        $codMoneda,
+        $tipoCambio,
+        $totalVentas,
+        $totalVentasNeta,
+        $totalComprobante,
+        $productos,
+        $tipoDocIr,
+        $fechaEmisionIr,
+        $numeroIr,
+        $codigoIr,
+        $razonIr
+        ) {
+
+        //detalles de tiquete / factura
+        $otrosType = "";
+        //detalles de la compra
+
+        $detalles = $productos;
+
+        $openTag = '<ReciboElectronicoPago xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/reciboElectronicoPago" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/reciboElectronicoPago https://tribunet.hacienda.go.cr/docs/esquemas/2025/v4.4/reciboElectronicoPago.xsd">';
+        $closeTag = "</ReciboElectronicoPago>";
+
+        $xmlString = '<?xml version="1.0" encoding="utf-8"?>
+            ' . $openTag . '
+            <Clave>' . $clave . '</Clave>
+            <ProveedorSistemas>' . PROVEEDOR_DE_SISTEMAS . '</ProveedorSistemas>
+            <NumeroConsecutivo>' . $consecutivo . '</NumeroConsecutivo>
+            <FechaEmision>' . $fechaEmision . '</FechaEmision>
+            <Emisor>
+                <Nombre>' . $emisorNombre . '</Nombre>
+                <Identificacion>
+                    <Tipo>' . $emisorTipoIdentif . '</Tipo>
+                    <Numero>' . $emisorNumIdentif . '</Numero>
+                </Identificacion>';       
+               $xmlString .= '<CorreoElectronico>' . $emisorEmail . '</CorreoElectronico>
+            </Emisor>';
+
+            if($receptorNombre != null && trim($receptorNombre) != "" && $receptorNombre != "null"){
+                $xmlString .= '<Receptor>
+                    <Nombre>' . $receptorNombre . '</Nombre>
+                    <Identificacion>
+                        <Tipo>' . $receptorTipoIdentif . '</Tipo>
+                        <Numero>' . $recenprotNumIdentif . '</Numero>
+                    </Identificacion>';
+                    $xmlString .= '<CorreoElectronico>' . $receptorEmail . '</CorreoElectronico>
+                </Receptor>';
+            }            
+            
+            $xmlString .= '<CondicionVenta>' . $condVenta . '</CondicionVenta>';
+
+            $xmlString .= '<DetalleServicio>';
+
+        $l = 1;
+        foreach ($detalles as $d) {
+            $xmlString .= '<LineaDetalle>
+                      <NumeroLinea>' . $l . '</NumeroLinea>
+                      <Detalle>' . $d["detalle"] . '</Detalle>
+                      <MontoTotal>' . $d["montoTotal"] . '</MontoTotal>';
+            $xmlString .= '<SubTotal>' . $d["subtotal"] . '</SubTotal>';
+
+            $xmlString .= '<ImpuestoNeto>0</ImpuestoNeto>                
+                <MontoTotalLinea>' . $d["montoTotalLinea"] . '</MontoTotalLinea>';
+
+            $xmlString .= '</LineaDetalle>';
+            $l++;
+        }
+        $xmlString .= '</DetalleServicio>
+            <ResumenFactura>';
+
+            $xmlString .= '<CodigoTipoMoneda>
+                <CodigoMoneda>' . $codMoneda . '</CodigoMoneda>
+                <TipoCambio>' . $tipoCambio . '</TipoCambio>
+            </CodigoTipoMoneda>            
+            <TotalVenta>' . $totalVentas . '</TotalVenta>
+            <TotalVentaNeta>' . $totalVentasNeta . '</TotalVentaNeta>';
+
+            foreach($medio_pago as $mp){
+                $xmlString .= '<MedioPago>
+                    <TipoMedioPago>' . $mp->tipo . '</TipoMedioPago>';
+                    $xmlString .= trim($mp->otros) != '' ? '<MedioPagoOtros>' . $mp->otros . '</MedioPagoOtros>' : '';
+                    $xmlString .= '<TotalMedioPago>' . $mp->total . '</TotalMedioPago>
+                </MedioPago>';
+            }
+
+            $xmlString .= '<TotalComprobante>' . $totalComprobante . '</TotalComprobante>';
+            $xmlString .= '</ResumenFactura>';
+        
         $xmlString .= "<InformacionReferencia>
             <TipoDocIR>" . $tipoDocIr . "</TipoDocIR>
             <Numero>" . $numeroIr . "</Numero>

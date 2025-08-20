@@ -1022,6 +1022,11 @@ class consulta extends CI_Controller {
                         $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
                         $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
                     break;
+					case "REP":
+                        $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                    break;
                 }
                 
                 if($art->estado != "aceptado" && $art->estado != "rechazado" && $art->estado != "recibido" && $art->estado != "procesando"){
@@ -1227,6 +1232,15 @@ class consulta extends CI_Controller {
                                 $retorno["error"] = "No existe mensaje receptor";
                             }
                         break;
+						case "REP":
+                            if($recibo = $this->contabilidad->getReciboElectronicoDePagoByClave($clave)){
+								$this->contabilidad->enviarReciboElectronicoDePagoAHacienda($recibo->Consecutivo, $recibo->Sucursal, $recibo->TipoDocIR);
+                                $retorno["status"] = 1;
+                                unset($retorno["error"]);
+                            }else{
+                                $retorno["error"] = "No existe mensaje receptor";
+                            }
+                        break;
                     }
                 }else{
                     $retorno["error"] = "El tipo no puede ser vacio";
@@ -1282,6 +1296,27 @@ class consulta extends CI_Controller {
 										$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml");
                                     if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                         $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
+                                        $retorno["status"] = 1;
+                                        unset($retorno["error"]);
+                                    }
+                                }
+                            }else{
+                                $retorno["error"] = "No existe nota credito electronica";
+                            }
+                            
+                        break;
+						case "REP":
+                            if($recibo = $this->contabilidad->getReciboElectronicoDePagoByClave($clave)){
+                                if(filter_var($recibo->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                    $empresa = $this->empresa->getEmpresa($recibo->Sucursal)[0];
+                                    require_once PATH_API_CORREO;
+                                    $apiCorreo = new Correo();
+                                    $attachs = array(
+                                        $this->contabilidad->getFinalPath("rep", $recibo->FechaEmision).$recibo->Clave.".xml",
+										$this->contabilidad->getFinalPath("rep", $recibo->FechaEmision).$recibo->Clave.".pdf",
+										$this->contabilidad->getFinalPath("rep", $recibo->FechaEmision).$recibo->Clave."-respuesta.xml");
+                                    if($apiCorreo->enviarCorreo($recibo->ReceptorEmail, "Recibo #{$recibo->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar un recibo bajo su nombre.", "Recibo Electrónico - ".$empresa->Sucursal_Nombre, $attachs)){
+                                        $this->contabilidad->marcarEnvioCorreoReciboElectronicoDePago($recibo->Sucursal, $recibo->Consecutivo, $recibo->TipoDocIR);
                                         $retorno["status"] = 1;
                                         unset($retorno["error"]);
                                     }

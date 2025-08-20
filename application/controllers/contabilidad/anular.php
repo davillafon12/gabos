@@ -8,6 +8,9 @@ class anular extends CI_Controller {
 		$this->load->model('user','',TRUE);
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('contabilidad','',TRUE);	
+		$this->load->model('factura','',TRUE);
+		$this->load->model('empresa','',TRUE);
+		$this->load->model('impresion_m','',TRUE);
 	}
 
 	function index()
@@ -87,6 +90,9 @@ class anular extends CI_Controller {
 				
 				include PATH_USER_DATA;	
 				$this->user->guardar_transaccion($data['Usuario_Codigo'], "El usuario anuló el recibo ".$_POST['recibo']." credito: ".$_POST['credito'],$data['Sucursal_Codigo'],'anular_recibo');
+
+				$this->crearReciboElectronicoDePagoParaAnulacion($_POST['recibo'], $data['Sucursal_Codigo']);
+
 				$retorno['status'] = 'success';
 				unset($retorno['error']);
 			}else{
@@ -97,6 +103,15 @@ class anular extends CI_Controller {
 		}
 		echo json_encode($retorno);
 	}
+
+	private function crearReciboElectronicoDePagoParaAnulacion($reciboId, $sucursal){
+		if($recibo = $this->contabilidad->getReciboParaImpresion($reciboId, $sucursal)){
+			$data = $this->contabilidad->generarObjetosParaComprobanteDeAnulacion($recibo[0], $sucursal);
+			$this->contabilidad->crearReciboElectronicoDePago($data['empresa'], $data['cliente'], $data['recibo'], $data['costos'], $data['articulos']);
+			$this->contabilidad->guardarPDFRecibo($reciboId, $sucursal);
+		}
+	}
+
 }
 
 ?>
