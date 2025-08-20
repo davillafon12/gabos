@@ -29,7 +29,7 @@ class consignaciones extends CI_Controller {
 					redirect('accesoDenegado', 'location');
 			}
 			$conf_array = $this->configuracion->getConfiguracionArray();
-			$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+			$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_arraySoloActivas();
 			$data['porcentaje_iva'] = $conf_array['iva'];
 			$data['cantidad_decimales'] = $conf_array['cantidad_decimales'];
 			$data['aplicar_retencion'] = $conf_array['aplicar_retencion'];
