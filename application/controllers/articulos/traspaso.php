@@ -24,7 +24,7 @@ class traspaso extends CI_Controller {
 		{
 				redirect('accesoDenegado', 'location');
 		}
-		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_arraySoloActivas();
 		$this->load->view("articulos/articulos_traspaso_tiendas", $data);
 	}
 
