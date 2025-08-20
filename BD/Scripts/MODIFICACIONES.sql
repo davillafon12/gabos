@@ -159,3 +159,5 @@ ALTER TABLE `tb_67_articulos_recibo_electronico_pago`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `tb_67_articulos_recibo_electronico_pago` ADD `TipoDocIR` VARCHAR(2) NOT NULL DEFAULT '01' AFTER `Sucursal`;
+
+UPDATE `tb_03_cliente` SET `NoReceptor`='1';

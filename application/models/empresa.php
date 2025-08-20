@@ -223,6 +223,24 @@ Class empresa extends CI_Model
             $this->db->update('tb_02_sucursal' ,$data);
 	}
 
+	function get_empresas_ids_arraySoloActivas()
+	{
+		$this -> db -> select('codigo, Sucursal_Nombre');
+		$this -> db -> from('tb_02_sucursal');
+		$this -> db -> where('Sucursal_Estado', 1);
+		$data = array(); // create a variable to hold the information
+
+		$query = $this -> db -> get();
+
+			$result = $query->result();
+			foreach($result as $row)
+			{
+			   $data[$row->Sucursal_Nombre] = $row->codigo;  // add the row in to the results (data) array
+			}
+
+	   return $data;
+    }
+
 	function get_empresas_ids_array()
 	{
 		$this -> db -> select('codigo, Sucursal_Nombre');
