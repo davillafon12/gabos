@@ -90,6 +90,9 @@ PARA:
                                 <th>
                                     Estado
                                 </th>
+                                <th>
+                                    Mensaje
+                                </th>
                             </thead> 
                             <tbody>
                                 <?php foreach($comprobantes as $c){ ?>
@@ -125,6 +128,9 @@ PARA:
                                                     <option value="<?= $value ?>"><?= $content ?></option>
                                                 <?php } ?>
                                             </select>
+                                        </td>
+                                        <td>
+                                            <textarea class="mensaje-textarea" id="mensaje-<?= $c["clave"] ?>"></textarea>
                                         </td>
                                     </tr>
                                 <?php } ?>

@@ -31,7 +31,7 @@ class API_FE{
         }
     }
     
-    public function createClave($tipoCedula, $cedula, $codigoPais, $consecutivo, $situacion, $codigoSeguridad, $tipoDocumento){
+    public function createClave($tipoCedula, $cedula, $codigoPais, $consecutivo, $situacion, $codigoSeguridad, $tipoDocumento, $sucursal = ""){
         $bm = round(microtime(true) * 1000);
         $params = array(
             "tipoCedula" => $tipoCedula,
@@ -40,12 +40,13 @@ class API_FE{
             "consecutivo" => $consecutivo,
             "situacion" => $situacion,
             "codigoSeguridad" => $codigoSeguridad,
-            "tipoDocumento" => $tipoDocumento
+            "tipoDocumento" => $tipoDocumento,
+            "sucursal" => $sucursal
         );
         $this->logger->info("createClave", "Creating clave into API with params: ".json_encode($params));
-        
-        $result = $this->helper->getClave($tipoDocumento, $tipoCedula, $cedula, $situacion, $codigoPais, $consecutivo, $codigoSeguridad);
-        
+
+        $result = $this->helper->getClave($tipoDocumento, $tipoCedula, $cedula, $situacion, $codigoPais, $consecutivo, $codigoSeguridad, $sucursal);
+
         if(is_array($result)){
             if(isset($result["clave"]) && isset($result["consecutivo"])){
                     $ms = (round(microtime(true) * 1000)) - $bm;
@@ -63,19 +64,65 @@ class API_FE{
         }
     }
 
-    public function crearXMLFactura($clave, $consecutivo, $fecha_emision,
-                                    $emisor_nombre, $emisor_tipo_indetif, $emisor_num_identif, $nombre_comercial, $emisor_provincia, $emisor_canton, $emisor_distrito, $emisor_barrio, $emisor_otras_senas, $emisor_cod_pais_tel, $emisor_tel, $emisor_cod_pais_fax, $emisor_fax, $emisor_email,
-                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, $receptor_canton, $receptor_distrito, $receptor_barrio, $receptor_cod_pais_tel, $receptor_tel, $receptor_cod_pais_fax, $receptor_fax, $receptor_email, $receptorCodigoActividad,
-                                    $condicion_venta,
-                                    $plazo_credito,
-                                    $medio_pago,
-                                    $cod_moneda,
-                                    $tipo_cambio,
-                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $totalDesgloseImpuestos, $total_comprobante,
-                                    $otros,
-                                    $productos,
-                                    $emisorCodigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
-                                    $esFacturaCompra = false){
+    public function crearXMLFactura(
+        $clave, 
+        $consecutivo, 
+        $fecha_emision,
+        $emisor_nombre, 
+        $emisor_tipo_indetif, 
+        $emisor_num_identif, 
+        $nombre_comercial, 
+        $emisorCodigoActividad, 
+        $emisor_provincia, 
+        $emisor_canton, 
+        $emisor_distrito, 
+        $emisor_barrio, 
+        $emisor_otras_senas, 
+        $emisor_cod_pais_tel, 
+        $emisor_tel, 
+        $emisor_cod_pais_fax, 
+        $emisor_fax, 
+        $emisor_email,
+        $receptor_nombre, 
+        $receptor_tipo_identif, 
+        $receptor_num_identif, 
+        $receptor_provincia, 
+        $receptor_canton, 
+        $receptor_distrito, 
+        $receptor_barrio, 
+        $receptor_otras_senas,
+        $receptor_cod_pais_tel, 
+        $receptor_tel, 
+        $receptor_cod_pais_fax, 
+        $receptor_fax, 
+        $receptor_email, 
+        $receptorCodigoActividad,
+        $condicion_venta,
+        $plazo_credito,
+        $medio_pago,
+        $cod_moneda,
+        $tipo_cambio,
+        $total_serv_gravados, 
+        $total_serv_exentos, 
+        $total_merc_gravada, 
+        $total_merc_exenta, 
+        $total_gravados, 
+        $total_exentos, 
+        $total_ventas, 
+        $total_descuentos, 
+        $total_ventas_neta, 
+        $total_impuestos, 
+        $totalDesgloseImpuestos, 
+        $total_comprobante,
+        $otros,
+        $productos,        
+        $totalServiciosExonerados, 
+        $totalMercanciaExonerada, 
+        $totalExonerado, 
+        $totalIVADevuelto, 
+        $totalOtrosCargos,
+        $esFacturaCompra = false, 
+        $esFacturaElectronica = false){
         $bm = round(microtime(true) * 1000);
         $params = array(
             "clave" => $clave, 
@@ -102,12 +149,13 @@ class API_FE{
             "receptor_canton" => str_pad($receptor_canton,2,"0", STR_PAD_LEFT), 
             "receptor_distrito" => str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), 
             "receptor_barrio" => $esFacturaCompra ? "" : str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), 
+            "receptor_otras_senas" => $esFacturaCompra ? "" : str_pad($receptor_otras_senas,2,"0", STR_PAD_LEFT),
             "receptor_cod_pais_tel" => $esFacturaCompra ? "" : $receptor_cod_pais_tel, 
             "receptor_tel" => $esFacturaCompra ? "" : str_replace("-", "", $receptor_tel), 
             "receptor_cod_pais_fax" => $esFacturaCompra ? "" : $receptor_cod_pais_fax, 
             "receptor_fax" => $esFacturaCompra ? "" : str_replace("-", "", $receptor_fax), 
             "receptor_email" => $receptor_email,
-            "receptor_codigo_actividad" => $receptorCodigoActividad,
+            "receptor_codigo_actividad" => $receptorCodigoActividad,            
             "condicion_venta" => $condicion_venta,
             "plazo_credito" => $plazo_credito,
             "medio_pago" => $medio_pago,
@@ -132,22 +180,269 @@ class API_FE{
             "total_comprobante" => $total_comprobante,
             "otros" => $esFacturaCompra ? "" : $otros,
             "emisor_codigo_actividad" => $emisorCodigoActividad,
-            "detalles" => $productos
+            "detalles" => $productos,
+            'esFacturaElectronica' => $esFacturaElectronica
         );
         $this->logger->info("crearXMLFactura", "Creating factura XML into API with params: ".json_encode($params));
-        $result = $this->helper->genXMLFe($clave, $consecutivo, $fecha_emision,
-                                    $emisor_nombre, $emisor_tipo_indetif, $emisor_num_identif, $nombre_comercial, $emisor_provincia, str_pad($emisor_canton,2,"0", STR_PAD_LEFT), str_pad($emisor_distrito,2,"0", STR_PAD_LEFT), $esFacturaCompra ? null : str_pad($emisor_barrio,2,"0", STR_PAD_LEFT), $emisor_otras_senas, $emisor_cod_pais_tel, str_replace("-", "", $emisor_tel), $emisor_cod_pais_fax, str_replace("-", "", $emisor_fax), $emisor_email,
-                                    $receptor_nombre, $receptor_tipo_identif, $receptor_num_identif, $receptor_provincia, str_pad($receptor_canton,2,"0", STR_PAD_LEFT), str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), $esFacturaCompra ? null : str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), $receptor_cod_pais_tel, str_replace("-", "", $receptor_tel), $receptor_cod_pais_fax, str_replace("-", "", $receptor_fax), $receptor_email, $receptorCodigoActividad,
-                                    $condicion_venta,
-                                    $plazo_credito,
-                                    $medio_pago,
-                                    $cod_moneda,
-                                    $tipo_cambio,
-                                    $total_serv_gravados, $total_serv_exentos, $total_merc_gravada, $total_merc_exenta, $total_gravados, $total_exentos, $total_ventas, $total_descuentos, $total_ventas_neta, $total_impuestos, $totalDesgloseImpuestos, $total_comprobante,
-                                    $otros,
-                                    $productos,
-                                    $emisorCodigoActividad, $totalServiciosExonerados, $totalMercanciaExonerada, $totalExonerado, $totalIVADevuelto, $totalOtrosCargos,
-                                    $esFacturaCompra, $receptorCodigoActividad);
+        
+        $result = $this->helper->genXMLFe(
+            $clave, 
+            $consecutivo, 
+            $fecha_emision,
+            $emisor_nombre, 
+            $emisor_tipo_indetif, 
+            $emisor_num_identif, 
+            $nombre_comercial, 
+            $emisorCodigoActividad,
+            $emisor_provincia, 
+            str_pad($emisor_canton,2,"0", STR_PAD_LEFT), 
+            str_pad($emisor_distrito,2,"0", STR_PAD_LEFT), 
+            $esFacturaCompra ? null : str_pad($emisor_barrio,2,"0", STR_PAD_LEFT), 
+            $emisor_otras_senas, 
+            $emisor_cod_pais_tel, 
+            str_replace("-", "", $emisor_tel), 
+            $emisor_cod_pais_fax, 
+            str_replace("-", "", $emisor_fax), 
+            $emisor_email,
+            $receptor_nombre, 
+            $receptor_tipo_identif, 
+            $receptor_num_identif, 
+            $receptor_provincia, 
+            str_pad($receptor_canton,2,"0", STR_PAD_LEFT), 
+            str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), 
+            $esFacturaCompra ? null : str_pad($receptor_barrio,2,"0", STR_PAD_LEFT), 
+            $esFacturaCompra ? "" : str_pad($receptor_otras_senas,2,"0", STR_PAD_LEFT),
+            $receptor_cod_pais_tel, 
+            str_replace("-", "", $receptor_tel), 
+            $receptor_cod_pais_fax, 
+            str_replace("-", "", $receptor_fax), 
+            $receptor_email, 
+            $receptorCodigoActividad,
+            $condicion_venta,
+            $plazo_credito,
+            $medio_pago,
+            $cod_moneda,
+            $tipo_cambio,
+            $total_serv_gravados, 
+            $total_serv_exentos, 
+            $total_merc_gravada, 
+            $total_merc_exenta, 
+            $total_gravados, 
+            $total_exentos, 
+            $total_ventas, 
+            $total_descuentos, 
+            $total_ventas_neta, 
+            $total_impuestos, 
+            $totalDesgloseImpuestos, 
+            $total_comprobante,
+            $otros,
+            $productos,             
+            $totalServiciosExonerados, 
+            $totalMercanciaExonerada, 
+            $totalExonerado, 
+            $totalIVADevuelto, 
+            $totalOtrosCargos,
+            $esFacturaCompra, 
+            $esFacturaElectronica
+        );
+        
+        if(is_array($result)){
+            if(isset($result["clave"]) && isset($result["xml"])){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("crearXMLFactura", $ms."ms | API returns ".json_encode($result));
+                return $result;
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("crearXMLFactura", $ms."ms | 2 - API returns ".json_encode($result));
+                return false;
+            }
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("crearXMLFactura", $ms."ms | 1 - API returns ".json_encode($result));
+            return false;
+        }
+    }
+
+    public function crearXMLFacturaElectronicaDeCompra(
+        $clave, 
+        $consecutivo, 
+        $fecha_emision,
+        $emisor_nombre, 
+        $emisor_tipo_indetif, 
+        $emisor_num_identif, 
+        $nombre_comercial, 
+        $emisorCodigoActividad, 
+        $emisor_provincia, 
+        $emisor_canton, 
+        $emisor_distrito, 
+        $emisor_barrio, 
+        $emisor_otras_senas, 
+        $emisor_cod_pais_tel, 
+        $emisor_tel, 
+        $emisor_cod_pais_fax, 
+        $emisor_fax, 
+        $emisor_email,
+        $receptor_nombre, 
+        $receptor_tipo_identif, 
+        $receptor_num_identif, 
+        $receptor_provincia, 
+        $receptor_canton, 
+        $receptor_distrito, 
+        $receptor_barrio, 
+        $receptor_otras_senas,
+        $receptor_cod_pais_tel, 
+        $receptor_tel, 
+        $receptor_cod_pais_fax, 
+        $receptor_fax, 
+        $receptor_email, 
+        $receptorCodigoActividad,
+        $condicion_venta,
+        $plazo_credito,
+        $medio_pago,
+        $cod_moneda,
+        $tipo_cambio,
+        $total_serv_gravados, 
+        $total_serv_exentos, 
+        $total_merc_gravada, 
+        $total_merc_exenta, 
+        $total_gravados, 
+        $total_exentos, 
+        $total_ventas, 
+        $total_descuentos, 
+        $total_ventas_neta, 
+        $total_impuestos, 
+        $totalDesgloseImpuestos, 
+        $total_comprobante,
+        $otros,
+        $productos,        
+        $totalServiciosExonerados, 
+        $totalMercanciaExonerada, 
+        $totalExonerado, 
+        $totalIVADevuelto, 
+        $totalOtrosCargos,
+        $tipoDocIr,
+        $fechaEmisionIr,
+        $numeroIr,
+        $codigoIr,
+        $razonIr){
+        $bm = round(microtime(true) * 1000);
+        $params = array(
+            "clave" => $clave, 
+            "consecutivo" => $consecutivo, 
+            "fecha_emision" => $fecha_emision,
+            "emisor_nombre" => $emisor_nombre, 
+            "emisor_tipo_indetif" => $emisor_tipo_indetif, 
+            "emisor_num_identif" => $emisor_num_identif, 
+            "nombre_comercial" => $nombre_comercial, 
+            "emisor_provincia" => $emisor_provincia, 
+            "emisor_canton" => str_pad($emisor_canton,2,"0", STR_PAD_LEFT), 
+            "emisor_distrito" => str_pad($emisor_distrito,2,"0", STR_PAD_LEFT), 
+            "emisor_otras_senas" => $emisor_otras_senas,             
+            "emisor_email" => $emisor_email,
+            "receptor_nombre" => $receptor_nombre, 
+            "receptor_tipo_identif" => $receptor_tipo_identif, 
+            "receptor_num_identif" => $receptor_num_identif, 
+            "receptor_provincia" => $receptor_provincia, 
+            "receptor_canton" => str_pad($receptor_canton,2,"0", STR_PAD_LEFT), 
+            "receptor_distrito" => str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), 
+            "receptor_otras_senas" => str_pad($receptor_otras_senas,2,"0", STR_PAD_LEFT),
+            "receptor_email" => $receptor_email,
+            "receptor_codigo_actividad" => $receptorCodigoActividad,            
+            "condicion_venta" => $condicion_venta,
+            "plazo_credito" => $plazo_credito,
+            "medio_pago" => $medio_pago,
+            "cod_moneda" => $cod_moneda,
+            "tipo_cambio" => $tipo_cambio,
+            "total_serv_gravados" => $total_serv_gravados, 
+            "total_serv_exentos" => $total_serv_exentos, 
+            "toal_serv_exonerados" => $totalServiciosExonerados,
+            "total_merc_gravada" => $total_merc_gravada, 
+            "total_merc_exenta" => $total_merc_exenta, 
+            "total_merc_exonerada" => $totalMercanciaExonerada,
+            "total_gravados" => $total_gravados, 
+            "total_exentos" => $total_exentos, 
+            "total_ventas" => $total_ventas, 
+            "total_descuentos" => $total_descuentos, 
+            "total_ventas_neta" => $total_ventas_neta, 
+            "total_impuestos" => $total_impuestos, 
+            "total_desglose_impuestos" => $totalDesgloseImpuestos,
+            "total_exonerado" => $totalExonerado,
+            "total_iva_devuelto" => $totalIVADevuelto,
+            "total_otros_cargos" => $totalOtrosCargos,
+            "total_comprobante" => $total_comprobante,
+            "emisor_codigo_actividad" => $emisorCodigoActividad,
+            "detalles" => $productos,
+            "tipoDocIr" => $tipoDocIr,
+            "fechaEmisionIr" => $fechaEmisionIr,
+            "numeroIr" => $numeroIr,
+            "codigoIr" => $codigoIr,
+            "razonIr" => $razonIr
+        );
+        $this->logger->info("crearXMLFactura", "Creating factura XML into API with params: ".json_encode($params));
+        
+        $result = $this->helper->genXMLFacturaElectronicaDeCompra(
+            $clave, 
+            $consecutivo, 
+            $fecha_emision,
+            $emisor_nombre, 
+            $emisor_tipo_indetif, 
+            $emisor_num_identif, 
+            $nombre_comercial, 
+            $emisorCodigoActividad,
+            $emisor_provincia, 
+            str_pad($emisor_canton,2,"0", STR_PAD_LEFT), 
+            str_pad($emisor_distrito,2,"0", STR_PAD_LEFT), 
+            null,
+            $emisor_otras_senas, 
+            $emisor_cod_pais_tel, 
+            str_replace("-", "", $emisor_tel), 
+            $emisor_cod_pais_fax, 
+            str_replace("-", "", $emisor_fax), 
+            $emisor_email,
+            $receptor_nombre, 
+            $receptor_tipo_identif, 
+            $receptor_num_identif, 
+            $receptor_provincia, 
+            str_pad($receptor_canton,2,"0", STR_PAD_LEFT), 
+            str_pad($receptor_distrito,2,"0", STR_PAD_LEFT), 
+            null,
+            str_pad($receptor_otras_senas,2,"0", STR_PAD_LEFT),
+            $receptor_cod_pais_tel, 
+            str_replace("-", "", $receptor_tel), 
+            $receptor_cod_pais_fax, 
+            str_replace("-", "", $receptor_fax), 
+            $receptor_email, 
+            $receptorCodigoActividad,
+            $condicion_venta,
+            $plazo_credito,
+            $medio_pago,
+            $cod_moneda,
+            $tipo_cambio,
+            $total_serv_gravados, 
+            $total_serv_exentos, 
+            $total_merc_gravada, 
+            $total_merc_exenta, 
+            $total_gravados, 
+            $total_exentos, 
+            $total_ventas, 
+            $total_descuentos, 
+            $total_ventas_neta, 
+            $total_impuestos, 
+            $totalDesgloseImpuestos, 
+            $total_comprobante,
+            $otros,
+            $productos,             
+            $totalServiciosExonerados, 
+            $totalMercanciaExonerada, 
+            $totalExonerado, 
+            $totalIVADevuelto, 
+            $totalOtrosCargos,
+            $tipoDocIr,
+            $fechaEmisionIr,
+            $numeroIr,
+            $codigoIr,
+            $razonIr
+        );
         
         if(is_array($result)){
             if(isset($result["clave"]) && isset($result["xml"])){
@@ -166,6 +461,103 @@ class API_FE{
         }
     }
     
+    public function crearXMLReciboElectronicoDePago(
+        $clave, 
+        $consecutivo, 
+        $fecha_emision,
+        $emisor_nombre, 
+        $emisor_tipo_indetif, 
+        $emisor_num_identif, 
+        $emisor_email,
+        $receptor_nombre, 
+        $receptor_tipo_identif, 
+        $receptor_num_identif, 
+        $receptor_email, 
+        $condicion_venta,
+        $medio_pago,
+        $cod_moneda,
+        $tipo_cambio,
+        $total_ventas, 
+        $total_ventas_neta, 
+        $total_comprobante,
+        $productos,        
+        $tipoDocIr,
+        $fechaEmisionIr,
+        $numeroIr,
+        $codigoIr,
+        $razonIr){
+        $bm = round(microtime(true) * 1000);
+        $params = array(
+            "clave" => $clave, 
+            "consecutivo" => $consecutivo, 
+            "fecha_emision" => $fecha_emision,
+            "emisor_nombre" => $emisor_nombre, 
+            "emisor_tipo_indetif" => $emisor_tipo_indetif, 
+            "emisor_num_identif" => $emisor_num_identif,            
+            "emisor_email" => $emisor_email,
+            "receptor_nombre" => $receptor_nombre, 
+            "receptor_tipo_identif" => $receptor_tipo_identif, 
+            "receptor_num_identif" => $receptor_num_identif, 
+            "receptor_email" => $receptor_email,         
+            "condicion_venta" => $condicion_venta,
+            "medio_pago" => $medio_pago,
+            "cod_moneda" => $cod_moneda,
+            "tipo_cambio" => $tipo_cambio,
+            "total_ventas" => $total_ventas, 
+            "total_ventas_neta" => $total_ventas_neta, 
+            "total_comprobante" => $total_comprobante,
+            "detalles" => $productos,
+            "tipoDocIr" => $tipoDocIr,
+            "fechaEmisionIr" => $fechaEmisionIr,
+            "numeroIr" => $numeroIr,
+            "codigoIr" => $codigoIr,
+            "razonIr" => $razonIr
+        );
+        $this->logger->info("crearXMLFactura", "Creating factura XML into API with params: ".json_encode($params));
+        
+        $result = $this->helper->genXMLReciboElectronicoDePago(
+            $clave, 
+            $consecutivo, 
+            $fecha_emision,
+            $emisor_nombre, 
+            $emisor_tipo_indetif, 
+            $emisor_num_identif,
+            $emisor_email,
+            $receptor_nombre, 
+            $receptor_tipo_identif, 
+            $receptor_num_identif,
+            $receptor_email, 
+            $condicion_venta,
+            $medio_pago,
+            $cod_moneda,
+            $tipo_cambio,
+            $total_ventas, 
+            $total_ventas_neta, 
+            $total_comprobante,
+            $productos,          
+            $tipoDocIr,
+            $fechaEmisionIr,
+            $numeroIr,
+            $codigoIr,
+            $razonIr
+        );
+        
+        if(is_array($result)){
+            if(isset($result["clave"]) && isset($result["xml"])){
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->info("crearXMLFactura", $ms."ms | API returns ".json_encode($result));
+                return $result;
+            }else{
+                $ms = (round(microtime(true) * 1000)) - $bm;
+                $this->logger->error("crearXMLFactura", $ms."ms | 2 - API returns ".json_encode($result));
+                return false;
+            }
+        }else{
+            $ms = (round(microtime(true) * 1000)) - $bm;
+            $this->logger->error("crearXMLFactura", $ms."ms | 1 - API returns ".json_encode($result));
+            return false;
+        }
+    }
     
     public function firmarDocumento($tokenCertificado, $xml, $pinCertificado, $tipoDocumento){
         $bm = round(microtime(true) * 1000);

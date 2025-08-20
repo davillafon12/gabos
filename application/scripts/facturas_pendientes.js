@@ -329,8 +329,11 @@ function numTransaccion(tipo)
 	banco_sel = $("#banco_sel");
 	mxtLabelContado = $("#monto_efectivo_mixto_label");
 	mxtContado = $("#monto_efectivo_mixto");
-	
-	
+
+	$("#tipo_pago_mixto_titulo").css('display', 'none');
+	$("#tipo_pago_mixto_select").css('display', 'none');
+
+
 	if(tipo.indexOf('contad') != -1 || tipo.indexOf('sinpe') != -1 || tipo.indexOf('plataforma') != -1)
 	{
 		vend.html('');
@@ -383,8 +386,10 @@ function numTransaccion(tipo)
 		mxtLabel.html('Monto en tarjeta:');
 		banco_title.html('Datáfono:');
 		banco_sel.css('display', 'block');
-		mxtLabelContado.html('Monto en efectivo:');
+		mxtLabelContado.html('Monto en efectivo o sinpe:');
 		mxtContado.html("<input id='monto_efectivo_mixto_input' class='input_uno' style='width: 100px; margin-left: 5px;' autocomplete='off' name='monto_efectivo_mixto' required='' type='number' min='0' step='any'>");
+		$("#tipo_pago_mixto_titulo").css('display', 'block');
+		$("#tipo_pago_mixto_select").css('display', 'block');
 	}
 	else if (tipo.indexOf('credit') != -1)
 	{

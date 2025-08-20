@@ -358,8 +358,9 @@ class caja extends CI_Controller {
                             if($moneda=='dolares'){
                                     $cantidad = $cantidad * $tipoCambio;
                             }
+							$tipoPagoMixto = $tipoPago['tipoPago'];
 
-                            $this->factura->guardarPagoMixto($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco'], $cantidad );
+                            $this->factura->guardarPagoMixto($consecutivo, $sucursal, $tipoPago['transaccion'], $comision, $vendedor, $cliente, $tipoPago['banco'], $cantidad, $tipoPagoMixto);
                             break;
                     case 'credito':
                             date_default_timezone_set("America/Costa_Rica");

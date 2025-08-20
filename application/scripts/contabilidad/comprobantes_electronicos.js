@@ -6,24 +6,25 @@ $(document).ready(function(){
 function setTable(){
 	$('#tabla_comprobantes').dataTable({
 		'oLanguage': {
-                            'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/datatables/Spanish.txt'
-			},
+            'sUrl': location.protocol+'//'+document.domain+(location.port ? ':'+location.port: '')+'/application/scripts/datatables/Spanish.txt'
+        },
 		"columns": [  
-                            null,    
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            { 'orderable': false }
-                         ],
+            null,    
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            { 'orderable': false },
+            { 'orderable': false }
+        ],
 		"drawCallback": function( settings ) {
-                        $("#contenido").css( "display", 'block' );
-                },
+            $("#contenido").css( "display", 'block' );
+        },
 		"aLengthMenu": [[20, 50, 100, 500, 1000], [20, 50, 100, 500, 1000]],
-                "order": [ 1, 'desc' ]
+        "order": [ 1, 'desc' ]
 	});
 }
 
@@ -34,15 +35,21 @@ function procesarFacturas(){
     $.each($(".selector-mensaje"), function(index, element){
         var clave = $(element).attr("clave-factura");
         var estado = $(element).val();
-        
+        var mensaje = $("#mensaje-" + clave).val();
+
+        if(estado !== "CCE" && mensaje.trim() === ""){
+            notyMsg('Debe ingresar un mensaje para el comprobante con clave: ' + clave, 'error');
+            hayError = true;
+            return;
+        }
         if(estado === "0"){
             notyMsg('Todos los comprobantes deben marcarse como aceptado, rechazado o parcialmente aceptado', 'error');
             hayError = true;
             return;
         }
-        
-        
-        facturas.push({clave:clave, estado:estado});
+
+
+        facturas.push({clave:clave, estado:estado, mensaje:mensaje});
     });
     
     if(!hayError){

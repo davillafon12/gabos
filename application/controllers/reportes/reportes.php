@@ -604,14 +604,15 @@ class reportes extends CI_Controller {
 	
 	function comboTipoPagoFactura(){
 		$tipoPagoFactura = array(
-						'contado' => 'CONTADO',
-						'tarjeta' => 'TARJETAS',
-						'mixto' => 'PAGO MIXTO',
-						'deposito' => 'DEPOSITO',
-						'cheque' => 'CHEQUE',
-						'apartado' => 'APARTADO',
-						'credito' => 'CREDITO', 
-						'todos' => 'TODOS'
+			'contado' => 'CONTADO',
+			'tarjeta' => 'TARJETAS',
+			'mixto' => 'PAGO MIXTO',
+			'deposito' => 'DEPOSITO',
+			'cheque' => 'CHEQUE',
+			'apartado' => 'APARTADO',
+			'credito' => 'CREDITO', 
+			'sinpe_movil' => 'SINPE MOVIL',
+			'todos' => 'TODOS'
 		); 
 		return $tipoPagoFactura; 
 	}
