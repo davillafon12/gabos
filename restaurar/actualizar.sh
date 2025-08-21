@@ -27,6 +27,8 @@ echo "    -> Haciendo git fecth"
 git fetch --all
 echo "    -> Pasandonos al branch/tag $branch"
 git checkout $branch
+echo "    -> Haciendo git pull"
+git pull
 
 
 echo "Construyendo nuevas imagenes..."
