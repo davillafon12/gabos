@@ -465,17 +465,19 @@ class impresion extends CI_Controller
 										$date = strtotime("+$diasCredito days", strtotime($facturaHead[0]->fecha));
 										$facturaHead[0]->fechaVencimiento = date('d-m-Y', $date);
 									} elseif ($facturaHead[0]->tipo == 'mixto') {
-										$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
-										$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
+										$pagoMixto = $this->factura->getPagoMixto($sucursal, $consecutivo);
+										$cantidadPagaTarjeta = $pagoMixto->Mixto_Cantidad_Paga;
+										$cantidadPagaContadoOSinpe = $facturaHead[0]->total - $cantidadPagaTarjeta;
 
 										//Valorar si fue en colones o dolares
 										if ($facturaHead[0]->moneda == 'dolares') {
 											$cantidadPagaTarjeta = $cantidadPagaTarjeta / $facturaHead[0]->cambio;
-											$cantidadPagaContado = $cantidadPagaContado / $facturaHead[0]->cambio;
+											$cantidadPagaContadoOSinpe = $cantidadPagaContadoOSinpe / $facturaHead[0]->cambio;
 										}
 
 										$facturaHead[0]->cantidadTarjeta = $cantidadPagaTarjeta;
-										$facturaHead[0]->cantidadContado = $cantidadPagaContado;
+										$facturaHead[0]->cantidadContado = $cantidadPagaContadoOSinpe;
+										$facturaHead[0]->tipoPago = $pagoMixto->Tipo_Pago;
 									} elseif ($facturaHead[0]->tipo == 'apartado') {
 										$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
 										//Valorar si fue en colones o dolares
