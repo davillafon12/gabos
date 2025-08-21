@@ -273,6 +273,25 @@ class external extends CI_Controller {
 
                 $resEnvio = $this->contabilidad->enviarNotaCreditoElectronicaAHacienda($nota->Consecutivo, $nota->Sucursal);
 
+                if($resEnvio["estado_hacienda"] == "aceptado"){
+                    if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                        if($empresaData = $this->empresa->getEmpresa($nota->Sucursal)){
+                            $empresa = $empresaData[0];
+                            require_once PATH_API_CORREO;
+                            $apiCorreo = new Correo();
+                            $attachs = array(
+                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
+                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf",
+                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml",);
+                            if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
+                                $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
+                            }
+                        }else{
+
+                        }
+                    }
+                }
+
             }
         }else{
             $this->logger->info("enviarComprobantesAHacienda", "No hay notas credito que enviar a Hacienda");
