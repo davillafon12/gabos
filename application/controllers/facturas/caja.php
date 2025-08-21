@@ -406,6 +406,11 @@ class caja extends CI_Controller {
 
             if($facturaHeaders = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo'])){
                 $tipoPago = array("tipo"=>"contado");
+				$newTipoDePago = array("Factura_Tipo_Pago"=>"contado");
+				$this->factura->actualizarFacturaHead($newTipoDePago, $consecutivo, $data['Sucursal_Codigo']);
+
+				$facturaHeaders = $this->factura->getFacturasHeaders($consecutivo, $data['Sucursal_Codigo']);
+
             	//include PATH_USER_DATA;
                 // Primero validamos si existe una factura electronica asociada a esta factura
                 // SI lo hay seguimos adelante y si no la creamos
