@@ -2175,7 +2175,7 @@ Class contabilidad extends CI_Model
             $feedback["status"] = false;
 
             // No vamos a aceptar receptores de pasaporte para FE
-            if($cliente->NoReceptor || $cliente->Cliente_Tipo_Cedula == "pasaporte"){
+            if($cliente->Cliente_Tipo_Cedula == "pasaporte"){
                 $cliente = null;
             }
 
@@ -2236,6 +2236,11 @@ Class contabilidad extends CI_Model
             $tipoCambio = $nota->Moneda == "colones" ? "1" : $nota->Tipo_Cambio;
             $otros = "";
 
+			if($tipoPago['tipo'] == "credito"){
+				$facturaElectronica = $this->factura->getFacturaElectronicaByClave($numero);
+				$plazoCredito = $facturaElectronica->PlazoCredito;
+			}
+
             // Agregamos la info nueva
             $data = array(
                 "Consecutivo" => $nota->Consecutivo,
@@ -2295,19 +2300,21 @@ Class contabilidad extends CI_Model
             );
 
             if($receptor != NULL){
-                $data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
-                $data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
-                $data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
-                $data["ReceptorProvincia"] = $receptor->Provincia;
-                $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
-                $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
-                $data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
-                $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
-                $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
-                $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
-                $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
-                $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
-				$data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
+				if($receptor->Cliente_Cedula != "1" && $receptor->Cliente_Cedula != "0"){
+					$data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
+					$data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
+					$data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
+					$data["ReceptorProvincia"] = $receptor->Provincia;
+					$data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
+					$data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
+					$data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
+					$data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
+					$data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
+					$data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
+					$data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
+					$data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+					$data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
+				}
             }
 
             $this->db->insert("tb_57_nota_credito_electronica", $data);

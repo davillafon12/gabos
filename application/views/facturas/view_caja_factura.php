@@ -243,7 +243,7 @@ PARA:
 
 						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="credito"><div class="tipos_de_pago">Crédito</div>
 
-						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="apartado"><div class="tipos_de_pago">Apartado</div>
+						<!--<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="apartado"><div class="tipos_de_pago">Apartado</div>-->
 						<br>
 						<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="sinpe_movil"><div class="tipos_de_pago">Sinpe Móvil</div>
 

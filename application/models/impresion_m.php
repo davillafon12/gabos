@@ -231,7 +231,7 @@ Class impresion_m extends CI_Model{
 					break;
 					case 'mixto':
 						$pdf->Text(150, 56, 'Pago Tarjeta: '.$this->fni($encabezado->cantidadTarjeta/$factor));
-						$pdf->Text(150, 61, 'Pago Contado: '.$this->fni($encabezado->cantidadContado/$factor));
+						$pdf->Text(150, 61, "Pago " . $encabezado->tipoPago . ": ".$this->fni($encabezado->cantidadContado/$factor));
 					break;
 					case 'apartado':
 						$pdf->Text(150, 56, 'Abono: '.$this->fni($encabezado->abono/$factor));
