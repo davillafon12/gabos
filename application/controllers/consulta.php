@@ -1162,7 +1162,8 @@ class consulta extends CI_Controller {
 												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".xml",
 												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave."-respuesta.xml",
 												$this->factura->getFinalPath("fe", $factura->FechaEmision).$factura->Clave.".pdf");
-											if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
+											$titulo = $factura->TipoDocumento == "TE" ? "Tiquete Electrónico" : "Factura Electrónica";
+											if($apiCorreo->enviarCorreo($responseCheck["cliente"]->Cliente_Correo_Electronico, $titulo." #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", $titulo." - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
 												$this->factura->marcarEnvioCorreoFacturaElectronica($data['Sucursal_Codigo'], $responseCheck["factura"]->Factura_Consecutivo);
 											}
 										}
