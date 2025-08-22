@@ -1806,7 +1806,7 @@ Class factura extends CI_Model
                             }
                             $facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
                             $facturaHead[0]->clave = $fElectornica->Clave;
-                            $facturaHead[0]->isTE = $fElectornica->ReceptorNombre == null;
+                            $facturaHead[0]->isTE = $fElectornica->TipoDocumento == "TE";
                             $this->impresion_m->facturaPDF($empresa, $facturaHead, $facturaBody, true);
                     }else{
                         log_message('error', "No se genero el PDF de factura, no existen los articulos de la factura | Consecutivo: $consecutivo | Sucursal: $sucursal");

@@ -488,7 +488,7 @@ class impresion extends CI_Controller
 									}
 									$facturaHead[0]->consecutivoH = $fElectornica->ConsecutivoHacienda;
 									$facturaHead[0]->clave = $fElectornica->Clave;
-									$facturaHead[0]->isTE = $fElectornica->ReceptorNombre == null;
+									$facturaHead[0]->isTE = $fElectornica->TipoDocumento == "TE";
 									$this->impresion_m->facturaPDF($empresa, $facturaHead, $facturaBody, false);
 								} else {
 									$this->retorno['error'] = '9';
