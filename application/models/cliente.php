@@ -792,6 +792,73 @@ Class cliente extends CI_Model
 			return $query;
 		}
 	}
+
+	public function consultarIdentificacionApi($identificacion){
+        // Valida que sea exactamente 9 dígitos numéricos
+        if(!is_string($identificacion) || !preg_match('/^\d{9,10}$/', $identificacion)){
+            return array(
+                "status" => 0,
+                "error"  => "Identificación inválida (debe ser numérica de 9 o 10 dígitos)"
+            );
+        }
+
+        $url = "https://apis.gometa.org/cedulas/".$identificacion;
+        $raw = null;
+        $err = null;
+
+        if(function_exists('curl_init')){
+            $ch = curl_init($url);
+            curl_setopt_array($ch, array(
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_CONNECTTIMEOUT => 5,
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_HTTPHEADER => array('Accept: application/json')
+            ));
+            $raw = curl_exec($ch);
+            if($raw === false){
+                $err = curl_error($ch);
+            }else{
+                $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                if($http !== 200){
+                    $err = "HTTP ".$http;
+                }
+            }
+            curl_close($ch);
+        }else{
+            // Fallback
+            $context = stream_context_create(array(
+                'http' => array('timeout' => 10, 'header' => "Accept: application/json\r\n")
+            ));
+            $raw = @file_get_contents($url, false, $context);
+            if($raw === false){
+                $err = "No se pudo conectar al servicio";
+            }
+        }
+
+        if($err){
+            return array(
+                "status" => 0,
+                "error"  => "Error consultando Hacienda: ".$err
+            );
+        }
+
+        $json = json_decode($raw, true);
+        if($json === null){
+            return array(
+                "status" => 0,
+                "error"  => "Respuesta inválida de Hacienda"
+            );
+        }
+
+        return array(
+            "status" => 1,
+            "data"   => $json
+        );
+    }
+
 }
 
 

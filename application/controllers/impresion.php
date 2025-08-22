@@ -447,12 +447,14 @@ class impresion extends CI_Controller
 									$fElectornica->ConsecutivoHacienda = "No se ha generado FE";
 									$fElectornica->Clave = "No se ha generado FE";
 									$fElectornica->ReceptorNombre = $facturaHead[0]->cliente_ced == 0 ? null : $facturaHead[0]->cliente_nom;
+									$fElectornica->TipoDocumento = "TE";
 								}
 							}else{
 								$fElectornica = new stdClass();
 								$fElectornica->ConsecutivoHacienda = $consecutivo;
 								$fElectornica->Clave = false;
 								$fElectornica->ReceptorNombre = null;
+								$fElectornica->TipoDocumento = "FE";
 							}
 
 

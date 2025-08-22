@@ -84,7 +84,7 @@ define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/au
 define('HACIENDA_RECEPCION_API_STAG', "https://api-sandbox.comprobanteselectronicos.go.cr/recepcion/v1/");
 define('HACIENDA_RECEPCION_API_PROD', "https://api.comprobanteselectronicos.go.cr/recepcion/v1/");
 define('PATH_DOCUMENTOS_ELECTRONICOS_WEB', 'application/third_party/');
-define('CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO', '513910');
+define('CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO', '');
 define('PROVEEDOR_DE_SISTEMAS', '3101350785');
 define('CODIGO_DESCUENTO_DEFECTO', '07');
 
@@ -99,7 +99,7 @@ define('ART_GEN_IMPUESTO', 13);
 
 define('CONTROL_DE_INVENTARIO', "CONTROL_DE_INVENTARIO");
 
-define('JAVASCRIPT_CACHE_VERSION', 47);
+define('JAVASCRIPT_CACHE_VERSION', 48);
 define('DB_DATETIME_FORMAT', 'y-m-d H:i:s'); //y/m/d : H:i:s
 
 /* End of file constants.php */
