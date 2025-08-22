@@ -122,12 +122,23 @@ Class empresa extends CI_Model
 
 		if($query -> num_rows() != 0)
 		{
-		  return $query->result();
+			$empresa = $query->result()[0];
+
+			if($ubicacion = $this->getUbicacionEmpresa($empresa)){
+				$empresa->NombreBarrio = $ubicacion->BarrioNombre;
+			}
+
+		  	return array($empresa);
 		}
 		else
 		{
 		  return false;
 		}
+	}
+
+	function getUbicacionEmpresa($empresa){
+		$this->load->model('ubicacion','',TRUE);
+		return $this->ubicacion->getUbicacion($empresa->Provincia, $empresa->Canton, $empresa->Distrito, $empresa->Barrio);
 	}
 
 	function getLeyendaEmpresa($id)
@@ -211,6 +222,24 @@ Class empresa extends CI_Model
             $this->db->where('codigo', $id);
             $this->db->update('tb_02_sucursal' ,$data);
 	}
+
+	function get_empresas_ids_arraySoloActivas()
+	{
+		$this -> db -> select('codigo, Sucursal_Nombre');
+		$this -> db -> from('tb_02_sucursal');
+		$this -> db -> where('Sucursal_Estado', 1);
+		$data = array(); // create a variable to hold the information
+
+		$query = $this -> db -> get();
+
+			$result = $query->result();
+			foreach($result as $row)
+			{
+			   $data[$row->Sucursal_Nombre] = $row->codigo;  // add the row in to the results (data) array
+			}
+
+	   return $data;
+    }
 
 	function get_empresas_ids_array()
 	{

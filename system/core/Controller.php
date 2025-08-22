@@ -75,6 +75,8 @@ class CI_Controller
         "03" => "Cheque",
         "04" => "Transferencia - depósito bancario",
         "05" => "Recaudado por terceros",
+        "06" => "Sinpe Móvil",
+        "07" => "Plataforma digital",
         "99" => "Otros"
     );
 
@@ -265,6 +267,7 @@ class CI_Controller
         $newArticulos = array();
         foreach ($articulos as $art) {
             $a = new stdClass();
+            $a->id = $art->Articulo_Factura_id;
             $a->c = $art->Articulo_Factura_Codigo;
             $a->d = 0;
             $a->b = $art->Articulo_Factura_Cantidad;

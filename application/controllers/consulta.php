@@ -503,6 +503,8 @@ class consulta extends CI_Controller {
 					$datos['totalNotasDebito'] = $this->obtenerTotalesNotasDebito($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
 					$datos['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($sucursal, $fechaCierre, $fechaCierreAnterior);
+
+					$datos['totalFacturasSinpeMovil'] = $this->getTotalFacturasSinpeMovil($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
 					$datos['vendedores'] = $this->obtenerVendidoPorCadaVendedor($sucursal, $fechaCierre, $fechaCierreAnterior);
 					
@@ -637,16 +639,22 @@ class consulta extends CI_Controller {
 		$total = 0;
 		$tarjeta = 0;
 		$efectivo = 0;			
+		$sinpeMovil = 0;
 		if($pagos->num_rows()!=0){
 			$cantidadFacturas = $pagos->num_rows();
 			$pagos = $pagos->result();			
 			foreach($pagos as $pago){
 				$total += $pago->monto;
 				$tarjeta += $pago->pago_tarjeta;
-			}			
-			$efectivo = $total - $tarjeta;
-		}		
-		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo);
+
+				if($pago->tipo_pago == 'sinpe_movil'){
+					$sinpeMovil += $pago->monto - $pago->pago_tarjeta;
+				}else if($pago->tipo_pago == 'contado'){
+					$efectivo += $pago->monto - $pago->pago_tarjeta;
+				}
+			}
+		}
+		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo,'sinpeMovil'=>$sinpeMovil);
 	}
 	
 	function obtenerRecibosDeDinero($sucursal, $fechaHoraActual, $fechaUltimoCierra){
@@ -654,6 +662,7 @@ class consulta extends CI_Controller {
 		$efectivo = 0;
 		$tarjeta = 0;
 		$deposito = 0;
+		$sinpeMovil = 0;
 		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
 		if($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($recibos as $recibo){
@@ -668,11 +677,14 @@ class consulta extends CI_Controller {
 					case 'tarjeta':
 						$tarjeta += $recibo->Recibo_Cantidad;
 					break;
+					case 'sinpe_movil':
+						$sinpeMovil += $recibo->Recibo_Cantidad;
+					break;
 				}
 			}
 		}
 		$total += $totalAbonoApartado;
-		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito, 'abonos'=>$totalAbonoApartado);
+		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito, 'sinpeMovil'=>$sinpeMovil, 'abonos'=>$totalAbonoApartado);
 	}
 	
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){
@@ -790,6 +802,17 @@ class consulta extends CI_Controller {
 	function obtenerTotalFacturasDeposito($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 		$total = 0;
 		if($facturas = $this->contabilidad->getFacturasDepositoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
+	}
+
+	function getTotalFacturasSinpeMovil($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasSinpeMovilPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			
 			foreach($facturas as $factura){
 				$total += $factura->Factura_Monto_Total;
@@ -992,9 +1015,14 @@ class consulta extends CI_Controller {
                     break;
                     case "MR":
                         $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave."-".$art->consecutivo.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
-                        $htmlXMLRespuesta = "<a target='_blank' href='".base_url('')."consulta/verXMLHacienda?clave=".$art->clave."&tipo=".$_POST['tipodocumento']."' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
 					break;
 					case "FEC":
+                        $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
+                        $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
+                        $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
+                    break;
+					case "REP":
                         $htmlPdf = "<a target='_blank' href='".$rutaWeb.$art->clave.".pdf' ><img src=".$ruta_imagen."/icon-pdf.png width='21' height='21' title='Ver PDF'></a>";
                         $htmlXML = "<a target='_blank' href='".$rutaWeb.$art->clave.".xml' ><img src=".$ruta_imagen."/icon-xml.png width='21' height='21' title='Ver XML'></a>";
                         $htmlXMLRespuesta = "<a target='_blank' href='".$rutaWeb.$art->clave."-respuesta.xml' ><img src='".$ruta_imagen."/Information_icon.png' width='21' height='21' title='Ver Respuesta de Hacienda'></a>";
@@ -1204,6 +1232,15 @@ class consulta extends CI_Controller {
                                 $retorno["error"] = "No existe mensaje receptor";
                             }
                         break;
+						case "REP":
+                            if($recibo = $this->contabilidad->getReciboElectronicoDePagoByClave($clave)){
+								$this->contabilidad->enviarReciboElectronicoDePagoAHacienda($recibo->Consecutivo, $recibo->Sucursal, $recibo->TipoDocIR);
+                                $retorno["status"] = 1;
+                                unset($retorno["error"]);
+                            }else{
+                                $retorno["error"] = "No existe mensaje receptor";
+                            }
+                        break;
                     }
                 }else{
                     $retorno["error"] = "El tipo no puede ser vacio";
@@ -1259,6 +1296,27 @@ class consulta extends CI_Controller {
 										$this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml");
                                     if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                         $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
+                                        $retorno["status"] = 1;
+                                        unset($retorno["error"]);
+                                    }
+                                }
+                            }else{
+                                $retorno["error"] = "No existe nota credito electronica";
+                            }
+                            
+                        break;
+						case "REP":
+                            if($recibo = $this->contabilidad->getReciboElectronicoDePagoByClave($clave)){
+                                if(filter_var($recibo->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                    $empresa = $this->empresa->getEmpresa($recibo->Sucursal)[0];
+                                    require_once PATH_API_CORREO;
+                                    $apiCorreo = new Correo();
+                                    $attachs = array(
+                                        $this->contabilidad->getFinalPath("rep", $recibo->FechaEmision).$recibo->Clave.".xml",
+										$this->contabilidad->getFinalPath("rep", $recibo->FechaEmision).$recibo->Clave.".pdf",
+										$this->contabilidad->getFinalPath("rep", $recibo->FechaEmision).$recibo->Clave."-respuesta.xml");
+                                    if($apiCorreo->enviarCorreo($recibo->ReceptorEmail, "Recibo #{$recibo->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar un recibo bajo su nombre.", "Recibo Electrónico - ".$empresa->Sucursal_Nombre, $attachs)){
+                                        $this->contabilidad->marcarEnvioCorreoReciboElectronicoDePago($recibo->Sucursal, $recibo->Consecutivo, $recibo->TipoDocIR);
                                         $retorno["status"] = 1;
                                         unset($retorno["error"]);
                                     }

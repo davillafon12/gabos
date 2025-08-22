@@ -68,10 +68,203 @@ PARA:
 						</td>
 					</tr>
 					<tr>
-						<td class="pad-l">
-							<div class="imagen_celdas">
-								<img src="<?php echo base_url('application/images/articulos/celdas_ingreso_inventario_nobrasil.png'); ?>"/>
-							</div>
+						<td class="tabla-encabezado-td">
+							<div>
+								<table class="tabla-encabezado">
+									<thead>
+										<th>
+											A
+										</th>
+										<th>
+											B
+										</th>
+										<th>
+											C
+										</th>
+										<th>
+											D
+										</th>
+										<th>
+											E
+										</th>
+										<th>
+											F
+										</th>
+										<th>
+											G
+										</th>
+										<th>
+											H
+										</th>
+										<th>
+											I
+										</th>
+										<th>
+											J
+										</th>
+										<th>
+											K
+										</th>
+										<th>
+											L
+										</th>
+										<th>
+											M
+										</th>
+										<th>
+											N
+										</th>
+										<th>
+											O
+										</th>
+										<th>
+											P
+										</th>
+										<th>
+											Q
+										</th>
+										<th>
+											R
+										</th>
+										<th>
+											S
+										</th>
+										<th>
+											T
+										</th>
+										<th>
+											U
+										</th>
+										<th>
+											V
+										</th>
+										<th>
+											W
+										</th>
+										<th>
+											X
+										</th>
+										<th>
+											Y
+										</th>
+										<th>
+											Z
+										</th>
+										<th>
+											AA
+										</th>
+										<th>
+											AB
+										</th>
+										<th>
+											AC
+										</th>
+										<th>
+											AD
+										</th>
+										<th>
+											AF
+										</th>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												CODIGO
+											</td>
+											<td>
+												DESCRIPCION
+											</td>
+											<td>
+												COSTO
+											</td>
+											<td>
+												COSTO_DESCUENTO
+											</td>
+											<td>
+												COSTO_CODIGO_DESCUENTO
+											</td>
+											<td>
+												PRECIO_1
+											</td>
+											<td>
+												PRECIO_1_DESCUENTO
+											</td>
+											<td>
+												PRECIO_1_CODIGO_DESCUENTO
+											</td>
+											<td>
+												PRECIO_2
+											</td>
+											<td>
+												PRECIO_2_DESCUENTO
+											</td>
+											<td>
+												PRECIO_2_CODIGO_DESCUENTO
+											</td>
+											<td>
+												PRECIO_3
+											</td>
+											<td>
+												PRECIO_3_DESCUENTO
+											</td>
+											<td>
+												PRECIO_3_CODIGO_DESCUENTO
+											</td>
+											<td>
+												PRECIO_4
+											</td>
+											<td>
+												PRECIO_4_DESCUENTO
+											</td>
+											<td>
+												PRECIO_4_CODIGO_DESCUENTO
+											</td>
+											<td>
+												PRECIO_5
+											</td>
+											<td>
+												PRECIO_5_DESCUENTO
+											</td>
+											<td>
+												PRECIO_5_CODIGO_DESCUENTO
+											</td>
+											<td>
+												SUCURSAL
+											</td>
+											<td>
+												FAMILIA
+											</td>
+											<td>
+												CANTIDAD
+											</td>
+											<td>
+												EXENTO_IVA
+											</td>
+											<td>
+												SIN_RETENCION
+											</td>
+											<td>
+												DESCUENTO
+											</td>
+											<td>
+												CODIGO_DESCUENTO
+											</td>
+											<td>
+												NOMBRE_IMAGEN
+											</td>
+											<td>
+												TIPO_CODIGO
+											</td>
+											<td>
+												UNIDAD_MEDIDA
+											</td>
+											<td>
+												CODIGO_CABYS
+											</td>
+										</tr>									
+									</tbody>
+								</table>
+							</div>							
 						</td>
 					</tr>
 					<tr>
@@ -241,6 +434,15 @@ PARA:
 								echo "<br><small>No hay artículos.</small>";
 							}else{
 								foreach($erroresCodigoCabys as $art){
+									echo "<br><small>- $art</small>";
+								}
+							}
+
+							echo "<br><br><small class='bold'>Con Código de Descuento no Válido:</small>";
+							if(sizeOf($erroresCodigoDescuento)<1){
+								echo "<br><small>No hay artículos.</small>";
+							}else{
+								foreach($erroresCodigoDescuento as $art){
 									echo "<br><small>- $art</small>";
 								}
 							}

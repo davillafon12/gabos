@@ -136,6 +136,8 @@ function tipoPagoJSON(){
 		return [{'tipo':'deposito', 'documento':$('#numero_documento').val()}];
 	}else if(tipoPago.trim()==='contado'){
 		return [{'tipo':'contado'}];
+	}else if(tipoPago.trim()==='sinpe_movil'){
+		return [{'tipo':'sinpe_movil'}];
 	}
 }
 

@@ -24,7 +24,7 @@ class traspaso extends CI_Controller {
 		{
 				redirect('accesoDenegado', 'location');
 		}
-		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_array();
+		$data['Familia_Empresas'] = $this->empresa->get_empresas_ids_arraySoloActivas();
 		$this->load->view("articulos/articulos_traspaso_tiendas", $data);
 	}
 
@@ -169,6 +169,7 @@ class traspaso extends CI_Controller {
 			$unidadmedida = $articuloDeSucursalEntrega[0]->UnidadMedida;
 			$codigoCabys = $articuloDeSucursalEntrega[0]->CodigoCabys;
 			$impuesto = $articuloDeSucursalEntrega[0]->Impuesto;
+			$codigoDescuento = $articuloDeSucursalEntrega[0]->CodigoDescuento;
 
 			//Para el costo, tomamos el precio al que se le vendio a la sucursal y le quitamos el IVA
 			$numeroPrecioCliente = $this->cliente->getNumeroPrecio($clienteLiga->Cliente);
@@ -210,7 +211,14 @@ class traspaso extends CI_Controller {
 										$precio2O->Precio_Descuento,
 										$precio3O->Precio_Descuento,
 										$precio4O->Precio_Descuento,
-										$precio5O->Precio_Descuento);
+										$precio5O->Precio_Descuento,
+										$codigoDescuento, 
+										$codigoDescuento, 
+										$precio1O->Precio_Codigo_Descuento, 
+										$precio2O->Precio_Codigo_Descuento, 
+										$precio3O->Precio_Codigo_Descuento, 
+										$precio4O->Precio_Codigo_Descuento, 
+										$precio5O->Precio_Codigo_Descuento);
 	}
 
 	private function traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $traspaso, $clienteLiga){

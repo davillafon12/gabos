@@ -255,42 +255,48 @@ PARA:
 					</tr>
 					<tr><td colspan="2"><hr></td></tr>
 					<tr>
-						<td>
+						<td colspan="2">
 							<table class="tabla-pagos-mixtos">
-								<tr><td colspan="3"><p class="titulo-2">Pago Mixtos</p></td></tr>
+								<tr><td colspan="4"><p class="titulo-2">Pago Mixtos</p></td></tr>
 								<tr>
-									<td class="borde-abajo"><p class="parrafo">Cant. Facturas</p></td>
+									<td class="borde-abajo"><p class="parrafo">Cantidad de Facturas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Efectivo</p></td>
+									<td class="borde-abajo"><p class="parrafo">Sinpe Móvil</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
 								</tr>
 								<tr>
 									<td class=''><p class='parrafo' id="cantidad_facturas_pago_mixto"></p></td>
 									<td class='alg-right'><p class='parrafo' id="total_efectivo_pago_mixto"></p></td>
+									<td class='alg-right'><p class='parrafo' id="total_sinpe_movil_pago_mixto"></p></td>
 									<td class='alg-right'><p class='parrafo' id="total_tarjetas_pago_mixto"></p></td>
 								</tr>								
 								<tr>
-									<td colspan="2" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
+									<td colspan="3" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
 									<td class="alg-right borde-arriba"><p class="parrafo" id="total_pago_mixto"></p></td>
 								</tr>
 							</table>
-						</td>
-						<td>
+						</td>						
+					</tr>
+					<tr>
+						<td colspan="2">
 							<table class="tabla-recibos-dinero">
-								<tr><td colspan="4"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
+								<tr><td colspan="5"><p class="titulo-2">Recibos Por Dinero</p></td></tr>
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Contado</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
 									<td class="borde-abajo"><p class="parrafo">Deposito</p></td>
 									<td class="borde-abajo"><p class="parrafo">Abonos</p></td>
+									<td class="borde-abajo"><p class="parrafo">Sinpe Móvil</p></td>
 								</tr>
 								<tr>
 									<td class='alg-right'><p class='parrafo' id="recibos_dinero_efectivo"></p></td>
 									<td class='alg-right'><p class='parrafo' id="recibos_dinero_tarjeta"></p></td>
 									<td class='alg-right'><p class='parrafo' id="recibos_dinero_deposito"></p></td>
 									<td class='alg-right'><p class='parrafo' id="recibos_dinero_abonos"></p></td>
+									<td class='alg-right'><p class='parrafo' id="recibos_dinero_sinpe_movil"></p></td>
 								</tr>								
 								<tr>
-									<td colspan="3" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
+									<td colspan="4" class="alg-right borde-arriba"><p class="parrafo">Total:</p></td>									
 									<td class="alg-right borde-arriba"><p class="parrafo"  id="recibos_dinero_total"></p></td>
 								</tr>
 							</table>
@@ -306,18 +312,24 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Tarjeta</p></td>
 									<td class="borde-abajo"><p class="parrafo">Cheque</p></td>
 									<td class="borde-abajo"><p class="parrafo">Depósito</p></td>
-									<td class="borde-abajo"><p class="parrafo">Mixto</p></td>
-									<td class="borde-abajo"><p class="parrafo">Crédito</p></td>
-									<td class="borde-abajo"><p class="parrafo">Apartado</p></td>
 								</tr>
 								<tr>
 									<td class=''><p class='parrafo' id="total_nota_credito_contado_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_tarjeta_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_cheque_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_deposito_p"></p></td>
+								</tr>	
+								<tr>
+									<td class="borde-abajo"><p class="parrafo">Mixto</p></td>
+									<td class="borde-abajo"><p class="parrafo">Crédito</p></td>
+									<td class="borde-abajo"><p class="parrafo">Apartado</p></td>
+									<td class="borde-abajo"><p class="parrafo">Sinpe Móvil</p></td>
+								</tr>
+								<tr>
 									<td class=''><p class='parrafo' id="total_nota_credito_mixto_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_credito_p"></p></td>
 									<td class=''><p class='parrafo' id="total_nota_credito_apartado_p"></p></td>
+									<td class=''><p class='parrafo' id="total_nota_credito_sinpe_movil_p"></p></td>
 								</tr>	
 							</table>
 						</td>						
@@ -332,6 +344,7 @@ PARA:
 									<td class="borde-abajo"><p class="parrafo">Faltante / Sobrante</p></td>
 									<td class="borde-abajo"><p class="parrafo">Tarjetas</p></td>
 									<td class="borde-abajo"><p class="parrafo">Créditos</p></td>
+									<td class="borde-abajo"><p class="parrafo">Sinpe Móvil</p></td>
 								</tr>
 								<tr>
 									<td class=''><p class='parrafo' id="total_facturas_contado_p"></p></td>
@@ -343,19 +356,21 @@ PARA:
 									<input id="totalDatafonos" value="" type="hidden"/>
 									<td class=''><p class='parrafo' id="totalDatafonosVista"></p></td>
 									<td class=''><p class='parrafo' id="total_credito_p"></p></td>
-									
+									<td class=''><p class='parrafo' id="total_sinpe_movil_p"></p></td>
 								</tr>								
 								<tr>
 									<td class="borde-abajo"><p class="parrafo">Encomiendas (Depo.)</p></td>
 									<td class="borde-abajo"><p class="parrafo">Apartados</p></td>
 									<td class="borde-abajo"><p class="parrafo">Notas Crédito</p></td>
 									<td class="borde-abajo"><p class="parrafo">Notas Débito</p></td>
+									<td class="borde-abajo"><p class="parrafo"></p></td>
 								</tr>
 								<tr>
 									<td class=''><p class='parrafo' id="total_deposito_p"></p></td>
 									<td class=''><p class='parrafo' id="total_apartado_p"></p></td>
 									<td class=''><p class='parrafo' id="total_notas_credito_p"></p></td>
 									<td class=''><p class='parrafo' id="total_notas_debito_p"></p></td>
+									<td class=''><p class='parrafo'></p></td>
 								</tr>
 							</table>
 						</td>						

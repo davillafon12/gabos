@@ -25,7 +25,7 @@ PARA:
 		<!--CSS ESTILO DEL MAIN WRAPPER-->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/Main_Wrapper.css'); ?>">
 		<!--CSS ESTILO PROPIO-->
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url('application/styles/clientes/descuentoCredito.css'); ?>">		
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url("application/styles/clientes/descuentoCredito.css?v=$javascript_cache_version"); ?>">		
 		<!--SCRIPT DE EXPIRACION DE LA SESION-->
 		<?php include PATH_LOG_OUT_HEADER;?>
 		
@@ -85,7 +85,17 @@ PARA:
 							<tr>
 								<td>
 									<label for="descuento"  class="contact">Descuento:</label>
-									<input id="descuento" class="input_uno descuento-cliente" autocomplete="off" name="descuento" value="00" onClick="$('#descuento').select()" type="text">%<a href="javascript:;" onclick="updateDescuento()" class="boton-cambiar">Cambiar</a>
+									<input id="descuento" class="input_uno descuento-cliente" autocomplete="off" name="descuento" value="00" onClick="$('#descuento').select()" type="text">%
+									<select id="costo_codigo_d" class="input_dos">
+										<?php
+											foreach($tipoDescuentos as $td){
+												?>
+													<option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+												<?php
+											}
+										?>
+									</select>
+									<a href="javascript:;" onclick="updateDescuento()" class="boton-cambiar">Cambiar</a>
 								</td>
 							</tr>
 							<tr>

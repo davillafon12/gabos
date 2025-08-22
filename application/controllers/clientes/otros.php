@@ -7,6 +7,7 @@ class otros extends CI_Controller {
 		$this->load->model('cliente','',TRUE);
 		$this->load->model('articulo','',TRUE);
 		$this->load->model('familia','',TRUE);
+		$this->load->model('catalogo','',TRUE);
 		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
 
 		$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
@@ -21,19 +22,11 @@ class otros extends CI_Controller {
 
 	 function index()
 	 {
-		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		include PATH_USER_DATA; 
 
-		/*$permisos = $this->user->get_permisos($data['Usuario_Codigo'], $data['Sucursal_Codigo']);
-
-		if($permisos['otros_cliente'])
-		{*/
-                        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
-			$this->load->view('clientes/clientes_descuentos_credito_view', $data);
-		/*}
-		else{
-		   redirect('accesoDenegado', 'location');
-		}*/
-
+		$data['tipoDescuentos'] = $this->catalogo->getTipoDescuentos();
+        $data['javascript_cache_version'] = $this->javascriptCacheVersion;
+		$this->load->view('clientes/clientes_descuentos_credito_view', $data);
 	}
 
 	function getCliente(){
@@ -115,32 +108,37 @@ class otros extends CI_Controller {
 	function actualizarDescuento(){
 		$retorno['status'] = 'error';
 		$retorno['error'] = '1'; //No se proceso la solicitud
-		if(isset($_POST['cedula'])&&isset($_POST['descuento'])){
+		if(isset($_POST['cedula'])&&isset($_POST['descuento'])&&isset($_POST['codigo'])){
 			$cedula = $_POST['cedula'];
 			$descuento = $_POST['descuento'];
+			$codigo = $_POST['codigo'];
 			include PATH_USER_DATA;
 
 			if($this->cliente->existe_Cliente($cedula)){
-				if($this->cliente->existeClienteDescuento($cedula, $data['Sucursal_Codigo'])){
-					//Actualizamos descuento
-					$this->cliente->actualizarDescuentoCliente($descuento, $data['Sucursal_Codigo'], $cedula);
+				if($this->catalogo->getTipoDescuentoByCodigo($codigo)){
+					if($this->cliente->existeClienteDescuento($cedula, $data['Sucursal_Codigo'])){
+						//Actualizamos descuento
+						$this->cliente->actualizarDescuentoCliente($descuento, $codigo, $data['Sucursal_Codigo'], $cedula);
 
-					$this->user->guardar_Bitacora_Cliente($cedula,
-								$data['Sucursal_Codigo'],
-								$data['Usuario_Codigo'],
-								'Actualiza_DesClien',
-								'Actualización descuento : '. $descuento);
-					$retorno['status'] = 'success';
+						$this->user->guardar_Bitacora_Cliente($cedula,
+									$data['Sucursal_Codigo'],
+									$data['Usuario_Codigo'],
+									'Actualiza_DesClien',
+									'Actualización descuento: '. $descuento . " con código: " . $codigo );
+						$retorno['status'] = 'success';
+					}else{
+						//Agregamos descuento
+						$this->cliente->agregarDescuentoCliente($descuento, $codigo, $data['Sucursal_Codigo'], $cedula);
+						$this->user->guardar_Bitacora_Cliente($cedula,
+									$data['Sucursal_Codigo'],
+									$data['Usuario_Codigo'],
+									'Agrega_DesCliente',
+									'Agregar descuento : '. $descuento . " con código: " . $codigo);
+						$retorno['status'] = 'success';
+					}
 				}else{
-					//Agregamos descuento
-					$this->cliente->agregarDescuentoCliente($descuento, $data['Sucursal_Codigo'], $cedula);
-					$this->user->guardar_Bitacora_Cliente($cedula,
-								$data['Sucursal_Codigo'],
-								$data['Usuario_Codigo'],
-								'Agrega_DesCliente',
-								'Agregar descuento : '. $descuento);
-					$retorno['status'] = 'success';
-				}
+					$retorno['error'] = '11'; //Error no existe codigo descuento
+				}				
 			}else{
 				$retorno['error'] = '5'; //Error no existe cliente
 			}

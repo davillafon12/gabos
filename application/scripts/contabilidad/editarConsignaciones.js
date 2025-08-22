@@ -221,6 +221,7 @@ function setProductosFactura(productos){
                 +"<td>"
                         +"<div class='articulo_specs' id='descuento_articulo_muestra_"+(i+1)+"'>"+productos[i].descuento+"</div>"
                         +"<input id='descuento_articulo_"+(i+1)+"' type='hidden' value='"+productos[i].descuento+"'/>"
+                        +"<input id='codigo_descuento_articulo_"+(i+1)+"' type='hidden' value='"+productos[i].codigo_descuento+"'/>"
                 +"</td>"
                 +"<td>"
                         +"<div class='precio_articulo' id='articulo_precio_unidad_muestra_"+(i+1)+"'>"+parseFloat(productos[i].pUnidad).format(_CANTIDAD_DECIMALES, 3, '.', ',')+"</div>"

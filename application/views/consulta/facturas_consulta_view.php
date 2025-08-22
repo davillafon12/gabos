@@ -131,9 +131,14 @@ PARA:
 							<input type="checkbox" name="tipo" value="tarjeta"><div class="tipos_de_pago">Tarjeta</div>
 							<input type="checkbox" name="tipo" value="cheque"><div class="tipos_de_pago">Cheque</div>
 							<input type="checkbox" name="tipo" value="deposito"><div class="tipos_de_pago">Deposito</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4" style="text-align: center;">
 							<input type="checkbox" name="tipo" value="mixto"><div class="tipos_de_pago">Mixto</div>
 							<input type="checkbox" name="tipo" value="credito"><div class="tipos_de_pago">Crédito</div>
 							<input type="checkbox" name="tipo" value="apartado"><div class="tipos_de_pago">Apartado</div>
+							<input type="checkbox" name="tipo" value="sinpe_movil"><div class="tipos_de_pago">Sinpe Móvil</div>
 						</td>
 					</tr>
 					<tr>

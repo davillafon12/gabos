@@ -50,5 +50,26 @@ Class ubicacion extends CI_Model{
           return array();
         }
     }
+
+    function getUbicacion($provinciaId, $cantonId, $distritoId, $barrioId){
+      $this -> db -> select('*');
+      $this -> db -> from('tb_54_ubicaciones');
+      $this -> db -> where('ProvinciaID', $provinciaId);
+      $this -> db -> where('CantonID', $cantonId);
+      $this -> db -> where('DistritoID', $distritoId);
+      $this -> db -> where('BarrioID', $barrioId);
+      $this -> db -> limit(1);
+
+      $query = $this -> db -> get();
+
+      if($query -> num_rows() != 0)
+      {
+        return $query->result()[0];
+      }
+      else
+      {
+        return false;
+      }
+    }
     
 }

@@ -465,17 +465,19 @@ class impresion extends CI_Controller
 										$date = strtotime("+$diasCredito days", strtotime($facturaHead[0]->fecha));
 										$facturaHead[0]->fechaVencimiento = date('d-m-Y', $date);
 									} elseif ($facturaHead[0]->tipo == 'mixto') {
-										$cantidadPagaTarjeta = $this->factura->getMontoPagoTarjetaMixto($sucursal, $consecutivo);
-										$cantidadPagaContado = $facturaHead[0]->total - $cantidadPagaTarjeta;
+										$pagoMixto = $this->factura->getPagoMixto($sucursal, $consecutivo);
+										$cantidadPagaTarjeta = $pagoMixto->Mixto_Cantidad_Paga;
+										$cantidadPagaContadoOSinpe = $facturaHead[0]->total - $cantidadPagaTarjeta;
 
 										//Valorar si fue en colones o dolares
 										if ($facturaHead[0]->moneda == 'dolares') {
 											$cantidadPagaTarjeta = $cantidadPagaTarjeta / $facturaHead[0]->cambio;
-											$cantidadPagaContado = $cantidadPagaContado / $facturaHead[0]->cambio;
+											$cantidadPagaContadoOSinpe = $cantidadPagaContadoOSinpe / $facturaHead[0]->cambio;
 										}
 
 										$facturaHead[0]->cantidadTarjeta = $cantidadPagaTarjeta;
-										$facturaHead[0]->cantidadContado = $cantidadPagaContado;
+										$facturaHead[0]->cantidadContado = $cantidadPagaContadoOSinpe;
+										$facturaHead[0]->tipoPago = $pagoMixto->Tipo_Pago;
 									} elseif ($facturaHead[0]->tipo == 'apartado') {
 										$abono = $this->factura->getAbonoApartado($sucursal, $consecutivo);
 										//Valorar si fue en colones o dolares
@@ -539,7 +541,7 @@ class impresion extends CI_Controller
 								}
 							}
 							if ($this->retorno['error'] != '11') { //Si no se cargo algun recibo salirse
-								$this->recibosPDF($recibosDevolver, $empresa[0]);
+								$this->impresion_m->recibosPDF($recibosDevolver, $empresa[0]);
 							}
 						} else {
 							//No vienen recibos
@@ -719,6 +721,8 @@ class impresion extends CI_Controller
 
 							$datos['totalFacturasDeposito'] = $this->obtenerTotalFacturasDeposito($sucursal, $fechaCierre, $fechaCierreAnterior);
 
+							$datos['totalFacturasSinpeMovil'] = $this->getTotalFacturasSinpeMovil($sucursal, $fechaCierre, $fechaCierreAnterior);
+
 							$datos['vendedores'] = $this->obtenerVendidoPorCadaVendedor($sucursal, $fechaCierre, $fechaCierreAnterior);
 
 							$datos['valoresFinales'] = $this->obtenerValoresFinales($sucursal, $fechaCierre, $fechaCierreAnterior);
@@ -897,64 +901,7 @@ class impresion extends CI_Controller
 		$pdf->Output();
 	}
 
-	private function recibosPDF($recibos, $empresa)
-	{
-		require(PATH_FPDF_LIBRARY);
-		$pdf = new FPDF('P', 'mm', 'A4');
-		foreach ($recibos as $recibo) {
-			//Agregamos una pagina
-			$pdf->AddPage();
-			//Obtenemos el recibo
-			$recibo = $recibo[0];
-			//Agregamos el encabezado
-			$this->encabezadoDocumentoPDF('r', $empresa, $recibo, $pdf);
-			//Agregamos el cuerpo del recibo
-			//Caja redondeada 1
-			$pdf->RoundedRect(10, 67, 190, 28, 5, '12', 'D');
-			$pdf->SetFont('Arial', '', 11);
-			$pdf->Text(12, 72, 'Recibimos de: ');
-			$pdf->Text(42, 72, $recibo->cliente_cedula . " - " . $recibo->cliente_nombre);
-
-			$V = new EnLetras();
-			$con_letra = $V->ValorEnLetras($recibo->monto, $recibo->moneda);
-
-			$pdf->Text(12, 79, 'La suma de: ');
-			$pdf->Text(42, 79, $this->fni($recibo->monto) . " - $con_letra");
-			$pdf->Text(12, 86, 'Por concepto de abono a la factura: ');
-			$pdf->Text(12, 93, 'Consecutivo # ');
-			$pdf->Text(42, 93, $recibo->factura);
-			$pdf->Text(62, 93, 'Emitida el ');
-			$pdf->Text(84, 93, $recibo->fecha_expedicion);
-			$pdf->Text(132, 93, 'Por el monto de ');
-			$pdf->Text(164, 93, $this->fni($recibo->Saldo_inicial));
-
-			//Comentarios
-			$pdf->Text(12, 100, 'Comentarios: ');
-			$pdf->SetXY(12, 102);
-			$pdf->SetFont('Arial', '', 8);
-			$pdf->MultiCell(118, 3, $recibo->comentarios, 0, 'L');
-
-			//Divisores
-			$pdf->Line(10, 74, 200, 74); //Primer divisor
-			$pdf->Line(10, 81, 200, 81); //Segundo divisor
-			$pdf->Line(10, 88, 200, 88); //Tercer divisor
-			//$pdf->Line(10, 95, 200, 95); //Cuarto divisor
-			$pdf->Line(40, 67, 40, 81); //Primer divisor vertical
-			//$pdf->Line(40, 88, 40, 95); //Segundo divisor vertical
-			$pdf->Line(60, 88, 60, 95); //Tercer divisor vertical
-			//$pdf->Line(82, 88, 82, 95); //Cuarto divisor vertical
-			$pdf->Line(130, 88, 130, 95); //Quinto divisor vertical
-			//$pdf->Line(162, 88, 162, 95); //Sexto divisor vertical
-
-			//Definimos el pie de pagina
-			$this->pieDocumentoPDF('r', $recibo, $empresa, $pdf, 0);
-
-			//Aumentamos la cantidad de paginas
-			$this->numPagina++;
-		}
-		//Imprimimos documento
-		$pdf->Output();
-	}
+	
 
 	private function cierreCajaPDF($empresa, $cierre, $billetes, $monedas, $dolares)
 	{
@@ -1098,55 +1045,61 @@ class impresion extends CI_Controller
 		//Pagos Mixtos y Recibos por dinero
 		$pdf->SetFont('Arial', 'B', 14);
 		$pdf->SetXY(10, 112);
-		$pdf->Cell(95, 5, 'Pagos Mixtos', 0, 0, 'C');
-		$pdf->Cell(95, 5, 'Recibos Por Dinero', 0, 0, 'C');
+		$pdf->Cell(81, 5, 'Pagos Mixtos', 0, 0, 'C');
+		$pdf->Cell(109, 5, 'Recibos Por Dinero', 0, 0, 'C');
 		$pdf->ln(5);
-		$pdf->SetFont('Arial', '', 11);
-		$pdf->Cell(40, 5, 'Cant. Facturas', 1, 0, 'C');
-		$pdf->Cell(25, 5, 'Efectivo', 1, 0, 'C');
-		$pdf->Cell(25, 5, 'Tarjeta', 1, 0, 'C');
-		$pdf->Cell(10, 5, '', 0, 0, 'C');
-		$pdf->Cell(23, 5, 'Contado', 1, 0, 'C');
-		$pdf->Cell(23, 5, 'Tarjeta', 1, 0, 'C');
-		$pdf->Cell(23, 5, 'Depósito', 1, 0, 'C');
+		$pdf->SetFont('Arial', '', 9);
+		$pdf->Cell(18, 5, 'Cant. Fact', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Efectivo', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Sinpe Móvil', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Tarjeta', 1, 0, 'C');
+		$pdf->Cell(4, 5, '', 0, 0, 'C');
+		$pdf->Cell(21, 5, 'Contado', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Tarjeta', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Depósito', 1, 0, 'C');
 		$pdf->Cell(21, 5, 'Abonos', 1, 0, 'C');
+		$pdf->Cell(21, 5, 'Sinpe Móvil', 1, 0, 'C');
 		$pdf->ln(5);
-		$pdf->SetFont('Arial', '', 10);
-		$pdf->Cell(40, 5, $cierre->datos['pagoMixto']['cantidadFacturas'], 1, 0, 'C');
-		$pdf->Cell(25, 5, $this->fni($cierre->datos['pagoMixto']['efectivo']), 1, 0, 'R');
-		$pdf->Cell(25, 5, $this->fni($cierre->datos['pagoMixto']['tarjeta']), 1, 0, 'R');
-		$pdf->Cell(10, 5, '', 0, 0, 'C');
-		$pdf->Cell(23, 5, $this->fni($cierre->datos['recibos']['efectivo']), 1, 0, 'R');
-		$pdf->Cell(23, 5, $this->fni($cierre->datos['recibos']['tarjeta']), 1, 0, 'R');
-		$pdf->Cell(23, 5, $this->fni($cierre->datos['recibos']['deposito']), 1, 0, 'R');
+		$pdf->SetFont('Arial', '', 9);
+		$pdf->Cell(18, 5, $cierre->datos['pagoMixto']['cantidadFacturas'], 1, 0, 'C');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['pagoMixto']['efectivo']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['pagoMixto']['sinpeMovil']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['pagoMixto']['tarjeta']), 1, 0, 'R');
+		$pdf->Cell(4, 5, '', 0, 0, 'C');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['efectivo']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['tarjeta']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['deposito']), 1, 0, 'R');
 		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['abonos']), 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['sinpeMovil']), 1, 0, 'R');
 		$pdf->ln(5);
-		$pdf->Cell(65, 5, 'Total:', 1, 0, 'R');
-		$pdf->Cell(25, 5, $this->fni($cierre->datos['pagoMixto']['total']), 1, 0, 'R');
-		$pdf->Cell(10, 5, '', 0, 0, 'C');
-		$pdf->Cell(65, 5, 'Total:', 1, 0, 'R');
-		$pdf->Cell(25, 5, $this->fni($cierre->datos['recibos']['total']), 1, 0, 'R');
+		$pdf->Cell(60, 5, 'Total:', 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['pagoMixto']['total']), 1, 0, 'R');
+		$pdf->Cell(4, 5, '', 0, 0, 'C');
+		$pdf->Cell(84, 5, 'Total:', 1, 0, 'R');
+		$pdf->Cell(21, 5, $this->fni($cierre->datos['recibos']['total']), 1, 0, 'R');
 
 		$pdf->SetFont('Arial', 'B', 14);
 		$pdf->ln(6);
 		$pdf->Cell(190, 5, 'Notas Crédito', 0, 0, 'C');
 		$pdf->ln(5);
-		$pdf->SetFont('Arial', '', 11);
-		$pdf->Cell(27.1, 5, 'Contado', 1, 0, 'C');
-		$pdf->Cell(27.1, 5, 'Tarjeta', 1, 0, 'C');
-		$pdf->Cell(27.1, 5, 'Cheque', 1, 0, 'C');
-		$pdf->Cell(27.1, 5, 'Depósito', 1, 0, 'C');
-		$pdf->Cell(27.1, 5, 'Crédito', 1, 0, 'C');
-		$pdf->Cell(27.1, 5, 'Mixto', 1, 0, 'C');
-		$pdf->Cell(27.1, 5, 'Apartado', 1, 0, 'C');
+		$pdf->SetFont('Arial', '', 9);
+		$pdf->Cell(23.75, 5, 'Contado', 1, 0, 'C');
+		$pdf->Cell(23.75, 5, 'Tarjeta', 1, 0, 'C');
+		$pdf->Cell(23.75, 5, 'Cheque', 1, 0, 'C');
+		$pdf->Cell(23.75, 5, 'Depósito', 1, 0, 'C');
+		$pdf->Cell(23.75, 5, 'Crédito', 1, 0, 'C');
+		$pdf->Cell(23.75, 5, 'Mixto', 1, 0, 'C');
+		$pdf->Cell(23.75, 5, 'Apartado', 1, 0, 'C');
+		$pdf->Cell(23.75, 5, 'Sinpe Móvil', 1, 0, 'C');
 		$pdf->ln(5);
-		$pdf->Cell(27.1, 5, $this->fni($cierre->datos['detalleNotasCredito']['contado']), 1, 0, 'C');
-		$pdf->Cell(27.1, 5, $this->fni($cierre->datos['detalleNotasCredito']['tarjeta']), 1, 0, 'C');
-		$pdf->Cell(27.1, 5, $this->fni($cierre->datos['detalleNotasCredito']['cheque']), 1, 0, 'C');
-		$pdf->Cell(27.1, 5, $this->fni($cierre->datos['detalleNotasCredito']['deposito']), 1, 0, 'C');
-		$pdf->Cell(27.1, 5, $this->fni($cierre->datos['detalleNotasCredito']['credito']), 1, 0, 'C');
-		$pdf->Cell(27.1, 5, $this->fni($cierre->datos['detalleNotasCredito']['mixto']), 1, 0, 'C');
-		$pdf->Cell(27.1, 5, $this->fni($cierre->datos['detalleNotasCredito']['apartado']), 1, 0, 'C');
+		$pdf->Cell(23.75, 5, $this->fni($cierre->datos['detalleNotasCredito']['contado']), 1, 0, 'C');
+		$pdf->Cell(23.75, 5, $this->fni($cierre->datos['detalleNotasCredito']['tarjeta']), 1, 0, 'C');
+		$pdf->Cell(23.75, 5, $this->fni($cierre->datos['detalleNotasCredito']['cheque']), 1, 0, 'C');
+		$pdf->Cell(23.75, 5, $this->fni($cierre->datos['detalleNotasCredito']['deposito']), 1, 0, 'C');
+		$pdf->Cell(23.75, 5, $this->fni($cierre->datos['detalleNotasCredito']['credito']), 1, 0, 'C');
+		$pdf->Cell(23.75, 5, $this->fni($cierre->datos['detalleNotasCredito']['mixto']), 1, 0, 'C');
+		$pdf->Cell(23.75, 5, $this->fni($cierre->datos['detalleNotasCredito']['apartado']), 1, 0, 'C');
+		$pdf->Cell(23.75, 5, $this->fni($cierre->datos['detalleNotasCredito']['sinpeMovil']), 1, 0, 'C');
 
 		$pdf->SetFont('Arial', 'B', 14);
 		$pdf->ln(6);
@@ -1183,6 +1136,7 @@ class impresion extends CI_Controller
 		$efectivoTotal -= $cierre->bnservicios;
 		$efectivoTotal -= $cierre->bcrservicios;
 		$efectivoTotal -= $cierre->datos['recibos']['abonos'];
+		$efectivoTotal -= $cierre->datos['recibos']['sinpeMovil'];
 		$efectivoTotal += $cierre->datos['detalleNotasCredito']['contado'];
 		//$efectivoTotal -= $cierre->datos['pagoMixto']['efectivo'];
 		$efectivoTotal -= $cierre->datos['totalFacturasContado'];
@@ -1192,15 +1146,19 @@ class impresion extends CI_Controller
 		$pdf->Cell(190, 5, 'Otros Totales', 0, 0, 'C');
 		$pdf->ln(5);
 		$pdf->SetFont('Arial', '', 11);
-		$pdf->Cell(47.5, 5, 'Facturas de Contado', 1, 0, 'C');
-		$pdf->Cell(47.5, 5, 'Faltante / Sobrante', 1, 0, 'C');
-		$pdf->Cell(47.5, 5, 'Tarjetas', 1, 0, 'C');
-		$pdf->Cell(47.5, 5, 'Créditos', 1, 0, 'C');
+		$pdf->Cell(38, 5, 'Facturas de Contado', 1, 0, 'C');
+		$pdf->Cell(38, 5, 'Faltante / Sobrante', 1, 0, 'C');
+		$pdf->Cell(38, 5, 'Tarjetas', 1, 0, 'C');
+		$pdf->Cell(38, 5, 'Créditos', 1, 0, 'C');
+		$pdf->Cell(38, 5, 'Sinpe Móvil', 1, 0, 'C');
 		$pdf->ln(5);
-		$pdf->Cell(47.5, 5, $this->fni($cierre->datos['totalFacturasContado'] - $cierre->datos['detalleNotasCredito']['contado']), 1, 0, 'C');
-		$pdf->Cell(47.5, 5, $this->fni($efectivoTotal), 1, 0, 'C');
-		$pdf->Cell(47.5, 5, $this->fni($cierre->datos['pagoDatafonos']['totalDatafonos'] + $cierre->bnserviciosc + $cierre->bcrserviciosc - $cierre->datos['detalleNotasCredito']['tarjeta']), 1, 0, 'C');
-		$pdf->Cell(47.5, 5, $this->fni($cierre->datos['totalCreditos']['totalCredito'] - $cierre->datos['detalleNotasCredito']['credito']), 1, 0, 'C');
+		$pdf->Cell(38, 5, $this->fni($cierre->datos['totalFacturasContado'] - $cierre->datos['detalleNotasCredito']['contado']), 1, 0, 'C');
+		$pdf->Cell(38, 5, $this->fni($efectivoTotal), 1, 0, 'C');
+		$pdf->Cell(38, 5, $this->fni($cierre->datos['pagoDatafonos']['totalDatafonos'] + $cierre->bnserviciosc + $cierre->bcrserviciosc - $cierre->datos['detalleNotasCredito']['tarjeta']), 1, 0, 'C');
+		$pdf->Cell(38, 5, $this->fni($cierre->datos['totalCreditos']['totalCredito'] - $cierre->datos['detalleNotasCredito']['credito']), 1, 0, 'C');
+
+		$totalSinpeMovil = $cierre->datos['totalFacturasSinpeMovil'] - $cierre->datos['detalleNotasCredito']['sinpeMovil'] + $cierre->datos['pagoMixto']['sinpeMovil'];
+		$pdf->Cell(38, 5, $this->fni($totalSinpeMovil), 1, 0, 'C');
 
 
 		$pdf->ln(5);
@@ -2189,17 +2147,23 @@ class impresion extends CI_Controller
 		$cantidadFacturas = 0;
 		$total = 0;
 		$tarjeta = 0;
-		$efectivo = 0;
-		if ($pagos->num_rows() != 0) {
+		$efectivo = 0;			
+		$sinpeMovil = 0;
+		if($pagos->num_rows()!=0){
 			$cantidadFacturas = $pagos->num_rows();
-			$pagos = $pagos->result();
-			foreach ($pagos as $pago) {
+			$pagos = $pagos->result();			
+			foreach($pagos as $pago){
 				$total += $pago->monto;
 				$tarjeta += $pago->pago_tarjeta;
+
+				if($pago->tipo_pago == 'sinpe_movil'){
+					$sinpeMovil += $pago->monto - $pago->pago_tarjeta;
+				}else if($pago->tipo_pago == 'contado'){
+					$efectivo += $pago->monto - $pago->pago_tarjeta;
+				}
 			}
-			$efectivo = $total - $tarjeta;
 		}
-		return array('cantidadFacturas' => $cantidadFacturas, 'total' => $total, 'tarjeta' => $tarjeta, 'efectivo' => $efectivo);
+		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo,'sinpeMovil'=>$sinpeMovil);
 	}
 
 	function obtenerRecibosDeDinero($sucursal, $fechaHoraActual, $fechaUltimoCierra)
@@ -2208,6 +2172,7 @@ class impresion extends CI_Controller
 		$efectivo = 0;
 		$tarjeta = 0;
 		$deposito = 0;
+		$sinpeMovil = 0;
 		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
 		if ($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)) {
 			foreach ($recibos as $recibo) {
@@ -2222,11 +2187,14 @@ class impresion extends CI_Controller
 					case 'tarjeta':
 						$tarjeta += $recibo->Recibo_Cantidad;
 						break;
+					case 'sinpe_movil':
+						$sinpeMovil += $recibo->Recibo_Cantidad;
+						break;
 				}
 			}
 		}
 		$total += $totalAbonoApartado;
-		return array('total' => $total, 'efectivo' => $efectivo, 'tarjeta' => $tarjeta, 'deposito' => $deposito, 'abonos' => $totalAbonoApartado);
+		return array('total' => $total, 'efectivo' => $efectivo, 'tarjeta' => $tarjeta, 'deposito' => $deposito, 'sinpeMovil' => $sinpeMovil, 'abonos' => $totalAbonoApartado);
 	}
 
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra)
@@ -2355,6 +2323,17 @@ class impresion extends CI_Controller
 		return $total;
 	}
 
+	function getTotalFacturasSinpeMovil($sucursal, $fechaHoraActual, $fechaUltimoCierra){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasSinpeMovilPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
+			
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
+	}
+
 	function obtenerVendidoPorCadaVendedor($sucursal, $fechaHoraActual, $fechaUltimoCierra)
 	{
 
@@ -2410,273 +2389,4 @@ class impresion extends CI_Controller
 
 
 
-class EnLetras
-{
-	var $Void = "";
-	var $SP = " ";
-	var $Dot = ".";
-	var $Zero = "0";
-	var $Neg = "Menos";
 
-	function ValorEnLetras($x, $Moneda)
-	{
-		$s = "";
-		$Ent = "";
-		$Frc = "";
-		$Signo = "";
-
-		if (floatVal($x) < 0)
-			$Signo = $this->Neg . " ";
-		else
-			$Signo = "";
-
-		if (intval(number_format($x, 2, '.', '')) != $x) //<- averiguar si tiene decimales
-			$s = number_format($x, 2, '.', '');
-		else
-			$s = number_format($x, 2, '.', '');
-
-		$Pto = strpos($s, $this->Dot);
-
-		if ($Pto === false) {
-			$Ent = $s;
-			$Frc = $this->Void;
-		} else {
-			$Ent = substr($s, 0, $Pto);
-			$Frc =  substr($s, $Pto + 1);
-		}
-
-		if ($Ent == $this->Zero || $Ent == $this->Void)
-			$s = "Cero ";
-		elseif (strlen($Ent) > 7) {
-			$s = $this->SubValLetra(intval(substr($Ent, 0,  strlen($Ent) - 6))) .
-				"Millones " . $this->SubValLetra(intval(substr($Ent, -6, 6)));
-		} else {
-			$s = $this->SubValLetra(intval($Ent));
-		}
-
-		if (substr($s, -9, 9) == "Millones " || substr($s, -7, 7) == "Millón ")
-			$s = $s . "de ";
-
-		$s = $s . $Moneda;
-
-		/*if($Frc != $this->Void)
-    {
-       $s = $s . " " . $Frc. "/100";
-       //$s = $s . " " . $Frc . "/100";
-    }
-    $letrass=$Signo . $s . " M.N."; */
-		return ($Signo . $s);
-	}
-
-
-	function SubValLetra($numero)
-	{
-		$Ptr = "";
-		$n = 0;
-		$i = 0;
-		$x = "";
-		$Rtn = "";
-		$Tem = "";
-
-		$x = trim("$numero");
-		$n = strlen($x);
-
-		$Tem = $this->Void;
-		$i = $n;
-
-		while ($i > 0) {
-			$Tem = $this->Parte(intval(substr($x, $n - $i, 1) .
-				str_repeat($this->Zero, $i - 1)));
-			if ($Tem != "Cero")
-				$Rtn .= $Tem . $this->SP;
-			$i = $i - 1;
-		}
-
-
-		//--------------------- GoSub FiltroMil ------------------------------
-		$Rtn = str_replace(" Mil Mil", " Un Mil", $Rtn);
-		while (1) {
-			$Ptr = strpos($Rtn, "Mil ");
-			if (!($Ptr === false)) {
-				if (!(strpos($Rtn, "Mil ", $Ptr + 1) === false))
-					$this->ReplaceStringFrom($Rtn, "Mil ", "", $Ptr);
-				else
-					break;
-			} else break;
-		}
-
-		//--------------------- GoSub FiltroCiento ------------------------------
-		$Ptr = -1;
-		do {
-			$Ptr = strpos($Rtn, "Cien ", $Ptr + 1);
-			if (!($Ptr === false)) {
-				$Tem = substr($Rtn, $Ptr + 5, 1);
-				if ($Tem == "M" || $Tem == $this->Void);
-				else
-					$this->ReplaceStringFrom($Rtn, "Cien", "Ciento", $Ptr);
-			}
-		} while (!($Ptr === false));
-
-		//--------------------- FiltroEspeciales ------------------------------
-		$Rtn = str_replace("Diez Un", "Once", $Rtn);
-		$Rtn = str_replace("Diez Dos", "Doce", $Rtn);
-		$Rtn = str_replace("Diez Tres", "Trece", $Rtn);
-		$Rtn = str_replace("Diez Cuatro", "Catorce", $Rtn);
-		$Rtn = str_replace("Diez Cinco", "Quince", $Rtn);
-		$Rtn = str_replace("Diez Seis", "Dieciseis", $Rtn);
-		$Rtn = str_replace("Diez Siete", "Diecisiete", $Rtn);
-		$Rtn = str_replace("Diez Ocho", "Dieciocho", $Rtn);
-		$Rtn = str_replace("Diez Nueve", "Diecinueve", $Rtn);
-		$Rtn = str_replace("Veinte Un", "Veintiun", $Rtn);
-		$Rtn = str_replace("Veinte Dos", "Veintidos", $Rtn);
-		$Rtn = str_replace("Veinte Tres", "Veintitres", $Rtn);
-		$Rtn = str_replace("Veinte Cuatro", "Veinticuatro", $Rtn);
-		$Rtn = str_replace("Veinte Cinco", "Veinticinco", $Rtn);
-		$Rtn = str_replace("Veinte Seis", "Veintiseís", $Rtn);
-		$Rtn = str_replace("Veinte Siete", "Veintisiete", $Rtn);
-		$Rtn = str_replace("Veinte Ocho", "Veintiocho", $Rtn);
-		$Rtn = str_replace("Veinte Nueve", "Veintinueve", $Rtn);
-
-		//--------------------- FiltroUn ------------------------------
-		if (substr($Rtn, 0, 1) == "M") $Rtn = "Un " . $Rtn;
-		//--------------------- Adicionar Y ------------------------------
-		for ($i = 65; $i <= 88; $i++) {
-			if ($i != 77)
-				$Rtn = str_replace("a " . Chr($i), "* y " . Chr($i), $Rtn);
-		}
-		$Rtn = str_replace("*", "a", $Rtn);
-		return ($Rtn);
-	}
-
-
-	function ReplaceStringFrom(&$x, $OldWrd, $NewWrd, $Ptr)
-	{
-		$x = substr($x, 0, $Ptr)  . $NewWrd . substr($x, strlen($OldWrd) + $Ptr);
-	}
-
-
-	function Parte($x)
-	{
-		$Rtn = '';
-		$t = '';
-		$i = '';
-		do {
-			switch ($x) {
-				case 0:
-					$t = "Cero";
-					break;
-				case 1:
-					$t = "Un";
-					break;
-				case 2:
-					$t = "Dos";
-					break;
-				case 3:
-					$t = "Tres";
-					break;
-				case 4:
-					$t = "Cuatro";
-					break;
-				case 5:
-					$t = "Cinco";
-					break;
-				case 6:
-					$t = "Seis";
-					break;
-				case 7:
-					$t = "Siete";
-					break;
-				case 8:
-					$t = "Ocho";
-					break;
-				case 9:
-					$t = "Nueve";
-					break;
-				case 10:
-					$t = "Diez";
-					break;
-				case 20:
-					$t = "Veinte";
-					break;
-				case 30:
-					$t = "Treinta";
-					break;
-				case 40:
-					$t = "Cuarenta";
-					break;
-				case 50:
-					$t = "Cincuenta";
-					break;
-				case 60:
-					$t = "Sesenta";
-					break;
-				case 70:
-					$t = "Setenta";
-					break;
-				case 80:
-					$t = "Ochenta";
-					break;
-				case 90:
-					$t = "Noventa";
-					break;
-				case 100:
-					$t = "Cien";
-					break;
-				case 200:
-					$t = "Doscientos";
-					break;
-				case 300:
-					$t = "Trescientos";
-					break;
-				case 400:
-					$t = "Cuatrocientos";
-					break;
-				case 500:
-					$t = "Quinientos";
-					break;
-				case 600:
-					$t = "Seiscientos";
-					break;
-				case 700:
-					$t = "Setecientos";
-					break;
-				case 800:
-					$t = "Ochocientos";
-					break;
-				case 900:
-					$t = "Novecientos";
-					break;
-				case 1000:
-					$t = "Mil";
-					break;
-				case 1000000:
-					$t = "Millón";
-					break;
-			}
-
-			if ($t == $this->Void) {
-				$i = $i + 1;
-				$x = $x / 1000;
-				if ($x == 0) $i = 0;
-			} else
-				break;
-		} while ($i != 0);
-
-		$Rtn = $t;
-		switch ($i) {
-			case 0:
-				$t = $this->Void;
-				break;
-			case 1:
-				$t = " Mil";
-				break;
-			case 2:
-				$t = " Millones";
-				break;
-			case 3:
-				$t = " Billones";
-				break;
-		}
-		return ($Rtn . $t);
-	}
-}

@@ -246,29 +246,6 @@ class external extends CI_Controller {
 
                 $res = $this->factura->envioHacienda($resFacturaElectronica, $responseCheck);
 
-                /*if($res["status"]){
-                    $this->logger->info("enviarComprobantesAHacienda", " La factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal} fue ACEPTADA");
-                    if(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
-                        $this->logger->info("enviarComprobantesAHacienda", "Enviando correo a cliente");
-                        require_once PATH_API_CORREO;
-                        $apiCorreo = new Correo();
-                        $attachs = array(
-                            $this->factura->getFinalPath("fe", $factura->FechaEmision).$resFacturaElectronica["data"]["clave"].".xml",
-                            $this->factura->getFinalPath("fe", $factura->FechaEmision).$resFacturaElectronica["data"]["clave"]."-respuesta.xml",
-                            $this->factura->getFinalPath("fe", $factura->FechaEmision).$resFacturaElectronica["data"]["clave"].".pdf");
-                        if($apiCorreo->enviarCorreo(filter_var($factura->ReceptorEmail, FILTER_VALIDATE_EMAIL), "Factura Electrónica #".$responseCheck["factura"]->Factura_Consecutivo." | ".$responseCheck["empresa"]->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una factura electrónica bajo su nombre.", "Factura Electrónica - ".$responseCheck["empresa"]->Sucursal_Nombre, $attachs)){
-                            $this->factura->marcarEnvioCorreoFacturaElectronica($responseCheck["factura"]->TB_02_Sucursal_Codigo, $responseCheck["factura"]->Factura_Consecutivo);
-                            $this->logger->info("enviarComprobantesAHacienda", "Se envio correo con exito");
-                        }else{
-                            $this->logger->error("enviarComprobantesAHacienda", "Correo no se pudo enviar al cliente");
-                        }
-                    }else{
-                        $this->logger->info("enviarComprobantesAHacienda", "Cliente no requiere envio de correo");
-                    }
-                }else{
-                    $this->logger->error("enviarComprobantesAHacienda", " La factura {$factura->Consecutivo} de la sucursal {$factura->Sucursal} no fue enviada por:");
-                    $this->logger->error("enviarComprobantesAHacienda", $res["message"]);
-                }*/
             }
         }else{
             $this->logger->info("enviarComprobantesAHacienda", "No hay facturas que enviar a Hacienda");
@@ -296,34 +273,24 @@ class external extends CI_Controller {
 
                 $resEnvio = $this->contabilidad->enviarNotaCreditoElectronicaAHacienda($nota->Consecutivo, $nota->Sucursal);
 
-                /*if($resEnvio){
-                    if($resEnvio["estado_hacienda"] == "rechazado"){
-                        $this->logger->error("enviarComprobantesAHacienda", "Nota credito fue RECHAZADA por Hacienda. | Consecutivo: {$nota->Consecutivo} | Sucursal: {$nota->Sucursal}");
-                    }else if($resEnvio["estado_hacienda"] == "aceptado"){
-                        $this->logger->info("enviarComprobantesAHacienda", "Nota credito fue ACEPTADA por Hacienda | Consecutivo: {$nota->Consecutivo} | Sucursal: {$nota->Sucursal}");
-                        if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
-                            $this->logger->info("enviarComprobantesAHacienda", "Enviando correo a cliente");
+                if($resEnvio["estado_hacienda"] == "aceptado"){
+                    if(filter_var($nota->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                        if($empresaData = $this->empresa->getEmpresa($nota->Sucursal)){
+                            $empresa = $empresaData[0];
                             require_once PATH_API_CORREO;
                             $apiCorreo = new Correo();
                             $attachs = array(
                                 $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".xml",
                                 $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave.".pdf",
-                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml");
+                                $this->contabilidad->getFinalPath("nc", $nota->FechaEmision).$nota->Clave."-respuesta.xml",);
                             if($apiCorreo->enviarCorreo($nota->ReceptorEmail, "Nota Crédito #{$nota->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar una nota crédito bajo su nombre.", "Nota Crédito Electrónica - ".$empresa->Sucursal_Nombre, $attachs)){
                                 $this->contabilidad->marcarEnvioCorreoNotaCreditoElectronica($nota->Sucursal, $nota->Consecutivo);
-                                $this->logger->info("enviarComprobantesAHacienda", "Se envio correo con exito");
-                            }else{
-                                $this->logger->error("enviarComprobantesAHacienda", "Correo no se pudo enviar al cliente");
                             }
                         }else{
-                            $this->logger->info("enviarComprobantesAHacienda", "Cliente no requiere envio de correo");
+
                         }
-                    }else{
-                        $this->logger->error("enviarComprobantesAHacienda", "Hacienda envio otro estado {$resEnvio["estado_hacienda"]} | Consecutivo: {$nota->Consecutivo} | Sucursal: {$nota->Sucursal}");
                     }
-                }else{
-                    $this->logger->error("enviarComprobantesAHacienda", "No se pudo enviar la nota credito a Hacienda, debemos marcarla como contingencia | Consecutivo: {$nota->Consecutivo} | Sucursal: {$nota->Sucursal}");
-                }*/
+                }
 
             }
         }else{
@@ -359,6 +326,73 @@ class external extends CI_Controller {
         }
 
 
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de factura electronicas de compra");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+
+        if($facturasElectronicaDeCompras = $this->factura->getFacturasDeCompraSinEnviarAHacienda()){
+            foreach($facturasElectronicaDeCompras as $facturaElectronicaDeCompra){
+                if(!isset($empresas[$facturaElectronicaDeCompra->Sucursal])){
+                    $empresas[$facturaElectronicaDeCompra->Sucursal] = $this->empresa->getEmpresa($facturaElectronicaDeCompra->Sucursal)[0];
+                }
+                $empresa = $empresas[$facturaElectronicaDeCompra->Sucursal];
+
+                $this->logger->info("enviarComprobantesAHacienda", " Enviando la factura electrónica de compra {$facturaElectronicaDeCompra->Consecutivo} de la sucursal {$facturaElectronicaDeCompra->Sucursal}");
+
+                $respuesta = $this->factura->enviarFacturaElectronicaDeCompraAHacienda($facturaElectronicaDeCompra->Consecutivo, $facturaElectronicaDeCompra->Sucursal);
+
+                if($respuesta){
+                    if(isset($respuesta["status"])){
+                        $this->logger->info("enviarComprobantesAHacienda", "Se envió factura electrónica de compra con estado <{$respuesta["estado_hacienda"]}>");
+                    }
+                }else{
+                    $this->logger->info("enviarComprobantesAHacienda", "No se pudo enviar factura electrónica de compra");
+                }
+            }
+        }else{
+            $this->logger->info("enviarComprobantesAHacienda", "No hay facturas electrónicas de compra que enviar a Hacienda");
+        }
+
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>> Comenzando envio por lote de recibos electronicos de pago");
+        $this->logger->info("enviarComprobantesAHacienda", ">>>>>>");
+        
+        if($recibosElectronicosDePago = $this->contabilidad->getRecibosElectronicosDePagoSinEnviarAHacienda()){
+            foreach($recibosElectronicosDePago as $reciboElectronicoDePago){
+                if(!isset($empresas[$reciboElectronicoDePago->Sucursal])){
+                    $empresas[$reciboElectronicoDePago->Sucursal] = $this->empresa->getEmpresa($reciboElectronicoDePago->Sucursal)[0];
+                }
+                $empresa = $empresas[$reciboElectronicoDePago->Sucursal];
+
+                $this->logger->info("enviarComprobantesAHacienda", " Enviando el recibo electrónico de pago {$reciboElectronicoDePago->Consecutivo} de la sucursal {$reciboElectronicoDePago->Sucursal}");
+
+                $respuesta = $this->contabilidad->enviarReciboElectronicoDePagoAHacienda($reciboElectronicoDePago->Consecutivo, $reciboElectronicoDePago->Sucursal, $reciboElectronicoDePago->TipoDocIR);
+
+                if($respuesta){
+                    if(isset($respuesta["status"])){
+                        $this->logger->info("enviarComprobantesAHacienda", "Se envió recibo electrónico de pago con estado <{$respuesta["estado_hacienda"]}>");
+
+                        if($respuesta["estado_hacienda"] == "aceptado"){
+                            if(filter_var($reciboElectronicoDePago->ReceptorEmail, FILTER_VALIDATE_EMAIL)){
+                                require_once PATH_API_CORREO;
+                                $apiCorreo = new Correo();
+                                $attachs = array(
+                                    $this->contabilidad->getFinalPath("rep", $reciboElectronicoDePago->FechaEmision).$reciboElectronicoDePago->Clave.".xml",
+                                    $this->contabilidad->getFinalPath("rep", $reciboElectronicoDePago->FechaEmision).$reciboElectronicoDePago->Clave.".pdf",
+                                    $this->contabilidad->getFinalPath("rep", $reciboElectronicoDePago->FechaEmision).$reciboElectronicoDePago->Clave."-respuesta.xml");
+                                if($apiCorreo->enviarCorreo($reciboElectronicoDePago->ReceptorEmail, "Recibo #{$reciboElectronicoDePago->Consecutivo} | ".$empresa->Sucursal_Nombre, "Este mensaje se envió automáticamente a su correo al generar un recibo bajo su nombre.", "Recibo Electrónico - ".$empresa->Sucursal_Nombre, $attachs)){
+                                    $this->contabilidad->marcarEnvioCorreoReciboElectronicoDePago($reciboElectronicoDePago->Sucursal, $reciboElectronicoDePago->Consecutivo, $reciboElectronicoDePago->TipoDocIR);
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    $this->logger->info("enviarComprobantesAHacienda", "No se pudo enviar recibo electrónico de pago");
+                }
+            }
+        }else{
+            $this->logger->info("enviarComprobantesAHacienda", "No hay recibos electrónicos de pago que enviar a Hacienda");
+        }
 
 
         // Al final destruimos todas las sesiones con el API de Hacienda

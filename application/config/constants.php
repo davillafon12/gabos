@@ -74,6 +74,7 @@ define('CODIGO_PAIS', 506);
 define('FACTURA_ELECTRONICA', 'FE');
 define('TIQUETE_ELECTRONICO', 'TE');
 define('FACTURA_COMPRA_ELECTRONICA', 'FEC');
+define('RECIBO_ELECTRONICO_PAGO', 'REP');
 define('FACTURA_ELECTRONICA_CODIGO', '01');
 define('NOTA_CREDITO_ELECTRONICA', 'NC');
 define('HACIENDA_DECIMALES', 5);
@@ -83,9 +84,12 @@ define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/au
 define('HACIENDA_RECEPCION_API_STAG', "https://api-sandbox.comprobanteselectronicos.go.cr/recepcion/v1/");
 define('HACIENDA_RECEPCION_API_PROD', "https://api.comprobanteselectronicos.go.cr/recepcion/v1/");
 define('PATH_DOCUMENTOS_ELECTRONICOS_WEB', 'application/third_party/');
+define('CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO', '513910');
+define('PROVEEDOR_DE_SISTEMAS', '3101350785');
+define('CODIGO_DESCUENTO_DEFECTO', '07');
 
 define('ANULAR_FACTURA', '01');
-define('CORRIGE_FACTURA', '03');
+define('CORRIGE_FACTURA', '06');
 
 define('ART_GEN_IMAGEN', 'Default.png');
 define('ART_GEN_TIPO_CODIGO', '04');
@@ -95,7 +99,7 @@ define('ART_GEN_IMPUESTO', 13);
 
 define('CONTROL_DE_INVENTARIO', "CONTROL_DE_INVENTARIO");
 
-define('JAVASCRIPT_CACHE_VERSION', 45);
+define('JAVASCRIPT_CACHE_VERSION', 47);
 define('DB_DATETIME_FORMAT', 'y-m-d H:i:s'); //y/m/d : H:i:s
 
 /* End of file constants.php */

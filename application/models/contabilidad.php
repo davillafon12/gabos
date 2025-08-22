@@ -165,15 +165,21 @@ Class contabilidad extends CI_Model
 					date_format(tb_24_credito.Credito_Fecha_Expedicion, '%d-%m-%Y %h:%i:%s %p') AS fecha_expedicion,
 					tb_24_credito.Credito_Factura_Consecutivo AS factura,
 					tb_07_factura.Factura_Moneda AS moneda,
+					tb_07_factura.Factura_tipo_cambio AS tipo_cambio,
 					tb_07_factura.Factura_Nombre_Cliente AS cliente_nombre,
 					tb_07_factura.TB_03_Cliente_Cliente_Cedula AS cliente_cedula,
+					tb_07_factura.Factura_Fecha_Hora AS fecha_factura,
 					tb_26_recibos_dinero.Credito AS c,
-					tb_26_recibos_dinero.Comentarios AS comentarios
+					tb_26_recibos_dinero.Comentarios AS comentarios,
+					tb_26_recibos_dinero.Anulado AS anulado,
+					tb_55_factura_electronica.Clave AS clave_fe
 			FROM tb_26_recibos_dinero
 			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito
 			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
+			JOIN tb_55_factura_electronica ON tb_55_factura_electronica.Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
 			WHERE  tb_24_credito.Credito_Sucursal_Codigo = $sucursal
-                        AND    tb_07_factura.TB_02_Sucursal_Codigo = $sucursal
+            AND    tb_07_factura.TB_02_Sucursal_Codigo = $sucursal
+			AND    tb_55_factura_electronica.Sucursal = $sucursal
 			AND    tb_26_recibos_dinero.Consecutivo = $recibo
 			$queryLoco
 		");
@@ -229,7 +235,7 @@ Class contabilidad extends CI_Model
 						'Moneda' => $moneda,
 						'Por_IVA' => $por_iva,
 						'Tipo_Cambio' => $tipo_cambio,
-                                                'Es_Anulacion' => $esAnulacion,
+                        'Es_Anulacion' => $esAnulacion,
 						'Sucursal' => $sucursal,
 						'Cliente' => $cliente
 						);
@@ -262,13 +268,10 @@ Class contabilidad extends CI_Model
 	}
 
 	function agregarProductosNotaCredito($consecutivo, $sucursal, $productos, $cliente, $facturaAcreditar){
-
-            $sucursalOriginal = $sucursal;
+        $sucursalOriginal = $sucursal;
 		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
+			$sucursal = $this->sucursales_trueque[$sucursal];
 		}
-
-
 
 		$datos = array();
 
@@ -280,28 +283,26 @@ Class contabilidad extends CI_Model
 			$descripcion = "";
 			$precio = "";
 			$descuento = 0;
+			$codigoDescuento = CODIGO_DESCUENTO_DEFECTO;
 			$exento = 0;
 			$noRetencion = 0;
 			$precioFinal = 0;
-			$tipoCodigo = "";
-			$codigoCabys = "";
+			$tipoCodigo = "99";
+			$codigoCabys = ART_GEN_CODIGO_CABYS;
 
-			if(trim($producto->c) === "00"){
-				$descripcion = trim($producto->ds);
-				$precio = trim($producto->p);
-				$precioFinal = $precio;
-				$tipoCodigo = "99";
-				$codigoCabys = ART_GEN_CODIGO_CABYS;
-			}else{
-				$descripcion = $this->articulo->getArticuloDescripcion($producto->c, $sucursal);
-				$precio = $this->precioArticuloEnFacturaDeterminada($facturaAcreditar, $sucursal, $producto->c);
-				$articuloCompleto = $this->factura->getArticuloFactura($facturaAcreditar, $sucursal, $producto->c);
-				$descuento = $articuloCompleto->Articulo_Factura_Descuento;
-				$exento = $articuloCompleto->Articulo_Factura_Exento;
-				$noRetencion = $articuloCompleto->Articulo_Factura_No_Retencion;
-				$precioFinal = $articuloCompleto->Articulo_Factura_Precio_Final;
-				$tipoCodigo = $this->articulo->getArticuloTipoCodigo($producto->c, $sucursal);
-				$codigoCabys = $articuloCompleto->Codigo_Cabys;
+			if($articuloDeFactura = $this->factura->getArticuloFacturaById($producto->id)){
+				//Si el articulo existe en la factura
+
+				$descripcion = $articuloDeFactura->Articulo_Factura_Descripcion;
+				$precio = ($articuloDeFactura->Articulo_Factura_Precio_Unitario - ($articuloDeFactura->Articulo_Factura_Precio_Unitario * ($articuloDeFactura->Articulo_Factura_Descuento/100)));
+				$descuento = $articuloDeFactura->Articulo_Factura_Descuento;
+				$codigoDescuento = $articuloDeFactura->TipoDescuento;
+				$exento = $articuloDeFactura->Articulo_Factura_Exento;
+				$noRetencion = $articuloDeFactura->Articulo_Factura_No_Retencion;
+				$precioFinal = $articuloDeFactura->Articulo_Factura_Precio_Final;
+				$tipoCodigo = $articuloDeFactura->TipoCodigo;
+				$codigoCabys = $articuloDeFactura->Codigo_Cabys;
+
 				//Si el codigo cabys esta vacio, estamos cargando un articulo de una factura que no se guardo con CABYS
 				//Entonces obtenemos el cabys de la tabla de articulos original
 				if(trim($codigoCabys) == ""){
@@ -311,7 +312,13 @@ Class contabilidad extends CI_Model
 						$codigoCabys = ART_GEN_CODIGO_CABYS;
 					}
 				}
+			}else{
+				//Si el articulo no existe en la factura, entonces lo tratamos como generico ingresado por el usuario al crear NC
+				$descripcion = trim($producto->ds);
+				$precio = trim($producto->p);
+				$precioFinal = $precio;
 			}
+
 			//Agregamos los datos a un array para ser agregado a la bd
 			$pro = array(
 						'Codigo' => $producto->c,
@@ -323,6 +330,7 @@ Class contabilidad extends CI_Model
 						'Precio_Unitario' => $precio,
 						'Precio_Final' => $precioFinal,
 						'Descuento' => $descuento,
+						'TipoDescuento' => $codigoDescuento,
 						'Exento' => $exento,
 						'No_Retencion' => $noRetencion,
 						'Nota_Credito_Consecutivo' => $consecutivo,
@@ -337,21 +345,6 @@ Class contabilidad extends CI_Model
 			$this->articulo->actualizarInventarioSUMADefectuoso($producto->c, $producto->d, $sucursalOriginal);
 		}
 		$this->db->insert_batch('tb_28_productos_notas_credito', $datos);
-	}
-
-	function precioArticuloEnFacturaDeterminada($factura, $sucursal, $articulo){
-		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es sucursal de trueque, poner la sucursal que responde
-				$sucursal = $this->sucursales_trueque[$sucursal];
-		}
-		$this->db->select('Articulo_Factura_Descuento as descuento, Articulo_Factura_Precio_Unitario as precio');
-		$this->db->from('tb_08_articulos_factura');
-		$this->db->where('TB_07_Factura_Factura_Consecutivo',$factura);
-		$this->db->where('TB_07_Factura_TB_02_Sucursal_Codigo',$sucursal);
-		$this->db->where('Articulo_Factura_Codigo',$articulo);
-		$query = $this->db->get();
-		$art = $query->result()[0];
-		//Calculamos el precio con el descuento
-		return ($art->precio - ($art->precio * ($art->descuento/100)));
 	}
 
 	function getNotaCreditoHeaderParaImpresion($consecutivo, $sucursal){
@@ -971,7 +964,7 @@ Class contabilidad extends CI_Model
 						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
 				}
 		}
-		$this->db->select('tb_07_factura.Factura_Monto_Total AS monto, tb_07_factura.Factura_Fecha_Hora AS fecha, tb_23_mixto.Mixto_Cantidad_Paga AS pago_tarjeta');
+		$this->db->select('tb_07_factura.Factura_Monto_Total AS monto, tb_07_factura.Factura_Fecha_Hora AS fecha, tb_23_mixto.Mixto_Cantidad_Paga AS pago_tarjeta, tb_23_mixto.Tipo_Pago AS tipo_pago');
 		$this->db->from('tb_07_factura');
 		$this->db->join('tb_23_mixto', 'tb_23_mixto.TB_18_Tarjeta_TB_07_Factura_Factura_Consecutivo = tb_07_factura.Factura_Consecutivo');
 		$this->db->where('tb_07_factura.Factura_Tipo_Pago', 'mixto');
@@ -1063,7 +1056,7 @@ Class contabilidad extends CI_Model
 		$this->db->from('tb_27_notas_credito');
 		$this->db->join('tb_07_factura', 'tb_07_factura.Factura_Consecutivo = tb_27_notas_credito.Factura_Aplicar');
 		$this->db->where('tb_27_notas_credito.Sucursal', $sucursal);
-                $this->db->where('tb_27_notas_credito.Es_Anulacion', "0");
+        $this->db->where('tb_27_notas_credito.Es_Anulacion', "0");
 		$this->db->where('tb_07_factura.TB_02_Sucursal_Codigo', $sucursal);
 		$this->db->where('tb_27_notas_credito.Fecha_Creacion >', $inicio);
 		$this->db->where('tb_27_notas_credito.Fecha_Creacion <', $final);
@@ -1079,6 +1072,8 @@ Class contabilidad extends CI_Model
 		$mixto = 0;
 		$credito = 0;
 		$apartado = 0;
+		$sinpeMovil = 0;
+		$plataformaDigital = 0;
 		$totalNotas = 0;
 
 		if($query->num_rows()!=0){
@@ -1173,11 +1168,17 @@ Class contabilidad extends CI_Model
 						case 'apartado':
 							$apartado += $costo_total;
 						break;
+						case 'sinpe_movil':
+							$sinpeMovil += $costo_total;
+						break;
+						case 'plataforma_digital':
+							$plataformaDigital += $costo_total;
+						break;
 					}
 				}
 			}
 		}
-		return array("contado"=>$contado, "tarjeta"=>$tarjeta, "cheque"=>$cheque, "deposito"=>$deposito, "mixto"=>$mixto, "credito"=>$credito, "apartado"=>$apartado, "total"=>$totalNotas);
+		return array("contado"=>$contado, "tarjeta"=>$tarjeta, "cheque"=>$cheque, "deposito"=>$deposito, "mixto"=>$mixto, "credito"=>$credito, "apartado"=>$apartado, "sinpeMovil"=>$sinpeMovil, "plataformaDigital"=>$plataformaDigital, "total"=>$totalNotas);
 
 
 	}
@@ -1202,7 +1203,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora >', $inicio);
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
-		$this->db->where('Factura_Tipo_Pago','contado');
+		$this->db->where_in('Factura_Tipo_Pago', array('contado'));
 		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
 
 		$query = $this->db->get();
@@ -1238,6 +1239,39 @@ Class contabilidad extends CI_Model
 		$this->db->where('Factura_Fecha_Hora <', $final);
 		$this->db->where('Factura_Estado','cobrada');
 		$this->db->where('Factura_Tipo_Pago','deposito');
+		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
+		$query = $this->db->get();
+		if($query->num_rows()==0)
+		{
+			return false;
+		}
+		else
+		{
+			return $query->result();
+		}
+	}
+
+	function getFacturasSinpeMovilPorRangoFecha($sucursal, $inicio, $final){
+		$this->load->model("factura", "", true);
+
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es trueque
+				$facturas_trueque = $this->factura->getFacturasTrueque($sucursal);
+				$sucursal = $this->sucursales_trueque[$sucursal];
+				if(!empty($facturas_trueque)){
+						$this->db->where_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
+				}
+		}elseif($this->truequeHabilitado && $this->esUsadaComoSucursaldeRespaldo($sucursal)){
+				$facturas_trueque = $this->factura->getFacturasTruequeResponde($this->getSucursalesTruequeFromSucursalResponde($sucursal));
+				if(!empty($facturas_trueque)){
+						$this->db->where_not_in("tb_07_factura.Factura_Consecutivo", $facturas_trueque);
+				}
+		}
+		$this->db->from('tb_07_factura');
+		$this->db->where('TB_02_Sucursal_Codigo', $sucursal);
+		$this->db->where('Factura_Fecha_Hora >', $inicio);
+		$this->db->where('Factura_Fecha_Hora <', $final);
+		$this->db->where('Factura_Estado','cobrada');
+		$this->db->where('Factura_Tipo_Pago','sinpe_movil');
 		$this->db->where('TB_03_Cliente_Cliente_Cedula !=', 2);
 		$query = $this->db->get();
 		if($query->num_rows()==0)
@@ -1864,20 +1898,34 @@ Class contabilidad extends CI_Model
             $this->db->delete("tb_50_articulos_consignacion");
         }
 
-	function registrarArticuloConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $consignacion, $precio_final){
+	function registrarArticuloConsignacion(
+		$codigo, 
+		$descripcion, 
+		$cantidad, 
+		$descuento, 
+		$precio_unidad, 
+		$precio_total, 
+		$exento, 
+		$retencion, 
+		$imagen, 
+		$consignacion, 
+		$precio_final,
+		$codigoDescuento
+	){
 			$datos = array(
-										"Codigo"=> $codigo,
-										"Descripcion" => $descripcion,
-										"Cantidad" => $cantidad,
-										"Descuento" => $descuento,
-										"Precio_Unidad" => $precio_unidad,
-										"Precio_Total" => $precio_total,
-										"Precio_Final" => $precio_final,
-										"Exento" => $exento,
-										"Retencion" => $retencion,
-										"Imagen" => $imagen,
-										"Consignacion" => $consignacion
-										);
+				"Codigo"=> $codigo,
+				"Descripcion" => $descripcion,
+				"Cantidad" => $cantidad,
+				"Descuento" => $descuento,
+				"Codigo_Descuento" => $codigoDescuento,
+				"Precio_Unidad" => $precio_unidad,
+				"Precio_Total" => $precio_total,
+				"Precio_Final" => $precio_final,
+				"Exento" => $exento,
+				"Retencion" => $retencion,
+				"Imagen" => $imagen,
+				"Consignacion" => $consignacion
+				);
 			$this->db->insert("tb_50_articulos_consignacion", $datos);
 	}
 
@@ -1952,6 +2000,7 @@ Class contabilidad extends CI_Model
                                            tb_06_articulo.Articulo_Cantidad_Inventario as inventario,
                                            tb_50_articulos_consignacion.Descripcion as descripcion,
                                            tb_50_articulos_consignacion.Descuento as descuento,
+										   tb_50_articulos_consignacion.Codigo_Descuento as codigo_descuento,
                                            tb_50_articulos_consignacion.Exento as exento,
                                            tb_50_articulos_consignacion.Cantidad as cantidad,
                                            tb_50_articulos_consignacion.Imagen as imagen,
@@ -2000,12 +2049,31 @@ Class contabilidad extends CI_Model
 			}
 	}
 
-	function registrarArticuloEnListaConsignacion($codigo, $descripcion, $cantidad, $descuento, $precio_unidad, $precio_total, $exento, $retencion, $imagen, $sucursalEntrega, $sucursalRecibe, $precio_final, $tipoCodigo, $unidadMedida, $codigoCabys, $impuesto){
+	function registrarArticuloEnListaConsignacion(
+		$codigo, 
+		$descripcion, 
+		$cantidad, 
+		$descuento, 
+		$precio_unidad, 
+		$precio_total, 
+		$exento, 
+		$retencion, 
+		$imagen, 
+		$sucursalEntrega, 
+		$sucursalRecibe, 
+		$precio_final, 
+		$tipoCodigo, 
+		$unidadMedida, 
+		$codigoCabys, 
+		$impuesto,
+		$codigoDescuento
+		){
 			$datos = array(
 				"Codigo"=> $codigo,
 				"Descripcion" => $descripcion,
 				"Cantidad" => $cantidad,
 				"Descuento" => $descuento,
+				"Codigo_Descuento" => $codigoDescuento,
 				"Precio_Unidad" => $precio_unidad,
 				"Precio_Total" => $precio_total,
 				"Precio_Final" => $precio_final,
@@ -2107,7 +2175,7 @@ Class contabilidad extends CI_Model
             $feedback["status"] = false;
 
             // No vamos a aceptar receptores de pasaporte para FE
-            if($cliente->NoReceptor || $cliente->Cliente_Tipo_Cedula == "pasaporte"){
+            if($cliente->Cliente_Tipo_Cedula == "pasaporte"){
                 $cliente = null;
             }
 
@@ -2163,10 +2231,15 @@ Class contabilidad extends CI_Model
             $fechaEmision = date(DATE_ATOM, $fechaFacturaActual);
             $condicionVenta = $this->getCondicionVenta($tipoPago);
             $plazoCredito = "0";
-            $medioPago = $this->getMedioPago($tipoPago);
+            $medioPago = array(array("tipo" => '01', "total" => $this->fn($costos['total_comprobante']), "otros" => ''));
             $codigoMoneda = $nota->Moneda == "colones" ? "CRC" : "USD";
-            $tipoCambio = $nota->Tipo_Cambio;
+            $tipoCambio = $nota->Moneda == "colones" ? "1" : $nota->Tipo_Cambio;
             $otros = "";
+
+			if($tipoPago['tipo'] == "credito"){
+				$facturaElectronica = $this->factura->getFacturaElectronicaByClave($numero);
+				$plazoCredito = $facturaElectronica->PlazoCredito;
+			}
 
             // Agregamos la info nueva
             $data = array(
@@ -2180,7 +2253,7 @@ Class contabilidad extends CI_Model
                 "EmisorProvincia" => $emisor->Provincia,
                 "EmisorCanton" => str_pad($emisor->Canton,2,"0", STR_PAD_LEFT),
                 "EmisorDistrito" => str_pad($emisor->Distrito,2,"0", STR_PAD_LEFT),
-                "EmisorBarrio" => str_pad($emisor->Barrio,2,"0", STR_PAD_LEFT),
+                "EmisorBarrio" => str_pad($emisor->NombreBarrio,5,"_", STR_PAD_RIGHT),
                 "EmisorOtrasSennas" => $emisor->Sucursal_Direccion,
                 "EmisorCodigoPaisTelefono" => $emisor->Codigo_Pais_Telefono,
                 "EmisorTelefono" => str_replace("-", "", $emisor->Sucursal_Telefono),
@@ -2189,7 +2262,8 @@ Class contabilidad extends CI_Model
                 "EmisorEmail" => $emisor->Sucursal_Email,
                 "CondicionVenta" => $condicionVenta,
                 "PlazoCredito" => $plazoCredito,
-                "MedioPago" => $medioPago,
+                "MedioPago" => '',
+				"MedioPagoObject" => json_encode($medioPago),
                 "CodigoMoneda" => $codigoMoneda,
                 "TipoCambio" => $tipoCambio,
                 "TotalServiciosGravados" => $this->fn($costos['total_serv_gravados']),
@@ -2205,6 +2279,7 @@ Class contabilidad extends CI_Model
                 "TotalDescuentos" => $this->fn($costos['total_descuentos']),
                 "TotalVentasNeta" => $this->fn($costos['total_ventas_neta']),
                 "TotalImpuestos" => $this->fn($costos['total_impuestos']),
+				"DesgloseTotalImpuestosObject" => json_encode($costos['desglose_impuestos']),
                 "TotalIVADevuelto" => $this->fn($costos['total_iva_devuelto']),
                 "TotalOtrosCargos" => $this->fn($costos['total_otros_cargos']),
                 "TotalComprobante" => $this->fn($costos['total_comprobante']),
@@ -2225,18 +2300,21 @@ Class contabilidad extends CI_Model
             );
 
             if($receptor != NULL){
-                $data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
-                $data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
-                $data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
-                $data["ReceptorProvincia"] = $receptor->Provincia;
-                $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
-                $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
-                $data["ReceptorBarrio"] = str_pad($receptor->Barrio,2,"0", STR_PAD_LEFT);
-                $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
-                $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
-                $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
-                $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
-                $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+				if($receptor->Cliente_Cedula != "1" && $receptor->Cliente_Cedula != "0"){
+					$data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
+					$data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
+					$data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
+					$data["ReceptorProvincia"] = $receptor->Provincia;
+					$data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
+					$data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
+					$data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
+					$data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
+					$data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
+					$data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
+					$data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
+					$data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+					$data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
+				}
             }
 
             $this->db->insert("tb_57_nota_credito_electronica", $data);
@@ -2249,6 +2327,7 @@ Class contabilidad extends CI_Model
                     "PrecioUnitario" => $art["precioUnitario"],
                     "MontoTotal" => $art["montoTotal"],
                     "MontoDescuento" => $art["montoDescuento"],
+					"TipoDescuento" => $art["codigoDescuento"], 
                     "NaturalezaDescuento" => $art["naturalezaDescuento"],
                     "BaseImponible" => $art["base_imponible"],
                     "Subtotal" => $art["subtotal"],
@@ -2326,6 +2405,13 @@ Class contabilidad extends CI_Model
                 $query = $this->db->get();
                 if($query->num_rows()>0){
                     $articulos = $query->result();
+
+					$desgloseImpuestos = json_decode($nota->DesgloseTotalImpuestosObject, true);
+
+                    foreach($desgloseImpuestos as $key => $desgloseImpuesto){
+                        $desgloseImpuestos[$key]["monto"] = $this->fn($desgloseImpuesto["monto"]);
+                    }
+
                     $xmlRes = $api->crearXMLNotaCredito($nota->Clave,
                                                     $nota->ConsecutivoHacienda,
                                                     $nota->FechaEmision,
@@ -2357,10 +2443,11 @@ Class contabilidad extends CI_Model
                                                     $nota->ReceptorCodigoPaisFax,
                                                     $nota->ReceptorFax,
                                                     $nota->ReceptorEmail,
+													$nota->ReceptorCodigoActividad,
 
                                                     $nota->CondicionVenta,
                                                     $nota->PlazoCredito,
-                                                    $nota->MedioPago,
+                                                    json_decode($nota->MedioPagoObject),
                                                     $nota->CodigoMoneda,
                                                     $nota->TipoCambio,
 
@@ -2374,6 +2461,7 @@ Class contabilidad extends CI_Model
                                                     $nota->TotalDescuentos,
                                                     $nota->TotalVentasNeta,
                                                     $nota->TotalImpuestos,
+													$desgloseImpuestos,
                                                     $nota->TotalComprobante,
 
                                                     $nota->Otros,
@@ -2441,57 +2529,7 @@ Class contabilidad extends CI_Model
         function generarNotaCreditoElectronica($consecutivo, $sucursal, $codigo, $razon, $numero, $tipoDoc, $fechaEmision){
             $responseFetch = $this->getDatosParaNotaCreditoElectronica($consecutivo, $sucursal);
             if($responseFetch["status"]){
-//                    $r["notaCreditoHead"] = $notaCreditoHead;
-//                    $r["facturaElectronica"] = $facturaElectronicaHead;
-//                    $r["costos"] = $costos;
-//                    $r["articulos"] = $artFinales;
-//                    $r["cliente"] = $cliente;
-//                    $r["empresa"] = $sucursal;
-                $responseCreacion = $this->crearNotaCreditoElectronica($responseFetch["empresa"], $responseFetch["cliente"], $responseFetch["notaCreditoHead"], $responseFetch["costos"], $responseFetch["articulos"], $codigo, $razon, $numero, $tipoDoc, $fechaEmision);
-
-                /*if($responseCreacion["status"]){
-                    if($responseCreacion["data"]["situacion"] == "normal"){
-                        if($resEnvio = $this->enviarNotaCreditoElectronicaAHacienda($consecutivo, $sucursal)){
-                            if($resEnvio["estado_hacienda"] == "rechazado"){
-                                log_message('error', "Nota credito fue RECHAZADA por Hacienda. | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                                $responseFetch["status"] = false;
-                                $responseFetch['error'] = 903;
-                                $responseFetch["error_msg"] = "Nota credito fue RECHAZADA por Hacienda, favor marcarla para su revisión";
-                            }else if($resEnvio["estado_hacienda"] == "aceptado"){
-                                $responseFetch["message"] = "Nota credito fue ACEPTADA por Hacienda";
-                                $responseFetch["status"] = true;
-                                $responseFetch["clave"] = $responseCreacion["data"]["clave"];
-                                log_message('error', "Nota credito fue ACEPTADA por Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            }else{
-                                $responseFetch["status"] = false;
-                                $responseFetch['error'] = 903;
-                                $responseFetch["error_msg"] = "Nota credito se envió a Hacienda pero no fue rechazada, ni aceptada";
-                                log_message('error', "Hacienda envio otro estado {$resEnvio["estado_hacienda"]} | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            }
-                        }else{
-                            log_message('error', "No se pudo enviar la nota credito a Hacienda, debemos marcarla como contingencia | Consecutivo: $consecutivo | Sucursal: $sucursal");
-                            // Realizar documento de contingencia, porque al enviar a Hacienda algo fallo
-                            // Pasos a seguir
-                            //    1) Cambiar estado a contingencia
-                            //    2) Regenerar y actualizar clave
-                            //    3) Regenerar y actualizar XML
-                            //    5) Regenerar y actualizar XML Firmado
-                            //$this->factura->regenerarFacturaElectronicaPorContingencia($responseCheck["factura"]->Factura_Consecutivo, $responseCheck["factura"]->TB_02_Sucursal_Codigo);
-
-                            $responseFetch["status"] = false;
-                            $responseFetch['error'] = 902;
-                            $responseFetch["error_msg"] = "Nota credito no se pudo enviar a Hacienda por fallo no reconocido";
-                        }
-                    }else{
-                        $responseFetch["status"] = false;
-                        $responseFetch['error'] = 901;
-                        $responseFetch["error_msg"] = "Nota credito no se pudo enviar a Hacienda por falta de internet";
-                    }
-                }else{
-                    $responseFetch["status"] = false;
-                    $responseFetch['error'] = $responseCreacion["error"];
-                    $responseFetch["error_msg"] = $responseCreacion["error_msg"];
-                }*/
+                $this->crearNotaCreditoElectronica($responseFetch["empresa"], $responseFetch["cliente"], $responseFetch["notaCreditoHead"], $responseFetch["costos"], $responseFetch["articulos"], $codigo, $razon, $numero, $tipoDoc, $fechaEmision);
             }
             return $responseFetch;
         }
@@ -2529,7 +2567,8 @@ Class contabilidad extends CI_Model
                                 "total_impuestos" => 0,
                                 "total_iva_devuelto" => 0,
                                 "total_otros_cargos" => 0,
-                                "total_comprobante" => 0
+                                "total_comprobante" => 0,
+								"desglose_impuestos" => array()
                             );
                             $artFinales = array();
                             foreach($notaCreditoArticulos as $a){
@@ -2553,6 +2592,8 @@ Class contabilidad extends CI_Model
 
                                 $impuesto = $linea["impuesto"][0]["monto"];
                                 $costos["total_impuestos"] += $impuesto;
+
+								$this->agregarImpuestoADesgloseDeImpuestos($costos["desglose_impuestos"], $linea["impuesto"][0]);
                             }
                             $costos["total_exonerado"] =  $costos["total_serv_exonerados"] + $costos["total_merc_exonerada"];
                             $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
@@ -2737,7 +2778,7 @@ Class contabilidad extends CI_Model
                                                 date_default_timezone_set("America/Costa_Rica");
                                                 $fecha = date(DB_DATETIME_FORMAT, now());
 
-                                                $tipoPago = 'contado'; //Por defetco guarda este
+                                                $tipoPago = $facturaAcreditarHeader->Factura_Tipo_Pago; //Por defetco guarda este
                                                 $moneda = 'colones'; //Por defecto guarda este
 
 
@@ -2864,15 +2905,16 @@ Class contabilidad extends CI_Model
                 $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
 				$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
 				$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
+				$tabla = $tipoDocumento == "REP" ? "tb_66_recibo_electronico_pago" : $tabla;
 		return $this->db->query("
 			SELECT 	Clave AS clave,
-                                ConsecutivoHacienda AS consecutivo,
-				ReceptorIdentificacion AS cliente_identificacion,
-                                ReceptorNombre AS cliente_nombre,
-                                CorreoEnviadoReceptor as correo_enviado,
-                                FechaEmision as fecha,
-                                RespuestaHaciendaEstado as estado,
-                                ReceptorEmail as email
+					ConsecutivoHacienda AS consecutivo,
+					ReceptorIdentificacion AS cliente_identificacion,
+					ReceptorNombre AS cliente_nombre,
+					CorreoEnviadoReceptor as correo_enviado,
+					FechaEmision as fecha,
+					RespuestaHaciendaEstado as estado,
+					ReceptorEmail as email
 			FROM $tabla
 			WHERE (Clave LIKE '%$busqueda%' OR
                                 ConsecutivoHacienda LIKE '%$busqueda%' OR
@@ -2906,6 +2948,7 @@ Class contabilidad extends CI_Model
                 $tabla = $tipoDocumento == "FE" ? "tb_55_factura_electronica" : "";
 				$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
 				$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
+				$tabla = $tipoDocumento == "REP" ? "tb_66_recibo_electronico_pago" : $tabla;
                     return $this->db->query("
                             SELECT 	Clave AS clave,
                                     ConsecutivoHacienda AS consecutivo,
@@ -2929,6 +2972,7 @@ Class contabilidad extends CI_Model
 		$tabla = $tipoDocumento == "NC" ? "tb_57_nota_credito_electronica" : $tabla;
 		$tabla = $tipoDocumento == "MR" ? "tb_59_mensaje_receptor" : $tabla;
 		$tabla = $tipoDocumento == "FEC" ? "tb_61_factura_compra_electronica" : $tabla;
+		$tabla = $tipoDocumento == "REP" ? "tb_66_recibo_electronico_pago" : $tabla;
 		$this->db->from($tabla);
 		$this->db->where('Sucursal', $sucursal);
 		$query = $this -> db -> get();
@@ -3030,7 +3074,24 @@ Class contabilidad extends CI_Model
             }
         }
 
-        function agregarInfoBasicaMensajeReceptor($sucursal, $consecutivo, $receptorTipoIdentificacion, $receptorIdentificacion, $receptorCodigoPais, $situacion, $codigoSeguridad, $tipoDocumento, $clave, $emisorNombre, $emisorIdentificacion, $emisorTipoIdentificacion, $fechaEmision, $totalImpuestos, $totalComprobante, $fechaEmisionComprobante){
+        function agregarInfoBasicaMensajeReceptor(
+			$sucursal, 
+			$consecutivo, 
+			$receptorTipoIdentificacion, 
+			$receptorIdentificacion, 
+			$receptorCodigoPais, 
+			$situacion, 
+			$mensaje,
+			$codigoSeguridad, 
+			$tipoDocumento, 
+			$clave, 
+			$emisorNombre, 
+			$emisorIdentificacion, 
+			$emisorTipoIdentificacion, 
+			$fechaEmision, 
+			$totalImpuestos, 
+			$totalComprobante, 
+			$fechaEmisionComprobante){
             //array("fisico", "juridico", "dimex", "nite")
             $tipoIdentificacion = "";
             switch($receptorTipoIdentificacion){
@@ -3057,6 +3118,7 @@ Class contabilidad extends CI_Model
                 "ReceptorIdentificacion" => $receptorIdentificacion,
                 "ReceptorCodigoPais" => $receptorCodigoPais,
                 "Situacion" => $situacion,
+				"Mensaje" => $mensaje,
                 "CodigoSeguridad" => $codigoSeguridad,
                 "TipoDocumento" => $tipoDocumento,
                 "Clave" => $clave,
@@ -3121,7 +3183,16 @@ Class contabilidad extends CI_Model
                     break;
                 }
 
-                if($xmlRes = $api->crearXMLMensajeReceptor($comprobante->Clave, $comprobante->ConsecutivoHacienda, $comprobante->FechaEmision, $comprobante->EmisorIdentificacion, $comprobante->ReceptorIdentificacion, $tipoMensaje, "", $comprobante->TotalImpuestos, $comprobante->TotalComprobante)){
+                if($xmlRes = $api->crearXMLMensajeReceptor(
+					$comprobante->Clave, 
+					$comprobante->ConsecutivoHacienda, 
+					$comprobante->FechaEmision, 
+					$comprobante->EmisorIdentificacion, 
+					$comprobante->ReceptorIdentificacion, 
+					$tipoMensaje, 
+					str_pad($comprobante->Mensaje, 5, '_', STR_PAD_RIGHT), 
+					$comprobante->TotalImpuestos, 
+					$comprobante->TotalComprobante)){
                     $data = array(
                         "XMLSinFirmar" => $xmlRes["xml"]
                     );
@@ -3243,6 +3314,9 @@ Class contabilidad extends CI_Model
                 $this->db->where("Sucursal", $sucursal);
                 $this->db->update("tb_59_mensaje_receptor", $data);
                 log_message('error', "Se obtuvo el estado de hacienda <$estado> | Consecutivo: $consecutivo | Sucursal: $sucursal");
+
+				$this->storeFile($comprobante->Clave."-respuesta.xml", "mr", null, base64_decode($xmlRespuesta), $comprobante->FechaEmision);
+
                 return array("status" => true, "estado_hacienda" => $estado);
             }else{
                 log_message('error', "Error al revisar el estado del mensaje receptor en Hacienda | Consecutivo: $consecutivo | Sucursal: $sucursal");
@@ -3314,6 +3388,538 @@ Class contabilidad extends CI_Model
 			$this->db->where("Credito_Sucursal_Codigo", $sucursal);
             $this->db->delete("tb_24_credito");
 		}
+
+	/*
+    
+         _____           _ _           ______ _           _                   _               _      _____                  
+        |  __ \         (_) |         |  ____| |         | |                 (_)             | |    |  __ \                 
+        | |__) |___  ___ _| |__   ___ | |__  | | ___  ___| |_ _ __ ___  _ __  _  ___ ___   __| | ___| |__) |_ _  __ _  ___  
+        |  _  // _ \/ __| | '_ \ / _ \|  __| | |/ _ \/ __| __| '__/ _ \| '_ \| |/ __/ _ \ / _` |/ _ \  ___/ _` |/ _` |/ _ \ 
+        | | \ \  __/ (__| | |_) | (_) | |____| |  __/ (__| |_| | | (_) | | | | | (_| (_) | (_| |  __/ |  | (_| | (_| | (_) |
+        |_|  \_\___|\___|_|_.__/ \___/|______|_|\___|\___|\__|_|  \___/|_| |_|_|\___\___/ \__,_|\___|_|   \__,_|\__, |\___/ 
+                                                                                                                 __/ |      
+                                                                                                                |___/      
+    */
+
+	function generarObjectosParaComprobante($recibo, $sucursal){
+		$codigoMoneda = $recibo->moneda == "colones" ? "CRC" : "USD";
+		$tipoCambio = $recibo->moneda == "colones" ? "1" : $recibo->tipo_cambio;
+		date_default_timezone_set("America/Costa_Rica");
+        $fechaReciboActual = now();
+
+		$cliente = $this->cliente->getClientes_Cedula($recibo->cliente_cedula)[0];
+		$sucursal = $this->empresa->getEmpresa($sucursal)[0];
+
+		$reciboArray = array(
+			'consecutivo' => $recibo->recibo,
+			'sucursal' => $sucursal->Codigo,
+			'fecha' => date(DATE_ATOM, $fechaReciboActual),
+			'condicionVenta' => '11',
+			'tipoPago' => $recibo->tipo_pago,
+			'moneda' => $codigoMoneda,
+			'tipoCambio' => $tipoCambio,
+			'fechaEmisionIr' => date(DATE_ATOM, strtotime($recibo->fecha_factura)),
+			'consecutivoFactura' => $recibo->clave_fe,
+			'razonReferencia' => 'Pago parcial y/o total de factura a crédito',
+			'tipoDocIr' => '01',
+			'codigoIr' => '04'
+		);
+
+		$articuloAbono = array(
+			"Detalle" => "Abono a cuenta",
+			"MontoTotal" => $recibo->monto,
+			"Subtotal" => $recibo->monto,
+			"MontoTotalLinea" => $recibo->monto,
+			"Consecutivo" => $recibo->recibo,
+			"Sucursal" => $sucursal->Codigo,
+		);
+
+		$artFinales = array($articuloAbono);
+		
+		$costos = array(
+			"total_comprobante" => $recibo->monto
+		);
+
+		return array("recibo" => $reciboArray, "cliente" => $cliente, "empresa" => $sucursal, "costos" => $costos, "articulos" => $artFinales);
+	}
+
+	function generarObjetosParaComprobanteDeAnulacion($recibo, $sucursal){
+		$codigoMoneda = $recibo->moneda == "colones" ? "CRC" : "USD";
+		$tipoCambio = $recibo->moneda == "colones" ? "1" : $recibo->tipo_cambio;
+		date_default_timezone_set("America/Costa_Rica");
+        $fechaReciboActual = now();
+
+		$cliente = $this->cliente->getClientes_Cedula($recibo->cliente_cedula)[0];
+		$sucursal = $this->empresa->getEmpresa($sucursal)[0];
+		$reciboElectronicoAAnular = $this->getReciboElectronicoDePago($recibo->recibo, $sucursal->Codigo);
+
+		$reciboArray = array(
+			'consecutivo' => $recibo->recibo,
+			'sucursal' => $sucursal->Codigo,
+			'fecha' => date(DATE_ATOM, $fechaReciboActual),
+			'condicionVenta' => '11',
+			'tipoPago' => $recibo->tipo_pago,
+			'moneda' => $codigoMoneda,
+			'tipoCambio' => $tipoCambio,
+			'fechaEmisionIr' => date(DATE_ATOM, strtotime($reciboElectronicoAAnular->FechaEmision)),
+			'consecutivoFactura' => $reciboElectronicoAAnular->Clave,
+			'razonReferencia' => 'Anulación de recibo electrónico de pago',
+			'tipoDocIr' => '07',
+			'codigoIr' => '01'
+		);
+
+		$articuloAbono = array(
+			"Detalle" => "Abono a cuenta",
+			"MontoTotal" => "0",
+			"Subtotal" => "0",
+			"MontoTotalLinea" => "0",
+			"Consecutivo" => $recibo->recibo,
+			"Sucursal" => $sucursal->Codigo,
+			"TipoDocIR" => "07"
+		);
+
+		$artFinales = array($articuloAbono);
+		
+		$costos = array(
+			"total_comprobante" => "0"
+		);
+
+		return array("recibo" => $reciboArray, "cliente" => $cliente, "empresa" => $sucursal, "costos" => $costos, "articulos" => $artFinales);
+	}
+
+    function crearReciboElectronicoDePago($emisor, $receptor, $recibo, $costos, $articulos){
+        $feedback["status"] = false;
+
+        $responseData = $this->guardarDatosBasicosReciboElectronicoDePago($emisor, $receptor, $recibo, $costos, $articulos);
+
+        if($resClave = $this->generarClaveYConsecutivoParaReciboElectronicoDePago($recibo["consecutivo"], $recibo["sucursal"], $responseData["tipoDocIR"])){
+            if($resXML = $this->generarXMLReciboElectronicoDePago($recibo["consecutivo"], $recibo["sucursal"], $responseData["tipoDocIR"])){
+                if($resXMLFirmado = $this->firmarXMLReciboElectronicoDePago($recibo["consecutivo"], $recibo["sucursal"], $responseData["tipoDocIR"])){
+                    $feedback["data"] = $responseData;
+                    $feedback["data"]["clave"] = $resClave["Clave"];
+                    $feedback["status"] = true;
+                    unset($feedback['error']);
+                    log_message('error', "Se genero bien el XML firmado REP | Consecutivo: {$recibo["consecutivo"]} | Sucursal: ".$recibo["sucursal"]);
+                }else{
+                    // ERROR AL FIRMAR EL XML DE REP
+                    $feedback['error']='54';
+                    log_message('error', "Error al firmar el XML REP | Consecutivo: {$recibo["consecutivo"]} | Sucursal: ".$recibo["sucursal"]);
+                }
+            }else{
+                // ERROR AL GENERAR EL XML DE REP
+                $feedback['error']='53';
+                log_message('error', "Error al generar el XML REP | Consecutivo: {$recibo["consecutivo"]} | Sucursal: ".$recibo["sucursal"]);
+            }
+        }else{
+            // ERROR AL GENERAR LA CLAVE
+            $feedback["error"] = '52';
+            log_message('error', "Error al generar la clave REP | Consecutivo: {$recibo["consecutivo"]} | Sucursal: ".$recibo["sucursal"]);
+        }
+        return $feedback;
+    }                                                                                                            
+
+    function guardarDatosBasicosReciboElectronicoDePago($emisor, $receptor, $recibo, $costos, $articulos){
+        // Eliminamos informacion antigua del mismo recibo
+        $this->db->where("Consecutivo", $recibo["consecutivo"]);
+        $this->db->where("Sucursal", $recibo["sucursal"]);
+		$this->db->where("TipoDocIR", $recibo["tipoDocIr"]);
+        $this->db->delete("tb_67_articulos_recibo_electronico_pago");
+
+        $this->db->where("Consecutivo", $recibo["consecutivo"]);
+        $this->db->where("Sucursal", $recibo["sucursal"]);
+		$this->db->where("TipoDocIR", $recibo["tipoDocIr"]);
+        $this->db->delete("tb_66_recibo_electronico_pago");
+
+        // Guardamos el encabezado del recibo
+        require_once PATH_API_HACIENDA;
+        $api = new API_FE();
+        $situacion = $api->internetIsOnline() ? "normal" : "sininternet";
+
+		$medioDePago = $this->getMedioPago(array("tipo" => $recibo["tipoPago"]), $costos['total_comprobante'], 0);
+
+        // Agregamos la info nueva
+        $data = array(
+            "Consecutivo" => $recibo["consecutivo"],
+            "Sucursal" => $recibo["sucursal"],
+            "FechaEmision" => $recibo["fecha"],
+            "EmisorNombre" => $emisor->Sucursal_Nombre,
+			"EmisorTipoIdentificacion" => $emisor->Tipo_Cedula,
+			"EmisorIdentificacion" => $emisor->Sucursal_Cedula,
+            "EmisorEmail" => $emisor->Sucursal_Email,
+            "CondicionVenta" => $recibo["condicionVenta"],
+            "MedioPago" => json_encode($medioDePago),
+            "CodigoMoneda" => $recibo["moneda"],
+            "TipoCambio" => $recibo["tipoCambio"],          
+            "TotalVentas" => $this->fn($costos['total_comprobante']),            
+            "TotalVentasNeta" => $this->fn($costos['total_comprobante']),            
+            "TotalComprobante" => $this->fn($costos['total_comprobante']),
+            "TipoDocumento" => RECIBO_ELECTRONICO_PAGO,
+            "CodigoPais" => CODIGO_PAIS,
+            "ConsecutivoFormateado" => $this->formatearConsecutivo($recibo["consecutivo"]),
+            "Situacion" => $situacion,
+            "CodigoSeguridad" => rand(10000000,99999999),
+            "RespuestaHaciendaEstado" => "sin_enviar",
+            "CorreoEnviadoReceptor" => 0,
+            "TipoDocIR" => $recibo["tipoDocIr"],
+            "CodigoIR" => $recibo["codigoIr"],
+            "FechaEmisionIR" => $recibo["fechaEmisionIr"],
+            "NumeroFacturaID" => $recibo["consecutivoFactura"],
+            "RazonIR" => $recibo["razonReferencia"]
+        );
+
+        if($receptor != NULL){
+			if($receptor->Cliente_Cedula != "1" && $receptor->Cliente_Cedula != "0"){
+				$data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
+				$data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
+				$data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;				
+				$data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
+			} 
+        }
+
+        $this->db->insert("tb_66_recibo_electronico_pago", $data);
+
+        foreach ($articulos as $art){
+            $data = array(
+                "Detalle" => $art["Detalle"],
+                "MontoTotal" => $art["MontoTotal"],
+                "Subtotal" => $art["Subtotal"],
+                "MontoTotalLinea" => $art["MontoTotalLinea"],
+                "Consecutivo" => $art["Consecutivo"],
+                "Sucursal" => $art["Sucursal"],
+				"TipoDocIR" => $recibo["tipoDocIr"]
+            );
+
+            $this->db->insert("tb_67_articulos_recibo_electronico_pago", $data);
+        }
+        return array("situacion" => $situacion, "fecha" => $recibo["fecha"], "tipoDocIR" => $recibo["tipoDocIr"]);
+    }
+
+    function generarClaveYConsecutivoParaReciboElectronicoDePago($consecutivo, $sucursal, $tipoDocIR = "01"){
+        $this->db->select("EmisorTipoIdentificacion, EmisorIdentificacion, CodigoPais, ConsecutivoFormateado, Situacion, CodigoSeguridad, TipoDocumento");
+		$this->db->from("tb_66_recibo_electronico_pago");
+		$this->db->where("Consecutivo", $consecutivo);
+		$this->db->where("Sucursal", $sucursal);
+		$this->db->where("TipoDocIR", $tipoDocIR);
+
+		$query = $this->db->get();
+		if($query->num_rows()>0){
+			require_once PATH_API_HACIENDA;
+			$api = new API_FE();
+
+			$row = $query->result()[0];
+			$tipoIdentificacion = "fisico";
+			switch($row->EmisorTipoIdentificacion){
+				case "01":
+					$tipoIdentificacion = "fisico";
+				break;
+				case "02":
+					$tipoIdentificacion = "juridico";
+				break;
+				case "03":
+					$tipoIdentificacion = "dimex";
+				break;
+				case "04":
+					$tipoIdentificacion = "nite";
+				break;
+			}
+			$sucursalParaClave = $tipoDocIR == "07" ? "2" : "1"; //Si es una anulacion de REP, usamos la sucursal trueque
+			if($claveRs = $api->createClave($tipoIdentificacion, $row->EmisorIdentificacion, $row->CodigoPais, $row->ConsecutivoFormateado, $row->Situacion, $row->CodigoSeguridad, $row->TipoDocumento, $sucursalParaClave)){
+				$data = array(
+					"Clave" => $claveRs["clave"],
+					"ConsecutivoHacienda" => $claveRs["consecutivo"]
+				);
+				$this->db->where("Consecutivo", $consecutivo);
+				$this->db->where("Sucursal", $sucursal);
+				$this->db->where("TipoDocIR", $tipoDocIR);
+				$this->db->update("tb_66_recibo_electronico_pago", $data);
+				return $data;
+			}
+		}
+		return false;
+    }
+
+    function generarXMLReciboElectronicoDePago($consecutivo, $sucursal, $tipoDocIR = "01"){
+        $this->db->from("tb_66_recibo_electronico_pago");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+        $this->db->where("TipoDocIR", $tipoDocIR);
+        $query = $this->db->get();
+        if($query->num_rows()>0){
+			require_once PATH_API_HACIENDA;
+			$api = new API_FE();
+
+            $recibo = $query->result()[0];
+            $this->db->from("tb_67_articulos_recibo_electronico_pago");
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+			$this->db->where("TipoDocIR", $tipoDocIR);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                $articulos = $query->result();
+
+				$art = $articulos[0];
+				$artt = array(
+                    "detalle" => $art->Detalle,
+                    "montoTotal" => $this->fn($art->MontoTotal),
+                    "subtotal" => $this->fn($art->Subtotal),
+                    "montoTotalLinea" => $this->fn($art->MontoTotalLinea)
+                );
+
+                $xmlRes = $api->crearXMLReciboElectronicoDePago(
+					$recibo->Clave,
+					$recibo->ConsecutivoHacienda,
+					$recibo->FechaEmision,
+
+					$recibo->EmisorNombre,
+					$recibo->EmisorTipoIdentificacion,
+					$recibo->EmisorIdentificacion,
+					$recibo->EmisorEmail,
+
+					$recibo->ReceptorNombre,
+					$recibo->ReceptorTipoIdentificacion,
+					$recibo->ReceptorIdentificacion,
+					$recibo->ReceptorEmail,
+
+					$recibo->CondicionVenta,
+					json_decode($recibo->MedioPago),
+					$recibo->CodigoMoneda,
+					$recibo->TipoCambio,
+
+					$recibo->TotalVentas,
+					$recibo->TotalVentasNeta,
+					$recibo->TotalComprobante,
+
+					array($artt),
+
+					$recibo->TipoDocIR,
+					$recibo->FechaEmisionIR,
+					$recibo->NumeroFacturaID,
+					$recibo->CodigoIR,
+					$recibo->RazonIR);
+                if($xmlRes){
+                    $data = array(
+                        "XMLSinFirmar" => $xmlRes["xml"]
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+					$this->db->where("TipoDocIR", $tipoDocIR);
+                    $this->db->update("tb_66_recibo_electronico_pago", $data);
+                    return $data;
+                }
+            }
+        }
+        return false;
+    }
+
+    function firmarXMLReciboElectronicoDePago($consecutivo, $sucursal, $tipoDocIR = "01"){
+        $this->db->from("tb_66_recibo_electronico_pago");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+		$this->db->where("TipoDocIR", $tipoDocIR);
+        $query = $this->db->get();
+        if($query->num_rows()>0){            
+			require_once PATH_API_HACIENDA;
+			$api = new API_FE();
+           
+            $recibo = $query->result()[0];
+            $this->db->from("tb_02_sucursal");
+            $this->db->where("Codigo", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                $empresa = $query->result()[0];
+                if($xmlFirmado = $api->firmarDocumento($empresa->Token_Certificado_Tributa, $recibo->XMLSinFirmar, $empresa->Pass_Certificado_Tributa, $recibo->TipoDocumento)){
+                    $data = array(
+                        "XMLFirmado" => $xmlFirmado
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+					$this->db->where("TipoDocIR", $tipoDocIR);
+                    $this->db->update("tb_66_recibo_electronico_pago", $data);
+
+                    // Guardarmos el XML firmado en un archivo
+                    $this->storeFile($recibo->Clave.".xml", "rep", null, base64_decode($xmlFirmado), $recibo->FechaEmision);
+
+                    return $data;
+                }
+            }
+        }
+        return false;
+    }
+
+    function enviarReciboElectronicoDePagoAHacienda($consecutivo, $sucursal, $tipoDocIR = "01"){
+        $this->db->from("tb_66_recibo_electronico_pago");
+        $this->db->where("Consecutivo", $consecutivo);
+        $this->db->where("Sucursal", $sucursal);
+        $this->db->where("TipoDocIR", $tipoDocIR);
+        $query = $this->db->get();
+        if($query->num_rows()>0){
+			require_once PATH_API_HACIENDA;
+			$api = new API_FE();
+            
+            $recibo = $query->result()[0];
+            $this->db->from("tb_02_sucursal");
+            $this->db->where("Codigo", $sucursal);
+            $query = $this->db->get();
+            if($query->num_rows()>0){
+                $empresa = $query->result()[0];
+                if($tokenData = $api->solicitarToken($empresa->Ambiente_Tributa, $empresa->Usuario_Tributa, $empresa->Pass_Tributa)){
+                    if($resEnvio = $api->enviarDocumento($empresa->Ambiente_Tributa, $recibo->Clave, $recibo->FechaEmision, $recibo->EmisorTipoIdentificacion, $recibo->EmisorIdentificacion, $recibo->ReceptorTipoIdentificacion, $recibo->ReceptorIdentificacion, $tokenData["access_token"], $recibo->XMLFirmado)){
+                        $data = array(
+                            "RespuestaHaciendaEstado" => "procesando",
+                            "FechaRecibidoPorHacienda" => date(DB_DATETIME_FORMAT)
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+						$this->db->where("TipoDocIR", $tipoDocIR);
+                        $this->db->update("tb_66_recibo_electronico_pago", $data);
+
+                        return $this->getEstadoReciboElectronicoDePago($api, $empresa, $recibo, $tokenData, $consecutivo, $sucursal, $tipoDocIR);
+                    }else{
+                        $data = array(
+                            "RespuestaHaciendaEstado" => "fallo_envio"
+                        );
+                        $this->db->where("Consecutivo", $consecutivo);
+                        $this->db->where("Sucursal", $sucursal);
+						$this->db->where("TipoDocIR", $tipoDocIR);
+                        $this->db->update("tb_66_recibo_electronico_pago", $data);
+                        log_message('error', "Error al enviar el recibo de pago a Hacienda REP | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                    }
+                }else{
+                    $data = array(
+                        "RespuestaHaciendaEstado" => "fallo_token"
+                    );
+                    $this->db->where("Consecutivo", $consecutivo);
+                    $this->db->where("Sucursal", $sucursal);
+					$this->db->where("TipoDocIR", $tipoDocIR);
+                    $this->db->update("tb_66_recibo_electronico_pago", $data);
+                    log_message('error', "Error al generar el token para envio de recibo de pago REP | Consecutivo: $consecutivo | Sucursal: $sucursal");
+                }
+            }else{
+                log_message('error', "No existe empresa para su envio REP | Consecutivo: $consecutivo | Sucursal: $sucursal");
+            }
+        }else{
+            log_message('error', "No existe recibo de pago para su envio REP | Consecutivo: $consecutivo | Sucursal: $sucursal");
+        }
+        return false;
+    }
+
+    public function getEstadoReciboElectronicoDePago($api, $empresa, $recibo, $tokenData, $consecutivo, $sucursal, $tipoDocIR = "01"){
+        // Obtener resultado del recibo
+        $resCheck = array();
+        $counter = 0;
+        do {
+            sleep(2);
+            $counter++;
+            $resCheck = $api->revisarEstadoAceptacion($empresa->Ambiente_Tributa, $recibo->Clave, $tokenData["access_token"]);
+            log_message('error', "Revisando estado del recibo de pago en Hacienda REP | Consecutivo: $consecutivo | Sucursal: $sucursal");
+        } while (trim(strtolower($resCheck["data"]["ind-estado"])) == "procesando" && $counter < 5);
+
+        if($resCheck["status"]){
+            $estado = trim(strtolower($resCheck["data"]["ind-estado"]));
+            $xmlRespuesta = isset($resCheck["data"]["respuesta-xml"]) ? trim($resCheck["data"]["respuesta-xml"]) : "NO XML FROM HACIENDA";
+            $data = array(
+                "RespuestaHaciendaEstado" => $estado,
+                "RespuestaHaciendaFecha" => date(DB_DATETIME_FORMAT),
+                "RespuestaHaciendaXML" => $xmlRespuesta
+            );
+            $this->db->where("Consecutivo", $consecutivo);
+            $this->db->where("Sucursal", $sucursal);
+			$this->db->where("TipoDocIR", $tipoDocIR);
+            $this->db->update("tb_66_recibo_electronico_pago", $data);
+            log_message('error', "Se obtuvo el estado de hacienda <$estado> REP | Consecutivo: $consecutivo | Sucursal: $sucursal");
+
+            // Guardarmos el XML firmado en un archivo
+            $this->storeFile($recibo->Clave."-respuesta.xml", "rep", null, base64_decode($xmlRespuesta), $recibo->FechaEmision);
+
+            return array("status" => true, "estado_hacienda" => $estado);
+        }else{
+            log_message('error', "Error al revisar el estado del recibo de pago en Hacienda REP | Consecutivo: $consecutivo | Sucursal: $sucursal");
+        }
+        return false;
+    }
+
+	function getReciboElectronicoDePagoByClave($clave){
+		$this->db->from("tb_66_recibo_electronico_pago");
+		$this->db->where("Clave", $clave);
+		$query = $this->db->get();
+
+		if($query->num_rows() == 0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+
+	function getReciboElectronicoDePago($consecutivo, $sucursal, $tipoDocIR = "01"){
+		$this->db->from("tb_66_recibo_electronico_pago");
+		$this->db->where("Consecutivo", $consecutivo);
+		$this->db->where("Sucursal", $sucursal);
+		$this->db->where("TipoDocIR", $tipoDocIR);
+		$query = $this->db->get();
+
+		if($query->num_rows() == 0){
+			return false;
+		}else{
+			return $query->result()[0];
+		}
+	}
+
+	function getRecibosElectronicosDePagoSinEnviarAHacienda(){
+        $this->db->where_in("RespuestaHaciendaEstado", array("sin_enviar", "fallo_token", "fallo_envio"));
+        $this->db->from("tb_66_recibo_electronico_pago");
+        $query = $this->db->get();
+        if($query->num_rows() == 0){
+            return false;
+        }else{
+            return $query->result();
+        }
+    }
+
+	function guardarPDFRecibo($consecutivo, $sucursal){
+        if($empresa = $this->empresa->getEmpresaImpresion($sucursal)){
+            if ($recibo = $this->contabilidad->getReciboParaImpresion($consecutivo, $sucursal)) {
+				if ($saldoAnterior = $this->contabilidad->getSaldoAnteriorRecibo($recibo[0]->recibo, $recibo[0]->c)) {
+					$recibo[0]->saldo_anterior = $saldoAnterior;
+				} else {
+					$recibo[0]->saldo_anterior = $recibo[0]->Saldo_inicial;
+				}
+
+				//Si es un recibo de un apartado hay que valorar el abono
+				$facturaHead = $this->factura->getFacturasHeadersImpresion($recibo[0]->factura, $sucursal);
+				if ($facturaHead[0]->tipo == 'apartado') {
+					$abono = $this->factura->getAbonoApartado($sucursal, $recibo[0]->factura);
+					$saldoAnterior = $recibo[0]->saldo_anterior;
+					$recibo[0]->saldo_anterior = $saldoAnterior - $abono;
+				}
+
+				$tipoDocIr = $recibo[0]->anulado ? "07" : "01";
+				$reciboElectronico = $this->getReciboElectronicoDePago($consecutivo, $sucursal, $tipoDocIr);
+
+				$recibo[0]->clave = $reciboElectronico->Clave;
+				$recibo[0]->fecha = $reciboElectronico->FechaEmision;
+
+				$this->impresion_m->recibosPDF(array($recibo), $empresa[0], true);
+			} else {
+				log_message('error', "No se genero el PDF del recibo, no existe el recibo | Consecutivo: $consecutivo | Sucursal: $sucursal");
+			}
+        }else{
+            log_message('error', "No se genero el PDF del recibo, no existe la empresa | Consecutivo: $consecutivo | Sucursal: $sucursal");
+        }
+    }
+
+	function marcarEnvioCorreoReciboElectronicoDePago($sucursal, $consecutivo, $tipoDocIR = "01"){
+		if($this->truequeHabilitado && isset($this->sucursales_trueque[$sucursal])){ //Si es una sucursal con trueque
+			$sucursal = $this->sucursales_trueque[$sucursal];
+		}
+		$this->db->where("Consecutivo", $consecutivo);
+		$this->db->where("Sucursal", $sucursal);
+		$this->db->where("TipoDocIR", $tipoDocIR);
+		$data = array(
+			"CorreoEnviadoReceptor" => 1
+		);
+		$this->db->update("tb_66_recibo_electronico_pago", $data);
+	}
+	
 }
 
 

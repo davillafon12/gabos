@@ -14,7 +14,9 @@ RUN apt-get update
 RUN apt install -y php5.6 php5.6-fpm apache2 libapache2-mod-fcgid
 RUN a2enmod actions fcgid alias proxy_fcgi rewrite ssl
 
-RUN apt install -y php5.6-mysql php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-dom php5.6-zip
+RUN apt-get update
+
+RUN apt install -y php5.6-mysql php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-dom php5.6-zip php5.6-gd php5.6-bcmath
 
 RUN apt install -y php8.2 php8.2-fpm php8.2-mcrypt php8.2-mbstring php8.2-curl php8.2-dom
 

@@ -2,6 +2,7 @@ var _SUCURSAL_ENTREGA = -1;
 var _SUCURSAL_RECIBE = -1;
 var _ARRAY_ARTICULOS = [];
 var _SUCURSAL_RECIBE_ES_EXENTA = false;
+var _OMITIR_CREACION_FACTURA = false;
 
 $(window).ready(function(){
 	$("#sucursal_entrega").change(cargarArticulosConsignados);
@@ -103,6 +104,12 @@ function doAjax(url, method, async, parametros, datatype, successCallback, error
 }
 
 function preguntaCrearFactura(){
+	if(_OMITIR_CREACION_FACTURA){
+		return;
+	}
+
+	_OMITIR_CREACION_FACTURA = true;
+
 	var debeDevolverArticulos = $('#devolver_consignados_check').is(':checked');
 	if(validarSucursales()){
 		if(validarArticulos()){
@@ -112,59 +119,62 @@ function preguntaCrearFactura(){
 						title: "¿Esta seguro que solo desea devolver artículos?",
 						buttons: { "Si, estoy seguro": true, "Cancelar": false },
 						submit:function(e,v,m,f){
-												if(v){
-														var parametros = {
-																			sucursalRecibe :  $("#sucursal_recibe").val().trim(),
-																			sucursalEntrega:  $("#sucursal_entrega").val().trim(),
-																			articulos      :  JSON.stringify(_ARRAY_ARTICULOS),
-																			devolver 	   :  debeDevolverArticulos ? 1 : 0,
-																			soloDevolver   :  1
-																	};
-														doAjax("/contabilidad/consignaciones/crearFactura", "POST", false, parametros, "JSON", resultadoCreacion, function(){
-																notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
-														});
-												}
-										}
+							if(v){
+								var parametros = {
+									sucursalRecibe :  $("#sucursal_recibe").val().trim(),
+									sucursalEntrega:  $("#sucursal_entrega").val().trim(),
+									articulos      :  JSON.stringify(_ARRAY_ARTICULOS),
+									devolver 	   :  debeDevolverArticulos ? 1 : 0,
+									soloDevolver   :  1
+								};
+								doAjax("/contabilidad/consignaciones/crearFactura", "POST", false, parametros, "JSON", resultadoCreacion, function(){
+									notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+									_OMITIR_CREACION_FACTURA = false;
+								});
+							}
+						}
 					});
 				}else{
 					$.prompt("¡Esto facturará los artículos con cantidad y devolverá a inventario, de quien consigna, las unidades restantes!", {
 						title: "¿Esta seguro que desea crear la factura y devolver restantes?",
 						buttons: { "Si, estoy seguro": true, "Cancelar": false },
 						submit:function(e,v,m,f){
-												if(v){
-														var parametros = {
-																			sucursalRecibe :  $("#sucursal_recibe").val().trim(),
-																			sucursalEntrega:  $("#sucursal_entrega").val().trim(),
-																			articulos      :  JSON.stringify(_ARRAY_ARTICULOS),
-																			devolver 	   :  debeDevolverArticulos ? 1 : 0,
-																			soloDevolver   :  0
-																	};
-														doAjax("/contabilidad/consignaciones/crearFactura", "POST", false, parametros, "JSON", resultadoCreacion, function(){
-																notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
-														});
-												}
-										}
+							if(v){
+								var parametros = {
+										sucursalRecibe :  $("#sucursal_recibe").val().trim(),
+										sucursalEntrega:  $("#sucursal_entrega").val().trim(),
+										articulos      :  JSON.stringify(_ARRAY_ARTICULOS),
+										devolver 	   :  debeDevolverArticulos ? 1 : 0,
+										soloDevolver   :  0
+									};
+								doAjax("/contabilidad/consignaciones/crearFactura", "POST", false, parametros, "JSON", resultadoCreacion, function(){
+									notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+									_OMITIR_CREACION_FACTURA = false;
+								});
+							}
+						}
 					});
 				}
 			}else{
 				$.prompt("¡Esto facturará los artículos con cantidad!", {
-							title: "¿Esta seguro que desea crear la factura?",
-							buttons: { "Si, estoy seguro": true, "Cancelar": false },
-							submit:function(e,v,m,f){
-													if(v){
-															var parametros = {
-																				sucursalRecibe :  $("#sucursal_recibe").val().trim(),
-																				sucursalEntrega:  $("#sucursal_entrega").val().trim(),
-																				articulos      :  JSON.stringify(_ARRAY_ARTICULOS),
-																				devolver 	   :  debeDevolverArticulos ? 1 : 0,
-																				soloDevolver   :  0
-																		};
-															doAjax("/contabilidad/consignaciones/crearFactura", "POST", false, parametros, "JSON", resultadoCreacion, function(){
-																	notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
-															});
-													}
-											}
-						});
+					title: "¿Esta seguro que desea crear la factura?",
+					buttons: { "Si, estoy seguro": true, "Cancelar": false },
+					submit:function(e,v,m,f){
+						if(v){
+							var parametros = {
+									sucursalRecibe :  $("#sucursal_recibe").val().trim(),
+									sucursalEntrega:  $("#sucursal_entrega").val().trim(),
+									articulos      :  JSON.stringify(_ARRAY_ARTICULOS),
+									devolver 	   :  debeDevolverArticulos ? 1 : 0,
+									soloDevolver   :  0
+								};
+							doAjax("/contabilidad/consignaciones/crearFactura", "POST", false, parametros, "JSON", resultadoCreacion, function(){
+								notyMsg('¡La respuesta tiene un formato indebido, contacte al administrador!', 'error');
+								_OMITIR_CREACION_FACTURA = false;
+							});
+						}
+					}
+				});
 			}
 		}
 	}
@@ -244,6 +254,7 @@ function cargarArrayArticulos(articulosSeleccionados){
 }
 
 function resultadoCreacion(data){
+	_OMITIR_CREACION_FACTURA = false;
 	if(data.status.trim() === 'success'){
 		doAjax('/contabilidad/consignaciones/getArticulosEnListaConsignados', 'POST', false, {SE:_SUCURSAL_ENTREGA,SR:_SUCURSAL_RECIBE}, 'JSON', dibujarArticulosEnTabla, resetAllFields);
 		notyMsg('Se creó con éxito una factura pendiente', "success");

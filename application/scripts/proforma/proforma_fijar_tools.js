@@ -336,7 +336,8 @@ function setProductosFactura(productos){
 		cell3.innerHTML = "<input id='cantidad_articulo_"+(i+1)+"' class='cantidad_articulo' autocomplete='off' name='cantidad_articulo' type='number' min='1' max='"+bodegaINT+"' onchange='cambiarCantidad(this.id, event, this.value);' onkeyup='cambiarCantidad(this.id, event, this.value);' value='"+productos[i].cantidad+"' disabled>"
 				+"<input id='cantidad_articulo_anterior_"+(i+1)+"' type='hidden' value='"+productos[i].cantidad+"'>";
 		cell4.innerHTML = "<div class='articulo_specs' id='bodega_articulo_"+(i+1)+"'>"+bodegaINT+"</div>";
-		cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+(i+1)+"' ondblclick='changeDiscount("+(i+1)+")'>"+productos[i].descuento+"</div>";
+		cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+(i+1)+"' ondblclick='changeDiscount("+(i+1)+")'>"+productos[i].descuento+"</div>"
+					+ "<input type='hidden' id='codigo_descuento_articulo_"+(i+1)+"' value='"+productos[i].tipoDescuento+"'/>";
 
 		precioUI = parseFloat(precio);
 		precioUI = precioUI.format(2, 3, '.', ',');
@@ -889,7 +890,8 @@ function agregarFila(index){
 					+"<div class='articulo_specs' id='descripcion_articulo_"+siguienteFila+"' style='display:none;'></div>"
 					 +"<div class='tooltip_imagen_articulo' id='tooltip_imagen_articulo_"+siguienteFila+"'></div>";
 	cell4.innerHTML = "<div class='articulo_specs' id='bodega_articulo_"+siguienteFila+"'></div>";
-	cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+siguienteFila+"' ondblclick='changeDiscount("+siguienteFila+")'></div>";
+	cell5.innerHTML = "<div class='articulo_specs' id='descuento_articulo_"+siguienteFila+"' ondblclick='changeDiscount("+siguienteFila+")'></div>"
+					+ "<input type='hidden' id='codigo_descuento_articulo_"+siguienteFila+"'/>";
 	cell6.innerHTML = "<div class='articulo_specs' id='costo_unidad_articulo_"+siguienteFila+"'>"
 					 +"</div><input id='costo_unidad_articulo_ORIGINAL_"+siguienteFila+"' type='hidden' >"
 					 +"<input id='costo_unidad_articulo_FINAL_"+siguienteFila+"' type='hidden' >"
@@ -1035,6 +1037,7 @@ function setArticulo(articulo, num_fila){
 	$("#cantidad_articulo_"+num_fila).attr( "max", articulo.inventario );
 	//Seteamos el descuento
 	$("#descuento_articulo_"+num_fila).html(articulo.descuento);
+	$("#codigo_descuento_articulo_"+num_fila).val(articulo.descuentoCodigo);
 
 	//Tipo de moneda y factor
 	tipo_moneda = $("#tipo_moneda").val();
@@ -1507,6 +1510,7 @@ function parseRowToJSON(numRow){
 	else{
 		cantidad = document.getElementById("cantidad_articulo_"+numRow).value;
 		descuento = document.getElementById("descuento_articulo_"+numRow).innerHTML;
+		codigoDescuento = $("#codigo_descuento_articulo_"+numRow).val();
 	}
 
 	precio_unitario = ''; //Por defecto es vacio
@@ -1518,7 +1522,7 @@ function parseRowToJSON(numRow){
 	exento = document.getElementById("producto_exento_"+numRow).value;
 	retencion = $("#producto_retencion_"+numRow).val();
 
-	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, pu:precio_unitario, ex:exento, re:retencion};
+	JSONRow = {co:codigo, de:descripcion, ca:cantidad, ds:descuento, cds:codigoDescuento, pu:precio_unitario, ex:exento, re:retencion};
 
 	return JSONRow;
 

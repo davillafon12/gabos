@@ -96,6 +96,7 @@ PARA:
 							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="contado"><div class="tipos_de_pago">Contado</div>
 							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="tarjeta" checked><div class="tipos_de_pago">Tarjeta</div>
 							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="deposito"><div class="tipos_de_pago">Deposito</div>
+							<input type="radio" name="tipo" onClick="numTransaccion(this.value)" value="sinpe_movil"><div class="tipos_de_pago">Sinpe Móvil</div>
 						</td>
 					</tr>
 					<tr>

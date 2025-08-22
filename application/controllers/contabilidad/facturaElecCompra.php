@@ -28,6 +28,7 @@ class facturaElecCompra extends CI_Controller {
             $data['provincias'] = $this->ubicacion->getProvincias();
             $data['condicionesventa'] = $this->condicionesdeventa;
             $data['tiposdepago'] = $this->tiposdepago;
+		    $data['tipoDescuentos'] = $this->catalogo->getTipoDescuentos();
 
             $conf_array = $this->configuracion->getConfiguracionArray();
 		    $data['c_array'] = $conf_array;
@@ -64,10 +65,12 @@ class facturaElecCompra extends CI_Controller {
             $canton = trim(@$_POST["cantonEmisor"]);
             $distrito = trim(@$_POST["distritoEmisor"]);
             $codigoActividad = trim(@$_POST["codigoActividadEmisor"]);
-            $fechaFactura = trim(@$_POST["fechaFactura"]);
+            $fechaEmisionIr = trim(@$_POST["fechaEmisionIr"]);
             $condicionVenta = trim(@$_POST["condicionVenta"]);
             $plazoCredito = trim(@$_POST["plazoCredito"]);
             $tipoPago = trim(@$_POST["tipoPago"]);
+            $consecutivoFactura = trim(@$_POST["consecutivoFactura"]);
+            $razonReferencia = trim(@$_POST["razonReferencia"]);
             $detalles = json_decode(trim(@$_POST["detalles"]), true);
 
             if($nombre != ""){
@@ -75,7 +78,7 @@ class facturaElecCompra extends CI_Controller {
                     if(filter_var($email, FILTER_VALIDATE_EMAIL)){
                         if($otrasSennas != ""){
                             if($codigoActividad != ""){
-                                if(DateTime::createFromFormat('d-m-Y H:i:s', $fechaFactura) !== false){
+                                if(DateTime::createFromFormat('d-m-Y H:i:s', $fechaEmisionIr) !== false){
                                     if(sizeof($detalles) > 0){
                                         $checkDetalles = $this->revisarDetalles($detalles);
                                         if($checkDetalles === true){
@@ -101,12 +104,15 @@ class facturaElecCompra extends CI_Controller {
                                                 $factura = array(
                                                     "consecutivo" => $this->factura->getNuevoConsecutivoFEC($data['Sucursal_Codigo']),
                                                     "sucursal" => $data['Sucursal_Codigo'],
-                                                    "fecha" => date(DATE_ATOM, strtotime($fechaFactura)),
+                                                    "fecha" => date(DATE_ATOM, now()),
                                                     "condicionVenta" => $condicionVenta,
                                                     "plazoCredito" => $plazoCredito,
                                                     "tipoPago" => $tipoPago,
+                                                    "fechaEmisionIr" => date(DATE_ATOM, strtotime($fechaEmisionIr)),
                                                     "moneda" => "CRC",
-                                                    "tipoCambio" => 1
+                                                    "tipoCambio" => 1,
+                                                    "consecutivoFactura" => $consecutivoFactura,
+                                                    "razonReferencia" => $razonReferencia
                                                 );
 
                                                 $articulosYCostos = $this->convertirArticulosALineaDetalle($detalles);
@@ -228,7 +234,8 @@ class facturaElecCompra extends CI_Controller {
             "total_impuestos" => 0,
             "total_iva_devuelto" => 0,
             "total_otros_cargos" => 0,
-            "total_comprobante" => 0
+            "total_comprobante" => 0,
+            "desglose_impuestos" => array()
         );
         foreach($detalles as $d){
             $a = new stdClass();
@@ -240,6 +247,7 @@ class facturaElecCompra extends CI_Controller {
             $a->Articulo_Factura_Descripcion = $d["detalle"];
             $a->Articulo_Factura_Precio_Unitario = $d["precio"];
             $a->Articulo_Factura_Descuento = $d["descuento"];
+            $a->TipoDescuento = $d["tipoDescuento"];
             $a->Articulo_Factura_No_Retencion = 1;
             $a->Articulo_Factura_Exento = 0;
             $linea = $this->factura->getDetalleLinea($a, false);
@@ -273,10 +281,20 @@ class facturaElecCompra extends CI_Controller {
 
             $impuesto = $linea["impuesto"][0]["monto"];
             $costos["total_impuestos"] += $impuesto;
+            $this->agregarImpuestoADesgloseDeImpuestos($costos["desglose_impuestos"], $linea["impuesto"][0]);
         }
         $costos["total_exonerado"] =  $costos["total_serv_exonerados"] + $costos["total_merc_exonerada"];
         $costos["total_ventas_neta"] = $costos["total_ventas"] - $costos["total_descuentos"];
         $costos["total_comprobante"] = $costos["total_ventas_neta"] + $costos["total_impuestos"] + $costos["total_otros_cargos"];
         return array("articulos"=>$nuevasLineas, "costos"=>$costos);
     }
+
+    public function agregarImpuestoADesgloseDeImpuestos(&$desgloseImpuestos, $impuestoArticulo){
+        $key = $impuestoArticulo["codigo"]."_".$impuestoArticulo["codigoTarifa"];
+        if(!isset($desgloseImpuestos[$key])){
+            $desgloseImpuestos[$key] = array("codigo" => $impuestoArticulo["codigo"], "tarifaCodigo" => $impuestoArticulo["codigoTarifa"], "monto" => 0);
+        }
+        $desgloseImpuestos[$key]["monto"] += $impuestoArticulo["monto"];
+    }
+    
 }

@@ -148,23 +148,27 @@ PARA:
 
                     </tr>
                     <tr>
-                            <td></td>
-                            <td></td>
-                                <td>
-                                    <label for="sucursal"  class="contact">Empresa:</label>
-                                </td>
-                                <td>
-                                    <select name="sucursal" class="input_dos" id="sucursal" style="    max-width: 280px;">
-                                        <?php
-                                            foreach($empresas as $Nombre_Empresa => $codigo_empresa)
-                                            {
-                                                echo "<option value='".$codigo_empresa."'";
-                                                echo ($empresaLiga == $codigo_empresa ? "selected" : "").">".$codigo_empresa." - ".$Nombre_Empresa."</option>";
-                                            }
-                                        ?>
-                                    </select>
-                                </td>
-                            </tr>
+                        <td>
+                            <label for="codigo_actividad"  class="label_form">Código de Actividad:</label>
+                        </td>
+                        <td>
+                            <input id="codigo_actividad" class="input_form" autocomplete="off" name="codigo_actividad" type="text" value="<?= $Codigo_Actividad ?>">
+                        </td>
+                        <td>
+                            <label for="sucursal"  class="contact">Empresa:</label>
+                        </td>
+                        <td>
+                            <select name="sucursal" class="input_dos" id="sucursal">
+                                <?php
+                                    foreach($empresas as $Nombre_Empresa => $codigo_empresa)
+                                    {
+                                        echo "<option value='".$codigo_empresa."'";
+                                        echo ($empresaLiga == $codigo_empresa ? "selected" : "").">".$codigo_empresa." - ".$Nombre_Empresa."</option>";
+                                    }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="3">
                                 <label for="essucursal" class="label_form" >Sucursal:</label>

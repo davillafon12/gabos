@@ -39,6 +39,8 @@ class CI_Model {
         "03" => "Cheque",
         "04" => "Transferencia - depósito bancario",
         "05" => "Recaudado por terceros",
+        "06" => "Sinpe Móvil",
+        "07" => "Plataforma Digital",
         "99" => "Otros"
     );
 
@@ -94,16 +96,31 @@ class CI_Model {
             return str_pad($price,$amount,$placeholder, $typePad);
         }
 
-        public function removeIVA($price){
+        public function removeIVA($price, $decimales = 5){
             $this->load->model('configuracion','',TRUE);
             $confArray = $this->configuracion->getConfiguracionArray();
-            return $price/(1+(floatval($confArray['iva'])/100));
+            $iva = (string) $confArray['iva']; // p.ej 13
+            if (function_exists('bcdiv')) {
+                $scale = $decimales + 4; // extra precision internal
+                $factor = bcadd('1', bcdiv($iva, '100', $scale), $scale);   // 1 + iva/100
+                $resultado = bcdiv((string)$price, $factor, $decimales);
+                return (float)$resultado;
+            }
+            // Fallback float
+            $factor = 1 + (float)$iva / 100;
+            return round($price / $factor, $decimales);
         }
 
-        public function getIVA(){
+        public function getIVA($decimales = 5, $asFloat = true){
             $this->load->model('configuracion','',TRUE);
             $confArray = $this->configuracion->getConfiguracionArray();
-            return floatval($confArray['iva']);
+            $iva = isset($confArray['iva']) ? (string)$confArray['iva'] : '0';
+            if (function_exists('bcadd')) {
+                $ivaFormateado = bcadd($iva, '0', $decimales); // normaliza y fija escala
+            } else {
+                $ivaFormateado = number_format((float)$iva, $decimales, '.', '');
+            }
+            return $asFloat ? (float)$ivaFormateado : $ivaFormateado;
         }
 
         private function getSessionMetadata(){
@@ -137,6 +154,8 @@ class CI_Model {
                 case 'deposito':
                 case 'cheque':
                 case 'mixto':
+                case 'sinpe_movil':
+                case 'plataforma_digital':
                     return "01";
                 case 'credito':
                     return "02";
@@ -145,7 +164,7 @@ class CI_Model {
             }
         }
 
-        function getMedioPago($tipoPago){
+        function getMedioPago($tipoPago, $montoTotalFactura, $pagoMixtoObject){
             /*
                 Corresponde al medio de pago empleado:
                 - 01 Efectivo
@@ -155,21 +174,31 @@ class CI_Model {
                 - 05 - Recaudado por terceros
                 - 99 Otros
              */
+            $totalFormateado = $this->fn($montoTotalFactura);            
             switch ($tipoPago['tipo']) {
                 case 'contado':
-                    return "01";
+                    return array(array("tipo" => '01', "total" => $totalFormateado, "otros" => ''));
                 case 'tarjeta':
-                    return "02";
+                    return array(array("tipo" => '02', "total" => $totalFormateado, "otros" => ''));
                 case 'deposito':
-                    return "04";
+                    return array(array("tipo" => '04', "total" => $totalFormateado, "otros" => ''));
                 case 'cheque':
-                    return "03";
+                    return array(array("tipo" => '03', "total" => $totalFormateado, "otros" => ''));
                 case 'mixto':
-                    return "01,02";
+                    $totalEfectivoEnMixto = $montoTotalFactura - $pagoMixtoObject->Mixto_Cantidad_Paga;
+                    $codigoDePagoMixto = $pagoMixtoObject->Tipo_Pago == 'sinpe_movil' ? '06' : '01';
+                    return array(
+                        array("tipo" => $codigoDePagoMixto, "total" => $this->fn($totalEfectivoEnMixto), "otros" => ''),
+                        array("tipo" => '02', "total" => $this->fn($pagoMixtoObject->Mixto_Cantidad_Paga), "otros" => '')
+                    );
                 case 'credito':
-                    return "99";
+                    return array(array("tipo" => '99', "otros" => 'Credito', "total" => $totalFormateado));
                 case 'apartado':
-                    return "99";
+                    return array(array("tipo" => '99', "otros" => 'Apartado', "total" => $totalFormateado));
+                case 'sinpe_movil':
+                    return array(array("tipo" => '06', "total" => $totalFormateado, "otros" => ''));
+                case 'plataforma_digital':
+                    return array(array("tipo" => '06', "total" => $totalFormateado, "otros" => ''));
             }
         }
 
@@ -207,6 +236,7 @@ class CI_Model {
                     "precioUnitario" => $this->fn($art->PrecioUnitario),
                     "montoTotal" => $this->fn($art->MontoTotal),
                     "montoDescuento" => $this->fn($art->MontoDescuento),
+                    "tipoDescuento" => $art->TipoDescuento,
                     "naturalezaDescuento" => $art->NaturalezaDescuento,
                     "subtotal" => $this->fn($art->Subtotal),
                     "impuesto" =>  $impuesto,
@@ -232,97 +262,123 @@ class CI_Model {
         }
 
         public function getDetalleLinea($a, $aplicaRetencion = false){
-            $aplicaRetencion = false; //Fix rapido para evitar aplicar retencion en toooodo el sistema 
+            $aplicaRetencion = false; // se mantiene el fix existente
             $linea = array();
 
+            $useBc = function_exists('bcadd');
+            $scaleCalc = 10;          // precisión interna
+            $scaleOut  = 5;           // para montos (coincidir con HACIENDA_DECIMALES si aplica)
+
+            // Helpers BCMath
+            $mul = function($a,$b) use($useBc,$scaleCalc){ return $useBc ? bcmul((string)$a,(string)$b,$scaleCalc) : ( (float)$a * (float)$b ); };
+            $add = function($a,$b) use($useBc,$scaleCalc){ return $useBc ? bcadd((string)$a,(string)$b,$scaleCalc) : ( (float)$a + (float)$b ); };
+            $sub = function($a,$b) use($useBc,$scaleCalc){ return $useBc ? bcsub((string)$a,(string)$b,$scaleCalc) : ( (float)$a - (float)$b ); };
+            $div = function($a,$b) use($useBc,$scaleCalc){ 
+                if($b == 0 || $b === '0') return 0;
+                return $useBc ? bcdiv((string)$a,(string)$b,$scaleCalc) : ( (float)$a / (float)$b ); 
+            };
+
             // CANTIDAD
-            $cantidad = floatval($a->Articulo_Factura_Cantidad);
+            $cantidad = (float)$a->Articulo_Factura_Cantidad;
             $linea["cantidad"] = $this->fn($cantidad, 3);
 
-            // CODIGO
+            // CODIGOS
             $linea["codigo"] = $a->Articulo_Factura_Codigo;
             $linea["tipoCodigo"] = $a->TipoCodigo;
             $linea["codigoCabys"] = $a->Codigo_Cabys;
 
-            // UNIDAD DE MEDIDA
+            // UNIDAD
             $linea["unidadMedida"] = $a->UnidadMedida;
 
             // DETALLE
             $linea["detalleCompleto"] = $a->Articulo_Factura_Descripcion;
             $linea["detalle"] = substr($a->Articulo_Factura_Descripcion,0,159);
 
-            // PRECIO UNITARIO
-            $precioUnitarioSinIVA = $this->fn($this->removeIVA(floatval($a->Articulo_Factura_Precio_Unitario)));
+            // PRECIO UNITARIO SIN IVA (removeIVA ya usa BCMath si disponible)
+            $precioUnitarioSinIVANum = $this->removeIVA((float)$a->Articulo_Factura_Precio_Unitario);
+            $precioUnitarioSinIVA = $this->fn($precioUnitarioSinIVANum);
             $linea["precioUnitario"] = $precioUnitarioSinIVA;
 
-            // MONTO TOTAL
-            $precioTotalSinIVA = $cantidad*$precioUnitarioSinIVA;
-            $linea["montoTotal"] = $precioTotalSinIVA;
+            // MONTO TOTAL SIN IVA
+            $precioTotalSinIVANum = $mul($cantidad, $precioUnitarioSinIVANum);
+            $linea["montoTotal"] = $useBc ? (float)bcadd($precioTotalSinIVANum,'0', $scaleOut) : $precioTotalSinIVANum;
 
             // DESCUENTO
-            $descuentoPrecioSinIva = 0;
-            if(floatval($a->Articulo_Factura_Descuento) > 0){
-                $descuentoPrecioSinIva = $this->fn($precioTotalSinIVA * (floatval($a->Articulo_Factura_Descuento) / 100));
-                $linea["montoDescuento"] = $descuentoPrecioSinIva;
-                $naturalezaDescuento = "Otorgado a cliente por empresa";
-                $linea["naturalezaDescuento"] = $naturalezaDescuento;
+            $descuentoPrecioSinIvaNum = 0;
+            $porcDesc = (float)$a->Articulo_Factura_Descuento;
+            if($porcDesc > 0){
+                $descuentoPrecioSinIvaNum = $mul($precioTotalSinIVANum, $div($porcDesc, 100));
+                $linea["montoDescuento"] = $this->fn($descuentoPrecioSinIvaNum);
+                $linea["tipoDescuento"] = $a->TipoDescuento;
+                $linea["naturalezaDescuento"] = "Otorgado a cliente por empresa";
             }else{
                 $linea["montoDescuento"] = 0;
+                $linea["tipoDescuento"] = '07';
                 $linea["naturalezaDescuento"] = "Ninguna";
             }
 
-             // SUBTOTAL
-            $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
-            $linea["subtotal"] = $subTotalSinIVA;
-
-            // BASE IMPONIBLE
-            $linea["base_imponible"] = $subTotalSinIVA;
+            // SUBTOTAL / BASE IMPONIBLE
+            $subTotalSinIVANum = $sub($precioTotalSinIVANum, $descuentoPrecioSinIvaNum);
+            $linea["subtotal"] = $useBc ? (float)bcadd($subTotalSinIVANum,'0',$scaleOut) : $subTotalSinIVANum;
+            $linea["base_imponible"] = $linea["subtotal"];
 
             // IMPUESTOS
             $impuestos = array();
-            $iva = $this->getIVA();
-            $montoDeImpuesto = $subTotalSinIVA * ($iva / 100);
-            $linea["iva"] = $subTotalSinIVA * ($iva / 100);
+            $iva = $this->getIVA(); // porcentaje (float)
+            $ivaFactor = $div($iva, 100);
+
+            $montoDeImpuestoNum = $mul($subTotalSinIVANum, $ivaFactor);
+            $linea["iva"] = $useBc ? (float)bcadd($montoDeImpuestoNum,'0',$scaleOut) : $montoDeImpuestoNum;
             $linea["retencion"] = 0;
+
             if($a->Articulo_Factura_No_Retencion == "0" && $aplicaRetencion){
-                $precioFinalUnitarioSinIVA = $this->removeIVA(floatval($a->Articulo_Factura_Precio_Final));
-                $precioFinalTotalSinIVA = $cantidad*$precioFinalUnitarioSinIVA;
-                $montoDeImpuesto = ($precioFinalTotalSinIVA * ($iva / 100));
-                $linea["retencion"] = $montoDeImpuesto - $linea["iva"];
+                $precioFinalUnitarioSinIVANum = $this->removeIVA((float)$a->Articulo_Factura_Precio_Final);
+                $precioFinalTotalSinIVANum = $mul($cantidad, $precioFinalUnitarioSinIVANum);
+                $montoDeImpuestoNum = $mul($precioFinalTotalSinIVANum, $ivaFactor);
+                $linea["retencion"] = ($useBc ? (float)bcsub($montoDeImpuestoNum, $linea["iva"], $scaleOut) : $montoDeImpuestoNum - $linea["iva"]);
             }
-            if($a->Articulo_Factura_Exento == 1){ // Es exento
-                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE
+
+            if($a->Articulo_Factura_Exento == 1){
                 $exoneracion = array(
-                    "tipoDocumento" => "01", // Compras Autorizadas
+                    "tipoDocumento" => "01",
                     "numeroDocumento" => "01",
                     "nombreInstitucion" => "Cliente",
                     "fechaEmision" => date(DATE_ATOM),
                     "montoImpuesto" => "9999999999999.99999",
                     "porcentajeCompra" => 100
                 );
-                $impuesto["exoneracion"] = $exoneracion;
-                $montoDeImpuesto = 0;
+                // se adicionará luego al objeto impuesto
+                $montoDeImpuestoNum = 0;
                 $linea["iva"] = 0;
             }
-            // Se debe cambiar el porcentaje de impuesto, ya que se debe tomar en cuenta la retencion
-            $factorIVAFinal = 0;
-            if($subTotalSinIVA > 0){
-                $factorIVAFinal = (($montoDeImpuesto) * 100) / $subTotalSinIVA;
+
+            // factor IVA final (considerando retención)
+            $factorIVAFinalNum = 0;
+            if( ($useBc ? bccomp($subTotalSinIVANum,'0',$scaleCalc) : $subTotalSinIVANum > 0) ){
+                $factorIVAFinalNum = $mul( $div($montoDeImpuestoNum, $subTotalSinIVANum), 100 );
             }
-            $montoFinalDeImpuesto = $subTotalSinIVA * ($factorIVAFinal / 100);
+
+            $montoFinalDeImpuestoNum = $mul($subTotalSinIVANum, $div($factorIVAFinalNum, 100));
+
             $impuesto = array(
-                "codigo" => ($a->Articulo_Factura_No_Retencion == "0" && $aplicaRetencion) ? "07" : "01", // 01 = Impuesto al Valor Agregado / 07 = IVA (cálculo especial)
-                "codigoTarifa" => $a->Articulo_Factura_Exento == 1 ? "01" : "08", // 01 = Exento / 08 = General 13%
-                "tarifa" => $factorIVAFinal,
-                "factorIVA" => $factorIVAFinal,
-                "monto" => $montoFinalDeImpuesto
+                "codigo" => ($a->Articulo_Factura_No_Retencion == "0" && $aplicaRetencion) ? "07" : "01",
+                "codigoTarifa" => $a->Articulo_Factura_Exento == 1 ? "01" : "08",
+                "tarifa" => $useBc ? (float)bcadd($factorIVAFinalNum,'0',2) : (float)round($factorIVAFinalNum,2),
+                "factorIVA" => $useBc ? (float)bcadd($factorIVAFinalNum,'0',2) : (float)round($factorIVAFinalNum,2),
+                "monto" => $useBc ? (float)bcadd($montoFinalDeImpuestoNum,'0',$scaleOut) : $montoFinalDeImpuestoNum
             );
 
-            array_push($impuestos, $impuesto);
+            if($a->Articulo_Factura_Exento == 1){
+                $impuesto["exoneracion"] = $exoneracion;
+            }
+
+            $impuestos[] = $impuesto;
             $linea["impuesto"] = $impuestos;
 
-            // MONTO TOTAL DE LA LINEA
-            $linea["montoTotalLinea"] = $subTotalSinIVA + floatval($impuesto["monto"]);
+            // MONTO TOTAL LINEA
+            $linea["montoTotalLinea"] = $useBc
+                ? (float)bcadd($subTotalSinIVANum, (string)$impuesto["monto"], $scaleOut)
+                : $subTotalSinIVANum + (float)$impuesto["monto"];
 
             return $linea;
         }
@@ -331,99 +387,133 @@ class CI_Model {
         public function getDetalleLineaNotaCredito($a, $aplicaRetencion = true){
             $linea = array();
 
-            // CANTIDAD
-            $cantidad = floatval($a->Cantidad_Bueno) + floatval($a->Cantidad_Defectuoso);
+            $useBc     = function_exists('bcadd');
+            $scaleCalc = 10; // precisión interna
+            $scaleOut  = 5;  // decimales para montos
+
+            // Helpers BCMath
+            $mul = function($x,$y) use($useBc,$scaleCalc){ return $useBc ? bcmul((string)$x,(string)$y,$scaleCalc) : ((float)$x * (float)$y); };
+            $add = function($x,$y) use($useBc,$scaleCalc){ return $useBc ? bcadd((string)$x,(string)$y,$scaleCalc) : ((float)$x + (float)$y); };
+            $sub = function($x,$y) use($useBc,$scaleCalc){ return $useBc ? bcsub((string)$x,(string)$y,$scaleCalc) : ((float)$x - (float)$y); };
+            $div = function($x,$y) use($useBc,$scaleCalc){
+                if($y == 0 || $y === '0') return 0;
+                return $useBc ? bcdiv((string)$x,(string)$y,$scaleCalc) : ((float)$x / (float)$y);
+            };
+
+            // CANTIDAD (Bueno + Defectuoso)
+            $cantidad = (float)$a->Cantidad_Bueno + (float)$a->Cantidad_Defectuoso;
             $linea["cantidad"] = $this->fn($cantidad, 3);
 
-            // CODIGO
+            // CÓDIGOS
             $linea["codigo"] = $a->Codigo;
             $linea["tipoCodigo"] = $a->TipoCodigo;
             $linea["codigoCabys"] = $a->CodigoCabys;
 
-            // UNIDAD DE MEDIDA
+            // UNIDAD
             $linea["unidadMedida"] = "Unid";
 
             // DETALLE
             $linea["detalleCompleto"] = $a->Descripcion;
             $linea["detalle"] = substr($a->Descripcion,0,159);
 
-            // PRECIO UNITARIO
-            // En el caso de NC los precios unitarios tienen impuesto pero tambien el descuento
-            // tons debemos agregarle el descuento para que haga bien la matematica esta vara
-            // PrecioFinal / (1 - Porcentaje / 100) = PrecioUnitario
-            $a->Precio_Unitario = floatval($a->Precio_Unitario) / (1 - (floatval($a->Descuento) / 100));
-            $precioUnitarioSinIVA = $this->fn($this->removeIVA($a->Precio_Unitario));
-            $linea["precioUnitario"] = $precioUnitarioSinIVA;
+            // PRECIO UNITARIO (reconstruir quitando descuento)
+            $precioUnitConDesc = (float)$a->Precio_Unitario;
+            $porcDesc = (float)$a->Descuento;
+            if($porcDesc != 0 && $porcDesc != 100){
+                // Precio_Unitario viene ya con descuento aplicado => revertimos
+                $factorDesc = 1 - ($porcDesc/100);
+                if($factorDesc != 0){
+                    $precioUnitConDesc = $useBc
+                        ? $div($precioUnitConDesc, $factorDesc)
+                        : $precioUnitConDesc / $factorDesc;
+                }
+            }
+            $precioUnitarioSinIVANum = $this->removeIVA($precioUnitConDesc);
+            $linea["precioUnitario"] = $this->fn($precioUnitarioSinIVANum);
 
-            // MONTO TOTAL
-            $precioTotalSinIVA = $cantidad*$precioUnitarioSinIVA;
-            $linea["montoTotal"] = $precioTotalSinIVA;
+            // MONTO TOTAL SIN IVA
+            $precioTotalSinIVANum = $mul($cantidad, $precioUnitarioSinIVANum);
+            $linea["montoTotal"] = $useBc ? (float)bcadd($precioTotalSinIVANum,'0',$scaleOut) : (float)$precioTotalSinIVANum;
 
             // DESCUENTO
-            $descuentoPrecioSinIva = 0;
-            if(floatval($a->Descuento) > 0){
-                $descuentoPrecioSinIva = $this->fn($precioTotalSinIVA * (floatval($a->Descuento) / 100));
-                $linea["montoDescuento"] = $descuentoPrecioSinIva;
-                $naturalezaDescuento = "Otorgado a cliente por empresa";
-                $linea["naturalezaDescuento"] = $naturalezaDescuento;
+            $descuentoPrecioSinIvaNum = 0;
+            if($porcDesc > 0){
+                $descuentoPrecioSinIvaNum = $mul($precioTotalSinIVANum, $div($porcDesc, 100));
+                $linea["montoDescuento"] = $this->fn($descuentoPrecioSinIvaNum);
+                $linea["naturalezaDescuento"] = "Otorgado a cliente por empresa";
+                $linea["codigoDescuento"] = $a->TipoDescuento;
             }else{
                 $linea["montoDescuento"] = 0;
                 $linea["naturalezaDescuento"] = "Ninguna";
+                $linea["codigoDescuento"] = defined('CODIGO_DESCUENTO_DEFECTO') ? CODIGO_DESCUENTO_DEFECTO : '00';
             }
 
-             // SUBTOTAL
-            $subTotalSinIVA = $precioTotalSinIVA - $descuentoPrecioSinIva;
-            $linea["subtotal"] = $subTotalSinIVA;
-
-            // BASE IMPONIBLE
-            $linea["base_imponible"] = $subTotalSinIVA;
+            // SUBTOTAL / BASE IMPONIBLE
+            $subTotalSinIVANum = $sub($precioTotalSinIVANum, $descuentoPrecioSinIvaNum);
+            $linea["subtotal"] = $useBc ? (float)bcadd($subTotalSinIVANum,'0',$scaleOut) : (float)$subTotalSinIVANum;
+            $linea["base_imponible"] = $linea["subtotal"];
 
             // IMPUESTOS
             $impuestos = array();
-            $iva = $this->getIVA();
-            $montoDeImpuesto = $subTotalSinIVA * ($iva / 100);
-            $linea["iva"] = $subTotalSinIVA * ($iva / 100);
+            $iva = $this->getIVA(); // porcentaje
+            $ivaFactor = $div($iva, 100);
+
+            $montoDeImpuestoNum = $mul($subTotalSinIVANum, $ivaFactor);
+            $linea["iva"] = $useBc ? (float)bcadd($montoDeImpuestoNum,'0',$scaleOut) : (float)$montoDeImpuestoNum;
             $linea["retencion"] = 0;
+
             if($a->No_Retencion == "0" && $aplicaRetencion){
-                $precioFinalUnitarioSinIVA = $this->removeIVA(floatval($a->Precio_Final));
-                $precioFinalTotalSinIVA = $cantidad*$precioFinalUnitarioSinIVA;
-                $montoDeImpuesto = ($precioFinalTotalSinIVA * ($iva / 100));
-                $linea["retencion"] = $montoDeImpuesto - $linea["iva"];
+                $precioFinalUnitarioSinIVANum = $this->removeIVA((float)$a->Precio_Final);
+                $precioFinalTotalSinIVANum = $mul($cantidad, $precioFinalUnitarioSinIVANum);
+                $montoImpuestoRetNum = $mul($precioFinalTotalSinIVANum, $ivaFactor);
+                $linea["retencion"] = $useBc
+                    ? (float)bcsub($montoImpuestoRetNum, $linea["iva"], $scaleOut)
+                    : ((float)$montoImpuestoRetNum - $linea["iva"]);
+                $montoDeImpuestoNum = $montoImpuestoRetNum; // actualizar para factor final
             }
-            if($a->Exento == 1){ // Es exento
-                // POR EL MOMENTO ESTA INFO ESTA AMARRADA, PERO DEBE OBTENERSE DE LA INFO DEL CLIENTE LO CUAL DEBE IMPLEMENTARSE
+
+            if($a->Exento == 1){
                 $exoneracion = array(
-                    "tipoDocumento" => "01", // Compras Autorizadas
+                    "tipoDocumento" => "01",
                     "numeroDocumento" => "01",
                     "nombreInstitucion" => "Cliente",
                     "fechaEmision" => date(DATE_ATOM),
                     "montoImpuesto" => "9999999999999.99999",
                     "porcentajeCompra" => 100
                 );
-                $impuesto["exoneracion"] = $exoneracion;
-                $montoDeImpuesto = 0;
+                $montoDeImpuestoNum = 0;
                 $linea["iva"] = 0;
                 $linea["retencion"] = 0;
             }
-            // Se debe cambiar el porcentaje de impuesto, ya que se debe tomar en cuenta la retencion
-            $factorIVAFinal = 0;
-            if($subTotalSinIVA != 0){
-                $factorIVAFinal = (($montoDeImpuesto) * 100) / round($subTotalSinIVA,0);
-            }
-            $montoFinalDeImpuesto = $subTotalSinIVA * ($factorIVAFinal / 100);
-            $impuesto = array(
-                "codigo" => ($a->No_Retencion == "0" && $aplicaRetencion) ? "07" : "01", // 01 = Impuesto al Valor Agregado / 07 = IVA (cálculo especial)
-                "codigoTarifa" => $a->Exento == 1 ? "01" : "08", // 01 = Exento / 08 = General 13%
-                "tarifa" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
-                "factorIVA" => $this->fpad($this->fn($factorIVAFinal, 2), 5),
-                "monto" => $montoFinalDeImpuesto
-            );
 
-            array_push($impuestos, $impuesto);
+            // Factor IVA final
+            $factorIVAFinalNum = 0;
+            $subComp = ($useBc ? bccomp($subTotalSinIVANum,'0',$scaleCalc) : ($subTotalSinIVANum > 0));
+            if($subComp > 0){
+                $factorIVAFinalNum = $mul( $div($montoDeImpuestoNum, $subTotalSinIVANum), 100 );
+            }
+
+            // Monto final impuesto
+            $montoFinalDeImpuestoNum = $mul($subTotalSinIVANum, $div($factorIVAFinalNum, 100));
+
+            $impuesto = array(
+                "codigo" => ($a->No_Retencion == "0" && $aplicaRetencion) ? "07" : "01",
+                "codigoTarifa" => $a->Exento == 1 ? "01" : "08",
+                "tarifa" => $this->fpad($this->fn($useBc ? (float)bcadd($factorIVAFinalNum,'0',2) : round($factorIVAFinalNum,2), 2), 5),
+                "factorIVA" => $this->fpad($this->fn($useBc ? (float)bcadd($factorIVAFinalNum,'0',2) : round($factorIVAFinalNum,2), 2), 5),
+                "monto" => $useBc ? (float)bcadd($montoFinalDeImpuestoNum,'0',$scaleOut) : (float)$montoFinalDeImpuestoNum
+            );
+            if($a->Exento == 1){
+                $impuesto["exoneracion"] = $exoneracion;
+            }
+
+            $impuestos[] = $impuesto;
             $linea["impuesto"] = $impuestos;
 
             // MONTO TOTAL DE LA LINEA
-            $linea["montoTotalLinea"] = $subTotalSinIVA + floatval($impuesto["monto"]);
+            $linea["montoTotalLinea"] = $useBc
+                ? (float)bcadd($subTotalSinIVANum, (string)$impuesto["monto"], $scaleOut)
+                : ((float)$subTotalSinIVANum + (float)$impuesto["monto"]);
 
             return $linea;
         }
@@ -526,6 +616,14 @@ class CI_Model {
             chmod($finalPath.$name, 0770);
         }
 
+        public function agregarImpuestoADesgloseDeImpuestos(&$desgloseImpuestos, $impuestoArticulo){
+            $key = $impuestoArticulo["codigo"]."_".$impuestoArticulo["codigoTarifa"];
+            if(!isset($desgloseImpuestos[$key])){
+                $desgloseImpuestos[$key] = array("codigo" => $impuestoArticulo["codigo"], "tarifaCodigo" => $impuestoArticulo["codigoTarifa"], "monto" => 0);
+            }
+            $desgloseImpuestos[$key]["monto"] += $impuestoArticulo["monto"];
+        }
+
         public function getFinalPath($type, $date = null){
             $finalPath = PATH_DOCUMENTOS_ELECTRONICOS;
 
@@ -549,6 +647,9 @@ class CI_Model {
                 break;
                 case "fec":
                     $finalPath .= "factura_electronica_compra/".date("Y_m_d", $date)."/";
+                break;
+                case "rep":
+                    $finalPath .= "recibo_electronico_pago/".date("Y_m_d", $date)."/";
                 break;
                 case "logo":
                     $finalPath = CARPETA_IMAGENES_LOGO;
@@ -581,6 +682,9 @@ class CI_Model {
                 break;
                 case "fec":
                     $finalPath .= "factura_electronica_compra/".date("Y_m_d", $date)."/";
+                break;
+                case "rep":
+                    $finalPath .= "recibo_electronico_pago/".date("Y_m_d", $date)."/";
                 break;
             }
 

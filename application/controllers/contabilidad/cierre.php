@@ -139,17 +139,24 @@ class cierre extends CI_Controller {
 		$cantidadFacturas = 0;
 		$total = 0;
 		$tarjeta = 0;
-		$efectivo = 0;			
+		$efectivo = 0;	
+		$sinpeMovil = 0;		
 		if($pagos->num_rows()!=0){
 			$cantidadFacturas = $pagos->num_rows();
 			$pagos = $pagos->result();			
 			foreach($pagos as $pago){
 				$total += $pago->monto;
 				$tarjeta += $pago->pago_tarjeta;
+
+				if($pago->tipo_pago == 'sinpe_movil'){
+					$sinpeMovil += $pago->monto - $pago->pago_tarjeta;
+				}else if($pago->tipo_pago == 'contado'){
+					$efectivo += $pago->monto - $pago->pago_tarjeta;
+				}
+
 			}			
-			$efectivo = $total - $tarjeta;
 		}		
-		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo);
+		return array('cantidadFacturas'=>$cantidadFacturas,'total'=>$total,'tarjeta'=>$tarjeta,'efectivo'=>$efectivo,'sinpeMovil'=>$sinpeMovil);
 	}
 	
 	function obtenerRecibosDeDinero($sucursal, $fechaHoraActual, $fechaUltimoCierra){
@@ -157,6 +164,7 @@ class cierre extends CI_Controller {
 		$efectivo = 0;
 		$tarjeta = 0;
 		$deposito = 0;
+		$sinpeMovil = 0;
 		$totalAbonoApartado = $this->contabilidad->getAbonoFacturasApartadoPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual); //Guarda la cantidad de dinero del abono del apartado
 		if($recibos = $this->contabilidad->getRecibosPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierra), $fechaHoraActual)){
 			foreach($recibos as $recibo){
@@ -171,11 +179,14 @@ class cierre extends CI_Controller {
 					case 'tarjeta':
 						$tarjeta += $recibo->Recibo_Cantidad;
 					break;
+					case 'sinpe_movil':
+						$sinpeMovil += $recibo->Recibo_Cantidad;
+					break;
 				}
 			}
 		}
 		$total += $totalAbonoApartado;
-		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito, 'abonos'=>$totalAbonoApartado);
+		return array('total'=>$total, 'efectivo'=>$efectivo, 'tarjeta'=>$tarjeta, 'deposito'=>$deposito, 'sinpeMovil'=>$sinpeMovil, 'abonos'=>$totalAbonoApartado);
 	}
 	
 	function obtenerTotalFacturasContado($sucursal, $fechaHoraActual, $fechaUltimoCierra){
@@ -199,7 +210,17 @@ class cierre extends CI_Controller {
 		}
 		return $total;
 	}
-	
+
+	function obtenerTotalFacturasSinpeMovil($sucursal, $fechaHoraActual, $fechaUltimoCierre){
+		$total = 0;
+		if($facturas = $this->contabilidad->getFacturasSinpeMovilPorRangoFecha($sucursal, date('Y-m-d H:i:s', $fechaUltimoCierre), $fechaHoraActual)){
+			foreach($facturas as $factura){
+				$total += $factura->Factura_Monto_Total;
+			}
+		}
+		return $total;
+	}
+
 	function obtenerValoresFinales($sucursal, $fechaHoraActual, $fechaUltimoCierra){
 			$totalFacturas = 0;
 			$totalIVA = 0;
@@ -479,6 +500,7 @@ class cierre extends CI_Controller {
 			unset($retorno['error']);
 			$retorno['cantidadFacturas'] = $pagosMixtos['cantidadFacturas'];
 			$retorno['efectivo'] = $pagosMixtos['efectivo'];
+			$retorno['sinpeMovil'] = $pagosMixtos['sinpeMovil'];
 			$retorno['tarjeta'] = $pagosMixtos['tarjeta'];
 			$retorno['total'] = $pagosMixtos['total'];
 		}else{
@@ -618,6 +640,26 @@ class cierre extends CI_Controller {
 			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
 
 			$total = $this->obtenerTotalFacturasDeposito($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
+			$retorno['status'] = 'success';
+			unset($retorno['error']);
+			$retorno['total'] = $total;
+		}else{
+			$retorno['error'] = '2'; 
+		}
+		echo json_encode($retorno);	
+		
+	}
+
+	public function getTotalFacturasSinpeMovil(){
+		$retorno['status'] = 'error';
+		$retorno['error'] = '1'; //No se proceso la solicitud
+
+		if(isset($_GET['fechaHoraActual'])&&isset($_GET['fechaUltimoCierre'])){
+			include PATH_USER_DATA;
+			$fechaHoraActual = @$_GET['fechaHoraActual'];
+			$fechaUltimoCierre = @$_GET['fechaUltimoCierre'];
+
+			$total = $this->obtenerTotalFacturasSinpeMovil($data['Sucursal_Codigo'], $fechaHoraActual, $fechaUltimoCierre);
 			$retorno['status'] = 'success';
 			unset($retorno['error']);
 			$retorno['total'] = $total;

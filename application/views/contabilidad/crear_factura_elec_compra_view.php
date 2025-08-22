@@ -107,6 +107,15 @@ PARA:
                                     </tr>
                                     <tr>
                                         <td>
+                                            <label class="contact">Código de Actividad:</label>
+                                        </td>
+                                        <td>
+                                            <input id="codigo_actividad_factura" class="input_uno" placeholder="Código de actividad del emisor" name="codigo_actividad_factura" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             <label class="contact">Correo Electrónico:</label>
                                         </td>
                                         <td>
@@ -165,19 +174,10 @@ PARA:
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="contact">Código de Actividad:</label>
+                                            <label class="contact">Fecha de emisión de la factura original:</label>
                                         </td>
                                         <td>
-                                            <input id="codigo_actividad_factura" class="input_uno" placeholder="Código de actividad de la factura" name="codigo_actividad_factura" type="text" required="" tabindex="1" autocomplete="">
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="contact">Fecha:</label>
-                                        </td>
-                                        <td>
-                                            <input id="fecha_factura" class="input_uno" placeholder="DD-MM-YYYY hh:mm:ss" name="fecha_factura" type="text" required="" tabindex="1" autocomplete="">
+                                            <input id="fecha_emision" class="input_uno" placeholder="DD-MM-YYYY hh:mm:ss" name="fecha_emision" type="text" required="" tabindex="1" autocomplete="">
                                         </td>
                                         <td></td>
                                     </tr>
@@ -215,6 +215,24 @@ PARA:
                                                  <option value="<?= $id ?>"><?= $name ?></option>
                                                 <?php endforeach; ?>
                                             </select>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Consecutivo de la factura original:</label>
+                                        </td>
+                                        <td>
+                                            <input id="consecutivo_factura" class="input_uno" placeholder="Consecutivo de la factura original" name="consecutivo_factura" type="text" required="" tabindex="1" autocomplete="">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="contact">Razón de referencia:</label>
+                                        </td>
+                                        <td>
+                                            <input id="razon_referencia" class="input_uno" name="razon_referencia" type="text" required="" tabindex="1" autocomplete="" value="Compra a empresa de régimen que no emite comprobantes electrónicos">
                                         </td>
                                         <td></td>
                                     </tr>
@@ -287,12 +305,28 @@ PARA:
                                         </td>
                                         <td>
                                             <input id="precio_unitario_detalle" class="input_uno" placeholder="Precio unitario del artículo" name="precio_unitario_detalle" type="text" required="" tabindex="1" autocomplete="">
-                                        </td>
+                                        </td>                                        
+                                    </tr>
+                                    <tr>
                                         <td style="    width: 12%;">
                                             <label class="contact">Descuento (%):</label>
                                         </td>
                                         <td style="    width: 10%;">
                                             <input id="descuento_detalle" class="input_uno" placeholder="Descuento en porcentaje" name="descuento_detalle" type="text" required="" tabindex="1" autocomplete="" value="0">
+                                        </td>
+                                        <td style="    width: 12%;">
+                                            <label class="contact">Tipo de Descuento:</label>
+                                        </td>
+                                        <td style="    width: 10%;">
+                                            <select id="tipo_codigo_descuento" name="tipo_codigo_descuento" class="input_uno" >
+                                                <?php
+                                                    foreach($tipoDescuentos as $td){
+                                                        ?>
+                                                            <option value="<?= $td->codigo ?>"><?= $td->descripcion ?></option>
+                                                        <?php
+                                                    }
+                                                ?>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
