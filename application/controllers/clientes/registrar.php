@@ -63,6 +63,9 @@ class registrar extends CI_Controller {
                             : "Cliente ya existe pero no esta activo";
         }else{
             $r["status"] = 1;
+
+            $r["resultado_api"] = $this->cliente->consultarIdentificacionApi($id_request);
+
             unset($r["error"]);
         }
 

@@ -15,6 +15,8 @@ $(window).ready(function(){
     $("#fecha_nacimiento").mask("99/99/9999");
     
     $('#formulario_registro_cliente').submit(chequearFormulario);
+
+    $('#imagen_cargar_cliente').css('display', 'none');
 });
 
 function getCantones(e){
@@ -69,6 +71,7 @@ function verify_IDI(){
 }
     
 function verify_ID(){
+    $("#imagen_cargar_cliente").css('display', 'inline');
     convertirResultado();	
     var estatus = document.getElementById('status');
     var input = document.getElementById('cedula');
@@ -84,7 +87,7 @@ function verify_ID(){
     if((valor==1 && tamano ==9) || (valor==2 && tamano == 12) || (valor==3 && tamano ==10) || (valor ==4)){
         if(!codigo==' '){
                 doAjax("/clientes/registrar/verificarExistencia?id="+codigo, "json", true, "GET", {},function(data){
-                    
+                    $("#imagen_cargar_cliente").css('display', 'none');
                     _CED_AVAILABLE = false;
                     
                     if(data.status == 0){
@@ -94,9 +97,36 @@ function verify_ID(){
                     }else{
                         _CED_AVAILABLE = true;
                         $("#status").html("<div class='status_2'><img src=/application/images/scripts/tick.gif /><p class='text_status'>¡Si esta disponible!</div></p>");
+
+                        if(data.resultado_api){
+                            if(data.resultado_api.status == 1){
+                                if(data.resultado_api.data){
+                                    if(data.resultado_api.data.results){
+                                        if(data.resultado_api.data.results.length > 0){
+                                            const respuesta = data.resultado_api.data.results[0];
+                                            const nombre = respuesta.firstname1 != null ? respuesta.firstname1 : respuesta.fullname;
+                                            $("#nombre").val(nombre);
+                                            $("#apellidos").val(respuesta.lastname);
+                                        }
+                                    }
+                                    if(data.resultado_api.data.actividades){
+                                        if(data.resultado_api.data.actividades.length > 0){
+                                            const actividad = data.resultado_api.data.actividades[0];
+                                            if(actividad.codigo){
+                                                $("#codigo_actividad").val(actividad.codigo);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
 
-                }, function(){}, function(){});
+                }, function(){
+                    $("#imagen_cargar_cliente").css('display', 'none');
+                }, function(){
+                    $("#imagen_cargar_cliente").css('display', 'none');
+                });
         }
     }else{
         estatus.innerHTML='';
