@@ -99,7 +99,7 @@ define('ART_GEN_IMPUESTO', 13);
 
 define('CONTROL_DE_INVENTARIO', "CONTROL_DE_INVENTARIO");
 
-define('JAVASCRIPT_CACHE_VERSION', 47);
+define('JAVASCRIPT_CACHE_VERSION', 48);
 define('DB_DATETIME_FORMAT', 'y-m-d H:i:s'); //y/m/d : H:i:s
 
 /* End of file constants.php */

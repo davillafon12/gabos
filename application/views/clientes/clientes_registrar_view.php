@@ -98,6 +98,7 @@ PARA:
                                     </td>
                                     <td>
                                             <input id="cedula" autocomplete="off" name="cedula"  placeholder="" onblur="verify_ID();"  tabindex="2" style="float: left;">
+                                            <img id="imagen_cargar_cliente" src="<?php echo base_url('application/images/ajax-loader.gif'); ?>" style="display:none;" />
                                                 <div id="status" class="status_cedula" style=""></div>
                                     </td>
 
