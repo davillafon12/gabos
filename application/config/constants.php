@@ -84,7 +84,7 @@ define('HACIENDA_TOKEN_API_PROD', "https://idp.comprobanteselectronicos.go.cr/au
 define('HACIENDA_RECEPCION_API_STAG', "https://api-sandbox.comprobanteselectronicos.go.cr/recepcion/v1/");
 define('HACIENDA_RECEPCION_API_PROD', "https://api.comprobanteselectronicos.go.cr/recepcion/v1/");
 define('PATH_DOCUMENTOS_ELECTRONICOS_WEB', 'application/third_party/');
-define('CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO', '513910');
+define('CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO', '');
 define('PROVEEDOR_DE_SISTEMAS', '3101350785');
 define('CODIGO_DESCUENTO_DEFECTO', '07');
 
