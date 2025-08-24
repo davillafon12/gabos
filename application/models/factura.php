@@ -1067,7 +1067,7 @@ Class factura extends CI_Model
             );
 
             if($receptor != NULL){
-                if($receptor->Cliente_Cedula != "1" && $receptor->Cliente_Cedula != "0"){
+                if($receptor->Cliente_Cedula != "1" && $receptor->Cliente_Cedula != "0" && trim($receptor->Cliente_Correo_Electronico) != ""){
                     $data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
                     $data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
                     $data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
