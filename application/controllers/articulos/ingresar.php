@@ -32,7 +32,7 @@ class ingresar extends CI_Controller {
 		$familias_actuales = $this->familia->get_familias_ids_array($data['Sucursal_Codigo']);
 		$tiposCodigos = $this->catalogo->getTipoCodigoProductoServicio();
 		$unidadesMedida = $this->catalogo->getUnidadesDeMedida();
-		$tipoDescuentos = $this->catalogo->getTipoDescuentos();
+		$tipoDescuentos = $this->catalogo->getTipoDescuentosSinRegaliasNiBonificaciones();
 		$data['Familia_Empresas'] = $empresas_actuales;
 		$data['Familias'] = $familias_actuales;
 		$data['tipo_codigo'] = $tiposCodigos;

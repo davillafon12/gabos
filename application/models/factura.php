@@ -1067,22 +1067,25 @@ Class factura extends CI_Model
             );
 
             if($receptor != NULL){
-                if($receptor->Cliente_Cedula != "1" && $receptor->Cliente_Cedula != "0"){
+                if($receptor->Cliente_Cedula != "1" && $receptor->Cliente_Cedula != "0" && trim($receptor->Cliente_Correo_Electronico) != ""){
                     $data["ReceptorNombre"] = $receptor->Cliente_Nombre." ".$receptor->Cliente_Apellidos;
                     $data["ReceptorTipoIdentificacion"] = $this->getTipoIdentificacionCliente($receptor->Cliente_Tipo_Cedula);
                     $data["ReceptorIdentificacion"] = $receptor->Cliente_Cedula;
-                    $data["ReceptorProvincia"] = $receptor->Provincia;
-                    $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
-                    $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
-                    $data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
-                    $data["ReceptorOtrasSennas"] = str_pad($receptor->Cliente_Direccion,5,"_", STR_PAD_RIGHT);
-                    $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
-                    $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
-                    $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
-                    $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);
                     $data["ReceptorEmail"] = $receptor->Cliente_Correo_Electronico;
-                    $data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
-                }                
+
+                    if($data["TipoDocumento"] == FACTURA_ELECTRONICA){
+                        $data["ReceptorProvincia"] = $receptor->Provincia;
+                        $data["ReceptorCanton"] = str_pad($receptor->Canton,2,"0", STR_PAD_LEFT);
+                        $data["ReceptorDistrito"] = str_pad($receptor->Distrito,2,"0", STR_PAD_LEFT);
+                        $data["ReceptorBarrio"] = str_pad($receptor->NombreBarrio,5,"_", STR_PAD_RIGHT);
+                        $data["ReceptorOtrasSennas"] = str_pad($receptor->Cliente_Direccion,5,"_", STR_PAD_RIGHT);
+                        $data["ReceptorCodigoPaisTelefono"] = $receptor->Codigo_Pais_Telefono;
+                        $data["ReceptorTelefono"] = str_replace("-", "", $receptor->Cliente_Telefono);
+                        $data["ReceptorCodigoPaisFax"] = $receptor->Codigo_Pais_Fax;
+                        $data["ReceptorFax"] = str_replace("-", "", $receptor->Numero_Fax);                        
+                        $data["ReceptorCodigoActividad"] = $receptor->Codigo_Actividad;
+                    }
+                }
             }
 
             $this->db->insert("tb_55_factura_electronica", $data);

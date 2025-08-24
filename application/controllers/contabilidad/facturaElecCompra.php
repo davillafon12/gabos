@@ -28,7 +28,7 @@ class facturaElecCompra extends CI_Controller {
             $data['provincias'] = $this->ubicacion->getProvincias();
             $data['condicionesventa'] = $this->condicionesdeventa;
             $data['tiposdepago'] = $this->tiposdepago;
-		    $data['tipoDescuentos'] = $this->catalogo->getTipoDescuentos();
+		    $data['tipoDescuentos'] = $this->catalogo->getTipoDescuentosSinRegaliasNiBonificaciones();
 
             $conf_array = $this->configuracion->getConfiguracionArray();
 		    $data['c_array'] = $conf_array;

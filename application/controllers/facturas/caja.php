@@ -39,7 +39,7 @@ class caja extends CI_Controller {
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$data['puedeEditarFacturas'] = @$permisos['editar_facturas'] == "1";
-		$data['tiposDeDescuento'] = $this->catalogo->getTipoDescuentos();
+		$data['tiposDeDescuento'] = $this->catalogo->getTipoDescuentosSinRegaliasNiBonificaciones();
 		$this->load->view('facturas/view_caja_factura', $data);
 	}
 

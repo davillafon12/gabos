@@ -24,7 +24,7 @@ class otros extends CI_Controller {
 	 {
 		include PATH_USER_DATA; 
 
-		$data['tipoDescuentos'] = $this->catalogo->getTipoDescuentos();
+		$data['tipoDescuentos'] = $this->catalogo->getTipoDescuentosSinRegaliasNiBonificaciones();
         $data['javascript_cache_version'] = $this->javascriptCacheVersion;
 		$this->load->view('clientes/clientes_descuentos_credito_view', $data);
 	}
