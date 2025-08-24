@@ -317,7 +317,7 @@ class editar extends CI_Controller {
 		$data['tipos_codigo'] = $tiposCodigos;
 		$unidadesMedida = $this->catalogo->getUnidadesDeMedida();
 		$data['unidades_medida'] = $unidadesMedida;
-		$tipoDescuentos = $this->catalogo->getTipoDescuentos();
+		$tipoDescuentos = $this->catalogo->getTipoDescuentosSinRegaliasNiBonificaciones();
 		$data['tipoDescuentos'] = $tipoDescuentos;
 		//Si viene sucursal usamos la que viene, sino deja la del log del usuario
 		if(isset($_GET['suc'])){

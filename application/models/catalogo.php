@@ -75,6 +75,21 @@ Class catalogo extends CI_Model
         }
     }
 
+    public function getTipoDescuentosSinRegaliasNiBonificaciones(){
+        $this->db->from("catalogo_tipo_descuento");
+        $this->db->where_not_in("codigo", array("01", "02", "03", "99"));
+        $query = $this -> db -> get();
+
+        if($query -> num_rows() != 0)
+        {
+          return $query->result();
+        }
+        else
+        {
+          return array();
+        }
+    }
+
     public function getTipoTarifas(){
         $this->db->from("catalogo_tipo_tarifa");
         $query = $this -> db -> get();
