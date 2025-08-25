@@ -33,7 +33,7 @@ class nueva extends CI_Controller {
 		$data['c_array'] = $conf_array;
 		$data['token_factura_temp'] = md5($fecha.$data['Usuario_Codigo'].$data['Sucursal_Codigo']);
 		$data['javascript_cache_version'] = $this->javascriptCacheVersion;
-		$data['tiposDeDescuento'] = $this->catalogo->getTipoDescuentos(); 
+		$data['tiposDeDescuento'] = $this->catalogo->getTipoDescuentosSinRegaliasNiBonificaciones(); 
 		$this->load->view('facturas/view_nueva_factura', $data);
 	}
 
