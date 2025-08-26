@@ -171,15 +171,12 @@ Class contabilidad extends CI_Model
 					tb_07_factura.Factura_Fecha_Hora AS fecha_factura,
 					tb_26_recibos_dinero.Credito AS c,
 					tb_26_recibos_dinero.Comentarios AS comentarios,
-					tb_26_recibos_dinero.Anulado AS anulado,
-					tb_55_factura_electronica.Clave AS clave_fe
+					tb_26_recibos_dinero.Anulado AS anulado
 			FROM tb_26_recibos_dinero
 			JOIN tb_24_credito ON tb_24_credito.Credito_Id = tb_26_recibos_dinero.Credito
 			JOIN tb_07_factura ON tb_07_factura.Factura_Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
-			JOIN tb_55_factura_electronica ON tb_55_factura_electronica.Consecutivo = tb_24_credito.Credito_Factura_Consecutivo
 			WHERE  tb_24_credito.Credito_Sucursal_Codigo = $sucursal
             AND    tb_07_factura.TB_02_Sucursal_Codigo = $sucursal
-			AND    tb_55_factura_electronica.Sucursal = $sucursal
 			AND    tb_26_recibos_dinero.Consecutivo = $recibo
 			$queryLoco
 		");
@@ -3409,6 +3406,7 @@ Class contabilidad extends CI_Model
 
 		$cliente = $this->cliente->getClientes_Cedula($recibo->cliente_cedula)[0];
 		$sucursal = $this->empresa->getEmpresa($sucursal)[0];
+		$facturaElectronica = $this->factura->getFacturaElectronica($recibo->factura, $sucursal->Codigo);
 
 		$reciboArray = array(
 			'consecutivo' => $recibo->recibo,
@@ -3419,7 +3417,7 @@ Class contabilidad extends CI_Model
 			'moneda' => $codigoMoneda,
 			'tipoCambio' => $tipoCambio,
 			'fechaEmisionIr' => date(DATE_ATOM, strtotime($recibo->fecha_factura)),
-			'consecutivoFactura' => $recibo->clave_fe,
+			'consecutivoFactura' => $facturaElectronica->Clave,
 			'razonReferencia' => 'Pago parcial y/o total de factura a crédito',
 			'tipoDocIr' => '01',
 			'codigoIr' => '04'
