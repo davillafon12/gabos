@@ -105,10 +105,14 @@ class anular extends CI_Controller {
 	}
 
 	private function crearReciboElectronicoDePagoParaAnulacion($reciboId, $sucursal){
-		if($recibo = $this->contabilidad->getReciboParaImpresion($reciboId, $sucursal)){
-			$data = $this->contabilidad->generarObjetosParaComprobanteDeAnulacion($recibo[0], $sucursal);
-			$this->contabilidad->crearReciboElectronicoDePago($data['empresa'], $data['cliente'], $data['recibo'], $data['costos'], $data['articulos']);
-			$this->contabilidad->guardarPDFRecibo($reciboId, $sucursal);
+		if($empresa = $this->empresa->getEmpresa($sucursal)){
+			if($empresa[0]->RequiereFE == 1){
+				if($recibo = $this->contabilidad->getReciboParaImpresion($reciboId, $sucursal)){
+					$data = $this->contabilidad->generarObjetosParaComprobanteDeAnulacion($recibo[0], $sucursal);
+					$this->contabilidad->crearReciboElectronicoDePago($data['empresa'], $data['cliente'], $data['recibo'], $data['costos'], $data['articulos']);
+					$this->contabilidad->guardarPDFRecibo($reciboId, $sucursal);
+				}
+			}
 		}
 	}
 

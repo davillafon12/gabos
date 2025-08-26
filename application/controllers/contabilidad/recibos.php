@@ -223,9 +223,13 @@ class recibos extends CI_Controller {
 	}
 
 	private function crearRecibosElectronicos($recibos, $sucursal){
-		foreach($recibos as $recibo){
-			$this->crearReciboElectronicoDePago($recibo, $sucursal);
-		}
+		if($empresa = $this->empresa->getEmpresa($sucursal)){
+			if($empresa[0]->RequiereFE == 1){
+				foreach($recibos as $recibo){
+					$this->crearReciboElectronicoDePago($recibo, $sucursal);
+				}
+			}			
+		}	
 	}
 
 	private function crearReciboElectronicoDePago($reciboId, $sucursal){
@@ -233,7 +237,7 @@ class recibos extends CI_Controller {
 			$data = $this->contabilidad->generarObjectosParaComprobante($recibo[0], $sucursal);
 			$this->contabilidad->crearReciboElectronicoDePago($data['empresa'], $data['cliente'], $data['recibo'], $data['costos'], $data['articulos']);
 			$this->contabilidad->guardarPDFRecibo($reciboId, $sucursal);
-		}
+		}			
 	}
 
 	
