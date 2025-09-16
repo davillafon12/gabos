@@ -69,7 +69,7 @@ function actualizarTotales(){
 
     var totalFacturasEfectivoFinal = _TOTAL_FACTURAS_EFECTIVO + _TOTAL_PAGO_MIXTO_EFECTIVO;
 
-    var totalFaltante = _TOTAL_RETIROS_PARCIALES - _TOTAL_RECIBOS_EFECTIVO - _TOTAL_RECIBOS_ABONO - _TOTAL_RECIBOS_SINPE_MOVIL + _TOTAL_NOTAS_CREDITO_CONTADO - totalFacturasEfectivoFinal;
+    var totalFaltante = _TOTAL_RETIROS_PARCIALES - _TOTAL_RECIBOS_EFECTIVO - _TOTAL_RECIBOS_ABONO + _TOTAL_NOTAS_CREDITO_CONTADO - totalFacturasEfectivoFinal;
 
     var totalFacturasContado = totalFacturasEfectivoFinal -_TOTAL_NOTAS_CREDITO_CONTADO;
 

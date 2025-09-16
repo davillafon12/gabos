@@ -431,16 +431,13 @@ function cargarTotales(datos){
 	bcrservicios = parseFloat(datos.cierre.bcrservicios);
 	datos = datos.datos;
 	totalRetiros = parseFloat(datos.totalRecibosParciales);
-	//totalEfectivo = (totalRetiros + totalRetiros) - baseCaja;
-	//console.log(datos);
+	
 	var totalEfectivo = totalRetiros; 
 	totalEfectivo -= datos.recibos.efectivo;
 	totalEfectivo -= datos.recibos.abonos;
-	totalEfectivo -= datos.recibos.sinpeMovil;
 	totalEfectivo -= bnservicios;
-        totalEfectivo -= bcrservicios;
+    totalEfectivo -= bcrservicios;
 	totalEfectivo += datos.detalleNotasCredito.contado;
-	//totalEfectivo -= datos.pagoMixto.efectivo;
 	totalEfectivo -= datos.totalFacturasContado;
 	totalFacturasSinpeMovil = datos.totalFacturasSinpeMovil + datos.pagoMixto.sinpeMovil - datos.detalleNotasCredito.sinpeMovil;
 

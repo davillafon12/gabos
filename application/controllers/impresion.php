@@ -1126,21 +1126,14 @@ class impresion extends CI_Controller
 
 
 		//Otros totales
-		$baseDeCaja = $cierre->base;
 		$totalRetirosParciales = $cierre->datos['totalRecibosParciales'];
-		$retiroFinal = $cierre->conteo;
-		//$efectivoTotal = ($totalRetirosParciales + $retiroFinal) - $baseDeCaja;
-		//$efectivoTotal = $totalRetirosParciales - $cierre->datos['recibos']['efectivo'] - $cierre->bnservicios - $cierre->datos['recibos']['abonos'];
 
 		$efectivoTotal = $totalRetirosParciales;
 		$efectivoTotal -= ($cierre->datos['recibos']['efectivo']);
-		//$efectivoTotal -= $cierre->datos['recibos']['efectivo'];
 		$efectivoTotal -= $cierre->bnservicios;
 		$efectivoTotal -= $cierre->bcrservicios;
 		$efectivoTotal -= $cierre->datos['recibos']['abonos'];
-		$efectivoTotal -= $cierre->datos['recibos']['sinpeMovil'];
 		$efectivoTotal += $cierre->datos['detalleNotasCredito']['contado'];
-		//$efectivoTotal -= $cierre->datos['pagoMixto']['efectivo'];
 		$efectivoTotal -= $cierre->datos['totalFacturasContado'];
 
 		$pdf->SetFont('Arial', 'B', 14);
