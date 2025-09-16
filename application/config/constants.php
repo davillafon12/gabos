@@ -87,6 +87,7 @@ define('PATH_DOCUMENTOS_ELECTRONICOS_WEB', 'application/third_party/');
 define('CODIGO_ACTIVIDAD_RECEPTOR_POR_DEFECTO', '');
 define('PROVEEDOR_DE_SISTEMAS', '3101350785');
 define('CODIGO_DESCUENTO_DEFECTO', '07');
+define('CONDICION_VENTA_PARA_RECIBO_DE_PAGO_ELECTRONICO', '10'); //02=Credito con iva no diferido, 10=Credito con iva diferido hasta 90 dias
 
 define('ANULAR_FACTURA', '01');
 define('CORRIGE_FACTURA', '06');
@@ -99,7 +100,7 @@ define('ART_GEN_IMPUESTO', 13);
 
 define('CONTROL_DE_INVENTARIO', "CONTROL_DE_INVENTARIO");
 
-define('JAVASCRIPT_CACHE_VERSION', 48);
+define('JAVASCRIPT_CACHE_VERSION', 49);
 define('DB_DATETIME_FORMAT', 'y-m-d H:i:s'); //y/m/d : H:i:s
 
 define('REPORTES_HOST_INTERNO', 'http://192.168.10.13:8186/');
