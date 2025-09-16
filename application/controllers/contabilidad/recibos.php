@@ -234,9 +234,13 @@ class recibos extends CI_Controller {
 
 	private function crearReciboElectronicoDePago($reciboId, $sucursal){
 		if($recibo = $this->contabilidad->getReciboParaImpresion($reciboId, $sucursal)){
-			$data = $this->contabilidad->generarObjectosParaComprobante($recibo[0], $sucursal);
-			$this->contabilidad->crearReciboElectronicoDePago($data['empresa'], $data['cliente'], $data['recibo'], $data['costos'], $data['articulos']);
-			$this->contabilidad->guardarPDFRecibo($reciboId, $sucursal);
+			if($facturaElectronica = $this->factura->getFacturaElectronica($recibo[0]->factura, $sucursal)){
+				if($facturaElectronica->CondicionVenta == CONDICION_VENTA_PARA_RECIBO_DE_PAGO_ELECTRONICO){
+					$data = $this->contabilidad->generarObjectosParaComprobante($recibo[0], $sucursal);
+					$this->contabilidad->crearReciboElectronicoDePago($data['empresa'], $data['cliente'], $data['recibo'], $data['costos'], $data['articulos']);
+					$this->contabilidad->guardarPDFRecibo($reciboId, $sucursal);
+				}				
+			}			
 		}			
 	}
 
