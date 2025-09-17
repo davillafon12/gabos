@@ -221,16 +221,34 @@ Class cliente extends CI_Model
 	}
 
 	function tieneCreditosVencidosSinPagar($cedula, $sucursal){
-		/*  SELECT * FROM tb_24_credito
-			WHERE DATE_ADD(Credito_Fecha_Expedicion, INTERVAL Credito_Numero_Dias DAY) < CURDATE()
-			AND Credito_Sucursal_Codigo
-			AND Credito_Cliente_Cedula
-			AND Credito_Saldo_Actual */
-		$query = $this->db->query("SELECT * FROM tb_24_credito
-									WHERE DATE_ADD(Credito_Fecha_Expedicion, INTERVAL Credito_Numero_Dias DAY) < CURDATE()
-									AND Credito_Sucursal_Codigo = $sucursal
-									AND Credito_Cliente_Cedula = '$cedula'
-									AND Credito_Saldo_Actual > 1");
+		/* 
+		SELECT 	cr.Credito_Id, 
+				cr.Credito_Numero_Dias, 
+				cr.Credito_Saldo_Actual, 
+				cr.Credito_Fecha_Expedicion, 
+				fac.Factura_Consecutivo, 
+				fac.Factura_Estado  
+		FROM tb_24_credito AS cr
+		JOIN tb_07_factura as fac ON cr.Credito_Factura_Consecutivo = fac.Factura_Consecutivo AND cr.Credito_Sucursal_Codigo = fac.TB_02_Sucursal_Codigo
+		WHERE DATE_ADD(cr.Credito_Fecha_Expedicion, INTERVAL cr.Credito_Numero_Dias DAY) < CURDATE()
+		AND cr.Credito_Sucursal_Codigo = 2
+		AND cr.Credito_Cliente_Cedula = '402040954'
+		AND cr.Credito_Saldo_Actual > 1
+		AND fac.Factura_Estado != 'anulada' 
+		*/
+		$query = $this->db->query("SELECT 	cr.Credito_Id, 
+											cr.Credito_Numero_Dias, 
+											cr.Credito_Saldo_Actual, 
+											cr.Credito_Fecha_Expedicion, 
+											fac.Factura_Consecutivo, 
+											fac.Factura_Estado  
+									FROM tb_24_credito AS cr
+									JOIN tb_07_factura as fac ON cr.Credito_Factura_Consecutivo = fac.Factura_Consecutivo AND cr.Credito_Sucursal_Codigo = fac.TB_02_Sucursal_Codigo
+									WHERE DATE_ADD(cr.Credito_Fecha_Expedicion, INTERVAL cr.Credito_Numero_Dias DAY) < CURDATE()
+									AND cr.Credito_Sucursal_Codigo = $sucursal
+									AND cr.Credito_Cliente_Cedula = '$cedula'
+									AND cr.Credito_Saldo_Actual > 1
+									AND fac.Factura_Estado != 'anulada' ");
 		return $query->num_rows()>0;
 	}
 
