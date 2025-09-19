@@ -935,7 +935,7 @@ Class impresion_m extends CI_Model{
     
 	function recibosPDF($recibos, $empresa, $makeFile = false)
 	{
-		require(PATH_FPDF_LIBRARY);
+		require_once(PATH_FPDF_LIBRARY);
 		$pdf = new FPDF('P', 'mm', 'A4');
 		foreach ($recibos as $recibo) {
 			//Agregamos una pagina

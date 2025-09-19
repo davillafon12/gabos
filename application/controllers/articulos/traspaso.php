@@ -150,8 +150,8 @@ class traspaso extends CI_Controller {
 			//Si articulo no existe en la sucursal que recibe debemos registrarlo
 			//PERO hay que verificar la existencia de la familia (Para este caso usamos familia = 0 FAMILIA BASE)
 			if(!$this->familia->existeFamilia($familiaCodigo, $sucursalRecibe)){
-					//Si no existe la familia, tons la creamos
-					$this->familia->registrar($familiaCodigo, "FAMILIA BASE", "Creada por sistema de consignación.", $sucursalRecibe, $datosSesion['Usuario_Nombre_Usuario']);
+				//Si no existe la familia, tons la creamos
+				$this->familia->registrar($familiaCodigo, "FAMILIA BASE", "Creada por sistema de consignación.", $sucursalRecibe, $datosSesion['Usuario_Nombre_Usuario']);
 			}
 			$conf_array = $this->configuracion->getConfiguracionArray();
 			$porcentajeIVA = $conf_array['iva'];
@@ -176,8 +176,8 @@ class traspaso extends CI_Controller {
 			$precioUnidadRealObject = $this->articulo->getPrecioProductoObject($articulo->codigo, $numeroPrecioCliente, $sucursalEntrega);
 			$precioUnidadReal = $precioUnidadRealObject->Precio_Monto;
 			$descuento = $precioUnidadRealObject->Precio_Descuento;
-			$descuentoProductoReal = $this->articulo->getDescuento($articulo->codigo, $sucursalEntrega, $clienteLiga->Cliente, $familiaCodigo, $descuento);
-			$costo = $precioUnidadReal - ($precioUnidadReal * ($descuentoProductoReal / 100));
+			$descuentoProductoReal = $this->articulo->getDescuento($articulo->codigo, $sucursalEntrega, $clienteLiga->Cliente, $familiaCodigo, $descuento, $codigoDescuento);
+			$costo = $precioUnidadReal - ($precioUnidadReal * ($descuentoProductoReal["descuento"] / 100));
 			$costo -= $costo / (1 + $porcentajeIVA);
 
 			$precio1O = $this->articulo->getPrecioProductoObject($articulo->codigo, 1, $sucursalEntrega);
@@ -206,7 +206,7 @@ class traspaso extends CI_Controller {
 										$unidadmedida,
 										$codigoCabys,
 										$impuesto,
-										$descuentoProductoReal,
+										$descuentoProductoReal["descuento"],
 										$precio1O->Precio_Descuento,
 										$precio2O->Precio_Descuento,
 										$precio3O->Precio_Descuento,
@@ -222,24 +222,22 @@ class traspaso extends CI_Controller {
 	}
 
 	private function traspasarProductosASucursal($articulos, $sucursalRecibe, $sucursalEntrega, $traspaso, $clienteLiga){
-			include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
-			foreach($articulos as $art){
-					//Primero verificamos que exista en la sucursal que recibe, si no lo creamos
-					if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
-							$this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data, $clienteLiga);
-					}else{
-						//Actualizamos el inventario
-						$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
-
-					}
-
-
-					//Indiferentemente de si registro o actualizo el articulo
-					//debemos restar dicha cantidad del inventario de la sucursal que entrega
-					$this->articulo->actualizarInventarioRESTA($art->codigo, $art->cantidad, $sucursalEntrega);
-
-					$this->articulo->agregarArticuloTraspasoInventario($traspaso, $art->codigo, $art->cantidad, $art->descripcion);
+		include PATH_USER_DATA; //Esto es para traer la informacion de la sesion
+		foreach($articulos as $art){
+			//Primero verificamos que exista en la sucursal que recibe, si no lo creamos
+			if(!$this->articulo->existe_Articulo($art->codigo,$sucursalRecibe)){
+				$this->registrarArticulo($art, $sucursalRecibe, $sucursalEntrega, $data, $clienteLiga);
+			}else{
+				//Actualizamos el inventario
+				$this->articulo->actualizarInventarioSUMA($art->codigo, $art->cantidad, $sucursalRecibe);
 			}
+
+
+			//Indiferentemente de si registro o actualizo el articulo
+			//debemos restar dicha cantidad del inventario de la sucursal que entrega
+			$this->articulo->actualizarInventarioRESTA($art->codigo, $art->cantidad, $sucursalEntrega);
+			$this->articulo->agregarArticuloTraspasoInventario($traspaso, $art->codigo, $art->cantidad, $art->descripcion);
+		}
 	}
 
         public function traspasoEs(){
