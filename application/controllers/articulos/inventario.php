@@ -235,7 +235,7 @@ class inventario extends CI_Controller {
 						if($tipo == "pdf"){
 							$this->createPDFControl($empresa[0], $control, $articulos);
 						}else if($tipo == "excel"){
-
+							$this->exportControlExcel($empresa[0], $control, $articulos);
 						}
 					}else{
 						die('Formato de archivo invalido');
@@ -370,4 +370,165 @@ class inventario extends CI_Controller {
 					return ' ';
 			}
 	}
+
+	private function exportControlExcel($sucursal, $controlHead, $controlArticulos){
+        // Filename
+        $filename = "control_inventario_".$controlHead->id.".xls";
+
+        // Totals
+        $totales = $this->generarCostos($controlArticulos);
+
+        // HTTP headers for Excel
+        header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
+        header("Content-Disposition: attachment; filename=\"".$filename."\"");
+        // BOM for UTF-8
+        echo "\xEF\xBB\xBF";
+
+        // Simple inline styles to improve readability in Excel
+        ?>
+        <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <style>
+                table{ border-collapse:collapse; font-family: Arial, Helvetica, sans-serif; font-size:12px; }
+                th, td{ border: 1px solid #000; padding:4px; }
+                .header { font-weight:bold; }
+                .right { text-align:right; }
+                .center { text-align:center; }
+                .no-border { border: none; }
+            </style>
+        </head>
+        <body>
+            <table class="no-border" width="100%">
+                <tr>
+                    <td class="no-border" style="font-weight:bold; font-size:14px;"><?php echo htmlspecialchars($sucursal->Sucursal_Nombre); ?></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+                    <td class="no-border" style="text-align:right; font-weight:bold;">Control de Inventario #<?php echo htmlspecialchars($controlHead->id); ?></td>
+                </tr>
+                <tr>
+                    <td class="no-border"><?php echo "Cédula Jurídica: ".(isset($sucursal->Sucursal_Cedula) ? htmlspecialchars($sucursal->Sucursal_Cedula) : ""); ?></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+                    <td class="no-border" style="text-align:right;"><?php echo "Fecha y Hora: ".htmlspecialchars(date("d-m-Y h:i:s a", strtotime($controlHead->Fecha_Creacion))); ?></td>
+                </tr>
+				<tr>
+                    <td class="no-border"><?php echo "Teléfono: ".(isset($sucursal->Sucursal_Telefono) ? htmlspecialchars($sucursal->Sucursal_Telefono) : ""); ?></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+                </tr>
+				<tr>
+                    <td class="no-border"><?php echo "Email: ".(isset($sucursal->Sucursal_Email) ? htmlspecialchars($sucursal->Sucursal_Email) : ""); ?></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+                </tr>
+                <tr><td class="no-border" colspan="2">&nbsp;</td></tr>
+                <tr>
+                    <td class="no-border">Creado Por: <?php echo htmlspecialchars($this->user->getUserById($controlHead->Creado_Por)->Usuario_Nombre_Usuario); ?></td>
+                </tr>
+				<tr>
+                    <td class="no-border">Empate Autorizado Por: <?php echo htmlspecialchars($this->user->getUserById($controlHead->Empate_Autorizado_Por)->Usuario_Nombre_Usuario); ?></td>
+                </tr>
+            </table>
+
+            <br/>
+
+            <table width="100%">
+                <thead>
+					<tr>
+                        <th colspan="9">Productos</th>
+                    </tr>
+                    <tr>
+                        <th width="12%">Código</th>
+                        <th width="45%">Descripción</th>
+                        <th width="5%">Producto Empatado</th>
+                        <th width="6%">Físico Bueno</th>
+                        <th width="6%">Sistema Bueno</th>
+                        <th width="6%">Balance Bueno</th>
+                        <th width="6%">Físico Defectuoso</th>
+                        <th width="6%">Sistema Defectuoso</th>
+                        <th width="6%">Balance Defectuoso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($controlArticulos as $articulo): ?>
+                        <tr>
+                            <td class="center"><?php echo htmlspecialchars($articulo->Codigo); ?></td>
+                            <td><?php echo htmlspecialchars($articulo->Descripcion); ?></td>
+                            <td class="center"><?php echo $this->fe($articulo->Empatar); ?></td>
+                            <td class="right"><?php echo intval($articulo->Fisico_Bueno); ?></td>
+                            <td class="right"><?php echo intval($articulo->Sistema_Bueno); ?></td>
+                            <td class="right"><?php echo intval($articulo->Sistema_Bueno) - intval($articulo->Fisico_Bueno); ?></td>
+                            <td class="right"><?php echo intval($articulo->Fisico_Defectuoso); ?></td>
+                            <td class="right"><?php echo intval($articulo->Sistema_Defectuoso); ?></td>
+                            <td class="right"><?php echo intval($articulo->Sistema_Defectuoso) - intval($articulo->Fisico_Defectuoso); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <br/>
+            <table width="30%" style="float:right;">
+                <tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+                    <td class="no-border">Bueno</td>
+                    <td class="right"><?php echo $this->fni($totales["bueno"]); ?></td>
+                </tr>
+                <tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+                    <td class="no-border">Defectuoso</td>
+                    <td class="right"><?php echo $this->fni($totales["defectuoso"]); ?></td>
+                </tr>
+                <tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+                    <td class="no-border"><strong>Total</strong></td>
+                    <td class="right"><strong><?php echo $this->fni($totales["total"]); ?></strong></td>
+                </tr>
+            </table>
+        </body>
+        </html>
+        <?php
+        exit;
+    }
+
 }
