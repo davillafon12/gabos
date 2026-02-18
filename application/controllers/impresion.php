@@ -340,26 +340,14 @@ class impresion extends CI_Controller
 					$sucursal = $_GET['s'];
 					$consecutivo = $_GET['n'];
 					if ($empresa = $this->empresa->getEmpresaImpresion($sucursal)) {
-						if ($retiro = $this->contabilidad->getRetiroParcialHeadImpresion($consecutivo)) {
-							if ($billetes = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'colones')) {
-								if ($monedas = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'moneda', 'colones')) {
-									if ($dolares = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'dolares')) {
-										unset($this->retorno['error']);
-										$this->retorno['status'] = 'success';
-										$this->retorno['empresa'] = $empresa;
-										$this->retorno['retiro'] = $retiro;
-										$this->retorno['billetes'] = $billetes;
-										$this->retorno['monedas'] = $monedas;
-										$this->retorno['dolares'] = $dolares;
-									} else {
-										$this->retorno['error'] = 'No se pudo cargar los dolares del retiro parcial';
-									}
-								} else {
-									$this->retorno['error'] = 'No se pudo cargar las monedas del retiro parcial';
-								}
-							} else {
-								$this->retorno['error'] = 'No se pudo cargar los billetes del retiro parcial';
-							}
+						if ($retiro = $this->contabilidad->getRetiroParcialHeadImpresion($consecutivo)) {					
+							unset($this->retorno['error']);
+							$this->retorno['status'] = 'success';
+							$this->retorno['empresa'] = $empresa;
+							$this->retorno['retiro'] = $retiro;
+							$this->retorno['billetes'] = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'colones');
+							$this->retorno['monedas'] = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'moneda', 'colones');
+							$this->retorno['dolares'] = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'dolares');									
 						} else {
 							$this->retorno['error'] = 'No se pudo cargar el encabezado del retiro parcial';
 						}
