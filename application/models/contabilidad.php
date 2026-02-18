@@ -733,11 +733,7 @@ Class contabilidad extends CI_Model
 		$this->db->where('Moneda',$moneda);
 		$this->db->where('Retiro',$retiro);
 		$query = $this->db->get();
-		if($query->num_rows()==0){
-			return false;
-		}else{
-			return $query->result();
-		}
+		return $query->result();
 	}
 
 	function getFechaUltimoCierreCaja($sucursal){

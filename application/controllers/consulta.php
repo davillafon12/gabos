@@ -359,29 +359,17 @@ class consulta extends CI_Controller {
 			$consecutivo = $_POST['retiro'];
 			include 'get_session_data.php';
 			if($retiro = $this->contabilidad->getRetiroParcialHeadImpresion($consecutivo)){
-				if($billetes = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'colones')){
-					if($monedas = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'moneda', 'colones')){
-						if($dolares = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'dolares')){
-							unset($retorno['error']);
-							$retorno['status'] = 'success';
-							$retorno['retiro'] = $retiro;
-							$retorno['billetes'] = $billetes;
-							$retorno['monedas'] = $monedas;
-							$retorno['dolares'] = $dolares;
-							
-							//Para efecto de impresion
-							$retorno['sucursal']= $data['Sucursal_Codigo'];
-							$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
-							$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");	
-						}else{
-							$retorno['error'] = '18';
-						}
-					}else{
-						$retorno['error'] = '17';
-					}
-				}else{
-					$retorno['error'] = '16';
-				}
+				unset($retorno['error']);
+				$retorno['status'] = 'success';
+				$retorno['retiro'] = $retiro;
+				$retorno['billetes'] = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'colones');
+				$retorno['monedas'] = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'moneda', 'colones');
+				$retorno['dolares'] = $this->contabilidad->getDenominacionesRetiroParcialPorTipoYMoneda($consecutivo, 'billete', 'dolares');
+				
+				//Para efecto de impresion
+				$retorno['sucursal']= $data['Sucursal_Codigo'];
+				$retorno['servidor_impresion']= $this->configuracion->getServidorImpresion();
+				$retorno['token'] =  md5($data['Usuario_Codigo'].$data['Sucursal_Codigo']."GAimpresionBO");				
 			}else{
 				$retorno['error'] = '15';
 			}
