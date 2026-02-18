@@ -1,8 +1,5 @@
 #!/bin/bash
 
-echo '1) Iniciando base de datos'
-service mariadb start && ejecutar_configuracion || echo "Fallo la configuracion, no se realiza nada mas"
-
 ejecutar_configuracion(){
     echo '2) Eliminando acceso remoto a root...'
     { echo "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"; } | mysql -uroot
@@ -98,8 +95,5 @@ ejecutar_configuracion(){
     { echo "SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));"; } | mysql -uroot
 }
 
-
-
-
-
-
+echo '1) Iniciando base de datos'
+service mariadb start && ejecutar_configuracion || echo "Fallo la configuracion, no se realiza nada mas"
